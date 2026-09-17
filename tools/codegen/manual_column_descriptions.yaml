@@ -1389,12 +1389,6 @@ blocking_summary:
   snap_counts_rt: Snaps aligned at right tackle.
   snap_counts_run_block: Run-blocking snaps played.
   snap_counts_te: Snaps aligned at tight end.
-blue_chip_ratio:
-  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio).
-  n_blue_chip: Signees at or above the division's blue-chip star floor across the window.
-  n_recruits: Total signees across the trailing recruiting-class window.
-  season: Roster season the trailing-window ratio describes (each class counts toward its eligible seasons).
-  team_id: 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id).
 boxscore:
   all_positions: All fielding positions played by the player during the game, as a list of position codes.
   game_status_is_current_batter: Indicates whether the player is currently at bat at the moment the boxscore was captured.
@@ -2086,11 +2080,6 @@ build_we_table:
   n: Plate appearances observed in this state bucket.
   outs_start: Outs before the play (0-2).
   score_diff_bucket: home minus away score, clipped to [-6, 6].
-calibration_table:
-  bin_mid: Midpoint of the probability bin.
-  mean_actual: Mean observed outcome within the bin.
-  mean_pred: Mean predicted probability within the bin.
-  n: Observations in the bin.
 cat_goalie_detail:
   player_games_played: Number of games in which the goalie appeared during the relevant tracking period.
   player_goals_against_avg: Goalie's goals-against average — goals allowed per 60 minutes of ice time — for the tracking period.
@@ -2319,22 +2308,6 @@ cfb_predict_games:
   home_team_id: Home team ESPN id (character; the ratings `team_id` join key).
   home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
   neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
-cfb_ratings:
-  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); ridge fit.
-  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
-  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); ridge fit.
-  adj_st_epa: Special-teams rating - z-composite of per-unit field-goal/punt/kick-return EPA.
-  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
-  fei_def: Opponent-adjusted defensive drive efficiency (Fremeau-FEI style).
-  fei_net: Opponent-adjusted net drive efficiency (fei_off minus fei_def).
-  fei_off: Opponent-adjusted offensive drive efficiency (Fremeau-FEI style).
-  games: Number of games the team played in the fitted window.
-  net_rank: Dense rank on adj_net descending (best net rating = 1).
-  net_z: Z-score of adj_net across the FBS teams.
-  off_pace: Offensive scrimmage plays per game (the tempo input to the totals model).
-  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
-  season: Season the ratings cover (null for a pooled multi-season fit).
-  team_id: Team ESPN id (character join key).
 cfb_recruiting_projection:
   pred_margin: Ridge-projected average scoring margin per game.
   pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
@@ -2643,18 +2616,6 @@ college_baseball_re24:
   n: Number of plate appearances observed starting in this base-out state.
   outs: Outs at the start of the base-out state (0-2).
   run_expectancy: Empirical mean runs scored from this state through the end of the half-inning (RE24).
-college_baseball_state:
-  base_state: 3-char base occupancy code before the PA ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first
-    and third.
-  batting_team_id: ESPN team id of the batting team.
-  game_id: ESPN event id for the game (join key to the schedule).
-  half: Half-inning ("top" or "bottom").
-  inning: Inning number of the plate appearance (1-based).
-  outs: Outs before the PA (0-2).
-  play_seq: Game-global sequential plate-appearance order.
-  runs_after: Cumulative (both teams) runs scored after the PA.
-  runs_before: Cumulative (both teams) runs scored before the PA.
-  score_diff: home minus away cumulative score before the PA.
 college_baseball_wpa:
   game_id: ESPN event id for the game (join key to the schedule).
   play_seq: Game-global sequential plate-appearance order.
@@ -3384,57 +3345,6 @@ env_adjusted_make_prob:
   base_make_prob: Shipped fg_model make probability (with nfl4th long-kick clamps applied).
   exp_make_prob: Environment-adjusted make probability (logit shift for long-kick clamp correction, wind, temperature and
     altitude).
-espn_cfb_game_rosters:
-  athlete_href: ESPN API URL reference for the athlete's full profile resource.
-  birth_country_alternate_id: Alternate identifier for the athlete's birth country, used in ESPN's nationality lookup system.
-  flag_alt: Alt-text description for the athlete's country flag image, typically the country name.
-  flag_href: URL to the athlete's nationality flag image on ESPN's CDN.
-  flag_rel: Relationship descriptor for the flag image link (e.g., 'flag' or 'country').
-  jersey_right: Secondary or alternate jersey number field, distinct from the primary jersey number.
-  position_href: ESPN API URL reference for the athlete's position resource.
-  statistics_href: ESPN API URL reference for the athlete's game or season statistics resource.
-  team_alternate_ids_sdr: ESPN SDR (Sports Data Repository) alternate team identifier for the athlete's team.
-espn_cfb_play_participants:
-  kicker_player_ids: List of ESPN athlete IDs for all kickers credited on the play (e.g., kickoff, field goal, or PAT attempt).
-  kicker_player_names: List of display names for all kickers credited on the play.
-  pass_defender_player_id: ESPN athlete ID for the primary pass defender (cornerback or safety) who contested the target on
-    the play.
-  pass_defender_player_ids: List of ESPN athlete IDs for all pass defenders who contested the target or were credited with
-    a pass breakup on the play.
-  pass_defender_player_name: Display name of the primary pass defender who contested the target or broke up the pass on the
-    play.
-  pass_defender_player_names: List of display names for all pass defenders credited on the play.
-  passer_player_ids: List of ESPN athlete IDs for all passers credited on the play (supports multi-player lateral/trick plays).
-  passer_player_names: List of display names for all passers credited on the play.
-  pat_scorer_player_id: ESPN athlete ID for the primary player who scored a point-after-touchdown (PAT) conversion on the
-    play.
-  pat_scorer_player_ids: List of ESPN athlete IDs for all players credited with a PAT conversion on the play.
-  pat_scorer_player_name: Display name of the player who scored the point-after-touchdown conversion on the play.
-  pat_scorer_player_names: List of display names for all players credited with a PAT conversion on the play.
-  penalized_player_id: ESPN athlete ID for the primary player who committed the penalty on the play.
-  penalized_player_ids: List of ESPN athlete IDs for all players penalized on the play.
-  penalized_player_name: Display name of the player assessed a penalty on the play.
-  penalized_player_names: List of display names for all players penalized on the play.
-  punter_player_ids: List of ESPN athlete IDs for all punters credited on the play.
-  punter_player_names: List of display names for all punters credited on the play.
-  receiver_player_ids: List of ESPN athlete IDs for all intended receivers on the play (supports lateral chains).
-  receiver_player_names: List of display names for all intended receivers credited on the play.
-  returner_player_id: ESPN athlete ID for the primary player who returned a kick, punt, or interception on the play.
-  returner_player_ids: List of ESPN athlete IDs for all returners credited on the play (e.g., during a lateral after a return).
-  returner_player_name: Display name of the primary player who returned a kick, punt, or interception on the play.
-  returner_player_names: List of display names for all returners credited on the play.
-  rusher_player_ids: List of ESPN athlete IDs for all ball carriers credited on the play (supports lateral handoffs).
-  rusher_player_names: List of display names for all ball carriers credited on the play.
-  sacked_by_player_id: ESPN athlete ID for the primary pass rusher who recorded the sack on the play.
-  sacked_by_player_ids: List of ESPN athlete IDs for all pass rushers credited with the sack on the play (includes split-sack
-    participants).
-  sacked_by_player_name: Display name of the primary pass rusher credited with the sack on the play.
-  sacked_by_player_names: List of display names for all pass rushers credited with the sack, including secondary participants
-    on split sacks.
-  scorer_player_id: ESPN athlete ID for the primary player who scored a touchdown or field goal on the play.
-  scorer_player_ids: List of ESPN athlete IDs for all players credited with a scoring event on the play.
-  scorer_player_name: Display name of the primary player credited with a touchdown or field goal score on the play.
-  scorer_player_names: List of display names for all players credited with scoring on the play.
 espn_cfb_player_stats:
   general_defensive_fumbles_touchdowns: Number of touchdowns scored by the player on fumble recoveries attributed to the defensive
     category.
@@ -5967,13 +5877,6 @@ leaguestandingsv3:
   vssouthwest: NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set.
   vswest: NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set.
   winpct: Winning percentage for the team or split represented by this row.
-leverage_index:
-  base_state: 3-char base occupancy code.
-  half: Half-inning ("top" or "bottom").
-  inning_capped: Inning number, capped at 9 (extra innings pooled with the 9th).
-  leverage_index: Mean absolute win-probability swing from this state, normalized to a 1.0 league average.
-  outs_start: Outs before the play (0-2).
-  score_diff_bucket: home minus away score, clipped to [-6, 6].
 load_cfb_adv_defensive:
   TFL: Count of scrimmage plays the defense held to negative yardage (non-penalty, non-special-teams, ESPN statYardage below
     zero) plus every sack.
@@ -13503,12 +13406,6 @@ load_nfl_contracts:
   season_history: List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus,
     option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus,
     other_bonus), money in millions of dollars and a final 'Total' row per nflreadr; null on 43 of 52,814 rows.
-load_nfl_depth_charts:
-  club_code: Three-letter team abbreviation identifying the NFL club for this depth chart entry.
-  depth_position: Specific positional slot on the depth chart (e.g., 'QB1', 'WR2') indicating where the player ranks.
-  depth_team: Depth rank of the player at their position, stored as a string ('1' = starter, '2' = backup, etc.).
-  elias_id: Elias Sports Bureau player identifier used for official NFL record-keeping and statistics attribution.
-  formation: Offensive or defensive formation label (e.g., 'Base 3-4', 'Nickel') associated with this depth chart grouping.
 load_nfl_espn_qbr:
   epa_total: Total expected points added across the quarterback's plays (ESPN QBR EPA component).
   exp_sack: QBR points contribution adjustment from expected sacks.
@@ -15284,43 +15181,6 @@ load_recruit_classes:
   stars: 247 composite star rating (1-5; null for unrated recruits).
   team: Signed-institution full name (falls back to committed) - the downstream name-join key.
   team_id: 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned).
-load_rosters:
-  birth_date: Player's date of birth (YYYY-MM-DD).
-  college: College or university the player attended.
-  depth_chart_position: Fine-grained depth-chart position label, which may differ from the broader position group.
-  draft_club: Team abbreviation of the club that drafted the player.
-  draft_number: Overall pick number at which the player was selected in the NFL draft.
-  entry_year: Calendar year the player first entered the NFL.
-  esb_id: Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping.
-  espn_id: ESPN player identifier for cross-system joins.
-  fantasy_data_id: FantasyData player identifier for cross-system joins.
-  first_name: Player's first (given) name.
-  football_name: Player's preferred football (commonly used) first name.
-  full_name: Player's full display name.
-  game_type: Type of game the roster snapshot applies to (e.g. 'REG', 'POST').
-  gsis_id: NFL GSIS player identifier — the canonical nflverse player key used to join across datasets.
-  gsis_it_id: NFL GSIS internal tracking identifier for the player.
-  headshot_url: URL of the player's headshot image.
-  height: Player's height in inches.
-  jersey_number: Uniform (jersey) number the player wears.
-  last_name: Player's last (family) name.
-  ngs_position: Player's position as classified by NFL Next Gen Stats.
-  pff_id: Pro Football Focus (PFF) player identifier for cross-system joins.
-  pfr_id: Pro Football Reference (PFR) player identifier for cross-system joins.
-  position: Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB').
-  rookie_year: Calendar year of the player's rookie season.
-  rotowire_id: RotoWire player identifier for cross-system joins.
-  season: NFL season (year) the roster entry applies to.
-  sleeper_id: Sleeper player identifier for cross-system joins.
-  smart_id: NFL SMART player identifier (GUID) used across modern NFL data feeds.
-  sportradar_id: Sportradar player identifier for cross-system joins.
-  status: Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured).
-  status_description_abbr: Abbreviated roster status description code from the source feed.
-  team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
-  week: Week of the season the roster snapshot applies to (weekly rosters only).
-  weight: Player's listed weight in pounds.
-  yahoo_id: Yahoo Sports player identifier for cross-system joins.
-  years_exp: Number of accrued NFL seasons of experience for the player.
 load_rosters_weekly:
   birth_date: Player's date of birth (YYYY-MM-DD).
   college: College or university the player attended.
@@ -16024,55 +15884,6 @@ nfl_availability_projection:
   proj_games: Expected games available - proj_availability x team_games (17).
   proj_games_missed: Expected games missed - team_games minus proj_games.
   target_season: The season being projected (features use strictly earlier seasons only).
-nfl_combine_profiles:
-  armLength: Arm length of the prospect measured at the NFL Combine, expressed in inches.
-  athleticismScore: Composite athleticism score assigned to the prospect based on Combine athletic drills.
-  benchPress: Raw bench press result string from the NFL Combine (reps at 225 lbs), may include designation notes.
-  benchPress_designation: Designation label for the bench press result (e.g., indicating official or pro-day measurement).
-  benchPress_repetitions: Number of repetitions completed at 225 lbs on the bench press at the NFL Combine.
-  bio: Biographical narrative text about the prospect published in the NFL Combine profile.
-  broadJump: Raw broad jump result string from the NFL Combine, may include designation notes.
-  broadJump_designation: Designation label for the broad jump result (e.g., official Combine or pro-day measurement).
-  broadJump_inches: Broad jump distance in inches recorded at the NFL Combine.
-  collegeClass: College class year of the prospect at the time of the NFL Draft (e.g., 'Senior', 'Junior').
-  combineAttendance: Indicates whether the prospect attended and participated in the NFL Scouting Combine.
-  draftGrade: Numerical draft grade assigned to the prospect by NFL evaluators.
-  draftProjection: Projected draft round or range for the prospect based on scouting evaluations.
-  fortyYardDash: Raw forty-yard dash result string from the NFL Combine, may include designation notes.
-  fortyYardDash_designation: Designation label for the forty-yard dash time (e.g., official Combine or pro-day measurement).
-  fortyYardDash_seconds: Forty-yard dash time in seconds recorded at the NFL Combine.
-  handSize: Hand size of the prospect measured at the NFL Combine, expressed in inches.
-  nflComparison: NFL player comparison cited by scouts to describe the prospect's projected pro style or ceiling.
-  overview: Scouting overview narrative providing a summary of the prospect's abilities and profile.
-  person_collegeNames: Name(s) of the college(s) attended by the prospect.
-  person_displayName: Full display name of the prospect as used in NFL Combine records.
-  person_esbId: ESPN-Elias Sports Bureau (ESB) identifier for the prospect.
-  person_firstName: First name of the prospect.
-  person_hometown: Hometown city or region of the prospect.
-  person_lastName: Last name of the prospect.
-  positionGroup: Position group the prospect is evaluated under at the NFL Combine (e.g., 'WR', 'OL').
-  proFortyYardDash: Raw pro-day forty-yard dash result string for the prospect, may include designation notes.
-  proFortyYardDash_designation: Designation label for the pro-day forty-yard dash (e.g., 'pro day' measurement).
-  proFortyYardDash_seconds: Pro-day forty-yard dash time in seconds for the prospect.
-  productionScore: Composite college production score assigned to the prospect based on statistical output.
-  profileAuthor: Name of the scout or analyst who authored the prospect's combine profile.
-  sixtyYardShuttle: Raw sixty-yard shuttle drill result string from the NFL Combine, may include designation notes.
-  sizeScore: Composite size score assigned to the prospect based on height, weight, and arm length measurements.
-  sourcesTellUs: Scouting intelligence notes from team and media sources about the prospect's draft stock or fit.
-  strengths: Narrative description of the prospect's key strengths as identified by scouts.
-  tenYardSplit: Raw ten-yard split time string from the NFL Combine, may include designation notes.
-  tenYardSplit_designation: Designation label for the ten-yard split time (e.g., official Combine or pro-day measurement).
-  tenYardSplit_seconds: Ten-yard split time in seconds recorded at the NFL Combine, measuring initial burst off the line.
-  threeConeDrill: Raw three-cone drill result string from the NFL Combine, may include designation notes.
-  threeConeDrill_designation: Designation label for the three-cone drill time (e.g., official Combine or pro-day measurement).
-  threeConeDrill_seconds: Three-cone drill time in seconds recorded at the NFL Combine, measuring change-of-direction ability.
-  twentyYardShuttle: Raw twenty-yard short shuttle result string from the NFL Combine, may include designation notes.
-  twentyYardShuttle_designation: Designation label for the twenty-yard shuttle time (e.g., official Combine or pro-day measurement).
-  twentyYardShuttle_seconds: Twenty-yard short shuttle time in seconds recorded at the NFL Combine.
-  verticalJump: Raw vertical jump result string from the NFL Combine, may include designation notes.
-  verticalJump_designation: Designation label for the vertical jump measurement (e.g., official Combine or pro-day measurement).
-  verticalJump_inches: Vertical jump height in inches recorded at the NFL Combine.
-  weaknesses: Narrative description of the prospect's key weaknesses or areas needing development as identified by scouts.
 nfl_compute_results:
   games.away_rest: Days of rest for the away team before the game (feeds the ELO rest adjustment of 25 points per extra week).
   games.away_team: Team abbreviation of the away team.
@@ -16090,16 +15901,6 @@ nfl_compute_results:
     call so ratings evolve over the simulated season.
   teams.sim: Simulated season identifier the team row belongs to, carried through from the input teams frame.
   teams.team: Team abbreviation, carried through from the input teams frame.
-nfl_draft_picks:
-  draftNumberOverall: Overall pick number in the NFL Draft, counting sequentially from pick 1 across all rounds.
-  draftPosition: Pick number within the draft round (e.g., the 3rd pick of round 2).
-  draftRound: Round of the NFL Draft in which the pick occurs.
-  personId: NFL.com Shield API identifier for the player associated with this draft pick.
-  pickIsIn: Indicates whether the draft pick selection has been officially submitted to the league.
-  teamId: NFL.com Shield API identifier for the team holding this draft pick.
-  tradeNote: Text note describing any trade involving this pick, if applicable.
-  tweetSent: Indicates whether an announcement tweet was sent for this draft pick selection.
-  tweetsSent: Indicates whether all scheduled announcement tweets for this pick have been sent.
 nfl_draft_projection:
   gsis_id: nflverse gsis player id of the drafted prospect (character join key).
   hit_prob: P(multi-year starter) - ridge-regularized IRLS logistic on the same features, hit := seasons_started >= 3.
@@ -16186,52 +15987,6 @@ nfl_game_script:
   season: Season of the aggregate.
   sec_per_play: Season mean of the per-game sec_per_play.
   team: Team abbreviation.
-nfl_game_summaries:
-  awayTeam_hasPossession: Indicates whether the away team has offensive possession at this point in the game.
-  awayTeam_score_ot: Away team points scored in overtime.
-  awayTeam_score_q1: Away team points scored in the first quarter.
-  awayTeam_score_q2: Away team points scored in the second quarter.
-  awayTeam_score_q3: Away team points scored in the third quarter.
-  awayTeam_score_q4: Away team points scored in the fourth quarter.
-  awayTeam_score_total: Away team total points scored through the current point in the game.
-  awayTeam_teamId: NFL.com Shield API identifier for the away team in this game.
-  awayTeam_timeouts_remaining: Number of timeouts remaining for the away team at this game state snapshot.
-  awayTeam_timeouts_used: Number of timeouts used by the away team through this point in the game.
-  gameBookUrl: URL pointing to the official NFL Game Book PDF for this game.
-  gameId: NFL.com Shield API identifier for the game.
-  homeTeam_hasPossession: Indicates whether the home team has offensive possession at this point in the game.
-  homeTeam_score_ot: Home team points scored in overtime.
-  homeTeam_score_q1: Home team points scored in the first quarter.
-  homeTeam_score_q2: Home team points scored in the second quarter.
-  homeTeam_score_q3: Home team points scored in the third quarter.
-  homeTeam_score_q4: Home team points scored in the fourth quarter.
-  homeTeam_score_total: Home team total points scored through the current point in the game.
-  homeTeam_teamId: NFL.com Shield API identifier for the home team in this game.
-  homeTeam_timeouts_remaining: Number of timeouts remaining for the home team at this game state snapshot.
-  homeTeam_timeouts_used: Number of timeouts used by the home team through this point in the game.
-  isGoalToGo: Indicates whether the current offensive situation is a goal-to-go scenario.
-  isRedZone: Indicates whether the ball is inside the opponent's 20-yard line (red zone).
-  offset: Byte or record offset within the game data stream, used for incremental polling of live game state.
-  quarter: Current game quarter as a string label (e.g., '1', '2', 'OT').
-  yardLine: Current ball position on the field expressed as a yard-line string (e.g., 'OPP 35').
-nfl_injuries:
-  injuries: Structured description of the player's reported injury or injuries, typically listing affected body part(s).
-  injuryStatus: Official NFL injury status designation for the player (e.g., 'Questionable', 'Out', 'IR', 'Doubtful').
-  person_commonFirstName: Commonly used or preferred first name for the player (may differ from legal first name).
-  person_displayName: Full display name of the player as shown on official NFL roster and injury report materials.
-  person_firstName: Player's legal first name as recorded in the NFL player database.
-  person_gsisId: Global Statistical Information System (GSIS) identifier — the NFL's official unique player ID used across
-    league data systems.
-  person_headshot: URL to the player's official NFL headshot image.
-  person_lastName: Player's last name as recorded in the NFL player database.
-  practiceDays: Comma-separated list or encoded representation of the practice days the player participated in during the
-    injury report week.
-  practiceStatus: Player's practice participation designation for the most recent session (e.g., 'Limited Participant', 'Did
-    Not Practice', 'Full Participant').
-  practices: Structured record of the player's weekly practice participation details used to compile the official injury report.
-  seasonType: Type of NFL season the injury report covers (e.g., 'Regular Season', 'Postseason', 'Preseason').
-  team_currentLogo: URL to the current official logo image of the player's team.
-  team_fullName: Full official name of the team the player belongs to (e.g., 'Kansas City Chiefs').
 nfl_kicker_rating:
   exp_made: Sum of environment-adjusted make probabilities (expected makes).
   fg_att: Field-goal attempts.
@@ -16869,17 +16624,6 @@ nfl_ratings:
   off_rank: Dense rank on adj_off_epa descending (best offense = 1).
   season: Season the ratings cover (null for a pooled multi-season fit).
   team_id: nflverse team abbreviation (character join key, e.g. "KC").
-nfl_rosters:
-  persons: Number of players (persons) listed on the team's roster entry for this record.
-  seasonType: Type of NFL season the roster entry applies to (e.g., 'Regular Season', 'Preseason', 'Postseason').
-  team_conferenceAbbr: Abbreviation of the conference the team belongs to (e.g., 'AFC', 'NFC').
-  team_conferenceFullName: Full name of the conference the team belongs to (e.g., 'American Football Conference').
-  team_currentLogo: URL to the current official logo image of the team.
-  team_divisionFullName: Full name of the division within the conference that the team belongs to (e.g., 'AFC West').
-  team_fullName: Full official name of the team (e.g., 'Las Vegas Raiders').
-  team_league: League identifier confirming the team belongs to the NFL.
-  team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
-  team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
 nfl_season_standings:
   conf: Conference of the team (AFC or NFC).
   conf_pct: Win percentage in games against conference opponents (0 when the team played no conference games).
@@ -16981,74 +16725,6 @@ nfl_special_teams_epa:
   season: Season of the aggregate.
   team: Team abbreviation.
   unit: Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point).
-nfl_standings:
-  clinched_bye: Boolean flag indicating whether the team has clinched a first-round bye in the playoffs.
-  clinched_division: Boolean flag indicating whether the team has clinched their division title.
-  clinched_eliminated: Boolean flag indicating whether the team has been mathematically eliminated from playoff contention.
-  clinched_homeField: Boolean flag indicating whether the team has clinched home-field advantage throughout the playoffs.
-  clinched_playoff: Boolean flag indicating whether the team has clinched a berth in the NFL playoffs.
-  clinched_wildCard: Boolean flag indicating whether the team has clinched a wild card playoff berth.
-  closeGames_losses: Number of games decided by 8 points or fewer that the team lost during the season.
-  closeGames_ties: Number of games decided by 8 points or fewer that ended in a tie for the team during the season.
-  closeGames_wins: Number of games decided by 8 points or fewer that the team won during the season.
-  conference_points_against: Total points allowed by the team in conference games during the season.
-  conference_points_for: Total points scored by the team in conference games during the season.
-  conference_rank: Team's rank within their conference (AFC or NFC) based on current standings.
-  conference_winPct: Team's winning percentage in conference games during the season.
-  division_losses: Number of games the team lost against divisional opponents during the season.
-  division_points_against: Total points allowed by the team in divisional games during the season.
-  division_points_for: Total points scored by the team in divisional games during the season.
-  division_rank: Team's rank within their division based on divisional record and tiebreakers.
-  division_ties: Number of games the team tied against divisional opponents during the season.
-  division_winPct: Team's winning percentage in divisional games during the season.
-  division_wins: Number of games the team won against divisional opponents during the season.
-  home_points_against: Total points allowed by the team in home games during the season.
-  home_points_for: Total points scored by the team in home games during the season.
-  home_winPct: Team's winning percentage in home games during the season.
-  last5_losses: Number of losses the team recorded in their last five games of the season segment.
-  last5_points_against: Total points allowed by the team across their last five games.
-  last5_points_for: Total points scored by the team across their last five games.
-  last5_ties: Number of ties the team recorded in their last five games of the season segment.
-  last5_winPct: Team's winning percentage across their last five games.
-  last5_wins: Number of wins the team recorded in their last five games of the season segment.
-  overall_games: Total number of games played by the team during the current season to date.
-  overall_losses: Total number of overall losses recorded by the team during the current season.
-  overall_points_against: Total points allowed by the team across all games during the current season.
-  overall_points_for: Total points scored by the team across all games during the current season.
-  overall_streak_length: Length (number of games) of the team's current winning or losing streak.
-  overall_streak_type: Type of the team's current streak, indicating whether it is a winning ('W') or losing ('L') streak.
-  overall_ties: Total number of overall ties recorded by the team during the current season.
-  overall_winPct: Team's overall winning percentage across all games during the current season.
-  overall_wins: Total number of overall wins recorded by the team during the current season.
-  road_points_against: Total points allowed by the team in road (away) games during the season.
-  road_points_for: Total points scored by the team in road (away) games during the season.
-  road_winPct: Team's winning percentage in road (away) games during the season.
-  team_currentLogo: URL to the team's current official logo image as displayed in the standings.
-  team_fullName: Full official name of the team (e.g., 'Kansas City Chiefs') as shown in the standings.
-nfl_team:
-  bio: Official team biography or description text as published on NFL.com.
-  currentBackground: URL or resource reference for the team's current background/banner image used on NFL.com.
-  currentCoach: Full name of the team's current head coach as listed on NFL.com.
-  currentLogo: URL for the team's current primary logo image as served by the NFL Shield API.
-  nflShopUrl: URL to the team's official merchandise page on NFL Shop (nflshop.com).
-  officialWebsiteUrl: URL to the team's official website (e.g., 'https://www.chiefs.com').
-  owners: Name(s) or serialized list of the team's current principal owner(s).
-  primaryColor: Hex color code or color name for the team's primary brand color.
-  secondaryColor: Hex color code or color name for the team's secondary brand color.
-  socials: Serialized list of the team's official social media handles or URLs (Twitter/X, Instagram, Facebook, etc.).
-  teamType: Classification of the team type within the NFL Shield system (e.g., 'FRANCHISE', 'PRO_BOWL').
-  vllChannelCallsign: Local affiliate TV channel callsign for the team's video/live-local broadcast rights.
-  yearEstablished: Four-digit year in which the franchise was originally established or founded.
-nfl_teams_history:
-  conferenceAbbr: Abbreviation of the conference the team belonged to during this historical period (e.g., 'AFC', 'NFC', 'AFL').
-  conferenceFullName: Full name of the conference the team belonged to during this historical period (e.g., 'American Football
-    Conference').
-  currentLogo: URL to the team's logo image that was current during this historical period.
-  divisionFullName: Full name of the division the team belonged to during this historical period (e.g., 'AFC West').
-  nickName: Team nickname (e.g., 'Chiefs', 'Raiders') used during this historical period.
-  teamType: Classification of the team type (e.g., 'NFL', 'AFL') indicating the league affiliation during this historical
-    period.
-  venues: List or serialized representation of venue(s) used by the team during this historical period.
 nfl_usage_projection:
   player_id: nflverse gsis player id (character join key).
   position_group: nflverse offensive position group.
@@ -17083,78 +16759,6 @@ nfl_week_games:
   venue_country: Country name or ISO code indicating where the game's venue is located.
   version: API response version integer returned by the NFL Shield API for this game record.
   weekType: Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB').
-nfl_weekly_game_details:
-  awayTeamStandings: Serialized standings record for the away team (wins, losses, ties, division rank) at the time of this
-    game.
-  awayTeam_currentLogo: URL for the away team's current primary logo image as served by the NFL Shield API.
-  awayTeam_fullName: Full name of the away team (e.g., 'San Francisco 49ers').
-  awayTeam_id: NFL Shield team identifier for the away team.
-  broadcastInfo_audioNetworks: Serialized list of radio networks carrying this game's audio broadcast.
-  broadcastInfo_awayNetworkChannels: Serialized list of TV/streaming channels designated as the away team's local broadcast
-    for this game.
-  broadcastInfo_homeNetworkChannels: Serialized list of TV/streaming channels designated as the home team's local broadcast
-    for this game.
-  broadcastInfo_internationalWatchOptions: Serialized list of international streaming or broadcast options available for this
-    game.
-  broadcastInfo_streamingNetworks: Serialized list of streaming platforms carrying this game.
-  broadcastInfo_territory: Geographic territory or market designation for this broadcast record.
-  driveChart_drives: Total number of drives recorded in the drive chart for this game.
-  driveChart_gameId: NFL Shield game identifier as embedded in the drive chart payload for this game.
-  driveChart_offset: Pagination offset integer for the drive chart response from the NFL Shield API.
-  driveChart_plays: Total number of plays recorded across all drives in the drive chart for this game.
-  driveChart_scoringSummaries: Total number of scoring summary entries in the drive chart for this game.
-  extensions: Serialized JSON or string of additional extension metadata attached to this game record.
-  externalIds: Serialized list of external system identifiers mapped to this game across partner platforms.
-  homeTeamStandings: Serialized standings record for the home team (wins, losses, ties, division rank) at the time of this
-    game.
-  homeTeam_currentLogo: URL for the home team's current primary logo image as served by the NFL Shield API.
-  homeTeam_fullName: Full name of the home team (e.g., 'Philadelphia Eagles').
-  homeTeam_id: NFL Shield team identifier for the home team.
-  international: Boolean flag indicating whether this game is designated as an international game played outside the United
-    States.
-  replays: Serialized list of official game replay or condensed-game links associated with this game.
-  seasonType: Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE').
-  summary_attendance: Announced or official attendance figure (number of fans) at the game.
-  summary_awayTeam_hasPossession: Boolean flag indicating whether the away team had possession at the most recent play update.
-  summary_awayTeam_score: Away team's current or final score as a string.
-  summary_awayTeam_teamId: NFL Shield team identifier for the away team as embedded in the game summary payload.
-  summary_awayTeam_timeouts: Serialized or numeric representation of remaining timeouts for the away team.
-  summary_clock: Current game clock value at the time of the summary snapshot (e.g., '2:11' remaining).
-  summary_distance: Yards to go for a first down at the time of the summary snapshot.
-  summary_down: Current down (1–4) at the time of the game summary snapshot.
-  summary_gameBookUrl: URL to the official NFL gamebook PDF for this game.
-  summary_gameId: NFL Shield game identifier as embedded in the game summary payload.
-  summary_homeTeam_hasPossession: Boolean flag indicating whether the home team had possession at the most recent play update.
-  summary_homeTeam_score: Home team's current or final score as a string.
-  summary_homeTeam_teamId: NFL Shield team identifier for the home team as embedded in the game summary payload.
-  summary_homeTeam_timeouts: Serialized or numeric representation of remaining timeouts for the home team.
-  summary_isGoalToGo: Boolean flag indicating whether the current offensive situation is goal-to-go at the summary snapshot.
-  summary_isRedZone: Boolean flag indicating whether the offense is in the red zone (inside the opponent's 20-yard line) at
-    the summary snapshot.
-  summary_offset: Pagination offset integer for the game summary response from the NFL Shield API.
-  summary_phase: Current phase of the game at the time of the summary snapshot (e.g., 'INGAME', 'FINAL', 'PREGAME').
-  summary_quarter: Current quarter of the game at the time of the summary snapshot (as a string, e.g., '4' or 'OT').
-  summary_startTime: Scheduled or actual kickoff start time of the game as an ISO-formatted datetime string.
-  summary_weather: Serialized weather conditions at game time (e.g., temperature, wind speed, precipitation).
-  summary_yardLine: Human-readable yardline string indicating field position at the time of the summary snapshot.
-  taggedVideos: Serialized list of video clips tagged to this game by the NFL Shield API (e.g., highlights, press conferences).
-  ticketUrl: URL to the official ticket purchasing page for this game.
-  ticketVendors: Serialized list of authorized ticket vendors or marketplaces for this game.
-  venue_country: Country name or ISO code indicating where this game's venue is located.
-  version: API response version integer returned by the NFL Shield API for this game detail record.
-  weekType: Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB').
-nfl_weeks:
-  byeTeams: Serialized list of team abbreviations that have a bye week during this NFL schedule week.
-  dateBegin: ISO-formatted date on which this NFL week's games begin (typically Thursday).
-  dateEnd: ISO-formatted date on which this NFL week's games conclude (typically Monday night).
-  seasonType: Phase of the season for this week (e.g., 'REG' for regular season, 'POST' for postseason).
-  weekType: Classification of the week type (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB', 'PRE').
-nfl_weeks_by_date:
-  byeTeams: Comma-separated list of team abbreviations on bye during this week.
-  dateBegin: Start date of the NFL week period in ISO 8601 format.
-  dateEnd: End date of the NFL week period in ISO 8601 format.
-  seasonType: Season segment for this week (e.g., 'REG' for regular season, 'POST' for playoffs, 'PRE' for preseason).
-  weekType: Descriptive label for the type of week (e.g., 'Regular Season', 'Wild Card', 'Super Bowl').
 nhl_scoreboard:
   away_team_name_default: Full English-language team name for the away team, as returned by the NHL api-web scoreboard feed.
   away_team_name_fr: Full French-language team name for the away team, as returned by the NHL api-web scoreboard feed.
@@ -26591,8 +26195,3 @@ wnba_aging_curve:
   rel_value: 'Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player
     consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the
     peak age is exactly 1.0 and the lowest-valued age 0.4.'
-x_era:
-  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
-  season: MLB season (4-digit start year).
-  x_era: Parametric xERA converted from x_woba via the season's league baselines.
-  x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
