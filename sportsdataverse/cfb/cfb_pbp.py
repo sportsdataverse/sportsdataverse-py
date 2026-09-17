@@ -5916,11 +5916,12 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
                 )
                 .then(-6)
-                # Defense TD + Kick/PAT Missed
+                # Defense TD + Kick/PAT Missed. Reads __add_xp_suffix_cols: the old text test
+                # matched an upper-case "PAT" against lower-cased text, so it never fired.
                 .when(
                     (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
+                    .and_(pl.col("xp_attempt") == True)
+                    .and_(pl.col("xp_made") == False),
                 )
                 .then(-6)
                 # Defense TD + Kick/PAT Good
@@ -5954,11 +5955,11 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")),
                 )
                 .then(3)
-                # Offense TD + Kick/PAT Missed
+                # Offense TD + Kick/PAT Missed (see the defense branch)
                 .when(
                     (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
+                    .and_(pl.col("xp_attempt") == True)
+                    .and_(pl.col("xp_made") == False),
                 )
                 .then(6)
                 # Offense TD + Kick/PAT Good
