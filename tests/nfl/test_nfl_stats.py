@@ -526,3 +526,37 @@ def test_build_team_stats_parity_2023():
         sub = joined.select([col, col + "_ref"]).drop_nulls()
         corr = sub.select(pl.corr(col, col + "_ref")).item()
         assert corr is not None and corr >= 0.85, f"{col} corr={corr}"
+
+
+def _with_preseason_copy(pbp: pl.DataFrame) -> pl.DataFrame:
+    """The frame plus the same plays relabelled as a preseason game in the same week."""
+    pre = pbp.with_columns(pl.lit("PRE").alias("season_type"), (pl.col("game_id") + "_PRE").alias("game_id"))
+    return pl.concat([pbp, pre], how="vertical_relaxed")
+
+
+def test_build_player_stats_reg_post_excludes_preseason(monkeypatch):
+    """REG+POST used to apply no filter, so preseason plays counted toward stats."""
+    from polars.testing import assert_frame_equal
+
+    import sportsdataverse.nfl.nfl_loaders as loaders
+
+    monkeypatch.setattr(loaders, "load_nfl_players", lambda *a, **k: _synthetic_players())
+    monkeypatch.setattr(loaders, "load_nfl_pbp", lambda *a, **k: _synthetic_pbp())
+    expected = build_nfl_player_stats([2023], summary_level="week", season_type="REG+POST")
+    monkeypatch.setattr(loaders, "load_nfl_pbp", lambda *a, **k: _with_preseason_copy(_synthetic_pbp()))
+    got = build_nfl_player_stats([2023], summary_level="week", season_type="REG+POST")
+
+    assert_frame_equal(got.sort("player_id"), expected.sort("player_id"))
+
+
+def test_build_team_stats_reg_post_excludes_preseason(monkeypatch):
+    from polars.testing import assert_frame_equal
+
+    import sportsdataverse.nfl.nfl_loaders as loaders
+
+    monkeypatch.setattr(loaders, "load_nfl_pbp", lambda *a, **k: _synthetic_team_pbp())
+    expected = build_nfl_team_stats([2023], summary_level="week", season_type="REG+POST")
+    monkeypatch.setattr(loaders, "load_nfl_pbp", lambda *a, **k: _with_preseason_copy(_synthetic_team_pbp()))
+    got = build_nfl_team_stats([2023], summary_level="week", season_type="REG+POST")
+
+    assert_frame_equal(got.sort("team"), expected.sort("team"))
