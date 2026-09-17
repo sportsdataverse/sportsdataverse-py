@@ -2251,15 +2251,22 @@ cfb_resume:
   team_id: Team ESPN id (character join key).
   wab: Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule.
 cfb_returning_production:
-  def_returning: Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced
-    fumbles) returning.
+  def_basis: 'Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for
+    loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle
+    volume, so not on the same scale), box (the source release was missing), or null with def_returning.'
+  def_returning: Fraction of prior-season weighted defensive production returning on the current roster; the measure is named
+    in def_basis.
+  is_estimated: True for 2004 only, where season-2003 production is parsed from play text; it reads about 0.085 low against
+    the box route.
   n_returning: Count of prior-season contributors present on the current roster.
   off_returning: Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current
     roster.
-  overall_returning: Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see
-    fit_returning_weights.py).
+  overall_basis: 'Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall
+    then equals off_returning.'
+  overall_returning: Unit fractions combined with the fitted returning_prod_weights (FBS offense 0.49 / defense 0.51, the
+    2018-2025 fit in fit_returning_weights.py).
   season: Season the returning fractions describe (production drawn from the prior season).
-  team: Normalized school-name key (play-by-play team names are school-only; not an ESPN id).
+  team_id: ESPN team id as a string (integer-origin).
 cfb_roster_talent:
   blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars.
   n_recruits: Total signees across the trailing recruiting-class window.
@@ -7407,10 +7414,15 @@ load_cfb_recruits:
   team_id_247: 247Sports' own team key for the recruit's committed or signed school; not interchangeable with the ESPN/CFBD
     team id.
 load_cfb_returning_production:
+  def_basis: 'Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for
+    loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle
+    volume, so not on the same scale), box (the source release was missing), or null with def_returning.'
   def_returning: Share of the team's prior-season defensive production returning for the season.
   is_estimated: Whether the returning-production figures for the row were estimated rather than derived from complete data.
   n_returning: Number of returning players counted in the returning-production calculation.
   off_returning: Share of the team's prior-season offensive production returning for the season.
+  overall_basis: 'Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall
+    then equals off_returning.'
   overall_returning: Usage-weighted blend of the offensive and defensive returning-production shares.
 load_cfb_rosters:
   active: ESPN's active flag on the athlete record. It reflects capture time, not the season, so do not use it as a season-eligibility

@@ -60,11 +60,13 @@ DIVISION_CONSTANTS: dict[str, ProjectionConstants] = {
         blue_chip_star_min=4,
         star_points={5: 100.0, 4: 70.0, 3: 45.0, 2: 25.0, 1: 10.0, 0: 20.0},
         class_recency_weights=(1.0, 0.9, 0.75, 0.55),
-        # Fitted by dev/cfb_projection/fit_returning_weights.py on FBS 2018-2023
-        # (n=794 team-seasons): std-coefs off=+2.52, def=-0.86 margin-pts/SD --
-        # the splash-event defensive measure carries no positive signal, so the
-        # overall combination weights offense only (defense clamped at 0).
-        returning_prod_weights={"offense": 1.0, "defense": 0.0},
+        # Fitted by dev/cfb_projection/fit_returning_weights.py on FBS 2018-2025
+        # (n=1017 team-seasons, returning_2005_2025.parquet): std-coefs off=+1.15,
+        # def=+1.21 margin-pts/SD, defense built from play participants. Train
+        # 2018-2023 alone gives 0.50/0.50. Held out, the pre-participant splash era
+        # (2005-2014, n=1213) scores 0.299 against 0.239 offense-only. The previous
+        # offense-only fit (def=-0.86) ran on a play-stats defense keyed by team name.
+        returning_prod_weights={"offense": 0.49, "defense": 0.51},
         bluechip_title_base_rate=0.50,
         avg_wins=6.0,
     ),

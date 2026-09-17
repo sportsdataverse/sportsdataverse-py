@@ -670,6 +670,8 @@ Release: [cfb_returning_production](https://github.com/sportsdataverse/sportsdat
 | `def_returning` | Float64 | Share of the team's prior-season defensive production returning for the season. |
 | `overall_returning` | Float64 | Usage-weighted blend of the offensive and defensive returning-production shares. |
 | `n_returning` | Int64 | Number of returning players counted in the returning-production calculation. |
+| `def_basis` | String | Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), box (the source release was missing), or null with def_returning. |
+| `overall_basis` | String | Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall then equals off_returning. |
 | `is_estimated` | Boolean | Whether the returning-production figures for the row were estimated rather than derived from complete data. |
 
 ```python

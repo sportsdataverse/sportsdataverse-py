@@ -53,6 +53,50 @@ def capture_results() -> None:
     print(f"results_2016_2023: {out.height} games, {out['season'].n_unique()} seasons")
 
 
+def capture_gate_2025() -> None:
+    """Returning production 2005-2025 + results 2004-2025 for the re-baselined returning gates (2026-09-17).
+
+    Results keep only COMPLETED games: canceled and postponed games carry 0-0
+    scores (164 of them 2016-2024, 121 in 2020), which the points-not-null filter
+    above admits as ties. ``is_fbs`` is per season, so FBS moves are honoured.
+    """
+    from sportsdataverse.cfb.cfb_loaders import load_cfb_teams
+    from sportsdataverse.cfb.cfb_returning_production import cfb_returning_production
+
+    sched = load_cfb_schedule(list(range(2004, 2026)))
+    results = (
+        sched.filter(
+            (pl.col("completed") == True) & pl.col("home_points").is_not_null() & pl.col("away_points").is_not_null()
+        )
+        .select(
+            _utf8_id("game_id").alias("game_id"),
+            pl.col("season").cast(pl.Int64),
+            pl.col("week").cast(pl.Int64),
+            _utf8_id("home_id").alias("home_team_id"),
+            _utf8_id("away_id").alias("away_team_id"),
+            pl.col("home_points").cast(pl.Int64).alias("home_score"),
+            pl.col("away_points").cast(pl.Int64).alias("away_score"),
+            pl.col("neutral_site").cast(pl.Boolean),
+        )
+        .sort("season", "week", "game_id")
+    )
+    results.write_parquet(_FIX / "results_2004_2025.parquet")
+    seasons = list(range(2005, 2026))
+    rp = cfb_returning_production(seasons)
+    teams = load_cfb_teams(seasons).select(
+        pl.col("season").cast(pl.Int64), _utf8_id("team_id").alias("team_id"), pl.col("is_fbs").cast(pl.Boolean)
+    )
+    out = (
+        rp.join(teams.group_by("season", "team_id").agg(pl.col("is_fbs").any()), on=["season", "team_id"], how="left")
+        .with_columns(pl.col("is_fbs").fill_null(False))
+        .sort("season", "team_id")
+    )
+    out.write_parquet(_FIX / "returning_2005_2025.parquet")
+    print(
+        f"results_2004_2025: {results.height} games; returning_2005_2025: {out.height} rows, fbs {out['is_fbs'].sum()}"
+    )
+
+
 def capture_talent() -> None:
     feed = sports247_composite_team_ranking_feed(_VALIDATION_SEASON, sport_key=1, page_size=200, return_as_pandas=False)
     out = (
@@ -240,6 +284,8 @@ if __name__ == "__main__":
         capture_recruits()
     if only in (None, "returning"):
         capture_returning()
+    if only in (None, "gate_2025"):
+        capture_gate_2025()
     if only in (None, "teams"):
         capture_teams()
     if only in (None, "draft"):

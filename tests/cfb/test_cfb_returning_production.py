@@ -262,13 +262,55 @@ class TestDefensiveSources:
         )
         monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
         monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: pl.DataFrame())
         out = _PARTICIPANTS_BUILDER(2019)
-        got = dict(zip(out["player_id"].to_list(), out["prod_weight"].to_list()))
-        # 7: tackle (1) + tackle-for-loss play 11 (1 + TFL 1) + half a sack (2.0 / 2) = 4
-        # 8: assist on the TFL play (1 + TFL 1) + half a sack (1) = 3
-        # 9: assist on the TFL play (1 + 1) + a pass defended (1) = 3
-        assert got == {"7": 4.0, "8": 3.0, "9": 3.0}
+        got = {k: round(v, 4) for k, v in zip(out["player_id"].to_list(), out["prod_weight"].to_list())}
+        # the box counts a sack as a tackle and a tackle for loss, and splits a shared TFL:
+        # 7: tackle (1) + play 11 tackle (1) + TFL 1/3 + sack play tackle (1) + half sack (2/2) + TFL 1/2
+        # 8: play 11 assist (1) + TFL 1/3 + sack play tackle (1) + half sack (1) + TFL 1/2
+        # 9: play 11 assist (1) + TFL 1/3 + a pass defended (1)
+        assert got == {"7": 4.8333, "8": 3.8333, "9": 2.3333}
         assert set(out["team_id"].to_list()) == {"55"} and set(out["unit"].to_list()) == {"defense"}
+
+    def test_participants_are_credited_to_their_roster_team(self, monkeypatch):
+        """On a punt the tackler covers for the team in possession, not the play's defending team."""
+        parts = pl.DataFrame(
+            {
+                "game_id": [1],
+                "play_id": [10],
+                "tackler_player_ids": ["['20' '21' '30']"],
+                "assisted_by_player_ids": ["[]"],
+                "sacked_by_player_ids": ["[]"],
+                "pass_defender_player_ids": ["[]"],
+            }
+        )
+        pbp = pl.DataFrame({"game_id": [1], "id": [10], "def_pos_team_id": [55], "statYardage": [8]})
+        # 30 is listed for two teams in the game, neither the defending one: ambiguous, so dropped
+        rosters = pl.DataFrame({"game_id": [1, 1, 1], "athlete_id": [20, 30, 30], "team_id": [66, 77, 66]})
+        monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: rosters)
+        out = _PARTICIPANTS_BUILDER(2019).sort("player_id")
+        # 20 is on 66's roster; 21 (no roster) and 30 (two rosters) fall back to the defending team
+        assert out.select("player_id", "team_id").rows() == [("20", "66"), ("21", "55"), ("30", "55")]
+
+    def test_a_partial_play_join_warns(self, monkeypatch):
+        parts = pl.DataFrame(
+            {
+                "game_id": [1, 2],
+                "play_id": [10, 20],
+                "tackler_player_ids": ["['7']", "['8']"],
+                "assisted_by_player_ids": ["[]", "[]"],
+                "sacked_by_player_ids": ["[]", "[]"],
+                "pass_defender_player_ids": ["[]", "[]"],
+            }
+        )
+        pbp = pl.DataFrame({"game_id": [1], "id": [10], "def_pos_team_id": [55], "statYardage": [3]})
+        monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: pl.DataFrame())
+        with pytest.warns(UserWarning, match="50.0% of season-2019 play participants"):
+            _PARTICIPANTS_BUILDER(2019)
 
     def test_pbp_splash_weights_and_defending_team(self, monkeypatch):
         pbp = pl.DataFrame(
