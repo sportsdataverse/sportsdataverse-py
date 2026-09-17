@@ -6,6 +6,7 @@ so no ESPN requests are made.
 
 from __future__ import annotations
 
+import gzip
 import tempfile
 from pathlib import Path
 from typing import Generator
@@ -141,13 +142,62 @@ def test_pipeline_version_bump_invalidates_cache(monkeypatch: pytest.MonkeyPatch
 
 
 # ---------------------------------------------------------------------------
-# Test 5: source="shield" raises NotImplementedError
+# Test 5: source="shield" builds from a per-game Shield JSON library
 # ---------------------------------------------------------------------------
 
+_SHIELD_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_shield" / "2024_01_BAL_KC.json.gz"
 
-def test_shield_source_raises_not_implemented() -> None:
-    with pytest.raises(NotImplementedError):
-        build_nfl_season([1], source="shield")
+
+def _shield_raw_dir(tmp_path: Path) -> Path:
+    """Lay the bundled 2024_01_BAL_KC Shield game out as ``{raw_dir}/2024/{game_id}.json``."""
+    season_dir = tmp_path / "2024"
+    season_dir.mkdir()
+    with gzip.open(_SHIELD_FIXTURE, "rb") as fh:
+        (season_dir / "2024_01_BAL_KC.json").write_bytes(fh.read())
+    return tmp_path
+
+
+def test_shield_source_builds_season_from_raw_dir(tmp_path: Path) -> None:
+    df = build_nfl_season(seasons=[2024], source="shield", raw_dir=_shield_raw_dir(tmp_path), schedule_lookup={})
+    assert isinstance(df, pl.DataFrame)
+    assert df["game_id"].unique().to_list() == ["2024_01_BAL_KC"]
+    assert df.height > 100
+    assert df["home_score"].unique().to_list() == [27]  # KC 27, BAL 20
+    # schedule_lookup={} skips the lookup: the three schedule-only columns stay null
+    assert df["spread_line"].null_count() == df.height
+    assert df["roof"].null_count() == df.height
+
+
+def test_shield_source_default_lookup_fills_schedule_columns(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        nfl_build_mod,
+        "_shield_schedule_lookup",
+        lambda season: {"2024_01_BAL_KC": {"roof": "outdoors", "spread_line": -3.0, "total_line": 44.5}},
+    )
+    df = build_nfl_season(seasons=[2024], source="shield", raw_dir=_shield_raw_dir(tmp_path))
+    assert df["roof"].unique().to_list() == ["outdoors"]
+    assert df["spread_line"].unique().to_list() == [-3.0]
+    assert df["total_line"].unique().to_list() == [44.5]
+
+
+def test_shield_source_pandas_and_empty_season(tmp_path: Path) -> None:
+    raw_dir = _shield_raw_dir(tmp_path)
+    (raw_dir / "1999").mkdir()
+    df_pd = build_nfl_season(
+        seasons=[1999, 2024], source="shield", raw_dir=raw_dir, schedule_lookup={}, return_as_pandas=True
+    )
+    assert df_pd.shape[0] > 100 and set(df_pd["game_id"]) == {"2024_01_BAL_KC"}
+
+
+def test_shield_source_argument_validation(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="takes seasons, not game_ids"):
+        build_nfl_season([1], source="shield", raw_dir=tmp_path)
+    with pytest.raises(ValueError, match="requires seasons"):
+        build_nfl_season(seasons=[], source="shield", raw_dir=tmp_path)
+    with pytest.raises(ValueError, match="requires raw_dir"):
+        build_nfl_season(seasons=[2024], source="shield")
+    with pytest.raises(ValueError, match="source='shield' only"):
+        build_nfl_season([1], raw_dir=tmp_path)
 
 
 # ---------------------------------------------------------------------------
