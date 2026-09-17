@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.mlb.mlb_statcast_parsers import _csv_to_frame, parse_mlb_statcast_player
+from sportsdataverse.mlb.mlb_statcast_parsers import _MLBAM_ID_COLUMNS, _csv_to_frame, parse_mlb_statcast_player
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import
     import pandas as pd
@@ -145,7 +145,9 @@ def _search_core(
     frames = [f for f in frames if f.height]
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     if return_as_pandas:
-        return out.to_pandas()
+        # polars -> pandas widens a nullable Int64 to float64; keep the pinned id columns nullable Int64.
+        ids = {c: "Int64" for c in _MLBAM_ID_COLUMNS if out.schema.get(c) == pl.Int64}
+        return out.to_pandas().astype(ids)
     return out
 
 

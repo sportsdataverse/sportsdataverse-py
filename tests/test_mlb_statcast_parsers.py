@@ -164,3 +164,58 @@ def test_parse_player_missing_section_is_zero_rows():
     html = (FIX / "player_page.html").read_text()
     assert parse_mlb_statcast_player(html, section="does_not_exist").height == 0
     assert parse_mlb_statcast_player("<html></html>").height == 0
+
+
+# MLBAM integer id columns of a Savant search CSV (confirmed against the real header).
+_SEARCH_ID_COLS = ("batter", "pitcher", "on_1b", "on_2b", "on_3b", *(f"fielder_{i}" for i in range(2, 10)), "game_pk")
+_SEARCH_HEAD = FIX / "search_2024-06-15_head.csv"
+
+
+def test_parse_search_real_capture_ids_are_int64_exact():
+    """Real Savant search CSV: runner ids blank on empty bases must be Int64 (null), not Float64 660271.0."""
+    from io import StringIO
+
+    import pandas as pd
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    df = parse_mlb_statcast_search(text)
+    assert df.shape == (46, 119)
+    for col in _SEARCH_ID_COLS:
+        assert df.schema[col] == pl.Int64, f"{col} is {df.schema[col]}"
+    # blank -> null, value -> exact integer (bases-loaded pitch, game 745329 AB 44 pitch 2)
+    assert [df[c].null_count() for c in ("on_1b", "on_2b", "on_3b")] == [26, 35, 43]
+    row = df.filter((pl.col("game_pk") == 745329) & (pl.col("at_bat_number") == 44) & (pl.col("pitch_number") == 2))
+    assert row.select("on_1b", "on_2b", "on_3b").row(0) == (656305, 671218, 596103)
+    # every non-id column keeps the dtype a plain CSV read gives it (e.g. all-null sv_id stays Float64)
+    base = pl.from_pandas(pd.read_csv(StringIO(text)))
+    assert {c: t for c, t in df.schema.items() if c not in _SEARCH_ID_COLS} == {
+        c: t for c, t in base.schema.items() if c not in _SEARCH_ID_COLS
+    }
+    pdf = parse_mlb_statcast_search(text, return_as_pandas=True)
+    assert str(pdf["on_1b"].dtype) == "Int64" and pdf["on_1b"].isna().sum() == 26
+
+
+def test_parse_search_non_integral_id_is_not_truncated():
+    """A non-integral value in an id column is surfaced (warning, column left as-is), never floored."""
+    import csv
+    import io
+
+    import pytest
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    # Mutate ONE on_1b cell of the real capture to a non-integral value.
+    rows = list(csv.reader(io.StringIO(_SEARCH_HEAD.read_text(encoding="utf-8"))))
+    idx = rows[0].index("on_1b")
+    target = next(r for r in rows[1:] if r[idx])
+    target[idx] = target[idx] + ".5"
+    buf = io.StringIO()
+    csv.writer(buf, lineterminator="\n").writerows(rows)
+
+    with pytest.warns(UserWarning, match="on_1b"):
+        df = parse_mlb_statcast_search(buf.getvalue())
+    assert df.schema["on_1b"] == pl.Float64
+    assert float(target[idx]) in df["on_1b"].to_list()
+    assert df.schema["on_2b"] == pl.Int64 and df.schema["batter"] == pl.Int64

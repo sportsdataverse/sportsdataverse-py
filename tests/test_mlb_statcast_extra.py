@@ -107,3 +107,24 @@ def test_player_raw_returns_html_else_frame(monkeypatch):
 
     df = ex.mlb_statcast_player(592450)
     assert isinstance(df, pl.DataFrame) and df.height == 1 and "xwoba" in df.columns
+
+
+def test_search_real_capture_ids_stay_int64_in_both_outputs(monkeypatch):
+    """Real Savant search CSV through the chunked search: runner ids Int64, not re-widened by to_pandas."""
+    from pathlib import Path
+
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    body = (Path(__file__).resolve().parent / "fixtures" / "mlb_statcast" / "search_2024-06-15_head.csv").read_text(
+        encoding="utf-8"
+    )
+
+    class R:
+        text = body
+
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: R())
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
+    assert (df.schema["on_1b"], df.schema["on_3b"], df.schema["game_pk"]) == (pl.Int64, pl.Int64, pl.Int64)
+    pdf = ex.mlb_statcast_search("2024-06-15", "2024-06-15", return_as_pandas=True)
+    assert str(pdf["on_1b"].dtype) == "Int64" and pdf["on_1b"].isna().sum() == 26
+    assert pdf["on_1b"].dropna().iloc[0] == int(pdf["on_1b"].dropna().iloc[0])

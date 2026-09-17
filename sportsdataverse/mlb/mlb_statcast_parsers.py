@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import re
+import warnings
 from io import StringIO
 from typing import Dict, List, Union
 
@@ -37,6 +38,27 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame | pd.Da
         return pl.from_pandas(df2)
 
 
+#: Savant CSV columns holding MLBAM integer ids (players, game). pandas reads an integer
+#: column with any blank cell as float64 -- ``on_1b`` is blank whenever first base is
+#: empty -- so these are pinned back to nullable Int64 at the parse boundary.
+_MLBAM_ID_COLUMNS = ("batter", "pitcher", "on_1b", "on_2b", "on_3b", *(f"fielder_{i}" for i in range(2, 10)), "game_pk")
+
+
+def _pin_id_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Cast float-read MLBAM id columns to nullable ``Int64``; warn and skip any holding a non-integral value."""
+    for col in _MLBAM_ID_COLUMNS:
+        if col not in df.columns or not pd.api.types.is_float_dtype(df[col]):
+            continue
+        vals = df[col].dropna()
+        if not (vals % 1 == 0).all():
+            warnings.warn(
+                f"Savant CSV id column {col!r} has non-integral values; left as {df[col].dtype}.", stacklevel=3
+            )
+            continue
+        df[col] = df[col].astype("Int64")
+    return df
+
+
 def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     if not text or not text.strip():
         return _empty_frame(return_as_pandas)
@@ -46,7 +68,7 @@ def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | p
         return _empty_frame(return_as_pandas)
     if df.empty:
         return _empty_frame(return_as_pandas)
-    return _to_output(_snake_columns(df), return_as_pandas)
+    return _to_output(_pin_id_columns(_snake_columns(df)), return_as_pandas)
 
 
 def _html_decode_var(html: str, var_name: str) -> Union[Dict, List, None]:
