@@ -1,12 +1,12 @@
 """ESPN football play-text grammar shared by the CFB and NFL processors.
 
 ESPN's newer play text names a player by an abbreviated form ("M.Chiumento",
-"A.St. Brown", "D.Jones Jr.") rather than spelling the name out. The NFL feed
-has always read that way; the college feed adopted the same vendor template in
-2025, with the jersey number inline ("#43 M.Chiumento punt 43 yards to the
-OSU36 #0 B.Inniss return 16 yards to the TEX48 (#81 N.Townsend), out of
-bounds"). Rust regex has no lookaround, so every pattern anchors on the verb
-that follows the name instead.
+"A.St. Brown", "D.Jones Jr.", "L.Vander Esch", "DK.Metcalf") rather than
+spelling the name out. The NFL feed has always read that way; the college feed
+adopted the same vendor template in 2025, with the jersey number inline ("#43
+M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48
+(#81 N.Townsend), out of bounds"). Rust regex has no lookaround, so every
+pattern anchors on the verb that follows the name instead.
 
 The constants here are the one definition of that name shape; the NFL grammar
 in :mod:`sportsdataverse.nfl.nfl_pbp` composes its verb-anchored patterns from
@@ -18,11 +18,35 @@ from __future__ import annotations
 
 import polars as pl
 
-#: An abbreviated player name: "X.Surname", optionally "Ja.Surname", with a
-#: particle ("A.St. Brown", "A.Van Ginkel") and a generational suffix.
+# One surname word: accented letters ("K.Colón"), straight and curly apostrophes
+# ("J.Malau’ulu"), hyphens, and the escaped apostrophe of the 2008-10 NFL feed
+# ("D.O&apos;Neal").
+_SURNAME_WORD = r"(?:[A-Za-zÀ-ÖØ-öø-ÿ'’\-]|&apos;)+"
+# A further surname word ("L.Vander Esch", "A.Randle El", "J.Echeverria Lozano").
+# Its second letter is lower-case, so an upper-case verb or team code ("R.Cobb
+# MUFFS", "to JAX 28") never joins the name, and it is never "Jr" / "Sr", so the
+# suffix keeps its period ("C.Harris Jr."). Where no verb follows to end the name,
+# a title-case word after it is read in: 2 of 1.09M NFL plays 2002-2026
+# ("Backward pass to T.Cohen The Replay Official ...", "to J.Lane For Two-Point").
+_NEXT_SURNAME_WORD = r"(?:[A-IK-RT-Z][a-z]|[JS][a-qs-z]|[JS]r[a-z])[A-Za-zÀ-ÖØ-öø-ÿ'’\-]*"
+
+#: An abbreviated player name as ESPN's NFL (2002-) and college vendor (2025-)
+#: text writes it: the initials ("T.", "Ja.", "Josh.", "Dari.", "A.J. ", and at a
+#: word start "DK." / "SamL.", so "YACJ.Elliott" still reads "J.Elliott"), an
+#: optional "St." particle, one to three surname words (a lower-case particle
+#: allowed before the later ones: "J.van den Berg"), and a suffix -- "Jr." / "Sr"
+#: or a whole numeral ("III", never the "II" inside it), either after a comma
+#: ("J.Ruffin, Jr.", "R.Royal, III"; not "V", which after a comma is the next
+#: tackler: "(T.Bruschi, V.Wilfork)"), a numeral without a period ("W.Snead IV."
+#: ends a sentence), including the vendor feed's lower-case-L "lll".
 ABBREVIATED_NAME = (
-    r"[A-Z][a-z]{0,2}\.(?:St\. |Ste\. |Van |Von |De |Da |Del |Di |Du |La |Le )?[A-Za-z'\-]+"
-    r"(?: (?:Jr|Sr|II|III|IV)\.?)?"
+    r"(?:[A-Z]\.[A-Z]\. |\b[A-Z]{2}\.|\b[A-Z][a-z]{1,3}[A-Z]\.|[A-Z][a-z]{0,4}\.)"
+    r"(?:St\. |Ste\. )?"
+    + _SURNAME_WORD
+    + r"(?: (?:(?:van|von|de|den|der|da|del|di|du|la|le) )?"
+    + _NEXT_SURNAME_WORD
+    + r"){0,2}"
+    + r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|lll|ll)\b)?"
 )
 
 #: The jersey-prefixed form the 2025 college feed uses: "#43 M.Chiumento".
