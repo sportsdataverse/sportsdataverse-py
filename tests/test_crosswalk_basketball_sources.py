@@ -8,6 +8,8 @@ was attempted and aborted:
    so a dead source degraded the whole crosswalk to ``unmatched`` instead of
    failing. The tests below assert the **raise**, and separately assert that a
    provably-empty-but-valid payload still returns the typed empty frame.
+   ``stats_rosters`` had the same swallow per team and is held to the same
+   contract.
 2. **Wrong envelope for ``scheduleleaguev2``.** The payload is
    ``{"meta":…, "leagueSchedule": {"gameDates": [...]}}``, not the
    ``resultSets`` envelope, so it parsed to zero rows against a healthy API.
@@ -33,6 +35,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     espn_scoreboard_games,
     espn_team_directory,
     require_source,
+    stats_rosters,
     stats_schedule_games,
 )
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
@@ -282,6 +285,100 @@ def test_espn_rosters_still_tolerates_a_single_team_failure(monkeypatch: pytest.
     out = espn_rosters("nba", 1, "ATL", 2026)
     assert out.height == 0
     assert "espn_athlete_id" in out.columns
+
+
+# --------------------------------------------------------------------------
+# stats_rosters: a failed Stats roster fetch is not an empty roster.
+#
+# It wrapped the commonteamroster call in `except Exception: return empty`, and
+# the Stats runtime answers a 403 / rate limit / blank body with `{}` rather
+# than raising -- which parses to the same zero-row frame as a real empty
+# roster. From a host that cannot reach stats.nba.com the player crosswalk
+# therefore came back with every nba_* / wnba_* column null and no error.
+# --------------------------------------------------------------------------
+
+
+def _raising(exc: Exception) -> Any:
+    def fetch(*args: Any, **kwargs: Any) -> Any:
+        raise exc
+
+    return fetch
+
+
+_ROSTER_FIXTURES = {
+    "nba": ("nba_stats/commonteamroster_1610612747_2023_24.json", "1610612747", "2023-24"),
+    "wnba": ("wnba_stats/commonteamroster_1611661319_2023.json", "1611661319", "2023"),
+}
+
+
+def _roster_body(league: str) -> str:
+    return (Path(__file__).parent / "fixtures" / _ROSTER_FIXTURES[league][0]).read_text(encoding="utf-8")
+
+
+def _stats_rosters(league: str, transport: Any) -> pl.DataFrame:
+    """Drive the REAL wrapper + runtime; only the HTTP transport is replaced."""
+    _, team_id, season = _ROSTER_FIXTURES[league]
+    return stats_rosters(league, 13, team_id, season, transport=transport)
+
+
+@pytest.fixture
+def _no_stats_retries(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("SDV_PY_NBA_STATS_RETRIES", raising=False)
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_projects_the_real_capture(league: str) -> None:
+    body = _roster_body(league)
+    rows = next(rs for rs in json.loads(body)["resultSets"] if rs["name"] == "CommonTeamRoster")["rowSet"]
+    out = _stats_rosters(league, lambda *a: (200, body))
+    assert out.height == len(rows) > 0
+    assert out.schema[f"{league}_player_id"] == pl.Utf8
+    assert out[f"{league}_player_id"].to_list() == [str(r[14]) for r in rows]
+    assert out[f"{league}_player_name"].null_count() == 0
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_raises_when_the_transport_fails(league: str) -> None:
+    """A timeout (the observed droplet failure) must not read as an empty roster."""
+    with pytest.raises(CrosswalkSourceError, match="commonteamroster") as exc:
+        _stats_rosters(league, _raising(TimeoutError("stats.nba.com timed out")))
+    assert isinstance(exc.value.__cause__, TimeoutError)
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize(("status", "body"), [(403, ""), (429, ""), (500, "<html>"), (200, "")])
+def test_stats_rosters_raises_when_the_request_is_refused(status: int, body: str) -> None:
+    """The runtime answers a refused request with ``{}``, not an exception."""
+    with pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set"):
+        _stats_rosters("nba", lambda *a: (status, body))
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_allows_a_provably_empty_roster(league: str) -> None:
+    """The envelope answered with no players: the real capture, rowSet emptied."""
+    payload = json.loads(_roster_body(league))
+    for rs in payload["resultSets"]:
+        rs["rowSet"] = []
+    out = _stats_rosters(league, lambda *a: (200, json.dumps(payload)))
+    assert out.height == 0
+    assert dict(out.schema) == {
+        "espn_team_id": pl.Int32,
+        f"{league}_player_id": pl.Utf8,
+        f"{league}_player_name": pl.Utf8,
+        f"{league}_jersey_num": pl.Utf8,
+        f"{league}_position": pl.Utf8,
+        f"{league}_birth_date": pl.Utf8,
+    }
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_without_a_stats_team_id_is_empty(league: str) -> None:
+    out = stats_rosters(league, 13, None, "2023", transport=_raising(AssertionError("must not fetch")))
+    assert out.height == 0
+    assert f"{league}_player_id" in out.columns
 
 
 def test_bart_super_sked_raises_when_the_fetch_fails(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -19,6 +19,7 @@ Per-family subdirectories carry their own README (see `tracking/`).
 | File | Endpoint | Captured | Notes |
 |---|---|---|---|
 | `scheduleleaguev2_2025_26.json` | `nba_stats_scheduleleaguev2(season="2025-26", return_parsed=False)` | 2026-08-07 | 2025-26 season |
+| `commonteamroster_1610612747_2023_24.json` | `nba_stats_commonteamroster(team_id="1610612747", season="2023-24", return_parsed=False)` | 2026-07-08 | Lakers 2023-24, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/00/commonteamroster.json` |
 
 ## Trimming
 

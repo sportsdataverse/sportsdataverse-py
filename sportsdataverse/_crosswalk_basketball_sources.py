@@ -46,9 +46,13 @@ class CrosswalkSourceError(SportsDataverseError):
     could not be rendered): the first returns a typed empty frame, the second
     raises this.
 
-    Only whole-source fetches raise. The per-item loops (one scoreboard call
-    per date, one roster call per team) keep tolerating an individual failure,
-    matching the R producers.
+    Only whole-source fetches raise, plus :func:`stats_rosters`. The other
+    per-item loops (one scoreboard call per date, one ESPN or Fox roster call
+    per team) keep tolerating an individual failure, matching the R producers.
+    The NBA/WNBA Stats roster call raises instead: its runtime answers a
+    refused request with ``{}`` rather than an exception, and a host that
+    cannot reach stats.nba.com fails every team identically, which left every
+    ``nba_*`` / ``wnba_*`` player column null with no error.
 
     Example:
         Fail loudly instead of publishing an all-null crosswalk::
@@ -592,7 +596,20 @@ def stats_rosters(
 
     Returns:
         ``pl.DataFrame`` with ``espn_team_id`` and the ``{league}_player_*``
-        columns the assembler consumes.
+        columns the assembler consumes. A typed empty frame **only** when
+        ``stats_team_id`` is ``None`` or the endpoint answered with a
+        ``CommonTeamRoster`` result set that has no players.
+
+    Raises:
+        CrosswalkSourceError: The fetch raised (timeout, missing
+            ``curl_cffi``), or the response carried no ``CommonTeamRoster``
+            result set -- which is how the Stats runtime reports a 403, a rate
+            limit or a blank body, since it answers those with ``{}`` rather
+            than raising.
+
+    Note:
+        ``stats.{nba,wnba}.com`` hangs on datacenter IPs, so this raises there
+        instead of returning an empty roster.
 
     Example:
         Quick start::
@@ -617,13 +634,27 @@ def stats_rosters(
         from sportsdataverse.nba.nba_stats import nba_stats_commonteamroster as fetch
     else:
         from sportsdataverse.wnba.wnba_stats import wnba_stats_commonteamroster as fetch
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+    endpoint = f"{league}_stats_commonteamroster(team_id={stats_team_id!r}, season={season!r})"
     try:
-        raw = fetch(team_id=stats_team_id, season=season, **kwargs)
-    except Exception:
-        return empty
-    if isinstance(raw, dict):
-        raw = raw.get("CommonTeamRoster")
-    if raw is None or not isinstance(raw, pl.DataFrame) or raw.height == 0:
+        # return_parsed=False so the envelope is inspectable: the runtime turns a
+        # 403 / rate limit / blank body into `{}`, which parses to the same
+        # zero-row frame as a real empty roster. Only a payload that carries the
+        # CommonTeamRoster result set can be called empty.
+        payload = fetch(team_id=stats_team_id, season=season, return_parsed=False, **kwargs)
+    except Exception as exc:
+        raise CrosswalkSourceError(f"{endpoint} failed: {type(exc).__name__}: {exc}") from exc
+    sets = payload.get("resultSets") if isinstance(payload, dict) else None
+    if not isinstance(sets, list) or not any(
+        isinstance(rs, dict) and rs.get("name") == "CommonTeamRoster" for rs in sets
+    ):
+        raise CrosswalkSourceError(
+            f"{endpoint} returned no CommonTeamRoster result set "
+            f"(got {type(payload).__name__} with keys {sorted(payload)[:10] if isinstance(payload, dict) else '-'})"
+        )
+    raw = parse_nba_stats_result_sets(payload, result_set="CommonTeamRoster")
+    if not isinstance(raw, pl.DataFrame) or raw.height == 0:
         return empty
     return raw.select(
         pl.lit(int(espn_team_id), dtype=pl.Int32).alias("espn_team_id"),
