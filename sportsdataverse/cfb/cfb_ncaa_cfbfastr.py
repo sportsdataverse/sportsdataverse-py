@@ -31,7 +31,7 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 
-from sportsdataverse.cfb.cfb_ncaa_pbp import _norm_code, _split_yard_line, _yl_candidates
+from sportsdataverse.cfb.cfb_ncaa_pbp import _NAME, _norm_code, _split_yard_line, _yl_candidates
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -43,7 +43,7 @@ __all__ = [
 
 _TRAILING_CLOCK_RE = re.compile(r"clock (\d{1,2}:\d{2})")
 _QTR_MARKER_RE = re.compile(r"start of (\d)(?:st|nd|rd|th) quarter", re.I)
-_INT_BY_RE = re.compile(r"intercepted by ([A-Z][\w'.\- ]*,[\w'.\- ]+?)(?: at| return| for|\.|,|$)")
+_INT_BY_RE = re.compile(rf"intercepted by ({_NAME})")
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
 # XP/FG result: "good" appears in both cases and "NO GOOD"/"no good" must not match.
 _KICK_GOOD_RE = re.compile(r"(?<!no )good", re.I)
@@ -222,8 +222,12 @@ def _norm_team(name: "str | None") -> str:
 
 
 def _first_last(name: "str | None") -> "str | None":
-    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last[ Suffix]'."""
-    if not name or "," not in name:
+    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last[ Suffix]'; a 2019-era 'First Last'
+    is already in that form, and a 2025 jersey prefix ("#95 K.Kimble") is dropped."""
+    if not name:
+        return name
+    name = re.sub(r"^#\d{1,2}\s", "", name)
+    if "," not in name:
         return name
     last, first = name.split(",", 1)
     return f"{first.strip()} {last.strip()}"

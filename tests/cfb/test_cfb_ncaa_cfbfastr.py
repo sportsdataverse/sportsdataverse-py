@@ -510,3 +510,13 @@ def test_digit_side_code_end_spots_resolve_against_the_game_codes() -> None:
         row = df.filter(pl.col("play_text").str.starts_with(prefix))
         assert row.height == 1, prefix
         assert row.item(0, "yards_to_goal_end") == end, prefix
+
+
+def test_first_last_participants_reach_the_cfbfastr_frame() -> None:
+    """2019 "First Last" names arrive as they are; "LAST, First" is turned around (NC3)."""
+    df = _frame("1735890")
+    assert "KeShawn Vaughn" in df.get_column("rusher_player_name").to_list()
+    assert "Joe Burrow" in df.get_column("passer_player_name").to_list()
+    assert "Derek Stingley" in df.get_column("interception_player_name").to_list()
+    df = _frame("1735120")
+    assert "Mike BEAUDRY" in df.get_column("passer_player_name").to_list()

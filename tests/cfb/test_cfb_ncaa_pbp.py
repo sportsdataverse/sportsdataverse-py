@@ -376,3 +376,46 @@ def test_review_reprint_feeds_no_flag_but_play_text_keeps_it() -> None:
     assert over.row(0, named=True)["is_touchdown"] is True
     stands = parse_cfb_ncaa_pbp(_variant("6386512")).filter(pl.col("play_text").str.contains("PLAY STANDS"))
     assert stands.height >= 1 and stands.get_column("is_first_down").all()
+
+
+# --- NC3 / NC4: 2019-era "First Last" names and damaged tackler separators ----
+# 1735890 LSU @ Vanderbilt (2019): "SH," formation prefix, "First Last" names everywhere,
+#   "C. Ed.-Helaire", tacklers glued with no separator ("Kristian FultonJaCoby Stevens")
+# 1735120 Wagner @ UConn (2019): "LAST, First" with a space, tacklers joined by a mangled
+#   ":" ("MORGAN, D.J.3aPAUL, Keyshawn")
+
+
+def test_first_last_names_are_extracted() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735890"))
+    rush = df.filter(pl.col("play_type") == "rush")
+    assert rush.height > 40
+    assert rush.get_column("rusher").null_count() == 0
+    assert "KeShawn Vaughn" in rush.get_column("rusher").to_list()
+    assert "C. Ed.-Helaire" in rush.get_column("rusher").to_list()
+    assert rush.filter(pl.col("play_text").str.starts_with("SH, ")).get_column("formation").unique().to_list() == [
+        "SH,"
+    ]
+    passes = df.filter(pl.col("play_type") == "pass")
+    assert passes.get_column("passer").null_count() == 0
+    comp = passes.filter(pl.col("pass_complete") == True)  # noqa: E712
+    assert comp.get_column("receiver").null_count() == 0
+    assert {"Joe Burrow", "Riley Neal"} <= set(passes.get_column("passer").unique().to_list())
+    ko = df.filter(pl.col("play_type") == "kickoff")
+    assert ko.get_column("kicker").null_count() == 0
+    assert "C. Ed.-Helaire" in ko.get_column("returner").to_list()
+    punts = df.filter(pl.col("play_type") == "punt")
+    assert punts.filter(pl.col("punter").is_null()).get_column("play_text").str.contains("punt BLOCKED").all()
+    assert punts.get_column("punter").null_count() < punts.height
+    sacks = df.filter(pl.col("play_type") == "sack")
+    assert sacks.height > 0 and sacks.get_column("passer").null_count() == 0
+
+
+def test_last_first_with_space_and_initials() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    assert "BEAUDRY, Mike" in df.get_column("passer").to_list()
+    assert "DRAYTON, Matt" in df.get_column("receiver").to_list()  # sentence period dropped
+    assert "McKENZIE, D" in df.get_column("rusher").to_list()  # a bare initial
+    assert (
+        df.filter(pl.col("play_type").is_in(["rush", "pass"])).get_column("rusher").null_count()
+        < df.filter(pl.col("play_type") == "pass").height + 3
+    )

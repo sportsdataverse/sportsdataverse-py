@@ -31,8 +31,28 @@ if TYPE_CHECKING:
 
 __all__ = ["DRIVE_TITLES_SCHEMA", "PBP_SCHEMA", "parse_cfb_ncaa_drive_titles", "parse_cfb_ncaa_pbp"]
 
-# NCAA official "Last,First", incl. suffixes ("Wilborn Jr.,James", "Jordan III,Tre").
-_NAME = r"[A-Z][\w.'\-]+(?:\s(?:Jr|Sr|II|III|IV)\.?)?,\s?[A-Z][\w.'\-]+"
+# A player name, in any of the page generations' forms (case-SENSITIVE inside the
+# case-insensitive play regexes: names are capitalised, the narrative is not):
+#   * official "Last[ Suffix],First" -- "Wilborn Jr.,James", "Smith, Danny", "McKENZIE, D"
+#   * 2019-era "First Last" -- "Joe Burrow", "C. Ed.-Helaire", "K. Duncan Jr.", or a lone
+#     surname ("ALEXANDER-STEVE"); anchored by the play verb that follows it
+#   * 2025 jersey style -- "#95 K.Kimble"
+_SUFFIX = r"(?:\s(?:Jr|Sr|II|III|IV)\.?)?"
+_TOKEN = r"[A-Z][A-Za-z.'\-]*"
+_NAME = rf"(?-i:[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}|#\d{{1,2}}\s{_TOKEN}|{_TOKEN}(?:\s{_TOKEN}){{0,2}}{_SUFFIX})"
+_LAST_FIRST_RE = re.compile(rf"^[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}$")
+
+
+def _clean_name(name: "str | None") -> "str | None":
+    """Drop the sentence period the regex swallows ("DRAYTON, Matt." / "Hodge, C..") -- an
+    initial keeps its own ("Covington, J.")."""
+    if not name:
+        return name
+    while name.endswith(".."):
+        name = name[:-1]
+    last = re.split(r"[,\s]+", name)[-1]
+    return name[:-1] if name.endswith(".") and len(last.rstrip(".")) >= 3 else name
+
 
 # Yard-line token = side code + yard number (0-50). A code is NOT a fixed character
 # class: "Ric25", "W&M25", nicknames ("SPARTANS25"), digits ("SFA2" + 25 is printed
@@ -126,9 +146,11 @@ def _split_yard_line(token: "str | None", codes: "list[str]") -> "tuple[str | No
 
 
 # --- play_text field regexes ----------------------------------------------
-_CLOCK_RE = re.compile(r"^\((\d{1,2}:\d{2})\)\s*")  # some games prefix each play with "(MM:SS)"
+# some games prefix each play with "(MM:SS)" / "Clock MM:SS,"
+_CLOCK_RE = re.compile(r"^(?:\((\d{1,2}:\d{2})\)|Clock (\d{1,2}:\d{2}),)\s*")
 _REVIEW_RE = re.compile(r"\s*(?:The previous play is under|\(Original Play:)")
-_FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol)\s+")
+# 2025 words, or the 2019-era codes "SH,"/"SHOT,"/"SG,"/"SGUN,"/"NHSG,"/"NH,"/"PSTL,"
+_FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol|(?:SHOT|SGUN|NHSG|PSTL|SG|SH|NH),)\s+")
 # The play's yardage is its FIRST "for ..." clause: "for 7 yards gain" / "for 5 yards
 # loss" (2025), "for loss of 4 yards" / "for 13 yards" (2019-era), "for no gain".
 # Leftmost wins, so a later fumble-advance clause ("..., recovered by VU Smith at
@@ -144,7 +166,7 @@ _RUSH_RE = re.compile(
     re.I,
 )
 _PASS_RE = re.compile(
-    rf"(?P<passer>{_NAME}) pass (?P<result>complete|incomplete|intercepted)"
+    rf"(?P<passer>{_NAME})(?-i:(?:\s[a-z]+){{0,2}}) pass (?P<result>complete|incomplete|intercepted)"
     rf"(?:\s+(?P<depth>short|deep))?(?:\s+(?P<dir>left|right|middle))?"
     rf"(?:.*?\bto\s+(?P<receiver>{_NAME}))?",
     re.I,
@@ -372,6 +394,8 @@ def _decompose_play_text(text: str) -> "dict":
         out["play_type"] = "penalty"
     else:
         out["play_type"] = "unknown"
+    for k in ("passer", "rusher", "receiver", "kicker", "punter", "returner", "penalty_player"):
+        out[k] = _clean_name(out[k])
     return out
 
 
