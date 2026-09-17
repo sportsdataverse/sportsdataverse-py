@@ -121,6 +121,9 @@ _VENDOR_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)([^#()\d]+?) field goal attempt"
 _VENDOR_KICKOFF_RETURNER_RE = (
     r"kickoff -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? (?:#\d{1,3} )?([^#()\d]+?) return -?\d+ yards?"
 )
+_VENDOR_PUNT_RETURNER_RE = (
+    r"punt -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? (?:#\d{1,3} )?([^#()\d]+?) return -?\d+ yards?"
+)
 
 
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
@@ -4747,6 +4750,8 @@ class CFBPlayProcess(object):
                     pl.coalesce(
                         # "#0 B.Inniss return 16 yards" / "fair catch by #21 R.Niblett"
                         _espn_text.jersey_returner(),
+                        # other name shapes: "#2 R.Vander Zee", "#16 M.Beltran, Jr.", "#10 J.Malau’ulu"
+                        pl.col("text").str.extract(_VENDOR_PUNT_RETURNER_RE, 1),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",

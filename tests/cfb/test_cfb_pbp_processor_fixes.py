@@ -10,6 +10,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858213.json`` -- Florida A&M @ Miami, 2026 (a timeout logged twice).
 * ``summary_401677179.json`` -- Indiana @ Notre Dame, 2024 ("Timeout Indiana" holds "nd").
 * ``summary_401112081.json`` -- Baylor @ TCU, 2019 (triple overtime, every OT period numbered 5).
+* ``summary_401858426.json`` -- Northern Illinois @ Iowa, 2026 (a punt returner written ``R.Vander Zee``).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -182,3 +183,12 @@ def test_odds_source_returned():
     proc, result, _, _ = _processed(401856682)
     assert result["odds_source"] == proc.odds_source
     assert result["odds_source"] in {"summary_pickcenter", "core_odds_api", "default", "injected"}
+
+
+# --- C16: punt returner names that are not "X.Surname" -------------------------------------------
+
+
+def test_punt_returner_beyond_abbreviated_names():
+    plays = _plays(401858426).filter(pl.col("text").str.contains("#2 R.Vander Zee return", literal=True))
+    assert plays.height == 2
+    assert plays["punt_return_player_name"].to_list() == ["R.Vander Zee", "R.Vander Zee"]
