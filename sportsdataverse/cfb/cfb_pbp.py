@@ -1599,30 +1599,6 @@ class CFBPlayProcess(object):
             )
         )
 
-        pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
-        )
-        pbp_txt["timeouts"][init["homeTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
-        )
-        pbp_txt["timeouts"][init["awayTeamId"]]["1"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
-        )
-        pbp_txt["timeouts"][init["awayTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
-        )
         # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
         # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
         # same way) nor, in older feeds, which overtime period a row belongs to, so the count is
@@ -1634,6 +1610,18 @@ class CFBPlayProcess(object):
         repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
         home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         away_used = ((pl.col("awayTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
+        # The payload's per-team lists hold exactly the rows that decremented a count: "1" / "2" the
+        # halves, "OT<n>" an overtime period (older feeds number every overtime 5, so theirs is "OT1").
+        window_key = pl.when(period <= 4).then(window.cast(pl.Utf8)).otherwise(pl.format("OT{}", period - 4))
+        charged = pbp_txt["plays"].select(
+            "id",
+            window_key.alias("window"),
+            ((home_used == 1) & (home_used.cum_sum().over(window) <= allotted)).alias("home"),
+            ((away_used == 1) & (away_used.cum_sum().over(window) <= allotted)).alias("away"),
+        )
+        for side in ("home", "away"):
+            by_window = charged.filter(pl.col(side)).group_by("window", maintain_order=True).agg(pl.col("id"))
+            pbp_txt["timeouts"][init[f"{side}TeamId"]] = {"1": [], "2": [], **dict(by_window.iter_rows())}
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(

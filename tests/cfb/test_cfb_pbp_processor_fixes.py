@@ -213,3 +213,36 @@ def test_cfb_pbp_json_returns_the_attached_summary():
     loaded = proc.espn_cfb_pbp(summary=_summary(401856682))
     assert proc.cfb_pbp_json() is loaded
     assert proc.json is loaded
+
+
+# --- C20: the payload's timeout lists agree with the capped counts --------------------------------
+
+
+def test_timeout_lists_agree_with_counts():
+    period = pl.col("period.number")
+    window = (
+        pl.when(period <= 2)
+        .then(pl.lit("1"))
+        .when(period <= 4)
+        .then(pl.lit("2"))
+        .otherwise(pl.format("OT{}", period - 4))
+    )
+    for game_id in (401856682, 401112081):
+        proc, result, _, _ = _processed(game_id)
+        plays = proc.plays_frame.with_columns(window=window)
+        for side, team_id in (("home", proc.homeTeamId), ("away", proc.awayTeamId)):
+            lists = result["timeouts"][team_id]
+            last = plays.group_by("window", maintain_order=True).agg(
+                pl.col(f"end.{side}TeamTimeouts").last(), pl.col("period.number").first()
+            )
+            for key, remaining, first_period in last.iter_rows():
+                allotted = 3 if first_period <= 4 else 1
+                assert len(lists.get(key, [])) == allotted - remaining, (game_id, side, key)
+            ids = [i for key_ids in lists.values() for i in key_ids]
+            charged = plays.filter(pl.col("id").is_in(ids))
+            assert charged.height == len(ids) and charged[f"{side}TimeoutCalled"].all()
+    # Texas logged four timeouts in the first half of 2026 Ohio State @ Texas; Baylor's overtime
+    # timeouts of 2019 Baylor @ TCU used to be listed under the second half.
+    assert len(_processed(401856682)[1]["timeouts"][251]["1"]) == 3
+    baylor = _processed(401112081)[1]["timeouts"][239]
+    assert (len(baylor["2"]), len(baylor["OT1"])) == (3, 1)
