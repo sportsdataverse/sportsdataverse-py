@@ -73,7 +73,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
             unchanged behavior. ``"sportsdataverse"`` / ``"sdv"`` returns the
             SDV-native ``nfl_model_pbp`` release: a Python-built, nflfastR-faithful
             enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that
-            covers 1999+ (27 assets, verified 2026-09-02) and drops administrative / timeout
+            covers 1999+ (28 assets, verified 2026-09-17) and drops administrative / timeout
             rows for a clean modeling subset. Any other value raises ``ValueError``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -144,8 +144,9 @@ def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFra
 
     A named alias for ``load_nfl_pbp(seasons, source="sportsdataverse")`` -- the
     Python-built, nflfastR-faithful enriched frame published as
-    ``nfl_model_pbp/model_pbp_{season}.parquet`` (27 assets, 1999-2025 as of
-    2026-09-02, 257 columns in every season). It carries ep/epa, wp/wpa/vegas_wp,
+    ``nfl_model_pbp/model_pbp_{season}.parquet`` (28 assets, 1999-2026 as of
+    2026-09-17; 326 columns in every season from 2002, while the 1999-2001
+    assets predate the 2026-09-10 rebuild and carry 257/256/256). It carries ep/epa, wp/wpa/vegas_wp,
     cp/cpoe and xyac_*/air_epa, and drops administrative / timeout rows for a
     clean modeling subset -- unlike the nflverse ``load_nfl_pbp`` default, which
     keeps them.

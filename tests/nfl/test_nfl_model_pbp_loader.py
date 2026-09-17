@@ -1,5 +1,5 @@
 """Tests for ``load_nfl_model_pbp`` -- the named loader for the SDV-native
-``nfl_model_pbp`` release (27 assets, 1999-2025, verified live 2026-09-02).
+``nfl_model_pbp`` release (28 assets, 1999-2026, verified live 2026-09-17).
 """
 
 from __future__ import annotations
@@ -67,9 +67,12 @@ def test_exported_from_the_nfl_package():
 @skip_if_no_live
 def test_live_model_pbp_reads_the_release():
     df = nfl_loaders.load_nfl_model_pbp([2024])
-    # 257 columns in every published season, checked against all 27 assets on
-    # 2026-09-02 via a parquet-footer scan.
-    assert df.width == 257, df.width
+    # 326 columns in every season 2002-2026 (identical names and order), checked
+    # against all 28 assets on 2026-09-17 via a parquet-footer scan. The
+    # 2026-09-10 rebuild of 2002-2025 added 69 columns (drive_*/series_*,
+    # qb_dropback/pass/rush, and the air/YAC/pass/rush EPA-WPA split with its
+    # home/away totals); 1999-2001 predate it and still carry 257/256/256.
+    assert df.width == 326, df.width
     assert df.height > 40_000, df.height
     assert df.schema["game_id"] == pl.String
     assert {"ep", "epa", "wp", "vegas_wp", "cp", "cpoe"} <= set(df.columns)
