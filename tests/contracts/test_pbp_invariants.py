@@ -153,6 +153,9 @@ def test_timeouts():
     assert _fires(no_reset, "timeouts.second_half_reset") == 1
     grow = _game(**{"end__awayTeamTimeouts": (2, 2)})
     assert _fires(grow, "timeouts.increase_within_half") == 1
+    # the timeout row (2 left) is Q4, the next row opens overtime with 3: a re-allotment, not an increase
+    ot_realloc = _game().with_columns(pl.Series("period.number", [1, 1, 2, 2, 4, 5]))
+    assert _fires(ot_realloc, "timeouts.increase_within_half") == 0
 
 
 # 2 --------------------------------------------------------------------------

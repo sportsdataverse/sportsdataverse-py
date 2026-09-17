@@ -190,7 +190,12 @@ def _timeouts(df: pl.DataFrame) -> list[RuleResult | None]:
     if not _has(df, *_TO, "period.number"):
         return []
     f = df.with_columns(
-        __half=pl.when(c("period.number") <= 2).then(1).otherwise(2),
+        # each overtime period is its own allotment (NFL re-allots for OT; NCAA one per OT period)
+        __half=pl.when(c("period.number") <= 2)
+        .then(1)
+        .when(c("period.number") <= 4)
+        .then(2)
+        .otherwise(c("period.number")),
         __home_used=c("start.homeTeamTimeouts") - c("end.homeTeamTimeouts"),
         __away_used=c("start.awayTeamTimeouts") - c("end.awayTeamTimeouts"),
     ).with_columns(
@@ -225,7 +230,7 @@ def _timeouts(df: pl.DataFrame) -> list[RuleResult | None]:
             f,
             "timeouts.increase_within_half",
             1,
-            "a team's timeouts remaining never increase within a half",
+            "a team's timeouts remaining never increase within a half (each overtime period is its own allotment)",
             same_half,
             (c("end.homeTeamTimeouts") > c("__prev_end_home")) | (c("end.awayTeamTimeouts") > c("__prev_end_away")),
             _TO,
