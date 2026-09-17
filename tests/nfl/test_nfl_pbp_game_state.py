@@ -202,3 +202,48 @@ def test_decision_views_carry_home_favoured_positive_spread_line(run):
     assert seen["fourth"] and seen["two_pt"]
     for key in ("fourth", "two_pt"):
         assert seen[key][0]["spread_line"].unique().to_list() == [8.5], key
+
+
+# ---------------------------------------------------------------------------
+# N3 -- one game-level roof reaches every model (EP, CP, xpass, 4th down, 2pt)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def dome_run(summary):
+    import copy
+
+    indoor = copy.deepcopy(summary)
+    indoor["gameInfo"]["venue"]["indoor"] = True
+    return _recorded_run(indoor)
+
+
+def _roof_seen(seen: dict) -> set:
+    """Every roof value the models received: frame columns and one-hot matrix rows."""
+    roofs = set()
+    for key in ("fourth", "two_pt", "xpass"):
+        for view in seen[key]:
+            roofs |= set(view["roof"].to_list())
+    names = {(1, 0, 0): "retractable", (0, 1, 0): "dome", (0, 0, 1): "outdoors"}
+    for features, x in seen["matrices"]:
+        if "dome" in features:
+            cols = x[:, [features.index(c) for c in ("retractable", "dome", "outdoors")]]
+            roofs |= {names.get(tuple(int(v) for v in row), str(row)) for row in cols}
+    return roofs
+
+
+def test_roof_defaults_to_outdoors_for_every_model(run, frame):
+    # ESPN's summary venue carries no roof field: the documented default applies everywhere
+    _, _, seen = run
+    assert "indoor" not in run[1]["gameInfo"]["venue"]
+    assert frame["roof"].unique().to_list() == ["outdoors"]
+    assert seen["xpass"] and seen["matrices"]
+    assert _roof_seen(seen) == {"outdoors"}
+
+
+def test_indoor_venue_is_a_dome_for_every_model(dome_run, frame):
+    proc, _, seen = dome_run
+    assert proc.plays_frame["roof"].unique().to_list() == ["dome"]
+    assert _roof_seen(seen) == {"dome"}
+    ep = frame.select("id", "EP_start").join(proc.plays_frame.select("id", "EP_start"), on="id", suffix="_dome")
+    assert (ep["EP_start"] - ep["EP_start_dome"]).abs().max() > 0.01

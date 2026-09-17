@@ -245,6 +245,28 @@ def _nfl_parse_penalty_spot(row):
     return f"{side}:{yardline}" if side else None
 
 
+# ESPN's summary names the venue but carries no roof. EP / CP / xpass were trained
+# (nfl-data ``model_training.play_level.make_model_mutations``) on nflverse roofs
+# where dome/closed -> dome=1 and every other roof -> outdoors=1 -- retractable is
+# never 1 -- and nfl4th reads "dome" / "outdoors" the same way, so the default is
+# the most common NFL roof rather than the retractable state no model was fit on.
+_NFL_DEFAULT_ROOF = "outdoors"
+
+
+def _nfl_roof(game_info) -> str:
+    """The game's roof from ``gameInfo.venue.indoor`` when ESPN (or an adapter) supplies it."""
+    indoor = ((game_info or {}).get("venue") or {}).get("indoor")
+    return "dome" if indoor is True else "outdoors" if indoor is False else _NFL_DEFAULT_ROOF
+
+
+def _nfl_with_roof(x, feature_names, roof):
+    """Set the roof one-hots ``ep_wp``'s ESPN feature builders hard-code (retractable=1)."""
+    x[:, feature_names.index("retractable")] = 0.0
+    x[:, feature_names.index("dome")] = float(roof == "dome")
+    x[:, feature_names.index("outdoors")] = float(roof == "outdoors")
+    return x
+
+
 # "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),
 # "Timeout DENVER BRONCOS, clock 9:52.", "Indy timeout; 02:42 remaining 2nd quarter" (2002-2007).
 _NFL_TIMEOUT_CODE_RE = re.compile(r"(?i)\btimeout\s*#\s*\d+\s*(?:by\s+)?([A-Z]{2,3})\b")
@@ -652,6 +674,7 @@ class NFLPlayProcess(object):
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
                 # Defensive cast: ESPN sometimes returns this as a python float (no .astype()), sometimes as numpy. Same shape fix as the cfb_pbp version.
                 overUnder=pl.lit(float(np.asarray(init["overUnder"]).reshape(-1)[0])).first(),
+                roof=pl.lit(init["roof"]),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
@@ -1253,6 +1276,7 @@ class NFLPlayProcess(object):
         init["awayTeamName"] = awayTeamName
         init["awayTeamAbbrev"] = awayTeamAbbrev
         init["awayTeamNameAlt"] = awayTeamNameAlt
+        init["roof"] = self.roof = _nfl_roof(pbp_txt.get("gameInfo"))
         self.homeTeamId = homeTeamId
         self.homeTeamMascot = homeTeamMascot
         self.homeTeamName = homeTeamName
@@ -3718,7 +3742,7 @@ class NFLPlayProcess(object):
             other.cast(pl.Utf8).alias("defteam"),
             pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
             pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
-            pl.lit("outdoors").alias("roof"),
+            pl.col("roof"),
             pl.col("period").alias("qtr"),
             qsr.alias("quarter_seconds_remaining"),
             pl.lit(10.0).alias("ydstogo"),
@@ -4494,7 +4518,9 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_tb = _ep_model.predict(DMatrix(X_ep_tb, feature_names=EP_FEATURES)).reshape(-1, 7)
+        _probs_tb = _ep_model.predict(
+            DMatrix(_nfl_with_roof(X_ep_tb, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
+        ).reshape(-1, 7)
         EP_start_touchback = np.clip(_probs_tb @ _EP_POINT_VALUES, -10.0, 10.0)
 
         X_ep_start = _espn_ep_features(
@@ -4510,7 +4536,9 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_start = _ep_model.predict(DMatrix(X_ep_start, feature_names=EP_FEATURES)).reshape(-1, 7)
+        _probs_start = _ep_model.predict(
+            DMatrix(_nfl_with_roof(X_ep_start, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
+        ).reshape(-1, 7)
         EP_start = np.clip(_probs_start @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = (
@@ -4585,7 +4613,9 @@ class NFLPlayProcess(object):
             pos_timeouts_col="end.posTeamTimeouts",
             def_timeouts_col="end.defPosTeamTimeouts",
         )
-        _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
+        _probs_end = _ep_model.predict(
+            DMatrix(_nfl_with_roof(X_ep_end, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
+        ).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
@@ -4658,7 +4688,9 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_cf = _ep_model.predict(DMatrix(X_ep_cf, feature_names=EP_FEATURES)).reshape(-1, 7)
+        _probs_cf = _ep_model.predict(
+            DMatrix(_nfl_with_roof(X_ep_cf, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
+        ).reshape(-1, 7)
         EP_penalty_cf = np.clip(_probs_cf @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = play_df.with_columns(
@@ -4936,7 +4968,9 @@ class NFLPlayProcess(object):
             pos_timeouts_col="_pos_to",
             def_timeouts_col="_def_to",
         )
-        _probs_respot = _ep_model.predict(DMatrix(X_ep_respot, feature_names=EP_FEATURES)).reshape(-1, 7)
+        _probs_respot = _ep_model.predict(
+            DMatrix(_nfl_with_roof(X_ep_respot, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
+        ).reshape(-1, 7)
         ep_respot = np.clip(_probs_respot @ _EP_POINT_VALUES, -10.0, 10.0)
 
         fixed = respotted.select(
@@ -5077,12 +5111,12 @@ class NFLPlayProcess(object):
             pl.col("start.defPosTeamTimeouts").alias("defteam_timeouts_remaining"),
             pl.col("pass").cast(pl.Int8).alias("pass"),
             pl.col("rush").cast(pl.Int8).alias("rush"),
+            pl.col("roof"),
         ).with_columns(
             # _make_cp_mutations derives `home` from posteam == home_team; the
             # ESPN frame already knows home via start.is_home, so synthesize a
             # home_team string that makes `home` resolve correctly.
             home_team=pl.when(pl.col("home_team_flag") == True).then(pl.col("posteam")).otherwise(pl.lit("__away__")),
-            roof=pl.lit("retractable"),
         )
 
         try:
@@ -5179,7 +5213,7 @@ class NFLPlayProcess(object):
             pl.col("start.def_pos_team.id").cast(pl.Utf8).alias("defteam"),
             pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
             pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
-            pl.lit("outdoors").alias("roof"),
+            pl.col("roof"),
             pl.col("period").alias("qtr"),
             qsr.alias("quarter_seconds_remaining"),
             pl.col("start.distance").cast(pl.Float64).alias("ydstogo"),
@@ -5462,7 +5496,9 @@ class NFLPlayProcess(object):
                 pass_middle_col="pass_middle",
                 home_col="start.is_home",
             )
-            cp_preds = _cp_model.predict(DMatrix(X_cp, feature_names=CP_FEATURES))
+            cp_preds = _cp_model.predict(
+                DMatrix(_nfl_with_roof(X_cp, CP_FEATURES, self.roof), feature_names=CP_FEATURES)
+            )
             cp_frame = pass_df.select("_cp_row_idx").with_columns(pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64))
         else:
             cp_frame = pl.DataFrame(
