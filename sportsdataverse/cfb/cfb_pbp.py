@@ -631,8 +631,10 @@ def _timeout_initials_side(row) -> str | None:
     YOUNG" (BYU), "LOUISIANA STATE" (LSU), "TENN MARTIN" (UTM), "SOUTHERN METHODIST UNIVERSITY"
     (SMU), "NORTH CAROLINA ST" (NCST). The token's initials, with a university "U" before or
     after them, or the initials of all but its last word plus that word, are compared with both
-    abbreviations from the header; a strict winner is charged. This outranks a substring match:
-    "SOUTHERN CAL" contains Cal's abbreviation but is USC's timeout.
+    abbreviations from the header; a strict winner is charged. This outranks a partial substring
+    match ("SOUTHERN CAL" contains Cal's abbreviation but is USC's timeout) but never a name part
+    that covers the whole token ("OREGON ST" is Oregon State's, although OSU is Ohio State's) --
+    the caller applies that guard.
     """
     words = [
         w for w in re.split(r"[\s\-]+", (row["_timeout_token"] or "").upper().replace("&", "").replace(".", "")) if w
@@ -1630,9 +1632,15 @@ class CFBPlayProcess(object):
         short_side = pl.when((pl.col("type.text") == "Timeout") & (home_match == 0) & (away_match == 0)).then(
             _timeout_struct.map_elements(_timeout_team_side, return_dtype=pl.Utf8)
         )
-        initials_side = pl.when(pl.col("type.text") == "Timeout").then(
-            _timeout_struct.map_elements(_timeout_initials_side, return_dtype=pl.Utf8)
-        )
+        # The initialism outranks a PARTIAL name match only ("SOUTHERN CAL" holds Cal's "cal" but
+        # is USC's). A name part that covers the whole token is that team's timeout: "Timeout
+        # OREGON ST" is Oregon State's own "Oregon St", although its initials are also Ohio
+        # State's OSU (2018 401012682). Over 5,180 games 2004-2026 the initialism disagreed with
+        # the literal match on 22 rows: 21 partial matches it corrects, 1 full match it broke.
+        initials_side = pl.when(
+            (pl.col("type.text") == "Timeout")
+            & (pl.max_horizontal(home_match, away_match) < _timeout_team_token().str.len_chars())
+        ).then(_timeout_struct.map_elements(_timeout_initials_side, return_dtype=pl.Utf8))
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1730,7 +1738,8 @@ class CFBPlayProcess(object):
                 # Indiana's and not Notre Dame's ("nd"), "Timeout Iowa State" is not Iowa's. A tie
                 # (two teams sharing a mascot) still charges both. A token no part matches goes to
                 # the shortened-name resolver, which charges a strict winner or nobody. A token
-                # whose initialism is exactly one team's abbreviation outranks both.
+                # whose initialism is exactly one team's abbreviation outranks both, unless a
+                # name part covers the whole token.
                 (
                     (pl.col("type.text") == "Timeout")
                     & pl.coalesce(

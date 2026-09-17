@@ -29,6 +29,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858224.json`` -- Wake Forest @ Purdue, 2026 (2OT; the vendor feed's sequenceNumber is a garbled running count).
 * ``summary_332990030.json`` -- Utah @ USC, 2013 ("Timeout SOUTHERN CAL").
 * ``summary_401110775.json`` -- UT Martin @ Florida, 2019 ("Timeout TENN MARTIN").
+* ``summary_401012682.json`` -- Oregon State @ Ohio State, 2018 ("Timeout OREGON ST" whose initials are Ohio State's OSU).
 * ``summary_333130023.json`` -- San Diego State @ San Jose State, 2013 (returners tackled out of bounds).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
@@ -396,6 +397,10 @@ def test_timeout_spelled_out_team_matches_abbreviation():
     assert usc.height == 5 and usc["homeTimeoutCalled"].all() and not usc["awayTimeoutCalled"].any()
     utm = _plays(401110775).filter(pl.col("text").str.starts_with("Timeout TENN MARTIN"))
     assert utm.height == 3 and utm["awayTimeoutCalled"].all() and not utm["homeTimeoutCalled"].any()
+    # a name part that covers the whole token wins over the initialism: "OREGON ST" is Oregon State's
+    # "Oregon St", although its initials OSU are Ohio State's abbreviation
+    orst = _plays(401012682).filter(pl.col("text").str.starts_with("Timeout OREGON ST"))
+    assert orst.height == 1 and orst["awayTimeoutCalled"].all() and not orst["homeTimeoutCalled"].any()
 
 
 # --- C38b: a returner tackled out of bounds is not a kick out of bounds (pre-2025 text) -----------
