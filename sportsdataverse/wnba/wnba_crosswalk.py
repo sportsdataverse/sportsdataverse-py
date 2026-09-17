@@ -322,6 +322,7 @@ def wnba_schedule_crosswalk(
     *,
     stats_games: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
@@ -336,10 +337,20 @@ def wnba_schedule_crosswalk(
             season.
         stats_games: Pre-fetched Stats schedule frame; ``None`` fetches live.
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-team, per-date or per-conference
+            ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated
+            failures. Default ``False`` matches the R producers; a provider
+            that failed *every* item raises either way.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
         ``pl.DataFrame`` (or pandas) with :data:`SCHEDULE_COLUMNS`.
+
+    Raises:
+        CrosswalkSourceError: The per-date ESPN scoreboard failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -365,7 +376,7 @@ def wnba_schedule_crosswalk(
         stats_games = stats_schedule_games("wnba", season, **kwargs)
     team_xwalk = wnba_team_crosswalk(season=season, **kwargs)
     dates = sorted({d for d in stats_games["game_date"].to_list() if d is not None})
-    espn_games = espn_scoreboard_games("wnba", dates, **kwargs)
+    espn_games = espn_scoreboard_games("wnba", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, stats_games, team_xwalk, season)
     return out.to_pandas() if return_as_pandas else out
 
@@ -375,6 +386,7 @@ def wnba_player_crosswalk(
     min_confidence: float = 0.92,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox).
@@ -389,6 +401,10 @@ def wnba_player_crosswalk(
             season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-team, per-date or per-conference
+            ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated
+            failures. Default ``False`` matches the R producers; a provider
+            that failed *every* item raises either way.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -402,6 +418,11 @@ def wnba_player_crosswalk(
             ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``, backoff
             ``SDV_PY_NBA_STATS_BACKOFF``); without it one transient refusal
             aborts the whole build.
+
+        CrosswalkSourceError: The per-team ESPN or Fox rosters failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -423,19 +444,23 @@ def wnba_player_crosswalk(
 
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    from sportsdataverse._crosswalk_basketball_sources import espn_rosters, fox_rosters, stats_rosters
+    from sportsdataverse._crosswalk_basketball_sources import FetchTally, espn_rosters, fox_rosters, stats_rosters
     from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
 
     season = int(season) if season is not None else most_recent_wnba_season()
     team_xwalk = wnba_team_crosswalk(season=season, **kwargs)
     frames: List[pl.DataFrame] = []
+    espn_tally = FetchTally("espn_wnba_team_roster", strict=strict)
+    fox_tally = FetchTally("fox_wnba_team_roster", strict=strict)
     for row in team_xwalk.iter_rows(named=True):
-        espn = espn_rosters("wnba", row["espn_team_id"], row["espn_abbreviation"], season, **kwargs)
+        espn = espn_rosters("wnba", row["espn_team_id"], row["espn_abbreviation"], season, tally=espn_tally, **kwargs)
         if espn.height == 0:
             continue
         stats = stats_rosters("wnba", row["espn_team_id"], row["wnba_team_id"], str(season), **kwargs)
-        fox = fox_rosters("wnba", row["espn_team_id"], row["fox_team_id"], **kwargs)
+        fox = fox_rosters("wnba", row["espn_team_id"], row["fox_team_id"], tally=fox_tally, **kwargs)
         frames.append(assemble_player_espn_stats_fox(espn, stats, fox, season, "wnba", min_confidence))
+    espn_tally.finish()
+    fox_tally.finish()
     out = (
         pl.concat(frames, how="diagonal_relaxed")
         if frames
