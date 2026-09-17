@@ -330,7 +330,6 @@ def test_name_suffixes_are_stripped_like_the_shared_grammar(name, stripped):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N17 pending (see s1-nfl/r3_STATE.md)")
 def test_html_entities_are_unescaped_at_load(nyg_no_2009):
     f = nyg_no_2009
     assert not f["text"].str.contains("&apos;").any()

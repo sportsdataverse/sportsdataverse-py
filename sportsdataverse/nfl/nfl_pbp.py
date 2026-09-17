@@ -803,7 +803,16 @@ class NFLPlayProcess(object):
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                pl.col("text").cast(str),
+                # the 2008-10 feed HTML-escapes apostrophes ("D.O&apos;Neal", "didn&apos;t"),
+                # which every name and clause pattern below would otherwise miss;
+                # unescaped once here, before the duplicate test compares a row with the next
+                pl.col("text")
+                .cast(str)
+                .str.replace_all("&apos;", "'", literal=True)
+                .str.replace_all("&quot;", '"', literal=True)
+                .str.replace_all("&amp;", "&", literal=True),
+            )
+            .with_columns(
                 orig_play_type=pl.col("type.text"),
                 lead_text=pl.col("text").shift(-1),
                 lead_start_team=pl.col("start.team.id").shift(-1),
