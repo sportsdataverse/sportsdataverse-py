@@ -287,3 +287,11 @@ def test_scrape_season_live_passing_2023():
 def test_scrape_season_live_includes_week0_aggregate():
     df = scrape_ngs_season("passing", 2023)
     assert 0 in set(df["week"].unique().to_list())
+
+
+def test_week_scoped_live_scores_not_listed_as_denied():
+    """``/live/game/scores`` 403s only with ``gameId``; by season/seasonType/week it
+    answers 200 anonymously (probed 2026-09-17), so it must not be listed as denied.
+    The per-game ``live/*`` routes stay listed."""
+    assert "/live/game/scores" not in M._DENIED_ENDPOINTS
+    assert "/live/game/drives" in M._DENIED_ENDPOINTS
