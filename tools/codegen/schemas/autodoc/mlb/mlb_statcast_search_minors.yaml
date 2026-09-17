@@ -95,13 +95,13 @@ columns:
   type: double
   description: ''
 - name: on_3b
-  type: double
+  type: integer
   description: ''
 - name: on_2b
-  type: double
+  type: integer
   description: ''
 - name: on_1b
-  type: double
+  type: integer
   description: ''
 - name: outs_when_up
   type: integer
