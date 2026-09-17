@@ -7338,7 +7338,7 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `mbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_player_crosswalk}
+### `mbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_player_crosswalk}
 
 Build the MBB cross-source player crosswalk (ESPN / Fox).
 
@@ -7354,6 +7354,7 @@ per-player tables, so neither is joined.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 
@@ -7438,7 +7439,7 @@ proj = mbb_recruiting_projection(2026)
 proj.sort("exp_box_bpm", descending=True).head(15)
 ```
 
-### `mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_schedule_crosswalk}
+### `mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_schedule_crosswalk}
 
 Build the MBB cross-source schedule crosswalk (ESPN / Torvik).
 
@@ -7455,6 +7456,7 @@ paid subscription and is not ported.
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 
@@ -7679,7 +7681,7 @@ resume = mbb_strength_of_schedule([2024])
 resume.sort("wab", descending=True).head(20)
 ```
 
-### `mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_team_crosswalk}
+### `mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_team_crosswalk}
 
 Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom).
 
@@ -7697,6 +7699,7 @@ each join on the normalized school name after `BART_ALIAS` /
 | `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live. |
 | `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season* when *season* is inside that bundled range. A season outside it -- 1999 or 2030, say -- falls back to the newest bundled season (2026) instead of returning no rows, mirroring the R builder's `max(kp_yrs)`, so for such a request the `kp_*` columns carry the newest bundled season's team and conference labels rather than *season*'s. Pass an empty frame to skip KenPom and get null `kp_*` columns. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 

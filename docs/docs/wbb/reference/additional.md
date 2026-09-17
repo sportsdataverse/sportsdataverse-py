@@ -9098,7 +9098,7 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `wbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_player_crosswalk}
+### `wbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_player_crosswalk}
 
 Build the WBB cross-source player crosswalk (ESPN / Fox).
 
@@ -9114,6 +9114,7 @@ for WBB, so it is not joined; Yahoo columns are null placeholders.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 
@@ -9160,7 +9161,7 @@ from sportsdataverse.wbb import wbb_predict_games, wbb_team_ratings
 preds = wbb_predict_games(games, wbb_team_ratings(2024))
 ```
 
-### `wbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_schedule_crosswalk}
+### `wbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_schedule_crosswalk}
 
 Build the WBB cross-source schedule crosswalk (ESPN / Torvik).
 
@@ -9175,6 +9176,7 @@ games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 
@@ -9243,7 +9245,7 @@ from sportsdataverse.wbb import wbb_strength_of_schedule
 wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
 ```
 
-### `wbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_team_crosswalk}
+### `wbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_team_crosswalk}
 
 Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik).
 
@@ -9260,6 +9262,7 @@ bridge); Torvik on the normalized school name after the
 | `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_wbb_teams_all()` frame. `None` fetches live (~60 s); pass an empty frame to skip Fox entirely. |
 | `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `bart_wbb_ratings()` frame. `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
 
 **Returns**
 
