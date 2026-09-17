@@ -47,14 +47,22 @@ _MLBAM_ID_COLUMNS = ("batter", "pitcher", "on_1b", "on_2b", "on_3b", *(f"fielder
 def _pin_id_columns(df: pd.DataFrame) -> List[str]:
     """Cast the MLBAM id columns present in ``df`` to nullable ``Int64``, in place.
 
-    Integer-read and integral float-read columns are cast. A float column holding a
-    non-integral value is left as read (never truncated) and its name is returned.
+    Integer-read, integral float-read, and digit-string columns (the ``/gf`` JSON
+    serializes ``game_pk`` as ``"745444"``) are cast. A column holding a non-integral
+    or non-numeric value is left as read (never truncated or nulled) and its name is
+    returned.
     """
     uncast: List[str] = []
     for col in _MLBAM_ID_COLUMNS:
         if col not in df.columns:
             continue
         s = df[col]
+        if pd.api.types.is_object_dtype(s) or pd.api.types.is_string_dtype(s):
+            try:
+                s = pd.to_numeric(s)
+            except (ValueError, TypeError):
+                uncast.append(col)
+                continue
         if pd.api.types.is_float_dtype(s) and not (s.dropna() % 1 == 0).all():
             uncast.append(col)
         elif pd.api.types.is_integer_dtype(s) or pd.api.types.is_float_dtype(s):
@@ -182,6 +190,8 @@ def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False) -
 
     Returns:
         A polars (or pandas) DataFrame, one row per pitch; zero rows on empty input.
+        The MLBAM id columns (``game_pk``, ``batter``, ``pitcher``, …) are ``Int64``,
+        the same dtype :func:`parse_mlb_statcast_search` gives them, so the two join.
 
     Example:
         Quick start::
@@ -202,8 +212,9 @@ def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False) -
             rows = ev
     if not rows:
         return _empty_frame(return_as_pandas)
-    df = pd.json_normalize(rows, sep="_")
-    return _to_output(_snake_columns(df), return_as_pandas)
+    df = _snake_columns(pd.json_normalize(rows, sep="_"))
+    _warn_uncast_ids(_pin_id_columns(df), stacklevel=2)  # parse_mlb_statcast_gamefeed <- caller
+    return _to_output(df, return_as_pandas)
 
 
 def parse_mlb_statcast_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:

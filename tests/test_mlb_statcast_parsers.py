@@ -222,3 +222,40 @@ def test_parse_search_non_integral_id_is_not_truncated():
     assert df.schema["on_1b"] == pl.Float64
     assert float(target[idx]) in df["on_1b"].to_list()
     assert df.schema["on_2b"] == pl.Int64 and df.schema["batter"] == pl.Int64
+
+
+def test_gamefeed_and_search_agree_game_pk_is_int64():
+    """Real /gf JSON carries ``"game_pk": "745444"`` (a string); the search CSV carries an int.
+
+    Both parsers pin the MLBAM id columns to Int64 so a gamefeed<->search join on
+    game_pk never hits a String-vs-Int64 schema mismatch.
+    """
+    import json
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed, parse_mlb_statcast_search
+
+    gf = parse_mlb_statcast_gamefeed(json.loads((FIX / "gamefeed.json").read_text()))
+    search = parse_mlb_statcast_search(_SEARCH_HEAD.read_text(encoding="utf-8"))
+    for col in ("game_pk", "batter", "pitcher"):
+        assert gf.schema[col] == search.schema[col] == pl.Int64, (col, gf.schema[col], search.schema[col])
+    assert gf["game_pk"].unique().to_list() == [745444]
+    pdf = parse_mlb_statcast_gamefeed(json.loads((FIX / "gamefeed.json").read_text()), return_as_pandas=True)
+    assert str(pdf["game_pk"].dtype) == "Int64" and pdf["game_pk"].tolist() == [745444] * 4
+
+
+def test_gamefeed_non_numeric_game_pk_is_left_as_read_and_warned():
+    """A non-numeric id string is surfaced (warning, column left as read), never coerced to null."""
+    import json
+    import warnings
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed
+
+    payload = json.loads((FIX / "gamefeed.json").read_text())
+    payload["team_home"][0]["game_pk"] = "not-a-pk"
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        df = parse_mlb_statcast_gamefeed(payload)
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "game_pk" in str(w.message)]
+    assert len(hits) == 1 and hits[0].filename == __file__
+    assert df.schema["game_pk"] == pl.String and "not-a-pk" in df["game_pk"].to_list()
+    assert df.schema["batter"] == pl.Int64
