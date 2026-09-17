@@ -1284,7 +1284,8 @@ adjust_pressure_pairs:
   team: Team abbreviation.
 ahl_leaders:
   photo_small: URL of the small-format headshot image for the AHL leader-board player.
-  stat_formatted: Human-readable string representation of the player's leading statistic value (e.g., "32G", "1.42").
+  stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
+    requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
   team_logo_small: URL of the small-format team logo image for the AHL leader-board entry.
   type_formatted: Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Points").
 ahl_player_stats:
@@ -1295,7 +1296,7 @@ ahl_standings:
   percentage: Points percentage earned by the team (points divided by maximum possible points), expressed as a decimal between
     0 and 1.
 ajhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -2181,7 +2182,7 @@ cat_skater_detail:
   zone_time_details_offensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the
     offensive zone.
 cchl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -2386,8 +2387,7 @@ cfb_standings:
   win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
   wins: Wins across all played games (conference championship and postseason included).
 cfb_teams_crosswalk:
-  espn_team: ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team (69
-    of 831 sampled).
+  espn_team: ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team.
   fox_abbreviation: Fox Sports' short team code from its teamnav directory (e.g. 'AC', 'AKRON'), which can differ from the Yahoo
     code for the same school ('AKRON' vs 'AKR'); null when no Fox team matched.
   fox_team: Fox Sports' team name, which that feed ships in all capitals (e.g. 'AIR FORCE FALCONS'); null when no Fox team matched.
@@ -2395,8 +2395,7 @@ cfb_teams_crosswalk:
     e.g. 'espn+fox+yahoo', 'espn', 'fox+yahoo'.
   norm_key: 'Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed
     and alias-mapped (e.g. ''alabama a m bulldogs'').'
-  yahoo_abbreviation: Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched (536 of 831 sampled
-    rows).
+  yahoo_abbreviation: Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched.
   yahoo_team: Yahoo Sports' team display name, school plus mascot (e.g. 'Akron Zips'); null when no Yahoo team matched.
 cfb_transfer_impact:
   net_transfer_talent: Incoming minus outgoing transfer talent points for the season.
@@ -2412,7 +2411,7 @@ cfb_transfer_moves:
   talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
   team_id: School name key of the side this row describes (destination for "in", origin for "out").
 chl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -3358,8 +3357,8 @@ espn_cfb_player_stats:
     two-point attempt on the offensive side.
   passing_adj_qbr: ESPN's adjusted Total Quarterback Rating (QBR) for the player's passing performance, controlling for opponent
     difficulty and game situation.
-  passing_avg_depth_of_target: ESPN's avgDepthOfTarget stat ('Average depth of target', aDOT) under the passing category; 0.0
-    in every college row checked (athletes 4426335 for 2024 and 4426338 for 2023).
+  passing_avg_depth_of_target: ESPN's avgDepthOfTarget stat (average depth of target, aDOT) under the passing category; 0.0
+    for every college player checked, so ESPN does not appear to populate it for college football.
   passing_avg_gain: Average yards gained per passing play attempt by the quarterback in the passing category.
   passing_completion_pct: Percentage of pass attempts thrown by the quarterback that were completed, calculated as completions
     divided by attempts.
@@ -3378,8 +3377,8 @@ espn_cfb_player_stats:
   passing_net_yards_per_game: Net total yards gained per game for the player as recorded in the passing category context.
   passing_net_yards_per_pass_attempt: Net passing yards divided by total pass attempts, including sack yardage lost in the
     denominator's context.
-  passing_offensive_snap_pct: ESPN's offensiveSnapPct stat, described by ESPN as the '% of plays the player was on the field';
-    0.0 in every college row checked (athletes 4426335 for 2024 and 4426338 for 2023).
+  passing_offensive_snap_pct: ESPN's offensiveSnapPct stat (described upstream as '% of plays the player was on the field');
+    0.0 for every college player checked, so ESPN does not appear to populate it for college football.
   passing_passing_attempts: Total number of pass attempts thrown by the quarterback, including completions, incompletions,
     and interceptions.
   passing_passing_big_plays: Number of passing plays that gained 20 or more yards as recorded for the quarterback.
@@ -3404,8 +3403,8 @@ espn_cfb_player_stats:
   passing_sack_yards_lost: Total yards lost by the quarterback as a result of being sacked, subtracted when computing net
     passing yards.
   passing_sacks: Total number of times the quarterback was sacked (tackled behind the line of scrimmage on a passing play).
-  passing_target_share_pct: ESPN's targetSharePct stat, described by ESPN as the '% of total team targets'; 0.0 in every college
-    row checked (athletes 4426335 for 2024 and 4426338 for 2023).
+  passing_target_share_pct: ESPN's targetSharePct stat (described upstream as '% of total team targets'); 0.0 for every college
+    player checked, so ESPN does not appear to populate it for college football.
   passing_team_games_played: Number of team games played during the stat period, used as the denominator for per-game passing
     rate statistics.
   passing_total_offensive_plays: Total number of offensive plays (pass attempts plus rushes) for the team during the stat
@@ -3427,8 +3426,8 @@ espn_cfb_player_stats:
   passing_yards_per_game: Average gross passing yards per game for the quarterback, equivalent to passing_passing_yards_per_game.
   passing_yards_per_pass_attempt: Average yards gained per pass attempt by the quarterback, calculated as passing yards divided
     by attempts.
-  passing_yards_per_route_run: ESPN's yardsPerRouteRun stat (YPRR) under the passing category; 0.0 in every college row checked
-    (athletes 4426335 for 2024 and 4426338 for 2023).
+  passing_yards_per_route_run: ESPN's yardsPerRouteRun stat (yards per route run, YPRR) under the passing category; 0.0 for
+    every college player checked, so ESPN does not appear to populate it for college football.
   receiving_avg_gain: Average yards gained per reception for the player in the receiving category.
   receiving_espnwr_rating: ESPN's proprietary wide receiver / pass-catcher rating for the player's receiving performance.
   receiving_long_reception: Longest single reception in yards recorded by the player during the stat period.
@@ -3711,8 +3710,8 @@ espn_nfl_player_stats:
     a float); 0.0 in the single sampled row.
   passing_adj_qbr: ESPN's Adjusted Total Quarterback Rating, which adjusts raw QBR for opponent strength and clutch situations
     on a 0–100 scale.
-  passing_avg_depth_of_target: ESPN average depth of target (aDOT) stat, listed under ESPN's passing category; always 0.0 in
-    sampled data.
+  passing_avg_depth_of_target: ESPN's avgDepthOfTarget stat (average depth of target, aDOT) under the passing category; 0.0
+    for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it.
   passing_avg_gain: Average yards gained per passing attempt including sacks.
   passing_completion_pct: Percentage of pass attempts that resulted in a completed reception (completions divided by attempts).
   passing_espnqb_rating: ESPN's proprietary composite quarterback rating blending efficiency, usage, and situational performance
@@ -3727,8 +3726,9 @@ espn_nfl_player_stats:
   passing_net_yards_per_game: Net total offensive yards (rushing plus net passing) per game.
   passing_net_yards_per_pass_attempt: Net passing yards divided by total pass attempts including sacks, penalizing passers
     for yardage lost in the pocket.
-  passing_offensive_snap_pct: ESPN snap-share stat (offensiveSnapPct, described upstream as the % of plays the player was on
-    the field); always 0.0 in sampled data, so its scale is unconfirmed.
+  passing_offensive_snap_pct: ESPN's offensiveSnapPct stat (described upstream as '% of plays the player was on the field');
+    0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate
+    it.
   passing_passing_attempts: Total number of pass attempts thrown by the player.
   passing_passing_big_plays: Number of passing plays that gained 20 or more yards.
   passing_passing_first_downs: Number of pass completions that resulted in a first down.
@@ -3746,8 +3746,8 @@ espn_nfl_player_stats:
     from passing_qb_rating (e.g., situational or opponent-adjusted).
   passing_sack_yards_lost: Total yards lost by the player as a result of being sacked behind the line of scrimmage.
   passing_sacks: Total number of times the player was sacked behind the line of scrimmage while attempting to pass.
-  passing_target_share_pct: ESPN target-share stat (targetSharePct, described upstream as the % of total team targets); always
-    0.0 in sampled data, so its scale is unconfirmed.
+  passing_target_share_pct: ESPN's targetSharePct stat (described upstream as '% of total team targets'); 0.0 for every athlete
+    checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it.
   passing_team_games_played: Number of games played by the player's team during which the player accumulated passing statistics.
   passing_total_offensive_plays: Total number of offensive plays (pass attempts, rushes, and sacks) run with the player as
     the primary ball handler.
@@ -3764,8 +3764,8 @@ espn_nfl_player_stats:
   passing_yards_per_completion: Average yards gained per completed pass attempt.
   passing_yards_per_game: Gross passing yards per game (equivalent to passing_passing_yards_per_game; alternate label).
   passing_yards_per_pass_attempt: Gross passing yards divided by total pass attempts, not penalizing for sacks.
-  passing_yards_per_route_run: ESPN yards per route run (YPRR) stat, listed under ESPN's passing category; always 0.0 in sampled
-    data.
+  passing_yards_per_route_run: ESPN's yardsPerRouteRun stat (yards per route run, YPRR) under the passing category; 0.0 for
+    every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it.
   receiving_avg_gain: Average yards gained per reception by the player.
   receiving_espnwr_rating: ESPN's proprietary composite wide receiver / pass-catcher rating blending efficiency and usage
     metrics.
@@ -4120,6 +4120,7 @@ fox_cfb_league_conferences:
 fox_cfb_league_header:
   content_type: Fox entity type of the header; 'league' for this league-level header.
   content_uri: Fox Bifrost content path of the league entity (e.g. 'football/cfb/league/1'); entity_id is its trailing number.
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox attaches to the league logo image, 'College Football' in the sample.
   template: Name of the Fox layout template for the header payload, 'entity-header' in the sample.
 fox_cfb_league_leaders:
@@ -4127,6 +4128,7 @@ fox_cfb_league_leaders:
     null on the rows of the other two top-25 tables stacked into the default passing frame.
   comp: Pass completions as a string (e.g. '81'). Filled only on the 25 rows of Fox's COMP table; null on the rows of the other
     two top-25 tables stacked into the default passing frame.
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   patt: Pass attempts as a string (e.g. '137'). Filled only on the 25 rows of Fox's PATT table; null on the rows of the other
     two top-25 tables stacked into the default passing frame.
   v1: Abbreviated player name, first initial plus surname (e.g. 'M. Alejado'), from Fox's untitled second column; the players
@@ -4146,22 +4148,23 @@ fox_cfb_league_player_news:
   subtitle: 'Team abbreviation, jersey number and position of the player, formatted like ''LSU #10 - QB''.'
   web_url: Site-relative foxsports.com path of the player's page (e.g. '/college-football/sam-leavitt-player').
 fox_cfb_league_polls:
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   section: 'Poll the row belongs to: ''ASSOCIATED PRESS'' or ''USA TODAY COACHES POLL''.'
   v1: Places the team moved since the previous poll, as an unsigned string (e.g. '3'); null when Fox shows no movement. The
     parser drops Fox's up/down flag, so a rise and a fall look the same.
   v2: Team short name as Fox prints it in the poll, with first-place votes in parentheses when it got any (e.g. 'Texas (56)',
     'Ohio State', 'Miami (FL) (4)').
 fox_cfb_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25, ACC)
     or ''selectionList'' (the season''s week segments); the parser also emits ''dailyList'', which CFB samples never show.'
   uri: Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/league/schedule-segment/2026-1-1?groupId=-4');
     null on every groupList row.
   web_url: Site-relative foxsports.com path for the selection, e.g. '/college-football/schedule?groupId=9' on a group row.
 fox_cfb_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25, ACC)
     or ''selectionList'' (the season''s week segments); the parser also emits ''dailyList'', which CFB samples never show.'
   uri: Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/league/scores-segment/2026-1-1?groupId=-4');
@@ -4173,11 +4176,11 @@ fox_cfb_league_stat_leaders:
 fox_cfb_schedule:
   segment_id: 'Fox scoreboard segment the game was fetched from: ''{season}-{week}-1'' for a regular-season week (sampled ''2026-3-1''),
     ''{season}-bowls-2'' or ''{season}-cfp-2'' for the postseason.'
-  week_label: Title of the Fox segment section that listed the game (sampled 'WEEK 3'); only 1 of 75 sampled rows had one, the
-    rest are null.
+  week_label: Title of the Fox segment section that listed the game (e.g. 'WEEK 3'); often null because Fox leaves most section
+    titles blank.
 fox_cfb_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25, ACC)
     or ''selectionList'' (the season''s week segments); the parser also emits ''dailyList'', which CFB samples never show.'
   uri: Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/scoreboard/segment/2026-1-1?groupId=-4');
@@ -4189,26 +4192,29 @@ fox_cfb_teamnav:
   content_uri: Fox Bifrost content path of the team (e.g. 'football/cfb/teams/25').
   fox_id: Fox Bifrost team id as a string, the trailing number of content_uri; the same id fox_cfb_teams returns as fox_team_id
     from this endpoint.
-  web_url: Site-relative foxsports.com team page path (e.g. '/college-football/ohio-state-buckeyes-team'); null on 273 of 539
-    sampled rows.
+  web_url: Site-relative foxsports.com team page path (e.g. '/college-football/ohio-state-buckeyes-team'); null for some teams.
 fox_mbb_league_conferences:
   content_type: Fox entity type from the conference's entity link; always 'league' in sampled data, even though each row is
     a conference.
   content_uri: Fox Bifrost content URI identifying the conference (e.g. 'basketball/cbk/groups/11'); fox_id is its trailing
     number.
-  fox_id: Fox Sports conference id as a string, the trailing number of content_uri; ids are league-specific, so a conference
-    has different ids in the men's and women's feeds.
+  fox_id: Fox Sports conference id as a string, the trailing number of content_uri; ids are assigned per feed and usually differ
+    between the men's and women's feeds (ACC 11 vs 12), though some coincide (America East is 9 in both), so never join the
+    two feeds on it.
   web_url: Site-relative foxsports.com path of the conference page (e.g. '/college-basketball/acc').
 fox_mbb_league_header:
   content_type: Fox entity type of the header's entity; 'league' in sampled data.
   content_uri: Fox Bifrost content URI of the league entity ('basketball/cbk/league/1' in sampled data).
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox attaches to the header image, which reads as the league's display name ('College Basketball'
     in sampled data).
   template: Fox layout template name for the header block; always 'entity-header' in sampled data.
 fox_mbb_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   v1: Leader's name as Fox abbreviates it, first initial plus surname (e.g. 'T. Moore'); the column is named v1 because its
     table header cell is blank.
 fox_mbb_league_polls:
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   rpi: RPI value as a decimal string with a leading dot (e.g. '.6808'); populated only on 'RPI RANKINGS' rows and null on both
     poll sections.
   section: 'Ranking the row belongs to: ''ASSOCIATED PRESS'', ''USA TODAY COACHES POLL'' or ''RPI RANKINGS'' (25 rows each in
@@ -4218,16 +4224,16 @@ fox_mbb_league_polls:
   v2: Team name on poll rows, with first-place votes in parentheses when the team received any (e.g. 'Michigan (57)'); null
     on 'RPI RANKINGS' rows, where the name is in v1.
 fox_mbb_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/schedule-segment/<season start year>-YYYYMMDD?groupId=...);
     null on groupList rows.
   web_url: Site-relative foxsports.com path of the page the selection opens (e.g. '/college-basketball/schedule?groupId=top25').
 fox_mbb_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/scores-segment/YYYYMMDD?groupId=...);
@@ -4237,8 +4243,8 @@ fox_mbb_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat, such as 'PPG', 'RPG', '3FGM/G', 'TS%' or 'HIGH'; the spelled-out
     name is in stat.
 fox_mbb_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../scoreboard/segment/YYYYMMDD?groupId=...);
@@ -4247,15 +4253,17 @@ fox_mbb_scoreboard:
 fox_mbb_teamnav:
   content_type: Fox entity type from the team's entity link; always 'team' in sampled data.
   content_uri: Fox Bifrost content URI identifying the team, shaped 'basketball/cbk/teams/<fox_id>'.
-  fox_id: Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school has different
-    ids in the men's and women's feeds.
+  fox_id: Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school can have
+    different ids in the men's and women's feeds.
   web_url: Site-relative foxsports.com path of the team page (e.g. '/college-basketball/michigan-wolverines-team').
 fox_mlb_league_header:
   content_type: Fox entity type of the header payload; always 'league' for the league header.
   content_uri: Fox content URI of the league entity (e.g., 'baseball/mlb/league/1'); entity_id is its trailing number.
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Image alt text Fox ships with the header, the full league name (e.g., 'Major League Baseball').
   template: Fox layout template name for the header payload; always 'entity-header' in sampled data.
 fox_mlb_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   pa: Plate appearances from the PA leader table, as a string (e.g., '687'); null on rows that come from another stat's leader
     table (G, AB, H).
   v1: Abbreviated player name (e.g., 'M. Olson'), from the leader table's unlabeled second column.
@@ -4274,15 +4282,17 @@ fox_mlb_league_player_news:
   subtitle: 'Player''s team abbreviation, jersey number and position formatted ''TEAM #NN - POS'' (e.g., ''AZ #14 - C'').'
   web_url: Site-relative foxsports.com path of the player's page (e.g., '/mlb/gabriel-moreno-player').
 fox_mlb_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's schedule segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/mlb/league/schedule-segment/2026-20260220').
   web_url: Site-relative foxsports.com schedule page path for that date (e.g., '/mlb/schedule?date=2026-02-20').
 fox_mlb_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's scores segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/mlb/league/scores-segment/20260220').
@@ -4298,6 +4308,7 @@ fox_mlb_league_standings:
     by win percentage in sampled data; null on rows from every other table.
   division_leaders: Number string from the first column of Fox's DIVISION LEADERS tables (one per league, WILD CARD section);
     Fox does not label it, sampled values '1'-'4' repeat and do not follow row order. Null on rows from every other table.
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   grapefruit_league: Position number ('1'-'15') from the first column of Fox's GRAPEFRUIT LEAGUE spring-training table, whose
     header text names this column; null on rows from every other table.
   nl_central: Position number ('1'-'5') from the first column of Fox's NL CENTRAL division table, whose header text names this
@@ -4316,8 +4327,9 @@ fox_mlb_league_standings:
 fox_mlb_league_stat_leaders:
   stat_abbreviation: Fox's short label for the leader's stat (e.g., 'HR', 'ERA', 'ISO').
 fox_mlb_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's scoreboard segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/mlb/scoreboard/segment/20260220').
@@ -4330,21 +4342,25 @@ fox_mlb_teamnav:
 fox_nba_league_header:
   content_type: Fox entity type of the header's entity; always 'league' in sampled data.
   content_uri: Fox Bifrost content URI of the league entity ('basketball/nba/league/1' in sampled data).
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox attaches to the header image, which reads as the league's full name.
   template: Fox layout template name for the header block; always 'entity-header' in sampled data.
 fox_nba_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   v1: Leader's name as Fox abbreviates it, first initial plus surname ('F. Lastname'); the column is named v1 because its table
     header cell is blank.
 fox_nba_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/league/schedule-segment/<year>-YYYYMMDD).
   web_url: Site-relative foxsports.com path of the page for that date (e.g. '/nba/schedule?date=YYYY-MM-DD').
 fox_nba_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/league/scores-segment/YYYYMMDD).
@@ -4358,6 +4374,7 @@ fox_nba_league_standings:
     tables without a DIV column.
   eastern_conference: Team's position in the Eastern Conference table, from the first column whose header is the table name;
     null on rows from other tables, and '-' on every populated row of the sampled pre-season data.
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   northwest: Team's position in the Northwest division table, from the first column whose header is the table name; null on
     rows from other tables, and '-' on every populated row of the sampled pre-season data.
   pa: Points allowed per game as a one-decimal string; always '0.0' in the sampled pre-season data, where no games had been
@@ -4370,16 +4387,16 @@ fox_nba_league_standings:
     rows from other tables, and '-' on every populated row of the sampled pre-season data.
   southwest: Team's position in the Southwest division table, from the first column whose header is the table name; null on
     rows from other tables, and '-' on every populated row of the sampled pre-season data.
-  v1: Team nickname as Fox displays it (e.g. 'Celtics', 'Liberty'); the column is named v1 because its table header cell is
-    blank.
+  v1: Team nickname as Fox displays it (e.g. 'Celtics', 'Knicks'); the column is named v1 because its table header cell is blank.
   western_conference: Team's position in the Western Conference table, from the first column whose header is the table name;
     null on rows from other tables, and '-' on every populated row of the sampled pre-season data.
 fox_nba_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat, such as 'PPG', 'RPG', 'FG%', 'DBL DBL' or 'OFF RTG'; the spelled-out
     name is in stat.
 fox_nba_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/scoreboard/segment/YYYYMMDD).
@@ -4390,14 +4407,17 @@ fox_nba_teamnav:
   fox_id: Fox Sports team id as a string, the trailing number of content_uri (e.g. '6').
   web_url: Site-relative foxsports.com path of the team page, shaped '/nba/<city-nickname>-team'.
 fox_nfl_league_header:
-  content_type: Fox entity type of the linked entity, such as 'league' or 'team'; constant within each endpoint's sample.
-  content_uri: Fox Bifrost content path of the entity in sport/league/entity-type/id form, such as football/nfl/teams/17 or
-    football/nfl/athletes/22256.
+  content_type: Fox entity type of the header's entity; 'league' for the league header.
+  content_uri: Fox Bifrost content path of the league entity (e.g. 'football/nfl/league/1'); entity_id is its trailing number.
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox supplies for the entity's logo image (e.g. 'National Football League').
   template: Fox layout template name for the header payload; 'entity-header' in sampled data.
 fox_nfl_league_leaders:
-  pts_g: Points per game for the leader, as a one-decimal string (e.g. '24.0'); null on 25 of 75 sampled rows.
-  td: Touchdowns credited to the leader, as an integer string (e.g. '4'); null on 50 of 75 sampled rows.
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
+  pts_g: Points per game for the leader, as a one-decimal string (e.g. '24.0'); null on rows stacked in from a leader table
+    that has no such column.
+  td: Touchdowns credited to the leader, as an integer string (e.g. '4'); null on rows stacked in from a leader table that has
+    no such column.
   v1: 'Unlabeled second column of the Fox table (blank header, so named by position): the player''s abbreviated name, e.g. ''J.
     Allen''.'
 fox_nfl_league_odds:
@@ -4407,15 +4427,15 @@ fox_nfl_league_odds:
   section: Title of the Fox odds-board section the game is listed under; always 'GAMES' in sampled data.
   to_win: Moneyline for the row's team to win the game, as an American-odds string (e.g. '+196', '-238').
 fox_nfl_league_player_news:
-  content_uri: Fox Bifrost content path of the entity in sport/league/entity-type/id form, such as football/nfl/teams/17 or
-    football/nfl/athletes/22256.
+  content_uri: Fox Bifrost content path of the player the news item is about, in sport/league/entity-type/id form (e.g. 'football/nfl/athletes/22256').
   impact: Free-text analysis paragraph (headed by impact_title) on what the news means for the player's availability or role.
   impact_title: Heading Fox shows above the impact paragraph; always 'Impact' in sampled data.
   subtitle: 'Player context line in ''TEAM #jersey - POSITION'' form (e.g. ''HOU #12 - WR'').'
-  web_url: Site-relative foxsports.com path of the entity's page (not an absolute URL), such as /nfl/detroit-lions-team or /nfl/nico-collins-player.
+  web_url: Site-relative foxsports.com path of the player's page (not an absolute URL), e.g. '/nfl/nico-collins-player'.
 fox_nfl_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled
     data.
   uri: Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads,
@@ -4423,8 +4443,9 @@ fox_nfl_league_schedule:
   web_url: Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week
     query parameters such as seasonType=reg&week=1.
 fox_nfl_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled
     data.
   uri: Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads,
@@ -4442,7 +4463,8 @@ fox_nfl_league_standings:
     from that table's header cell, so it is null on rows from every other table.
   american_football_conference: Team's position number in the American Football Conference standings table, stored as a string
     (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table.
-  div: Team's division record as a 'W-L' string (e.g. '1-0', '0-1'); null on 32 of 96 sampled rows.
+  div: Team's division record as a 'W-L' string (e.g. '1-0', '0-1'); null on rows from standings tables that have no DIV column.
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   national_football_conference: Team's position number in the National Football Conference standings table, stored as a string
     (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table.
   nfc_east: Team's position number in the NFC East standings table, stored as a string (e.g. '1', '2'); the column is named
@@ -4460,8 +4482,9 @@ fox_nfl_league_standings:
 fox_nfl_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat (e.g. 'PYDS', 'RTD', 'K-RET YDS').
 fox_nfl_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled
     data.
   uri: Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads,
@@ -4469,17 +4492,18 @@ fox_nfl_scoreboard:
   web_url: Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week
     query parameters such as seasonType=reg&week=1.
 fox_nfl_teamnav:
-  content_type: Fox entity type of the linked entity, such as 'league' or 'team'; constant within each endpoint's sample.
-  content_uri: Fox Bifrost content path of the entity in sport/league/entity-type/id form, such as football/nfl/teams/17 or
-    football/nfl/athletes/22256.
+  content_type: Fox entity type of the navigation item's entity; 'team' for team rows.
+  content_uri: Fox Bifrost content path of the team in sport/league/entity-type/id form (e.g. 'football/nfl/teams/17').
   fox_id: Fox Sports team id as a string, taken from the trailing number of content_uri (e.g. '17').
-  web_url: Site-relative foxsports.com path of the entity's page (not an absolute URL), such as /nfl/detroit-lions-team or /nfl/nico-collins-player.
+  web_url: Site-relative foxsports.com path of the team's page (not an absolute URL), e.g. '/nfl/detroit-lions-team'.
 fox_nhl_league_header:
   content_type: Fox entity type of the header payload; always 'league' for the league header.
   content_uri: Fox content URI of the league entity (e.g., 'hockey/nhl/league/1'); entity_id is its trailing number.
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Image alt text Fox ships with the header, the full league name (e.g., 'National Hockey League').
   template: Fox layout template name for the header payload; always 'entity-header' in sampled data.
 fox_nhl_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   v1: Abbreviated player name (e.g., 'A. Ovechkin'), from the leader table's unlabeled second column.
 fox_nhl_league_player_news:
   content_uri: Fox content URI of the player the item is about (e.g., 'hockey/nhl/athletes/4442'); athlete_id is its trailing
@@ -4489,15 +4513,17 @@ fox_nhl_league_player_news:
   subtitle: 'Player''s team abbreviation, jersey number and position formatted ''TEAM #NN - POS'' (e.g., ''WPG #37 - G'').'
   web_url: Site-relative foxsports.com path of the player's page (e.g., '/nhl/connor-hellebuyck-player').
 fox_nhl_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's schedule segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/league/schedule-segment/2026-20260919').
   web_url: Site-relative foxsports.com schedule page path for that date (e.g., '/nhl/schedule?date=2026-09-19').
 fox_nhl_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's scores segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/league/scores-segment/20260919').
@@ -4509,6 +4535,7 @@ fox_nhl_league_standings:
     header text names this column; all null in the sampled preseason data, where Fox left that cell blank.
   eastern_conference: First-column cell of Fox's EASTERN CONFERENCE tables (CONFERENCE and PRESEASON sections), whose header
     text names this column; all null in the sampled preseason data, where Fox left that cell blank.
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   gd: Goal differential (GD column), as a string; '0' for every team in the sampled preseason data.
   gf: Goals for (GF column), as a string; '0' for every team in the sampled preseason data.
   section: Title of the standings section the row's table sits in ('CONFERENCE', 'DIVISION', 'WILD CARD' or 'PRESEASON'); each
@@ -4528,8 +4555,9 @@ fox_nhl_league_standings:
 fox_nhl_league_stat_leaders:
   stat_abbreviation: Fox's short label for the leader's stat (e.g., 'G', 'GAA', 'TOI/G').
 fox_nhl_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList'
     (one row per date) in sampled data.
   uri: Absolute Bifrost API URL of that date's scoreboard segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/scoreboard/segment/20260919').
@@ -4544,19 +4572,23 @@ fox_wbb_league_conferences:
     a conference.
   content_uri: Fox Bifrost content URI identifying the conference (e.g. 'basketball/wcbk/groups/11'); fox_id is its trailing
     number.
-  fox_id: Fox Sports conference id as a string, the trailing number of content_uri; ids are league-specific, so a conference
-    has different ids in the men's and women's feeds.
+  fox_id: Fox Sports conference id as a string, the trailing number of content_uri; ids are assigned per feed and usually differ
+    between the men's and women's feeds (ACC 11 vs 12), though some coincide (America East is 9 in both), so never join the
+    two feeds on it.
   web_url: Site-relative foxsports.com path of the conference page (e.g. '/womens-college-basketball/acc').
 fox_wbb_league_header:
   content_type: Fox entity type of the header's entity; 'league' in sampled data.
   content_uri: Fox Bifrost content URI of the league entity ('basketball/wcbk/league/1' in sampled data).
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox attaches to the header image, which reads as the league's display name ('Women's College Basketball'
     in sampled data).
   template: Fox layout template name for the header block; always 'entity-header' in sampled data.
 fox_wbb_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   v1: Leader's name as Fox abbreviates it, first initial plus surname (e.g. 'T. Sides'); the column is named v1 because its
     table header cell is blank.
 fox_wbb_league_polls:
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   rpi: RPI value as a decimal string with a leading dot (e.g. '.7007'); populated only on 'RPI RANKINGS' rows and null on both
     poll sections.
   section: 'Ranking the row belongs to: ''ASSOCIATED PRESS'', ''USA TODAY COACHES POLL'' or ''RPI RANKINGS'' (25 rows each in
@@ -4566,22 +4598,23 @@ fox_wbb_league_polls:
   v2: Team name on poll rows, with first-place votes in parentheses when the team received any (e.g. 'UCLA (31)'); null on 'RPI
     RANKINGS' rows, where the name is in v1.
 fox_wbb_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/schedule-segment/<season start year>-YYYYMMDD?groupId=...);
     null on groupList rows.
   web_url: Site-relative foxsports.com path of the page the selection opens (e.g. '/womens-college-basketball/schedule?groupId=top25').
 fox_wbb_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/scores-segment/YYYYMMDD?groupId=...);
     null on groupList rows.
   web_url: Site-relative foxsports.com path of the page the selection opens (e.g. '/womens-college-basketball/scores?groupId=top25').
 fox_wbb_league_standings:
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   pa: Season total points allowed, as an integer string (e.g. '1966' for a 38-1 UConn).
   section: Title of the Fox standings section the row came from; always 'CONFERENCE' in sampled data.
   top_25: Record against Top 25 opponents as a 'W-L' string (e.g. '7-1').
@@ -4594,8 +4627,8 @@ fox_wbb_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat, such as 'PPG', 'RPG', '3FGM/G', 'TS%' or 'HIGH'; the spelled-out
     name is in stat.
 fox_wbb_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: 'Fox''s default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never
+    False) on every other row.'
   selection_list: 'Which Fox navigation list the row came from: ''groupList'' (group filters such as FEATURED, TOP 25 and each
     conference; uri is null) or ''dailyList'' (one row per game date).'
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../scoreboard/segment/YYYYMMDD?groupId=...);
@@ -4604,15 +4637,17 @@ fox_wbb_scoreboard:
 fox_wbb_teamnav:
   content_type: Fox entity type from the team's entity link; always 'team' in sampled data.
   content_uri: Fox Bifrost content URI identifying the team, shaped 'basketball/wcbk/teams/<fox_id>'.
-  fox_id: Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school has different
-    ids in the men's and women's feeds.
+  fox_id: Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school can have
+    different ids in the men's and women's feeds.
   web_url: Site-relative foxsports.com path of the team page (e.g. '/womens-college-basketball/michigan-wolverines-team').
 fox_wnba_league_header:
   content_type: Fox entity type of the header's entity; always 'league' in sampled data.
   content_uri: Fox Bifrost content URI of the league entity ('basketball/wnba/league/1' in sampled data).
+  entity_id: 'Fox id of the league entity as a string: the trailing number of the league''s Fox contentUri.'
   image_alt_text: Alt text Fox attaches to the header image, which reads as the league's full name.
   template: Fox layout template name for the header block; always 'entity-header' in sampled data.
 fox_wnba_league_leaders:
+  entity_id: 'Fox id of the row''s linked player or team as a string: the trailing number of the row''s entityLink contentUri.'
   v1: Leader's name as Fox abbreviates it, first initial plus surname ('F. Lastname'); the column is named v1 because its table
     header cell is blank.
 fox_wnba_league_odds:
@@ -4629,15 +4664,17 @@ fox_wnba_league_player_news:
   subtitle: 'Player tag line shaped ''<TEAM> #<jersey> - <position>'' (e.g. ''PHX #2 - G/F'').'
   web_url: Site-relative foxsports.com path of the player's page (e.g. '/wnba/kahleah-copper-player').
 fox_wnba_league_schedule:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/league/schedule-segment/<year>-YYYYMMDD).
   web_url: Site-relative foxsports.com path of the page for that date (e.g. '/wnba/schedule?date=YYYY-MM-DD').
 fox_wnba_league_scores:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/league/scores-segment/YYYYMMDD).
@@ -4645,19 +4682,20 @@ fox_wnba_league_scores:
 fox_wnba_league_standings:
   eastern: Team's position in the Eastern conference table, from the first column whose header is the table name; null on rows
     from other tables, as a number string ('1' to '7' in sampled data).
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
   pa: Points allowed per game as a one-decimal string (e.g. '86.0').
   section: 'Title of the Fox standings section the row came from, such as ''CONFERENCE'' or ''PRESEASON''; each team appears
     once per section. Values in sampled data: ''CONFERENCE'', ''PRESEASON''.'
-  v1: Team nickname as Fox displays it (e.g. 'Celtics', 'Liberty'); the column is named v1 because its table header cell is
-    blank.
+  v1: Team nickname as Fox displays it (e.g. 'Liberty', 'Fever'); the column is named v1 because its table header cell is blank.
   western: Team's position in the Western conference table, from the first column whose header is the table name; null on rows
     from other tables, as a number string ('1' to '8' in sampled data).
 fox_wnba_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat, such as 'PPG', 'RPG', 'FG%', 'DBL DBL' or 'OFF RTG'; the spelled-out
     name is in stat.
 fox_wnba_scoreboard:
-  selected: 'Fox''s default-selection flag for the navigation item: True on the single item Fox pre-selects, and null (never
-    False) on every other item.'
+  selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
+    has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
+    which the parser does not return.
   selection_list: Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList',
     one row per game date, in sampled data.
   uri: Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/scoreboard/segment/YYYYMMDD).
@@ -5061,7 +5099,7 @@ goalie_win_plateaus:
 goalie_win_streak:
   win_streak: Number of consecutive wins recorded by the goalie in this streak.
 gojhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -7277,8 +7315,8 @@ load_cfb_model_pbp:
   passing_down: True on second and eight or longer, third and five or longer, or fourth and five or longer, the standard obvious-passing-situation
     flag.
   scored_date: Date on which the play was scored by the models.
-  start.TimeSecsRem: Seconds remaining in the half at the snap, so it tops out at 1800 rather than counting down from a full
-    game.
+  start.TimeSecsRem: Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005
+    and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800.
   start.distance: Yards the offense needs for a first down at the snap, carried through from ESPN without correction.
   start.down: Down at the snap as ESPN reports it; 0 marks the small share of rows ESPN leaves without a down, overwhelmingly
     timeouts and penalty administrations.
@@ -7468,7 +7506,7 @@ load_cfb_pbp:
   early_down_rush: True when the play is a rush on an early down.
   end.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the end of the play.
   end.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the end of the play.
-  end.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the end of the play.
+  end.TimeSecsRem: Seconds remaining in the half carried as this play's end state; currently the preceding row's clock stamp.
   end.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the end of the play.
   end.awayScore: ESPN's `awayScore` value for the play state at the end of the play.
   end.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the end of the play.
@@ -7673,7 +7711,8 @@ load_cfb_pbp:
   start.ExpScoreDiff_Time_Ratio_touchback: ESPN's `ExpScoreDiff_Time_Ratio_touchback` value for the play state at the start
     of the play.
   start.ExpScoreDiff_touchback: ESPN's `ExpScoreDiff_touchback` value for the play state at the start of the play.
-  start.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the start of the play.
+  start.TimeSecsRem: Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005
+    and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800.
   start.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the start of the play.
   start.awayScore: ESPN's `awayScore` value for the play state at the start of the play.
   start.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the start of the play.
@@ -8176,8 +8215,8 @@ load_cfb_rosters_cfbd:
   recruit_ids: List of recruiting-database profile ids matched to the player; real ids run in the six-figure range and a lone
     0 entry means no recruiting profile was matched.
 load_cfb_rosters_crosswalk:
-  fox_position: Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null on 1,511 of 37,740 sampled rows,
-    including every row with no Fox player.
+  fox_position: Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null when the player has no Fox roster
+    match or Fox lists no position.
   matched_sources: 'Plus-joined provenance tag naming which rosters listed the player: ''espn+fox'', ''espn'' or ''fox''. The
     published asset is built without Yahoo, so ''yahoo'' never appears.'
   person_key: 'Normalized player-name join key: ''Last, First'' flipped, lowercased, ASCII-folded, punctuation stripped and
@@ -10471,10 +10510,10 @@ load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
     year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of
-    dollars; null on 43 of 52,814 rows.
+    dollars.
   season_history: List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus,
     option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus,
-    other_bonus), money in millions of dollars and a final 'Total' row per nflreadr; null on 43 of 52,814 rows.
+    other_bonus), money in millions of dollars and a final 'Total' row per nflreadr.
 load_depth_charts:
   club_code: Three-letter team abbreviation identifying the NFL club on the depth chart row.
   depth_position: Positional grouping label used to place the player on the team's official depth chart (e.g., 'QB', 'WR1',
@@ -11502,7 +11541,7 @@ load_nba_team_crosswalk:
   nba_team_abbreviation: Team abbreviation as listed by the NBA Stats API.
   nba_team_city: Team city as listed by the NBA Stats API.
   nba_team_id: NBA Stats team id side of the ESPN-to-NBA team crosswalk.
-  nba_team_name: Team nickname as listed by the NBA Stats API.
+  nba_team_name: Full NBA team name from the NBA Stats API, city followed by nickname (e.g. 'Boston Celtics').
   nba_team_slug: URL-friendly slug for the team's name on NBA Stats.
 load_nba_team_season_stats:
   stat_description: ESPN's prose definition of the team statistic on this row, for example the average number of assists a
@@ -13402,10 +13441,10 @@ load_nfl_contracts:
   cols: Number of contract columns returned in the contracts dataset (metadata artifact from the loader).
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
     year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of
-    dollars; null on 43 of 52,814 rows.
+    dollars.
   season_history: List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus,
     option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus,
-    other_bonus), money in millions of dollars and a final 'Total' row per nflreadr; null on 43 of 52,814 rows.
+    other_bonus), money in millions of dollars and a final 'Total' row per nflreadr.
 load_nfl_espn_qbr:
   epa_total: Total expected points added across the quarterback's plays (ESPN QBR EPA component).
   exp_sack: QBR points contribution adjustment from expected sacks.
@@ -15661,7 +15700,7 @@ matchupsrollup:
   sfl: NBA or WNBA Stats value for sfl in the matchupsrollup result set.
   team_pts: Scoring or score-margin metric for team points in the requested NBA or WNBA Stats split.
 mhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -15677,7 +15716,7 @@ mhl_standings:
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
 mjhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -15764,7 +15803,7 @@ mlb_statcast_search_minors:
     without a tracked swing-and-miss (about 90% of sampled rows).
 mlb_statcast_search_wbc:
   miss_distance: Distance between the bat and the ball on a swing-and-miss, in inches (Savant bat-tracking field); all null
-    in the sampled 2023 WBC pitches, which predate Savant's 2024+ miss-distance data.
+    in the sampled WBC pitches (2023-03-08), and coverage for later WBC tournaments is unverified.
 mlb_stuff_plus:
   pitch_type: Statcast pitch-type abbreviation.
   pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
@@ -16800,7 +16839,7 @@ nil_rankings:
   person: Nested On3 person object for the ranked athlete (stringified).
   valuation: Athlete's On3 NIL valuation in dollars.
 nojhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -16857,8 +16896,8 @@ ohl_game_corsi:
   toi_seconds: Total time on ice for the player during the game, recorded in seconds.
 ohl_leaders:
   photo_small: URL of a small-format headshot image of the player from the OHL HockeyTech feed.
-  stat_formatted: Human-readable string representation of the leader's statistical value for display purposes (e.g., '42',
-    '1.85', '93.5%').
+  stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
+    requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
   team_logo_small: URL of the small-format team logo image for the player's OHL club.
   type_formatted: Human-readable label describing the statistical category for which the player appears on the leaders list
     (e.g., 'Points', 'Goals', 'Save Percentage').
@@ -16879,10 +16918,11 @@ ohl_player_toi:
   toi_seconds: Total time on ice for the player during the game or tracked period, expressed in seconds.
 ohl_standings:
   goals_diff: Net goal differential for the team (goals for minus goals against) displayed as a signed string.
-  past_10: Team record over the most recent ten games, formatted as a W-L or W-OTL-L string.
+  past_10: 'Record over the team''s most recent 10 games (feed header ''Past 10 Games'') as a hyphenated string: W-L-OTL-SOL
+    when four parts are shipped (e.g. ''2-0-0-1''), W-L-OTL when three are (e.g. ''0-2-1'').'
   percentage: Team points percentage expressed as a string, calculated as points earned divided by maximum possible points.
 ojhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -21212,7 +21252,8 @@ pwhl_game_shifts:
   start_s: Shift start time in seconds elapsed from the start of the period.
 pwhl_leaders:
   photo_small: URL of the small-format headshot image for the PWHL leader-board player.
-  stat_formatted: Human-readable string representation of the player's leading statistic value (e.g., "22G", "0.95").
+  stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
+    requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
   team_logo_small: URL of the small-format team logo image for the PWHL leader-board entry.
   type_formatted: Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Save
     Percentage").
@@ -21310,8 +21351,8 @@ pwhl_team_roster:
     PWHL.
 qmjhl_leaders:
   photo_small: URL of a small-format headshot image of the player from the QMJHL HockeyTech feed.
-  stat_formatted: Human-readable string representation of the leader's statistical value for display purposes (e.g., '42',
-    '1.85', '93.5%').
+  stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
+    requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
   team_logo_small: URL of the small-format team logo image for the player's QMJHL club.
   type_formatted: Human-readable label describing the statistical category for which the player appears on the leaders list
     (e.g., 'Points', 'Goals', 'Save Percentage').
@@ -22911,7 +22952,7 @@ siera_like:
   season: Season year (carried through for join convenience with x_era).
   siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
 sjhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -26046,7 +26087,7 @@ tto_penalty_table:
   penalty_vs_first: mean_run_value minus the TTO=1 mean run value.
   times_through_order: Times through the batting order (1-3).
 ushl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -26073,7 +26114,7 @@ videostatus:
   visitor_team_city: City name of the visiting team.
   visitor_team_name: Nickname of the visiting team.
 vijhl_leaders:
-  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by player_id (e.g. '.../pwhl/60x60/13.jpg'),
+  photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -26096,7 +26137,8 @@ whl_player_stats:
     the WHL HockeyTech system.
 whl_standings:
   goals_diff: Net goal differential for the team (goals for minus goals against) displayed as a signed string.
-  past_10: Team record over the most recent ten games, formatted as a W-L or W-OTL-L string.
+  past_10: 'Record over the team''s most recent 10 games (feed header ''Past 10 Games'') as a hyphenated string: W-L-OTL-SOL
+    when four parts are shipped (e.g. ''2-0-0-1''), W-L-OTL when three are (e.g. ''0-2-1'').'
   percentage: Team points percentage expressed as a string, calculated as points earned divided by maximum possible points.
 win_probability:
   about_at_bat_index: The sequential index of the at-bat within the game to which this win-probability observation belongs.
