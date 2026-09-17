@@ -6921,6 +6921,18 @@ class NFLPlayProcess(object):
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
 
+    def __pipeline_input(self):
+        """A pipeline replaces ``self.json`` with its result, so every run starts from a copy of
+        the payload it was given (``espn_nfl_pbp`` / ``nfl_pbp_disk`` / the caller), never from
+        the other pipeline's result."""
+        results = getattr(self, "_pipeline_results", {})
+        if not any(self.json is result for result in results.values()):
+            self._pipeline_source = self.json
+        return copy.deepcopy(self._pipeline_source)
+
+    def __pipeline_done(self, kind):
+        self._pipeline_results = {**getattr(self, "_pipeline_results", {}), kind: self.json}
+
     def run_processing_pipeline(self):
         """Run the full feature-engineering pipeline against ``self.json``.
 
@@ -6955,7 +6967,7 @@ class NFLPlayProcess(object):
                 sorted(slim.keys())
         """
         if self.ran_pipeline == False:
-            pbp_txt = self.__helper_nfl_pbp_drives(self.json)
+            pbp_txt = self.__helper_nfl_pbp_drives(self.__pipeline_input())
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -6989,6 +7001,7 @@ class NFLPlayProcess(object):
 
             if confirmed_corrupt:
                 self.ran_pipeline = True
+                self.__pipeline_done("processing")
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none") and (
@@ -7061,6 +7074,8 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
+            self.__pipeline_done("processing")
+        self.json = getattr(self, "_pipeline_results", {}).get("processing", self.json)
         return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
     def run_cleaning_pipeline(self):
@@ -7085,7 +7100,7 @@ class NFLPlayProcess(object):
                 "plays" in cleaned and "advBoxScore" not in cleaned
         """
         if self.ran_cleaning_pipeline == False:
-            pbp_txt = self.__helper_nfl_pbp_drives(self.json)
+            pbp_txt = self.__helper_nfl_pbp_drives(self.__pipeline_input())
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -7119,6 +7134,7 @@ class NFLPlayProcess(object):
 
             if confirmed_corrupt:
                 self.ran_cleaning_pipeline = True
+                self.__pipeline_done("cleaning")
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (
@@ -7171,6 +7187,8 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
+            self.__pipeline_done("cleaning")
+        self.json = getattr(self, "_pipeline_results", {}).get("cleaning", self.json)
         return self.json
 
     def corrupt_pbp_check(self):

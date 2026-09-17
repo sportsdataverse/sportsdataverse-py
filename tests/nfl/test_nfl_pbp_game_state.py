@@ -573,3 +573,36 @@ def test_espn_feature_builders_read_the_roof_column(frame):
         for build, feats in builders:
             x = build(f)[:, [feats.index(c) for c in ("retractable", "dome", "outdoors")]]
             assert {tuple(int(v) for v in r) for r in x} == {hot}, (build.__name__, hot)
+
+
+# ---------------------------------------------------------------------------
+# N13 -- cleaning and processing pipelines can share one instance, in either order
+# ---------------------------------------------------------------------------
+
+
+def test_cleaning_and_processing_pipelines_share_one_instance(summary, frame):
+    cols = ["id", "type.text", "start.yardsToEndzone", "start.posTeamTimeouts", "EPA", "wp_before"]
+    ref = NFLPlayProcess(gameId=GAME_ID)
+    ref.espn_nfl_pbp(summary=summary)
+    ref_ids = [p["id"] for p in ref.run_cleaning_pipeline()["plays"]]
+
+    import copy
+
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    payload = proc.espn_nfl_pbp(summary=summary)
+    pristine = copy.deepcopy(payload)
+    cleaned = proc.run_cleaning_pipeline()
+    processed = proc.run_processing_pipeline()
+    # both runs built from a copy: the attached payload is untouched
+    assert set(payload) == set(pristine) and payload["header"] == pristine["header"]
+    assert "advBoxScore" not in cleaned and "advBoxScore" in processed
+    assert [p["id"] for p in cleaned["plays"]] == ref_ids
+    assert proc.plays_frame.select(cols).equals(frame.select(cols))
+    # a repeat call returns that pipeline's own result, not the other one's
+    assert proc.run_cleaning_pipeline() is cleaned
+    assert proc.run_processing_pipeline() is processed
+
+    other = NFLPlayProcess(gameId=GAME_ID)
+    other.espn_nfl_pbp(summary=summary)
+    other.run_processing_pipeline()
+    assert [p["id"] for p in other.run_cleaning_pipeline()["plays"]] == ref_ids
