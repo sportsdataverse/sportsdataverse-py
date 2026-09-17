@@ -33,6 +33,43 @@ by Basketball-Reference `data-stat` keys.
 
 One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the box columns scaled to `table` (the `advanced` table adds `per`, `ts_pct`, `usg_pct`, `ws`, `bpm`, `vorp` …), and echoed `season` / `table` / `league` columns. A zero-row frame when the page carries no player table.
 
+| col_name | type | description |
+|---|---|---|
+| `ranker` | double | Row rank. |
+| `player` | character | Player name. |
+| `age` | double | Player age (in years). |
+| `team` | character | Team-side label or team identifier. |
+| `pos` | character | Position. |
+| `g` | double | Games played. |
+| `gs` | double | Games started. |
+| `mp_per_g` | double | Minutes (per_game table) / `mp` total (totals table). |
+| `fg_per_g` | double | Field goals made per game over the season (Float64, one decimal, e.g. 10.8); null where the page leaves the cell blank. |
+| `fga_per_g` | double | Field goal attempts per game over the season (Float64, one decimal, e.g. 22.8); null where the page leaves the cell blank. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg3_per_g` | double | Three-point field goals made per game over the season (Float64, one decimal, e.g. 4.0); null where the page leaves the cell blank. |
+| `fg3a_per_g` | double | Three-point field goal attempts per game over the season (Float64, one decimal, e.g. 10.8); null where the page leaves the cell blank. |
+| `fg3_pct` | double | Three-point field goal percentage (0-1). |
+| `fg2_per_g` | double | Two-point field goals made per game over the season (Float64, one decimal, e.g. 6.9); null where the page leaves the cell blank. |
+| `fg2a_per_g` | double | Two-point field goal attempts per game over the season (Float64, one decimal, e.g. 11.9); null where the page leaves the cell blank. |
+| `fg2_pct` | double | Two-point field goal percentage as a 0-1 proportion (e.g. 0.575); null where the page leaves the cell blank. |
+| `efg_pct` | double | Effective field goal percentage as a 0-1 proportion (e.g. 0.563), crediting made threes at 1.5 field goals: (FG + 0.5 * 3P) / FGA; null where the page leaves the cell blank. |
+| `ft_per_g` | double | Free throws made per game over the season (Float64, one decimal, e.g. 7.9); null where the page leaves the cell blank. |
+| `fta_per_g` | double | Free throw attempts per game over the season (Float64, one decimal, e.g. 10.1); null where the page leaves the cell blank. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `orb_per_g` | double | Offensive rebounds per game over the season (Float64, one decimal, e.g. 0.6); null where the page leaves the cell blank. |
+| `drb_per_g` | double | Defensive rebounds per game over the season (Float64, one decimal, e.g. 7.1); null where the page leaves the cell blank. |
+| `trb_per_g` | double | Total rebounds per game over the season (Float64, one decimal, e.g. 7.7); null where the page leaves the cell blank. |
+| `ast_per_g` | double | Assists per game over the season (Float64, one decimal, e.g. 8.3); null where the page leaves the cell blank. |
+| `stl_per_g` | double | Steals per game over the season (Float64, one decimal, e.g. 1.6); null where the page leaves the cell blank. |
+| `blk_per_g` | double | Blocks per game over the season (Float64, one decimal, e.g. 0.8); null where the page leaves the cell blank. |
+| `tov_per_g` | double | Turnovers per game over the season (Float64, one decimal, e.g. 4.0); null where the page leaves the cell blank. |
+| `pf_per_g` | double | Personal fouls per game over the season (Float64, one decimal, e.g. 2.4); null where the page leaves the cell blank. |
+| `pts_per_g` | double | Points (scaled to the chosen `table`). |
+| `awards` | character | Comma-separated Basketball-Reference award codes for the season (e.g. 'MVP-4,CPOY-8,AS,NBA1'): voting finishes as CODE-place, AS for All-Star, NBA1/NBA2/NBA3 for the All-NBA team; empty string when the player has none. |
+| `season` | integer | Season year. |
+| `table` | character | Stat table requested through the table argument, echoed on every row ('per_game' in sampled data). |
+| `league` | character | League slug. |
+
 **Example**
 
 ```python
@@ -71,6 +108,21 @@ Port of hoopR's `bref_standings()` (NBA) and wehoop's
 **Returns**
 
 One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emits `"Eastern"`/`"Western"`), `team` (playoff `*` marker stripped), `playoffs` (bool, from that marker), `wins`, `losses`, `win_loss_pct`, `gb`, `pts_per_g`, `opp_pts_per_g`, `srs`, plus echoed `season` / `league`. Zero rows when neither conference table is present.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `wins` | double | Total wins. |
+| `losses` | double | Total losses. |
+| `win_loss_pct` | double | Win-loss percentage. |
+| `gb` | character | Games behind the conference leader. |
+| `pts_per_g` | double | Points (scaled to the chosen `table`). |
+| `opp_pts_per_g` | double | Opponent points per game. |
+| `srs` | double | Simple Rating System (point margin + SOS). |
+| `conference` | character | Conference name. |
+| `playoffs` | logical | `TRUE` if the team made the playoffs (`*` marker). |
+| `season` | integer | Season year. |
+| `league` | character | League slug. |
 
 **Example**
 
@@ -112,6 +164,37 @@ selection in bref_table` matters here.
 **Returns**
 
 One row per team: `ranker`, `team`, `g`, `mp` and the box categories scaled to `table`, plus echoed `season` / `table` / `league`. The WNBA path drops the `League Average` footer row, as wehoop does. A zero-row frame when the table id is absent.
+
+| col_name | type | description |
+|---|---|---|
+| `ranker` | double | Row rank. |
+| `team` | character | Team-side label or team identifier. |
+| `g` | double | Games played. |
+| `mp` | double | Minutes played. |
+| `fg` | double | Field goals made by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 43.5). |
+| `fga` | double | Field goal attempts. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg3` | double | Three-point field goals made by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 14.2). |
+| `fg3a` | double | Three-point field goal attempts. |
+| `fg3_pct` | double | Three-point field goal percentage (0-1). |
+| `fg2` | double | Two-point field goals made by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 29.4). |
+| `fg2a` | double | Two-point field goal attempts by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 52.0). |
+| `fg2_pct` | double | Team two-point field goal percentage as a 0-1 proportion (e.g. 0.565). |
+| `ft` | double | Free throws made by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 20.8). |
+| `fta` | double | Free throw attempts. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `orb` | double | Offensive rebounds by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 9.8). |
+| `drb` | double | Defensive rebounds by the team, scaled to the requested table (per game in the sampled per_game table, e.g. 34.2). |
+| `trb` | double | Career total rebounds. |
+| `ast` | double | Assists. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `tov` | double | Turnovers. |
+| `pf` | double | Personal fouls. |
+| `pts` | double | Points scored. |
+| `season` | integer | Season year. |
+| `table` | character | Stat table requested through the table argument, echoed on every row ('per_game' in sampled data). |
+| `league` | character | League slug. |
 
 **Example**
 
@@ -1410,6 +1493,19 @@ page, so none is guessed at here.
 
 One row per candidate per award: `award` (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`), `rank`, `player`, `age`, `team`, `votes_first`, `points_won`, `points_max`, `award_share`, plus `season`. Zero rows when the page carries no voting table (award voting predates 1956 for none of them).
 
+| col_name | type | description |
+|---|---|---|
+| `rank` | character | Rank. |
+| `player` | character | Player name. |
+| `age` | double | Player age (in years). |
+| `team` | character | Team-side label or team identifier. |
+| `votes_first` | double | First-place votes. |
+| `points_won` | double | Voting points won. |
+| `points_max` | double | Maximum possible voting points. |
+| `award_share` | double | Share of the maximum voting points. |
+| `award` | character | Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`). |
+| `season` | integer | Season year. |
+
 **Example**
 
 ```python
@@ -1444,6 +1540,32 @@ Port of hoopR's `bref_draft()`. NBA only.
 **Returns**
 
 One row per pick: `pick_overall`, `round`, `team`, `player`, `college_name`, `seasons`, `g`, `mp`, `pts`, `trb`, `ast`, `fg_pct` …, `ws`, `ws_per_48`, `bpm`, `vorp`, plus `season`. Zero rows when the draft page is absent.
+
+| col_name | type | description |
+|---|---|---|
+| `ranker` | double | Row rank. |
+| `pick_overall` | double | Overall draft pick number. |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `college_name` | character | College / pre-draft team. |
+| `seasons` | character | NBA seasons played. |
+| `g` | character | Games played. |
+| `mp` | character | Minutes played. |
+| `pts` | character | Points scored. |
+| `trb` | character | Career total rebounds. |
+| `ast` | character | Assists. |
+| `fg_pct` | character | Field goal percentage (0-1). |
+| `fg3_pct` | character | Three-point field goal percentage (0-1). |
+| `ft_pct` | character | Free throw percentage (0-1). |
+| `mp_per_g` | character | Minutes (per_game table) / `mp` total (totals table). |
+| `pts_per_g` | character | Points (scaled to the chosen `table`). |
+| `trb_per_g` | character | Career total rebounds per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `ast_per_g` | character | Career assists per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `ws` | character | Career win shares. |
+| `ws_per_48` | character | Career win shares per 48 minutes for the drafted player, from Basketball-Reference's draft table. Every value is an empty string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there. |
+| `bpm` | character | Career box plus/minus. |
+| `vorp` | character | Career value over replacement player. |
+| `season` | integer | Season year. |
 
 **Example**
 
@@ -1481,6 +1603,13 @@ NBC retired.
 
 One row per injured player: `player`, `team_name`, `date_update` and `note` (status plus description). Zero rows when no one is listed or the page is unreachable.
 
+| col_name | type | description |
+|---|---|---|
+| `player` | character | Player name. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `date_update` | character | Date the status was last updated. |
+| `note` | character | Injury status and description. |
+
 **Example**
 
 ```python
@@ -1517,6 +1646,19 @@ Basketball-Reference **player dictionary**: `player_id` is the slug that
 **Returns**
 
 One row per player: `player`, `player_id` (e.g. `jamesle01`), `year_min`, `year_max`, `pos`, `height`, `weight`, `birth_date`, `colleges`, plus the echoed `letter`. `player_id` is omitted when the number of player links on the page does not match the number of rows (the same guard the R wrapper applies).
+
+| col_name | type | description |
+|---|---|---|
+| `player` | character | Player name. |
+| `player_id` | character | Unique player identifier. |
+| `year_min` | double | First season played. |
+| `year_max` | double | Last season played. |
+| `pos` | character | Position. |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | double | Player weight in pounds. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `colleges` | character | College(s). |
+| `letter` | character | Last-name initial (echoes the `letter` argument). |
 
 **Example**
 
@@ -2158,6 +2300,19 @@ Wraps `nba/league/header`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `template` | character | Fox layout template name for the header block; always 'entity-header' in sampled data. |
+| `title` | character | Title or label for the record. |
+| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | character | Fox Bifrost content URI of the league entity ('basketball/nba/league/1' in sampled data). |
+| `content_type` | character | Fox entity type of the header's entity; always 'league' in sampled data. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+| `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's full name. |
+| `rank` | character | Rank. |
+| `details` | character | Details. |
+
 **Example**
 
 ```python
@@ -2182,6 +2337,15 @@ NBA statistical leaders (`stats-con`); who=player|team.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `players` | character | Nested list of per-player box scores. |
+| `v1` | character | Leader's name as Fox abbreviates it, first initial plus surname ('F. Lastname'); the column is named v1 because its table header cell is blank. |
+| `gp` | character | Games played. |
+| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `min` | character | Minutes played. |
+| `mpg` | character | Minutes per game. |
 
 **Example**
 
@@ -2251,6 +2415,17 @@ Wraps `nba/league/schedule`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Id. |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/league/schedule-segment/<year>-YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/nba/schedule?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
+
 **Example**
 
 ```python
@@ -2267,6 +2442,17 @@ Wraps `nba/league/scores`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Id. |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/league/scores-segment/YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/nba/scores?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
 
 **Example**
 
@@ -2285,6 +2471,31 @@ Wraps `nba/league/standings`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the Fox standings section the row came from, such as 'CONFERENCE' or 'PRESEASON'; each team appears once per section. Values in sampled data: 'CONFERENCE', 'DIVISION', 'PRESEASON'. |
+| `eastern_conference` | character | Team's position in the Eastern Conference table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `v1` | character | Team nickname as Fox displays it (e.g. 'Celtics', 'Knicks'); the column is named v1 because its table header cell is blank. |
+| `w_l` | character | W l. |
+| `pct` | character | Win percentage. |
+| `gb` | character | Games behind the conference leader. |
+| `pf` | character | Personal fouls. |
+| `pa` | character | Points allowed per game as a one-decimal string; always '0.0' in the sampled pre-season data, where no games had been played. |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `conf` | character | character. |
+| `div` | character | Record against division opponents as a 'W-L' string ('0-0' throughout the sampled pre-season data); null on rows from tables without a DIV column. |
+| `l10` | character | Last-ten record. |
+| `strk` | character | Current streak. |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `western_conference` | character | Team's position in the Western Conference table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `atlantic` | character | Team's position in the Atlantic division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `central` | character | Team's position in the Central division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `southeast` | character | Team's position in the Southeast division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `northwest` | character | Team's position in the Northwest division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `pacific` | character | Team's position in the Pacific division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+| `southwest` | character | Team's position in the Southwest division table, from the first column whose header is the table name; null on rows from other tables, and '-' on every populated row of the sampled pre-season data. |
+
 **Example**
 
 ```python
@@ -2301,6 +2512,14 @@ Wraps `nba/league/stats`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Category label. |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character | Fox's short code for the leader stat, such as 'PPG', 'RPG', 'FG%', 'DBL DBL' or 'OFF RTG'; the spelled-out name is in stat. |
+| `player` | character | Player name. |
+| `value` | character | Numeric or string value field. |
 
 **Example**
 
@@ -2364,6 +2583,17 @@ Wraps `nba/scoreboard/main`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Id. |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../nba/scoreboard/segment/YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/scores/nba?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
 
 **Example**
 
@@ -2525,6 +2755,18 @@ Wraps `nba/league/teamnav`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Group identifier (e.g. conference 'group_id'). |
+| `fox_id` | character | Fox Sports team id as a string, the trailing number of content_uri (e.g. '6'). |
+| `abbreviation` | character | Short abbreviation. |
+| `name` | character | Display name. |
+| `content_uri` | character | Fox Bifrost content URI identifying the team, shaped 'basketball/nba/teams/<fox_id>'. |
+| `content_type` | character | Fox entity type from the team's entity link; always 'team' in sampled data. |
+| `web_url` | character | Site-relative foxsports.com path of the team page, shaped '/nba/<city-nickname>-team'. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+
 **Example**
 
 ```python
@@ -2550,6 +2792,12 @@ teams), this is the frame the hoopR NBA team crosswalk consumes.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | character | Fox team name (NA if unmatched). |
+| `fox_section` | character | Fox conference/section label (NA if unmatched). |
 
 **Example**
 
@@ -2634,6 +2882,22 @@ Pacing is environment-tunable, never hardcoded in the fetch path:
 **Returns**
 
 One row per player-season with `player_id`, `player`, `first_name`, `last_name`, `team_id`, `team`, `season`, `salary`, `cap_allocation`, `team_option`, `player_option`, `two_way` and `qualifying_offer`. Ids are `Utf8`, money is `Float64`, options are `Boolean`. All 30 pages failing yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `team_id` | character | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `season` | integer | Season year. |
+| `salary` | double | Total cap-counting salary for the season ($). |
+| `cap_allocation` | double | Cap allocation for the season (USD). |
+| `team_option` | logical | Whether the season is a team option. |
+| `player_option` | logical | Whether the season is a player option. |
+| `two_way` | logical | Whether it is a two-way contract. |
+| `qualifying_offer` | logical | Whether it is a qualifying offer. |
 
 **Example**
 
@@ -2875,6 +3139,12 @@ Load the bundled per-age value-multiplier curve.
 **Returns**
 
 Frame `age:Int64, rel_value:Float64, peak_age:Float64` (`peak_age` repeated on every row for convenient filtering/joining).
+
+| col_name | type | description |
+|---|---|---|
+| `age` | integer | Player age (in years). |
+| `rel_value` | double | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
+| `peak_age` | double | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
 
 **Example**
 
@@ -3474,6 +3744,30 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 
 `pl.DataFrame` (or pandas), one row per ESPN athlete, 21 columns.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_name` | character | Player name. |
+| `espn_athlete_id` | character | ESPN athlete id. |
+| `espn_full_name` | character | ESPN full name. |
+| `espn_jersey` | character | ESPN jersey number. |
+| `espn_position` | character | ESPN position abbreviation. |
+| `nba_player_id` | character | NBA Stats API (stats.nba.com) player id as a string, matched to the ESPN athlete within the same team by normalized exact name, then Jaro-Winkler fuzzy name match (min_confidence, default 0.92) with jersey and birth-date tiebreaks; null when the athlete had no Stats match. |
+| `nba_player_name` | character | Player name from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `nba_jersey_num` | character | Jersey number as a string from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `nba_position` | character | Position from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
+| `fox_player` | character | Fox player name (NA if unmatched). |
+| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
+| `fox_position_group` | character | Fox position group label (NA if unmatched). |
+| `yahoo_player_id` | character | Yahoo player id (NA placeholder). |
+| `yahoo_player_name` | character | Yahoo player name (NA placeholder). |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
+| `match_keys` | character | NA (reserved for future use). |
+
 **Example**
 
 ```python
@@ -3965,6 +4259,30 @@ historical relocations are not back-modelled.
 
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `espn_abbreviation` | character | ESPN abbreviation. |
+| `espn_display_name` | character | ESPN display name (school + mascot). |
+| `espn_short_name` | character | ESPN short name. |
+| `espn_location` | character | ESPN school/location only. |
+| `espn_mascot` | character | ESPN mascot/nickname. |
+| `nba_team_id` | character | NBA Stats API (stats.nba.com) team id as a string, attached to the ESPN team row on espn_team_id after the Stats team nickname is matched to ESPN's short_name; null when no Stats team matched the ESPN team. |
+| `nba_team_abbreviation` | character | NBA Stats team tricode, taken from nba_stats_leaguegamelog's team_abbreviation because leaguestandingsv3 publishes none; null when no Stats team matched the ESPN team. |
+| `nba_team_name` | character | Full NBA Stats team name built as team_city plus team_name (city then nickname) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_team_city` | character | Team city (team_city) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_team_slug` | character | URL slug for the team (team_slug) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_conference` | character | Team's conference as NBA Stats labels it (conference) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_division` | character | Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | character | Fox team name (NA if unmatched). |
+| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team_abbreviation` | character | Yahoo abbreviation (NA placeholder). |
+| `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
+
 **Example**
 
 ```python
@@ -4385,6 +4703,18 @@ tables are static. A traded pick's team cell carries `*`, which is stripped.
 **Returns**
 
 One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `weight`, `position`, `school` and `class`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `round` | integer | Tournament / playoff round. |
+| `pick` | integer | Pick number within the round. |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | integer | Player weight in pounds. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `school` | character | Player school / pre-draft team. |
+| `class` | character | College class / draft eligibility note. |
 
 **Example**
 
@@ -4926,6 +5256,23 @@ null for a table with no `pick` column (the undrafted list).
 
 One row per selection -- `pick`, `player`, `team`, `draft_trades`, `pos`, `ht`, `wt`, `age`, `yos`, `pre_draft_team`, `class`, `nationality`, plus `round` and `draft_year`. Zero rows when no draft table was found.
 
+| col_name | type | description |
+|---|---|---|
+| `pick` | integer | Pick number within the round. |
+| `player` | character | Player name. |
+| `team` | character | Team-side label or team identifier. |
+| `draft_trades` | character | Draft-night trade note, if any. |
+| `pos` | character | Position. |
+| `ht` | character | Listed height. |
+| `wt` | integer | Listed weight (lbs). |
+| `age` | integer | Player age (in years). |
+| `yos` | integer | Years of service. |
+| `pre_draft_team` | character | Pre-draft team / school / club. |
+| `class` | character | College class / draft eligibility note. |
+| `nationality` | character | Player nationality. |
+| `round` | integer | Tournament / playoff round. |
+| `draft_year` | integer | Draft year (4-digit). |
+
 **Example**
 
 ```python
@@ -5351,6 +5698,12 @@ conference from a static division -> conference map.
 
 One row per team -- `team`, `division`, `conference`. Zero rows (with that schema) when no division table was recognised.
 
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `division` | character | Team division. |
+| `conference` | character | Conference name. |
+
 **Example**
 
 ```python
@@ -5379,6 +5732,11 @@ items), so this parses the DOM rather than a `<table>`.
 **Returns**
 
 One row per transaction -- `date` (`polars.Date`) and `transaction` (text). Zero rows (with that schema) when no dated block parsed.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Date in YYYY-MM-DD format. |
+| `transaction` | character | Transaction description. |
 
 **Example**
 
@@ -5448,6 +5806,19 @@ back as `"Subscribers Only"`; it is returned as null for non-subscribers.
 **Returns**
 
 One row per injured player with `player_id`, `player`, `first_name`, `last_name`, `team`, `position`, `injury`, `status`, `return_date` and `url`. An unreachable endpoint or a non-list body yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `team` | character | Team-side label or team identifier. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `injury` | character | Injury (body part / description). |
+| `status` | character | Status label. |
+| `return_date` | character | Projected return (`NA` unless a subscriber). |
+| `url` | character | RotoWire player page URL. |
 
 **Example**
 
@@ -5638,6 +6009,17 @@ abbreviation (`"ORL ORL"`), so only the first token is kept, and every
 **Returns**
 
 One row per team. Columns follow Spotrac's table -- `rank`, `team`, `record`, `players_active`, `avg_age_team`, `total_cap_allocations`, `cap_space_all` -- plus `season`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Rank. |
+| `team` | character | Team-side label or team identifier. |
+| `record` | character | Overall win-loss record. |
+| `players_active` | integer | Number of active players. |
+| `avg_age_team` | double | Average roster age. |
+| `total_cap_allocations` | double | Total cap allocations (USD). |
+| `cap_space_all` | double | Cap space / over-the-cap amount (USD). |
+| `season` | integer | Season year. |
 
 **Example**
 
