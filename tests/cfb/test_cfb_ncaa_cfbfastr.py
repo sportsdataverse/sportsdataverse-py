@@ -531,3 +531,14 @@ def test_td_and_pat_in_one_row_scores_seven() -> None:
         0, named=True
     )
     assert (six["play_type"], six["score_pts"]) == ("Interception Return Touchdown", -7)
+
+
+def test_2019_field_goal_text_scores() -> None:
+    """ "field goal attempt from 30 GOOD" (no "yards") is a made kick; 1735120's event-sourced final is 21-24."""
+    df = _frame("1735120")
+    fg = df.filter(pl.col("play_text").str.starts_with("HARRIS, Clayton field goal attempt from 30 GOOD")).row(
+        0, named=True
+    )
+    assert (fg["play_type"], fg["fg_made"], fg["yds_fg"], fg["score_pts"]) == ("Field Goal Good", True, 30, 3)
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Wagner": 21, "UConn": 24}  # no drive titles: pure event sourcing

@@ -214,7 +214,8 @@ _TWOPT_RE = re.compile(
 _KICK_YDS_RE = re.compile(r"kickoff (\d+) yards", re.I)
 _PUNT_YDS_RE = re.compile(r"punt (\d+) yards", re.I)
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
-_FG_DETAIL_RE = re.compile(r"field goal attempt from (\d+) yards\s+(GOOD|NO GOOD)", re.I)
+# "from 24 yards GOOD" (2025) / "from 24 GOOD" (2019-era)
+_FG_DETAIL_RE = re.compile(r"field goal attempt from (\d+)(?: yards)?\s+(GOOD|NO GOOD|BLOCKED)", re.I)
 _PENALTY_RE = re.compile(
     rf"PENALTY (?P<team>{_SIDE_CHARS}{{2,10}}) (?P<type>[A-Za-z][A-Za-z /'\-]*?)"
     rf"(?:\s+\((?P<player>{_NAME})\))?\s+(?P<yards>\d+) yards",
