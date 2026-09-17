@@ -4,7 +4,7 @@ columns:
 - name: season
   type: integer
   description: ''
-- name: team
+- name: team_id
   type: character
   description: ''
 - name: off_returning
@@ -18,4 +18,13 @@ columns:
   description: ''
 - name: n_returning
   type: integer
+  description: ''
+- name: def_basis
+  type: character
+  description: ''
+- name: overall_basis
+  type: character
+  description: ''
+- name: is_estimated
+  type: logical
   description: ''
