@@ -497,9 +497,8 @@ def build_nfl_player_stats(
 
     pbp = load_nfl_pbp(seasons, source=source)
 
-    # season_type pre-filter (PBP carries REG / POST / etc.).
-    if season_type in ("REG", "POST"):
-        pbp = pbp.filter(pl.col("season_type") == season_type)
+    # season_type pre-filter. PBP can also carry PRE rows, so REG+POST filters too.
+    pbp = pbp.filter(pl.col("season_type").is_in(season_type.split("+")))
     if pbp.height == 0:
         return _empty_player_stats(weekly=summary_level == "week", return_as_pandas=return_as_pandas)
 
@@ -1487,8 +1486,7 @@ def build_nfl_team_stats(
     if _missing_st:
         pbp = pbp.with_columns([pl.lit(0, dtype=pl.Int64).alias(c) for c in _missing_st])
 
-    if season_type in ("REG", "POST"):
-        pbp = pbp.filter(pl.col("season_type") == season_type)
+    pbp = pbp.filter(pl.col("season_type").is_in(season_type.split("+")))  # REG+POST also drops PRE
     if pbp.height == 0:
         return _empty_team_stats(weekly=summary_level == "week", return_as_pandas=return_as_pandas)
 
