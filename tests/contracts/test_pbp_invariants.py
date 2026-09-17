@@ -388,6 +388,20 @@ def test_nfl_processor_fixture_smoke(monkeypatch):
     assert rules["attr.passer"].n_checked > 20
 
 
+def test_sweep_report_survives_a_late_error_game(tmp_path):
+    """The status frame's "error" column is None for 100+ games before the first failure."""
+    from tools.validation.pbp_invariant_sweep import report
+
+    games = tmp_path / "games" / "nfl" / "2020"
+    games.mkdir(parents=True)
+    meta = {"league": "nfl", "season": 2020, "stratum": "REG", "seconds": 1.0, "rules": []}
+    for i in range(101):
+        (games / f"{i}.json").write_text(json.dumps({**meta, "game_id": i, "status": "ok"}))
+    (games / "999.json").write_text(json.dumps({**meta, "game_id": 999, "status": "error", "error": "KeyError: 'x'"}))
+    report(tmp_path)
+    assert pl.read_csv(tmp_path / "game_status.csv").height == 102
+
+
 @pytest.mark.parametrize("season,era", [(2002, "2002-2009"), (2014, "2010-2014"), (2026, "2025-2026")])
 def test_sweep_era_buckets(season, era):
     from tools.validation.pbp_invariant_sweep import era_of

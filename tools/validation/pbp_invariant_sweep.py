@@ -380,7 +380,11 @@ def report(out: Path) -> None:
 
     metas = [json.loads(p.read_text()) for p in sorted((out / "games").rglob("*.json"))]
     status = pl.DataFrame(
-        [{k: m.get(k) for k in ("league", "season", "game_id", "stratum", "status", "seconds", "error")} for m in metas]
+        [
+            {k: m.get(k) for k in ("league", "season", "game_id", "stratum", "status", "seconds", "error")}
+            for m in metas
+        ],
+        infer_schema_length=None,  # "error" is None until the first failed game, which may sit past row 100
     )
     status.write_csv(out / "game_status.csv")
     long_rows = []
