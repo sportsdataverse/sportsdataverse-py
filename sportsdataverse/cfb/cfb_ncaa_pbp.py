@@ -127,6 +127,7 @@ def _split_yard_line(token: "str | None", codes: "list[str]") -> "tuple[str | No
 
 # --- play_text field regexes ----------------------------------------------
 _CLOCK_RE = re.compile(r"^\((\d{1,2}:\d{2})\)\s*")  # some games prefix each play with "(MM:SS)"
+_REVIEW_RE = re.compile(r"\s*(?:The previous play is under|\(Original Play:)")
 _FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol)\s+")
 # The play's yardage is its FIRST "for ..." clause: "for 7 yards gain" / "for 5 yards
 # loss" (2025), "for loss of 4 yards" / "for 13 yards" (2019-era), "for no gain".
@@ -245,6 +246,10 @@ def _decompose_play_text(text: str) -> "dict":
     if fm:
         out["formation"] = fm.group(1)
         text = text[fm.end() :]
+    # a replay review appends its note and, when overturned, reprints the ORIGINAL call
+    # ("... PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)"); only the ruling before
+    # the note is the play (play_text keeps the whole string)
+    text = _REVIEW_RE.split(text, 1)[0]
     tl = text.lower()
 
     # non-play markers -- classify + return early (no per-play fields apply)
@@ -263,10 +268,8 @@ def _decompose_play_text(text: str) -> "dict":
 
     # universal flags (case-sensitive caps markers)
     out["is_first_down"] = "1ST DOWN" in text
-    # "TOUCHDOWN nullified by penalty" scored nothing, and a replay-overturned play
-    # reprints its ORIGINAL call after "(Original Play:" -- neither is a touchdown
-    played = text.split("(Original Play:")[0]
-    out["is_touchdown"] = "TOUCHDOWN" in played and "TOUCHDOWN nullified" not in played
+    # "TOUCHDOWN nullified by penalty" scored nothing
+    out["is_touchdown"] = "TOUCHDOWN" in text and "TOUCHDOWN nullified" not in text
     out["is_safety"] = "SAFETY" in text
     out["is_fumble"] = "FUMBLE" in text.upper()
     out["out_of_bounds"] = "out of bounds" in tl

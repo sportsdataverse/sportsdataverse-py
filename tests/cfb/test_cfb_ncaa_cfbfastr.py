@@ -376,6 +376,7 @@ def test_end_yards_to_goal_follows_a_clean_gain() -> None:
             & (pl.col("int") == False)  # noqa: E712
             & pl.col("play_text").str.contains(r"to the ")
             & ~pl.col("play_text").str.contains("lateral")
+            & ~pl.col("play_text").str.contains("Original Play:")  # play_text keeps the overturned call
         )
         assert clean.height > 50, cid
         bad = clean.filter(

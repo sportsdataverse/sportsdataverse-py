@@ -345,3 +345,34 @@ def test_pass_result_does_not_depend_on_the_passer_name_format() -> None:
     assert comp.get_column("yards_gained").null_count() == 0
     inc = passes.filter(pl.col("play_text").str.contains(" pass incomplete"))
     assert inc.height > 0 and inc.get_column("pass_complete").to_list() == [False] * inc.height
+
+
+# --- NC5: replay reviews reprint the ORIGINAL call ------------------------
+# 6389205 Minnesota @ Ohio St. (2025): "PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)"
+# 6386512 Houston @ Oregon St. (2025): "PLAY STANDS." after an own recovery
+
+
+def test_review_reprint_feeds_no_flag_but_play_text_keeps_it() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("6389205"))
+    reviewed = df.filter(pl.col("play_text").str.contains("Original Play:"))
+    assert reviewed.height >= 3
+    # the overturned call carried TOUCHDOWN / a goal-line spot / a tackle; the ruling did not
+    short = reviewed.filter(
+        pl.col("play_text").str.starts_with("Donaldson Jr,CJ rush left for 1 yard gain to the MINN01")
+    )
+    assert short.height == 1
+    r = short.row(0, named=True)
+    assert (r["is_touchdown"], r["yards_gained"], r["end_yard_line"], r["tackler_1"]) == (
+        False,
+        1,
+        "MINN01",
+        "Roberson,Jeff",
+    )
+    assert "Original Play:" in r["play_text"]
+    over = reviewed.filter(
+        pl.col("play_text").str.starts_with("Shotgun Jackson,Bo rush middle for 5 yards gain to the MINN00 TOUCHDOWN")
+    )
+    assert over.row(0, named=True)["tackler_1"] is None  # the tackle belongs to the overturned call
+    assert over.row(0, named=True)["is_touchdown"] is True
+    stands = parse_cfb_ncaa_pbp(_variant("6386512")).filter(pl.col("play_text").str.contains("PLAY STANDS"))
+    assert stands.height >= 1 and stands.get_column("is_first_down").all()
