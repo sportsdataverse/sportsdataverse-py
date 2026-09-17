@@ -308,3 +308,28 @@ def test_midfield_end_yard_line() -> None:
     mid = df.filter(pl.col("play_text").str.contains("to the 50 yardline"))
     assert mid.height == 3
     assert mid.get_column("end_yard_line").to_list() == ["50", "50", "50"]
+
+
+# --- side codes with digits / hyphens -------------------------------------
+# 1736435 SFA @ Lamar University (2019) -- side code "SFA2": "SFA225" is SFA2 + 25
+# 1735539 Shorter @ ETSU (2019)         -- side code "SU-ETSU" (hyphen)
+
+
+def test_digit_side_code_split_from_yard_number() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1736435"))
+    yl = df.filter(pl.col("yard_line").is_not_null())
+    assert set(yl.get_column("yard_line_side").unique().to_list()) == {"SFA2", "LU"}
+    assert yl.get_column("yard_line_number").is_between(0, 50).all()
+    row = df.filter(pl.col("yard_line") == "SFA225").row(0, named=True)
+    assert (row["yard_line_side"], row["yard_line_number"]) == ("SFA2", 25)
+
+
+def test_hyphenated_side_code_parses() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735539"))
+    assert set(df.get_column("offense").unique().to_list()) == {"Shorter", "ETSU"}
+    snaps = df.filter(pl.col("play_type").is_in(["rush", "pass", "sack"]))
+    assert snaps.get_column("yard_line").null_count() == 0
+    assert set(snaps.get_column("yard_line_side").unique().to_list()) == {"SU-ETSU", "ETSU"}
+    titles = parse_cfb_ncaa_drive_titles(_variant("1735539"))
+    assert titles.get_column("team").null_count() == 0
+    assert titles.filter(pl.col("start_yard_line") == "SU-ETSU25").height > 0
