@@ -251,6 +251,34 @@ def _nfl_parse_penalty_spot(row):
 _NFL_PUNT_LOS_RE = re.compile(r"(?i)\bpunts (\d{1,2}) yards? to (?:(end zone)|(?:([A-Z]{2,3}) )?(\d{1,2}))\b")
 
 
+# One clause per penalty: "PENALTY on CAR-L.Kuechly, Defensive Pass Interference, 10 yards,
+# enforced at PHI 5 - No Play." Declined and offsetting clauses carry no enforced yardage.
+_NFL_PENALTY_CLAUSE_SPLIT_RE = re.compile(r"(?i)\bpenalty on\s+")
+_NFL_PENALTY_ENFORCED_RE = re.compile(r"(?i)^([A-Z]{2,3})\b.*?, (\d{1,2}) yards?, enforced\b")
+
+
+def _nfl_incompletion_end_y2e(text, start_y2e, offense_side, home_abbr, away_abbr):
+    """Yards to the end zone where an incompletion leaves the ball.
+
+    The pass gains nothing, so the ball stays at the line of scrimmage unless a penalty
+    is enforced, which moves it toward the penalized team's goal (ESPN enforced at the
+    line of scrimmage on all 839 sampled 2015-26 incompletions). None when a penalized
+    team cannot be placed.
+    """
+    if start_y2e is None:
+        return None
+    pos = start_y2e
+    for clause in _NFL_PENALTY_CLAUSE_SPLIT_RE.split(text or "")[1:]:
+        m = _NFL_PENALTY_ENFORCED_RE.match(clause)
+        if not m:
+            continue
+        penalized = _nfl_side_of_abbrev(m.group(1), home_abbr, away_abbr)
+        if penalized is None:
+            return None
+        pos += int(m.group(2)) if penalized == offense_side else -int(m.group(2))
+    return min(max(pos, 1), 99)
+
+
 def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
     """Yards to the end zone at a punt's line of scrimmage, read from its text (None if absent)."""
     m = _NFL_PUNT_LOS_RE.search(text or "")
@@ -1048,6 +1076,27 @@ class NFLPlayProcess(object):
             .with_columns(
                 pl.when((pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains(r"(?i)declined")))
                 .then(pl.col("start.yardsToEndzone"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .with_columns(
+                # ESPN's end spot on an incompletion is as stale as its start (N6); the pass
+                # gains nothing, so it ends at the corrected start, moved by any enforced penalty
+                pl.when(pl.col("type.text") == "Pass Incompletion")
+                .then(
+                    pl.struct("text", "start.yardsToEndzone", "start.team.id")
+                    .map_elements(
+                        lambda r: _nfl_incompletion_end_y2e(
+                            r["text"],
+                            r["start.yardsToEndzone"],
+                            "home" if r["start.team.id"] == init["homeTeamId"] else "away",
+                            init["homeTeamAbbrev"],
+                            init["awayTeamAbbrev"],
+                        ),
+                        return_dtype=pl.Int64,
+                    )
+                    .fill_null(pl.col("end.yardsToEndzone")),
+                )
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )

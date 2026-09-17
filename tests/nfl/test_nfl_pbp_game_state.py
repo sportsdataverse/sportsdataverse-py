@@ -395,3 +395,50 @@ def test_end_clock_is_the_next_snap(frame):
     assert same_half.height > 100 and (within["end.TimeSecsRem"] == within["_next"]).all()
     last_h1 = f.filter(pl.col("half") == 1).row(-1, named=True)
     assert (last_h1["end.TimeSecsRem"], last_h1["end.adj_TimeSecsRem"]) == (0, 1800)
+
+
+# ---------------------------------------------------------------------------
+# N6b -- an incompletion ends where it started, unless a penalty is enforced
+# ---------------------------------------------------------------------------
+
+# PHI @ CAR, 2015 week 6: nfl-raw ``nfl/espn/raw/2015/400791567.json.gz`` trimmed like BUF_ARI.
+PHI_CAR = Path(__file__).parent / "fixtures" / "summary_400791567_trimmed.json.gz"
+
+
+@pytest.fixture(scope="module")
+def phi_car_frame() -> pl.DataFrame:
+    import gzip
+
+    with gzip.open(PHI_CAR, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = NFLPlayProcess(gameId=400791567)
+    proc.espn_nfl_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def test_incompletions_end_where_they_start_unless_a_penalty_is_enforced(phi_car_frame):
+    from sportsdataverse.nfl.model_vars import clock_stoppage_vec
+
+    f = phi_car_frame.filter(pl.col("type.text").is_in(clock_stoppage_vec) == False).sort("game_play_number")
+    f = f.with_columns(
+        pl.col("start.yardsToEndzone").shift(-1).alias("_next_start"),
+        pl.col("start.pos_team.id").shift(-1).alias("_next_offense"),
+        # a field goal's start is re-derived from its kick distance (yds_fg - 17), not the snap
+        pl.col("fg_attempt").shift(-1).alias("_next_fg"),
+    )
+    inc = {r["id"]: r for r in f.filter(pl.col("type.text") == "Pass Incompletion").iter_rows(named=True)}
+    # ESPN writes a stale end spot on each of these (55, 95, and the plain ones)
+    declined = inc[4007915673113]  # "Penalty on CAR-E.Dickson, Offensive Holding, declined."
+    assert (declined["start.yardsToEndzone"], declined["end.yardsToEndzone"]) == (46, 46)
+    accepted = inc[
+        4007915674123
+    ]  # "PENALTY on CAR-L.Kuechly, Defensive Pass Interference, 10 yards, enforced at PHI 5"
+    assert (accepted["start.yardsToEndzone"], accepted["end.yardsToEndzone"]) == (95, 85)
+    followed = [
+        r
+        for r in inc.values()
+        if r["_next_offense"] == r["start.pos_team.id"] and r["end_of_half"] is False and r["_next_fg"] is False
+    ]
+    assert len(followed) > 20
+    assert [r["id"] for r in followed if r["end.yardsToEndzone"] != r["_next_start"]] == []
