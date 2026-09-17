@@ -81,6 +81,16 @@ ACCEPTS = {
         "J.Starks left end to DET 20 for no gain (SamL.Hill).",
         "SamL.Hill",
     ),
+    "double initial without a space 291221028": (
+        r"\(NAME",
+        "L.Tynes kicks 63 yards from NYG 30 to WAS 7. D.Thomas to WAS 14 for 7 yards (D.J.Johnson).",
+        "D.J.Johnson",
+    ),
+    "double initial after a jersey 400951628": (
+        r"deflected by \d+-NAME",
+        "(11:43) B.Wing punts 16 yards to 50, Center-Z.DeOssie, downed by NYG-Z.DeOssie. Ball deflected by 58-D.J.Alexander.",
+        "D.J.Alexander",
+    ),
     "double initial 400554216": (
         r"\(NAME",
         "(7:20) (No Huddle) A.Luck pass incomplete deep left to H.Nicks (A.J. Bouye).",
@@ -152,6 +162,26 @@ STOPS = {
         "D.Swift right tackle to CHI 37 for 17 yards (Ja.Horn).PENALTY on CHI-R.Odunze, Offensive Holding, 10 yards, "
         "enforced at CHI 29.",
         "Ja.Horn",
+    ),
+    "double initial with a space, then the verb 320930030": (
+        r"to NAME for",
+        "A. Dalton pass to A.J. Green for 18 yards, TOUCHDOWN",
+        "A.J. Green",
+    ),
+    "a sentence period is no double initial 340126035": (
+        r"to NAME",
+        "Cam Newton pass incomplete to A.J. Green.",
+        "A.J. Green",
+    ),
+    "a sentence period before a single name 301017021": (
+        r"to NAME",
+        "K.Kolb pass incomplete to B.Celek.",
+        "B.Celek",
+    ),
+    "no double initial starts inside a glued word 401547408": (
+        r"NAME extra point is",
+        "C.Akers left end for 1 yard, TOUCHDOWN.B.Maher extra point is GOOD, Center-A.Ward, Holder-E.Evans.",
+        "B.Maher",
     ),
     "no initial group starts inside a glued word 401220355": (
         r"NAME extra point is",

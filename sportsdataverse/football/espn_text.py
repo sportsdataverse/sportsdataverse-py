@@ -31,8 +31,9 @@ _SURNAME_WORD = r"(?:[A-Za-zÀ-ÖØ-öø-ÿ'’\-]|&apos;)+"
 _NEXT_SURNAME_WORD = r"(?:[A-IK-RT-Z][a-z]|[JS][a-qs-z]|[JS]r[a-z])[A-Za-zÀ-ÖØ-öø-ÿ'’\-]*"
 
 #: An abbreviated player name as ESPN's NFL (2002-) and college vendor (2025-)
-#: text writes it: the initials ("T.", "Ja.", "Josh.", "Dari.", "A.J. ", and at a
-#: word start "DK." / "SamL.", so "YACJ.Elliott" still reads "J.Elliott"), an
+#: text writes it: the initials ("T.", "Ja.", "Josh.", "Dari.", "A.J. ", and only at
+#: a word start "D.J." / "DK." / "SamL.", so "YACJ.Elliott" reads "J.Elliott" and
+#: "TOUCHDOWN.B.Maher" reads "B.Maher"), an
 #: optional "St." particle, one to three surname words (a lower-case particle
 #: allowed before the later ones: "J.van den Berg"), and a suffix -- "Jr." / "Sr"
 #: or a whole numeral ("III", never the "II" inside it), either after a comma
@@ -40,7 +41,7 @@ _NEXT_SURNAME_WORD = r"(?:[A-IK-RT-Z][a-z]|[JS][a-qs-z]|[JS]r[a-z])[A-Za-zÀ-Ö�
 #: tackler: "(T.Bruschi, V.Wilfork)"), a numeral without a period ("W.Snead IV."
 #: ends a sentence), including the vendor feed's lower-case-L "lll".
 ABBREVIATED_NAME = (
-    r"(?:[A-Z]\.[A-Z]\. |\b[A-Z]{2}\.|\b[A-Z][a-z]{1,3}[A-Z]\.|[A-Z][a-z]{0,4}\.)"
+    r"(?:[A-Z]\.[A-Z]\. |\b[A-Z]\.[A-Z]\.|\b[A-Z]{2}\.|\b[A-Z][a-z]{1,3}[A-Z]\.|[A-Z][a-z]{0,4}\.)"
     r"(?:St\. |Ste\. )?"
     + _SURNAME_WORD
     + r"(?: (?:(?:van|von|de|den|der|da|del|di|du|la|le) )?"
