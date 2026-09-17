@@ -152,3 +152,24 @@ def test_timeout_team_matching_empty_mascot_and_substrings():
     away = plays.filter(pl.col("awayTimeoutCalled"))["text"]  # Indiana
     assert home.str.contains("Notre Dame").all() and away.str.contains("Indiana").all()
     assert home.len() + away.len() == 7
+
+
+# --- C9: a second run returns the same payload; the caller's summary is not mutated -------------
+
+
+def test_rerun_returns_payload_and_input_untouched():
+    proc, first, summary, snapshot = _processed(401856682)
+    assert summary == snapshot
+    again = proc.run_processing_pipeline()
+    assert again is not None
+    assert again["plays"] == first["plays"]
+
+
+def test_cleaning_rerun_returns_payload_and_input_untouched():
+    summary = _summary(401856682)
+    snapshot = copy.deepcopy(summary)
+    proc = CFBPlayProcess(gameId=401856682)
+    proc.espn_cfb_pbp(summary=summary)
+    first = proc.run_cleaning_pipeline()
+    assert summary == snapshot
+    assert proc.run_cleaning_pipeline() is first

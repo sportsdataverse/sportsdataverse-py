@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import logging
 import os
@@ -8075,7 +8076,8 @@ class CFBPlayProcess(object):
                 * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB PBP
         """
         if self.ran_pipeline == False:
-            pbp_txt = self.__helper_cfb_pbp_drives(self.json)
+            # work on a copy: the summary may be the caller's dict (espn_cfb_pbp(summary=...))
+            pbp_txt = self.__helper_cfb_pbp_drives(copy.deepcopy(self.json))
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -8108,6 +8110,7 @@ class CFBPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_pipeline = True
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none") and (
@@ -8178,7 +8181,7 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-            return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+        return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
     def add_fourth_down_probs(self):
         """Add the cfb4th 4th-down decision surface to the processed plays.
@@ -8325,7 +8328,8 @@ class CFBPlayProcess(object):
                 * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB PBP
         """
         if self.ran_cleaning_pipeline == False:
-            pbp_txt = self.__helper_cfb_pbp_drives(self.json)
+            # work on a copy: the summary may be the caller's dict (espn_cfb_pbp(summary=...))
+            pbp_txt = self.__helper_cfb_pbp_drives(copy.deepcopy(self.json))
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -8358,6 +8362,7 @@ class CFBPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_cleaning_pipeline = True
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (
@@ -8407,7 +8412,7 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-            return self.json
+        return self.json
 
     def corrupt_pbp_check(self):
         """Heuristic check for corrupt or incomplete play-by-play.
