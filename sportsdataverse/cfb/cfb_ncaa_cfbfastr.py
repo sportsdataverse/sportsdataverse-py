@@ -47,6 +47,8 @@ _INT_BY_RE = re.compile(rf"intercepted by ({_NAME})")
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
 # XP/FG result: "good" appears in both cases and "NO GOOD"/"no good" must not match.
 _KICK_GOOD_RE = re.compile(r"(?<!no )good", re.I)
+# the try printed on the touchdown's own row (2019-era pages): "..., HARRIS, Clayton kick attempt good."
+_SAME_ROW_TRY_RE = re.compile(r"kick attempt good|(?:pass|run|rush) attempt successful", re.I)
 
 #: play rows that are game furniture, not plays (dropped from the cfbfastR frame
 #: after they've fed the stateful pass).
@@ -691,6 +693,14 @@ def to_cfbfastr(
                 else:
                     pts_off += 6
                     last_td_team = offense
+                if r["play_type"] not in ("extra_point", "two_point"):
+                    tm = _SAME_ROW_TRY_RE.search(text)
+                    if tm:
+                        try_pts = 1 if tm.group(0).lower().startswith("kick") else 2
+                        if last_td_team == defense:
+                            pts_def += try_pts
+                        else:
+                            pts_off += try_pts
             if r["play_type"] == "field_goal" and r["fg_made"]:
                 pts_off += 3
             # XP/2pt belong to whoever scored the preceding TD (a defensive TD's

@@ -431,3 +431,16 @@ def test_tacklers_split_on_the_mangled_separator_or_left_null() -> None:
     assert (single["tackler_1"], single["tackler_2"]) == ("Kristian Fulton", None)
     glued = df.filter(pl.col("play_text").str.contains("Kristian FultonJaCoby Stevens")).row(0, named=True)
     assert (glued["tackler_1"], glued["tackler_2"]) == (None, None)  # separator lost: not recoverable
+
+
+# --- NC2: touchdown and PAT printed in one row (1735120) -----------------------
+
+
+def test_td_and_pat_in_one_row_is_the_scoring_play() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    both = df.filter(pl.col("play_text").str.contains("TOUCHDOWN") & pl.col("play_text").str.contains("kick attempt"))
+    assert both.height == 6
+    assert set(both.get_column("play_type").to_list()) == {"rush", "pass"}
+    assert both.get_column("is_touchdown").all()
+    row = both.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike rush for 2 yards")).row(0, named=True)
+    assert (row["rusher"], row["yards_gained"], row["end_yard_line"]) == ("BEAUDRY, Mike", 2, "WAGNER0")

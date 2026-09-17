@@ -179,6 +179,33 @@ _PUNT_RE = re.compile(
 _SACK_RE = re.compile(rf"(?P<passer>{_NAME}) sacked", re.I)
 _FG_RE = re.compile(rf"(?P<kicker>{_NAME}) field goal", re.I)
 _XP_RE = re.compile(rf"(?P<kicker>{_NAME}) kick attempt", re.I)
+#: play kinds by text marker, in tie-break order: the FIRST marker in the text types the
+#: play, so a row that prints the touchdown and its PAT together ("... TOUCHDOWN, clock
+#: 04:29, HARRIS, Clayton kick attempt good.") is the scoring play, not the kick. A 2-pt
+#: "rush attempt" also contains "rush", hence the order; "rush" needs its own spaces so a
+#: surname ("Rush,Jarvis pass ...") is not a verb.
+_KIND_MARKERS = (
+    ("kickoff", ("kickoff",)),
+    ("punt", ("punt",)),
+    ("field_goal", ("field goal",)),
+    ("extra_point", ("kick attempt", "extra point")),
+    ("two_point", ("pass attempt", "run attempt", "rush attempt")),
+    ("sack", ("sacked",)),
+    ("pass", ("pass complete", "pass incomplete", "pass intercepted")),
+    ("kneel", ("kneel",)),
+    ("rush", (r"(?<=\s)rush(?:es)?\s",)),
+)
+
+
+def _play_kind(tl: str) -> "str | None":
+    best: "tuple[int, int, str] | None" = None
+    for prio, (kind, markers) in enumerate(_KIND_MARKERS):
+        hits = [m.start() for m in (re.search(x, tl) for x in markers) if m]
+        if hits and (best is None or min(hits) < best[0]):
+            best = (min(hits), prio, kind)
+    return best[2] if best else None
+
+
 _POSSESSION_RE = re.compile(r"^[^,]{1,16}? ball on [^,]*\d")  # "AKR ball on AKR20." / "Ore ball on Ore25." drive marker
 _TWOPT_RE = re.compile(
     rf"(?P<player>{_NAME}) (?P<kind>pass|run|rush) attempt (?P<result>Successful|failed)",
@@ -348,7 +375,8 @@ def _decompose_play_text(text: str) -> "dict":
         out["penalty_flag"] = "PENALTY" in text
 
     # play type + type-specific fields
-    if "kickoff" in tl:
+    kind = _play_kind(tl)
+    if kind == "kickoff":
         out["play_type"] = "kickoff"
         m = _KICKOFF_RE.search(text)
         if m:
@@ -360,7 +388,7 @@ def _decompose_play_text(text: str) -> "dict":
         ry = _RET_YDS_RE.search(text)
         out["kick_yards"] = int(ky.group(1)) if ky else None
         out["return_yards"] = int(ry.group(1)) if ry else None
-    elif "punt" in tl:
+    elif kind == "punt":
         out["play_type"] = "punt"
         m = _PUNT_RE.search(text)
         if m:
@@ -370,7 +398,7 @@ def _decompose_play_text(text: str) -> "dict":
         ry = _RET_YDS_RE.search(text)
         out["punt_yards"] = int(py.group(1)) if py else None
         out["return_yards"] = int(ry.group(1)) if ry else None
-    elif "field goal" in tl:
+    elif kind == "field_goal":
         out["play_type"] = "field_goal"
         m = _FG_RE.search(text)
         if m:
@@ -381,23 +409,23 @@ def _decompose_play_text(text: str) -> "dict":
                 int(fg.group(1)),
                 fg.group(2).upper() == "GOOD",
             )
-    elif "kick attempt" in tl or "extra point" in tl:
+    elif kind == "extra_point":
         out["play_type"] = "extra_point"
         m = _XP_RE.search(text)
         if m:
             out["kicker"] = m.group("kicker")
-    elif "pass attempt" in tl or "run attempt" in tl or "rush attempt" in tl:
+    elif kind == "two_point":
         out["play_type"] = "two_point"  # 2-pt conversion ("... attempt Successful/failed")
         tm = _TWOPT_RE.search(text)
         if tm:
             out["passer" if tm.group("kind").lower() == "pass" else "rusher"] = tm.group("player")
-    elif "sacked" in tl:
+    elif kind == "sack":
         out["play_type"] = "sack"
         out["yards_gained"] = _yards_gained(text)
         m = _SACK_RE.search(text)
         if m:
             out["passer"] = m.group("passer")
-    elif "pass complete" in tl or "pass incomplete" in tl or "pass intercepted" in tl:
+    elif kind == "pass":
         out["play_type"] = "pass"
         # the result is in the text whether or not the passer's name matches _NAME
         # (2019 pages print "First Last", which the "Last,First" pattern cannot)
@@ -410,10 +438,10 @@ def _decompose_play_text(text: str) -> "dict":
             out["receiver"] = m.groupdict().get("receiver")
             out["pass_depth"] = (m.groupdict().get("depth") or "").lower() or None
             out["pass_direction"] = (m.groupdict().get("dir") or "").lower() or None
-    elif "kneel" in tl:
+    elif kind == "kneel":
         out["play_type"] = "kneel"
         out["yards_gained"] = _yards_gained(text)
-    elif "rush" in tl:
+    elif kind == "rush":
         out["play_type"] = "rush"
         out["yards_gained"] = _yards_gained(text)
         m = _RUSH_RE.search(text)

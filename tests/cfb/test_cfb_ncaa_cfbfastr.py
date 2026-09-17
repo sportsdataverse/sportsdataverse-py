@@ -520,3 +520,14 @@ def test_first_last_participants_reach_the_cfbfastr_frame() -> None:
     assert "Derek Stingley" in df.get_column("interception_player_name").to_list()
     df = _frame("1735120")
     assert "Mike BEAUDRY" in df.get_column("passer_player_name").to_list()
+
+
+def test_td_and_pat_in_one_row_scores_seven() -> None:
+    """1735120 prints "... TOUCHDOWN, ..., HARRIS, Clayton kick attempt good." on the scoring play (NC2)."""
+    df = _frame("1735120")
+    row = df.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike rush for 2 yards")).row(0, named=True)
+    assert (row["play_type"], row["rush_td"], row["score_pts"]) == ("Rushing Touchdown", True, 7)
+    six = df.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike pass intercepted by MORRIS, Myron")).row(
+        0, named=True
+    )
+    assert (six["play_type"], six["score_pts"]) == ("Interception Return Touchdown", -7)
