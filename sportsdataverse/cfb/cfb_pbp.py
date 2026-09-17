@@ -4204,7 +4204,7 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("pass") == True).and_(pl.col("int") == True).and_(pl.col("text").str.contains(r"(?i)for a TD")),
             )
-            .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("int") == True))
             .then(
                 pl.col("text")
@@ -4239,8 +4239,8 @@ class CFBPlayProcess(object):
             .then(0)
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)returned by")))
             .then(pl.col("text").str.extract(r"(?i)returned by (.+)").str.extract(r"(\d+)").cast(pl.Int32))
-            .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)return for")))
-            .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)return\s+for")))
+            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(0)
@@ -4279,10 +4279,10 @@ class CFBPlayProcess(object):
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
             .then(pl.col("text").str.extract(r"(?i)returns for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
-            .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
-            .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             # The first number after "sacked" is the YARDLINE in 2004-2007 text --
             # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the
@@ -4503,8 +4503,8 @@ class CFBPlayProcess(object):
                 .then(
                     _extract_player_name(
                         pl.col("text"),
-                        r"(?i)(.{0,30} )pass |(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for|(?i)(.{0,30} )incomplete|(?i)pass from (.{0,30} ) \( ",
-                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                        r"(?i)(.{0,30} )pass |(?i)(.{0,30} )sacked\s+by|(?i)(.{0,30} )sacked for|(?i)(.{0,30} )incomplete|(?i)pass from (.{0,30} ) \( ",
+                    ).str.replace(r"(?i)pass |(?i) sacked\s+by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when(
                     (pl.col("pass") == True)
@@ -4513,8 +4513,8 @@ class CFBPlayProcess(object):
                 )
                 .then(
                     _extract_player_name(
-                        pl.col("text"), r"(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for"
-                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                        pl.col("text"), r"(?i)(.{0,30} )sacked\s+by|(?i)(.{0,30} )sacked for"
+                    ).str.replace(r"(?i)pass |(?i) sacked\s+by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when((pl.col("pass") == True).and_(pl.col("type.text") == "Passing Touchdown"))
                 .then(
@@ -4633,7 +4633,7 @@ class CFBPlayProcess(object):
                 .then(
                     pl.coalesce(
                         pl.col("text")
-                        .str.extract(r"(?i)sacked by(.+)")
+                        .str.extract(r"(?i)sacked\s+by(.+)")
                         .str.replace(r"for (.+)", "")
                         .str.replace(r"(.+) by ", "")
                         .str.replace(r" at the (.+)", ""),

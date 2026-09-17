@@ -14,6 +14,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_400869270.json`` -- Central Michigan @ Oklahoma State, 2016 ("Timeout CENTRAL MICH").
 * ``summary_401032062.json`` -- Western Michigan @ BYU, 2018 ("Timeout WESTRN MICHIGAN").
 * ``summary_401752746.json`` -- Auburn @ Arkansas, 2025 ("Timeout , clock" names no team).
+* ``summary_401762858.json`` -- Buffalo @ Central Michigan, 2025 ("sacked  by", "fumbled,  return  for 85 yds").
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -196,6 +197,15 @@ def test_punt_returner_beyond_abbreviated_names():
     plays = _plays(401858426).filter(pl.col("text").str.contains("#2 R.Vander Zee return", literal=True))
     assert plays.height == 2
     assert plays["punt_return_player_name"].to_list() == ["R.Vander Zee", "R.Vander Zee"]
+
+
+# --- C17: a doubled space in "sacked  by" / "return  for" -------------------------------------------
+
+
+def test_double_space_sack_and_return_text():
+    row = _row(_plays(401762858), "T. Roberson sacked  by K. Demma for -3 yds")
+    assert (row["sack_player_name"], row["passer_player_name"]) == ("K. Demma", "T. Roberson")
+    assert row["yds_fumble_return"] == 85
 
 
 # --- C18: a null mascot is processed exactly like an empty one ------------------------------------
