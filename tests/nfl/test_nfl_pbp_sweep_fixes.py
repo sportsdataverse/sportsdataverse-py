@@ -282,7 +282,6 @@ def test_field_goals_start_at_the_snap_spot(wsh_phi_2015, ne_mia_2005, mia_den_2
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N15 pending (see s1-nfl/r3_STATE.md)")
 def test_direct_snap_taker_is_not_the_receiver(no_nyj_2013):
     r = _row(no_nyj_2013, 3311030201335)  # "Direct snap to J.Cribbs.  J.Cribbs pass deep right to Z.Sudfeld to NO 15"
     assert (r["passer_player_name"], r["receiver_player_name"]) == ("J.Cribbs", "Z.Sudfeld")

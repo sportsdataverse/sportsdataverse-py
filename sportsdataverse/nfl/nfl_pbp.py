@@ -146,6 +146,9 @@ _NFL_LATERAL_YDS_RE = r"Lateral to " + _NFL_NAME + r"[^.]*? for (-?\d+) yards?"
 _NFL_RECOVERY_SPOT_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-[^,]*? at ([A-Z]{2,3}) (\d{1,2})"
 _NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
 _NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
+# "Direct snap to J.Cribbs.  J.Cribbs pass deep right to Z.Sudfeld": the snap
+# clause carries the first "to NAME" and is dropped before the receiver is read.
+_NFL_DIRECT_SNAP_RE = r"Direct snap to " + _NFL_NAME + r"\.?\s*"
 
 
 def _abbreviated_name(pattern: str) -> pl.Expr:
@@ -3616,7 +3619,7 @@ class NFLPlayProcess(object):
                 .then(
                     pl.coalesce(
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE3),
-                        pl.col("text").str.extract(_NFL_RECEIVER_RE, 1),
+                        pl.col("text").str.replace(_NFL_DIRECT_SNAP_RE, "").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
                         pl.col("receiver_player"),
                     ),
