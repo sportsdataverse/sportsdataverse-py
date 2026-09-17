@@ -173,3 +173,12 @@ def test_cleaning_rerun_returns_payload_and_input_untouched():
     first = proc.run_cleaning_pipeline()
     assert summary == snapshot
     assert proc.run_cleaning_pipeline() is first
+
+
+# --- C10: odds provenance is part of the returned payload ---------------------------------------
+
+
+def test_odds_source_returned():
+    proc, result, _, _ = _processed(401856682)
+    assert result["odds_source"] == proc.odds_source
+    assert result["odds_source"] in {"summary_pickcenter", "core_odds_api", "default", "injected"}
