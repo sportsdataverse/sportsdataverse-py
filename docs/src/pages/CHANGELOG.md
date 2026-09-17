@@ -522,7 +522,7 @@ grouping (`drive.team`), never plays grouped by `drive.id`.
 returned `on_1b` / `on_2b` / `on_3b` as Float64 (`660271.0`): pandas reads any
 integer CSV column holding a blank as float, and a base is blank whenever it is
 empty. Float ids break joins against `batter` / `pitcher` and stringify as
-`"660271.0"`. The 13 MLBAM id columns (`batter`, `pitcher`, `on_1b`..`on_3b`,
+`"660271.0"`. The 14 MLBAM id columns (`batter`, `pitcher`, `on_1b`..`on_3b`,
 `fielder_2`..`fielder_9`, `game_pk`) are now pinned to nullable Int64 (blank ->
 null), in polars and in `return_as_pandas=True` output, and the Returns docs say
 `integer`. An id column holding a non-integral value is left as read and warned
