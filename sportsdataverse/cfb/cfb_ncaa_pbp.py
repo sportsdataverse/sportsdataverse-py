@@ -58,9 +58,16 @@ _YL_SPLIT_RE = re.compile(rf"^({_SIDE})(\d+)$")
 # --- play_text field regexes ----------------------------------------------
 _CLOCK_RE = re.compile(r"^\((\d{1,2}:\d{2})\)\s*")  # some games prefix each play with "(MM:SS)"
 _FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol)\s+")
-_YARDS_RE = re.compile(r"for (\d+) yards? (gain|loss)", re.I)
-_YARDS_PLAIN_RE = re.compile(r"for (\d+) yards? to the", re.I)  # completed pass / 0-yard run: positive
-_END_YL_RE = re.compile(rf"to the ({_SIDE}\d+)")
+# The play's yardage is its FIRST "for ..." clause: "for 7 yards gain" / "for 5 yards
+# loss" (2025), "for loss of 4 yards" / "for 13 yards" (2019-era), "for no gain".
+# Leftmost wins, so a later fumble-advance clause ("..., recovered by VU Smith at
+# VU36, Smith for 1 yard to the VU37") is not read as the play's gain.
+_YARDS_RE = re.compile(
+    r"for (?:(?P<n>\d+) yards? (?P<dir>gain|loss)|(?:a )?loss of (?P<loss>\d+) yards?|(?P<plain>\d+) yards?\b|no gain)",
+    re.I,
+)
+# "to the VU37" -- or "to the 50 yardline" (midfield has no side code; emitted as "50")
+_END_YL_RE = re.compile(rf"to the (?:({_SIDE}\d+)|(50) yard ?line)")
 _RUSH_RE = re.compile(
     rf"(?P<rusher>{_NAME}) rush(?:es)?(?:\s+(?P<dir>left|right|middle|up the middle))?",
     re.I,
@@ -140,14 +147,13 @@ def _spaces(text: str) -> str:
 
 def _yards_gained(text: str) -> "int | None":
     m = _YARDS_RE.search(text)
-    if m:
-        return int(m.group(1)) * (1 if m.group(2).lower() == "gain" else -1)
-    m = _YARDS_PLAIN_RE.search(text)
-    if m:
-        return int(m.group(1))
-    if re.search(r"for no gain", text, re.I):
-        return 0
-    return None
+    if not m:
+        return None
+    if m.group("n"):
+        return int(m.group("n")) * (1 if m.group("dir").lower() == "gain" else -1)
+    if m.group("loss"):
+        return -int(m.group("loss"))
+    return int(m.group("plain")) if m.group("plain") else 0
 
 
 def _tacklers(text: str) -> "tuple[str | None, str | None]":
@@ -200,7 +206,7 @@ def _decompose_play_text(text: str) -> "dict":
     elif out["is_fumble"] and "recovered by" in tl:
         out["turnover_type"] = "fumble"
     out["tackler_1"], out["tackler_2"] = _tacklers(text)
-    out["end_yard_line"] = (_END_YL_RE.findall(text) or [None])[-1]
+    out["end_yard_line"] = next((a or b for a, b in reversed(_END_YL_RE.findall(text))), None)
     pm = _PENALTY_RE.search(text)
     if pm:
         out.update(

@@ -71,3 +71,14 @@ exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`
 | `mfb_drives_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | drives tab with `1OT` quarter rows (`period` = 5) | <https://stats.ncaa.org/contests/6386512/drives> |
 | `mfb_box_score_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | `scoring_summary_table` with an OT row (concatenated `tr`s, re-chunked by 9) | <https://stats.ncaa.org/contests/6386512/box_score> |
 | `mfb_play_by_play_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT, 27-24) | completes the 1OT game's pbp + box + drives bundle, so `to_cfbfastr` runs exactly as the `-data` build calls it (drive titles, linescore, scoring summary, OT synthesis); consumed by `test_cfb_ncaa_cfbfastr.py` field-position tests | <https://stats.ncaa.org/contests/6386512/play_by_play> |
+
+## 2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)
+
+Single `play_by_play` tabs extracted byte-for-byte from the `ncaa-mfb-football-raw`
+per-game bundles (`mfb/raw/{academic_year}/{id}.json.gz`, same browser transport).
+Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` and `test_cfb_ncaa_cfbfastr.py`.
+
+| file | contest_id | game (page date) | variant pinned | source URL |
+|---|---|---|---|---|
+| `mfb_play_by_play_1735106.html` | 1735106 | Villanova @ Colgate (2019, 34-14) | 2019-era text: `"for loss of N yards"`, a fumble advance with a later `"for 1 yard"` clause, `"to the 50 yardline"` | <https://stats.ncaa.org/contests/1735106/play_by_play> |
+| `mfb_play_by_play_6386303.html` | 6386303 | WestConn @ New Haven (2025-10-11, 0-69) | 6-letter side code (`WSTCNN25`); sacks and kneels read `"for loss of N yards"` | <https://stats.ncaa.org/contests/6386303/play_by_play> |

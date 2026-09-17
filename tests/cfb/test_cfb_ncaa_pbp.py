@@ -275,3 +275,36 @@ def test_drive_titles_nickname_side_codes() -> None:
     assert df.get_column("team").to_list() == ["Morgan St.", "Norfolk St."]
     assert df.get_column("start_yard_line").to_list() == ["BEARS38", "SPARTANS25"]
     assert df.get_column("yards").to_list() == [-7, 3]
+
+
+# --- yardage in 2019-era text ---------------------------------------------
+# 1735106 Villanova @ Colgate (2019) -- "for loss of N yards", a fumble advance
+#   whose later "for 1 yard" clause is not the play's gain, "to the 50 yardline"
+# 6386303 New Haven @ WSTCNN (2025) -- sacks + kneels also read "for loss of N yards"
+
+
+def test_loss_of_yardage_is_negative() -> None:
+    """'rush/sacked/kneel ... for loss of N yards' is -N (2019 text and 2025 sacks/kneels)."""
+    for cid in ("1735106", "6386303"):
+        df = parse_cfb_ncaa_pbp(_variant(cid), contest_id=cid)
+        loss = df.filter(
+            pl.col("play_type").is_in(["rush", "sack", "kneel"])
+            & pl.col("play_text").str.contains(r"for loss of \d+ yard")
+        )
+        assert loss.height >= 5, cid
+        want = (-loss.get_column("play_text").str.extract(r"for loss of (\d+) yard", 1).cast(pl.Int64)).to_list()
+        assert loss.get_column("yards_gained").to_list() == want, cid
+
+
+def test_fumble_advance_keeps_the_play_clause_yardage() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735106"))
+    row = df.filter(pl.col("play_text").str.starts_with("Smith, Danny rush for loss of 4 yards to the VU34, fumble"))
+    assert row.height == 1
+    assert row.item(0, "yards_gained") == -4
+
+
+def test_midfield_end_yard_line() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735106"))
+    mid = df.filter(pl.col("play_text").str.contains("to the 50 yardline"))
+    assert mid.height == 3
+    assert mid.get_column("end_yard_line").to_list() == ["50", "50", "50"]
