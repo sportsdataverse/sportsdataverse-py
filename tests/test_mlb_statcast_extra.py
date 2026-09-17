@@ -199,3 +199,48 @@ def test_search_non_integral_id_warns_once_at_the_caller(monkeypatch):
     assert len(hits) == 1, [str(w.message) for w in hits]
     assert hits[0].filename == __file__
     assert df.schema["on_1b"] == pl.Float64 and df.schema["on_2b"] == pl.Int64
+
+
+_MINORS_HEAD = _SEARCH_HEAD.with_name("search_minors_2024-06-01_head.csv")
+_WBC_HEAD = _SEARCH_HEAD.with_name("search_wbc_2023-03-11_head.csv")
+
+
+def test_minors_and_wbc_routes_send_their_population_flags(monkeypatch):
+    """Savant's /csv routes share one backend that defaults to MLB; the search UI selects the
+    population with ``minors=<bool>&wbc=<bool>``. Without them the MiLB route returns MLB games
+    and the WBC route returns spring training (reproduced live 2026-09-17)."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    seen: dict = {}
+
+    def fake_download(url, params=None, **kw):
+        seen[url] = dict(params)
+        return _Resp(_SEARCH_HEAD.read_text(encoding="utf-8"))
+
+    monkeypatch.setattr(ex, "download", fake_download)
+    ex.mlb_statcast_search("2024-06-01", "2024-06-01")
+    ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01", hfLevel="AAA|")
+    ex.mlb_statcast_search_wbc("2023-03-11", "2023-03-11")
+    assert (seen[ex._SEARCH_URL_MINORS]["minors"], seen[ex._SEARCH_URL_MINORS]["wbc"]) == ("true", "false")
+    assert seen[ex._SEARCH_URL_MINORS]["hfLevel"] == "AAA|"  # user filters still ride along
+    assert (seen[ex._SEARCH_URL_WBC]["minors"], seen[ex._SEARCH_URL_WBC]["wbc"]) == ("false", "true")
+    assert not {"minors", "wbc"} & seen[ex._SEARCH_URL].keys()  # MLB request unchanged
+
+
+def test_minors_and_wbc_real_captures_are_their_own_population(monkeypatch):
+    """Captures taken WITH the flags: MiLB affiliates (ROC/STP, NOR/GWN) and WBC nations (JPN/CZE,
+    game_type F = pool play); the same 119-column shape with MLBAM ids Int64."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    bodies = {ex._SEARCH_URL_MINORS: _MINORS_HEAD, ex._SEARCH_URL_WBC: _WBC_HEAD}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[url].read_text(encoding="utf-8")))
+
+    minors = ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01")
+    assert minors.shape == (5, 119)
+    assert set(minors.select("home_team", "away_team").rows()) == {("NOR", "GWN"), ("ROC", "STP")}
+    assert minors["game_pk"].unique().sort().to_list() == [752539, 752692] and minors.schema["game_pk"] == pl.Int64
+
+    wbc = ex.mlb_statcast_search_wbc("2023-03-11", "2023-03-11")
+    assert wbc.shape == (5, 119)
+    assert set(wbc.select("home_team", "away_team", "game_type").rows()) == {("JPN", "CZE", "F")}
+    assert wbc["game_pk"].unique().to_list() == [719529] and wbc.schema["batter"] == pl.Int64
