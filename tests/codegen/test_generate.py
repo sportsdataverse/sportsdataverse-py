@@ -221,6 +221,52 @@ def test_autodoc_capture_summary_reports_thin_capture(tmp_path, monkeypatch, cap
     assert "1 columns retained (absent from capture)" in out
     assert "2 types preserved (all-null or list)" in out
     assert "autodoc merge nfl.f: 1 new, 1 retained, 2 types preserved" in out
+def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch):
+    """Capture the season with the most columns, not the newest one that resolves.
+
+    Mid-season the newest asset is partial: in September 2026
+    ``load_cfb_game_rosters`` had 73 columns for 2026 and 77 for 2025, so taking
+    the newest season dropped the 2025-only ``draft_*`` columns from the docs.
+    A tie goes to the newer season, and a season whose read raises is skipped.
+    """
+    import polars as pl
+    import yaml
+
+    from tools.codegen import spec
+
+    cols = {
+        # partial newest season: fewer columns than the full prior season
+        "rich_2026.parquet": ["a", "b"],
+        "rich_2025.parquet": ["a", "b", "draft_round"],
+        "rich_2024.parquet": ["a", "b"],
+        # tie between 2025 and 2023; 2026 and 2024 raise
+        "tie_2025.parquet": ["a", "new"],
+        "tie_2023.parquet": ["a", "old"],
+        "tie_2022.parquet": ["a"],
+    }
+
+    def fake_schema(url):
+        name = url.rsplit("/", 1)[-1]
+        if name not in cols:
+            raise OSError(f"404 {url}")
+        return {c: pl.Int64 for c in cols[name]}
+
+    rel = spec.ReleasesConfig(
+        bases={"b": "https://example.invalid/"},
+        loaders=[
+            spec.Loader(fn="load_rich", league="cfb", base="b", url="rich_{season}.parquet", tag="t"),
+            spec.Loader(fn="load_tie", league="cfb", base="b", url="tie_{season}.parquet", tag="t"),
+        ],
+    )
+    monkeypatch.setattr(generate, "ENDPOINTS", tmp_path / "endpoints")
+    monkeypatch.setattr(generate.spec, "load_releases", lambda path: rel)
+    monkeypatch.setattr(pl, "read_parquet_schema", fake_schema)
+
+    assert generate.refresh_loader_schemas() == 0
+
+    written = yaml.safe_load((tmp_path / "schemas" / "loader_schemas.yaml").read_text(encoding="utf-8"))
+    assert [c["name"] for c in written["load_rich"]] == ["a", "b", "draft_round"], "richest season not captured"
+    assert [c["name"] for c in written["load_tie"]] == ["a", "new"], "tie did not go to the newest season"
 
 
 def test_loader_notes_reach_the_docstring_and_the_page():

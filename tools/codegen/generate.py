@@ -1614,19 +1614,25 @@ def refresh_loader_schemas() -> int:
     for ld in rel.loaders:
         if ld.stub:
             continue
-        # NEWEST season first: long-history loaders (cfb_pbp floor 2004,
-        # nba_stats floor 1996) have sparse early-era schemas, and capturing
-        # those shrinks the column inventory — orphaning manual descriptions
-        # and dropping columns from the docs. min_season is the last resort.
+        # RICHEST recent season wins (most columns; a tie goes to the newer one).
+        # Long-history loaders (cfb_pbp floor 2004, nba_stats floor 1996) have
+        # sparse early-era schemas, and a newest season still in progress is
+        # partial too (Sept 2026: cfb_game_rosters 2026 had 73 cols vs 77 for
+        # 2025) -- capturing either shrinks the column inventory, orphaning
+        # manual descriptions and dropping columns from the docs. Seasons are
+        # NOT unioned: test_declared_schema_matches_the_published_parquet
+        # asserts the declared schema equals ONE published season's columns, so
+        # a union would document a shape no single asset has. min_season is the
+        # last resort; a season whose footer read raises is skipped.
         seasons = [2026, 2025, 2024, 2023, 2022, ld.min_season or 2024]
         got = None
         for s in dict.fromkeys(seasons):
             try:
                 sch = pl.read_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
-                got = [{"name": k, "type": str(v)} for k, v in sch.items()]
-                break
             except Exception:  # noqa: BLE001
                 continue
+            if got is None or len(sch) > len(got):
+                got = [{"name": k, "type": str(v)} for k, v in sch.items()]
         # id_int64 columns are cast at the loader boundary AFTER read, so the
         # declared type is Int64 regardless of the parquet footer (enforced by
         # tests/codegen/test_id_casts.py; a raw re-capture must not regress it).
