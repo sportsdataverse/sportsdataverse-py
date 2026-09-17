@@ -350,10 +350,13 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     d["fg_roof"] = np.where(roof.to_numpy() == "outdoors", 1, 0)
     d["home_total"] = (d["total_line"] + d["spread_line"]) / 2.0
     d["away_total"] = (d["total_line"] - d["spread_line"]) / 2.0
+    # nfl4th's own fd / two_pt boosters were fit on nflfastR's roof one-hots
+    # (open / closed / NA -> retractable), so they read model_roof. sdv's EP / WP
+    # boosters were not (retractable is never 1 in their training data; see
+    # ep_wp._roof_one_hots), so the frame handed to them below keeps the game roof.
     d["retractable"] = (d["model_roof"] == "retractable").astype(int)
     d["dome"] = (d["model_roof"] == "dome").astype(int)
     d["outdoors"] = (d["model_roof"] == "outdoors").astype(int)
-    d["roof"] = d["model_roof"]
     qtr = d["qtr"].to_numpy()
     d["home_receive_2h_ko"] = np.where(qtr <= 2, np.where(d["home_opening_kickoff"].to_numpy() == 1, -1, 1), 0)
     d["down"] = 4

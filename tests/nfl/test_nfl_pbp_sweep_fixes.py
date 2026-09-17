@@ -372,6 +372,7 @@ def test_fourth_down_prepare_passes_the_game_roof_to_sdv_models(monkeypatch):
         }
     )
     d = fd._prepare(view)
+    fd._calc_wp(d)  # nfl4th's WP averages its own model with sdv's EP and WP scorers
     assert seen and all(roofs == ["closed", "open", "outdoors"] for roofs in seen)
     # nfl4th's own fd / 2pt features keep nfl4th's mapping (open/closed -> retractable)
     assert d["retractable"].tolist() == [1, 1, 0] and d["dome"].tolist() == [0, 0, 0]
