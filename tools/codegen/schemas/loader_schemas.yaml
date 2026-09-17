@@ -4686,10 +4686,6 @@ load_cfb_returning_production:
   type: Float64
 - name: n_returning
   type: Int64
-- name: def_basis
-  type: String
-- name: overall_basis
-  type: String
 - name: is_estimated
   type: Boolean
 load_cfb_rosters:

@@ -813,8 +813,6 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
         |def_returning     |Float64 |
         |overall_returning |Float64 |
         |n_returning       |Int64   |
-        |def_basis         |String  |
-        |overall_basis     |String  |
         |is_estimated      |Boolean |
 
     Raises:

@@ -296,8 +296,8 @@ take precedence.
 
 ### Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`
 
-`def_returning` read ESPN's per-game defensive player box, which covers 0% of teams
-in 2014-2015 and 17-65% through 2023, so the column was null for most of the league
+`def_returning` was built from ESPN's per-game defensive player box, which covers 0% of
+teams in 2014-2015 and 17-65% through 2023, so the column was null for most of the league
 before 2024 and the fitted FBS weights were offense 1.0 / defense 0.0: every published
 `overall_returning` equalled `off_returning`. Defense now comes from play participants
 when the production season is 2014+, 92-100% of teams every season (all of FBS), and
@@ -315,6 +315,8 @@ New columns `def_basis` (`participants` / `pbp_splash` / `box`) and `overall_bas
 (`offense+defense`, or `offense` for a team with no defensive value, whose overall
 then equals `off_returning`) say which measure each row used. The splash measure has
 no tackle volume and is not on the participants' scale.
+They are returned by `cfb_returning_production()` now and reach the
+`load_cfb_returning_production` release asset when it is next rebuilt.
 
 **`overall_returning` values change.** FBS weights are refitted on the corrected
 metric: offense 0.49 / defense 0.51 (FBS 2018-2025, n = 1,017; standardized
