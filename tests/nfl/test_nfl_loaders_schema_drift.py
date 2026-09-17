@@ -37,6 +37,8 @@ from sportsdataverse.nfl import (
     update_config,
 )
 from sportsdataverse.nfl import nfl_loaders as _loaders
+from sportsdataverse.nfl import nfl_players as _players
+from sportsdataverse.nfl import nfl_roster_builder as _roster_builder
 from sportsdataverse.nfl import nfl_schedule as _schedule
 from tests.conftest import skip_if_no_live
 
@@ -144,33 +146,35 @@ def test_load_participation_live_across_the_2023_schema_change(no_cache):
 
 # DynastyProcess CSVs are read with ``pl.read_csv``, so without a pin every id
 # column's dtype follows whatever the current upstream rows happen to contain.
-# The expected dtypes are main's documented contract
-# (``tools/codegen/schemas/autodoc/nfl/load_nfl_ff_{playerids,rankings}.yaml``:
-# ``character`` -> ``pl.Utf8``, ``integer`` -> ``pl.Int64``) with two deliberate
-# ``Utf8`` overrides: ``mfl_id`` (MFL ids are zero-padded, e.g. ``0156``) and the
-# rankings FantasyPros id (``id`` / ``fantasypros_id``), which is the same key as
-# ``load_nfl_ff_playerids``' ``fantasypros_id`` and must share its dtype.
+# Every id is ``Utf8``: upstream's own ``db_playerids.rds`` stores all 20 id
+# columns as character, MFL ids are zero-padded (``0156``), and the same ids are
+# ``Utf8`` in the roster/players schemas they join against. The rankings
+# FantasyPros id (``id`` / ``fantasypros_id``) is the same key as playerids'
+# ``fantasypros_id`` and must share its dtype.
 _FF_PLAYERIDS_ID_DTYPES = {
-    "mfl_id": pl.Utf8,
-    "sportradar_id": pl.Utf8,
-    "fantasypros_id": pl.Utf8,
-    "gsis_id": pl.Utf8,
-    "pff_id": pl.Utf8,
-    "sleeper_id": pl.Int64,
-    "nfl_id": pl.Utf8,
-    "espn_id": pl.Int64,
-    "yahoo_id": pl.Utf8,
-    "fleaflicker_id": pl.Utf8,
-    "cbs_id": pl.Int64,
-    "pfr_id": pl.Utf8,
-    "cfbref_id": pl.Utf8,
-    "rotowire_id": pl.Int64,
-    "rotoworld_id": pl.Utf8,
-    "ktc_id": pl.Int64,
-    "stats_id": pl.Int64,
-    "stats_global_id": pl.Int64,
-    "fantasy_data_id": pl.Int64,
-    "swish_id": pl.Utf8,
+    col: pl.Utf8
+    for col in (
+        "mfl_id",
+        "sportradar_id",
+        "fantasypros_id",
+        "gsis_id",
+        "pff_id",
+        "sleeper_id",
+        "nfl_id",
+        "espn_id",
+        "yahoo_id",
+        "fleaflicker_id",
+        "cbs_id",
+        "pfr_id",
+        "cfbref_id",
+        "rotowire_id",
+        "rotoworld_id",
+        "ktc_id",
+        "stats_id",
+        "stats_global_id",
+        "fantasy_data_id",
+        "swish_id",
+    )
 }
 _FF_RANKINGS_ID_DTYPES = {
     "draft": {"id": pl.Utf8, "sportsdata_id": pl.Utf8, "yahoo_id": pl.Utf8, "cbs_id": pl.Utf8},
@@ -254,3 +258,39 @@ def test_ff_rankings_fantasypros_id_joins_playerids(kind, key, matched, no_cache
     assert ranks.schema[key] == ids.schema["fantasypros_id"]
     joined = ranks.join(ids, left_on=key, right_on="fantasypros_id", how="inner")
     assert sorted(joined["name"].to_list()) == matched
+
+
+@pytest.mark.parametrize("schema_module", [_roster_builder, _players], ids=lambda m: m.__name__)
+def test_ff_playerids_ids_match_roster_schema_dtypes(schema_module, no_cache, offline_ff_csvs):
+    """A roster -> playerids join on a shared id must not raise ``SchemaError``.
+
+    Compares against the module's real pinned ``_SCHEMA`` (not a copy), so the
+    two surfaces can't drift apart silently.
+    """
+    df = load_nfl_ff_playerids()
+    shared = sorted(c for c in set(df.columns) & set(schema_module._SCHEMA) if c.endswith("_id"))
+    assert "espn_id" in shared
+    assert {c: df.schema[c] for c in shared} == {c: schema_module._SCHEMA[c] for c in shared}
+
+
+@pytest.mark.parametrize(
+    ("load", "id_cols", "padded"),
+    [
+        (lambda: load_nfl_ff_playerids(return_as_pandas=True), list(_FF_PLAYERIDS_ID_DTYPES), ("mfl_id", "0156")),
+        (
+            lambda: load_nfl_ff_rankings(kind="draft", return_as_pandas=True),
+            list(_FF_RANKINGS_ID_DTYPES["draft"]),
+            None,
+        ),
+        (lambda: load_nfl_ff_rankings(kind="week", return_as_pandas=True), list(_FF_RANKINGS_ID_DTYPES["week"]), None),
+    ],
+    ids=["playerids", "rankings-draft", "rankings-week"],
+)
+def test_ff_loaders_return_string_ids_as_pandas(load, id_cols, padded, no_cache, offline_ff_csvs):
+    import pandas as pd
+
+    pdf = load()
+    assert [c for c in id_cols if not pd.api.types.is_string_dtype(pdf[c])] == []
+    if padded is not None:
+        col, value = padded
+        assert value in pdf[col].tolist()

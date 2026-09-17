@@ -1616,31 +1616,35 @@ def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
 
 # DynastyProcess ships a CSV, so an unpinned id takes whatever dtype the current
 # rows infer to (fantasypros_id / pff_id / nfl_id flipped Utf8 -> Int64 when
-# upstream happened to ship only numeric values). Pinned to the documented
-# contract; string ids are read straight from the CSV text, never via a float.
-# mfl_id is Utf8 despite being documented integer: MFL ids are zero-padded
-# ("0156"), and Int64 silently strips the padding.
+# upstream happened to ship only numeric values). Every id is pinned Utf8: that
+# is how upstream's own db_playerids.rds stores all 20, it keeps zero-padded MFL
+# ids ("0156") intact, it matches the Utf8 ids of the roster / players schemas
+# these join against, and unlike an Int64 pin it cannot raise on a text value.
+# Ids are read straight from the CSV text, never via a float.
 _FF_PLAYERIDS_ID_DTYPES = {
-    "mfl_id": pl.Utf8,
-    "sportradar_id": pl.Utf8,
-    "fantasypros_id": pl.Utf8,
-    "gsis_id": pl.Utf8,
-    "pff_id": pl.Utf8,
-    "sleeper_id": pl.Int64,
-    "nfl_id": pl.Utf8,
-    "espn_id": pl.Int64,
-    "yahoo_id": pl.Utf8,
-    "fleaflicker_id": pl.Utf8,
-    "cbs_id": pl.Int64,
-    "pfr_id": pl.Utf8,
-    "cfbref_id": pl.Utf8,
-    "rotowire_id": pl.Int64,
-    "rotoworld_id": pl.Utf8,
-    "ktc_id": pl.Int64,
-    "stats_id": pl.Int64,
-    "stats_global_id": pl.Int64,
-    "fantasy_data_id": pl.Int64,
-    "swish_id": pl.Utf8,
+    col: pl.Utf8
+    for col in (
+        "mfl_id",
+        "sportradar_id",
+        "fantasypros_id",
+        "gsis_id",
+        "pff_id",
+        "sleeper_id",
+        "nfl_id",
+        "espn_id",
+        "yahoo_id",
+        "fleaflicker_id",
+        "cbs_id",
+        "pfr_id",
+        "cfbref_id",
+        "rotowire_id",
+        "rotoworld_id",
+        "ktc_id",
+        "stats_id",
+        "stats_global_id",
+        "fantasy_data_id",
+        "swish_id",
+    )
 }
 
 
@@ -1655,11 +1659,10 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         pl.DataFrame: Polars dataframe containing fantasy football player ID mappings across platforms.
 
     Note:
-        Id column dtypes are pinned at read time, not inferred from the rows
-        upstream currently ships: ``sleeper_id``, ``espn_id``, ``cbs_id``,
-        ``rotowire_id``, ``ktc_id``, ``stats_id``, ``stats_global_id`` and
-        ``fantasy_data_id`` are ``Int64``; every other ``*_id`` column
-        (including the zero-padded ``mfl_id``) is ``Utf8``.
+        Every ``*_id`` column is ``Utf8``, pinned at read time rather than
+        inferred from the rows upstream currently ships. Zero-padded ids such
+        as ``mfl_id`` ``"0156"`` keep their padding, and the ids join directly
+        to the ``Utf8`` ids of ``build_nfl_rosters`` and ``build_nfl_players``.
 
     Example:
         Quick start::
