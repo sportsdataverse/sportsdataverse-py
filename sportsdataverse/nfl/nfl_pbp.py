@@ -3727,7 +3727,7 @@ class NFLPlayProcess(object):
             scorer_timeouts.cast(pl.Int64).alias("posteam_timeouts_remaining"),
             other_timeouts.cast(pl.Int64).alias("defteam_timeouts_remaining"),
             home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
-            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),
             pl.col("overUnder").cast(pl.Float64).alias("total_line"),
         ).with_row_index("go_index")
         try:
@@ -5188,9 +5188,9 @@ class NFLPlayProcess(object):
             pl.col("start.posTeamTimeouts").cast(pl.Int64).alias("posteam_timeouts_remaining"),
             pl.col("start.defPosTeamTimeouts").cast(pl.Int64).alias("defteam_timeouts_remaining"),
             home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
-            # nflverse spread_line is home-team-favored-positive; homeTeamSpread is
-            # the home team's point spread (negative when favored), so flip sign.
-            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            # nflverse spread_line is positive when the home team is favoured, and so
+            # is homeTeamSpread (+|spread| when homeFavorite): same sign, no flip.
+            pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),
             pl.col("overUnder").cast(pl.Float64).alias("total_line"),
         )
 

@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
@@ -25,12 +26,45 @@ def summary() -> dict:
     return json.loads(FIX.read_text())
 
 
+def _recorded_run(summary: dict):
+    """Run the pipeline offline, recording the frames/matrices handed to the models."""
+    import sportsdataverse.nfl.nfl_fourth_down as fd
+    import sportsdataverse.nfl.nfl_pbp as mod
+
+    seen: dict = {"fourth": [], "two_pt": [], "xpass": [], "matrices": []}
+
+    def record(key, fn):
+        def wrapper(df, *a, **k):
+            seen[key].append(df)
+            return fn(df, *a, **k)
+
+        return wrapper
+
+    real_dmatrix = mod.DMatrix
+
+    def dmatrix(data, *a, **k):
+        seen["matrices"].append((list(k.get("feature_names") or []), np.asarray(data)))
+        return real_dmatrix(data, *a, **k)
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(fd, "get_4th_down_probs", record("fourth", fd.get_4th_down_probs))
+        mp.setattr(fd, "get_2pt_probs", record("two_pt", fd.get_2pt_probs))
+        mp.setattr(mod, "calculate_xpass", record("xpass", mod.calculate_xpass))
+        mp.setattr(mod, "DMatrix", dmatrix)
+        proc = NFLPlayProcess(gameId=GAME_ID)
+        proc.espn_nfl_pbp(summary=summary)
+        out = proc.run_processing_pipeline()
+    return proc, out, seen
+
+
 @pytest.fixture(scope="module")
-def frame(summary) -> pl.DataFrame:
-    proc = NFLPlayProcess(gameId=GAME_ID)
-    proc.espn_nfl_pbp(summary=summary)
-    proc.run_processing_pipeline()
-    return proc.plays_frame
+def run(summary):
+    return _recorded_run(summary)
+
+
+@pytest.fixture(scope="module")
+def frame(run) -> pl.DataFrame:
+    return run[0].plays_frame
 
 
 def _row(frame: pl.DataFrame, play_id: int) -> dict:
@@ -153,3 +187,18 @@ def test_timeouts_reset_at_the_start_of_the_second_half(frame):
     assert (first_h2["start.homeTeamTimeouts"], first_h2["start.awayTeamTimeouts"]) == (3, 3)
     assert (first_h2["start.posTeamTimeouts"], first_h2["start.defPosTeamTimeouts"]) == (3, 3)
     assert f.filter(pl.col("period") >= 3)["start.awayTeamTimeouts"].min() == 2
+
+
+# ---------------------------------------------------------------------------
+# N7 -- the nflverse-shape decision views carry nflverse's spread_line sign
+# ---------------------------------------------------------------------------
+
+
+def test_decision_views_carry_home_favoured_positive_spread_line(run):
+    # DraftKings: JAX (home) -8.5. nflverse spread_line is positive when the home
+    # team is favoured (the convention the nfl4th models were trained on).
+    _, out, seen = run
+    assert np.ravel(out["homeTeamSpread"]).tolist() == [8.5]
+    assert seen["fourth"] and seen["two_pt"]
+    for key in ("fourth", "two_pt"):
+        assert seen[key][0]["spread_line"].unique().to_list() == [8.5], key
