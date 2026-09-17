@@ -4853,8 +4853,13 @@ class CFBPlayProcess(object):
                             r"(?i)intercepted by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
                             1,
                         ),
+                        # 2014-2024 also writes the result between the verb and the name:
+                        # "pass intercepted, touchback. Jacoby Glenn return for no gain",
+                        # "pass intercepted for a TD Lamarcus Farmer return for 22 yds",
+                        # "pass intercepted for a 1ST down Damontae Kazee return for 28 yds".
                         pl.col("text").str.extract(
-                            r"(?i)pass intercepted (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            r"(?i)pass intercepted(?:,? touchback\.?| for a (?:td|1st down)|\.)? (?:#\d+\s+)?"
+                            r"(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
                             1,
                         ),
                     ),
@@ -5012,6 +5017,11 @@ class CFBPlayProcess(object):
                         # multi-word surnames ("#92 J.Echeverria Lozano", "#81 A.De La Poza") and
                         # stats.ncaa.org's "(00:00) Gilbert,Max field goal attempt"
                         pl.col("text").str.extract(_VENDOR_FG_KICKER_RE, 1),
+                        # 2004-2009: "30 yard field goal by Eric Neihouse (ASU) is good."
+                        pl.col("text").str.extract(
+                            r"(?i)yard field goal by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            1,
+                        ),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",

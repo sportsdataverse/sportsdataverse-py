@@ -375,6 +375,16 @@ def test_overtime_games_end_at_the_header_final():
     assert ot["id"].is_sorted()
 
 
+# --- C32: the 2004-09 field-goal kicker and the 2014-24 interceptor written after the result -----
+
+
+def test_legacy_fg_kicker_and_interceptor_shapes():
+    fg = _row(_plays(243042579), "27 yard field goal by Josh Brown (USC) is good.")
+    assert fg["fg_kicker_player_name"] == "Josh Brown"
+    pick = _row(_plays(401636889), "Sawyer Robertson pass intercepted, touchback. Jontez Williams return for no gain")
+    assert pick["interception_player_name"] == "Jontez Williams"
+
+
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------
 
 
