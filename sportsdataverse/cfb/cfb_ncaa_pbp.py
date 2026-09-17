@@ -116,6 +116,48 @@ def _side_codes(tokens: "list[str]") -> "list[str]":
     return codes
 
 
+def _match_code(code: str, codes: "list[str]") -> "str | None":
+    """The game side code a text code names: the same code (case/punctuation aside) or a
+    unique prefix either way ("SDSU" -> "SDS", "Hawaii" -> "HAW")."""
+    n = _norm_code(code)
+    for c in codes:
+        if _norm_code(c) == n:
+            return c
+    hits = [c for c in codes if n.startswith(_norm_code(c)) or _norm_code(c).startswith(n)]
+    return hits[0] if len(hits) == 1 else None
+
+
+#: plays snapped from the drive offense's own spot -- the only rows that may vote on a
+#: team's own yard-line side (see :func:`_own_side_codes`).
+_SCRIMMAGE_TYPES = ("rush", "pass", "sack", "kneel", "punt", "field_goal")
+
+
+def _own_side_codes(rows: "list[dict]") -> "dict[str, str]":
+    """Each offense's own yard-line side code (e.g. Merrimack -> 'MC').
+
+    Drives overwhelmingly start in the offense's own territory, so of the two
+    possible (team name -> side code) assignments, pick the one under which more
+    first-SNAPS-of-drive sit on the offense's own side. Only scrimmage plays vote: a
+    drive's first row is usually the kickoff, which sits in the RECEIVING team's
+    drive but is spotted on the KICKING team's side. Drives with no scrimmage play
+    cast no vote. Rows need ``offense``, ``yard_line_side``, ``play_type``,
+    ``drive_number``.
+    """
+    teams = sorted({r["offense"] for r in rows if r["offense"]})
+    sides = sorted({r["yard_line_side"] for r in rows if r["yard_line_side"]})
+    if len(teams) != 2 or len(sides) != 2:
+        return {}
+    firsts: "dict[int, dict]" = {}
+    for r in rows:
+        if r["yard_line_side"] and r["play_type"] in _SCRIMMAGE_TYPES:
+            firsts.setdefault(r["drive_number"], r)
+    a = {teams[0]: sides[0], teams[1]: sides[1]}
+    b = {teams[0]: sides[1], teams[1]: sides[0]}
+    score_a = sum(1 for r in firsts.values() if a.get(r["offense"]) == r["yard_line_side"])
+    score_b = sum(1 for r in firsts.values() if b.get(r["offense"]) == r["yard_line_side"])
+    return a if score_a >= score_b else b
+
+
 def _split_yard_line(token: "str | None", codes: "list[str]") -> "tuple[str | None, int] | None":
     """Split a yard-line token into (game side code, yard) -> ``None`` when unresolvable.
 
@@ -149,6 +191,7 @@ def _split_yard_line(token: "str | None", codes: "list[str]") -> "tuple[str | No
 # some games prefix each play with "(MM:SS)" / "Clock MM:SS,"
 _CLOCK_RE = re.compile(r"^(?:\((\d{1,2}:\d{2})\)|Clock (\d{1,2}:\d{2}),)\s*")
 _REVIEW_RE = re.compile(r"\s*(?:The previous play is under|\(Original Play:)")
+_RECOVERED_BY_RE = re.compile(r"recovered by (\S+) ")
 # 2025 words, or the 2019-era codes "SH,"/"SHOT,"/"SG,"/"SGUN,"/"NHSG,"/"NH,"/"PSTL,"
 _FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol|(?:SHOT|SGUN|NHSG|PSTL|SG|SH|NH),)\s+")
 # The play's yardage is its FIRST "for ..." clause: "for 7 yards gain" / "for 5 yards
@@ -360,7 +403,7 @@ def _decompose_play_text(text: str) -> "dict":
     elif "INTERCEPT" in text.upper():
         out["is_turnover"], out["turnover_type"] = True, "interception"
     elif out["is_fumble"] and "recovered by" in tl:
-        out["turnover_type"] = "fumble"
+        out["turnover_type"] = "fumble"  # settled per game once the side codes are known
     out["tackler_1"], out["tackler_2"] = _tacklers(text)
     out["end_yard_line"] = next((a or b for a, b in reversed(_END_YL_RE.findall(text))), None)
     pm = _PENALTY_RE.search(text)
@@ -616,6 +659,25 @@ def parse_cfb_ncaa_pbp(
     for r in rows:
         side, num = _split_yard_line(r["yard_line"], codes) or (None, None)
         r["yard_line_side"], r["yard_line_number"] = side, num
+    # a recovered fumble is a turnover only when the OTHER team recovered: the last
+    # "recovered by <code>" names the team (matched to the game's side codes); a code
+    # the codes cannot place falls back to the drive structure (an own recovery keeps
+    # the drive alive) -- except on a touchdown, where the scorer is settled downstream
+    team_of = {v: k for k, v in _own_side_codes(rows).items()}
+    for i, r in enumerate(rows):
+        if r["turnover_type"] != "fumble":
+            continue
+        recov = _RECOVERED_BY_RE.findall(_REVIEW_RE.split(r["play_text"] or "", 1)[0])
+        code = _match_code(recov[-1], list(team_of)) if recov else None
+        if code is not None:
+            turnover = team_of[code] != r["offense"]
+        elif r["is_touchdown"]:
+            continue
+        else:
+            nxt = rows[i + 1] if i + 1 < len(rows) else None
+            turnover = nxt is not None and nxt["drive_number"] != r["drive_number"] and nxt["offense"] != r["offense"]
+        r["is_turnover"] = turnover
+        r["turnover_type"] = "fumble" if turnover else None
     df = pl.DataFrame(rows, schema=PBP_SCHEMA) if rows else pl.DataFrame(schema=PBP_SCHEMA)
     if df.height:
         # qb_scramble = a rush by a player who also passes in this game (QB run).

@@ -542,3 +542,30 @@ def test_2019_field_goal_text_scores() -> None:
     assert (fg["play_type"], fg["fg_made"], fg["yds_fg"], fg["score_pts"]) == ("Field Goal Good", True, 30, 3)
     pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
     assert {pos: pos_s, dpos: dpos_s} == {"Wagner": 21, "UConn": 24}  # no drive titles: pure event sourcing
+
+
+def test_fumble_recoveries_follow_cfbfastr_labels_and_turnover_vec() -> None:
+    """NC1 / NC6: own recoveries are not turnovers; the recovering team scores a return-less TD."""
+    df = _frame("6386493")
+    own = df.filter(pl.col("play_text").str.contains("recovered by LSU Van Buren")).row(0, named=True)
+    assert (own["play_type"], own["turnover_vec"], own["fumble_vec"], own["rush"]) == (
+        "Fumble Recovery (Own)",
+        False,
+        True,
+        True,
+    )
+    td = df.filter(pl.col("play_text").str.contains("recovered by WKU Flowers,Dylan at WKU29 TOUCHDOWN")).row(
+        0, named=True
+    )
+    assert (td["play_type"], td["rush_td"], td["score_pts"], td["turnover_vec"]) == (
+        "Fumble Recovery (Opponent) Touchdown",
+        False,
+        -6,
+        True,
+    )
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Western Ky.": 10, "LSU": 13}
+    df = _frame("6386512")
+    own = df.filter(pl.col("play_text").str.contains("recovered by OSU") & (pl.col("pos_team") == "Oregon St."))
+    assert own.height >= 2 and not own.get_column("turnover_vec").any()
+    assert set(own.get_column("play_type").to_list()) <= {"Fumble Recovery (Own)", "Field Goal Missed", "Punt"}

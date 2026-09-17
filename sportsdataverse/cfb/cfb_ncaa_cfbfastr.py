@@ -31,7 +31,16 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 
-from sportsdataverse.cfb.cfb_ncaa_pbp import _NAME, _norm_code, _split_yard_line, _yl_candidates
+from sportsdataverse.cfb.cfb_ncaa_pbp import (
+    _NAME,
+    _RECOVERED_BY_RE,
+    _REVIEW_RE,
+    _match_code,
+    _norm_code,
+    _own_side_codes,
+    _split_yard_line,
+    _yl_candidates,
+)
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -54,9 +63,6 @@ _SAME_ROW_TRY_RE = re.compile(r"kick attempt good|(?:pass|run|rush) attempt succ
 #: after they've fed the stateful pass).
 _MARKER_TYPES = {"drive_start", "coin_toss"}
 
-#: plays snapped from the drive offense's own spot -- the only rows that may
-#: vote on a team's own yard-line side (see :func:`_own_side`).
-_SCRIMMAGE_TYPES = ("rush", "pass", "sack", "kneel", "punt", "field_goal")
 
 #: end_how -> cfbfastR play_type label for synthesized OT rows. Every value is
 #: one cfbfastR publishes; a code with no entry falls back to "Unknown" rather
@@ -245,35 +251,6 @@ def _clock_secs(clock: "str | None") -> "int | None":
         return None
 
 
-def _own_side(df: pl.DataFrame) -> "dict[str, str]":
-    """Infer each offense's own yard-line side code (e.g. Merrimack -> 'MC').
-
-    Drives overwhelmingly start in the offense's own territory, so of the two
-    possible (team name -> side code) assignments, pick the one under which
-    more first-SNAPS-of-drive sit on the offense's own side. Only scrimmage
-    plays vote: a drive's first row is usually the kickoff, which sits in the
-    RECEIVING team's drive but is spotted on the KICKING team's side, and
-    voting on it mirrored ``yards_to_goal`` for most games. Drives with no
-    scrimmage play (kickoff-, PAT- or penalty-only) cast no vote.
-    """
-    teams = [t for t in df.get_column("offense").unique().to_list() if t]
-    sides = [s for s in df.get_column("yard_line_side").unique().to_list() if s]
-    if len(teams) != 2 or len(sides) != 2:
-        return {}
-    firsts = (
-        df.filter(pl.col("yard_line_side").is_not_null() & pl.col("play_type").is_in(_SCRIMMAGE_TYPES))
-        .group_by("drive_number", maintain_order=True)
-        .first()
-        .select("offense", "yard_line_side")
-        .to_dicts()
-    )
-    a = {teams[0]: sides[0], teams[1]: sides[1]}
-    b = {teams[0]: sides[1], teams[1]: sides[0]}
-    score_a = sum(1 for r in firsts if a.get(r["offense"]) == r["yard_line_side"])
-    score_b = sum(1 for r in firsts if b.get(r["offense"]) == r["yard_line_side"])
-    return a if score_a >= score_b else b
-
-
 def _exact_side(token: "str | None", codes: "list[str]") -> "tuple[str, int] | None":
     """(game side code, yard) when a token names one of the game's codes outright."""
     lookup = {_norm_code(c): c for c in codes}
@@ -334,13 +311,30 @@ def _split_end_yard_line(
     return alias or _split_yard_line(token, codes)
 
 
-def _td_by_defense(r: "dict[str, Any]", offense: "Optional[str]", own_side: "dict[str, str]", end: Any) -> bool:
+def _recovering_team(text: str, own_side: "dict[str, str]", aliases: "dict[str, str]") -> "Optional[str]":
+    """The team named by the play's last "recovered by <code>", or None when the code
+    cannot be placed (the game's codes, then a learned alias, then a unique prefix)."""
+    recov = _RECOVERED_BY_RE.findall(_REVIEW_RE.split(text, 1)[0])
+    if not recov:
+        return None
+    codes = list(own_side.values())
+    code = _match_code(recov[-1], codes) or aliases.get(_norm_code(recov[-1]))
+    return next((t for t, c in own_side.items() if c == code), None)
+
+
+def _td_by_defense(
+    r: "dict[str, Any]", offense: "Optional[str]", own_side: "dict[str, str]", end: Any, recovered: "Optional[str]"
+) -> bool:
     """Whether a TOUCHDOWN row was scored by its drive's DEFENSE (a return touchdown).
 
-    The end spot says whose end zone the ball reached: ending on the offense's own
-    side means the other team ran it back. Without a resolvable end spot, fall back to
-    the text: an interception, a fumble recovery, or a punt / field goal (return TDs).
+    The team that last recovered a fumble scored it (a page can print "recovered by
+    WKU ... at WKU29 TOUCHDOWN" without narrating the return, so this comes before
+    the geometry). Else the end spot says whose end zone the ball reached: ending on
+    the offense's own side means the other team ran it back. Without either, fall
+    back to the text: an interception, a fumble recovery, or a punt / field goal.
     """
+    if recovered is not None and offense is not None:
+        return recovered != offense
     if end is not None and end[0] is not None and offense in own_side:
         return own_side[offense] == end[0]
     return r["turnover_type"] in ("interception", "fumble") or r["play_type"] in ("punt", "field_goal")
@@ -358,6 +352,13 @@ def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
         if r["turnover_type"] == "interception":
             return "Interception Return Touchdown"
         return "Fumble Recovery (Opponent) Touchdown"
+    if (
+        not td
+        and r["is_fumble"]
+        and pt in ("rush", "kneel", "pass", "sack")
+        and "recovered by" in (r["play_text"] or "").lower()
+    ):
+        return "Fumble Recovery (Opponent)" if r["turnover_type"] == "fumble" else "Fumble Recovery (Own)"
     if pt == "rush" or pt == "kneel":
         return "Rushing Touchdown" if td else "Rush"
     if pt == "pass":
@@ -523,7 +524,7 @@ def to_cfbfastr(
             .fill_null(pl.col("offense"))
             .alias("offense")
         )
-    own_side = _own_side(pbp)
+    own_side = _own_side_codes(pbp.to_dicts())
     side_codes = list(own_side.values())
     end_aliases = _end_code_aliases(pbp, own_side) if own_side else {}
     teams = (
@@ -668,7 +669,8 @@ def to_cfbfastr(
 
         # running score -- award points to the right side of the ball
         end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
-        def_td = bool(r["is_touchdown"]) and _td_by_defense(r, offense, own_side, end)
+        recovered = _recovering_team(text, own_side, end_aliases) if r["is_fumble"] else None
+        def_td = bool(r["is_touchdown"]) and _td_by_defense(r, offense, own_side, end, recovered)
         return_td = def_td
         # the kicking team owns the kickoff spot's side (the row sits in either drive)
         kicker = (

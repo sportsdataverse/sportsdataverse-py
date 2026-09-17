@@ -444,3 +444,26 @@ def test_td_and_pat_in_one_row_is_the_scoring_play() -> None:
     assert both.get_column("is_touchdown").all()
     row = both.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike rush for 2 yards")).row(0, named=True)
     assert (row["rusher"], row["yards_gained"], row["end_yard_line"]) == ("BEAUDRY, Mike", 2, "WAGNER0")
+
+
+# --- NC1: a recovered fumble is a turnover only when the OTHER team recovered ---
+# 6386512 Houston @ Oregon St. (2025): own recoveries ("... recovered by OSU ..." in an
+#   Oregon St. drive); 6386493 Western Ky. @ LSU (2025): one own, one by the defense
+
+
+def test_own_recovery_is_not_a_turnover() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("6386512"))
+    own = df.filter(
+        pl.col("play_text").str.contains("fumbled by")
+        & pl.col("play_text").str.contains("recovered by OSU")
+        & (pl.col("offense") == "Oregon St.")
+    )
+    assert own.height >= 2
+    assert own.get_column("is_fumble").all()
+    assert not own.get_column("is_turnover").any()
+    assert own.get_column("turnover_type").null_count() == own.height
+    df = parse_cfb_ncaa_pbp(_variant("6386493"))
+    lsu = df.filter(pl.col("play_text").str.contains("recovered by LSU Van Buren")).row(0, named=True)
+    wku = df.filter(pl.col("play_text").str.contains("recovered by WKU Flowers")).row(0, named=True)
+    assert (lsu["offense"], lsu["is_turnover"], lsu["turnover_type"]) == ("LSU", False, None)
+    assert (wku["offense"], wku["is_turnover"], wku["turnover_type"]) == ("LSU", True, "fumble")
