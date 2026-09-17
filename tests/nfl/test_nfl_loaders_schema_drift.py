@@ -23,10 +23,15 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.config import NFL_FF_PLAYERIDS_URL
+from sportsdataverse.config import (
+    NFL_FF_PLAYERIDS_URL,
+    NFL_FF_RANKINGS_DRAFT_URL,
+    NFL_FF_RANKINGS_WEEK_URL,
+)
 from sportsdataverse.nfl import (
     clear_cache,
     load_nfl_ff_playerids,
+    load_nfl_ff_rankings,
     load_nfl_pbp_participation,
     reset_config,
     update_config,
@@ -137,13 +142,16 @@ def test_load_participation_live_across_the_2023_schema_change(no_cache):
     assert df.schema["play_id"] == pl.Float64
 
 
-# DynastyProcess ``db_playerids.csv`` is read with ``pl.read_csv``, so without a
-# pin every id column's dtype follows whatever the current upstream rows happen
-# to contain. The expected dtypes are main's documented contract
-# (``tools/codegen/schemas/autodoc/nfl/load_nfl_ff_playerids.yaml``):
-# ``character`` -> ``pl.Utf8``, ``integer`` -> ``pl.Int64``.
+# DynastyProcess CSVs are read with ``pl.read_csv``, so without a pin every id
+# column's dtype follows whatever the current upstream rows happen to contain.
+# The expected dtypes are main's documented contract
+# (``tools/codegen/schemas/autodoc/nfl/load_nfl_ff_{playerids,rankings}.yaml``:
+# ``character`` -> ``pl.Utf8``, ``integer`` -> ``pl.Int64``) with two deliberate
+# ``Utf8`` overrides: ``mfl_id`` (MFL ids are zero-padded, e.g. ``0156``) and the
+# rankings FantasyPros id (``id`` / ``fantasypros_id``), which is the same key as
+# ``load_nfl_ff_playerids``' ``fantasypros_id`` and must share its dtype.
 _FF_PLAYERIDS_ID_DTYPES = {
-    "mfl_id": pl.Int64,
+    "mfl_id": pl.Utf8,
     "sportradar_id": pl.Utf8,
     "fantasypros_id": pl.Utf8,
     "gsis_id": pl.Utf8,
@@ -164,31 +172,85 @@ _FF_PLAYERIDS_ID_DTYPES = {
     "fantasy_data_id": pl.Int64,
     "swish_id": pl.Utf8,
 }
+_FF_RANKINGS_ID_DTYPES = {
+    "draft": {"id": pl.Utf8, "sportsdata_id": pl.Utf8, "yahoo_id": pl.Utf8, "cbs_id": pl.Utf8},
+    "week": {"fantasypros_id": pl.Utf8, "player_opponent_id": pl.Utf8},
+}
+_FF_RANKINGS_URLS = {"draft": NFL_FF_RANKINGS_DRAFT_URL, "week": NFL_FF_RANKINGS_WEEK_URL}
+_FF_SLICES = {
+    NFL_FF_PLAYERIDS_URL: FIXTURES / "db_playerids_slice.csv",
+    NFL_FF_RANKINGS_DRAFT_URL: FIXTURES / "db_fpecr_latest_slice.csv",
+    NFL_FF_RANKINGS_WEEK_URL: FIXTURES / "fp_latest_weekly_slice.csv",
+}
 
 _read_csv = pl.read_csv
 
 
-def test_ff_playerids_pins_id_dtypes_against_upstream_inference(monkeypatch, no_cache):
-    """Id dtypes must not follow the rows DynastyProcess happens to ship.
-
-    The fixture is four real rows of the live CSV (see the fixtures README) in
-    which every formerly-string id is purely numeric, so plain inference types
-    them ``Int64`` -- and ``nfl_id`` ``038666`` loses its leading zero.
-    """
-    slice_csv = FIXTURES / "db_playerids_slice.csv"
-    inferred = _read_csv(slice_csv, null_values=["NA", "NULL", ""])
-    assert inferred.schema["fantasypros_id"] == pl.Int64, "fixture no longer reproduces the flip"
-
+@pytest.fixture()
+def offline_ff_csvs(monkeypatch):
+    """Serve the committed real CSV slices in place of the DynastyProcess URLs."""
     seen: list = []
 
     def fake_read_csv(source, **kwargs):
         seen.append(source)
-        return _read_csv(slice_csv, **kwargs)
+        return _read_csv(_FF_SLICES[source], **kwargs)
 
     monkeypatch.setattr(_loaders.pl, "read_csv", fake_read_csv)
+    return seen
+
+
+def test_ff_fixtures_really_do_flip_under_inference():
+    """Guard the guard: unpinned, each slice types a string id as ``Int64``."""
+
+    def inferred(url):
+        return _read_csv(_FF_SLICES[url], null_values=["NA", "NULL", ""]).schema
+
+    assert inferred(NFL_FF_PLAYERIDS_URL)["fantasypros_id"] == pl.Int64
+    assert inferred(NFL_FF_PLAYERIDS_URL)["mfl_id"] == pl.Int64
+    assert inferred(NFL_FF_RANKINGS_DRAFT_URL)["id"] == pl.Int64
+    assert inferred(NFL_FF_RANKINGS_WEEK_URL)["fantasypros_id"] == pl.Int64
+
+
+def test_ff_playerids_pins_id_dtypes_against_upstream_inference(no_cache, offline_ff_csvs):
+    """Id dtypes must not follow the rows DynastyProcess happens to ship.
+
+    Every formerly-string id in the slice is purely numeric, so plain inference
+    types it ``Int64`` -- and ``nfl_id`` ``038666`` / ``mfl_id`` ``0156`` lose
+    their leading zeros.
+    """
     df = load_nfl_ff_playerids()  # ``load_ff_playerids`` is the same object
 
-    assert seen == [NFL_FF_PLAYERIDS_URL]
+    assert offline_ff_csvs == [NFL_FF_PLAYERIDS_URL]
     assert {c: df.schema[c] for c in _FF_PLAYERIDS_ID_DTYPES} == _FF_PLAYERIDS_ID_DTYPES
-    assert df["nfl_id"].to_list()[-1] == "038666"
-    assert df["fantasypros_id"].to_list()[:3] == ["28013", "24853", "11174"]
+    by_name = {row["name"]: row for row in df.to_dicts()}
+    assert by_name["Anthony Smith"]["nfl_id"] == "038666"
+    assert by_name["James Allen"]["mfl_id"] == "0156"
+    assert by_name["Fernando Mendoza"]["fantasypros_id"] == "28013"
+
+
+@pytest.mark.parametrize("kind", ["draft", "week"])
+def test_ff_rankings_pins_id_dtypes_against_upstream_inference(kind, no_cache, offline_ff_csvs):
+    df = load_nfl_ff_rankings(kind=kind)  # ``load_ff_rankings`` is the same object
+
+    assert offline_ff_csvs == [_FF_RANKINGS_URLS[kind]]
+    expected = _FF_RANKINGS_ID_DTYPES[kind]
+    assert {c: df.schema[c] for c in expected} == expected
+
+
+@pytest.mark.parametrize(
+    ("kind", "key", "matched"),
+    [("draft", "id", ["Fernando Mendoza", "Josh Allen"]), ("week", "fantasypros_id", ["Josh Allen"])],
+)
+def test_ff_rankings_fantasypros_id_joins_playerids(kind, key, matched, no_cache, offline_ff_csvs):
+    """The rankings FantasyPros id is playerids' ``fantasypros_id``.
+
+    92% of the live ``db_fpecr_latest.csv`` ``id`` values (and 91% of the weekly
+    ``fantasypros_id`` values) appear in ``db_playerids.csv`` ``fantasypros_id``.
+    Pinning one side and letting the other infer ``Int64`` breaks the join.
+    """
+    ids = load_nfl_ff_playerids()
+    ranks = load_nfl_ff_rankings(kind=kind)
+
+    assert ranks.schema[key] == ids.schema["fantasypros_id"]
+    joined = ranks.join(ids, left_on=key, right_on="fantasypros_id", how="inner")
+    assert sorted(joined["name"].to_list()) == matched

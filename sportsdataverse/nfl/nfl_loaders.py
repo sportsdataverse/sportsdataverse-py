@@ -1618,8 +1618,10 @@ def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
 # rows infer to (fantasypros_id / pff_id / nfl_id flipped Utf8 -> Int64 when
 # upstream happened to ship only numeric values). Pinned to the documented
 # contract; string ids are read straight from the CSV text, never via a float.
+# mfl_id is Utf8 despite being documented integer: MFL ids are zero-padded
+# ("0156"), and Int64 silently strips the padding.
 _FF_PLAYERIDS_ID_DTYPES = {
-    "mfl_id": pl.Int64,
+    "mfl_id": pl.Utf8,
     "sportradar_id": pl.Utf8,
     "fantasypros_id": pl.Utf8,
     "gsis_id": pl.Utf8,
@@ -1654,10 +1656,10 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
 
     Note:
         Id column dtypes are pinned at read time, not inferred from the rows
-        upstream currently ships: ``mfl_id``, ``sleeper_id``, ``espn_id``,
-        ``cbs_id``, ``rotowire_id``, ``ktc_id``, ``stats_id``,
-        ``stats_global_id`` and ``fantasy_data_id`` are ``Int64``; every other
-        ``*_id`` column is ``Utf8``.
+        upstream currently ships: ``sleeper_id``, ``espn_id``, ``cbs_id``,
+        ``rotowire_id``, ``ktc_id``, ``stats_id``, ``stats_global_id`` and
+        ``fantasy_data_id`` are ``Int64``; every other ``*_id`` column
+        (including the zero-padded ``mfl_id``) is ``Utf8``.
 
     Example:
         Quick start::
@@ -1687,6 +1689,15 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         schema_overrides=_FF_PLAYERIDS_ID_DTYPES,
     )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+# Same inference hazard as _FF_PLAYERIDS_ID_DTYPES, per CSV. The FantasyPros id
+# (``id`` in the draft file, ``fantasypros_id`` in the weekly one) is the key
+# that joins to load_nfl_ff_playerids' fantasypros_id, so it shares its Utf8.
+_FF_RANKINGS_ID_DTYPES = {
+    "draft": {"id": pl.Utf8, "sportsdata_id": pl.Utf8, "yahoo_id": pl.Utf8, "cbs_id": pl.Utf8},
+    "week": {"fantasypros_id": pl.Utf8, "player_opponent_id": pl.Utf8},
+}
 
 
 @cached_loader
@@ -1719,6 +1730,11 @@ def load_nfl_ff_rankings(
         Available as the alias ``sportsdataverse.nfl.load_ff_rankings`` for
         nflreadpy parity.
 
+        Id columns are ``Utf8`` in every kind (pinned at read time for the
+        CSV-backed ``"draft"`` and ``"week"``). The FantasyPros id (``id`` for ``"draft"``/``"all"``,
+        ``fantasypros_id`` for ``"week"``) joins directly to
+        ``load_nfl_ff_playerids``' ``fantasypros_id``.
+
     Example:
         Preferred ``kind=`` parameter::
 
@@ -1749,9 +1765,17 @@ def load_nfl_ff_rankings(
         raise ValueError("type/kind must be one of 'draft', 'week', 'all'")
 
     if effective == "draft":
-        data = _read_csv_retry(NFL_FF_RANKINGS_DRAFT_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(
+            NFL_FF_RANKINGS_DRAFT_URL,
+            null_values=["NA", "NULL", ""],
+            schema_overrides=_FF_RANKINGS_ID_DTYPES["draft"],
+        )
     elif effective == "week":
-        data = _read_csv_retry(NFL_FF_RANKINGS_WEEK_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(
+            NFL_FF_RANKINGS_WEEK_URL,
+            null_values=["NA", "NULL", ""],
+            schema_overrides=_FF_RANKINGS_ID_DTYPES["week"],
+        )
     else:  # all
         data = _fetch_release_parquet(NFL_FF_RANKINGS_ALL_URL)
 
