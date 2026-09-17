@@ -250,12 +250,42 @@ def _yards_gained(text: str) -> "int | None":
 
 
 def _tacklers(text: str) -> "tuple[str | None, str | None]":
+    """The (up to two) tacklers in the play's last parenthesised group.
+
+    2025 pages separate them with ";". 2019-era pages arrive damaged: the separator is
+    a mangled ":" ("MORGAN, D.J.3aPAUL, Keyshawn") or gone entirely, one name running
+    into the next ("Smith, JohnDOE, Jane", "Kristian FultonJaCoby Stevens"). "Last, First"
+    names can still be pulled apart at the "Last, " that starts the next one; "First Last"
+    names cannot (a CamelCase first name looks the same), so a comma-less group is trusted
+    only as a single name and is otherwise left null rather than emitted as garbage.
+    """
     pre = text.split("PENALTY")[0]  # tacklers belong to the play, before any penalty note
-    cand = [g for g in re.findall(r"\(([^)]+)\)", pre) if "," in g and not g.startswith(("H:", "LS:"))]
+    cand = [
+        g.strip()
+        for g in re.findall(r"\(([^()]+)\)", pre)
+        if not g.startswith(("H:", "LS:")) and not g.strip().isdigit()
+    ]
     if not cand:
         return None, None
-    names = [n.strip() for n in re.split(r";\s*", cand[-1]) if n.strip()]
-    return (names[0] if names else None), (names[1] if len(names) > 1 else None)
+    group = cand[-1]
+    if "," not in group:
+        one = re.fullmatch(rf"{_TOKEN}(?:\s{_TOKEN})?{_SUFFIX}", group) is not None  # one "First Last[ Jr.]"
+        return (group if one else None), None
+    pieces = [
+        x.strip()
+        for x in re.split(r";\s*|(?<=[\w.])3a(?=[A-Z])|(?<=[a-z.])(?=[A-Z][A-Za-z.'\-]*,\s?[A-Z])", group)
+        if x.strip()
+    ]
+    # a piece without a comma is a "Last, First" cut inside its surname ("Mc|Clellan, Matt")
+    names: "list[str]" = []
+    for piece in pieces:
+        if names and "," not in names[-1]:
+            names[-1] += piece
+        else:
+            names.append(piece)
+    if not all(_LAST_FIRST_RE.match(n) for n in names):
+        return None, None
+    return names[0], (names[1] if len(names) > 1 else None)
 
 
 def _decompose_play_text(text: str) -> "dict":

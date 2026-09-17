@@ -419,3 +419,15 @@ def test_last_first_with_space_and_initials() -> None:
         df.filter(pl.col("play_type").is_in(["rush", "pass"])).get_column("rusher").null_count()
         < df.filter(pl.col("play_type") == "pass").height + 3
     )
+
+
+def test_tacklers_split_on_the_mangled_separator_or_left_null() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    row = df.filter(pl.col("play_text").str.contains("MORGAN, D.J.3aPAUL, Keyshawn")).row(0, named=True)
+    assert (row["tackler_1"], row["tackler_2"]) == ("MORGAN, D.J.", "PAUL, Keyshawn")
+    assert not df.get_column("tackler_1").fill_null("").str.contains("3a").any()
+    df = parse_cfb_ncaa_pbp(_variant("1735890"))
+    single = df.filter(pl.col("play_text").str.ends_with("(Kristian Fulton).")).row(0, named=True)
+    assert (single["tackler_1"], single["tackler_2"]) == ("Kristian Fulton", None)
+    glued = df.filter(pl.col("play_text").str.contains("Kristian FultonJaCoby Stevens")).row(0, named=True)
+    assert (glued["tackler_1"], glued["tackler_2"]) == (None, None)  # separator lost: not recoverable
