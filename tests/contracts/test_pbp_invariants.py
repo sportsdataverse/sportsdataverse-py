@@ -170,8 +170,10 @@ def test_field_position():
     assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at AWY 25")}), spot) == 0
     assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at HOM 25")}), spot) == 1
     # an unrecognized side code only admits the two mirror values
-    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at XYZ 75")}), spot) == 0
+    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at XYZ 25")}), spot) == 0
     assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at XYZ 30")}), spot) == 1
+    placeholder = _game(**{"start__downDistanceText": (0, "1st & 10 at HOM 0")})
+    assert _by_rule(placeholder)[spot].n_checked == 0  # "at HOM 0" is a placeholder, not a spot
 
 
 # 3 --------------------------------------------------------------------------

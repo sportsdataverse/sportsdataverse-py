@@ -323,7 +323,8 @@ def _field_position(df: pl.DataFrame) -> list[RuleResult | None]:
                 "ytg.start_matches_down_distance_text",
                 2,
                 "start yards-to-endzone agrees with the spot in ESPN's own downDistanceText",
-                _scrimmage() & c("__yl").is_not_null() & c("start.yardsToEndzone").is_not_null(),
+                # "at GASO 0" is ESPN's placeholder on some penalty rows, not a spot
+                _scrimmage() & c("__yl").is_between(1, 50) & c("start.yardsToEndzone").is_not_null(),
                 pl.when(c("__text_ytg").is_not_null())
                 .then(c("start.yardsToEndzone") != c("__text_ytg"))
                 .otherwise((c("start.yardsToEndzone") != c("__yl")) & (c("start.yardsToEndzone") != 100 - c("__yl"))),
