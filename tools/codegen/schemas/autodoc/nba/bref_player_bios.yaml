@@ -1,0 +1,33 @@
+schema: bref_player_bios
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: year_min
+  type: double
+  description: ''
+- name: year_max
+  type: double
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: height
+  type: character
+  description: ''
+- name: weight
+  type: double
+  description: ''
+- name: birth_date
+  type: character
+  description: ''
+- name: colleges
+  type: character
+  description: ''
+- name: letter
+  type: character
+  description: ''

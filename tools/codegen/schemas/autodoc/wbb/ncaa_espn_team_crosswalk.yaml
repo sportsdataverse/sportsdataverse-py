@@ -1,0 +1,39 @@
+schema: ncaa_espn_team_crosswalk
+kind: dataframe
+columns:
+- name: season
+  type: character
+  description: ''
+- name: ncaa_team_id
+  type: integer
+  description: ''
+- name: ncaa_team
+  type: character
+  description: ''
+- name: ncaa_conference
+  type: character
+  description: ''
+- name: espn_team_id
+  type: character
+  description: ''
+- name: espn_display_name
+  type: character
+  description: ''
+- name: espn_location
+  type: character
+  description: ''
+- name: espn_mascot
+  type: character
+  description: ''
+- name: espn_abbreviation
+  type: character
+  description: ''
+- name: espn_conference_name
+  type: character
+  description: ''
+- name: espn_conference_id
+  type: character
+  description: ''
+- name: match_method
+  type: character
+  description: ''

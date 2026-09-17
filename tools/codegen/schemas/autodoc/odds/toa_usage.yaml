@@ -1,0 +1,12 @@
+schema: toa_usage
+kind: dataframe
+columns:
+- name: requests_remaining
+  type: integer
+  description: ''
+- name: requests_used
+  type: integer
+  description: ''
+- name: last_cost
+  type: integer
+  description: ''

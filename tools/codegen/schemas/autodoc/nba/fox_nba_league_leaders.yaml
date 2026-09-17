@@ -1,0 +1,21 @@
+schema: fox_nba_league_leaders
+kind: dataframe
+columns:
+- name: players
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: gp
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: min
+  type: character
+  description: ''
+- name: mpg
+  type: character
+  description: ''

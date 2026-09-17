@@ -232,6 +232,18 @@ columns:
 - name: passing_quarterback_rating
   type: double
   description: ''
+- name: passing_offensive_snap_pct
+  type: double
+  description: ''
+- name: passing_target_share_pct
+  type: double
+  description: ''
+- name: passing_yards_per_route_run
+  type: double
+  description: ''
+- name: passing_avg_depth_of_target
+  type: double
+  description: ''
 - name: rushing_avg_gain
   type: double
   description: ''

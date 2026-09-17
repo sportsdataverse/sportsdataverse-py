@@ -11,6 +11,9 @@ columns:
   type: character
   description: ''
 - name: points
+  type: integer
+  description: ''
+- name: streak_wl
   type: character
   description: ''
 - name: goals_for

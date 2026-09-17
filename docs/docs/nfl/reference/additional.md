@@ -388,6 +388,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
+| `general_defensive_fumbles_forced` | double | Fumbles the player forced on defense, excluding miscellaneous and special-teams plays (ESPN defensiveFumblesForced, as a float); 0.0 in the single sampled row. |
+| `general_misc_fumbles_forced` | double | Fumbles the player forced when not on defense or special teams (ESPN miscFumblesForced, as a float); 0.0 in the single sampled row. |
+| `general_special_teams_fumbles_forced` | double | Fumbles the player forced on special-teams plays (ESPN specialTeamsFumblesForced, as a float); 0.0 in the single sampled row. |
+| `passing_offensive_snap_pct` | double | ESPN's offensiveSnapPct stat (described upstream as '% of plays the player was on the field'); 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
+| `passing_target_share_pct` | double | ESPN's targetSharePct stat (described upstream as '% of total team targets'); 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
+| `passing_yards_per_route_run` | double | ESPN's yardsPerRouteRun stat (yards per route run, YPRR) under the passing category; 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
+| `passing_avg_depth_of_target` | double | ESPN's avgDepthOfTarget stat (average depth of target, aDOT) under the passing category; 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
 
 **Example**
 
@@ -600,6 +607,8 @@ Polars dataframe containing historical contracts available.
 | `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character | Team that drafted player |
 | `cols` | double | Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context. |
+| `season_history` | double | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
+| `contract_history` | integer | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
 
 **Example**
 
@@ -751,6 +760,32 @@ seasons; this loader reads the requested file once and post-filters by
 **Returns**
 
 Polars dataframe containing ESPN Total QBR for the requested seasons, summarized per `summary_type`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `game_week` | character | Season week |
+| `team_abb` | character | Abbreviation of Team of Player |
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `name_short` | character | Short name of player (First Initial, Last Name) |
+| `rank` | double | QBR Rank in specified timeframe |
+| `qbr_total` | double | Adjusted Total QBR, which adjusts quarterback play on 0-100 scale adjusted for strength of opposing defenses played. |
+| `pts_added` | double | Number of points contributed by a quarterback above the average level QB |
+| `qb_plays` | double | Total dropbacks for the quarterback (excludes handoffs) |
+| `epa_total` | double | Total Expected Points Added by quarterback, calculated by ESPN Win Probability Model |
+| `pass` | double | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `run` | double | Expected Points Added on run plays |
+| `exp_sack` | double | Expected EPA Added on Sacks |
+| `penalty` | double | Binary indicator for whether or not a penalty occurred. |
+| `qbr_raw` | double | Raw total QBR, does not adjust for strength of opposing defenses played. |
+| `sack` | double | Binary indicator for if the play ended in a sack. |
+| `name_first` | character | First Name of Quarterback |
+| `name_last` | character | Last Name of Quarterback |
+| `name_display` | character | Full Name of Quarterback |
+| `headshot_href` | character | Link to ESPN Headshot of Player |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `qualified` | logical | True/False indicator of whether or not player meets minimum play requirement |
 
 **Example**
 
@@ -985,25 +1020,25 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 
 | col_name | type | description |
 |---|---|---|
-| `mfl_id` | integer | MyFantasyLeague.com ID - this is the primary key for this table and is unique and complete. Usually an integer of 5 digits. |
+| `mfl_id` | character | MyFantasyLeague.com ID - this is the primary key for this table and is unique and complete. Usually an integer of 5 digits. |
 | `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
 | `fantasypros_id` | character | FantasyPros.com ID - usually an integer of 5 digits. |
 | `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
 | `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `sleeper_id` | integer | Sleeper ID - usually an integer with ~4 digits. |
+| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `espn_id` | integer | ESPN ID - usual format is an integer with ~5 digits |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
 | `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
 | `fleaflicker_id` | character | Fleaflicker ID - usual format is an integer with ~4 digits. Fleaflicker API also has sportradar and that's generally preferred. |
-| `cbs_id` | integer | CBS ID - usual format is an integer with ~ 7 digits. |
+| `cbs_id` | character | CBS ID - usual format is an integer with ~ 7 digits. |
 | `pfr_id` | character | Pro-Football-Reference ID for player |
 | `cfbref_id` | character | College Football Reference ID - usual format is firstname-lastname-integer |
-| `rotowire_id` | integer | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
 | `rotoworld_id` | character | Rotoworld ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
-| `ktc_id` | integer | KeepTradeCut ID - usual format is an integer with ~four digits. |
-| `stats_id` | integer | Stats ID - usual format is five digit integer |
-| `stats_global_id` | integer | Stats Global ID - usual format is a six digit integer |
-| `fantasy_data_id` | integer | FantasyData ID - usual format five digit integer |
+| `ktc_id` | character | KeepTradeCut ID - usual format is an integer with ~four digits. |
+| `stats_id` | character | Stats ID - usual format is five digit integer |
+| `stats_global_id` | character | Stats Global ID - usual format is a six digit integer |
+| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
 | `swish_id` | character | Player ID for Swish Analytics |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `merge_name` | character | Name but formatted for name joins via ffscrapr::dp_cleannames() - coerced to lowercase, stripped of punctuation and suffixes, and common substitutions performed. |
@@ -1059,7 +1094,7 @@ Polars dataframe containing fantasy football rankings data.
 | `page_type` | character | Two word identifier separated by a dash identifying the type of fantasy ranking (best = bestball; dynasty; redraft) and what position it applies to |
 | `ecr_type` | character | A two letter identifier combining the ranking type (b = bestball; d = dynasty; r = redraft) and position type (o = overall; p = positional; sf = superflex; rk = rookie) |
 | `player` | character | Player name |
-| `id` | integer | ID of the player in the 'name' column. |
+| `id` | character | ID of the player in the 'name' column. |
 | `pos` | character | Position as tracked by FP |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `ecr` | double | Average (mean) expert ranking for this player |
@@ -1385,6 +1420,8 @@ Polars dataframe containing historical contracts available.
 | `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character | Team that drafted player |
 | `cols` | double | Number of contract columns returned in the contracts dataset (metadata artifact from the loader). |
+| `season_history` | double | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
+| `contract_history` | integer | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
 
 **Example**
 
@@ -1752,25 +1789,25 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 
 | col_name | type | description |
 |---|---|---|
-| `mfl_id` | integer | MyFantasyLeague.com ID - this is the primary key for this table and is unique and complete. Usually an integer of 5 digits. |
+| `mfl_id` | character | MyFantasyLeague.com ID - this is the primary key for this table and is unique and complete. Usually an integer of 5 digits. |
 | `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
 | `fantasypros_id` | character | FantasyPros.com ID - usually an integer of 5 digits. |
 | `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
 | `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `sleeper_id` | integer | Sleeper ID - usually an integer with ~4 digits. |
+| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `espn_id` | integer | ESPN ID - usual format is an integer with ~5 digits |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
 | `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
 | `fleaflicker_id` | character | Fleaflicker ID - usual format is an integer with ~4 digits. Fleaflicker API also has sportradar and that's generally preferred. |
-| `cbs_id` | integer | CBS ID - usual format is an integer with ~ 7 digits. |
+| `cbs_id` | character | CBS ID - usual format is an integer with ~ 7 digits. |
 | `pfr_id` | character | Pro-Football-Reference ID for player |
 | `cfbref_id` | character | College Football Reference ID - usual format is firstname-lastname-integer |
-| `rotowire_id` | integer | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
 | `rotoworld_id` | character | Rotoworld ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
-| `ktc_id` | integer | KeepTradeCut ID - usual format is an integer with ~four digits. |
-| `stats_id` | integer | Stats ID - usual format is five digit integer |
-| `stats_global_id` | integer | Stats Global ID - usual format is a six digit integer |
-| `fantasy_data_id` | integer | FantasyData ID - usual format five digit integer |
+| `ktc_id` | character | KeepTradeCut ID - usual format is an integer with ~four digits. |
+| `stats_id` | character | Stats ID - usual format is five digit integer |
+| `stats_global_id` | character | Stats Global ID - usual format is a six digit integer |
+| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
 | `swish_id` | character | Player ID for Swish Analytics |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `merge_name` | character | Name but formatted for name joins via ffscrapr::dp_cleannames() - coerced to lowercase, stripped of punctuation and suffixes, and common substitutions performed. |
@@ -1826,7 +1863,7 @@ Polars dataframe containing fantasy football rankings data.
 | `page_type` | character | Two word identifier separated by a dash identifying the type of fantasy ranking (best = bestball; dynasty; redraft) and what position it applies to |
 | `ecr_type` | character | A two letter identifier combining the ranking type (b = bestball; d = dynasty; r = redraft) and position type (o = overall; p = positional; sf = superflex; rk = rookie) |
 | `player` | character | Player name |
-| `id` | integer | ID of the player in the 'name' column. |
+| `id` | character | ID of the player in the 'name' column. |
 | `pos` | character | Position as tracked by FP |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `ecr` | double | Average (mean) expert ranking for this player |
@@ -1874,6 +1911,11 @@ Load the bundled NFL EP-by-yardline curve (no network).
 **Returns**
 
 `yardline_own: Int64 (1..99), ep: Float64`.
+
+| col_name | type | description |
+|---|---|---|
+| `yardline_own` | integer | Starting yard line from the offense's own goal (1-99); one row per yard line of the bundled NFL EP-by-starting-yardline curve. |
+| `ep` | double | Using the scoring event probabilities, the estimated expected points with respect to the possession team for the given play. |
 
 **Example**
 
@@ -2961,6 +3003,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `week` | integer | Season week. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `game_id` | character | Ten digit identifier for NFL game. |
 | `opponent_team` | character | Team abbreviation or identifier of the opposing team faced during the game or period. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
@@ -2977,6 +3020,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
 | `passing_cpoe` | double | Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to a model-based baseline. Percentage points (100 * the completion-rate gap), not a 0-1 rate. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `passing_10` | integer | Number of the team's completed passes that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_16` | integer | Number of the team's completed passes that gained 16 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_20` | integer | Number of the team's completed passes that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_40` | integer | Number of the team's completed passes that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
 | `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
@@ -2985,6 +3032,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
 | `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
 | `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `rushing_10` | integer | Number of the team's runs that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_12` | integer | Number of the team's runs that gained 12 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_20` | integer | Number of the team's runs that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_40` | integer | Number of the team's runs that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `targets` | integer | The number of pass plays where the player was the targeted receiver. |
 | `receiving_yards` | integer | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
@@ -2996,6 +3047,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `receiving_first_downs` | integer | Total number of first downs gained on receptions |
 | `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
 | `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `receiving_10` | integer | Number of the team's receptions that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_16` | integer | Number of the team's receptions that gained 16 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_20` | integer | Number of the team's receptions that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_40` | integer | Number of the team's receptions that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
 | `def_tackles_solo` | integer | Total number of solo tackles for this player |
 | `def_tackles_with_assist` | integer | Number of tackles this player had with an assisted tackle |
@@ -3012,6 +3067,11 @@ Polars dataframe containing team stats available for the requested seasons.
 | `def_tds` | integer | Number of defensive touchdowns scored by this player |
 | `def_fumbles` | integer | Number of fumbles by this player |
 | `def_safeties` | integer | Number of safeties scored by the defense (opponent tackled in their own end zone) during the period. |
+| `def_punt_blocks` | integer | Number of opponent punts blocked by the team's defense. |
+| `def_pat_blocks` | integer | Number of opponent extra point attempts blocked by the team's defense. |
+| `def_fg_blocks` | integer | Number of opponent field goal attempts blocked by the team's defense. |
+| `def_2pt_atts` | integer | Number of defensive two-point conversion returns attempted by the team (nflfastR stat id 403). |
+| `def_2pt_made` | integer | Number of successful defensive two-point conversion returns by the team (nflfastR stat id 404). |
 | `misc_yards` | integer | Miscellaneous yards not attributed to passing, rushing, or standard return categories during the period. |
 | `fumble_recovery_own` | integer | Number of fumbles recovered by the team that were originally fumbled by their own players. |
 | `fumble_recovery_yards_own` | integer | Total yards gained (or lost) on recoveries of the team's own fumbles during the period. |
@@ -3021,6 +3081,11 @@ Polars dataframe containing team stats available for the requested seasons.
 | `penalties` | integer | Total number of penalties. |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
 | `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period. |
+| `fumbles_forced_by_opp` | integer | Fumbles by the team's players that were forced by the opponent, counted across all units (offense, defense and special teams). |
+| `fumbles_not_forced` | integer | Fumbles by the team's players that were not forced by the opponent, counted across all units. |
+| `fumbles_out_of_bounds` | integer | Fumbles by the team's players where the ball went out of bounds, forced or not; each is also counted in fumbles_forced_by_opp or fumbles_not_forced. |
+| `fumbles_total` | integer | Total fumbles by the team's players across all units; equals fumbles_forced_by_opp + fumbles_not_forced. |
+| `fumbles_lost_total` | integer | Total fumbles lost by the team's players, counted across all units. |
 | `punt_returns` | integer | Number of punt returns. |
 | `punt_return_yards` | integer | Team punt return yards. |
 | `kickoff_returns` | integer | Total number of kickoff returns recorded by the team during the game or season period. |
@@ -3059,6 +3124,19 @@ Polars dataframe containing team stats available for the requested seasons.
 | `gwfg_missed` | integer | Number of game-winning field goal attempts that were missed (no good) in the final moments. |
 | `gwfg_blocked` | integer | Number of game-winning field goal attempts that were blocked by the opposing defense. |
 | `gwfg_distance` | integer | Distance in yards of the game-winning field goal attempt (or attempts) during the period. |
+| `pt_att` | integer | Number of punts kicked by the team; blocked punts are counted separately in pt_blocked. |
+| `pt_blocked` | integer | Number of the team's punts that were blocked. |
+| `pt_long` | integer | Length in yards of the team's longest punt; null when the team had no kicked punt (never 0 in the 2024 sample). |
+| `pt_yards` | integer | Total gross yards of the team's punts. |
+| `pt_inside_20` | integer | Number of the team's punts credited as ending inside the opponent's 20-yard line (nflfastR defines the spot as where the return ended). |
+| `pt_out_of_bounds` | integer | Number of the team's punts that went out of bounds without a return. |
+| `pt_downed` | integer | Number of the team's punts that were downed without a return. |
+| `pt_touchback` | integer | Number of the team's punts that resulted in a touchback. |
+| `pt_fair_caught` | integer | Number of the team's punts that were fair caught by the opponent. |
+| `pt_returned` | integer | Number of the team's punts that were returned by the opponent. |
+| `pt_return_yards` | integer | Punt return yards gained by the opponent on the team's punts; can be negative (minimum -4 in the 2024 sample). |
+| `pt_return_tds` | integer | Number of the team's punts that the opponent returned for a touchdown. |
+| `pt_net_yards` | integer | Net punting yards: pt_yards minus pt_return_yards minus 20 yards per touchback. |
 
 **Example**
 
@@ -3767,6 +3845,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `week` | integer | Season week. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `game_id` | character | Ten digit identifier for NFL game. |
 | `opponent_team` | character | Abbreviation of the opposing team the team faced in the game or week represented by this row. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
@@ -3783,6 +3862,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
 | `passing_cpoe` | double | Completion percentage over expectation for the team's passing game — how much better or worse actual completion rate was versus the model-predicted rate. Percentage points (100 * the completion-rate gap), not a 0-1 rate. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `passing_10` | integer | Number of the team's completed passes that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_16` | integer | Number of the team's completed passes that gained 16 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_20` | integer | Number of the team's completed passes that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `passing_40` | integer | Number of the team's completed passes that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
 | `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
@@ -3791,6 +3874,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
 | `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
 | `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `rushing_10` | integer | Number of the team's runs that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_12` | integer | Number of the team's runs that gained 12 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_20` | integer | Number of the team's runs that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `rushing_40` | integer | Number of the team's runs that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `targets` | integer | The number of pass plays where the player was the targeted receiver. |
 | `receiving_yards` | integer | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
@@ -3802,6 +3889,10 @@ Polars dataframe containing team stats available for the requested seasons.
 | `receiving_first_downs` | integer | Total number of first downs gained on receptions |
 | `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
 | `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `receiving_10` | integer | Number of the team's receptions that gained 10 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_16` | integer | Number of the team's receptions that gained 16 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_20` | integer | Number of the team's receptions that gained 20 or more yards (one of nflfastR's 'explosive' play thresholds). |
+| `receiving_40` | integer | Number of the team's receptions that gained 40 or more yards (one of nflfastR's 'explosive' play thresholds). |
 | `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
 | `def_tackles_solo` | integer | Total number of solo tackles for this player |
 | `def_tackles_with_assist` | integer | Number of tackles this player had with an assisted tackle |
@@ -3818,6 +3909,11 @@ Polars dataframe containing team stats available for the requested seasons.
 | `def_tds` | integer | Number of defensive touchdowns scored by this player |
 | `def_fumbles` | integer | Number of fumbles by this player |
 | `def_safeties` | integer | Number of safeties recorded by the team's defense (tackling an opponent in their own end zone). |
+| `def_punt_blocks` | integer | Number of opponent punts blocked by the team's defense. |
+| `def_pat_blocks` | integer | Number of opponent extra point attempts blocked by the team's defense. |
+| `def_fg_blocks` | integer | Number of opponent field goal attempts blocked by the team's defense. |
+| `def_2pt_atts` | integer | Number of defensive two-point conversion returns attempted by the team (nflfastR stat id 403). |
+| `def_2pt_made` | integer | Number of successful defensive two-point conversion returns by the team (nflfastR stat id 404). |
 | `misc_yards` | integer | Yards gained by the team through miscellaneous means not captured in standard rushing, passing, or return categories. |
 | `fumble_recovery_own` | integer | Number of the team's own fumbles that were recovered by the team itself. |
 | `fumble_recovery_yards_own` | integer | Total yards gained after recovering their own fumbles. |
@@ -3827,6 +3923,11 @@ Polars dataframe containing team stats available for the requested seasons.
 | `penalties` | integer | Total number of penalties. |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
 | `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period covered. |
+| `fumbles_forced_by_opp` | integer | Fumbles by the team's players that were forced by the opponent, counted across all units (offense, defense and special teams). |
+| `fumbles_not_forced` | integer | Fumbles by the team's players that were not forced by the opponent, counted across all units. |
+| `fumbles_out_of_bounds` | integer | Fumbles by the team's players where the ball went out of bounds, forced or not; each is also counted in fumbles_forced_by_opp or fumbles_not_forced. |
+| `fumbles_total` | integer | Total fumbles by the team's players across all units; equals fumbles_forced_by_opp + fumbles_not_forced. |
+| `fumbles_lost_total` | integer | Total fumbles lost by the team's players, counted across all units. |
 | `punt_returns` | integer | Number of punt returns. |
 | `punt_return_yards` | integer | Team punt return yards. |
 | `kickoff_returns` | integer | Total number of kickoff return attempts by the team. |
@@ -3865,6 +3966,19 @@ Polars dataframe containing team stats available for the requested seasons.
 | `gwfg_missed` | integer | Number of game-winning field goal attempts that were missed by the team's kicker. |
 | `gwfg_blocked` | integer | Number of game-winning field goal attempts that were blocked by the opposing defense. |
 | `gwfg_distance` | integer | Distance in yards of the game-winning field goal attempt(s) during the period covered. |
+| `pt_att` | integer | Number of punts kicked by the team; blocked punts are counted separately in pt_blocked. |
+| `pt_blocked` | integer | Number of the team's punts that were blocked. |
+| `pt_long` | integer | Length in yards of the team's longest punt; null when the team had no kicked punt (never 0 in the 2024 sample). |
+| `pt_yards` | integer | Total gross yards of the team's punts. |
+| `pt_inside_20` | integer | Number of the team's punts credited as ending inside the opponent's 20-yard line (nflfastR defines the spot as where the return ended). |
+| `pt_out_of_bounds` | integer | Number of the team's punts that went out of bounds without a return. |
+| `pt_downed` | integer | Number of the team's punts that were downed without a return. |
+| `pt_touchback` | integer | Number of the team's punts that resulted in a touchback. |
+| `pt_fair_caught` | integer | Number of the team's punts that were fair caught by the opponent. |
+| `pt_returned` | integer | Number of the team's punts that were returned by the opponent. |
+| `pt_return_yards` | integer | Punt return yards gained by the opponent on the team's punts; can be negative (minimum -4 in the 2024 sample). |
+| `pt_return_tds` | integer | Number of the team's punts that the opponent returned for a touchdown. |
+| `pt_net_yards` | integer | Net punting yards: pt_yards minus pt_return_yards minus 20 yards per touchback. |
 
 **Example**
 
@@ -5644,6 +5758,19 @@ Wraps `nfl/league/header`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `template` | character | Fox layout template name for the header payload; 'entity-header' in sampled data. |
+| `title` | character | Specific role title for the assignment. |
+| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | character | Fox Bifrost content path of the league entity (e.g. 'football/nfl/league/1'); entity_id is its trailing number. |
+| `content_type` | character | Fox entity type of the header's entity; 'league' for the league header. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+| `image_alt_text` | character | Alt text Fox supplies for the entity's logo image (e.g. 'National Football League'). |
+| `rank` | character | QBR Rank in specified timeframe |
+| `details` | character | ESPN's headline line string (e.g. `UGA -54.5`). |
+
 **Example**
 
 ```python
@@ -5669,6 +5796,16 @@ NFL statistical leaders (`stats-con`); who=player|team.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `players` | character | Nested list of per-player box scores. |
+| `v1` | character | Unlabeled second column of the Fox table (blank header, so named by position): the player's abbreviated name, e.g. 'J. Allen'. |
+| `pts` | character | Points scored. |
+| `gp` | character | Games played. |
+| `pts_g` | character | Points per game for the leader, as a one-decimal string (e.g. '24.0'); null on rows stacked in from a leader table that has no such column. |
+| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `td` | character | Touchdowns credited to the leader, as an integer string (e.g. '4'); null on rows stacked in from a leader table that has no such column. |
+
 **Example**
 
 ```python
@@ -5686,6 +5823,17 @@ Wraps `nfl/league/odds`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the Fox odds-board section the game is listed under; always 'GAMES' in sampled data. |
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `event_time` | character | Scheduled start time of the game as an ISO-8601 UTC timestamp string (e.g. '2026-09-20T17:00:00Z'). |
+| `event_status` | integer | Fox numeric event status code for the game; always 2 in sampled data, captured when every listed game was still to be played. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `spread` | character | Pre-game point spread from the selected provider. |
+| `to_win` | character | Moneyline for the row's team to win the game, as an American-odds string (e.g. '+196', '-238'). |
+| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+
 **Example**
 
 ```python
@@ -5702,6 +5850,20 @@ Wraps `nfl/league/playernews`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `title` | character | Specific role title for the assignment. |
+| `subtitle` | character | Player context line in 'TEAM #jersey - POSITION' form (e.g. 'HOU #12 - WR'). |
+| `headline` | character | Headline ESPN attaches to the poll release. |
+| `description` | character | ESPN's description of the stat. |
+| `impact_title` | character | Heading Fox shows above the impact paragraph; always 'Impact' in sampled data. |
+| `impact` | character | Free-text analysis paragraph (headed by impact_title) on what the news means for the player's availability or role. |
+| `date` | character | Date of the poll release. |
+| `source` | character | News source. |
+| `athlete_id` | character | ESPN athlete id. |
+| `content_uri` | character | Fox Bifrost content path of the player the news item is about, in sport/league/entity-type/id form (e.g. 'football/nfl/athletes/22256'). |
+| `web_url` | character | Site-relative foxsports.com path of the player's page (not an absolute URL), e.g. '/nfl/nico-collins-player'. |
 
 **Example**
 
@@ -5737,6 +5899,17 @@ Wraps `nfl/league/schedule`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | character | ID of the player in the 'name' column. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group (conference) id for the season. |
+
 **Example**
 
 ```python
@@ -5753,6 +5926,17 @@ Wraps `nfl/league/scores`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | character | ID of the player in the 'name' column. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group (conference) id for the season. |
 
 **Example**
 
@@ -5771,6 +5955,31 @@ Wraps `nfl/league/standings`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the Fox standings section the row's table belongs to: DIVISION, CONFERENCE or PRESEASON in sampled data. |
+| `afc_east` | character | Team's position number in the AFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `v1` | character | Unlabeled second column of the Fox table (blank header, so named by position): the team nickname, e.g. 'Bills'. |
+| `w_l_t` | character | Team's record as a win-loss-tie string with the tie count shown only when nonzero (e.g. '1-0', '1-1-1'). |
+| `pct` | character | Win percentage. |
+| `pf` | character | Personal fouls. |
+| `pa` | character | Points allowed by the team, as an integer string (e.g. '31'). |
+| `home` | character | Home team name. |
+| `away` | character | Away team name. |
+| `conf` | character | character. |
+| `div` | character | Team's division record as a 'W-L' string (e.g. '1-0', '0-1'); null on rows from standings tables that have no DIV column. |
+| `strk` | character | Current streak. |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `afc_north` | character | Team's position number in the AFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `afc_south` | character | Team's position number in the AFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `afc_west` | character | Team's position number in the AFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_east` | character | Team's position number in the NFC East standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_north` | character | Team's position number in the NFC North standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_south` | character | Team's position number in the NFC South standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `nfc_west` | character | Team's position number in the NFC West standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `american_football_conference` | character | Team's position number in the American Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+| `national_football_conference` | character | Team's position number in the National Football Conference standings table, stored as a string (e.g. '1', '2'); the column is named from that table's header cell, so it is null on rows from every other table. |
+
 **Example**
 
 ```python
@@ -5787,6 +5996,14 @@ Wraps `nfl/league/stats`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Broader category of player positions |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character | Fox's short code for the leader stat (e.g. 'PYDS', 'RTD', 'K-RET YDS'). |
+| `player` | character | Player name |
+| `value` | character | Total contract value |
 
 **Example**
 
@@ -5850,6 +6067,17 @@ Wraps `nfl/scoreboard/main`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Fox navigation list the row came from (groupList, dailyList or selectionList); always 'selectionList' in sampled data. |
+| `id` | character | ID of the player in the 'name' column. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Fox Bifrost API URL (https://api.foxsports.com/bifrost/v1/nfl/...) of the segment feed this selection loads, ending in a segment id such as 2026-1-1. |
+| `web_url` | character | Site-relative foxsports.com path of the page for this selection (not an absolute URL), carrying seasonType and week query parameters such as seasonType=reg&week=1. |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group (conference) id for the season. |
 
 **Example**
 
@@ -6010,6 +6238,18 @@ Wraps `nfl/league/teamnav`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
+| `fox_id` | character | Fox Sports team id as a string, taken from the trailing number of content_uri (e.g. '17'). |
+| `abbreviation` | character | Metric abbreviation. |
+| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `content_uri` | character | Fox Bifrost content path of the team in sport/league/entity-type/id form (e.g. 'football/nfl/teams/17'). |
+| `content_type` | character | Fox entity type of the navigation item's entity; 'team' for team rows. |
+| `web_url` | character | Site-relative foxsports.com path of the team's page (not an absolute URL), e.g. '/nfl/detroit-lions-team'. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
 
 **Example**
 

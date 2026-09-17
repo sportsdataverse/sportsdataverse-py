@@ -1,0 +1,39 @@
+schema: bref_standings
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: wins
+  type: double
+  description: ''
+- name: losses
+  type: double
+  description: ''
+- name: win_loss_pct
+  type: double
+  description: ''
+- name: gb
+  type: character
+  description: ''
+- name: pts_per_g
+  type: double
+  description: ''
+- name: opp_pts_per_g
+  type: double
+  description: ''
+- name: srs
+  type: double
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: playoffs
+  type: logical
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: league
+  type: character
+  description: ''

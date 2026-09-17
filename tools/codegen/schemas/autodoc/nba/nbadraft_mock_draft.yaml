@@ -1,0 +1,30 @@
+schema: nbadraft_mock_draft
+kind: dataframe
+columns:
+- name: round
+  type: integer
+  description: ''
+- name: pick
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: height
+  type: character
+  description: ''
+- name: weight
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: school
+  type: character
+  description: ''
+- name: class
+  type: character
+  description: ''

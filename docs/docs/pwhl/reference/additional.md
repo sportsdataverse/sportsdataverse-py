@@ -438,7 +438,7 @@ by season, not `season` (name string). The resolved integer is passed as the
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character | URL of the small-format team logo image for the PWHL leader-board entry. |
-| `stat_formatted` | character | Human-readable string representation of the player's leading statistic value (e.g., "22G", "0.95"). |
+| `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
 | `type_formatted` | character | Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Save Percentage"). |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character | URL of the small-format headshot image for the PWHL leader-board player. |
@@ -789,6 +789,8 @@ PWHL live scorebar (today ± 3 days).
 | `venue_location` | character | City and/or arena name indicating the physical location where the game is played. |
 | `league_name` | character | League name. |
 | `league_code` | character | Short code identifying the league for this scorebar record (e.g., "PWHL"). |
+| `time_tbd` | character | Scorebar flag string named for a to-be-determined start time; '0' in every sampled row, so the non-zero case was not observed. |
+| `date_tbd` | character | Scorebar flag string named for a to-be-determined game date; '0' in every sampled row, so the non-zero case was not observed. |
 | `timezone_short` | character | Abbreviated timezone label for the game's scheduled start time (e.g., "ET", "CT"). |
 | `home_logo` | character | Home team logo URL. |
 | `visitor_logo` | character | URL of the logo image for the visiting team. |
@@ -917,7 +919,8 @@ PWHL standings — one row per team.
 | `team_code` | character | Team abbreviation. |
 | `losses` | character | Losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `points` | character | Total points (goals + assists). |
+| `points` | integer | Total points (goals + assists). |
+| `streak_wl` | character | Present but unpopulated in the sampled PWHL standings (empty string in every row); the name suggests a win/loss streak, but no value was observed to confirm a format. |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
 | `non_reg_wins` | character | Non-regulation wins. |
@@ -1124,6 +1127,7 @@ PWHL team roster for a given team + season.
 | `latest_team_id` | character | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character | Text label or descriptor indicating the player's veteran status or experience classification in the PWHL. |
+| `team_id` | character | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `division` | character | Division identifier. |
 | `tp_jersey_number` | character | Jersey number assigned to the player on the current PWHL team roster, as provided by the HockeyTech feed. |

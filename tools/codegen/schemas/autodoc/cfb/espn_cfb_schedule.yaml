@@ -67,6 +67,9 @@ columns:
 - name: venue_address_city
   type: character
   description: ''
+- name: venue_address_state
+  type: character
+  description: ''
 - name: venue_address_country
   type: character
   description: ''
@@ -102,6 +105,18 @@ columns:
   description: ''
 - name: status_type_short_detail
   type: character
+  description: ''
+- name: groups_id
+  type: character
+  description: ''
+- name: groups_name
+  type: character
+  description: ''
+- name: groups_short_name
+  type: character
+  description: ''
+- name: groups_is_conference
+  type: logical
   description: ''
 - name: format_regulation_periods
   type: integer
@@ -219,19 +234,4 @@ columns:
   description: ''
 - name: week
   type: integer
-  description: ''
-- name: venue_address_state
-  type: character
-  description: ''
-- name: groups_id
-  type: character
-  description: ''
-- name: groups_name
-  type: character
-  description: ''
-- name: groups_short_name
-  type: character
-  description: ''
-- name: groups_is_conference
-  type: logical
   description: ''
