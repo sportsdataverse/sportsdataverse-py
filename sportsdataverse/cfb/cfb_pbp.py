@@ -126,6 +126,17 @@ _VENDOR_PUNT_RETURNER_RE = (
 )
 
 
+def _signed_yards(tail: pl.Expr) -> pl.Expr:
+    """The first yardage in *tail*, negative when written "-N" or "a loss of N".
+
+    The return-yardage chains read "the first number after the clause", and read it unsigned:
+    "return  for -55 yds" stored 55 and "returned by Darius Carey for a loss of 9 yards" stored 9.
+    """
+    g = tail.str.extract_groups(r"(?i)(-|loss of )?(\d+)")
+    n = g.struct.field("2").cast(pl.Int32)
+    return pl.when(g.struct.field("1").is_not_null()).then(-n).otherwise(n)
+
+
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
     """Remove formation tags and the jersey number from an extracted name.
 
@@ -4126,9 +4137,9 @@ class CFBPlayProcess(object):
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
             .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)run for (\d+)").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)rush for (\d+)").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)rush for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Run")))
             .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Rush")))
@@ -4145,7 +4156,7 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == False),
             )
-            .then(pl.col("cleaned_text").str.extract(r"(?i)for (\d+) yards").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)for (-?\d+) yards").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
@@ -4169,7 +4180,7 @@ class CFBPlayProcess(object):
             )
             .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)for (\d+)").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)for (-?\d+)").cast(pl.Int32))
             .when(
                 (pl.col("pass") == True).and_(
                     pl.col("cleaned_text").str.contains(
@@ -4204,14 +4215,10 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("pass") == True).and_(pl.col("int") == True).and_(pl.col("text").str.contains(r"(?i)for a TD")),
             )
-            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
             .when((pl.col("pass") == True).and_(pl.col("int") == True))
             .then(
-                pl.col("text")
-                .str.replace("for a 1st", "")
-                .str.extract(r"(?i)for (.+)")
-                .str.extract(r"(\d+)")
-                .cast(pl.Int32),
+                _signed_yards(pl.col("text").str.replace("for a 1st", "").str.extract(r"(?i)for (.+)")),
             )
             .otherwise(None),
             yds_kickoff=pl.when(pl.col("kickoff_play") == True)
@@ -4238,9 +4245,9 @@ class CFBPlayProcess(object):
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
             .then(0)
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)returned by")))
-            .then(pl.col("text").str.extract(r"(?i)returned by (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned by (.+)")))
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)return\s+for")))
-            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
             .otherwise(None),
             yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(0)
@@ -4272,17 +4279,19 @@ class CFBPlayProcess(object):
             # Dominant 2005-2013 shape, previously never matched: 18,746 real
             # returns carried NULL yardage ("...punt for 39 yards, returned by
             # Haruki Nakamura for 1 yard to the Cincy 16.").
-            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned by .{2,40}? for \d+ yard")))
-            .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (\d+) yard", 1).cast(pl.Int32))
-            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned \d+ yards")))
-            .then(pl.col("text").str.extract(r"(?i)returned (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .when(
+                (pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned by .{2,40}? for -?\d+ yard"))
+            )
+            .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (-?\d+) yard", 1).cast(pl.Int32))
+            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned -?\d+ yards")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned (.+)")))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
-            .then(pl.col("text").str.extract(r"(?i)returns for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returns for (.+)")))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
-            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
             .otherwise(None),
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
-            .then(pl.col("text").str.extract(r"(?i)return\s+for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
             .otherwise(None),
             # The first number after "sacked" is the YARDLINE in 2004-2007 text --
             # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the

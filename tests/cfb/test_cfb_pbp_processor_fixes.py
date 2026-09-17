@@ -15,6 +15,9 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401032062.json`` -- Western Michigan @ BYU, 2018 ("Timeout WESTRN MICHIGAN").
 * ``summary_401752746.json`` -- Auburn @ Arkansas, 2025 ("Timeout , clock" names no team).
 * ``summary_401762858.json`` -- Buffalo @ Central Michigan, 2025 ("sacked  by", "fumbled,  return  for 85 yds").
+* ``summary_243042579.json`` -- Tennessee @ South Carolina, 2004 ("for -2 yards", "returned -1 yards by").
+* ``summary_401636929.json`` -- Baylor @ West Virginia, 2024 ("return for a loss of 1 yard" on a kickoff).
+* ``summary_401858221.json`` -- Old Dominion @ Virginia Tech, 2026 ("return  for -55 yds").
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -277,3 +280,16 @@ def test_timeout_shortened_team_names():
     blank = _plays(401752746).filter(pl.col("text").str.starts_with("Timeout , clock"))
     assert blank.height == 14
     assert not (blank["homeTimeoutCalled"] | blank["awayTimeoutCalled"]).any()
+
+
+# --- C23: negative yardage keeps its sign ---------------------------------------------------------
+
+
+def test_negative_yardage_keeps_its_sign():
+    usc = _plays(243042579)
+    assert _row(usc, "Kickoff returned by Jamon Meredith (USC) for -2 yards.")["yds_kickoff_return"] == -2
+    assert _row(usc, "returned -1 yards by Noah Whiteside (USC)")["yds_punt_return"] == -1
+    assert _row(usc, "Robert Meachem (TENN) rushed right side for -4 yards.")["yds_rushed"] == -4
+    assert _row(usc, "complete to Noah Whiteside (USC) for -11 yards.")["yds_receiving"] == -11
+    assert _row(_plays(401636929), "Ashtyn Hawkins return for a loss of 1 yard")["yds_kickoff_return"] == -1
+    assert _row(_plays(401858221), "return  for -55 yds")["yds_fumble_return"] == -55
