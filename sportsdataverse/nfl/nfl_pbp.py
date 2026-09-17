@@ -345,24 +345,28 @@ def _nfl_repair_scores(scores, scoring, texts):
     row, so a run of bad rows heals rather than re-seeding itself from the
     previous bad row.
     """
-    # A rise on a non-scoring row that the rest of the game keeps is a score ESPN
-    # recorded one row late (the 2006 feed puts the try on the kickoff row); one
-    # the feed takes back again is the error.
+    # A rise on the row after a scoring play that the rest of the game keeps is a
+    # try ESPN recorded one row late (the 2006 feed puts it on the kickoff row);
+    # one the feed takes back again is the error.
     later_min, m = [None] * len(scores), None
     for i in range(len(scores) - 1, -1, -1):
         later_min[i] = m
         if scores[i] is not None:
             m = scores[i] if m is None else min(m, scores[i])
-    out, prev = [], None
+    out, prev, prev_scoring = [], None, False
     for i, (score, is_scoring, text) in enumerate(zip(scores, scoring, texts)):
         if score is not None and prev is not None:
             delta = score - prev
-            taken_back = later_min[i] is not None and later_min[i] < score
-            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring and taken_back):
+            # a try booked one row late: the row after a scoring play rises and the
+            # rest of the game keeps it. A rise anywhere else is not accepted even
+            # when kept -- the 2007 feed books a kick's points on the row BEFORE it.
+            late_try = prev_scoring and not (later_min[i] is not None and later_min[i] < score)
+            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring and not late_try):
                 score = prev
         out.append(score)
         if score is not None:
             prev = score
+        prev_scoring = bool(is_scoring)
     return out
 
 

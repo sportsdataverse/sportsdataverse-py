@@ -12,6 +12,7 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_400874485_trimmed.json.gz`` -- NYG @ PHI, 2016 week 16 ("34 Yrd Interception Return")
 * ``summary_261022011_trimmed.json.gz`` -- WSH @ IND, 2006 week 7 (the try booked on the kickoff row)
 * ``summary_291115014_trimmed.json.gz`` -- NO @ STL, 2009 week 10 (end.team flipped on the final play)
+* ``summary_271209010_trimmed.json.gz`` -- TEN @ SD, 2007 week 14 (the per-row score leads by a row)
 """
 
 from __future__ import annotations
@@ -199,6 +200,20 @@ def test_a_try_recorded_on_the_next_row_is_kept(ind_wsh_2006):
     assert _row(f, 2610220114009)["end.awayScore"] == 22
     assert f.tail(1).select("end.homeScore", "end.awayScore").row(0) == (36, 22)  # the header's final
     assert (f["end.awayScore"].diff().fill_null(0) >= 0).all()
+
+
+@pytest.fixture(scope="module")
+def sd_ten_2007() -> pl.DataFrame:
+    return _process(271209010)
+
+
+def test_a_score_booked_on_the_row_before_the_kick_stays_on_the_kick(sd_ten_2007):
+    # the 2007 feed's per-row score leads by a row: the incompletion before Nate
+    # Kaeding's 20-yarder already reads 3; the kick is the scoring row
+    f = sd_ten_2007
+    assert _row(f, 2712090102153)["end.awayScore"] == 0
+    fg = _row(f, 2712090102175)
+    assert (fg["start.awayScore"], fg["end.awayScore"]) == (0, 3)
 
 
 # ---------------------------------------------------------------------------
