@@ -333,3 +333,15 @@ def test_hyphenated_side_code_parses() -> None:
     titles = parse_cfb_ncaa_drive_titles(_variant("1735539"))
     assert titles.get_column("team").null_count() == 0
     assert titles.filter(pl.col("start_yard_line") == "SU-ETSU25").height > 0
+
+
+def test_pass_result_does_not_depend_on_the_passer_name_format() -> None:
+    """2019 pages print "First Last" names the "Last,First" pattern cannot match; a completion is still one."""
+    df = parse_cfb_ncaa_pbp(_variant("1735539"))
+    passes = df.filter(pl.col("play_type") == "pass")
+    comp = passes.filter(pl.col("play_text").str.contains(" pass complete"))
+    assert comp.height >= 10
+    assert comp.get_column("pass_complete").to_list() == [True] * comp.height
+    assert comp.get_column("yards_gained").null_count() == 0
+    inc = passes.filter(pl.col("play_text").str.contains(" pass incomplete"))
+    assert inc.height > 0 and inc.get_column("pass_complete").to_list() == [False] * inc.height

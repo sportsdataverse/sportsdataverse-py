@@ -341,15 +341,17 @@ def _decompose_play_text(text: str) -> "dict":
             out["passer"] = m.group("passer")
     elif "pass complete" in tl or "pass incomplete" in tl or "pass intercepted" in tl:
         out["play_type"] = "pass"
+        # the result is in the text whether or not the passer's name matches _NAME
+        # (2019 pages print "First Last", which the "Last,First" pattern cannot)
+        complete = "pass complete" in tl
+        out["pass_complete"] = complete
+        out["yards_gained"] = _yards_gained(text) if complete else 0
         m = _PASS_RE.search(text)
         if m:
             out["passer"] = m.group("passer")
             out["receiver"] = m.groupdict().get("receiver")
             out["pass_depth"] = (m.groupdict().get("depth") or "").lower() or None
             out["pass_direction"] = (m.groupdict().get("dir") or "").lower() or None
-            complete = m.group("result").lower() == "complete"
-            out["pass_complete"] = complete
-            out["yards_gained"] = _yards_gained(text) if complete else 0
     elif "kneel" in tl:
         out["play_type"] = "kneel"
         out["yards_gained"] = _yards_gained(text)
