@@ -82,5 +82,6 @@ Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` and `test_cfb_ncaa_cfbfastr.py`.
 |---|---|---|---|---|
 | `mfb_play_by_play_1735106.html` | 1735106 | Villanova @ Colgate (2019, 34-14) | 2019-era text: `"for loss of N yards"`, a fumble advance with a later `"for 1 yard"` clause, `"to the 50 yardline"` | <https://stats.ncaa.org/contests/1735106/play_by_play> |
 | `mfb_play_by_play_6386303.html` | 6386303 | WestConn @ New Haven (2025-10-11, 0-69) | 6-letter side code (`WSTCNN25`); sacks and kneels read `"for loss of N yards"` | <https://stats.ncaa.org/contests/6386303/play_by_play> |
+| `mfb_play_by_play_6396796.html` | 6396796 | Auburn @ Oklahoma (2025-09-20, 17-24) | play text writes side codes the drive headers never use (`"OU36"` for the headers' `OKL`) | <https://stats.ncaa.org/contests/6396796/play_by_play> |
 | `mfb_play_by_play_1736435.html` | 1736435 | SFA @ Lamar University (2019-09-28, 24-17) | side code ending in a digit: `"SFA225"` is `SFA2` + 25 | <https://stats.ncaa.org/contests/1736435/play_by_play> |
 | `mfb_play_by_play_1735539.html` | 1735539 | Shorter @ ETSU (2019-09-07, 10-48) | hyphenated side code `SU-ETSU` (drive titles + yard lines) | <https://stats.ncaa.org/contests/1735539/play_by_play> |

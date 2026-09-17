@@ -31,6 +31,8 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 
+from sportsdataverse.cfb.cfb_ncaa_pbp import _norm_code, _split_yard_line, _yl_candidates
+
 if TYPE_CHECKING:
     import pandas as pd
 
@@ -258,6 +260,49 @@ def _own_side(df: pl.DataFrame) -> "dict[str, str]":
     return a if score_a >= score_b else b
 
 
+def _end_code_aliases(df: pl.DataFrame, own_side: "dict[str, str]") -> "dict[str, str]":
+    """Map play-text side codes the drive headers never use ("OU" for "OKL") onto a game code.
+
+    A clean gain of ``g`` yards from ``yards_to_goal`` ends ``yards_to_goal - g`` from
+    the goal, so an unresolved text end token "X n" with ``n`` equal to that is the
+    defense's side and with ``n`` equal to 100 minus it the offense's own side.
+    Majority vote per text code.
+    """
+    codes = list(own_side.values())
+    votes: "dict[str, dict[str, int]]" = {}
+    clean = df.filter(
+        pl.col("play_type").is_in(["rush", "pass", "sack"])
+        & pl.col("yards_gained").is_not_null()
+        & pl.col("end_yard_line").is_not_null()
+        & (pl.col("penalty_flag") != True)  # noqa: E712
+        & (pl.col("is_fumble") != True)  # noqa: E712
+    )
+    for r in clean.select("offense", "yard_line_side", "yard_line_number", "yards_gained", "end_yard_line").to_dicts():
+        off, side, num = r["offense"], r["yard_line_side"], r["yard_line_number"]
+        if off not in own_side or side is None or num is None or _split_yard_line(r["end_yard_line"], codes):
+            continue
+        to_go = (100 - num if own_side[off] == side else num) - r["yards_gained"]
+        if not 0 < to_go < 100 or to_go == 50:
+            continue
+        opp = next(c for c in codes if c != own_side[off])
+        for code, n in _yl_candidates(r["end_yard_line"]):
+            owner = opp if n == to_go else own_side[off] if n == 100 - to_go else None
+            if owner:
+                tally = votes.setdefault(_norm_code(code), {})
+                tally[owner] = tally.get(owner, 0) + 1
+    return {k: max(v, key=lambda c: v[c]) for k, v in votes.items()}
+
+
+def _split_end_yard_line(
+    token: "str | None", codes: "list[str]", aliases: "dict[str, str]"
+) -> "tuple[str | None, int] | None":
+    """(game side code, yard) of a play-text end yard line; learned aliases after the shared rule."""
+    split = _split_yard_line(token, codes)
+    if split or not token:
+        return split
+    return next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
+
+
 def _play_type_label(r: "dict[str, Any]") -> str:
     """Map the NCAA structural play_type to the cfbfastR play_type vocabulary."""
     pt, td = r["play_type"], bool(r["is_touchdown"])
@@ -413,6 +458,8 @@ def to_cfbfastr(
             .alias("offense")
         )
     own_side = _own_side(pbp)
+    side_codes = list(own_side.values())
+    end_aliases = _end_code_aliases(pbp, own_side) if own_side else {}
     teams = (
         sorted(set(title_team.values()))
         if len(set(title_team.values())) == 2
@@ -612,10 +659,10 @@ def to_cfbfastr(
         if side is not None and num is not None and offense in own_side:
             ytg = 100 - num if own_side[offense] == side else num
         end_ytg = None
-        eyl = r["end_yard_line"] or ""
-        em = re.match(r"([A-Za-z&]{1,4})(\d+)$", eyl)
-        if em and offense in own_side:
-            end_ytg = 100 - int(em.group(2)) if own_side[offense] == em.group(1) else int(em.group(2))
+        end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
+        if end and offense in own_side:
+            end_side, end_num = end
+            end_ytg = 100 - end_num if end_side is not None and own_side[offense] == end_side else end_num
 
         pt = r["play_type"]
         is_rush = pt in ("rush", "kneel")

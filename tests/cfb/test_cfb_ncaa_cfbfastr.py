@@ -225,3 +225,30 @@ def test_ot_bundle_final_and_synthesized_drives(
     assert df.filter(pl.col("ot_synthesized") == True).height > 0  # noqa: E712
     pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
     assert {pos: pos_s, dpos: dpos_s} == {"Houston": 27, "Oregon St.": 24}
+
+
+# --- end-of-play field position ---------------------------------------------
+# 6386303 WestConn @ New Haven (2025) -- 6-letter side code "WSTCNN"
+# 6396796 Auburn @ Oklahoma (2025)    -- play text writes "OU36" for the headers' "OKL"
+
+
+def test_end_yards_to_goal_follows_a_clean_gain() -> None:
+    """A clean gain of g yards ends at yards_to_goal - g (no fumble, penalty, lateral or TD)."""
+    for cid in ("6386303", "6396796"):
+        df = _frame(cid)
+        clean = df.filter(
+            pl.col("orig_play_type").is_in(["rush", "pass", "sack"])
+            & pl.col("yards_gained").is_not_null()
+            & pl.col("yards_to_goal").is_not_null()
+            & (pl.col("penalty_flag") == False)  # noqa: E712
+            & (pl.col("fumble_vec") == False)  # noqa: E712
+            & (pl.col("touchdown") == False)  # noqa: E712
+            & pl.col("play_text").str.contains(r"to the ")
+            & ~pl.col("play_text").str.contains("lateral")
+        )
+        assert clean.height > 50, cid
+        bad = clean.filter(
+            pl.col("yards_to_goal_end").is_null()
+            | (pl.col("yards_to_goal_end") != pl.col("yards_to_goal") - pl.col("yards_gained"))
+        ).select("yards_to_goal", "yards_gained", "yards_to_goal_end", "play_text")
+        assert bad.height == 0, (cid, bad.rows()[:5])
