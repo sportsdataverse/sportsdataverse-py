@@ -2,7 +2,7 @@ schema: load_nfl_ff_playerids
 kind: dataframe
 columns:
 - name: mfl_id
-  type: integer
+  type: character
   description: ''
 - name: sportradar_id
   type: character
@@ -17,13 +17,13 @@ columns:
   type: character
   description: ''
 - name: sleeper_id
-  type: integer
+  type: character
   description: ''
 - name: nfl_id
   type: character
   description: ''
 - name: espn_id
-  type: integer
+  type: character
   description: ''
 - name: yahoo_id
   type: character
@@ -32,7 +32,7 @@ columns:
   type: character
   description: ''
 - name: cbs_id
-  type: integer
+  type: character
   description: ''
 - name: pfr_id
   type: character
@@ -41,22 +41,22 @@ columns:
   type: character
   description: ''
 - name: rotowire_id
-  type: integer
+  type: character
   description: ''
 - name: rotoworld_id
   type: character
   description: ''
 - name: ktc_id
-  type: integer
+  type: character
   description: ''
 - name: stats_id
-  type: integer
+  type: character
   description: ''
 - name: stats_global_id
-  type: integer
+  type: character
   description: ''
 - name: fantasy_data_id
-  type: integer
+  type: character
   description: ''
 - name: swish_id
   type: character
