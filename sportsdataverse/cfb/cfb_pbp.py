@@ -1019,14 +1019,15 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
-    """Chronological play sort with a 2023+ ESPN overtime correction.
+    """Chronological play sort with an overtime correction.
 
-    Regulation plays sort by ``(id, start.adj_TimeSecsRem)``. From 2023 ESPN slots
-    every overtime play into the same ``period.number`` rather than adding new
-    periods, and the clock-derived ``adj_TimeSecsRem`` collapses in OT -- so OT
-    plays (``period.number >= 5``) are instead ordered by ``sequenceNumber`` and
-    appended after regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__``
-    (commit ``a3dff20``); no-op for games without OT.
+    Regulation plays sort by ``(id, start.adj_TimeSecsRem)``. ESPN slots overtime
+    plays into one ``period.number`` (all of OT is period 5 from 2023) and the
+    clock-derived ``adj_TimeSecsRem`` collapses in OT, so OT plays (``period.number
+    >= 5``) are ordered separately -- by ``sequenceNumber`` or ``id``, whichever
+    keeps the score from stepping backwards (see below) -- and appended after
+    regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__`` (commit
+    ``a3dff20``); no-op for games without OT.
     """
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"])
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
@@ -1037,7 +1038,28 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     if ot.height == 0:
         return plays_df
     non_ot = plays_df.filter((period < 5).or_(period.is_null()))
-    ot = ot.sort(pl.col("sequenceNumber").cast(pl.Int64, strict=False))
+    # Neither key is chronological in every era. ``sequenceNumber`` restarts per drive through
+    # 2013 and is a garbled running count in the 2025+ vendor feed (an "End of Game" row at 82
+    # among plays at 161-186), while ``id`` is a re-keyed insert in the 2014-2024 scheme (a
+    # touchdown at ...021 that belongs before the "End of OT" row at ...020). Take the order
+    # under which the score steps backwards least; on a tie, ``sequenceNumber`` when it is
+    # ESPN's period-encoded 105xxxxxx scheme, else ``id``. Over 99 overtime games 2004-2026
+    # this leaves 31 backward steps against 60 for sequenceNumber alone and 41 for id alone.
+    seq = pl.col("sequenceNumber").cast(pl.Int64, strict=False)
+    by_seq = ot.sort(seq, pl.col("id"))
+    by_id = ot.sort(pl.col("id"))
+    if "homeScore" in ot.columns and "awayScore" in ot.columns:
+
+        def backsteps(frame: pl.DataFrame) -> int:
+            h = frame["homeScore"].cast(pl.Int64, strict=False).diff()
+            a = frame["awayScore"].cast(pl.Int64, strict=False).diff()
+            return int(((h < 0) | (a < 0)).sum())
+
+        seq_scheme = (ot.select(seq.min()).item() or 0) >= 100_000_000
+        s_seq, s_id = backsteps(by_seq), backsteps(by_id)
+        ot = by_seq if s_seq < s_id or (s_seq == s_id and seq_scheme) else by_id
+    else:
+        ot = by_seq
     return pl.concat([non_ot, ot])
 
 
@@ -2543,6 +2565,22 @@ class CFBPlayProcess(object):
             subset=["text", "id", "type.text", "start.down", "sequenceNumber"],
             keep="last",
             maintain_order=True,
+        )
+        # An "End of Game" / "End of OT" marker is dropped below, but it is often the only row
+        # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
+        # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
+        # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
+        # it, so the game still ends at its final; a lower score on a marker is a glitch and is
+        # ignored.
+        marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
+        play_df = play_df.with_columns(
+            *[
+                pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
+                .then(pl.col(c).shift(-1))
+                .otherwise(pl.col(c))
+                .alias(c)
+                for c in ("homeScore", "awayScore")
+            ]
         )
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,

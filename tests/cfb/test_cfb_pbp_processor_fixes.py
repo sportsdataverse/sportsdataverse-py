@@ -24,6 +24,9 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401752844.json`` -- Iowa @ Rutgers, 2025 ("J. Scullion kick for 65 yds", the short kickoff form).
 * ``summary_401309611.json`` -- Troy @ UL Monroe, 2021 (two timeout rows show 29-10 between a 29-16 touchdown and kickoff).
 * ``summary_400869817.json`` -- Nicholls @ South Alabama, 2016 (the last row shows 41-34 after the 41-40 final).
+* ``summary_243040130.json`` -- Michigan State @ Michigan, 2004 (3OT; sequenceNumber restarts per drive).
+* ``summary_401301042.json`` -- East Carolina @ Memphis, 2021 (OT; the winning touchdown row is missing, the "End of OT" marker carries 29-30).
+* ``summary_401858224.json`` -- Wake Forest @ Purdue, 2026 (2OT; the vendor feed's sequenceNumber is a garbled running count).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -340,6 +343,20 @@ def test_score_glitches_reverted_and_last_row_anchored():
     last = _plays(400869817).row(-1, named=True)
     assert last["type.text"] == "Penalty"
     assert (last["start.awayScore"], last["end.awayScore"]) == (40, 40)
+
+
+# --- C31: an overtime game ends at the header's final score --------------------------------------
+
+
+def test_overtime_games_end_at_the_header_final():
+    for game_id, final in ((243040130, (45, 37)), (401301042, (29, 30)), (401858224, (36, 38)), (401112081, (23, 29))):
+        plays = _plays(game_id)
+        last = plays.row(-1, named=True)
+        assert (last["end.homeScore"], last["end.awayScore"]) == final, game_id
+        assert plays.filter(pl.col("period.number") >= 5).height > 0, game_id
+    # 2004: ids are chronological and sequenceNumber restarts every drive, so the OT rows keep id order
+    ot = _plays(243040130).filter(pl.col("period.number") >= 5)
+    assert ot["id"].is_sorted()
 
 
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------
