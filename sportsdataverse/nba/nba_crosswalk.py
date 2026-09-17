@@ -27,6 +27,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     str_id,
 )
 from sportsdataverse._crosswalk_basketball_sources import (
+    _stats_result_set,
     espn_scoreboard_games,
     espn_team_directory,
     require_source,
@@ -252,7 +253,11 @@ def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
     does this.
 
     Raises:
-        CrosswalkSourceError: The game log could not be produced.
+        CrosswalkSourceError: The game log fetch failed, was refused (the
+            runtime's ``{}`` for a non-200 / rate limit / blank body), or had
+            rows that did not parse. Only a real ``LeagueGameLog`` set with no
+            rows falls back a season. Throttles are retried only when
+            ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``).
     """
     out: Dict[str, str] = {}
     for year in (season, season - 1):
@@ -261,13 +266,14 @@ def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
         # Default-bound so the closure captures this iteration's season, not the
         # loop variable's final value. The provider import is inside the callable
         # so a missing/broken nba_stats module raises CrosswalkSourceError too.
+        # Raw payload: a refused request is `{}`, which would parse to the same
+        # zero rows as a season that has not tipped off.
         def _fetch(s: str = stats_season) -> Any:
             from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
 
-            raw = nba_stats_leaguegamelog(league_id="00", season=s, **kwargs)
-            return raw.get("LeagueGameLog") if isinstance(raw, dict) else raw
+            return nba_stats_leaguegamelog(league_id="00", season=s, return_parsed=False, **kwargs)
 
-        log = require_source(f"nba_stats_leaguegamelog(season={stats_season!r})", _fetch)
+        log = _stats_result_set(f"nba_stats_leaguegamelog(season={stats_season!r})", _fetch, "LeagueGameLog")
         if log.height == 0 or "team_abbreviation" not in log.columns:
             continue
         ids = log.select(str_id(log, "team_id")).to_series().to_list()
@@ -290,9 +296,12 @@ def _stats_team_directory(season: int, **kwargs: Any) -> pl.DataFrame:
 
     Raises:
         CrosswalkSourceError: ``leaguestandingsv3`` or ``leaguegamelog`` could
-            not be produced. A standings payload that renders to zero rows is
+            not be produced: the fetch raised, was refused (the runtime's
+            ``{}`` for a non-200 / rate limit / blank body), or had rows that
+            did not parse. Only a real ``Standings`` set with no rows is
             provably empty (a season whose standings have not opened) and
-            returns a typed empty frame instead.
+            returns a typed empty frame instead. Throttles are retried only
+            when ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``).
     """
     stats_season = f"{season - 1}-{str(season)[-2:]}"
     label = f"nba_stats_leaguestandingsv3(season={stats_season!r})"
@@ -300,10 +309,9 @@ def _stats_team_directory(season: int, **kwargs: Any) -> pl.DataFrame:
     def _fetch() -> Any:
         from sportsdataverse.nba.nba_stats import nba_stats_leaguestandingsv3
 
-        raw = nba_stats_leaguestandingsv3(season=stats_season, **kwargs)
-        return raw.get("Standings") if isinstance(raw, dict) else raw
+        return nba_stats_leaguestandingsv3(season=stats_season, return_parsed=False, **kwargs)
 
-    standings = require_source(label, _fetch)
+    standings = _stats_result_set(label, _fetch, "Standings")
     if standings.height == 0:
         return pl.DataFrame(schema=_STATS_SCHEMA)
     tricode = _stats_team_tricodes(season, **kwargs)
@@ -374,7 +382,10 @@ def nba_team_crosswalk(
     Note:
         ``stats.nba.com`` TLS-fingerprint-blocks plain ``requests`` and hangs
         on datacenter IPs; the live path needs ``curl_cffi`` and a residential
-        connection. Pass ``stats=`` to build fully offline.
+        connection. Pass ``stats=`` to build fully offline. A refused or
+        throttled Stats call raises rather than emptying ``nba_*``; the runtime
+        retries only when ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``,
+        backoff ``SDV_PY_NBA_STATS_BACKOFF``).
 
     Example:
         Quick start::
@@ -492,6 +503,15 @@ def nba_player_crosswalk(
 
     Returns:
         ``pl.DataFrame`` (or pandas), one row per ESPN athlete, 21 columns.
+
+    Raises:
+        CrosswalkSourceError: A Stats team-directory or ``commonteamroster``
+            call for any team failed or was refused (stats.nba.com answers a
+            throttle or block with an empty body), so ``nba_*`` would
+            otherwise be silently null. Throttles are retried only when
+            ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``, backoff
+            ``SDV_PY_NBA_STATS_BACKOFF``); without it one transient refusal
+            aborts the whole build.
 
     Example:
         Quick start::

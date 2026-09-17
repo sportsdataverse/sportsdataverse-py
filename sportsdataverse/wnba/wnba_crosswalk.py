@@ -394,6 +394,15 @@ def wnba_player_crosswalk(
     Returns:
         ``pl.DataFrame`` (or pandas), one row per ESPN athlete, 21 columns.
 
+    Raises:
+        CrosswalkSourceError: A Stats team-directory or ``commonteamroster``
+            call for any team failed or was refused (stats.wnba.com answers a
+            throttle or block with an empty body), so ``wnba_*`` would
+            otherwise be silently null. Throttles are retried only when
+            ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``, backoff
+            ``SDV_PY_NBA_STATS_BACKOFF``); without it one transient refusal
+            aborts the whole build.
+
     Example:
         Quick start::
 

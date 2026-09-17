@@ -150,6 +150,58 @@ def require_source(label: str, fetch: Callable[[], Any]) -> pl.DataFrame:
     return out
 
 
+_STATS_RETRY_HINT = "set SDV_PY_NBA_STATS_RETRIES / SDV_PY_NBA_STATS_BACKOFF to retry; default is 0 retries"
+
+
+def _stats_result_set(label: str, fetch: Callable[[], Any], name: str) -> pl.DataFrame:
+    """One named result set from a RAW NBA/WNBA Stats payload, raising unless it was produced.
+
+    ``parse_nba_stats_result_sets`` alone cannot tell a real empty answer from
+    a failed one: the Stats runtime answers a refused request (non-200, rate
+    limit, blank body) with ``{}``, and the parser drops rows whose field count
+    does not match the headers. Both render as zero rows. So the envelope is
+    read first -- only a present ``name`` set is an answer, and only an empty
+    ``rowSet`` is an empty one.
+
+    Args:
+        label: The call, with its league / team / season, quoted into errors.
+        fetch: Zero-argument callable returning the raw payload
+            (``return_parsed=False``). Put the provider import inside it.
+        name: Result-set name, e.g. ``"CommonTeamRoster"``.
+
+    Returns:
+        The parsed result set; zero rows only when its ``rowSet`` was empty.
+
+    Raises:
+        CrosswalkSourceError: The fetch raised; the payload had no ``name``
+            result set; or it had rows that did not all parse. The runtime
+            retries a throttle only when ``SDV_PY_NBA_STATS_RETRIES`` is set
+            (default ``0``, backoff ``SDV_PY_NBA_STATS_BACKOFF``), so without it
+            one transient refusal raises here.
+    """
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+    try:
+        payload = fetch()
+    except Exception as exc:
+        raise CrosswalkSourceError(f"{label} failed: {type(exc).__name__}: {exc} ({_STATS_RETRY_HINT})") from exc
+    sets = payload.get("resultSets") if isinstance(payload, dict) else None
+    named = [rs for rs in sets if isinstance(rs, dict) and rs.get("name") == name] if isinstance(sets, list) else []
+    if not named:
+        raise CrosswalkSourceError(
+            f"{label} returned no {name} result set (non-200, rate limit, or blank body; {_STATS_RETRY_HINT}); "
+            f"got {type(payload).__name__} with keys {sorted(payload)[:10] if isinstance(payload, dict) else '-'}"
+        )
+    rows = named[0].get("rowSet") or []
+    frame = parse_nba_stats_result_sets(payload, result_set=name)
+    height = frame.height if isinstance(frame, pl.DataFrame) else 0
+    # Strict equality, not only "rows present but zero parsed": a partly ragged
+    # rowSet would otherwise drop some players silently.
+    if not isinstance(frame, pl.DataFrame) or height != len(rows):
+        raise CrosswalkSourceError(f"{label}: {name} carried {len(rows)} rows but {height} parsed (malformed rowSet)")
+    return frame
+
+
 def _pick(df: pl.DataFrame, *candidates: str) -> pl.Expr:
     """First present column among ``candidates``, else a null ``Utf8`` literal."""
     for name in candidates:
@@ -602,14 +654,18 @@ def stats_rosters(
 
     Raises:
         CrosswalkSourceError: The fetch raised (timeout, missing
-            ``curl_cffi``), or the response carried no ``CommonTeamRoster``
+            ``curl_cffi``); the response carried no ``CommonTeamRoster``
             result set -- which is how the Stats runtime reports a 403, a rate
             limit or a blank body, since it answers those with ``{}`` rather
-            than raising.
+            than raising; or the set had rows that did not parse.
 
     Note:
-        ``stats.{nba,wnba}.com`` hangs on datacenter IPs, so this raises there
-        instead of returning an empty roster.
+        The runtime retries a refused or timed-out request only when
+        ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``; backoff seconds
+        ``SDV_PY_NBA_STATS_BACKOFF``). Without it, one transient throttle on
+        any team aborts the whole player crosswalk -- set it for full-league
+        builds. ``stats.{nba,wnba}.com`` hangs on datacenter IPs, so this
+        raises there instead of returning an empty roster.
 
     Example:
         Quick start::
@@ -634,27 +690,12 @@ def stats_rosters(
         from sportsdataverse.nba.nba_stats import nba_stats_commonteamroster as fetch
     else:
         from sportsdataverse.wnba.wnba_stats import wnba_stats_commonteamroster as fetch
-    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
-
-    endpoint = f"{league}_stats_commonteamroster(team_id={stats_team_id!r}, season={season!r})"
-    try:
-        # return_parsed=False so the envelope is inspectable: the runtime turns a
-        # 403 / rate limit / blank body into `{}`, which parses to the same
-        # zero-row frame as a real empty roster. Only a payload that carries the
-        # CommonTeamRoster result set can be called empty.
-        payload = fetch(team_id=stats_team_id, season=season, return_parsed=False, **kwargs)
-    except Exception as exc:
-        raise CrosswalkSourceError(f"{endpoint} failed: {type(exc).__name__}: {exc}") from exc
-    sets = payload.get("resultSets") if isinstance(payload, dict) else None
-    if not isinstance(sets, list) or not any(
-        isinstance(rs, dict) and rs.get("name") == "CommonTeamRoster" for rs in sets
-    ):
-        raise CrosswalkSourceError(
-            f"{endpoint} returned no CommonTeamRoster result set "
-            f"(got {type(payload).__name__} with keys {sorted(payload)[:10] if isinstance(payload, dict) else '-'})"
-        )
-    raw = parse_nba_stats_result_sets(payload, result_set="CommonTeamRoster")
-    if not isinstance(raw, pl.DataFrame) or raw.height == 0:
+    raw = _stats_result_set(
+        f"{league}_stats_commonteamroster(team_id={stats_team_id!r}, season={season!r})",
+        lambda: fetch(team_id=stats_team_id, season=season, return_parsed=False, **kwargs),
+        "CommonTeamRoster",
+    )
+    if raw.height == 0:
         return empty
     return raw.select(
         pl.lit(int(espn_team_id), dtype=pl.Int32).alias("espn_team_id"),
