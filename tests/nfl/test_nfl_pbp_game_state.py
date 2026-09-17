@@ -328,3 +328,52 @@ def test_a_repeated_current_drive_is_still_deduplicated(buf_ari, buf_ari_frame):
     assert f["id"].to_list() == buf_ari_frame["id"].to_list()
     last_drive = {int(p["id"]) for p in current["plays"]} & set(f["id"].to_list())
     assert last_drive and f.filter(pl.col("id").is_in(last_drive))["text"].str.ends_with("(revised)").all()
+
+
+# ---------------------------------------------------------------------------
+# N6 -- punts and incompletions start from their real line of scrimmage
+# ---------------------------------------------------------------------------
+
+
+def _los_from_possession_text(summary: dict, types: set) -> dict:
+    """``{play id: yards to the end zone}`` from ESPN's own ``start.possessionText`` ("JAX 22")."""
+    from sportsdataverse.nfl.nfl_pbp import _nfl_side_of_abbrev
+
+    teams = {c["homeAway"]: c["team"] for c in summary["header"]["competitions"][0]["competitors"]}
+    out = {}
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            start = play["start"]
+            text = start.get("possessionText") or ""
+            if play["type"]["text"] not in types:
+                continue
+            if text == "50":
+                out[int(play["id"])] = 50
+                continue
+            code, yard = text.split(" ")
+            offense = "home" if start["team"]["id"] == teams["home"]["id"] else "away"
+            own = _nfl_side_of_abbrev(code, teams["home"]["abbreviation"], teams["away"]["abbreviation"]) == offense
+            out[int(play["id"])] = 100 - int(yard) if own else int(yard)
+    return out
+
+
+def test_home_punts_start_from_the_punt_spot(summary, frame):
+    # ESPN writes both JAX (home) punts with start.yardsToEndzone == yardLine (22, 39)
+    los = _los_from_possession_text(summary, {"Punt"})
+    assert (los[4018729221815], los[4018729223421]) == (78, 61)
+    got = dict(frame.filter(pl.col("type.text") == "Punt").select("id", "start.yardsToEndzone").iter_rows())
+    assert got == los
+
+
+def test_incompletions_start_from_the_snap_spot(buf_ari, buf_ari_frame):
+    # 2020: six of BUF@ARI's incompletions carry a stale start.yardsToEndzone
+    los = _los_from_possession_text(buf_ari, {"Pass Incompletion"})
+    raw = {
+        int(p["id"]): p["start"]["yardsToEndzone"]
+        for d in buf_ari["drives"]["previous"]
+        for p in d["plays"]
+        if int(p["id"]) in los
+    }
+    assert sum(raw[k] != v for k, v in los.items()) == 6
+    f = buf_ari_frame.filter(pl.col("id").is_in(list(los)))
+    assert dict(f.select("id", "start.yardsToEndzone").iter_rows()) == los

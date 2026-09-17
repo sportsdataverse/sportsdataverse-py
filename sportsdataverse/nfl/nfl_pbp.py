@@ -246,6 +246,29 @@ def _nfl_parse_penalty_spot(row):
     return f"{side}:{yardline}" if side else None
 
 
+# "L.Cooke punts 58 yards to CLV 20" / "... to end zone" / "... to 50": the kick
+# length plus the landing spot is the line of scrimmage (2008+ text).
+_NFL_PUNT_LOS_RE = re.compile(r"(?i)\bpunts (\d{1,2}) yards? to (?:(end zone)|(?:([A-Z]{2,3}) )?(\d{1,2}))\b")
+
+
+def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
+    """Yards to the end zone at a punt's line of scrimmage, read from its text (None if absent)."""
+    m = _NFL_PUNT_LOS_RE.search(text or "")
+    if not m:
+        return None
+    if m.group(2):
+        spot = 0
+    elif m.group(3) is None:
+        spot = int(m.group(4))
+    else:
+        side = _nfl_side_of_abbrev(m.group(3), home_abbr, away_abbr)
+        if side is None:
+            return None
+        spot = int(m.group(4)) if side != punting_side else 100 - int(m.group(4))
+    los = int(m.group(1)) + spot
+    return los if 0 < los < 100 else None
+
+
 # ESPN's summary names the venue but carries no roof. EP / CP / xpass were trained
 # (nfl-data ``model_training.play_level.make_model_mutations``) on nflverse roofs
 # where dome/closed -> dome=1 and every other roof -> outdoors=1 -- retractable is
@@ -758,6 +781,21 @@ class NFLPlayProcess(object):
             lambda t: _nfl_timeout_side(t, home_names, away_names),
             return_dtype=pl.Utf8,
         )
+        punt_los = (
+            pl.when(pl.col("type.text").is_in(punt_vec))
+            .then(
+                pl.struct("text", "start.team.id").map_elements(
+                    lambda r: _nfl_punt_los(
+                        r["text"],
+                        "home" if r["start.team.id"] == init["homeTeamId"] else "away",
+                        init["homeTeamAbbrev"],
+                        init["awayTeamAbbrev"],
+                    ),
+                    return_dtype=pl.Int64,
+                )
+            )
+            .otherwise(None)
+        )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -959,6 +997,18 @@ class NFLPlayProcess(object):
                 pl.when(pl.col("start.yardLine").is_null() == False)
                 .then(pl.col("start.yardsToEndzone"))
                 .otherwise(pl.col("start.yardLine"))
+                .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # ESPN's start.yardsToEndzone disagrees with its own yardLine on punts
+                # (2024+ home punts carry the yardLine itself: JAX 22 -> 22, not 78) and on
+                # 2016-2024 incompletions (a stale value). A punt's line of scrimmage comes
+                # from its own text; an incompletion cannot move the ball, so its yardLine stands.
+                pl.when(punt_los.is_not_null())
+                .then(punt_los)
+                .when((pl.col("type.text") == "Pass Incompletion").and_(pl.col("start.yard").is_not_null()))
+                .then(pl.col("start.yard"))
+                .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
             )
             .with_columns(
