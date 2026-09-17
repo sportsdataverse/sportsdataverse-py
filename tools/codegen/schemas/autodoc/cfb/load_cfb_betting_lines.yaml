@@ -43,3 +43,9 @@ columns:
 - name: week
   type: integer
   description: ''
+- name: home_team_id
+  type: integer
+  description: ''
+- name: away_team_id
+  type: integer
+  description: ''

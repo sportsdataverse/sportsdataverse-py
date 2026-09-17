@@ -598,3 +598,24 @@ columns:
 - name: team_logo_href
   type: character
   description: ''
+- name: general_defensive_fumbles_forced
+  type: double
+  description: ''
+- name: general_misc_fumbles_forced
+  type: double
+  description: ''
+- name: general_special_teams_fumbles_forced
+  type: double
+  description: ''
+- name: passing_offensive_snap_pct
+  type: double
+  description: ''
+- name: passing_target_share_pct
+  type: double
+  description: ''
+- name: passing_yards_per_route_run
+  type: double
+  description: ''
+- name: passing_avg_depth_of_target
+  type: double
+  description: ''

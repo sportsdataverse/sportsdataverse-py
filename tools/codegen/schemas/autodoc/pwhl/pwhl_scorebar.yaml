@@ -175,6 +175,12 @@ columns:
 - name: league_code
   type: character
   description: ''
+- name: time_tbd
+  type: character
+  description: ''
+- name: date_tbd
+  type: character
+  description: ''
 - name: timezone_short
   type: character
   description: ''

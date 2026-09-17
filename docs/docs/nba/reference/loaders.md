@@ -1964,7 +1964,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_mascot` | String | ESPN mascot/nickname. |
 | `nba_team_id` | String | NBA Stats team id side of the ESPN-to-NBA team crosswalk. |
 | `nba_team_abbreviation` | String | Team abbreviation as listed by the NBA Stats API. |
-| `nba_team_name` | String | Team nickname as listed by the NBA Stats API. |
+| `nba_team_name` | String | Full NBA team name from the NBA Stats API, city followed by nickname (e.g. 'Boston Celtics'). |
 | `nba_team_city` | String | Team city as listed by the NBA Stats API. |
 | `nba_team_slug` | String | URL-friendly slug for the team's name on NBA Stats. |
 | `nba_conference` | String | Team's conference as listed by the NBA Stats API. |

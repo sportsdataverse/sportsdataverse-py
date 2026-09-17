@@ -1,0 +1,45 @@
+schema: load_cfb_rosters_crosswalk
+kind: dataframe
+columns:
+- name: espn_team_id
+  type: integer
+  description: ''
+- name: fox_team_id
+  type: character
+  description: ''
+- name: person_key
+  type: character
+  description: ''
+- name: espn_athlete_id
+  type: integer
+  description: ''
+- name: fox_athlete_id
+  type: character
+  description: ''
+- name: yahoo_athlete_id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: espn_jersey
+  type: character
+  description: ''
+- name: fox_jersey
+  type: character
+  description: ''
+- name: espn_position
+  type: character
+  description: ''
+- name: fox_position
+  type: character
+  description: ''
+- name: yahoo_position
+  type: character
+  description: ''
+- name: match_method
+  type: character
+  description: ''
+- name: matched_sources
+  type: character
+  description: ''

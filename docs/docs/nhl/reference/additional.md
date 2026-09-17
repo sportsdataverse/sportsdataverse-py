@@ -940,6 +940,8 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `period_descriptor_ot_periods` | double | Number of overtime periods played when the game extended beyond regulation, as reported in the scoreboard period descriptor. |
 | `away_team_record` | character | Away team's win-loss record. |
 | `home_team_record` | character | Home team's win-loss record. |
+| `away_team_common_name_fr` | character | Away team common name (French). |
+| `home_team_common_name_fr` | character | Home team common name (French). |
 
 **Example**
 
@@ -1874,6 +1876,19 @@ Wraps `nhl/league/header`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `template` | character | Fox layout template name for the header payload; always 'entity-header' in sampled data. |
+| `title` | character | Transaction title/headline. |
+| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | character | Fox content URI of the league entity (e.g., 'hockey/nhl/league/1'); entity_id is its trailing number. |
+| `content_type` | character | Fox entity type of the header payload; always 'league' for the league header. |
+| `color` | character | Primary color hex. |
+| `logo_url` | character | NBA CDN primary logo URL. |
+| `image_alt_text` | character | Image alt text Fox ships with the header, the full league name (e.g., 'National Hockey League'). |
+| `rank` | character | Rank of the streak. |
+| `details` | character | Odds detail string (e.g. "DET -185"). |
+
 **Example**
 
 ```python
@@ -1898,6 +1913,16 @@ NHL statistical leaders (`stats-con`); who=player|team.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `players` | character | Nested list of per-player box scores. |
+| `v1` | character | Abbreviated player name (e.g., 'A. Ovechkin'), from the leader table's unlabeled second column. |
+| `gp` | character | Games played. |
+| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `g` | character | Goals (skaters). |
+| `a` | character | Assists (skaters). |
+| `p` | character | P. |
 
 **Example**
 
@@ -1933,6 +1958,20 @@ Wraps `nhl/league/playernews`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `title` | character | Transaction title/headline. |
+| `subtitle` | character | Player's team abbreviation, jersey number and position formatted 'TEAM #NN - POS' (e.g., 'WPG #37 - G'). |
+| `headline` | character | Article headline. |
+| `description` | character | Full text description of the event. |
+| `impact_title` | character | Heading label for the impact paragraph; always 'Impact' in sampled data. |
+| `impact` | character | Free-text analysis paragraph Fox shows under the item's impact_title heading. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `source` | character | News source. |
+| `athlete_id` | character | ESPN athlete identifier (echoed from arg). |
+| `content_uri` | character | Fox content URI of the player the item is about (e.g., 'hockey/nhl/athletes/4442'); athlete_id is its trailing number. |
+| `web_url` | character | Site-relative foxsports.com path of the player's page (e.g., '/nhl/connor-hellebuyck-player'). |
+
 **Example**
 
 ```python
@@ -1967,6 +2006,17 @@ Wraps `nhl/league/schedule`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList' (one row per date) in sampled data. |
+| `id` | character | Unique player identifier. |
+| `title` | character | Transaction title/headline. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `uri` | character | Absolute Bifrost API URL of that date's schedule segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/league/schedule-segment/2026-20260919'). |
+| `web_url` | character | Site-relative foxsports.com schedule page path for that date (e.g., '/nhl/schedule?date=2026-09-19'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | Group id (echoed from arg). |
+
 **Example**
 
 ```python
@@ -1983,6 +2033,17 @@ Wraps `nhl/league/scores`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList' (one row per date) in sampled data. |
+| `id` | character | Unique player identifier. |
+| `title` | character | Transaction title/headline. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `uri` | character | Absolute Bifrost API URL of that date's scores segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/league/scores-segment/20260919'). |
+| `web_url` | character | Site-relative foxsports.com scores page path for that date (e.g., '/nhl/scores?date=2026-09-19'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | Group id (echoed from arg). |
 
 **Example**
 
@@ -2001,6 +2062,32 @@ Wraps `nhl/league/standings`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the standings section the row's table sits in ('CONFERENCE', 'DIVISION', 'WILD CARD' or 'PRESEASON'); each team appears once per section. |
+| `eastern_conference` | character | First-column cell of Fox's EASTERN CONFERENCE tables (CONFERENCE and PRESEASON sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `v1` | character | Team nickname (e.g., 'Bruins'), from the standings table's unlabeled second column. |
+| `w_l_otl` | character | Record as a 'W-L-OTL' string (wins-losses-overtime losses); '0-0-0' for every team in the sampled preseason data. |
+| `pts` | character | Points scored. |
+| `gp` | character | Games played. |
+| `row` | character | Row index within the game grouping (sequencing helper). |
+| `sow` | character | Shootout wins (SOW column), as a string; '0' for every team in the sampled preseason data. |
+| `sol` | character | Shootout losses (SOL column), as a string; '0' for every team in the sampled preseason data. |
+| `gf` | character | Goals for (GF column), as a string; '0' for every team in the sampled preseason data. |
+| `ga` | character | Goals against (goalies). |
+| `gd` | character | Goal differential (GD column), as a string; '0' for every team in the sampled preseason data. |
+| `home` | character | Whether the player's team was home. |
+| `away` | character | Away team shots in the period. |
+| `l10` | character | Last-ten record. |
+| `strk` | character | Current streak. |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `western_conference` | character | First-column cell of Fox's WESTERN CONFERENCE tables (CONFERENCE and PRESEASON sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `east_atlantic` | character | First-column cell of Fox's 'EAST, ATLANTIC' division tables (DIVISION and WILD CARD sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `east_metropolitan` | character | First-column cell of Fox's 'EAST, METROPOLITAN' division tables (DIVISION and WILD CARD sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `west_central` | character | First-column cell of Fox's 'WEST, CENTRAL' division tables (DIVISION and WILD CARD sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `west_pacific` | character | First-column cell of Fox's 'WEST, PACIFIC' division tables (DIVISION and WILD CARD sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+| `wild_card` | character | First-column cell of Fox's WILD CARD tables (one per conference in the WILD CARD section), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
+
 **Example**
 
 ```python
@@ -2017,6 +2104,14 @@ Wraps `nhl/league/stats`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Stat leader category. |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character | Fox's short label for the leader's stat (e.g., 'G', 'GAA', 'TOI/G'). |
+| `player` | character | Penalized player name. |
+| `value` | character | Leader stat numeric value. |
 
 **Example**
 
@@ -2080,6 +2175,17 @@ Wraps `nhl/scoreboard/main`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList' (one row per date) in sampled data. |
+| `id` | character | Unique player identifier. |
+| `title` | character | Transaction title/headline. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `uri` | character | Absolute Bifrost API URL of that date's scoreboard segment payload (e.g., 'https://api.foxsports.com/bifrost/v1/nhl/scoreboard/segment/20260919'). |
+| `web_url` | character | Site-relative foxsports.com scoreboard page path for that date (e.g., '/scores/nhl?date=2026-09-19'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | Group id (echoed from arg). |
 
 **Example**
 
@@ -2240,6 +2346,18 @@ Wraps `nhl/league/teamnav`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
+| `fox_id` | character | Fox Sports team id as a string (e.g., '14'), the trailing number of content_uri. |
+| `abbreviation` | character | Team abbreviation. |
+| `name` | character | Team mascot name. |
+| `content_uri` | character | Fox content URI of the team (e.g., 'hockey/nhl/teams/14'); fox_id is its trailing number. |
+| `content_type` | character | Fox entity type of the nav item; always 'team' in sampled data. |
+| `web_url` | character | Site-relative foxsports.com path of the team page (e.g., '/nhl/detroit-red-wings-team'). |
+| `color` | character | Primary color hex. |
+| `logo_url` | character | NBA CDN primary logo URL. |
 
 **Example**
 

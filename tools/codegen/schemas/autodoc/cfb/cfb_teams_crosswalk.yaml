@@ -1,0 +1,36 @@
+schema: cfb_teams_crosswalk
+kind: dataframe
+columns:
+- name: norm_key
+  type: character
+  description: ''
+- name: espn_team_id
+  type: integer
+  description: ''
+- name: espn_team
+  type: character
+  description: ''
+- name: espn_abbreviation
+  type: character
+  description: ''
+- name: fox_team_id
+  type: character
+  description: ''
+- name: fox_team
+  type: character
+  description: ''
+- name: fox_abbreviation
+  type: character
+  description: ''
+- name: yahoo_team_id
+  type: character
+  description: ''
+- name: yahoo_team
+  type: character
+  description: ''
+- name: yahoo_abbreviation
+  type: character
+  description: ''
+- name: matched_sources
+  type: character
+  description: ''

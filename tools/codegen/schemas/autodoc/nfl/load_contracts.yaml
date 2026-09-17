@@ -76,3 +76,9 @@ columns:
 - name: cols
   type: double
   description: ''
+- name: season_history
+  type: double
+  description: ''
+- name: contract_history
+  type: integer
+  description: ''
