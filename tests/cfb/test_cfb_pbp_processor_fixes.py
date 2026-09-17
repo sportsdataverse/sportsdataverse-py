@@ -328,3 +328,12 @@ def test_return_n_yards_clause():
 
 def test_punt_for_a_loss_is_negative():
     assert _row(_plays(252460252), "Johnny Ayers punt for a loss of 12 yards.")["yds_punted"] == -12
+
+
+# --- C37: the short kickoff form, "kick for N yds" ------------------------------------------------
+
+
+def test_short_kick_form_parses():
+    kick = _row(_plays(401752844), "J. Scullion kick for 65 yds")
+    assert kick["yds_kickoff"] == 65
+    assert kick["yds_kickoff_return"] == 100

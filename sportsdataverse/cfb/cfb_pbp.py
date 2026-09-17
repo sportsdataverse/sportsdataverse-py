@@ -4259,7 +4259,9 @@ class CFBPlayProcess(object):
             )
             .otherwise(None),
             yds_kickoff=pl.when(pl.col("kickoff_play") == True)
-            .then(pl.col("text").str.extract(r"(?i)kickoff for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            # "S. Turner kick for 65 yds,J. Price return for 100 yds for a TD" -- the 2025 short
+            # form drops the "off", and every such row came out null
+            .then(pl.col("text").str.extract(r"(?i)kick(?:off)? for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
             yds_kickoff_return=pl.when(
                 (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True).and_(pl.col("season") > 2013),
