@@ -196,7 +196,6 @@ def test_sack_stubs_are_not_pass_attempts(phi_nyg_2006):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N20 pending (see s1-nfl/r3_STATE.md)")
 def test_pre_2015_interceptions_are_pass_plays(mia_den_2002):
     ints = mia_den_2002.filter(pl.col("id").is_in([2210130071212, 2210130072309]))
     assert ints["type.text"].to_list() == ["Interception Return", "Interception Return"]

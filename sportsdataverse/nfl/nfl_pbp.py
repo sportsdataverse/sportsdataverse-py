@@ -1561,6 +1561,7 @@ class NFLPlayProcess(object):
                                 "Sack",
                                 "Pass",
                                 "Interception",
+                                "Pass Interception",  # ESPN's type through 2014
                                 "Pass Interception Return",
                                 "Interception Return Touchdown",
                                 "Pass Incompletion",
