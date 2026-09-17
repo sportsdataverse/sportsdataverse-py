@@ -158,8 +158,9 @@ def test_score_drops_are_repaired(ne_mia_2005):
     f = ne_mia_2005
     for col in ("homeScore", "awayScore", "end.homeScore", "end.awayScore"):
         assert (f[col].diff().fill_null(0) >= 0).all(), col
-    assert _row(f, 2511130152756)["end.awayScore"] == 12  # ESPN wrote 6 here, 12 on the rows around it
-    assert _row(f, 2511130153777)["end.homeScore"] == 16  # ESPN wrote 10
+    # ESPN wrote 7-12 on two non-scoring plays of a 7-6 drive, then 7-6 again
+    assert [_row(f, i)["end.awayScore"] for i in (2511130152735, 2511130152756, 2511130152798)] == [6, 6, 6]
+    assert _row(f, 2511130153777)["end.homeScore"] == 16  # ESPN wrote 10 after a scoring play made it 16
     assert f.tail(1).select("end.homeScore", "end.awayScore").row(0) == (16, 23)  # the header's final
 
 

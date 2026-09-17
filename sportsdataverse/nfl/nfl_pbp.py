@@ -303,6 +303,27 @@ def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
     return los if 0 < los < 100 else None
 
 
+def _nfl_repair_scores(scores, scoring, texts):
+    """Carry a team's running score forward through ESPN's feed errors.
+
+    A score only ever drops when a review takes points off the board (no such
+    drop in 319 sampled 2002-26 drops; all were feed errors), and it only rises
+    on a scoring play. Every other change is a feed error, replaced by the last
+    accepted value -- which then anchors the next row, so a run of bad rows heals
+    rather than re-seeding itself from the previous bad row.
+    """
+    out, prev = [], None
+    for score, is_scoring, text in zip(scores, scoring, texts):
+        if score is not None and prev is not None:
+            delta = score - prev
+            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring):
+                score = prev
+        out.append(score)
+        if score is not None:
+            prev = score
+    return out
+
+
 # ESPN's summary names the venue but carries no roof; the models' one-hots come from
 # the game-level ``roof`` column through ep_wp's feature builders (_roof_one_hots).
 
@@ -1660,48 +1681,22 @@ class NFLPlayProcess(object):
                 A_score_diff=pl.col("awayScore") - pl.col("lag_awayScore"),
             )
             .with_columns(
-                homeScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= 9),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") < 9)
-                    & (pl.col("H_score_diff") > 1),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= -9)
-                    & (pl.col("H_score_diff") < -1),
-                )
-                .then(pl.col("homeScore"))
-                .otherwise(pl.col("homeScore")),
-                awayScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= 9),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") < 9)
-                    & (pl.col("A_score_diff") > 1),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= -9)
-                    & (pl.col("A_score_diff") < -1),
-                )
-                .then(pl.col("awayScore"))
-                .otherwise(pl.col("awayScore")),
+                homeScore=pl.Series(
+                    _nfl_repair_scores(
+                        play_df["homeScore"].to_list(),
+                        play_df["scoringPlay"].fill_null(False).to_list(),
+                        play_df["text"].to_list(),
+                    ),
+                    dtype=play_df.schema["homeScore"],
+                ),
+                awayScore=pl.Series(
+                    _nfl_repair_scores(
+                        play_df["awayScore"].to_list(),
+                        play_df["scoringPlay"].fill_null(False).to_list(),
+                        play_df["text"].to_list(),
+                    ),
+                    dtype=play_df.schema["awayScore"],
+                ),
             )
             .drop(["lag_homeScore", "lag_awayScore"])
             .with_columns(
