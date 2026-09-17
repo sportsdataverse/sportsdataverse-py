@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import html
 import json
 import logging
 import os
@@ -113,6 +114,18 @@ _JERSEY_PREFIX = r"^\s*#\d{1,3}\s+"
 #: clock precedes it. Published 2025 carries 3,682 kickoff_player_name values of
 #: the form "(15:00) #36 T.Morrison", plus rusher, passer and interception names.
 _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
+
+#: ESPN's feed carries a few escaped entities with the "&" already stripped -- "Deapos;Angelo
+#: Bryant", "Patrick Oapos;Bryan", "Timeout TEXAS Aamp;M" (10 rows over 1,328 games 2004-26,
+#: 9 of them in 2006); no intact entity survives. Python ``re``: polars has no lookbehind.
+_MANGLED_ENTITY = r"(amp|apos|quot|#39);"
+_MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
+
+
+def _repair_entities(text: str) -> str:
+    """Restore a stripped ``&`` and unescape: ``"Patrick Oapos;Bryan"`` -> ``"Patrick O'Bryan"``."""
+    return html.unescape(_MANGLED_ENTITY_RE.sub(r"&\1;", text))
+
 
 #: The vendor template's kicker / returner clauses with any name shape: the capture excludes
 #: "#", parentheses and digits, so it can neither run back across a jersey or a yardline nor
@@ -1455,6 +1468,14 @@ class CFBPlayProcess(object):
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         if len(pbp_txt["plays"]) == 0:
             return pbp_txt
+        # Repair the feed's pre-stripped entities once, at the boundary -- never in the 2025+
+        # vendor rows (clock-opened), where ";" separates tacklers and "#30 A.Agapos;" is a surname.
+        text = pl.col("text").cast(pl.Utf8)
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            text=pl.when(text.str.contains(_MANGLED_ENTITY) & (text.str.contains(_CLOCK_PREFIX) == False))
+            .then(text.map_elements(_repair_entities, return_dtype=pl.Utf8))
+            .otherwise(text)
+        )
         if (len(pbp_txt["plays"]) < 50) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):

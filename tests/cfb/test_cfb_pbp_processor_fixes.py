@@ -483,3 +483,40 @@ def test_a_repeated_current_drive_keeps_the_fresher_copy():
     assert f["id"].to_list() == _plays(401645333)["id"].to_list()
     last_drive = {int(p["id"]) for p in current["plays"]} & set(f["id"].to_list())
     assert last_drive and f.filter(pl.col("id").is_in(last_drive))["text"].str.ends_with("(revised)").all()
+
+
+# --- C40: entities the feed ships with the "&" already stripped are repaired at the boundary ------
+
+
+def test_pre_stripped_apostrophe_entity_is_repaired():
+    # Miami (OH) @ Purdue, 2006: four targets of "Patrick Oapos;Bryan"
+    plays = _plays(262522509)
+    assert not plays["text"].str.contains("apos;").any()
+    assert plays.filter(pl.col("receiver_player_name") == "Patrick O'Bryan").height == 4
+    assert _row(plays, "Patrick O'Bryan for 6 yards to the MiaOh 48")["passer_player_name"] == "Mike Kokal"
+
+
+def test_pre_stripped_ampersand_timeout_is_charged():
+    # Louisiana Tech @ Texas A&M, 2006: "Timeout TEXAS Aamp;M, clock 05:16."
+    row = _row(_plays(262660245), "Timeout TEXAS A&M")
+    assert row["homeTimeoutCalled"] and not row["awayTimeoutCalled"]
+    assert row["end.homeTeamTimeouts"] == 2 and row["end.awayTeamTimeouts"] == 3
+
+
+def test_vendor_tackler_separator_is_not_an_entity():
+    # Georgia Southern @ Arkansas State, 2025 (401761636): the vendor template separates tacklers
+    # with ";", so "#30 A.Agapos;" is the surname Agapos -- placed on a vendor-template fixture row
+    real = (
+        "(09:47) #25 C.Amaya kickoff 65 yards to the GS00 #1 D.Cobb return 17 yards to the GS17 "
+        "(#30 A.Agapos; #44 J.Sample)"
+    )
+    summary = _summary(401752753)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            if play["id"] == "4017527533":
+                play["text"] = real
+    proc = CFBPlayProcess(gameId=401752753)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    row = proc.plays_frame.filter(pl.col("id") == 4017527533).row(0, named=True)
+    assert row["text"] == real and row["kickoff_return_player_name"] == "D.Cobb"
