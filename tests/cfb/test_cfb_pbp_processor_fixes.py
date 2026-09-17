@@ -430,3 +430,56 @@ def test_short_kick_form_parses():
     kick = _row(_plays(401752844), "J. Scullion kick for 65 yds")
     assert kick["yds_kickoff"] == 65
     assert kick["yds_kickoff_return"] == 100
+
+
+# --- C39: the duplicate filter drops true duplicates only, never a distinct play ------------------
+
+_ADMIN_TYPES = {"End Period", "End of Half", "End of Game", "Coin Toss"}
+
+
+def _raw_ids(summary: dict, *, admin: bool = True) -> set[int]:
+    return {
+        int(p["id"])
+        for drives in summary["drives"].values()
+        for d in (drives if isinstance(drives, list) else [drives])
+        for p in d["plays"]
+        if admin or p.get("type", {}).get("text") not in _ADMIN_TYPES
+    }
+
+
+def test_2004_plays_sharing_the_next_rows_start_state_are_kept():
+    # South Carolina @ Tennessee, 2004: the feed repeats the start state on every row, and the
+    # former loose text test deleted 17 distinct plays -- rushes, completions, a two-point try
+    proc, _, summary, _ = _processed(243042579)
+    kept = set(proc.plays_frame["id"].to_list())
+    assert 2430425790711 in kept  # Summers 12-yd rush, next row a 13-yd completion at the same spot
+    assert 2430425791524 in kept  # Schaeffer two-point rush
+    assert {2430425792904, 2430425792905} <= kept  # two completions logged at 13:55
+    assert _raw_ids(summary, admin=False) <= kept <= _raw_ids(summary)
+
+
+def test_identical_copies_on_consecutive_rows_are_dropped_once():
+    # Temple @ Charlotte, 2024: two plays logged twice under consecutive ids -- same text,
+    # clock, period and start state; 2013 San Jose State: a 2-yd rush entered twice
+    kept = set(_plays(401645333)["id"].to_list())
+    assert kept & {401645333101925701, 401645333101925702} == {401645333101925702}
+    assert kept & {401645333102948301, 401645333102948307} == {401645333102948307}
+    kept_2013 = set(_plays(333130023)["id"].to_list())
+    assert kept_2013 & {333130023175, 333130023176} == {333130023176}
+
+
+def test_a_repeated_current_drive_keeps_the_fresher_copy():
+    # a live feed repeats the drive in progress under drives.current -- listed BEFORE previous
+    # in the 2026 feed -- with the same ids and sometimes revised text; the revised copy survives
+    summary = _summary(401645333)
+    current = copy.deepcopy(summary["drives"]["previous"][-1])
+    for play in current["plays"]:
+        play["text"] += " (revised)"
+    summary["drives"] = {"current": current, "previous": summary["drives"]["previous"]}
+    proc = CFBPlayProcess(gameId=401645333)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    f = proc.plays_frame
+    assert f["id"].to_list() == _plays(401645333)["id"].to_list()
+    last_drive = {int(p["id"]) for p in current["plays"]} & set(f["id"].to_list())
+    assert last_drive and f.filter(pl.col("id").is_in(last_drive))["text"].str.ends_with("(revised)").all()
