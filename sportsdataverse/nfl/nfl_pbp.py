@@ -1116,28 +1116,9 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
+            # ESPN's "Blocked Field Goal" keeps its type: relabeled "Extra Point Missed"
+            # it scored as a missed PAT (EPA -0.92) instead of the turnover it is, and
+            # the "Blocked Field Goal Touchdown" relabel below never fired.
         )
 
         return pbp_txt
