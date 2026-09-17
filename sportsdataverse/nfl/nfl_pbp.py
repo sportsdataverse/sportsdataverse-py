@@ -204,7 +204,10 @@ _NFL_TEXT_TEAM_ALIASES = {
     "LA": "LAR",
     "SL": "STL",
 }
-_NFL_NAME_SUFFIX_RE = re.compile(r"\s+(?:Jr|Sr|II|III|IV)\.?$")
+# The suffixes the shared name grammar admits (football.espn_text.ABBREVIATED_NAME):
+# "Jr." / "Sr" after a comma or a space, a whole numeral after a comma or a space,
+# and the vendor feed's "V" / lower-case-L "lll" / "ll".
+_NFL_NAME_SUFFIX_RE = re.compile(r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|lll|ll)\b)\.?$")
 _NFL_RECOVERY_RE = re.compile(r"(?i)recovered by\s+([A-Z]{2,3})-")
 _NFL_PENALTY_ON_RE = re.compile(r"(?i)penalty on\s+([A-Z]{2,3})\b")
 _NFL_ENFORCED_AT_RE = re.compile(r"(?i)enforced at\s+(?:([A-Z]{2,3})\s+)?(\d{1,2})\b")
@@ -3983,9 +3986,9 @@ class NFLPlayProcess(object):
         ESPN's NFL summary ships no per-play ``participants`` array (the CFB
         feed does), so the ids come from the game's own ``boxscore.players``:
         every athlete with a stat line, keyed by team and by the text form of
-        the name -- first-initial prefixes of one to three letters
-        (``D.Watson``, ``Bri.Thomas``) plus the surname with any Jr./Sr./II
-        suffix dropped. A key that maps to two athletes on the same team is
+        the name -- first-initial prefixes of one to five letters
+        (``D.Watson``, ``Bri.Thomas``, ``Josh.Brown``) plus the surname with any
+        Jr./Sr./numeral suffix dropped. A key that maps to two athletes on the same team is
         left unresolved rather than guessed. Team-aware: each name column is
         matched against the team that fielded it.
         """
@@ -4000,7 +4003,8 @@ class NFLPlayProcess(object):
             if len(tokens) < 2:
                 continue
             first, rest = tokens[0], " ".join(tokens[1:]).lower()
-            keys = [f"{tid}|{first[:k].lower()}.{rest}" for k in (1, 2, 3)]
+            # ESPN's initials run one to five letters ("D.Watson", "Bri.Thomas", "Josh.Brown")
+            keys = [f"{tid}|{first[:k].lower()}.{rest}" for k in range(1, min(len(first), 5) + 1)]
             keys.append(f"{tid}|{first.lower()} {rest}")  # the participants' full display name
             for key in keys:
                 mapping[key] = None if key in mapping and mapping[key] != str(aid) else str(aid)

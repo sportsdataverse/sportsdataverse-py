@@ -292,7 +292,6 @@ def test_direct_snap_taker_is_not_the_receiver(no_nyj_2013):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N16 pending (see s1-nfl/r3_STATE.md)")
 def test_four_letter_initials_resolve_to_an_id():
     with gzip.open(FIX / "summary_290927014_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         summary = json.load(fh)
@@ -320,7 +319,6 @@ def test_four_letter_initials_resolve_to_an_id():
         ("A.St. Brown", "A.St. Brown"),
     ],
 )
-@pytest.mark.xfail(strict=False, reason="round-3 N16 pending (see s1-nfl/r3_STATE.md)")
 def test_name_suffixes_are_stripped_like_the_shared_grammar(name, stripped):
     from sportsdataverse.nfl.nfl_pbp import _NFL_NAME_SUFFIX_RE
 
