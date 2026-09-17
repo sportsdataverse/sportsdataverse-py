@@ -25,11 +25,12 @@ from .conftest import CFB_GAME_ID, NFL_GAME_ID
 def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGame):
     prov = nfl_processed.provenance
     assert nfl_processed.game["source"] is prov
-    assert prov["requested"] == prov["source"] == "espn" and prov["fallback"] is False
+    assert prov["requested"] == prov["served"] == "espn" and prov["fallback"] is False
     assert [a["source"] for a in prov["attempts"]] == ["espn"] and prov["attempts"][0]["ok"]
     assert prov["playByPlaySource"] == "full" and prov["native_ids"] == {"espn_event_id": str(NFL_GAME_ID)}
     assert prov["contract"]["ok"] and prov["contract"]["gop_ok"]
     assert prov["lossy_columns"] == []
+    assert prov["odds"] == {"source": "summary_pickcenter", "default": False, "from_idmap": False}
     assert nfl_processed.health == {"espn": "ok"}
     assert len(nfl_processed.game["plays"]) > 100
     assert isinstance(nfl_processed.plays_frame, pl.DataFrame)
@@ -40,7 +41,7 @@ def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGa
 
 def test_cfb_offline_dispatch(cfb_summary, no_network):
     out = _process_game("cfb", CFB_GAME_ID, payloads={"espn": cfb_summary})
-    assert out.provenance["source"] == "espn" and out.provenance["contract"]["ok"]
+    assert out.provenance["served"] == "espn" and out.provenance["contract"]["ok"]
     assert out.game["gameId"] == CFB_GAME_ID and len(out.game["plays"]) > 100
     assert set(out.game["advBoxScore"]) >= {"pass", "rush", "receiver", "team"}
 
@@ -90,7 +91,7 @@ def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, 
     out = _process_game("nfl", NFL_GAME_ID, source="shield", payloads={"espn": nfl_summary})
 
     prov = out.provenance
-    assert prov["requested"] == "shield" and prov["source"] == "espn" and prov["fallback"] is True
+    assert prov["requested"] == "shield" and prov["served"] == "espn" and prov["fallback"] is True
     assert [(a["source"], a["ok"]) for a in prov["attempts"]] == [
         ("shield", False),
         ("cbs", False),
@@ -112,7 +113,7 @@ def test_contract_failure_is_a_fall_through_reason(nfl_summary, fast_processor, 
     monkeypatch.setitem(dispatch._ADAPTERS, ("nfl", "cbs"), lambda league, espn_id, ctx: AdaptedGame(summary=gutted))
     out = _process_game("nfl", NFL_GAME_ID, source="cbs", payloads={"espn": nfl_summary})
 
-    assert out.provenance["source"] == "espn"
+    assert out.provenance["served"] == "espn"
     assert out.health["cbs"].startswith("contract: missing=['plays[].statYardage']")
     assert len(fast_processor) == 1  # the gutted summary never reached the processor
 
@@ -131,7 +132,7 @@ def test_alternate_adapter_provenance(nfl_summary, fast_processor, monkeypatch):
     out = _process_game("nfl", NFL_GAME_ID, source="shield", idmap_row=row, payloads={"shield": {"raw": 1}})
 
     prov = out.provenance
-    assert prov["source"] == "shield" and prov["fallback"] is False
+    assert prov["served"] == "shield" and prov["fallback"] is False
     assert prov["playByPlaySource"] == "shield" and prov["native_ids"] == {"shield_game_id": "abc"}
     assert prov["notes"] == ["open drive synthesized"] and prov["lossy_columns"] == []
     assert seen["ctx"].idmap_row is row and seen["ctx"].payload == {"raw": 1}
@@ -153,3 +154,32 @@ def test_no_fallthrough_raises_with_one_attempt():
     with pytest.raises(AllSourcesFailed) as ei:
         _process_game("cfb", CFB_GAME_ID, source="ncaa", fallthrough=False)
     assert [(a.source, a.error) for a in ei.value.attempts] == [("ncaa", "not implemented")]
+
+
+def test_stored_closing_line_becomes_odds_override(nfl_summary, fast_processor):
+    row = {
+        "espn_event_id": str(NFL_GAME_ID),
+        "spread_line": 8.5,
+        "total_line": 40.5,
+        "odds_source": "nflverse_schedule",
+    }
+    out = _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary}, idmap_row=row)
+    assert fast_processor[0].odds_override == {
+        "gameSpread": 8.5,
+        "overUnder": 40.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+    }
+    assert out.provenance["odds"]["from_idmap"] is True
+    # an explicit odds_override wins over the stored line
+    fast_processor.clear()
+    explicit = {"gameSpread": 3.0, "overUnder": 44.0, "homeFavorite": False, "gameSpreadAvailable": True}
+    _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary}, idmap_row=row, odds_override=explicit)
+    assert fast_processor[0].odds_override == explicit
+
+
+def test_default_odds_are_flagged_in_provenance(nfl_summary, no_network):
+    stripped = copy.deepcopy(nfl_summary)
+    stripped["pickcenter"] = []
+    out = _process_game("nfl", NFL_GAME_ID, payloads={"espn": stripped})
+    assert out.provenance["odds"] == {"source": "default", "default": True, "from_idmap": False}

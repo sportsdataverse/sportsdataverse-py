@@ -112,9 +112,12 @@ non-empty mascot, exactly one home + one away. Feed-order id violations and dupl
 8. **`drives.current`** for the open drive on live games; `previous` never repeats it (GOP bug #4).
 9. **Provenance:** `header.competitions[0].playByPlaySource = "<source>"` (any value ≠ `"none"` runs; the
    processor copies it into the result). The dispatcher stamps the full provenance dict (§3.3).
-10. **Odds:** alternates carry no usable ESPN-style `pickcenter`; pass `odds_override` (validated in both
-    ctors; sets `odds_source="injected"`). Without it the processor defaults to 2.5 / 55.5 and drops the
-    14 odds-dependent columns.
+10. **Odds on failover (user decision):** the **stored closing line** from the id-map row (`spread_line`,
+    `total_line`, written by the same nightly job) is passed as `odds_override` by the dispatcher
+    (`idmap._odds_override_from_row`: nflverse sign convention → `gameSpread=|spread|`,
+    `homeFavorite = spread > 0`); an adapter-supplied `odds_override` (the source's own odds) wins when
+    given; when neither exists the processor's 2.5 / 55.5 default applies and `provenance.odds.default`
+    is True (14 odds-dependent columns then carry defaults).
 11. **Text grammar:** EPA/WP barely depend on text (team EPA/play ±0.01 with all text replaced) but player
     box sections collapse. Adapters should re-skin structured sub-events into ESPN/GSIS grammar where cheap
     and pass names/ids via `participants=` (frame with `id` + `{type}_player_name/_id` in ESPN athlete-id
@@ -145,7 +148,9 @@ and the paper index; D §2.4) and the same dict, plus `game["source"]`.
 
 `SOURCE_ORDER = {"nfl": (espn, shield, cbs, yahoo, fox), "cfb": (espn, cbs, yahoo, ncaa, fox)}`.
 Order tried = requested source, then the remaining alternates in canonical order, then **ESPN as the terminal
-fallback** when an alternate was requested (fails fast in an outage, free otherwise). `fallthrough=False`
+fallback — always, even when an alternate was explicitly requested** (user decision 2026-09-17: fails fast in
+an outage, free otherwise). Shadow-mode comparisons see that the requested source failed from
+`provenance.requested != provenance.served` plus the per-source `attempts` error list. `fallthrough=False`
 tries one source. A source hands over to the next on: adapter not registered (`"not implemented"`), adapter
 exception (fetch failed, id unmapped — `SourceUnavailable`), **contract failure** (`report.ok` False; the
 gutted summary never reaches the processor), or a processor exception. When every source fails,
@@ -153,16 +158,27 @@ gutted summary never reaches the processor), or a processor exception. When ever
 
 ### 3.3 Provenance (`game["source"]`)
 
-`requested`, `source`, `fallback`, `attempts[{source, ok, error, seconds}]`, `playByPlaySource`,
-`native_ids`, `contract` (report summary), `lossy_columns` (`KNOWN_LOSSY[(league, source)]`), `notes`.
+`requested`, `served` (the source that actually produced the game), `fallback`, `attempts[{source, ok, error,
+seconds}]` (every source tried, in order), `playByPlaySource`, `native_ids`, `contract` (report summary),
+`odds {source, default, from_idmap}` (the processor's `odds_source`; `default=True` flags the 2.5 / 55.5
+fallback), `lossy_columns` (`KNOWN_LOSSY[(league, served)]`), `notes`.
 `ProcessedGame.health` = per-source outcome of this call (feeds GOP dq telemetry).
 
 ## 4. Pre-kickoff id map (`idmap.py`)
 
-Built **nightly from schedules**, stored as two parquets (`games.parquet`, `teams.parquet`), read by GOP in O(1)
-at request time (`_lookup(games, espn_id, teams)` → row + `home_team`/`away_team`). **Never built on ESPN at
-request time**: `cfb_schedule_crosswalk` is a live ESPN-anchored name-match (≥3 calls/week, fails in the
+Built **nightly from schedules** by a job that writes it into **sdv-db**; GOP's Flask reads one row at request
+time from the Data API route **`GET /v1/{league}/idmap/{espn_id}`** (user decision Q2; sdv-py side:
+`idmap.IDMAP_ROUTE` + `_fetch_idmap_row(league, espn_id, base_url=)` → dict or None on 404). The parquet pair
+(`games.parquet`, `teams.parquet`; `_write_idmap` / `_load_idmap` / `_lookup`) is the builder's hand-off format
+and the offline fixture. **Never built on ESPN at request time**: `cfb_schedule_crosswalk` is a live ESPN-anchored name-match (≥3 calls/week, fails in the
 outage it exists for, no CBS/NCAA leg, no team ids) and stays a *builder input*, not a lookup.
+
+**Table / route shape** (`idmap.GAME_SCHEMA` = sdv-db table `idmap` = the route's JSON body): `league`,
+`season`, `espn_event_id`, `shield_game_id`, `cbs_game_id`, `yahoo_game_id`, `fox_event_id`, `ncaa_game_id`,
+`kickoff_utc`, `home_espn_team_id`, `away_espn_team_id`, `built_at` (the user's list), plus builder extras
+`season_type`, `week`, `neutral_site`, `nflverse_game_id` and the stored closing line `spread_line`,
+`total_line`, `odds_source` (Q3). Ids are text. Primary key `(league, espn_event_id)`; the job upserts, so a
+row's `built_at` is the last rebuild.
 
 | games column | source of truth |
 |---|---|
@@ -170,14 +186,15 @@ outage it exists for, no CBS/NCAA leg, no team ids) and stays a *builder input*,
 | `shield_game_id`, `nflverse_game_id` | nfl-raw `nfl/espn/crosswalk/games.json` (exists; date/time matched) |
 | `yahoo_game_id` (NFL) | **computed**: `nfl.g.{YYYYMMDD US-Eastern}{ESPN home id:03d}`; team `nfl.t.{ESPN id}` (16/16 wk1 + SB LX verified) |
 | `yahoo_game_id` (CFB), `fox_game_id` | `load_cfb_schedule_crosswalk(season)` release parquet (built off-request); Fox NFL by name-join to the crosswalk (16/16) |
+| `spread_line`, `total_line`, `odds_source` | nflverse schedule (`load_nfl_schedule`: `spread_line`, `total_line`) for NFL; CFBD lines / ESPN pickcenter snapshot for CFB; provenance in `odds_source` |
 | `cbs_game_id` | **scraped from the CBS week scoreboard page** (`sb_<season>_<type>_<week>.html`; JAC→JAX, WAS→WSH); no API |
 | `ncaa_game_id` | ncaa.com GraphQL game ids (≠ stats.ncaa.org contest ids); pre-game tiers only (date + voted team map — the score-matched tiers of `ncaa_mfb_06_xwalk_build.py` are post-game) |
 
 Teams: `espn_team_id`, `espn_abbr`, `shield_team_id`, `nflverse_abbr`, `cbs/yahoo/fox/ncaa_team_id`. All ids
 Utf8 (labels, never arithmetic). `_build_nfl_idmap()` materialises the ESPN↔Shield↔nflverse(+Yahoo) leg from
-nfl-raw today; CBS/Fox/NCAA columns exist and stay null until their builders land. Where it runs: the nfl-raw
-daily driver (after the crosswalk rebuild) and the cfb-raw equivalent; GOP reads the parquet from KV or the
-Data API — decision for Stage 4.
+nfl-raw today; CBS/Fox/NCAA and the odds columns exist and stay null until their builders land. Where it runs:
+the nfl-raw daily driver (after the crosswalk rebuild) and the cfb-raw equivalent, each ending in an sdv-db
+upsert; the sdv-db table + route are a required change (§6.3).
 
 ## 5. Parity harness (`parity.py`)
 
@@ -212,6 +229,9 @@ Tests: the ESPN fixture against itself is perfect; a perturbed copy reports exac
 
 ### 6.2 Game on Paper (D report file:line; ≈20 lines in Python)
 
+* `idmap_row` for `_process_game` comes from `GET {DATA_API}/v1/{league}/idmap/{espn_id}`
+  (`idmap._fetch_idmap_row`); a 404 → `idmap_row=None` (ESPN-only game; alternates fail with "id unmapped").
+
 * `python/app.py:337-340` `_PROCESSORS` → replace with `from sportsdataverse.football.sources.dispatch import
   _process_game`; `app.py:354-379` `_process_game("nfl"|"cfb", id)` → call it with
   `source=os.environ.get(f"{LEAGUE}_PBP_SOURCE", "espn")` and `idmap_row=<KV/Data API lookup>`; keep
@@ -226,6 +246,17 @@ Tests: the ESPN fixture against itself is perfect; a perturbed copy reports exac
   cache config (`competitions[0].date` + `status`), invalid-status, pregame and `GameRoute.astro:21-29`
   keep working. Without this, failover covers "site.api down, cdn alive" only.
 * Later (PLAN Phase 7): scoreboard/schedule off ESPN; not needed for a game-page failover.
+
+### 6.3 sdv-db (required; where it lands)
+
+* Table `idmap` with the §4 columns, PK `(league, espn_event_id)`, upserted nightly by the nfl-raw / cfb-raw
+  drivers (via the ingest route or a direct `sdv_db` writer).
+* Route `GET /v1/{league}/idmap/{espn_id}` → one row as JSON, 404 when unmapped. Lands as a catalog entry in
+  `sdv-db/python/src/sdv_db/catalog.py` (`_build_registry`, the `Dataset` registry the API is generated
+  from) so `python/src/sdv_db/api/gen/` regenerates `api/generated/endpoints.py` (`mount_all`) — no
+  hand-written Flask/FastAPI route.
+* Loader side in sdv-py: `_fetch_idmap_row` today (private); a public `load_*` loader is out of scope until
+  `_process_game` goes public.
 
 ## 7. Known per-source lossy columns (scorecards; `contract.KNOWN_LOSSY`)
 
@@ -244,25 +275,30 @@ Tests: the ESPN fixture against itself is perfect; a perturbed copy reports exac
 
 * `contract.py` — field lists, `KNOWN_LOSSY`, `_validate_summary` → `ContractReport`.
 * `dispatch.py` — `SOURCE_ORDER`, adapter registry (ESPN registered), `_fallthrough_order`, `_process_game`,
-  `ProcessedGame` with provenance + health, `SourceUnavailable` / `AllSourcesFailed`.
-* `idmap.py` — `GAME_SCHEMA` / `TEAM_SCHEMA`, `_build_nfl_idmap` (nfl-raw crosswalk → Shield/nflverse/Yahoo
-  legs), `_write_idmap` / `_load_idmap` (schema-asserted), `_lookup`, `_yahoo_nfl_game_id`.
+  `ProcessedGame` with provenance (`requested`/`served`/`attempts`/`odds`) + health, stored-line →
+  `odds_override` cascade, `SourceUnavailable` / `AllSourcesFailed`.
+* `idmap.py` — `GAME_SCHEMA` (= sdv-db `idmap` row) / `TEAM_SCHEMA`, `IDMAP_ROUTE`, `_build_nfl_idmap`
+  (nfl-raw crosswalk → Shield/nflverse/Yahoo legs, `built_at`), `_write_idmap` / `_load_idmap`
+  (schema-asserted), `_lookup`, `_fetch_idmap_row` (Data API), `_odds_override_from_row`, `_yahoo_nfl_game_id`.
 * `parity.py` — `GOP_HARD_COLUMNS`, `GOP_BOX_SECTIONS`, `_compare_plays`, `_compare_box`,
   `_compare_processed`, `ParityReport.gates()/check()`.
-* 61 offline tests on real fixtures (`summary_401872922.json`, 26 CFB summaries, a 17-game slice of the
+* 65 offline tests on real fixtures (`summary_401872922.json`, 26 CFB summaries, a 17-game slice of the
   nfl-raw crosswalk); no network; two real pipeline runs per session.
 
 Not included, by design: any Shield / CBS / Yahoo / Fox / NCAA adapter, the nightly id-map job, GOP edits,
 the `type.text → type.id` map (lands with the first adapter), public exports / codegen.
 
-## 9. Open questions (user)
+## 9. Decisions (user, 2026-09-17)
 
-1. **ESPN as terminal fallback** when an alternate is explicitly requested — keep (fails fast in an outage) or
-   honour the operator's exclusion? (`_fallthrough_order` is one line either way.)
-2. **Id-map delivery to GOP:** KV blob per league (Worker-readable, header fallback possible) vs Data API route
-   (Postgres, joins with percentiles). Affects the nightly job's target.
-3. **Odds for alternates:** `odds_override` from the nflverse/CFBD closing line stored beside the id map, or
-   accept the 2.5/55.5 default on a failover page?
-4. **H1 thresholds:** kwarg (default unchanged) vs bypass when `playByPlaySource != "full"`.
-5. **Promotion path:** when the first adapter ships, does `_process_game` become the public
-   `process_game(league, espn_id, source=)` (codegen + docs run), or stay private until GOP is wired?
+1. **ESPN is always the terminal fallback**, even when an alternate was explicitly requested. Provenance
+   records `requested` vs `served` and the per-source `attempts` error list so shadow mode can see a
+   requested-source failure. Implemented (`dispatch._fallthrough_order`, `_process_game`).
+2. **Id map via the Data API route** `GET /v1/{league}/idmap/{espn_id}`: nightly job → sdv-db table (§4
+   shape) → GOP Flask. sdv-py owns the builder + loader (`_build_nfl_idmap`, `_fetch_idmap_row`); the sdv-db
+   table + route are §6.3.
+3. **Odds on failover = stored closing line** (`spread_line`, `total_line`, `odds_source`, stored by the same
+   nightly job beside the ids) passed as `odds_override`; else the source's own odds; else the 2.5 / 55.5
+   default, flagged in `provenance.odds.default`. Implemented (`idmap._odds_override_from_row`, dispatcher).
+4. **H1** = constructor kwarg on the processors (default unchanged).
+5. **`_process_game` goes public** (codegen + reference docs run) **at GOP wiring time**, not before; the
+   package stays underscore-prefixed until then.

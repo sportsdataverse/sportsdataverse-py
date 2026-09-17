@@ -21,6 +21,7 @@ from typing import Any
 import polars as pl
 
 from sportsdataverse.football.sources.contract import KNOWN_LOSSY, LEAGUES, ContractReport, _validate_summary
+from sportsdataverse.football.sources.idmap import _odds_override_from_row
 
 #: Canonical failover order per league (scorecards 2026-09-16). ESPN first while it is the
 #: primary; the remaining order is the recommended alternate ranking.
@@ -109,7 +110,7 @@ class ProcessedGame:
         | game | dict | the processor's ``run_processing_pipeline()`` dict, plus a ``source`` provenance key |
         | processor | NFLPlayProcess or CFBPlayProcess | the instance (GOP needs ``plays_frame`` / ``create_box_score`` for spans) |
         | plays_frame | polars.DataFrame | ``processor.plays_frame`` |
-        | provenance | dict | ``game["source"]``: requested/actual source, attempts, contract report, lossy columns |
+        | provenance | dict | ``game["source"]``: requested vs served source, attempts, contract report, odds, lossy columns |
         | health | dict[str, str] | per-source outcome this call: ``"ok"``, ``"not implemented"``, or the error |
     """
 
@@ -173,8 +174,10 @@ for _league in LEAGUES:
 def _fallthrough_order(league: str, source: str, fallthrough: bool = True) -> tuple[str, ...]:
     """Sources to try, in order: the requested one, then the rest of :data:`SOURCE_ORDER`.
 
-    ESPN is always the terminal fallback when an alternate was requested (it fails fast in
-    an ESPN outage and costs nothing otherwise).
+    **Decision (user, 2026-09-17): ESPN is always the terminal fallback**, even when an alternate
+    was explicitly requested -- it fails fast in an ESPN outage and costs nothing otherwise.
+    Shadow-mode comparisons learn that the requested source failed from
+    ``provenance["requested"] != provenance["served"]`` plus the per-source ``attempts`` errors.
     """
     order = SOURCE_ORDER.get(league)
     if order is None:
@@ -225,7 +228,9 @@ def _process_game(
             A source with no entry fetches.
         participants: optional pre-shaped ``participants=`` frame (ESPN athlete-id space).
         odds_override: optional closing line for sources that carry no odds.
-        idmap_row: the game's pre-kickoff id-map row (``idmap._lookup``); never built at request time.
+        idmap_row: the game's pre-kickoff id-map row (``idmap._fetch_idmap_row`` from the Data API,
+            or ``idmap._lookup`` offline); never built at request time. Its stored closing line becomes
+            ``odds_override`` when none was passed.
 
     Returns:
         :class:`ProcessedGame`. ``game["source"]`` carries the provenance dict:
@@ -233,12 +238,13 @@ def _process_game(
         | key | type | description |
         |---|---|---|
         | requested | str | the ``source`` argument |
-        | source | str | the source that produced the game |
-        | fallback | bool | True when ``source != requested`` |
-        | attempts | list[dict] | every source tried: ``{source, ok, error, seconds}`` |
+        | served | str | the source that actually produced the game |
+        | fallback | bool | True when ``served != requested`` |
+        | attempts | list[dict] | every source tried, in order: ``{source, ok, error, seconds}`` |
         | playByPlaySource | str | ``header.competitions[0].playByPlaySource`` of the adapted summary |
         | native_ids | dict | the producing adapter's native ids |
         | contract | dict | ``ContractReport.summary()`` for the adapted summary |
+        | odds | dict | ``{source, default, from_idmap}`` -- the processor's ``odds_source`` and whether the 2.5 / 55.5 default was used |
         | lossy_columns | list[str] | :data:`KNOWN_LOSSY` for ``(league, source)`` |
         | notes | list[str] | adapter notes |
 
@@ -274,15 +280,20 @@ def _process_game(
                 )
             )
             continue
+        if adapted.odds_override is None:
+            # odds on failover: the stored closing line (nightly job, beside the id map) first,
+            # then the source's own odds (adapter-supplied), else the processor's 2.5 / 55.5 default
+            adapted.odds_override = _odds_override_from_row(idmap_row)
         try:
             proc, game = _run_processor(league, espn_id, adapted)
         except Exception as exc:
             attempts.append(Attempt(src, False, f"processor: {type(exc).__name__}: {exc}", time.perf_counter() - t0))
             continue
         attempts.append(Attempt(src, True, None, time.perf_counter() - t0))
+        odds_source = getattr(proc, "odds_source", None)
         provenance = {
             "requested": source,
-            "source": src,
+            "served": src,
             "fallback": src != source,
             "attempts": [a.__dict__ for a in attempts],
             "playByPlaySource": (adapted.summary.get("header", {}).get("competitions") or [{}])[0].get(
@@ -290,6 +301,14 @@ def _process_game(
             ),
             "native_ids": adapted.native_ids,
             "contract": report.summary(),
+            "odds": {
+                # "injected" = stored closing line (or adapter odds); "default" = the 2.5 / 55.5 fallback
+                "source": odds_source,
+                "default": odds_source == "default",
+                "from_idmap": adapted.odds_override is not None
+                and idmap_row is not None
+                and adapted.odds_override == _odds_override_from_row(idmap_row),
+            },
             "lossy_columns": list(KNOWN_LOSSY.get((league, src), ())),
             "notes": adapted.notes,
         }

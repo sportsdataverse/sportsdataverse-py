@@ -1,8 +1,13 @@
 """Pre-kickoff id map: ESPN event / team ids <-> every alternate source's ids (private, experimental).
 
-The map is built **before kickoff from schedules** (a nightly job) and stored as two small
-parquets GOP reads in O(1) at request time. It is never built on ESPN at request time --
-that is the case it exists for. Today only the NFL ESPN <-> Shield <-> nflverse leg is
+The map is built **before kickoff from schedules** by a nightly job that writes it into
+sdv-db; GOP's Flask reads one row at request time from the Data API route
+``/v1/{league}/idmap/{espn_id}`` (:data:`IDMAP_ROUTE`, :func:`_fetch_idmap_row`). The same
+job stores the closing line beside the ids (``spread_line`` / ``total_line`` / ``odds_source``)
+so a failover game gets a real spread through ``odds_override`` (:func:`_odds_override_from_row`).
+It is never built on ESPN at request time -- that is the case it exists for. The parquet
+pair (:func:`_write_idmap` / :func:`_load_idmap`) is the builder's hand-off format and the
+offline test fixture. Today only the NFL ESPN <-> Shield <-> nflverse leg is
 materialised, from nfl-raw's ``nfl/espn/crosswalk/{games,teams}.json``; the Yahoo NFL ids are
 pure functions of that row (``nfl.g.{ET date}{ESPN home id:03d}``, ``nfl.t.{ESPN team id}``)
 and are filled in the same pass. CBS / Fox / NCAA columns exist in the schema and stay null
@@ -14,11 +19,16 @@ pre-game tiers).
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 from zoneinfo import ZoneInfo
 
 import polars as pl
+
+from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import NoDataError
 
 GAME_SCHEMA: dict[str, pl.DataType] = {
     "league": pl.Utf8,
@@ -34,10 +44,19 @@ GAME_SCHEMA: dict[str, pl.DataType] = {
     "nflverse_game_id": pl.Utf8,
     "cbs_game_id": pl.Utf8,
     "yahoo_game_id": pl.Utf8,
-    "fox_game_id": pl.Utf8,
+    "fox_event_id": pl.Utf8,
     "ncaa_game_id": pl.Utf8,
+    "spread_line": pl.Float64,  # nflverse convention: home team's expected margin (> 0 = home favoured)
+    "total_line": pl.Float64,
+    "odds_source": pl.Utf8,  # e.g. "nflverse_schedule", "cfbd_lines", "espn_pickcenter"
+    "built_at": pl.Utf8,  # ISO-8601 UTC of the nightly build
 }
-"""One row per game. Every id is Utf8: ids are labels, never arithmetic (join-key dtype discipline)."""
+"""One row per game = one sdv-db ``idmap`` row = one ``/v1/{league}/idmap/{espn_id}`` response.
+
+Every id is Utf8: ids are labels, never arithmetic (join-key dtype discipline)."""
+
+IDMAP_ROUTE = "/v1/{league}/idmap/{espn_id}"
+"""Data API route GOP reads at request time (served by sdv-db's generated API)."""
 
 TEAM_SCHEMA: dict[str, pl.DataType] = {
     "league": pl.Utf8,
@@ -66,13 +85,16 @@ def _yahoo_nfl_game_id(kickoff_utc: str, home_espn_team_id: str | int) -> str:
     return f"nfl.g.{dt.astimezone(_ET):%Y%m%d}{int(home_espn_team_id):03d}"
 
 
-def _build_nfl_idmap(games_json: str | Path, teams_json: str | Path) -> tuple[pl.DataFrame, pl.DataFrame]:
+def _build_nfl_idmap(
+    games_json: str | Path, teams_json: str | Path, *, built_at: str | None = None
+) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Build the NFL id map from nfl-raw's ESPN crosswalk (offline, no network).
 
     Args:
         games_json: ``nfl-raw/nfl/espn/crosswalk/games.json`` (list of rows with ``espn_event_id``,
             ``shield_game_id``, ``game_id`` (nflverse), ``kickoff_utc``, home/away ESPN team ids).
         teams_json: ``nfl-raw/nfl/espn/crosswalk/teams.json``.
+        built_at: ISO-8601 UTC stamp for the build; defaults to now.
 
     Returns:
         ``(games, teams)`` frames in :data:`GAME_SCHEMA` / :data:`TEAM_SCHEMA`.
@@ -82,7 +104,9 @@ def _build_nfl_idmap(games_json: str | Path, teams_json: str | Path) -> tuple[pl
         | shield_game_id, nflverse_game_id | crosswalk verbatim |
         | yahoo_game_id, yahoo_team_id | computed (:func:`_yahoo_nfl_game_id`; ``nfl.t.{espn id}``) |
         | cbs_*, fox_*, ncaa_* | null until their builders land |
+        | spread_line, total_line, odds_source | null here; the nightly job fills them from the nflverse schedule (NFL) / CFBD lines (CFB) |
     """
+    built_at = built_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     rows = json.loads(Path(games_json).read_text(encoding="utf-8"))
     games = pl.DataFrame(
         [
@@ -100,8 +124,12 @@ def _build_nfl_idmap(games_json: str | Path, teams_json: str | Path) -> tuple[pl
                 "nflverse_game_id": r.get("game_id"),
                 "cbs_game_id": None,
                 "yahoo_game_id": _yahoo_nfl_game_id(r["kickoff_utc"], r["home_espn_team_id"]),
-                "fox_game_id": None,
+                "fox_event_id": None,
                 "ncaa_game_id": None,
+                "spread_line": None,
+                "total_line": None,
+                "odds_source": None,
+                "built_at": built_at,
             }
             for r in rows
         ],
@@ -166,3 +194,44 @@ def _lookup(games: pl.DataFrame, espn_event_id: str | int, teams: pl.DataFrame |
             )
             row[f"{side}_team"] = t.row(0, named=True) if not t.is_empty() else None
     return row
+
+
+def _odds_override_from_row(row: dict | None) -> dict | None:
+    """The processor's ``odds_override`` from a stored closing line, or None when the row has none.
+
+    ``spread_line`` follows nflverse: the home team's expected margin, positive when the home
+    team is favoured. The processor wants ``gameSpread`` as a magnitude plus ``homeFavorite``
+    (``nfl_pbp.py:615-624``: ``homeTeamSpread = +gameSpread`` when home is favoured).
+    """
+    if not row or row.get("spread_line") is None or row.get("total_line") is None:
+        return None
+    spread = float(row["spread_line"])
+    return {
+        "gameSpread": abs(spread),
+        "overUnder": float(row["total_line"]),
+        "homeFavorite": spread > 0,
+        "gameSpreadAvailable": True,
+    }
+
+
+def _fetch_idmap_row(
+    league: str,
+    espn_event_id: str | int,
+    *,
+    base_url: str,
+    transport: Callable[..., Any] = download,
+    **kwargs: Any,
+) -> dict | None:
+    """Read one id-map row from the Data API (``{base_url}/v1/{league}/idmap/{espn_id}``).
+
+    Returns:
+        The row as a dict (the :data:`GAME_SCHEMA` columns), or None on a 404 (game not mapped).
+        Any other failure raises through ``download`` -- a failed fetch is never an empty row.
+    """
+    url = base_url.rstrip("/") + IDMAP_ROUTE.format(league=league, espn_id=espn_event_id)
+    try:
+        resp = transport(url=url, **kwargs)
+    except NoDataError:
+        return None
+    body = resp.json()
+    return body if isinstance(body, dict) and body else None

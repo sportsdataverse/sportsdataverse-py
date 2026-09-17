@@ -7,12 +7,16 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.football.sources.idmap import (
     GAME_SCHEMA,
+    IDMAP_ROUTE,
     TEAM_SCHEMA,
     _build_nfl_idmap,
+    _fetch_idmap_row,
     _load_idmap,
     _lookup,
+    _odds_override_from_row,
     _write_idmap,
     _yahoo_nfl_game_id,
 )
@@ -22,7 +26,11 @@ FIX = Path(__file__).parent / "fixtures"
 
 @pytest.fixture(scope="module")
 def idmap():
-    return _build_nfl_idmap(FIX / "nfl_espn_crosswalk_games_2026_wk1.json", FIX / "nfl_espn_crosswalk_teams.json")
+    return _build_nfl_idmap(
+        FIX / "nfl_espn_crosswalk_games_2026_wk1.json",
+        FIX / "nfl_espn_crosswalk_teams.json",
+        built_at="2026-09-17T09:00:00Z",
+    )
 
 
 def test_schema_and_shape(idmap):
@@ -32,6 +40,23 @@ def test_schema_and_shape(idmap):
     assert games["espn_event_id"].n_unique() == games.height
     assert games["cbs_game_id"].null_count() == games.height  # builder not landed yet: stays null, never fabricated
     assert games["shield_game_id"].null_count() == 0 and games["nflverse_game_id"].null_count() == 0
+    assert games["spread_line"].null_count() == games.height  # the nightly job fills the line, not the crosswalk
+    assert games["built_at"].unique().to_list() == ["2026-09-17T09:00:00Z"]
+    # the Data API row shape (user decision Q2) is a subset of the table
+    assert {
+        "league",
+        "season",
+        "espn_event_id",
+        "shield_game_id",
+        "cbs_game_id",
+        "yahoo_game_id",
+        "fox_event_id",
+        "ncaa_game_id",
+        "kickoff_utc",
+        "home_espn_team_id",
+        "away_espn_team_id",
+        "built_at",
+    } <= set(GAME_SCHEMA)
 
 
 def test_lookup_cle_at_jax(idmap):
@@ -76,3 +101,38 @@ def test_parquet_round_trip_and_schema_drift(idmap, tmp_path):
     games.with_columns(pl.col("week").cast(pl.Int64)).write_parquet(d / "games.parquet")
     with pytest.raises(ValueError, match="schema drift"):
         _load_idmap(d)
+
+
+def test_odds_override_from_row():
+    assert _odds_override_from_row(None) is None
+    assert _odds_override_from_row({"spread_line": None, "total_line": 40.5}) is None
+    # nflverse spread_line = home margin: JAX -8.5 favourite at home -> +8.5, homeFavorite
+    assert _odds_override_from_row({"spread_line": 8.5, "total_line": 40.5}) == {
+        "gameSpread": 8.5,
+        "overUnder": 40.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+    }
+    assert _odds_override_from_row({"spread_line": -3, "total_line": 47})["homeFavorite"] is False
+
+
+def test_fetch_idmap_row_reads_the_data_api_route():
+    seen = {}
+
+    class _Resp:
+        def __init__(self, body):
+            self._body = body
+
+        def json(self):
+            return self._body
+
+    def transport(url, **kw):
+        seen["url"] = url
+        if url.endswith("/1"):
+            raise NoDataError("404")
+        return _Resp({"espn_event_id": "401872922", "shield_game_id": "abc"})
+
+    assert IDMAP_ROUTE == "/v1/{league}/idmap/{espn_id}"
+    row = _fetch_idmap_row("nfl", 401872922, base_url="https://api.example/", transport=transport)
+    assert seen["url"] == "https://api.example/v1/nfl/idmap/401872922" and row["shield_game_id"] == "abc"
+    assert _fetch_idmap_row("nfl", 1, base_url="https://api.example", transport=transport) is None
