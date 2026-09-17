@@ -2388,10 +2388,15 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             def_wp_after=1 - pl.col("wp_after"),
         )
         .with_columns(
-            home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            # wp_after is stated in the START-possession team's perspective (every
+            # branch above takes lead_wp_before or its complement into that frame), so
+            # the home/away split keys off start.pos_team.id. Keyed off end.pos_team.id
+            # it came out complemented on every possession change (CFB fixed the same
+            # code as B7): 70% of the sweep's possession-change rows, 100% of punts.
+            home_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
             .otherwise(pl.col("def_wp_after")),
-            away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            away_wp_after=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
             .otherwise(pl.col("def_wp_after")),
         )
