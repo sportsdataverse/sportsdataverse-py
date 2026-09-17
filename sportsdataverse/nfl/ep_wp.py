@@ -2280,6 +2280,11 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             "classify the plays before calling calculate_wpa."
         )
 
+    _start_pos_score_diff_end = (
+        pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+        .then(pl.col("end.homeScore") - pl.col("end.awayScore"))
+        .otherwise(pl.col("end.awayScore") - pl.col("end.homeScore"))
+    )
     play_df = (
         df.with_columns(
             # --- Leading overlay: kickoff wp_before uses the touchback view ---
@@ -2307,6 +2312,10 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),
         )
         .with_columns(
+            # The game-over branches judge the result in the START-possession frame,
+            # like every other wp_after branch: pos_score_diff_end is the END team's,
+            # and ESPN flips end.team on ~5% of final incompletions (the loser's
+            # last throw published home_wp_after 1.0 in 9 of 148 swept games).
             wp_after=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(pl.col("wp_before"))
             .when(
@@ -2318,7 +2327,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") > 0),
+                .and_(_start_pos_score_diff_end > 0),
             )
             .then(1.0)
             .when(
@@ -2328,7 +2337,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") < 0),
+                .and_(_start_pos_score_diff_end < 0),
             )
             .then(0.0)
             .when(

@@ -11,6 +11,7 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_400791508_trimmed.json.gz`` -- WSH @ PHI, 2015 week 16 (end.team flips, "PAT failed")
 * ``summary_400874485_trimmed.json.gz`` -- NYG @ PHI, 2016 week 16 ("34 Yrd Interception Return")
 * ``summary_261022011_trimmed.json.gz`` -- WSH @ IND, 2006 week 7 (the try booked on the kickoff row)
+* ``summary_291115014_trimmed.json.gz`` -- NO @ STL, 2009 week 10 (end.team flipped on the final play)
 """
 
 from __future__ import annotations
@@ -121,6 +122,21 @@ def nyg_phi_2016() -> pl.DataFrame:
 @pytest.fixture(scope="module")
 def no_nyj_2013() -> pl.DataFrame:
     return _process(331103020)
+
+
+@pytest.fixture(scope="module")
+def stl_no_2009() -> pl.DataFrame:
+    return _process(291115014)
+
+
+def test_final_row_home_wp_matches_the_result(stl_no_2009, wsh_phi_2015, mia_den_2002):
+    # NO 28 @ STL 23: ESPN flips end.team to NO on M.Bulger's last incompletion; the
+    # game-over wp_after is judged for the team that threw it, not for ESPN's end team
+    last = _row(stl_no_2009, 2911150143853)
+    assert last["wp_after"] == 0.0 and last["home_wp_after"] == 0.0 and last["away_wp_after"] == 1.0
+    for f, home_won in ((stl_no_2009, False), (wsh_phi_2015, False), (mia_den_2002, False)):
+        tail = f.filter(pl.col("home_wp_after").is_not_null()).tail(1).row(0, named=True)
+        assert tail["home_wp_after"] == (1.0 if home_won else 0.0)
 
 
 # ---------------------------------------------------------------------------
