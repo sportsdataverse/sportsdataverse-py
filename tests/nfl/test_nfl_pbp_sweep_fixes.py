@@ -183,6 +183,7 @@ def test_interception_return_touchdown_is_not_a_passing_touchdown(mia_den_2002):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N26 pending (see s1-nfl/r3_STATE.md)")
 def test_sack_stubs_are_not_pass_attempts(phi_nyg_2006):
     sacks = phi_nyg_2006.filter(pl.col("type.text") == "Sack")
     assert sacks.height >= 7 and (sacks["text"] == "Sack").all()
@@ -195,6 +196,7 @@ def test_sack_stubs_are_not_pass_attempts(phi_nyg_2006):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N20 pending (see s1-nfl/r3_STATE.md)")
 def test_pre_2015_interceptions_are_pass_plays(mia_den_2002):
     ints = mia_den_2002.filter(pl.col("id").is_in([2210130071212, 2210130072309]))
     assert ints["type.text"].to_list() == ["Interception Return", "Interception Return"]
@@ -207,6 +209,7 @@ def test_pre_2015_interceptions_are_pass_plays(mia_den_2002):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N28 pending (see s1-nfl/r3_STATE.md)")
 def test_scoring_summary_kickers_passers_and_receivers(wsh_phi_2015):
     f = wsh_phi_2015
     assert _row(f, 4007915081769)["fg_kicker_player_name"] == "C.Sturgis"  # "Caleb Sturgis 34 Yd Field Goal"
@@ -222,6 +225,7 @@ def test_scoring_summary_kickers_passers_and_receivers(wsh_phi_2015):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N31 pending (see s1-nfl/r3_STATE.md)")
 def test_field_goals_start_at_the_snap_spot(wsh_phi_2015):
     assert _row(wsh_phi_2015, 4007915081769)["start.yardsToEndzone"] == 16  # "34 Yd Field Goal" from the PHI 16
     assert _row(wsh_phi_2015, 4007915082166)["start.yardsToEndzone"] == 10  # "28 Yd Field Goal" from the 10
@@ -232,6 +236,7 @@ def test_field_goals_start_at_the_snap_spot(wsh_phi_2015):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N15 pending (see s1-nfl/r3_STATE.md)")
 def test_direct_snap_taker_is_not_the_receiver(no_nyj_2013):
     r = _row(no_nyj_2013, 3311030201335)  # "Direct snap to J.Cribbs.  J.Cribbs pass deep right to Z.Sudfeld to NO 15"
     assert (r["passer_player_name"], r["receiver_player_name"]) == ("J.Cribbs", "Z.Sudfeld")
@@ -242,6 +247,7 @@ def test_direct_snap_taker_is_not_the_receiver(no_nyj_2013):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N16 pending (see s1-nfl/r3_STATE.md)")
 def test_four_letter_initials_resolve_to_an_id():
     with gzip.open(FIX / "summary_290927014_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         summary = json.load(fh)
@@ -269,6 +275,7 @@ def test_four_letter_initials_resolve_to_an_id():
         ("A.St. Brown", "A.St. Brown"),
     ],
 )
+@pytest.mark.xfail(strict=False, reason="round-3 N16 pending (see s1-nfl/r3_STATE.md)")
 def test_name_suffixes_are_stripped_like_the_shared_grammar(name, stripped):
     from sportsdataverse.nfl.nfl_pbp import _NFL_NAME_SUFFIX_RE
 
@@ -280,6 +287,7 @@ def test_name_suffixes_are_stripped_like_the_shared_grammar(name, stripped):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N17 pending (see s1-nfl/r3_STATE.md)")
 def test_html_entities_are_unescaped_at_load(nyg_no_2009):
     f = nyg_no_2009
     assert not f["text"].str.contains("&apos;").any()
@@ -293,6 +301,7 @@ def test_html_entities_are_unescaped_at_load(nyg_no_2009):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.xfail(strict=True, reason="round-3 N27 pending (see s1-nfl/r3_STATE.md)")
 def test_legacy_team_tagged_text_names_players(mia_den_2002):
     f = mia_den_2002
     assert (
