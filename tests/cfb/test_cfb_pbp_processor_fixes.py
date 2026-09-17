@@ -136,3 +136,19 @@ def test_overtime_timeouts_reset_to_one():
     for col in _TIMEOUT_COLS[:4]:
         assert plays[col].max() <= 1, col
         assert plays[col].min() >= 0, col
+
+
+# --- C8: a timeout is charged to the team it names, even with an empty mascot -------------------
+
+
+def test_timeout_team_matching_empty_mascot_and_substrings():
+    # "Timeout Indiana" contains Notre Dame's abbreviation "nd"; an empty mascot is contained in
+    # every string. Either way the timeout used to be charged to both teams.
+    plays = _plays(401677179, blank_mascots=True).filter(pl.col("type.text") == "Timeout")
+    assert plays.height == 7
+    both = plays.filter(pl.col("homeTimeoutCalled") & pl.col("awayTimeoutCalled"))
+    assert both.height == 0, both["text"].to_list()
+    home = plays.filter(pl.col("homeTimeoutCalled"))["text"]  # Notre Dame
+    away = plays.filter(pl.col("awayTimeoutCalled"))["text"]  # Indiana
+    assert home.str.contains("Notre Dame").all() and away.str.contains("Indiana").all()
+    assert home.len() + away.len() == 7

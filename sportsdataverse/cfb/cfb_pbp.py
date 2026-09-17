@@ -544,6 +544,28 @@ _PENALTY_TOKEN_RES = [
 _SQUASH_RE = re.compile(r"[^A-Z0-9]")
 
 
+def _timeout_team_match_len(names) -> pl.Expr:
+    """Length of the longest of *names* found in a Timeout row's team token (0 when none is).
+
+    The token is the lower-cased text without the word "timeout" and the clock tail ("Timeout
+    Indiana, clock 03:30" -> "indiana"; 2004's "Huskies timeout; 00:40 remaining 2nd quarter" ->
+    "huskies"), matched literally, each part also without its parentheses ("Miami (OH)" is
+    written "MIAMI OH"). Empty or missing name parts are skipped: "" is contained in every
+    string, so an empty mascot used to charge every timeout to that team.
+    """
+    token = (
+        pl.col("text")
+        .str.to_lowercase()
+        .str.replace(r"(?:[,;]\s*|\s+)(?:clock\b|\d{1,2}:\d{2}\s+remaining\b).*$", "")
+        .str.replace(r"\btimeout\b", "")
+        .str.strip_chars(" .,;")
+    )
+    parts = {str(n).strip().lower() for n in names if n is not None}
+    parts = (parts | {n.replace("(", "").replace(")", "") for n in parts}) - {"", "none"}
+    hits = [pl.when(token.str.contains(n, literal=True)).then(len(n)).otherwise(0) for n in parts]
+    return pl.max_horizontal(hits) if hits else pl.lit(0)
+
+
 def _squash_team(s):
     """Uppercase and strip non-alphanumerics for team-token comparison."""
     return _SQUASH_RE.sub("", s.upper()) if s else ""
@@ -1463,6 +1485,12 @@ class CFBPlayProcess(object):
         # they are distinct plays with bad text, not duplicates.
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
+        home_match = _timeout_team_match_len(
+            [init["homeTeamAbbrev"], init["homeTeamName"], init["homeTeamMascot"], init["homeTeamNameAlt"]]
+        )
+        away_match = _timeout_team_match_len(
+            [init["awayTeamAbbrev"], init["awayTeamName"], init["awayTeamMascot"], init["awayTeamNameAlt"]]
+        )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1556,37 +1584,14 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False)
                 .alias("end.is_home"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["homeTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
-                .then(True)
-                .otherwise(False)
+                # Charged to the team whose name part is the LONGER match, so "Timeout Indiana" is
+                # Indiana's and not Notre Dame's ("nd"), "Timeout Iowa State" is not Iowa's. A tie
+                # (two teams sharing a mascot) still charges both.
+                ((pl.col("type.text") == "Timeout") & (home_match > 0) & (home_match >= away_match))
+                .fill_null(False)
                 .alias("homeTimeoutCalled"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["awayTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
-                .then(True)
-                .otherwise(False)
+                ((pl.col("type.text") == "Timeout") & (away_match > 0) & (away_match >= home_match))
+                .fill_null(False)
                 .alias("awayTimeoutCalled"),
             )
         )
