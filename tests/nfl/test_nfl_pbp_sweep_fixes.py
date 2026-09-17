@@ -9,6 +9,7 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_290927014_trimmed.json.gz`` -- GB @ STL, 2009 week 3 (blocked FG, "Josh.Brown")
 * ``summary_291018018_trimmed.json.gz`` -- NYG @ NO, 2009 week 6 (``&apos;`` in the text)
 * ``summary_400791508_trimmed.json.gz`` -- WSH @ PHI, 2015 week 16 (end.team flips, "PAT failed")
+* ``summary_400874485_trimmed.json.gz`` -- NYG @ PHI, 2016 week 16 ("34 Yrd Interception Return")
 """
 
 from __future__ import annotations
@@ -112,6 +113,11 @@ def phi_nyg_2006() -> pl.DataFrame:
 
 
 @pytest.fixture(scope="module")
+def nyg_phi_2016() -> pl.DataFrame:
+    return _process(400874485)
+
+
+@pytest.fixture(scope="module")
 def no_nyj_2013() -> pl.DataFrame:
     return _process(331103020)
 
@@ -207,7 +213,6 @@ def test_pre_2015_interceptions_are_pass_plays(mia_den_2002):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N28 pending (see s1-nfl/r3_STATE.md)")
 def test_scoring_summary_kickers_passers_and_receivers(wsh_phi_2015):
     f = wsh_phi_2015
     assert _row(f, 4007915081769)["fg_kicker_player_name"] == "C.Sturgis"  # "Caleb Sturgis 34 Yd Field Goal"
@@ -216,6 +221,39 @@ def test_scoring_summary_kickers_passers_and_receivers(wsh_phi_2015):
     assert (reed["passer_player_name"], reed["receiver_player_name"]) == ("K.Cousins", "J.Reed")
     thompson = _row(f, 4007915083091)
     assert (thompson["passer_player_name"], thompson["receiver_player_name"]) == ("K.Cousins", "C.Thompson")
+    # "Pierre Garcon Pass From Kirk Cousins for 13 Yrds TWO-POINT CONVERSION ATTEMPT.
+    # K.Cousins pass to J.Crowder is complete. ATTEMPT SUCCEEDS.": the try's target is not the receiver
+    garcon = _row(f, 4007915084040)
+    assert (garcon["passer_player_name"], garcon["receiver_player_name"]) == ("K.Cousins", "P.Garcon")
+
+
+def test_scoring_summary_interceptor_is_named(nyg_phi_2016):
+    f = nyg_phi_2016
+    r = _row(f, 400874485377)  # "Malcolm Jenkins 34 Yrd Interception Return C.Sturgis extra point is GOOD, ..."
+    assert r["int_td"] is True and r["interception_player_name"] == "M.Jenkins"
+    assert _row(f, 400874485857)["fg_kicker_player_name"] == "R.Gould"  # "Robbie Gould 35 Yd Field Goal"
+
+
+@pytest.mark.parametrize(
+    ("text", "kicker", "interceptor"),
+    [
+        # verbatim ESPN scoring-summary rows (nfl-raw 2015-16); the spelled-out name
+        # folds to the "X.Surname" form the player's other rows use
+        ("Caleb Sturgis 34 Yd Field Goal ", "C.Sturgis", None),
+        ("Malcolm Jenkins 34 Yd Interception Return (Caleb Sturgis Kick)", None, "M.Jenkins"),
+        ("Marcus Cooper 60 Yd Interception Return  ", None, "M.Cooper"),
+        ("Malcolm Jenkins 34 Yrd Interception Return C.Sturgis extra point is GOOD, Center-R.Lovato", None, "M.Jenkins"),
+    ],
+)
+def test_scoring_summary_kicker_and_interceptor_fold_to_the_abbreviated_form(text, kicker, interceptor):
+    from sportsdataverse.nfl.nfl_pbp import _NFL_LEGACY_FG_KICKER_RE, _NFL_LEGACY_INTERCEPTOR_RE, _abbreviated_name
+
+    r = (
+        pl.DataFrame({"text": [text]})
+        .with_columns(k=_abbreviated_name(_NFL_LEGACY_FG_KICKER_RE), i=_abbreviated_name(_NFL_LEGACY_INTERCEPTOR_RE))
+        .row(0, named=True)
+    )
+    assert (r["k"], r["i"]) == (kicker, interceptor)
 
 
 # ---------------------------------------------------------------------------

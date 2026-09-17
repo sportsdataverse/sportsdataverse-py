@@ -122,6 +122,13 @@ _NFL_LEGACY_PASSER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Pp]ass "
 _NFL_LEGACY_RECEIVER_RE2 = r" to " + _NFL_LONG_NAME + r"\.?$"
 _NFL_LEGACY_XP_KICKER_RE = r"\(" + _NFL_LONG_NAME + r" Kick(?: [A-Za-z]+)?\)"
 _NFL_LEGACY_RUSHER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Rr]un for "
+# ...and the 2015-19 scoring-summary shape "Jordan Reed Pass From Kirk Cousins for 12 Yrds".
+_NFL_LEGACY_PASSER_RE3 = r"Pass From " + _NFL_LONG_NAME + r" for \d+ Yrds?"
+_NFL_LEGACY_RECEIVER_RE3 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" Pass From "
+# ...and its kicker / interceptor forms ("Caleb Sturgis 34 Yd Field Goal", "Malcolm
+# Jenkins 34 Yrd Interception Return").
+_NFL_LEGACY_FG_KICKER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? (?:Field Goal|FG)"
+_NFL_LEGACY_INTERCEPTOR_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? Interception Return"
 _NFL_RUSH_DIRECTION = r"(?:up the middle|left (?:end|tackle|guard)|right (?:end|tackle|guard)|scrambles|kneels)"
 # A ball-carrier followed by a rush direction, or (aborted-snap recoveries: "J.Williams
 # to DET 32 for 7 yards") by the spot / gain the run ends at.
@@ -3295,14 +3302,14 @@ class NFLPlayProcess(object):
                 .then(
                     pl.col("text")
                     .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} Yd Interception Return|(?i)(.{0,25} )\\d{0,2} yd interception return",
+                        r"(?i)(.{0,25} )\d{0,2} Yd Interception Return|(?i)(.{0,25} )\d{0,2} yd interception return",
                     )
                     .str.replace(r"return (.+)", "")
                     .str.replace(r"(.+) intercepted", "")
                     .str.replace(r"intercepted", "")
                     .str.replace(r"Yd Interception Return", "")
                     .str.replace(r"for a 1st down", "")
-                    .str.replace(r"(\\d{1,2})", "")
+                    .str.replace(r"(\d{1,2})", "")
                     .str.replace(r"for a TD", "")
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
@@ -3384,7 +3391,7 @@ class NFLPlayProcess(object):
                     pl.col("text")
                     .str.extract(r"(?i)(.+) yd return of blocked")
                     .str.replace(r"(?i)blocked|(?i)Blocked", "")
-                    .str.replace(r"(?i)\\d+", "")
+                    .str.replace(r"(?i)\d+", "")
                     .str.replace(r"(?i)yd return of", ""),
                 )
                 .otherwise(pl.col("punt_block_player")),
@@ -3441,10 +3448,10 @@ class NFLPlayProcess(object):
                 .then(
                     pl.col("text")
                     .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} yd field goal|(?i)(.{0,25} )\\d{0,2} yd fg|(?i)(.{0,25} )\\d{0,2} yard field goal",
+                        r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
                     )
                     .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
-                    .str.replace(r"(\\d{1,2})", ""),
+                    .str.replace(r"(\d{1,2})", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
@@ -3499,8 +3506,8 @@ class NFLPlayProcess(object):
                     .str.replace(r"(?i) for ", "")
                     .str.replace(r"(?i) a safety", "")
                     .str.replace(r"(?i)r no gain", "")
-                    .str.replace(r"(?i)(.+)(\\d{1,2})", "")
-                    .str.replace(r"(?i)(\\d{1,2})", "")
+                    .str.replace(r"(?i)(.+)(\d{1,2})", "")
+                    .str.replace(r"(?i)(\d{1,2})", "")
                     .str.replace(r", ", ""),
                 )
                 .otherwise(None),
@@ -3581,6 +3588,10 @@ class NFLPlayProcess(object):
                 pass_player=pl.when(pl.col("pass") == True)
                 .then(
                     pl.coalesce(
+                        # the scoring-summary "X Pass From Y for N Yrds" names the
+                        # touchdown's passer; a two-point clause after it may name
+                        # another "Q pass to", so the anchored shape is read first
+                        _abbreviated_name(_NFL_LEGACY_PASSER_RE3),
                         pl.col("text").str.extract(_NFL_PASSER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE2),
@@ -3597,6 +3608,7 @@ class NFLPlayProcess(object):
                 )
                 .then(
                     pl.coalesce(
+                        _abbreviated_name(_NFL_LEGACY_RECEIVER_RE3),
                         pl.col("text").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
                         pl.col("receiver_player"),
@@ -3609,6 +3621,8 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains(r"Yd (?:TD )?pass")),
                 )
                 .then(_abbreviated_name(_NFL_LEGACY_RECEIVER_RE))
+                .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r" Pass From ")))
+                .then(_abbreviated_name(_NFL_LEGACY_RECEIVER_RE3))
                 .otherwise(pl.col("receiver_player")),
             )
             .with_columns(
@@ -3627,6 +3641,7 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("sack_player2")),
                 interception_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_INTERCEPTOR_RE, 1),
+                    _abbreviated_name(_NFL_LEGACY_INTERCEPTOR_RE),
                     pl.col("interception_player"),
                 ),
                 pass_breakup_player=pl.when(pl.col("type.text") == "Pass Incompletion")
@@ -3680,6 +3695,7 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("kickoff_return_player")),
                 fg_kicker_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_FG_KICKER_RE, 1),
+                    _abbreviated_name(_NFL_LEGACY_FG_KICKER_RE),
                     pl.col("fg_kicker_player"),
                 ),
                 fg_block_player=pl.coalesce(pl.col("text").str.extract(_NFL_FG_BLOCK_RE, 1), pl.col("fg_block_player")),
