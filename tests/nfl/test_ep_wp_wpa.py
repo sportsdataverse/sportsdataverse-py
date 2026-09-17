@@ -251,6 +251,7 @@ def test_no_cross_game_leak_on_lead() -> None:
             "wp_after": 0.40,  # overwritten by change-of-possession branch
             "start.pos_team.id": "H",
             "end.pos_team.id": "A",  # possession changes
+            "lead_pos_team": "A",  # ...and A runs the next play
             "scoringPlay": False,
             "game_play_number": 2,
         },
@@ -305,20 +306,25 @@ def test_no_cross_game_leak_on_lead() -> None:
 
 
 def test_change_of_possession_scoring_branches() -> None:
-    """The last two wp_after branches: pos-team change with / without a score.
+    """The possession-change wp_after branches key on who runs the NEXT play.
 
-    When ``start.pos_team.id != end.pos_team.id``:
-      * ``scoringPlay=False`` → ``wp_after = 1 - lead_wp_before``
-        (turnover / pick / fumble: defense now has ball, so the new offense
-        win probability is the complement of the old offense's lead wp)
-      * ``scoringPlay=True``  → ``wp_after = lead_wp_before``
-        (pick-six / fumble-TD etc.: scoring team retains the ball after the
-        score; their lead wp is taken directly as the new offense wp)
+    ``wp_after`` is stated in the start-possession team's perspective and is
+    borrowed from the next play's ``wp_before``, which is stated in the next
+    play's possession perspective. So when ``start.pos_team.id !=
+    end.pos_team.id``:
+      * the next play belongs to the other team (``lead_pos_team != start``):
+        a turnover, a pick, a fumble -- or a pick-six, after which the scorer
+        runs the try -- ``wp_after = 1 - lead_wp_before``
+      * the next play is still this team's (an ESPN ``end.team`` that flipped on
+        a play that kept the ball): ``wp_after = lead_wp_before``
+    ``scoringPlay`` no longer chooses the branch: the old scoring branch took
+    ``lead_wp_before`` unflipped and published the complement of the truth on
+    every defensive touchdown (sweep item N19).
 
     Hand-computed expected values:
         lead_wp_before is play-1's wp_before = 0.70 in both frames.
-        non-scoring branch: wp_after = 1 - 0.70 = 0.30
-        scoring branch:     wp_after =     0.70
+        other team next:  wp_after = 1 - 0.70 = 0.30 (with or without a score)
+        same team next:   wp_after =     0.70
     """
     # --- scoringPlay=False: turnover / change of possession without score ---
     df_no_score = _frame(
@@ -329,16 +335,34 @@ def test_change_of_possession_scoring_branches() -> None:
                 "wp_after": 0.99,  # ignored — overwritten by pos-change branch
                 "start.pos_team.id": "H",
                 "end.pos_team.id": "A",  # possession changes
+                "lead_pos_team": "A",  # ...and A runs the next play
                 "scoringPlay": False,
             },
             # lead play — its wp_before (0.70) flows into play-0's wp_after
-            {"wp_before": 0.70, "wp_after": 0.70},
+            {"wp_before": 0.70, "wp_after": 0.70, "start.pos_team.id": "A", "end.pos_team.id": "A"},
         ],
     )
     out_no_score = calculate_wpa(df_no_score)
     # wp_after = 1 - lead_wp_before = 1 - 0.70 = 0.30
     assert out_no_score["wp_after"].to_list()[0] == pytest.approx(0.30)
     assert out_no_score["wpa"].to_list()[0] == pytest.approx(0.30 - 0.50)
+
+    # --- ESPN's end.team flipped, but H runs the next play: no flip ---
+    df_kept = _frame(
+        "G3",
+        [
+            {
+                "wp_before": 0.50,
+                "wp_after": 0.99,
+                "start.pos_team.id": "H",
+                "end.pos_team.id": "A",  # ESPN says the ball changed hands...
+                "lead_pos_team": "H",  # ...but H snaps the next play
+                "scoringPlay": False,
+            },
+            {"wp_before": 0.70, "wp_after": 0.70},
+        ],
+    )
+    assert calculate_wpa(df_kept)["wp_after"].to_list()[0] == pytest.approx(0.70)
 
     # --- scoringPlay=True: pick-six / fumble-TD style ---
     df_score = _frame(
@@ -349,16 +373,17 @@ def test_change_of_possession_scoring_branches() -> None:
                 "wp_after": 0.99,  # ignored — overwritten by pos-change branch
                 "start.pos_team.id": "H",
                 "end.pos_team.id": "A",  # possession changes (scoring team keeps ball)
+                "lead_pos_team": "A",  # the scorer runs the try
                 "scoringPlay": True,
             },
-            # lead play — its wp_before (0.70) flows into play-0's wp_after
-            {"wp_before": 0.70, "wp_after": 0.70},
+            # lead play — its wp_before (0.70) is A's, so H's wp_after is its complement
+            {"wp_before": 0.70, "wp_after": 0.70, "start.pos_team.id": "A", "end.pos_team.id": "A"},
         ],
     )
     out_score = calculate_wpa(df_score)
-    # wp_after = lead_wp_before = 0.70
-    assert out_score["wp_after"].to_list()[0] == pytest.approx(0.70)
-    assert out_score["wpa"].to_list()[0] == pytest.approx(0.70 - 0.50)
+    # wp_after = 1 - lead_wp_before = 0.30
+    assert out_score["wp_after"].to_list()[0] == pytest.approx(0.30)
+    assert out_score["wpa"].to_list()[0] == pytest.approx(0.30 - 0.50)
 
 
 def test_missing_wp_columns_raises_keyerror() -> None:

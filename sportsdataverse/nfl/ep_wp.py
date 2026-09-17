@@ -2378,10 +2378,22 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(1 - pl.col("lead_wp_before"))
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
             .then(pl.col("wp_after"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
-            .then(1 - pl.col("lead_wp_before"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+            # A possession change borrows the next play's wp_before, which is stated
+            # in the NEXT play's possession perspective. Whether that needs flipping
+            # into this row's (start-possession) frame depends on who really has the
+            # ball next -- lead_pos_team -- not on ESPN's end.team, which flips on
+            # 5-7% of 2015-24 scrimmage plays that kept the ball (a 3-yard run at
+            # wp 0.81 published wp_after 0.20). Scoring plays follow the same rule:
+            # after a defensive touchdown the scorer runs the try, so the next row is
+            # the other team's frame. CFB fixed the non-scoring half as B6.
+            .when(
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
+                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                ),
+            )
             .then(pl.col("lead_wp_before"))
+            .when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+            .then(1 - pl.col("lead_wp_before"))
             .otherwise(pl.col("wp_after")),
         )
         .with_columns(
