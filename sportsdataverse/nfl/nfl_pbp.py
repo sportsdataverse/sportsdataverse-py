@@ -2529,14 +2529,24 @@ class NFLPlayProcess(object):
                 .otherwise(False),
                 pass_breakup=pl.when(pl.col("text").str.contains("(?i)broken up by")).then(True).otherwise(False),
                 # --- Pass/Rush TDs ------
+                # the offense's touchdowns only: an interception or fumble returned for a
+                # score is a pass / rush play with td_play set, but the defence scored it
                 pass_td=pl.when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("td_play") == True)
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                )
                 .then(True)
                 .otherwise(False),
                 rush_td=pl.when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
-                .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
+                .when(
+                    (pl.col("rush") == True)
+                    .and_(pl.col("td_play") == True)
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                )
                 .then(True)
                 .otherwise(False),
                 # --- Pass depth/direction + rush direction (Game on Paper matrix fields) ---
@@ -2968,7 +2978,11 @@ class NFLPlayProcess(object):
             yds_receiving=pl.when(
                 (pl.col("pass") == True)
                 .and_(pl.col("yds_receiving").is_null())
-                .and_(pl.col("text").str.contains(r"(?i)incomplete|sacked|intercepted|for no gain")),
+                .and_(
+                    (pl.col("int") == True).or_(
+                        pl.col("text").str.contains(r"(?i)incomplete|sacked|intercepted|for no gain"),
+                    ),
+                ),
             )
             .then(0)
             .when((pl.col("pass") == True).and_(pl.col("yds_receiving").is_null()))
