@@ -2361,9 +2361,9 @@ A polars (or pandas) DataFrame, one row per pitch.
 | `pfx_z` | numeric | Induced vertical movement (in). |
 | `plate_x` | numeric | Plate x. |
 | `plate_z` | numeric | Plate z. |
-| `on_3b` | character | On 3b. |
-| `on_2b` | character | On 2b. |
-| `on_1b` | character | On 1b. |
+| `on_3b` | integer | On 3b. |
+| `on_2b` | integer | On 2b. |
+| `on_1b` | integer | On 1b. |
 | `outs_when_up` | integer | Outs when up. |
 | `inning` | integer | Inning. |
 | `inning_topbot` | character | Inning topbot. |
@@ -2512,9 +2512,9 @@ A polars (or pandas) DataFrame, one row per minor-league pitch.
 | `pfx_z` | numeric | Induced vertical movement (in). |
 | `plate_x` | numeric | Plate x. |
 | `plate_z` | numeric | Plate z. |
-| `on_3b` | character | On 3b. |
-| `on_2b` | character | On 2b. |
-| `on_1b` | character | On 1b. |
+| `on_3b` | integer | On 3b. |
+| `on_2b` | integer | On 2b. |
+| `on_1b` | integer | On 1b. |
 | `outs_when_up` | integer | Outs when up. |
 | `inning` | integer | Inning. |
 | `inning_topbot` | character | Inning topbot. |
@@ -2662,9 +2662,9 @@ A polars (or pandas) DataFrame, one row per WBC pitch.
 | `pfx_z` | numeric | Induced vertical movement (in). |
 | `plate_x` | numeric | Plate x. |
 | `plate_z` | numeric | Plate z. |
-| `on_3b` | character | On 3b. |
-| `on_2b` | character | On 2b. |
-| `on_1b` | character | On 1b. |
+| `on_3b` | integer | On 3b. |
+| `on_2b` | integer | On 2b. |
+| `on_1b` | integer | On 1b. |
 | `outs_when_up` | integer | Outs when up. |
 | `inning` | integer | Inning. |
 | `inning_topbot` | character | Inning topbot. |
