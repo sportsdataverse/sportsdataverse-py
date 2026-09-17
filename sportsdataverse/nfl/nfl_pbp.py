@@ -2436,6 +2436,10 @@ class NFLPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 # --- Sacks -----
+                # Computed first: the pass-attempt / target flags below exclude sacks
+                # by this flag as well as by the word "sacked" -- the 2006-era feed
+                # writes a sack's whole text as "Sack" (32% of 2002-09 sacks counted
+                # as pass attempts).
                 sack=pl.when(pl.col("type.text").is_in(["Sack"]))
                 .then(True)
                 .when(
@@ -2456,6 +2460,8 @@ class NFLPlayProcess(object):
                 .when((pl.col("type.text").is_in(["Safety"])).and_(pl.col("text").str.contains("(?i)sacked")))
                 .then(True)
                 .otherwise(False),
+            )
+            .with_columns(
                 # --- Interceptions ------
                 int=pl.col("type.text").is_in(["Interception Return", "Interception Return Touchdown"]),
                 int_td=pl.col("type.text").is_in(["Interception Return Touchdown"]),
@@ -2501,7 +2507,11 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("text").str.contains("(?i)sacked") == False))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("sack") == False)
+                    .and_(pl.col("text").str.contains("(?i)sacked") == False),
+                )
                 .then(True)
                 .otherwise(False),
                 target=pl.when(
@@ -2525,7 +2535,11 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("text").str.contains("(?i)sacked") == False))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("sack") == False)
+                    .and_(pl.col("text").str.contains("(?i)sacked") == False),
+                )
                 .then(True)
                 .otherwise(False),
                 pass_breakup=pl.when(pl.col("text").str.contains("(?i)broken up by")).then(True).otherwise(False),

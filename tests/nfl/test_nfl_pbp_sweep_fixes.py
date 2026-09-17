@@ -183,7 +183,6 @@ def test_interception_return_touchdown_is_not_a_passing_touchdown(mia_den_2002):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N26 pending (see s1-nfl/r3_STATE.md)")
 def test_sack_stubs_are_not_pass_attempts(phi_nyg_2006):
     sacks = phi_nyg_2006.filter(pl.col("type.text") == "Sack")
     assert sacks.height >= 7 and (sacks["text"] == "Sack").all()
