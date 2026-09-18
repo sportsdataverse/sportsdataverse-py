@@ -164,10 +164,12 @@ def test_provisional_tail_marked(live_df: pl.DataFrame, ingame: dict):
     # Everything flagged is a play the feed has not closed...
     for pid in flagged["play_id"].to_list():
         assert plays[pid]["playEndTime"] is None
-    # ...and the flags are the tail of the frame.
+    # ...and the flags are a contiguous run at the tail of the play rows.
     provisional = live_df.filter(pl.col("is_play") == 1)["provisional"].to_list()
     assert provisional[-1] == 1
-    assert sum(provisional) == len([v for v in provisional[provisional.index(1) :] if v == 1])
+    first = provisional.index(1)
+    assert all(v == 1 for v in provisional[first:]), "provisional must be an unbroken tail"
+    assert not any(v == 1 for v in provisional[:first])
 
 
 # --------------------------------------------------------------------------- fix 6
