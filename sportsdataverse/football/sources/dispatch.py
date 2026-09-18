@@ -135,6 +135,7 @@ _ADAPTERS: dict[tuple[str, str], Adapter] = {}
 #: without a cycle, and keeps the heavy Shield parser off the ESPN-only path.
 _ADAPTER_MODULES: dict[tuple[str, str], str] = {
     ("nfl", "shield"): "sportsdataverse.nfl.shield_pbp.to_espn_summary",
+    ("nfl", "cbs"): "sportsdataverse.nfl.cbs_pbp.to_espn_summary",
     ("cfb", "yahoo"): "sportsdataverse.cfb.yahoo_pbp.to_espn_summary",
 }
 

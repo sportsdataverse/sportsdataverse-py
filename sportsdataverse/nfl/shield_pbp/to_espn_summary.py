@@ -1151,9 +1151,25 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
     # ("WAS" -> "WSH") -- so nothing matched and a Washington game charged no timeout, attributed
     # no penalty and no fumble recovery to either club. ``_espn_abbr`` reads ESPN's own
     # abbreviation off the franchise id instead.
+    # ``season``/``season_type``/``week`` are ESPN's own coordinates, not nflverse's: the
+    # schedule numbers postseason weeks 19-22 as a continuation of the regular season, while
+    # ESPN restarts them at 1 within season type 3 (and counts the Pro Bowl as week 4). The
+    # CBS adapter looks its game id up with these, so the conversion belongs here, once.
+    game_type = str(game.get("game_type") or "REG")
+    season_type = {"PRE": 1, "REG": 2}.get(game_type, 3)
+    week = {"WC": 1, "DIV": 2, "CON": 3, "SB": 5}.get(game_type, game.get("week"))
     return {
         "league": "nfl",
         "espn_event_id": str(espn_id),
+        "season": game.get("season"),
+        "season_type": season_type,
+        "week": week,
+        # The date is the CBS resolver's only guard against matching the wrong game: without it
+        # ``_match_card`` joins on the club pair alone, and the postseason path tries three
+        # neighbouring weeks, so a regular-season meeting of the same two clubs on one of those
+        # pages would resolve as this game. ``gameday`` is a bare ET calendar date, which
+        # ``cbs_pbp.game_id._et_date`` already handles.
+        "kickoff_utc": game.get("gameday"),
         "nflverse_game_id": game.get("game_id"),
         "home_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(home)),
         "away_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(away)),
