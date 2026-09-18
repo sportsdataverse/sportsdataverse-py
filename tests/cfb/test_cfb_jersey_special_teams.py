@@ -240,3 +240,16 @@ def test_special_teams_box_sums_the_jersey_yardage(processed):
     assert (returners["R.Niblett"]["kick_returns"], returners["R.Niblett"]["kick_return_yards"]) == (1, 16)
     # the same sections ride on the processor's advanced box
     assert out["advBoxScore"]["st_punters"]
+
+
+def test_pipeline_special_teams_provenance(processed):
+    # every kick distance in this game is stated in the text: nothing derived, and the
+    # provenance columns ride on the processed plays (null away from kicks)
+    _, plays, _ = processed
+    kicks = pl.col("punt") == True
+    assert plays.filter(kicks)["yds_punted_source"].to_list() == ["text"] * 6
+    assert plays.filter(pl.col("kickoff_play") == True)["yds_kickoff_source"].to_list() == ["text"] * 11
+    assert plays.filter(kicks)["yds_punt_return_source"].drop_nulls().to_list() == ["text"] * 4
+    other = plays.filter((pl.col("punt") == False) & (pl.col("kickoff_play") == False))
+    for col in ("yds_punted_source", "yds_kickoff_source", "yds_punt_return_source"):
+        assert other[col].null_count() == other.height

@@ -1138,6 +1138,203 @@ from sportsdataverse.football.usage_box import create_usage_box as _create_usage
 from sportsdataverse.football.series import add_series_data as _add_series_data  # noqa: E402
 
 
+#: A kick row whose field position is NOT one clean kick plus at most one return by
+#: the receiving team: flags, turnovers, blocks, muffs, laterals, safeties, scores,
+#: onside kicks, and "for a 1ST down" (a flag or a fake the text does not name).
+#: Matched against both ``text`` and ``type.text``.
+_ST_DERIVE_EXCLUDE_RE = (
+    r"(?i)penalty|fumble|muff|lateral|block|safety|touchdown|for a TD|no play|nullified"
+    r"|on-?side|on side|1st down"
+)
+#: Any word describing how a punt ended. A punt whose text has none of them
+#: ("Alex Weir punt for 44 yds") says nothing about a return either way.
+_PUNT_OUTCOME_RE = r"(?i)return|fair catch|fair caught|downed|out-of-bounds|out of bounds|touchback|recover"
+#: A punt text that names how a no-return punt ended short of the end zone.
+_PUNT_FIELD_OUTCOME_RE = r"(?i)fair catch|fair caught|downed|out-of-bounds|out of bounds|returned|returns for"
+
+
+def _next_real_play(col: str) -> pl.Expr:
+    """``col`` on the next row that is not an administrative row (up to two skipped)."""
+    return (
+        pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+        .then(
+            pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+            .then(pl.col(col).shift(-3))
+            .otherwise(pl.col(col).shift(-2))
+        )
+        .otherwise(pl.col(col).shift(-1))
+    )
+
+
+def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Fill kick distances and bare-punt returns the play text does not state, and say which.
+
+    Runs on one game's frame at the end of the yardage step, before the EPA step
+    rewrites any field position. Only null values are filled; a parsed value is never
+    changed. Three provenance columns record where each value came from --
+    ``yds_punted_source``, ``yds_kickoff_source``, ``yds_punt_return_source``: ``"text"``
+    (present before this step: parsed, or a flag convention such as a blocked punt's 0),
+    ``"derived"`` (filled here), or null (no value).
+
+    * ``yds_punted`` -- touchback: ``start.yardsToEndzone`` (the text convention: it
+      matches 98.9-100% of stated touchback punts in each season sampled, 2005-2025). Otherwise ``start - landing`` with
+      ``landing = (100 - end.yardsToEndzone) - yds_punt_return``, the receiver's own
+      yardline where the ball came down; needs a known return (0 on fair catches,
+      downs, no-return texts). Skipped when a no-return punt ends exactly at the 20
+      and the text names no fair catch / downing / out of bounds, since a 2004
+      "no return" touchback reads the same.
+    * ``yds_kickoff`` -- the kick spot is ``start.yardsToEndzone`` from 2005 on (ESPN
+      stores the spot: 65 while kicking from the 35, 70 in 2007-2011 from the 30);
+      2004 stores the catch spot there instead, so 2004 assumes the 35 (65), requires
+      the computed landing to equal that catch spot, and skips a kick whose previous
+      two rows carry a flag or a safety. Touchback: the spot. Otherwise
+      ``spot - landing`` from the end spot and a known return; skipped on kickoff
+      touchbacks the text does not call touchbacks (2018+ fair catches).
+    * ``yds_punt_return`` on a punt whose text describes no outcome at all:
+      ``(100 - end.yardsToEndzone) - (start.yardsToEndzone - yds_punted)`` when that is
+      positive and the next real play starts at that end spot with the receiving team
+      in possession; otherwise left null. Not derived when the ball reached the end
+      zone and the receiver starts at the 20 (an unmarked touchback) or when the
+      result is exactly 5 or 15 (an unrecorded flag's enforcement looks the same).
+      Returner names are not recoverable.
+
+    Never derived: penalties, fumbles, muffs, blocks, laterals, safeties, touchdowns,
+    onside kicks, out-of-bounds KICKOFFS, rows where possession did not change on a punt,
+    and anything outside 0-80 (punt) / 0-75 (kickoff) or landing more than 10 yards deep.
+
+    A punt out of bounds **is** derived, unlike a kickoff out of bounds. A kickoff that
+    goes out of bounds is spotted by rule (the receiving team's own 35, and the processor
+    stores the matching 40-yard "return"), so ESPN's end spot is a placement rather than
+    a landing; a punt out of bounds is dead where it crossed the sideline, which is the
+    landing spot. On the 22 ``punt_oob`` rows in a 2005-2025 sample the field position
+    reproduces the stated distance exactly 22 times, so excluding them would drop the
+    most reliable case rather than a doubtful one.
+
+    Args:
+        play_df: one game's plays in order, carrying ``text``, ``type.text``, ``season``,
+            ``start.yardsToEndzone``, ``end.yardsToEndzone``, ``start.pos_team.id``,
+            ``end.pos_team.id``, the ``punt`` / ``kickoff_play`` flag families and the
+            five special-teams yardage columns.
+
+    Returns:
+        polars.DataFrame: ``play_df`` with the three yardage columns filled where derivable
+        and the three ``*_source`` columns added.
+    """
+    text = pl.col("text").cast(pl.Utf8, strict=False)
+    start = pl.col("start.yardsToEndzone").cast(pl.Int64, strict=False)
+    end = pl.col("end.yardsToEndzone").cast(pl.Int64, strict=False)
+    clean = ~(
+        text.str.contains(_ST_DERIVE_EXCLUDE_RE).fill_null(True)
+        | pl.col("type.text").cast(pl.Utf8, strict=False).str.contains(_ST_DERIVE_EXCLUDE_RE).fill_null(True)
+    )
+    touchback_text = text.str.contains(r"(?i)touchback").fill_null(False) & ~text.str.contains(
+        r"(?i)fair catch|fair caught"
+    ).fill_null(False)
+
+    punt_ok = (
+        (pl.col("punt") == True)
+        & (pl.col("punt_blocked") == False)
+        & clean
+        & (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).fill_null(False)
+    )
+    punt_return = pl.col("yds_punt_return").cast(pl.Int64)
+    punt_landing = 100 - end - punt_return
+    ambiguous_touchback = (
+        (punt_return == 0) & (end == 80) & ~text.str.contains(_PUNT_FIELD_OUTCOME_RE).fill_null(False)
+    ).fill_null(False)
+    punt_yds = pl.when(pl.col("punt_tb") == True).then(start).otherwise(start - punt_landing)
+    punt_yds = (
+        pl.when(
+            punt_ok
+            & pl.col("yds_punted").is_null()
+            & ((pl.col("punt_tb") == True) | ((punt_landing >= -10) & ~ambiguous_touchback))
+            & punt_yds.is_between(0, 80)
+        )
+        .then(punt_yds)
+        .otherwise(None)
+    )
+
+    # 2004 cannot read the spot, so a kick the previous two rows may have moved (a flag
+    # enforced on the kickoff, a free kick after a safety) is not assumed to be from the
+    # 35. Measured on 2005, where ESPN does store the spot: the 35 assumption is exact on
+    # 97.9% of non-touchback kickoffs without such a row and 64.6% with one.
+    prior_flag_or_safety = pl.any_horizontal(
+        pl.col(c).shift(n).cast(pl.Utf8, strict=False).str.contains(r"(?i)penalty|safety").fill_null(False)
+        for c in ("text", "type.text")
+        for n in (1, 2)
+    )
+    kick_spot = pl.when(pl.col("season") <= 2004).then(pl.lit(65, pl.Int64)).otherwise(start)
+    kick_landing = 100 - end - pl.col("yds_kickoff_return").cast(pl.Int64)
+    kick_yds = (
+        pl.when(touchback_text)
+        .then(kick_spot)
+        .when(
+            (pl.col("kickoff_tb") == False)
+            & (kick_landing >= -10)
+            & ((pl.col("season") > 2004) | (kick_landing == start))
+        )
+        .then(kick_spot - kick_landing)
+        .otherwise(None)
+    )
+    kick_yds = (
+        pl.when(
+            (pl.col("kickoff_play") == True)
+            & clean
+            & (pl.col("kickoff_oob") == False)
+            & pl.col("yds_kickoff").is_null()
+            & ((pl.col("season") > 2004) | ~prior_flag_or_safety)
+            & kick_spot.is_between(50, 85)
+            & kick_yds.is_between(0, 75)
+        )
+        .then(kick_yds)
+        .otherwise(None)
+    )
+
+    return_yds = 100 - end - (start - pl.col("yds_punted").cast(pl.Int64))
+    return_yds = (
+        pl.when(
+            punt_ok
+            & (pl.col("punt_tb") == False)
+            & punt_return.is_null()
+            & pl.col("yds_punted").is_not_null()
+            & ~text.str.contains(_PUNT_OUTCOME_RE).fill_null(True)
+            & end.is_between(1, 99)
+            & (start - pl.col("yds_punted") >= -10)
+            # the ball reached the end zone and the receiver starts at the 20: an
+            # unmarked touchback, not a 20-yard return
+            & ~((end == 80) & (start - pl.col("yds_punted") <= 0))
+            & (return_yds > 0)
+            # exactly 5 or 15 is what an unrecorded flag enforced at the end of the play
+            # looks like: 64 of 201 false returns on simulated bare punts (2005-2025),
+            # against 7.1% of parsed positive returns
+            & ~return_yds.is_in([5, 15])
+            & (_next_real_play("start.yardsToEndzone") == end).fill_null(False)
+            & (_next_real_play("start.pos_team.id") == pl.col("end.pos_team.id")).fill_null(False)
+        )
+        .then(return_yds)
+        .otherwise(None)
+    )
+
+    def _source(col: str, derived: pl.Expr) -> pl.Expr:
+        return (
+            pl.when(pl.col(col).is_not_null())
+            .then(pl.lit("text"))
+            .when(derived.is_not_null())
+            .then(pl.lit("derived"))
+            .otherwise(pl.lit(None, pl.Utf8))
+            .alias(f"{col}_source")
+        )
+
+    return play_df.with_columns(
+        _source("yds_punted", punt_yds),
+        _source("yds_kickoff", kick_yds),
+        _source("yds_punt_return", return_yds),
+        pl.coalesce(pl.col("yds_punted"), punt_yds).cast(pl.Int32).alias("yds_punted"),
+        pl.coalesce(pl.col("yds_kickoff"), kick_yds).cast(pl.Int32).alias("yds_kickoff"),
+        pl.coalesce(pl.col("yds_punt_return"), return_yds).cast(pl.Int32).alias("yds_punt_return"),
+    )
+
+
 class CFBPlayProcess(object):
     """Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -4569,7 +4766,7 @@ class CFBPlayProcess(object):
             .then(_jersey_return)
             .otherwise(pl.col("yds_kickoff_return")),
         )
-        return play_df
+        return _derive_special_teams_from_field_position(play_df)
 
     def __add_air_yards_cols(self, play_df):
         """Derive air yards / yards-after-catch from the ESPN play text.
