@@ -84,6 +84,70 @@ def test_every_observed_type_is_mapped():
     assert missing == [], f"unmapped play types: {missing}"
 
 
+def test_every_label_the_ncaa_mapper_emits_is_mapped():
+    """``to_cfbfastr`` writes cfbfastR labels into ``play_type``, so this table must cover them.
+
+    The reachable set is ENUMERATED by driving ``_play_type_label`` over the
+    cross-product of every structural play type, turnover type, text marker and
+    flag it reads, rather than listed by hand -- a new branch cannot slip in a
+    label that canonicalizes to null. That is how "Uncategorized Touchdown" and
+    "Kickoff Team Fumble Recovery Touchdown" (cfbfastR taxonomy labels the ESPN
+    feed never ships) left 5 ``ot_synthesized`` rows per 25 games unmapped.
+    """
+    import itertools
+
+    from sportsdataverse.cfb.cfb_ncaa_cfbfastr import _OT_END_HOW_LABEL, _play_type_label
+
+    structural = [
+        "rush",
+        "kneel",
+        "pass",
+        "sack",
+        "punt",
+        "kickoff",
+        "field_goal",
+        "extra_point",
+        "two_point",
+        "penalty",
+        "timeout",
+        "period_marker",
+        "drive_start",
+        "coin_toss",
+        "unknown",
+    ]
+    texts = ["", "blocked", "kick attempt good", "recovered by X", "recovered by X blocked"]
+    emitted = set(_OT_END_HOW_LABEL.values())
+    for pt, turnover, text, td, return_td, complete, fg_made, passer, return_yards in itertools.product(
+        structural,
+        [None, "interception", "fumble", "downs"],
+        texts,
+        [False, True],
+        [False, True],
+        [False, True],
+        [False, True],
+        [None, "P"],
+        [None, 5],
+    ):
+        emitted.add(
+            _play_type_label(
+                {
+                    "play_type": pt,
+                    "is_touchdown": td,
+                    "play_text": text,
+                    "turnover_type": turnover,
+                    "pass_complete": complete,
+                    "fg_made": fg_made,
+                    "passer": passer,
+                    "is_fumble": "recovered by" in text,
+                    "return_yards": return_yards,
+                },
+                return_td,
+            )
+        )
+    assert len(emitted) > 30, sorted(emitted)
+    assert sorted(label for label in emitted if label not in PLAY_TYPE_CANONICAL) == []
+
+
 def test_every_canonical_type_has_a_family():
     orphans = sorted({v for v in PLAY_TYPE_CANONICAL.values()} - set(PLAY_TYPE_FAMILY))
     assert orphans == [], f"canonical types with no family: {orphans}"
