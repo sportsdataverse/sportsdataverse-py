@@ -15,6 +15,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_271209010_trimmed.json.gz`` -- TEN @ SD, 2007 week 14 (the per-row score leads by a row)
 * ``summary_240919004_trimmed.json.gz`` -- MIA @ CIN, 2004 week 2 ("A.J. Feeley", "T.J.
   Houshmandzadeh", and two untyped two-minute-warning rows)
+* ``summary_400951676_trimmed.json.gz`` -- SF @ SEA, 2017 week 2 (six home points carried by no
+  scoring row; the header's final anchors the repair)
 """
 
 from __future__ import annotations
@@ -540,3 +542,29 @@ def test_double_initial_names_fold_like_the_abbreviated_grammar(mia_cin_2004):
     assert single["receiver_player_name"] == "L.Gordon"
     for col in ("passer_player_name", "rusher_player_name", "receiver_player_name"):
         assert mia_cin_2004.filter(pl.col(col).str.contains(r"\.\.")).height == 0
+
+
+# ---------------------------------------------------------------------------
+# N36 -- the header's final score anchors the repair (CFB's C29)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def sf_sea_2017() -> pl.DataFrame:
+    return _process(400951676)
+
+
+def test_a_rise_to_the_header_final_that_the_game_keeps_is_kept(sf_sea_2017):
+    """SEA's second field goal exists only in the header: 6 -> 12 on a non-scoring row.
+
+    Without the anchor the persistence rule reverts that rise (it is neither a scoring
+    row nor the row after one), so the game ended 6-9 -- a SEA loss on a SEA win, which
+    also left the last row's ``home_wp_after`` at 0.0.
+    """
+    f = sf_sea_2017
+    assert f.tail(1).select("end.homeScore", "end.awayScore").row(0) == (12, 9)  # the header's final
+    # the rise lands on the kickoff after the kick ("B.Walsh kicks 63 yards from SEA 35 ...")
+    assert _row(f, 4009516763785)["end.homeScore"] == 12
+    for col in ("homeScore", "awayScore"):
+        assert (f[col].diff().fill_null(0) >= 0).all(), col
+    assert float(f["home_wp_after"].drop_nulls()[-1]) > 0.9  # SEA won
