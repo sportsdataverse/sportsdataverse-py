@@ -1858,10 +1858,10 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 | `ab_number` | character | Ab number. |
 | `cap_index` | character | Cap index. |
 | `outs` | character | Outs. |
-| `batter` | character | MLBAM id of the batter. |
+| `batter` | integer | MLBAM id of the batter. |
 | `stand` | character | Batter stance side (R/L). |
 | `batter_name` | character | Batter name. |
-| `pitcher` | character | MLBAM id of the pitcher. |
+| `pitcher` | integer | MLBAM id of the pitcher. |
 | `p_throws` | character | Pitcher throwing hand (R/L). |
 | `pitcher_name` | character | Pitcher name. |
 | `catcher` | character | Catcher. |
@@ -1915,7 +1915,7 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 | `launch_speed` | character | Exit velocity of the batted ball (mph). |
 | `launch_angle` | character | Launch angle (deg). |
 | `game_total_pitches` | character | Game total pitches. |
-| `game_pk` | character | MLBAM game id. |
+| `game_pk` | integer | MLBAM game id. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
