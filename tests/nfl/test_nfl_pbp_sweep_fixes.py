@@ -13,6 +13,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_261022011_trimmed.json.gz`` -- WSH @ IND, 2006 week 7 (the try booked on the kickoff row)
 * ``summary_291115014_trimmed.json.gz`` -- NO @ STL, 2009 week 10 (end.team flipped on the final play)
 * ``summary_271209010_trimmed.json.gz`` -- TEN @ SD, 2007 week 14 (the per-row score leads by a row)
+* ``summary_240919004_trimmed.json.gz`` -- MIA @ CIN, 2004 week 2 ("A.J. Feeley", "T.J.
+  Houshmandzadeh", and two untyped two-minute-warning rows)
 """
 
 from __future__ import annotations
@@ -484,6 +486,11 @@ def test_fourth_down_prepare_passes_the_game_roof_to_sdv_models(monkeypatch):
 # ---------------------------------------------------------------------------
 
 
+@pytest.fixture(scope="module")
+def mia_cin_2004() -> pl.DataFrame:
+    return _process(240919004)
+
+
 def test_a_penalty_in_field_goal_formation_is_not_a_field_goal_attempt(nyg_phi_2016, wsh_phi_2015):
     """A "(Field Goal formation)" clause is a formation annotation, not an attempt."""
     pen = _row(nyg_phi_2016, 4008744853519)
@@ -499,3 +506,21 @@ def test_a_penalty_in_field_goal_formation_is_not_a_field_goal_attempt(nyg_phi_2
     assert punt_pen.height == 1
     assert punt_pen["punt"].to_list() == [False]
     assert punt_pen["type.text"].to_list() == ["Penalty"]
+
+
+def test_mistyped_two_minute_warning_rows_are_admin_rows(mia_den_2002, mia_cin_2004):
+    """ESPN types the 2002-04 two-minute-warning rows as a play; retype them."""
+    # 2002: ESPN labelled them "Missed Field Goal Return", which booked fg_attempt
+    for play_id in (2210130071207, 2210130073201):
+        r = _row(mia_den_2002, play_id)
+        assert r["text"].strip() == "2 minute warning."
+        assert r["type.text"] == "Two-minute warning"
+        assert r["fg_attempt"] is False and r["play"] is False
+    assert mia_den_2002.filter(pl.col("type.text") == "Missed Field Goal Return").height == 0
+    # the game's real missed field goal is untouched
+    missed = _row(mia_den_2002, 2210130070604)  # "48 yard field goal by Olindo Mare (MIA) is no good."
+    assert missed["fg_attempt"] is True and missed["fg_kicker_player_name"] == "O.Mare"
+    # 2003-04: ESPN ships no type at all on those rows
+    for play_id in (2409190041608, 2409190043804):
+        r = _row(mia_cin_2004, play_id)
+        assert r["type.text"] == "Two-minute warning" and r["play"] is False

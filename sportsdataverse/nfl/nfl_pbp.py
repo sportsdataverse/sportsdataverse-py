@@ -826,6 +826,26 @@ class NFLPlayProcess(object):
                 pl.col("id").cast(pl.Int64),
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
+            .with_columns(
+                # ESPN mistypes the 2002-2004 two-minute-warning rows: 473 of them
+                # (2002) arrive as "Missed Field Goal Return" and 1,010 (2003-04) with
+                # no type at all, against 6,765 correctly labelled "Two-minute warning"
+                # 2005-2026. A row typed as the play it precedes is not an admin row to
+                # anything downstream -- it booked fg_attempt with no kicker (221013007
+                # rows 2210130071207 / 2210130073201) and fed the EP/WP models a phantom
+                # play. The text is the only reliable signal, so retype it to the
+                # canonical clock_stoppage_vec label; a row already carrying a
+                # clock-stoppage type keeps it.
+                pl.when(
+                    pl.col("text")
+                    .str.strip_chars()
+                    .str.contains(r"(?i)^(?:\(\d{1,2}:\d{2}\) )?(?:two|2)[- ]minute warning\.?$")
+                    .and_(pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False) == False),
+                )
+                .then(pl.lit("Two-minute warning"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
         )
         # maintain_order: a play repeated under drives.current sorts after its
         # drives.previous copy, so keeping the last copy keeps the fresher one
