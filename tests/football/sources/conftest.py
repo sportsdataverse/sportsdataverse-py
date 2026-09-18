@@ -64,6 +64,21 @@ def alternates_unavailable(monkeypatch):
             monkeypatch.setitem(dispatch._ADAPTERS, (league, source), _down(source))
 
 
+@pytest.fixture(autouse=True)
+def offline_schedule(monkeypatch):
+    """No test here may read the nflverse schedule release asset.
+
+    Both NFL alternate adapters rebuild a missing id-map row from it -- that is Game on Paper's
+    call shape (the ESPN event id and nothing else) -- so a **registered** adapter would fetch
+    the asset, and then its own source, from tests whose whole point is the fall-through order.
+    Repo invariant (``tests.yml``): 0 network-reaching tests.
+    """
+    import sportsdataverse.nfl.shield_pbp.to_espn_summary as shield
+
+    monkeypatch.setattr(shield, "_nflverse_schedule", lambda seasons: None)
+    shield._SCHEDULE_CACHE.clear()
+
+
 @pytest.fixture(scope="session")
 def nfl_processed(nfl_summary, no_network):
     """The ESPN path through ``_process_game`` on the stored summary (one ~8 s pipeline run per session)."""

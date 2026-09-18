@@ -100,9 +100,10 @@ def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, 
         ("espn", True),
     ]
     assert out.health["shield"] == "SourceUnavailable: shield down"
-    # cbs is registered and hands over on its own terms; yahoo / fox are still empty slots
+    # cbs and yahoo are registered and hand over on their own terms; fox is still an empty slot
     assert out.health["cbs"] == "SourceUnavailable: cbs down"
-    assert out.health["yahoo"] == out.health["fox"] == "not implemented"
+    assert "no yahoo_game_id" in out.health["yahoo"]
+    assert out.health["fox"] == "not implemented"
     assert fast_processor[0].summary is nfl_summary  # ESPN consumed its injected payload
 
 
@@ -149,10 +150,11 @@ def test_processor_exception_falls_through(nfl_summary, alternates_unavailable, 
         _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary})
     errs = {a.source: a.error for a in ei.value.attempts}
     assert errs["espn"] == "processor: RuntimeError: boom"
-    # shield and cbs ARE registered now, so they fail on their own terms (unmapped id, no
-    # payload) rather than "not implemented"; yahoo / fox are still unregistered slots
+    # shield, cbs and yahoo ARE registered now, so they fail on their own terms (unmapped id,
+    # no payload) rather than "not implemented"; fox is still an unregistered slot
     assert "SourceUnavailable" in errs["shield"] and "SourceUnavailable" in errs["cbs"] and len(errs) == 5
-    assert [errs[s] for s in ("yahoo", "fox")] == ["not implemented"] * 2
+    assert "SourceUnavailable" in errs["yahoo"]
+    assert errs["fox"] == "not implemented"
 
 
 def test_no_fallthrough_raises_with_one_attempt():
