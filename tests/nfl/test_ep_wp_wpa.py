@@ -391,3 +391,43 @@ def test_missing_wp_columns_raises_keyerror() -> None:
     df = pl.DataFrame({"game_id": ["G1"], "type.text": ["Pass Reception"]})
     with pytest.raises(KeyError):
         calculate_wpa(df)
+
+
+def test_null_posteam_cannot_publish_a_loss_for_the_winner() -> None:
+    """A null ``start.pos_team.id`` must not resolve the game-over branch.
+
+    ``pos_score_diff_end`` is the END team's margin and is negated when ESPN's
+    ``end.team`` differs from ``start.pos_team``.  A null posteam made that
+    equality test False, so the margin was negated on a row with no possession
+    team at all and the winner's final play published ``wp_after`` 0.0.  With the
+    guard the margin goes null, no game-over branch fires, and the row keeps the
+    model's own ``wp_after``; the home/away perspective columns -- which both took
+    the defensive complement and stopped summing to 1 -- go null too.
+    """
+    df = _frame(
+        "G1",
+        [
+            {
+                "wp_before": 0.80,
+                "wp_after": 0.80,
+                "status_type_completed": True,
+                "lead_play_type": None,  # no next play -> end-of-game branch
+                "pos_score_diff_end": 4,  # the END team leads by 4
+                "start.pos_team.id": None,  # ESPN dropped the possession team
+                "end.pos_team.id": "H",
+                "game_play_number": 1,
+            },
+        ],
+    )
+    out = calculate_wpa(df)
+    assert out["wp_after"].to_list()[0] == pytest.approx(0.80)
+    assert out["wpa"].to_list()[0] == pytest.approx(0.0)
+    assert out["home_wp_after"].to_list()[0] is None
+    assert out["away_wp_after"].to_list()[0] is None
+    assert out["home_wp_before"].to_list()[0] is None
+    assert out["away_wp_before"].to_list()[0] is None
+    # a known posteam on the same row still resolves the winner to 1.0
+    known = calculate_wpa(df.with_columns(pl.lit("H").alias("start.pos_team.id")))
+    assert known["wp_after"].to_list()[0] == pytest.approx(1.0)
+    assert known["home_wp_after"].to_list()[0] == pytest.approx(1.0)
+    assert known["away_wp_after"].to_list()[0] == pytest.approx(0.0)

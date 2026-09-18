@@ -221,6 +221,8 @@ def test_autodoc_capture_summary_reports_thin_capture(tmp_path, monkeypatch, cap
     assert "1 columns retained (absent from capture)" in out
     assert "2 types preserved (all-null or list)" in out
     assert "autodoc merge nfl.f: 1 new, 1 retained, 2 types preserved" in out
+
+
 def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch):
     """Capture the season with the most columns, not the newest one that resolves.
 

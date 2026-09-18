@@ -111,8 +111,17 @@ _NFL_NAME = _ABBREVIATED_NAME
 # ESPN's scoring-summary phrasing ("Denzel Boston 46 Yd pass from Deshaun Watson
 # (Andre Szmyt Kick)", "Bri.Thomas 5 Yd Run") spells names out; group 1 + "." +
 # group 2 folds them to the abbreviated form the rest of the game uses so a
-# player's rows group together in the box.
-_NFL_LONG_NAME = r"([A-Z])[A-Za-z'\-]+ ((?:St\. )?[A-Z][A-Za-z'\-]+)"
+# player's rows group together in the box. A double initial is already written the
+# way the abbreviated grammar spells it ("T.J. Houshmandzadeh", "A.J. Feeley" --
+# the ``[A-Z]\.[A-Z]\. `` alternative of ``football.espn_text.ABBREVIATED_NAME``),
+# so group 1 takes the whole "T.J." and ``_abbreviated_name`` drops its trailing
+# period; the fold reads "T.J.Houshmandzadeh", the same key ``__add_player_ids``
+# builds from the box ("T.J."[:3] + "." + surname). Without it neither initial
+# matched and the name column stayed null on 3,548 rows 2002-2026. The double
+# initial alternative must swallow its OWN second period -- ``([A-Z](?:\.[A-Z])?)``
+# with an optional period after it instead reads the modern abbreviated
+# "A.Randle El" as initials "A.R" + "andle" and folds it to "A.R.El".
+_NFL_LONG_NAME = r"([A-Z]\.[A-Z]\.|[A-Z])[A-Za-z'\-]* ((?:St\. )?[A-Z][A-Za-z'\-]+)"
 _NFL_LEGACY_PASSER_RE = r"Yd (?:TD )?pass from " + _NFL_LONG_NAME
 _NFL_LEGACY_RECEIVER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?pass"
 _NFL_LEGACY_RUSHER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?(?:Run|Rush)"
@@ -171,10 +180,15 @@ _NFL_DIRECT_SNAP_RE = r"Direct snap to " + _NFL_NAME + r"\.?\s*"
 
 
 def _abbreviated_name(pattern: str) -> pl.Expr:
-    """``"Deshaun Watson"`` -> ``"D.Watson"`` from a two-group ``_NFL_LONG_NAME`` match."""
+    """``"Deshaun Watson"`` -> ``"D.Watson"`` from a two-group ``_NFL_LONG_NAME`` match.
+
+    Group 1 is the first name's initial, or both initials of a double initial with
+    its trailing period ("T.J." -> "T.J.Houshmandzadeh"), which is stripped here so
+    the one separator below is never doubled.
+    """
     return pl.concat_str(
         [
-            pl.col("text").str.extract(pattern, 1),
+            pl.col("text").str.extract(pattern, 1).str.strip_chars_end("."),
             pl.lit("."),
             pl.col("text").str.extract(pattern, 2),
         ],
@@ -825,6 +839,26 @@ class NFLPlayProcess(object):
                 .alias("start.adj_TimeSecsRem"),
                 pl.col("id").cast(pl.Int64),
                 pl.col("sequenceNumber").cast(pl.Int32),
+            )
+            .with_columns(
+                # ESPN mistypes the 2002-2004 two-minute-warning rows: 473 of them
+                # (2002) arrive as "Missed Field Goal Return" and 1,010 (2003-04) with
+                # no type at all, against 6,765 correctly labelled "Two-minute warning"
+                # 2005-2026. A row typed as the play it precedes is not an admin row to
+                # anything downstream -- it booked fg_attempt with no kicker (221013007
+                # rows 2210130071207 / 2210130073201) and fed the EP/WP models a phantom
+                # play. The text is the only reliable signal, so retype it to the
+                # canonical clock_stoppage_vec label; a row already carrying a
+                # clock-stoppage type keeps it.
+                pl.when(
+                    pl.col("text")
+                    .str.strip_chars()
+                    .str.contains(r"(?i)^(?:\(\d{1,2}:\d{2}\) )?(?:two|2)[- ]minute warning\.?$")
+                    .and_(pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False) == False),
+                )
+                .then(pl.lit("Two-minute warning"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
             )
         )
         # maintain_order: a play repeated under drives.current sorts after its
@@ -2649,9 +2683,20 @@ class NFLPlayProcess(object):
                 scoring_play=pl.col("type.text").is_in(scores_vec),
                 yds_punted=pl.col("text").str.extract(r"(?i)(punt for \d+)").str.extract(r"(\d+)").cast(pl.Int32),
                 yds_punt_gained=pl.when(pl.col("punt") == True).then(pl.col("statYardage")).otherwise(None),
+                # "(Field Goal formation)" is ESPN's pre-snap formation annotation, not
+                # an attempt: 405 rows 2002-2026 (303 of them penalties enforced "- No
+                # Play", the rest fakes and aborted snaps) carry the annotation and no
+                # other mention of a kick, and every one of them booked fg_attempt True
+                # with no kicker. Drop the annotation before the text fallback reads it;
+                # a real kick in that formation still says "field goal" further along.
+                # ``punt`` needs no equivalent guard -- it reads type.text only, so the
+                # 1,365 "(Punt formation)" rows with no other "punt" mention are already
+                # False.
                 fg_attempt=pl.when(
                     (pl.col("type.text").str.contains(r"(?i)Field Goal")).or_(
-                        pl.col("text").str.contains(r"(?i)Field Goal"),
+                        pl.col("text")
+                        .str.replace_all(r"(?i)\(Field Goal formation\)", "")
+                        .str.contains(r"(?i)Field Goal"),
                     ),
                 )
                 .then(True)
