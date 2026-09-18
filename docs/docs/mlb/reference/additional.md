@@ -2453,7 +2453,7 @@ halving any window that hits the cap, and stitches the chunks back together.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per pitch.
+A polars (or pandas) DataFrame, one row per pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
 
 | col_name | type | description |
 |---|---|---|
@@ -2589,9 +2589,11 @@ df = mlb_statcast_search("2024-06-15", "2024-06-16", batters_lookup=592450)
 Minor-league Statcast search (`/statcast-search-minors/csv`), date-chunked.
 
 Same shape, columns, and 25,000-row chunking as `mlb_statcast_search`,
-against the MiLB CSV route with Savant's `minors=true` population flag sent
-for you (the route path alone returns MLB games). Narrow further with
-`hfLevel` (`"AAA|"`, `"AA|"`, `"A+|"`, `"A|"`) and `hfSea` filters.
+against the MiLB CSV route with Savant's `minors=true&wbc=false` population
+flags sent for you (the route path alone returns MLB games). The route pins those
+two flags and **overrides** a `minors=`/`wbc=` passed through `**filters`;
+every other filter rides along. Narrow further with `hfLevel` (`"AAA|"`,
+`"AA|"`, `"A+|"`, `"A|"`) and `hfSea` filters.
 
 **Parameters**
 
@@ -2605,7 +2607,7 @@ for you (the route path alone returns MLB games). Narrow further with
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per minor-league pitch.
+A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
 
 | col_name | type | description |
 |---|---|---|
@@ -2741,10 +2743,12 @@ df = mlb_statcast_search_minors("2024-06-01", "2024-06-02")
 World Baseball Classic Statcast search (`/statcast-search-world-baseball-classic/csv`).
 
 Same shape, columns, and 25,000-row chunking as `mlb_statcast_search`,
-against the WBC CSV route with Savant's `wbc=true` population flag sent for
-you (the route path alone returns MLB spring training). Pass WBC date windows
-(e.g. March of a WBC year); `game_type` is the tournament round (`F` pool
-play, `D` quarterfinals, `L` semifinals, `W` championship).
+against the WBC CSV route with Savant's `minors=false&wbc=true` population
+flags sent for you (the route path alone returns MLB spring training). The route
+pins those two flags and **overrides** a `minors=`/`wbc=` passed through
+`**filters`; every other filter rides along. Pass WBC date windows (e.g. March
+of a WBC year); `game_type` is the tournament round (`F` pool play, `D`
+quarterfinals, `L` semifinals, `W` championship).
 
 **Parameters**
 
@@ -2758,7 +2762,7 @@ play, `D` quarterfinals, `L` semifinals, `W` championship).
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per WBC pitch.
+A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
 
 | col_name | type | description |
 |---|---|---|

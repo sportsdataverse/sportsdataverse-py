@@ -74,7 +74,8 @@ def _warn_uncast_ids(cols: Iterable[str], stacklevel: int) -> None:
     """Warn once about id columns left uncast; ``stacklevel`` is counted from this helper's caller."""
     if cols:
         warnings.warn(
-            f"Savant CSV id columns {sorted(cols)} hold non-integral values; left as read, not cast to Int64.",
+            f"Savant CSV id columns {sorted(cols)} hold non-integral or non-numeric values; "
+            "left as read, not cast to Int64.",
             stacklevel=stacklevel + 1,
         )
 
@@ -87,6 +88,11 @@ def _csv_to_frame(
     When ``uncast_ids`` is given, id columns left uncast are added to it so a
     multi-chunk caller can warn once; otherwise this warns, attributed to the
     caller of the public parser.
+
+    A header-only body keeps its columns (the documented schema) with the id
+    columns ``Int64``; the remaining columns have no values to infer a dtype from
+    and carry polars' ``Null``, which widens into a populated frame's dtype rather
+    than forcing it to ``String``.
     """
     if not text or not text.strip():
         return _empty_frame(return_as_pandas)
@@ -102,7 +108,15 @@ def _csv_to_frame(
         _warn_uncast_ids(uncast, stacklevel=3)  # _csv_to_frame <- parse_mlb_statcast_* <- caller
     else:
         uncast_ids.update(uncast)
-    return _to_output(df, return_as_pandas)
+    out = _to_output(df, return_as_pandas)
+    if not return_as_pandas and out.height == 0:
+        # No rows to infer dtypes from: pandas reads every un-pinned column as object, which
+        # lands as polars String and would silently widen a populated frame's Float64 columns
+        # to String in a caller's concat (or make a strict concat raise). Null is polars'
+        # unknown dtype -- it widens to whatever the populated side holds, so an empty-window
+        # result composes with a populated one instead of poisoning it.
+        out = out.with_columns(pl.col(c).cast(pl.Null) for c in out.columns if out.schema[c] == pl.String)
+    return out
 
 
 def _html_decode_var(html: str, var_name: str) -> Union[Dict, List, None]:
@@ -164,7 +178,8 @@ def parse_mlb_statcast_leaderboard(payload: object, return_as_pandas: bool = Fal
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per leaderboard entry; zero rows on empty input.
+        A polars (or pandas) DataFrame, one row per leaderboard entry; zero rows on empty
+        input (a header-only response keeps its columns, ids ``Int64``).
 
     Example:
         Quick start::
@@ -191,8 +206,15 @@ def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False) -
 
     Returns:
         A polars (or pandas) DataFrame, one row per pitch; zero rows on empty input.
-        The MLBAM id columns (``game_pk``, ``batter``, ``pitcher``, …) are ``Int64``,
-        the same dtype :func:`parse_mlb_statcast_search` gives them, so the two join.
+        The MLBAM id columns (``game_pk``, ``batter``, ``pitcher``, …) are ``Int64``
+        when every value parses as an integer -- the same dtype
+        :func:`parse_mlb_statcast_search` gives them, so the two join.
+
+    Warns:
+        UserWarning: When an MLBAM id column holds a non-integral or non-numeric
+            value. That column is left as read (never truncated or nulled), so it
+            stays ``String``/``Float64`` and a join against the search parser's
+            ``Int64`` raises ``SchemaError`` rather than silently dropping rows.
 
     Example:
         Quick start::
