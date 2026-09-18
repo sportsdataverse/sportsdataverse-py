@@ -4010,7 +4010,7 @@ from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
 win_prob_from_margin(7.0)
 ```
 
-### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_boxscore}
+### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_boxscore}
 
 Yahoo CFB box score: team and player stats, one row per entity stat.
 
@@ -4021,30 +4021,30 @@ decoder-dictionary schema
 `stat_categories` dictionaries into a long frame: one row per team stat
 and per player stat. Pivot on `stat_type_id` for a wide box. The editorial
 payload carries no player names; a player's team comes from the game's
-home/away lineups. Unlike its siblings this defaults to the raw payload
-(`return_parsed=False`), which also carries play-by-play and drives.
+home/away lineups. Pass `return_parsed=False` for the raw payload, which
+also carries play-by-play and drives.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `Union[int, str]` |  | Dotted Yahoo game id (e.g. `"ncaaf.g.202509200023"`). |
-| `return_parsed` | `bool` | `False` | If `True`, decode the box score into a DataFrame; if `False` (the default) return the raw JSON `dict`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) decode the box score into a DataFrame; if `False` return the raw JSON `dict`. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
 **Returns**
 
-The raw editorial boxscore JSON `dict` by default. With `return_parsed=True`, a polars DataFrame (pandas when `return_as_pandas=True`) with one row per team or player stat, every column `Utf8`, and zero rows (same columns) for an empty payload: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`); null for a player missing from the lineups. | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`); null on team-stat rows. | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Kicking`, `Returns`, `Punting`, `Defense` or `Team`. | | `stat_type_id` | Utf8 | Yahoo stat type id (`ncaaf.stat_type.105`). | | `stat_name` | Utf8 | Stat name (`Yards`, `Third Down Efficiency`). | | `stat_abbreviation` | Utf8 | Short stat label (`Yds`, `3DE`). | | `stat_variation` | Utf8 | Stat variation name (`Game`). | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`, `"73.2"`, `"1-14"`). |
+A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row per team or player stat, every column `Utf8`, and zero rows (same columns) for an empty payload; the raw editorial boxscore JSON `dict` when `return_parsed=False`: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`); null for a player missing from the lineups. | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`); null on team-stat rows. | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Kicking`, `Returns`, `Punting`, `Defense` or `Team`. | | `stat_type_id` | Utf8 | Yahoo stat type id (`ncaaf.stat_type.105`). | | `stat_name` | Utf8 | Stat name (`Yards`, `Third Down Efficiency`). | | `stat_abbreviation` | Utf8 | Short stat label (`Yds`, `3DE`). | | `stat_variation` | Utf8 | Stat variation name (`Game`). | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`, `"73.2"`, `"1-14"`). |
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import yahoo_cfb_boxscore
-box = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
+box = yahoo_cfb_boxscore("ncaaf.g.202509200023")
 
 # Raw JSON (includes play-by-play and drives)
 
-raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
 
 # Wide team box (one line)
 
