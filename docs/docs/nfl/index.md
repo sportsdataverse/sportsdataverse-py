@@ -15,7 +15,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflpro](reference/nflpro) | 16 | `https://pro.nfl.com` |
 | [PFF Premium Stats (premium.pff.com)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [Dataset loaders](reference/loaders) | 25 | nflverse data releases / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 175 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 177 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

@@ -355,6 +355,8 @@ from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_week as scrape_ngs_week  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
+from sportsdataverse.nfl import shield_nfl_pbp as shield_nfl_pbp  # noqa: F401
+from sportsdataverse.nfl import shield_to_espn_summary as shield_to_espn_summary  # noqa: F401
 from sportsdataverse.nfl import special_teams_ratings as special_teams_ratings  # noqa: F401
 from sportsdataverse.nfl import team_game_pace as team_game_pace  # noqa: F401
 from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
@@ -696,6 +698,8 @@ __all__ = [
     "scrape_ngs_season",
     "scrape_ngs_week",
     "season_not_found_error",
+    "shield_nfl_pbp",
+    "shield_to_espn_summary",
     "special_teams_ratings",
     "team_game_pace",
     "team_name_fn",
