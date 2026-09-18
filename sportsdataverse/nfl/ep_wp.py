@@ -1926,6 +1926,23 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             "before calling calculate_epa."
         )
 
+    # The try ESPN folds into a touchdown row, read from the parsed flags
+    # (``xp_attempt`` / ``xp_made`` / ``two_point_conv_result``, NFLPlayProcess) when
+    # the frame carries them, else from the text. The old text test matched an
+    # upper-case "PAT" against lower-cased text and never fired, so every failed
+    # try scored as made and every "extra point is GOOD" stayed at the 6.92 unknown.
+    _lower = pl.col("text").str.to_lowercase()
+    two_pt_good = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed") == False)  # noqa: E712
+    two_pt_failed = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed"))
+    if "two_point_conv_result" in df.columns:
+        two_pt_good = (pl.col("two_point_conv_result") == "success").or_(two_pt_good)
+        two_pt_failed = (pl.col("two_point_conv_result") == "failure").or_(two_pt_failed)
+    kick_good = _lower.str.contains(r"kick\)")
+    kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
+    if "xp_attempt" in df.columns and "xp_made" in df.columns:
+        kick_good = (pl.col("xp_made") == True).or_(kick_good)  # noqa: E712
+        kick_failed = ((pl.col("xp_attempt") == True).and_(pl.col("xp_made") == False)).or_(kick_failed)  # noqa: E712
+
     play_df = (
         df.with_columns(
             # --- Scoring-attempt EP_start override (must precede EP_end overlays) ---
@@ -1968,49 +1985,25 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
             .then(-8)
             # Defense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
             .then(-6)
             # Defense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_failed))
             .then(-6)
             # Defense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_good))
             .then(-7)
             # Defense TD
             .when(pl.col("type.text").is_in(defense_score_vec))
             .then(-6.92)
             # Offense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
             .then(6)
             # Offense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
             .then(8)
             # Offense Made FG
             .when(
@@ -2020,18 +2013,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(3)
             # Offense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_failed))
             .then(6)
             # Offense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_good))
             .then(7)
             # Offense TD
             .when(pl.col("type.text").is_in(offense_score_vec))
@@ -2295,6 +2280,13 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             "classify the plays before calling calculate_wpa."
         )
 
+    # the end-of-play margin for the team that STARTED the play: pos_score_diff_end
+    # is the end team's, negated where ESPN's end.team differs from start.pos_team
+    _start_pos_score_diff_end = (
+        pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+        .then(pl.col("pos_score_diff_end"))
+        .otherwise(-pl.col("pos_score_diff_end"))
+    )
     play_df = (
         df.with_columns(
             # --- Leading overlay: kickoff wp_before uses the touchback view ---
@@ -2322,6 +2314,10 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),
         )
         .with_columns(
+            # The game-over branches judge the result in the START-possession frame,
+            # like every other wp_after branch: pos_score_diff_end is the END team's,
+            # and ESPN flips end.team on ~5% of final incompletions (the loser's
+            # last throw published home_wp_after 1.0 in 9 of 148 swept games).
             wp_after=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(pl.col("wp_before"))
             .when(
@@ -2333,7 +2329,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") > 0),
+                .and_(_start_pos_score_diff_end > 0),
             )
             .then(1.0)
             .when(
@@ -2343,7 +2339,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") < 0),
+                .and_(_start_pos_score_diff_end < 0),
             )
             .then(0.0)
             .when(
@@ -2359,12 +2355,6 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(1 - pl.col("lead_wp_before"))
             .when(
-                (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                .and_(pl.col("type.text").is_in(clock_stoppage_vec)),
-            )
-            .then(pl.col("wp_after"))
-            .when(
                 (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
                     pl.col("change_of_pos_team") == False,
                 ),
@@ -2378,20 +2368,37 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(1 - pl.col("lead_wp_before"))
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
             .then(pl.col("wp_after"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
-            .then(1 - pl.col("lead_wp_before"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+            # A possession change borrows the next play's wp_before, which is stated
+            # in the NEXT play's possession perspective. Whether that needs flipping
+            # into this row's (start-possession) frame depends on who really has the
+            # ball next -- lead_pos_team -- not on ESPN's end.team, which flips on
+            # 5-7% of 2015-24 scrimmage plays that kept the ball (a 3-yard run at
+            # wp 0.81 published wp_after 0.20). Scoring plays follow the same rule:
+            # after a defensive touchdown the scorer runs the try, so the next row is
+            # the other team's frame. CFB fixed the non-scoring half as B6.
+            .when(
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
+                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                ),
+            )
             .then(pl.col("lead_wp_before"))
+            .when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+            .then(1 - pl.col("lead_wp_before"))
             .otherwise(pl.col("wp_after")),
         )
         .with_columns(
             def_wp_after=1 - pl.col("wp_after"),
         )
         .with_columns(
-            home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            # wp_after is stated in the START-possession team's perspective (every
+            # branch above takes lead_wp_before or its complement into that frame), so
+            # the home/away split keys off start.pos_team.id. Keyed off end.pos_team.id
+            # it came out complemented on every possession change (CFB fixed the same
+            # code as B7): 70% of the sweep's possession-change rows, 100% of punts.
+            home_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
             .otherwise(pl.col("def_wp_after")),
-            away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            away_wp_after=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
             .otherwise(pl.col("def_wp_after")),
         )

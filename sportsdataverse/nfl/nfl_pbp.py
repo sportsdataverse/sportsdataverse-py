@@ -122,6 +122,32 @@ _NFL_LEGACY_PASSER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Pp]ass "
 _NFL_LEGACY_RECEIVER_RE2 = r" to " + _NFL_LONG_NAME + r"\.?$"
 _NFL_LEGACY_XP_KICKER_RE = r"\(" + _NFL_LONG_NAME + r" Kick(?: [A-Za-z]+)?\)"
 _NFL_LEGACY_RUSHER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Rr]un for "
+# ...and the 2015-19 scoring-summary shape "Jordan Reed Pass From Kirk Cousins for 12 Yrds".
+_NFL_LEGACY_PASSER_RE3 = r"Pass From " + _NFL_LONG_NAME + r" for \d+ Yrds?"
+_NFL_LEGACY_RECEIVER_RE3 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" Pass From "
+# ...and its kicker / interceptor forms ("Caleb Sturgis 34 Yd Field Goal", "Malcolm
+# Jenkins 34 Yrd Interception Return").
+_NFL_LEGACY_FG_KICKER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? (?:Field Goal|FG)"
+_NFL_LEGACY_INTERCEPTOR_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? Interception Return"
+# The 2002-09 feed spells names out and tags the team -- "Clinton Portis (DEN)
+# rushed left side for 1 yard", "Brian Griese (DEN) pass left side complete to
+# Clinton Portis (DEN) for 9 yards", "Punt by Mark Royals (MIA) returned 15 yards
+# by Deltha O'Neal (DEN) to the Miami 26", "Kickoff returned by Travis Minor (MIA)
+# for 28 yards", "33 yard field goal by Jason Elam (DEN) is good" (2005-07 drop the
+# tag), "Extra point by Jason Elam (DEN) is good", "intercepted by Montae Reagor
+# (DEN)", "Denver fumble by Mike Anderson (DEN), recovered by Larry Chester (MIA)".
+_NFL_TEAM_TAG = r" \([A-Z]{2,3}\)"
+_NFL_TAGGED_RUSHER_RE = r"^" + _NFL_LONG_NAME + _NFL_TEAM_TAG + r" rushed"
+_NFL_TAGGED_PASSER_RE = r"^" + _NFL_LONG_NAME + _NFL_TEAM_TAG + r" (?:pass|sacked)"
+_NFL_TAGGED_RECEIVER_RE = r"complete to " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_PUNTER_RE = r"Punt by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_PUNT_RETURNER_RE = r"returned -?\d+ yards? by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_KICK_RETURNER_RE = r"Kickoff returned by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_FG_KICKER_RE = r"field goal by " + _NFL_LONG_NAME
+_NFL_TAGGED_XP_KICKER_RE = r"Extra point by " + _NFL_LONG_NAME
+_NFL_TAGGED_INTERCEPTOR_RE = r"intercepted by " + _NFL_LONG_NAME
+_NFL_TAGGED_FUMBLER_RE = r"fumble by " + _NFL_LONG_NAME
+_NFL_TAGGED_RECOVERER_RE = r"recovered by " + _NFL_LONG_NAME
 _NFL_RUSH_DIRECTION = r"(?:up the middle|left (?:end|tackle|guard)|right (?:end|tackle|guard)|scrambles|kneels)"
 # A ball-carrier followed by a rush direction, or (aborted-snap recoveries: "J.Williams
 # to DET 32 for 7 yards") by the spot / gain the run ends at.
@@ -139,6 +165,9 @@ _NFL_LATERAL_YDS_RE = r"Lateral to " + _NFL_NAME + r"[^.]*? for (-?\d+) yards?"
 _NFL_RECOVERY_SPOT_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-[^,]*? at ([A-Z]{2,3}) (\d{1,2})"
 _NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
 _NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
+# "Direct snap to J.Cribbs.  J.Cribbs pass deep right to Z.Sudfeld": the snap
+# clause carries the first "to NAME" and is dropped before the receiver is read.
+_NFL_DIRECT_SNAP_RE = r"Direct snap to " + _NFL_NAME + r"\.?\s*"
 
 
 def _abbreviated_name(pattern: str) -> pl.Expr:
@@ -194,7 +223,10 @@ _NFL_TEXT_TEAM_ALIASES = {
     "LA": "LAR",
     "SL": "STL",
 }
-_NFL_NAME_SUFFIX_RE = re.compile(r"\s+(?:Jr|Sr|II|III|IV)\.?$")
+# The suffixes the shared name grammar admits (football.espn_text.ABBREVIATED_NAME):
+# "Jr." / "Sr" after a comma or a space, a whole numeral after a comma or a space,
+# and the vendor feed's "V" / lower-case-L "lll" / "ll".
+_NFL_NAME_SUFFIX_RE = re.compile(r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|lll|ll)\b)\.?$")
 _NFL_RECOVERY_RE = re.compile(r"(?i)recovered by\s+([A-Z]{2,3})-")
 _NFL_PENALTY_ON_RE = re.compile(r"(?i)penalty on\s+([A-Z]{2,3})\b")
 _NFL_ENFORCED_AT_RE = re.compile(r"(?i)enforced at\s+(?:([A-Z]{2,3})\s+)?(\d{1,2})\b")
@@ -301,6 +333,41 @@ def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
         spot = int(m.group(4)) if side != punting_side else 100 - int(m.group(4))
     los = int(m.group(1)) + spot
     return los if 0 < los < 100 else None
+
+
+def _nfl_repair_scores(scores, scoring, texts):
+    """Carry a team's running score forward through ESPN's feed errors.
+
+    A score only ever drops when a review takes points off the board (no such
+    drop in 319 sampled 2002-26 drops; all were feed errors), and it only rises
+    on a scoring play or on the row after one. Every other change is a feed
+    error, replaced by the last accepted value -- which then anchors the next
+    row, so a run of bad rows heals rather than re-seeding itself from the
+    previous bad row.
+    """
+    # A rise on the row after a scoring play that the rest of the game keeps is a
+    # try ESPN recorded one row late (the 2006 feed puts it on the kickoff row);
+    # one the feed takes back again is the error.
+    later_min, m = [None] * len(scores), None
+    for i in range(len(scores) - 1, -1, -1):
+        later_min[i] = m
+        if scores[i] is not None:
+            m = scores[i] if m is None else min(m, scores[i])
+    out, prev, prev_scoring = [], None, False
+    for i, (score, is_scoring, text) in enumerate(zip(scores, scoring, texts)):
+        if score is not None and prev is not None:
+            delta = score - prev
+            # a try booked one row late: the row after a scoring play rises and the
+            # rest of the game keeps it. A rise anywhere else is not accepted even
+            # when kept -- the 2007 feed books a kick's points on the row BEFORE it.
+            late_try = prev_scoring and not (later_min[i] is not None and later_min[i] < score)
+            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring and not late_try):
+                score = prev
+        out.append(score)
+        if score is not None:
+            prev = score
+        prev_scoring = bool(is_scoring)
+    return out
 
 
 # ESPN's summary names the venue but carries no roof; the models' one-hots come from
@@ -769,7 +836,16 @@ class NFLPlayProcess(object):
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                pl.col("text").cast(str),
+                # the 2008-10 feed HTML-escapes apostrophes ("D.O&apos;Neal", "didn&apos;t"),
+                # which every name and clause pattern below would otherwise miss;
+                # unescaped once here, before the duplicate test compares a row with the next
+                pl.col("text")
+                .cast(str)
+                .str.replace_all("&apos;", "'", literal=True)
+                .str.replace_all("&quot;", '"', literal=True)
+                .str.replace_all("&amp;", "&", literal=True),
+            )
+            .with_columns(
                 orig_play_type=pl.col("type.text"),
                 lead_text=pl.col("text").shift(-1),
                 lead_start_team=pl.col("start.team.id").shift(-1),
@@ -1116,28 +1192,9 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
+            # ESPN's "Blocked Field Goal" keeps its type: relabeled "Extra Point Missed"
+            # it scored as a missed PAT (EPA -0.92) instead of the turnover it is, and
+            # the "Blocked Field Goal Touchdown" relabel below never fired.
         )
 
         return pbp_txt
@@ -1559,6 +1616,7 @@ class NFLPlayProcess(object):
                                 "Sack",
                                 "Pass",
                                 "Interception",
+                                "Pass Interception",  # ESPN's type through 2014
                                 "Pass Interception Return",
                                 "Interception Return Touchdown",
                                 "Pass Incompletion",
@@ -1679,48 +1737,22 @@ class NFLPlayProcess(object):
                 A_score_diff=pl.col("awayScore") - pl.col("lag_awayScore"),
             )
             .with_columns(
-                homeScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= 9),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") < 9)
-                    & (pl.col("H_score_diff") > 1),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= -9)
-                    & (pl.col("H_score_diff") < -1),
-                )
-                .then(pl.col("homeScore"))
-                .otherwise(pl.col("homeScore")),
-                awayScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= 9),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") < 9)
-                    & (pl.col("A_score_diff") > 1),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= -9)
-                    & (pl.col("A_score_diff") < -1),
-                )
-                .then(pl.col("awayScore"))
-                .otherwise(pl.col("awayScore")),
+                homeScore=pl.Series(
+                    _nfl_repair_scores(
+                        play_df["homeScore"].to_list(),
+                        play_df["scoringPlay"].fill_null(False).to_list(),
+                        play_df["text"].to_list(),
+                    ),
+                    dtype=play_df.schema["homeScore"],
+                ),
+                awayScore=pl.Series(
+                    _nfl_repair_scores(
+                        play_df["awayScore"].to_list(),
+                        play_df["scoringPlay"].fill_null(False).to_list(),
+                        play_df["text"].to_list(),
+                    ),
+                    dtype=play_df.schema["awayScore"],
+                ),
             )
             .drop(["lag_homeScore", "lag_awayScore"])
             .with_columns(
@@ -2459,6 +2491,10 @@ class NFLPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 # --- Sacks -----
+                # Computed first: the pass-attempt / target flags below exclude sacks
+                # by this flag as well as by the word "sacked" -- the 2006-era feed
+                # writes a sack's whole text as "Sack" (32% of 2002-09 sacks counted
+                # as pass attempts).
                 sack=pl.when(pl.col("type.text").is_in(["Sack"]))
                 .then(True)
                 .when(
@@ -2479,6 +2515,8 @@ class NFLPlayProcess(object):
                 .when((pl.col("type.text").is_in(["Safety"])).and_(pl.col("text").str.contains("(?i)sacked")))
                 .then(True)
                 .otherwise(False),
+            )
+            .with_columns(
                 # --- Interceptions ------
                 int=pl.col("type.text").is_in(["Interception Return", "Interception Return Touchdown"]),
                 int_td=pl.col("type.text").is_in(["Interception Return Touchdown"]),
@@ -2524,7 +2562,11 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("text").str.contains("(?i)sacked") == False))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("sack") == False)
+                    .and_(pl.col("text").str.contains("(?i)sacked") == False),
+                )
                 .then(True)
                 .otherwise(False),
                 target=pl.when(
@@ -2548,19 +2590,33 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("text").str.contains("(?i)sacked") == False))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("sack") == False)
+                    .and_(pl.col("text").str.contains("(?i)sacked") == False),
+                )
                 .then(True)
                 .otherwise(False),
                 pass_breakup=pl.when(pl.col("text").str.contains("(?i)broken up by")).then(True).otherwise(False),
                 # --- Pass/Rush TDs ------
+                # the offense's touchdowns only: an interception or fumble returned for a
+                # score is a pass / rush play with td_play set, but the defence scored it
                 pass_td=pl.when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
-                .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("td_play") == True)
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                )
                 .then(True)
                 .otherwise(False),
                 rush_td=pl.when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
-                .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
+                .when(
+                    (pl.col("rush") == True)
+                    .and_(pl.col("td_play") == True)
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                )
                 .then(True)
                 .otherwise(False),
                 # --- Pass depth/direction + rush direction (Game on Paper matrix fields) ---
@@ -2610,8 +2666,15 @@ class NFLPlayProcess(object):
                 .cast(pl.Int32),
             )
             .with_columns(
-                pl.when(pl.col("fg_attempt") == True)
-                .then(pl.col("yds_fg") - 17)
+                # A field goal snaps from ESPN's own yard line; the kick distance is a
+                # fallback for the oldest feeds, and it is 18 yards longer than the
+                # line of scrimmage (7-8 yards to the hold plus the 10-yard end zone):
+                # ESPN's yard line sits at yds_fg - 18 on 525 of 582 sampled kicks
+                # 2002-2026, at yds_fg - 17 on 22.
+                pl.when((pl.col("fg_attempt") == True).and_(pl.col("start.yard") > 0))
+                .then(pl.col("start.yard"))
+                .when(pl.col("fg_attempt") == True)
+                .then(pl.col("yds_fg") - 18)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
             )
@@ -2783,13 +2846,17 @@ class NFLPlayProcess(object):
             qb_hurry=pl.col("text").str.contains(r"(?i)\shurried by\s").fill_null(False),
             # ESPN folds the try into the touchdown row ("... TOUCHDOWN. J.Elliott
             # extra point is GOOD, ..."), so the XP flags ride on that row.
+            # "(Dustin Hopkins PAT failed)", "(Adam Vinatieri PAT MISSED)" and the 2005-era
+            # "Extra Point Missed" stub are tries too, all failed
             xp_attempt=(
                 pl.col("text").str.contains("extra point is")
-                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick(?: [A-Za-z]+)?\)")
+                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ (?:Kick|PAT)(?: [A-Za-z]+)?\)")
+                | (pl.col("type.text").str.contains("Touchdown") & (pl.col("text") == "Extra Point Missed"))
             ).fill_null(False),
             xp_made=(
                 pl.col("text").str.contains("extra point is GOOD")
                 | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick\)")
+                | pl.col("text").str.contains(r"(?i)\([A-Za-z' .-]+ PAT good\)")
             ).fill_null(False),
             # ... and so is the two-point try: "TOUCHDOWN. TWO-POINT CONVERSION
             # ATTEMPT. C.Wentz pass to J.Jefferson is complete. ATTEMPT SUCCEEDS."
@@ -2988,7 +3055,11 @@ class NFLPlayProcess(object):
             yds_receiving=pl.when(
                 (pl.col("pass") == True)
                 .and_(pl.col("yds_receiving").is_null())
-                .and_(pl.col("text").str.contains(r"(?i)incomplete|sacked|intercepted|for no gain")),
+                .and_(
+                    (pl.col("int") == True).or_(
+                        pl.col("text").str.contains(r"(?i)incomplete|sacked|intercepted|for no gain"),
+                    ),
+                ),
             )
             .then(0)
             .when((pl.col("pass") == True).and_(pl.col("yds_receiving").is_null()))
@@ -3286,14 +3357,14 @@ class NFLPlayProcess(object):
                 .then(
                     pl.col("text")
                     .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} Yd Interception Return|(?i)(.{0,25} )\\d{0,2} yd interception return",
+                        r"(?i)(.{0,25} )\d{0,2} Yd Interception Return|(?i)(.{0,25} )\d{0,2} yd interception return",
                     )
                     .str.replace(r"return (.+)", "")
                     .str.replace(r"(.+) intercepted", "")
                     .str.replace(r"intercepted", "")
                     .str.replace(r"Yd Interception Return", "")
                     .str.replace(r"for a 1st down", "")
-                    .str.replace(r"(\\d{1,2})", "")
+                    .str.replace(r"(\d{1,2})", "")
                     .str.replace(r"for a TD", "")
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
@@ -3375,7 +3446,7 @@ class NFLPlayProcess(object):
                     pl.col("text")
                     .str.extract(r"(?i)(.+) yd return of blocked")
                     .str.replace(r"(?i)blocked|(?i)Blocked", "")
-                    .str.replace(r"(?i)\\d+", "")
+                    .str.replace(r"(?i)\d+", "")
                     .str.replace(r"(?i)yd return of", ""),
                 )
                 .otherwise(pl.col("punt_block_player")),
@@ -3432,10 +3503,10 @@ class NFLPlayProcess(object):
                 .then(
                     pl.col("text")
                     .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} yd field goal|(?i)(.{0,25} )\\d{0,2} yd fg|(?i)(.{0,25} )\\d{0,2} yard field goal",
+                        r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
                     )
                     .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
-                    .str.replace(r"(\\d{1,2})", ""),
+                    .str.replace(r"(\d{1,2})", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
@@ -3490,8 +3561,8 @@ class NFLPlayProcess(object):
                     .str.replace(r"(?i) for ", "")
                     .str.replace(r"(?i) a safety", "")
                     .str.replace(r"(?i)r no gain", "")
-                    .str.replace(r"(?i)(.+)(\\d{1,2})", "")
-                    .str.replace(r"(?i)(\\d{1,2})", "")
+                    .str.replace(r"(?i)(.+)(\d{1,2})", "")
+                    .str.replace(r"(?i)(\d{1,2})", "")
                     .str.replace(r", ", ""),
                 )
                 .otherwise(None),
@@ -3565,6 +3636,7 @@ class NFLPlayProcess(object):
                         pl.col("text").str.extract(_NFL_RUSHER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RUSHER_RE),
                         _abbreviated_name(_NFL_LEGACY_RUSHER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_RUSHER_RE),
                         pl.col("rush_player"),
                     ),
                 )
@@ -3572,9 +3644,14 @@ class NFLPlayProcess(object):
                 pass_player=pl.when(pl.col("pass") == True)
                 .then(
                     pl.coalesce(
+                        # the scoring-summary "X Pass From Y for N Yrds" names the
+                        # touchdown's passer; a two-point clause after it may name
+                        # another "Q pass to", so the anchored shape is read first
+                        _abbreviated_name(_NFL_LEGACY_PASSER_RE3),
                         pl.col("text").str.extract(_NFL_PASSER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_PASSER_RE),
                         pl.col("pass_player"),
                     ),
                 )
@@ -3588,8 +3665,10 @@ class NFLPlayProcess(object):
                 )
                 .then(
                     pl.coalesce(
-                        pl.col("text").str.extract(_NFL_RECEIVER_RE, 1),
+                        _abbreviated_name(_NFL_LEGACY_RECEIVER_RE3),
+                        pl.col("text").str.replace(_NFL_DIRECT_SNAP_RE, "").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_RECEIVER_RE),
                         pl.col("receiver_player"),
                     ),
                 )
@@ -3600,6 +3679,8 @@ class NFLPlayProcess(object):
                     .and_(pl.col("text").str.contains(r"Yd (?:TD )?pass")),
                 )
                 .then(_abbreviated_name(_NFL_LEGACY_RECEIVER_RE))
+                .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r" Pass From ")))
+                .then(_abbreviated_name(_NFL_LEGACY_RECEIVER_RE3))
                 .otherwise(pl.col("receiver_player")),
             )
             .with_columns(
@@ -3618,6 +3699,8 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("sack_player2")),
                 interception_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_INTERCEPTOR_RE, 1),
+                    _abbreviated_name(_NFL_LEGACY_INTERCEPTOR_RE),
+                    _abbreviated_name(_NFL_TAGGED_INTERCEPTOR_RE),
                     pl.col("interception_player"),
                 ),
                 pass_breakup_player=pl.when(pl.col("type.text") == "Pass Incompletion")
@@ -3633,12 +3716,14 @@ class NFLPlayProcess(object):
                     pl.when(pl.col("text").str.contains(r"(?:FUMBLES|MUFFS catch)[^.]*, and recovers"))
                     .then(pl.col("text").str.extract(_NFL_FUMBLER_RE, 1))
                     .otherwise(None),
+                    _abbreviated_name(_NFL_TAGGED_RECOVERER_RE),
                     pl.col("fumble_recovered_player"),
                 ),
                 fumble_player=pl.when(pl.col("fumble_vec") == True)
                 .then(
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_FUMBLER_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_FUMBLER_RE),
                         pl.when(pl.col("sack") == True).then(pl.col("pass_player")).otherwise(None),
                         pl.when(pl.col("pass") == True).then(pl.col("receiver_player")).otherwise(None),
                         pl.when(pl.col("rush") == True).then(pl.col("rush_player")).otherwise(None),
@@ -3646,7 +3731,11 @@ class NFLPlayProcess(object):
                     ),
                 )
                 .otherwise(pl.col("fumble_player")),
-                punter_player=pl.coalesce(pl.col("text").str.extract(_NFL_PUNTER_RE, 1), pl.col("punter_player")),
+                punter_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_PUNTER_RE, 1),
+                    _abbreviated_name(_NFL_TAGGED_PUNTER_RE),
+                    pl.col("punter_player"),
+                ),
                 punt_block_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_PUNT_BLOCK_RE, 1),
                     pl.col("punt_block_player"),
@@ -3656,6 +3745,7 @@ class NFLPlayProcess(object):
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_PUNT_RETURNER_RE, 1),
                         pl.col("text").str.extract(_NFL_FAIR_CATCH_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_PUNT_RETURNER_RE),
                         pl.col("punt_return_player"),
                     ),
                 )
@@ -3665,18 +3755,22 @@ class NFLPlayProcess(object):
                 .then(
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_KICK_RETURNER_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_KICK_RETURNER_RE),
                         pl.col("kickoff_return_player"),
                     ),
                 )
                 .otherwise(pl.col("kickoff_return_player")),
                 fg_kicker_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_FG_KICKER_RE, 1),
+                    _abbreviated_name(_NFL_LEGACY_FG_KICKER_RE),
+                    _abbreviated_name(_NFL_TAGGED_FG_KICKER_RE),
                     pl.col("fg_kicker_player"),
                 ),
                 fg_block_player=pl.coalesce(pl.col("text").str.extract(_NFL_FG_BLOCK_RE, 1), pl.col("fg_block_player")),
                 xp_kicker_player_name=pl.coalesce(
                     pl.col("text").str.extract(_NFL_XP_KICKER_RE, 1),
                     _abbreviated_name(_NFL_LEGACY_XP_KICKER_RE),
+                    _abbreviated_name(_NFL_TAGGED_XP_KICKER_RE),
                 ),
             )
             .with_columns(
@@ -3948,9 +4042,9 @@ class NFLPlayProcess(object):
         ESPN's NFL summary ships no per-play ``participants`` array (the CFB
         feed does), so the ids come from the game's own ``boxscore.players``:
         every athlete with a stat line, keyed by team and by the text form of
-        the name -- first-initial prefixes of one to three letters
-        (``D.Watson``, ``Bri.Thomas``) plus the surname with any Jr./Sr./II
-        suffix dropped. A key that maps to two athletes on the same team is
+        the name -- first-initial prefixes of one to five letters
+        (``D.Watson``, ``Bri.Thomas``, ``Josh.Brown``) plus the surname with any
+        Jr./Sr./numeral suffix dropped. A key that maps to two athletes on the same team is
         left unresolved rather than guessed. Team-aware: each name column is
         matched against the team that fielded it.
         """
@@ -3965,7 +4059,8 @@ class NFLPlayProcess(object):
             if len(tokens) < 2:
                 continue
             first, rest = tokens[0], " ".join(tokens[1:]).lower()
-            keys = [f"{tid}|{first[:k].lower()}.{rest}" for k in (1, 2, 3)]
+            # ESPN's initials run one to five letters ("D.Watson", "Bri.Thomas", "Josh.Brown")
+            keys = [f"{tid}|{first[:k].lower()}.{rest}" for k in range(1, min(len(first), 5) + 1)]
             keys.append(f"{tid}|{first.lower()} {rest}")  # the participants' full display name
             for key in keys:
                 mapping[key] = None if key in mapping and mapping[key] != str(aid) else str(aid)
