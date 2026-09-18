@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import warnings
 from pathlib import Path
 
 import polars as pl
@@ -19,6 +20,7 @@ from sportsdataverse.nfl.shield_pbp.live import DEFAULT_CONTEXT, current_situati
 
 FIXTURES = Path(__file__).resolve().parents[2] / "fixtures" / "nfl_shield"
 INGAME = FIXTURES / "2026_02_DET_BUF_ingame_q2.json.gz"
+INGAME_Q4 = FIXTURES / "2026_02_DET_BUF_ingame_q4.json.gz"
 PREGAME = FIXTURES / "2026_02_DET_BUF_pregame.json.gz"
 FINAL = FIXTURES / "2024_01_BAL_KC.json.gz"
 
@@ -180,18 +182,28 @@ def test_context_injected(live_df: pl.DataFrame):
 
 
 def test_context_partial_falls_back_to_defaults(ingame: dict):
-    roof, spread, total = resolve_context(ingame, {"roof": "dome"}, game_id=None)
+    with pytest.warns(RuntimeWarning, match="spread_line, total_line"):
+        roof, spread, total = resolve_context(ingame, {"roof": "dome"}, game_id=None)
     assert roof == "dome"
     assert spread == DEFAULT_CONTEXT["spread_line"]
     assert total == DEFAULT_CONTEXT["total_line"]
 
 
 def test_context_defaults_when_nothing_supplied(ingame: dict):
-    assert resolve_context(ingame, None, game_id=None) == (
-        DEFAULT_CONTEXT["roof"],
-        DEFAULT_CONTEXT["spread_line"],
-        DEFAULT_CONTEXT["total_line"],
-    )
+    """A defaulted spread/total is indistinguishable from a real one in the frame, so
+    falling back has to warn — ``vegas_wp`` off 2.5 / 55.5 is not market-informed."""
+    with pytest.warns(RuntimeWarning, match="not market-informed"):
+        assert resolve_context(ingame, None, game_id=None) == (
+            DEFAULT_CONTEXT["roof"],
+            DEFAULT_CONTEXT["spread_line"],
+            DEFAULT_CONTEXT["total_line"],
+        )
+
+
+def test_fully_supplied_context_is_silent(ingame: dict):
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert resolve_context(ingame, CTX, game_id=None) == ("outdoors", -1.5, 48.5)
 
 
 def test_schedule_context_fills_the_gaps(ingame: dict, monkeypatch):
@@ -207,10 +219,17 @@ def test_schedule_context_fills_the_gaps(ingame: dict, monkeypatch):
     assert resolve_context(ingame, CTX, game_id="2026_02_DET_BUF") == ("outdoors", -1.5, 48.5)
 
 
-def test_schedule_lookup_failure_degrades_with_a_warning():
-    """An unusable schedule must not fail a live build (season 1899 has none)."""
+def test_schedule_lookup_failure_degrades_with_a_warning(monkeypatch):
+    """An unusable schedule must not fail a live build — and the test must not
+    reach the network to prove it (the previous form called ``load_nfl_schedule``
+    for real and passed off whichever error the environment happened to raise)."""
+    import sportsdataverse.nfl as nfl_mod
     import sportsdataverse.nfl.shield_pbp.live as live_mod
 
+    def boom(_seasons):
+        raise OSError("release asset unreachable")
+
+    monkeypatch.setattr(nfl_mod, "load_nfl_schedule", boom)
     with pytest.warns(RuntimeWarning, match="schedule context unavailable"):
         assert live_mod._schedule_context(1899, "1899_01_AAA_BBB") == {}
 
@@ -233,3 +252,107 @@ def test_live_columns_on_every_row(live_df: pl.DataFrame):
     markers = live_df.filter(pl.col("shield_play_type").is_in(("GAME_START", "END_QUARTER")))
     assert markers.height >= 1
     assert markers["is_play"].sum() == 0
+
+
+# --------------------------------------------------------------------------- empty payload
+def test_no_play_payload_still_carries_the_live_columns():
+    """Every not-yet-played game is a payload with no drive chart, so a poller started
+    before kickoff hits this first. ``build_pbp`` returns a schema-less frame there;
+    the entry point must still declare the columns it documents, or a consumer's
+    ``pl.col("is_play")`` filter is a ColumnNotFoundError instead of an empty result."""
+    df = shield_nfl_pbp(game_detail={"driveChart": {"plays": [], "drives": []}}, enrich=False, context=CTX)
+    assert df.height == 0
+    for col in ("live_phase", "is_play", "provisional"):
+        assert col in df.columns, f"{col} missing from an empty live frame"
+    assert df.filter(pl.col("is_play") == 1).height == 0
+    # Same shape for the ``{"data": null}`` envelope Shield returns for an unknown uuid.
+    assert shield_nfl_pbp(game_detail={"data": None}, enrich=False, context=CTX).columns == df.columns
+
+
+# --------------------------------------------------------------------------- provisional nulls
+def test_provisional_is_never_null(ingame: dict):
+    """``is_in`` propagates nulls, so a play with no ``playId`` would leave
+    ``provisional`` null — and a downstream ``provisional == 0`` mask silently drops
+    the row. An ``open_ids`` set holding only ``None`` is truthy too, which would take
+    the ``is_in`` branch with a needle that can never match."""
+    mutated = json.loads(json.dumps(ingame))
+    mutated["driveChart"]["plays"][0]["playId"] = None
+    mutated["driveChart"]["plays"][-1]["playId"] = None
+    df = shield_nfl_pbp(game_detail=mutated, enrich=False, context=CTX)
+    assert df["provisional"].null_count() == 0
+    assert set(df["provisional"].unique().to_list()) <= {0, 1}
+
+
+# --------------------------------------------------------------------------- prefix invariant
+# Columns that are EXPECTED to differ between two snapshots of the same game: the
+# game-outcome columns (null until FINAL by design), the two snapshot-describing
+# columns, and every aggregate that summarises a drive or series which had not
+# finished on the earlier snapshot. ``fixed_drive`` and ``series`` themselves are NOT
+# excluded — they are asserted stable.
+_SNAPSHOT_SCOPED = {
+    "home_score",
+    "away_score",
+    "result",
+    "live_phase",
+    "provisional",
+    "fixed_drive_result",
+    "series_result",
+    "series_success",
+} | {
+    "drive_play_count",
+    "drive_first_downs",
+    "drive_inside20",
+    "drive_ended_with_score",
+    "drive_quarter_start",
+    "drive_quarter_end",
+    "drive_yards_penalized",
+    "drive_start_transition",
+    "drive_end_transition",
+    "drive_game_clock_start",
+    "drive_game_clock_end",
+    "drive_start_yard_line",
+    "drive_end_yard_line",
+    "drive_play_id_started",
+    "drive_play_id_ended",
+    "drive_time_of_possession",
+}
+
+
+def _raw_plays(payload: dict) -> dict:
+    plays = (payload.get("driveChart") or {}).get("plays") or []
+    return {p["playId"]: p for p in plays if not p.get("playDeleted") and p.get("playId") is not None}
+
+
+def test_prefix_invariant_across_two_snapshots():
+    """The parser must be a pure function of the payload prefix: a later poll may not
+    move a row whose raw payload object has not changed.
+
+    This is the property the live path actually rests on — Shield revises a play's
+    text / stats / yardage after the snap (up to ~11 plays back), so a consumer has to
+    re-derive the whole frame every poll, and the only thing that makes that safe is
+    that the parser invents no differences of its own. The 223-snapshot sweep that
+    measured it (0 mismatches over 19,820 rows) lives in ``background-research`` and
+    CI never runs it; this pins the same invariant on two committed snapshots.
+    """
+    early, late = _payload(INGAME), _payload(INGAME_Q4)
+    early_raw, late_raw = _raw_plays(early), _raw_plays(late)
+    unchanged = [pid for pid, p in early_raw.items() if pid in late_raw and late_raw[pid] == p]
+    assert len(unchanged) >= 90, f"fixtures must share many unrevised plays, got {len(unchanged)}"
+
+    a = shield_nfl_pbp(game_detail=early, enrich=False, context=CTX)
+    b = shield_nfl_pbp(game_detail=late, enrich=False, context=CTX)
+    cols = [c for c in a.columns if c not in _SNAPSHOT_SCOPED]
+    assert a.columns == b.columns, "two snapshots of one game must build the same schema"
+
+    rows_a = {r["play_id"]: r for r in a.filter(pl.col("play_id").is_in(unchanged)).select(cols).iter_rows(named=True)}
+    rows_b = {r["play_id"]: r for r in b.filter(pl.col("play_id").is_in(unchanged)).select(cols).iter_rows(named=True)}
+    # Fewer rows than playIds: ``build_pbp`` drops TIMEOUT rows, which have playIds.
+    assert rows_a.keys() == rows_b.keys()
+    assert len(rows_a) >= 80, f"too few comparable rows ({len(rows_a)}) to mean anything"
+
+    mismatches = {
+        pid: {c: (rows_a[pid][c], rows_b[pid][c]) for c in cols if rows_a[pid][c] != rows_b[pid][c]}
+        for pid in rows_a
+        if any(rows_a[pid][c] != rows_b[pid][c] for c in cols)
+    }
+    assert not mismatches, f"prefix invariant broken on {len(mismatches)} play(s): {list(mismatches.items())[:3]}"
