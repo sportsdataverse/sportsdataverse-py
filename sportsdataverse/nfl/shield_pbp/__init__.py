@@ -17,6 +17,7 @@ Modules (build order):
     series      -- series / series_result / series_success
     playstats   -- long-format play-stats table (nflverse ``play_stats``)
     build       -- build_pbp / build_pbp_from_file / build_season / shield_nfl_pbp
+    to_espn_summary -- the ESPN-summary projection of the same parsed rows, for NFLPlayProcess
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ from sportsdataverse.nfl.shield_pbp.build import (
 from sportsdataverse.nfl.shield_pbp.game_id import nflverse_game_id
 from sportsdataverse.nfl.shield_pbp.live import is_final
 from sportsdataverse.nfl.shield_pbp.playstats import build_playstats_frame, build_playstats_season
+from sportsdataverse.nfl.shield_pbp.to_espn_summary import shield_to_espn_summary
 
 __all__ = [
     "build_pbp",
@@ -40,4 +42,5 @@ __all__ = [
     "is_final",
     "nflverse_game_id",
     "shield_nfl_pbp",
+    "shield_to_espn_summary",
 ]
