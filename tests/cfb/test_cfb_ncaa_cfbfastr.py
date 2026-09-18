@@ -208,11 +208,13 @@ CFBFASTR_PLAY_TYPES = frozenset(
         "Two-Point Conversion Good",
         "Two-Point Conversion Missed",
         "Unknown",
-        # cfbfastR's taxonomy label for a touchdown it cannot attribute
-        # (`.pbp_play_types()`; ported here in `sportsdataverse/cfb/model_vars.py`).
-        # The ESPN feed never produces it, so it is absent from the parquet, but
-        # a synthesized OT drive-summary row is exactly an unattributable TD.
+        # Two cfbfastR taxonomy labels (`.pbp_play_types()`; ported here in
+        # `sportsdataverse/cfb/model_vars.py`) that the ESPN feed never produces,
+        # so they are absent from the parquet: an unattributable touchdown, which
+        # is exactly what a synthesized OT drive-summary row is, and the kicking
+        # team's own fumble-recovery TD on a kickoff.
         "Uncategorized Touchdown",
+        "Kickoff Team Fumble Recovery Touchdown",
     }
 )
 

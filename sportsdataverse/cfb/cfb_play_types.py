@@ -62,6 +62,11 @@ __all__ = [
 
 #: ESPN ``type.text`` -> era-stable canonical play type.
 #:
+#: Two entries marked ``cfbfastR-only`` are labels the ESPN feed has never
+#: shipped but that cfbfastR's own taxonomy defines and
+#: :func:`sportsdataverse.cfb.cfb_ncaa_cfbfastr.to_cfbfastr` emits, so the table
+#: has to cover them or those rows canonicalize to null.
+#:
 #: The three entries marked ERA-SYNONYM are the whole point of this table: they
 #: are the same football event written differently by era, verified against the
 #: mechanics flags (``Punt Return`` carries ``punt_play=True`` on 100% of its
@@ -104,6 +109,7 @@ PLAY_TYPE_CANONICAL: dict[str, str] = {
     "Kickoff Return (Offense)": "kickoff",  # ERA-SYNONYM (2004; kickoff_play=True 100%)
     "Kickoff Return Touchdown": "kickoff_return_touchdown",
     "Kickoff Team Fumble Recovery": "kickoff_team_fumble_recovery",
+    "Kickoff Team Fumble Recovery Touchdown": "kickoff_team_fumble_recovery_touchdown",  # cfbfastR-only
     "Kickoff (Safety)": "kickoff_safety",
     # --- field goals ---
     "Field Goal Good": "field_goal_made",
@@ -124,6 +130,8 @@ PLAY_TYPE_CANONICAL: dict[str, str] = {
     "Defensive 2pt Conversion": "defensive_two_point",
     # --- other scoring / stoppages ---
     "Safety": "safety",
+    # cfbfastR's label for a touchdown it cannot attribute to a rush/pass/return.
+    "Uncategorized Touchdown": "uncategorized_touchdown",  # cfbfastR-only
     "Penalty": "penalty",
     "Penalty (Safety)": "penalty_safety",
     "Timeout": "timeout",
@@ -167,6 +175,7 @@ PLAY_TYPE_FAMILY: dict[str, str] = {
     "kickoff": "special_teams",
     "kickoff_return_touchdown": "special_teams",
     "kickoff_team_fumble_recovery": "special_teams",
+    "kickoff_team_fumble_recovery_touchdown": "special_teams",
     "kickoff_safety": "special_teams",
     "field_goal_made": "special_teams",
     "field_goal_missed": "special_teams",
@@ -177,6 +186,8 @@ PLAY_TYPE_FAMILY: dict[str, str] = {
     "extra_point_made": "special_teams",
     "extra_point_missed": "special_teams",
     "safety": "other",
+    # by definition the phase is unknown, so it cannot be scored as offense
+    "uncategorized_touchdown": "other",
     "penalty": "other",
     "penalty_safety": "other",
     "unknown": "other",
