@@ -593,6 +593,7 @@ def _synthesize_admin_rows(
     previous = timeouts[0] if timeouts else (None, None)
     skipped = 0
     glitches = 0
+    has_overtime = any(((p.get("period") or {}).get("number") or 0) > 4 for p in emitted)
 
     def synthetic(
         index: int, template: Dict[str, Any], type_id: str, text: str, offset: int
@@ -656,7 +657,6 @@ def _synthesize_admin_rows(
         this_period = (play.get("period") or {}).get("number")
         next_period = (emitted[index + 1].get("period") or {}).get("number") if index + 1 < len(emitted) else None
         if this_period and next_period != this_period:
-            has_overtime = any(((p.get("period") or {}).get("number") or 0) > 4 for p in emitted)
             type_id = _quarter_end_type_id(this_period, has_overtime)
             end_row = synthetic(index + 1, play, type_id, _type_object(type_id)["text"], 1)
             if end_row is None:
