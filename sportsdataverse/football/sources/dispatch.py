@@ -16,7 +16,9 @@ choice) or by returning something other than an :class:`AdaptedGame`.
 from __future__ import annotations
 
 import importlib
+import os
 import time
+import warnings
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
@@ -157,6 +159,61 @@ def _register(league: str, source: str) -> Callable[[Adapter], Adapter]:
     return deco
 
 
+#: Data API base URL for the request-time id-map lookup, and the offline id-map directory.
+#: Both optional: an unset env var just means that step of the cascade is skipped.
+IDMAP_BASE_URL_ENV = "SDV_DATA_API_URL"
+IDMAP_DIR_ENV = "SDV_IDMAP_DIR"
+
+
+def _resolve_idmap_row(league: str, espn_id: int) -> tuple[dict | None, str]:
+    """Find the game's id-map row when the caller did not pass one.
+
+    Game on Paper calls ``_process_game(league, espn_id, source=...)`` with the ESPN event id
+    and nothing else, so an alternate source would otherwise reach its adapter with
+    ``idmap_row=None`` and fail on an unmapped id every time. The cascade is resolved **once
+    per call**, here, so every adapter gets the same row:
+
+    1. the Data API route (:func:`...idmap._fetch_idmap_row`), when ``SDV_DATA_API_URL`` is set;
+    2. an offline id-map parquet pair (:func:`...idmap._lookup`), when ``SDV_IDMAP_DIR`` is set;
+    3. nothing -- the adapter is then free to resolve what it can from a schedule, and must
+       raise :class:`SourceUnavailable` rather than invent an id.
+
+    Neither lookup may raise: a 404, a timeout or a missing asset is a warning and a miss, and
+    dispatch falls through to ESPN. Returns ``(row, how)``; ``how`` is stamped in provenance.
+    """
+    base_url = os.environ.get(IDMAP_BASE_URL_ENV)
+    if base_url:
+        try:
+            from sportsdataverse.football.sources.idmap import _fetch_idmap_row
+
+            row = _fetch_idmap_row(league, espn_id, base_url=base_url)
+            if row:
+                return row, "data_api"
+        except Exception as exc:  # noqa: BLE001 -- the route is optional and may not exist yet
+            warnings.warn(
+                f"idmap: Data API lookup for {league} {espn_id} failed ({type(exc).__name__}: {exc}); falling back",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+    directory = os.environ.get(IDMAP_DIR_ENV)
+    if directory:
+        try:
+            from sportsdataverse.football.sources.idmap import _load_idmap, _lookup
+
+            games, teams = _load_idmap(directory)
+            row = _lookup(games, espn_id, teams)
+            if row:
+                return row, "offline_parquet"
+        except Exception as exc:  # noqa: BLE001
+            warnings.warn(
+                f"idmap: offline lookup for {league} {espn_id} in {directory} failed "
+                f"({type(exc).__name__}: {exc}); falling back",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+    return None, "unresolved"
+
+
 def _processor_class(league: str):
     # local imports: nfl_pbp / cfb_pbp are heavy (models load at import)
     if league == "nfl":
@@ -251,7 +308,8 @@ def _process_game(
         odds_override: optional closing line for sources that carry no odds.
         idmap_row: the game's pre-kickoff id-map row (``idmap._fetch_idmap_row`` from the Data API,
             or ``idmap._lookup`` offline); never built at request time. Its stored closing line becomes
-            ``odds_override`` when none was passed.
+            ``odds_override`` when none was passed. **Optional**: left None (Game on Paper's call
+            shape) it is resolved once by :func:`_resolve_idmap_row` for every non-ESPN source.
 
     Returns:
         :class:`ProcessedGame`. ``game["source"]`` carries the provenance dict:
@@ -264,6 +322,7 @@ def _process_game(
         | attempts | list[dict] | every source tried, in order: ``{source, ok, error, seconds}`` |
         | playByPlaySource | str | ``header.competitions[0].playByPlaySource`` of the adapted summary |
         | native_ids | dict | the producing adapter's native ids |
+        | idmap | dict | how the id-map row was obtained: ``caller`` / ``data_api`` / ``offline_parquet`` / ``unresolved`` |
         | contract | dict | ``ContractReport.summary()`` for the adapted summary |
         | odds | dict | ``{source, default, from_idmap}`` -- the processor's ``odds_source`` and whether the 2.5 / 55.5 default was used |
         | lossy_columns | list[str] | :data:`KNOWN_LOSSY` for ``(league, source)`` |
@@ -276,6 +335,11 @@ def _process_game(
     order = _fallthrough_order(league, source, fallthrough)
     payloads = payloads or {}
     attempts: list[Attempt] = []
+    # GOP passes the ESPN event id and nothing else; resolve the id map once for every
+    # alternate source in the order, never per adapter and never inside the retry loop.
+    idmap_source = "caller" if idmap_row is not None else "not needed"
+    if idmap_row is None and any(s != "espn" for s in order):
+        idmap_row, idmap_source = _resolve_idmap_row(league, espn_id)
     for src in order:
         t0 = time.perf_counter()
         adapter = _adapter_for(league, src)
@@ -323,6 +387,7 @@ def _process_game(
                 "playByPlaySource"
             ),
             "native_ids": adapted.native_ids,
+            "idmap": {"source": idmap_source, "resolved": idmap_row is not None},
             "contract": report.summary(),
             "odds": {
                 # "injected" = stored closing line (or adapter odds); "default" = the 2.5 / 55.5 fallback

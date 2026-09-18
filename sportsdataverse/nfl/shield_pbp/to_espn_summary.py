@@ -77,44 +77,59 @@ ESPN_PLAY_TYPES: Dict[str, Tuple[str, Optional[str]]] = {
     "80": ("Sack Opp Fumble Recovery", "SFOP"),
 }
 
-#: ESPN team id -> (primary, alternate) hex colour. Game on Paper styles the header with
-#: these and nothing else reads them; every other competitor field is era-correct because it
-#: comes from the payload (location / mascot) or the id map (abbreviation).
-# ponytail: static snapshot of the 32 current franchises. If a rebrand ever moves a colour,
-# add the column to the id map's TEAM_SCHEMA rather than growing this table.
-_ESPN_TEAM_COLORS: Dict[str, Tuple[str, str]] = {
-    "1": ("a71930", "000000"),
-    "2": ("00338d", "d50a0a"),
-    "3": ("0b162a", "c83803"),
-    "4": ("fb4f14", "000000"),
-    "5": ("311d00", "ff3c00"),
-    "6": ("002a5c", "b0b7bc"),
-    "7": ("0a2343", "fc4c02"),
-    "8": ("0076b6", "b0b7bc"),
-    "9": ("204e32", "ffb612"),
-    "10": ("002c5f", "a71930"),
-    "11": ("003b75", "ffffff"),
-    "12": ("e31837", "ffb81c"),
-    "13": ("000000", "a5acaf"),
-    "14": ("003594", "ffd100"),
-    "15": ("008e97", "fc4c02"),
-    "16": ("4f2683", "ffc62f"),
-    "17": ("002a5e", "c60c30"),
-    "18": ("d3bc8d", "000000"),
-    "19": ("0b2265", "a71930"),
-    "20": ("115740", "ffffff"),
-    "21": ("004c54", "a5acaf"),
-    "22": ("97233f", "000000"),
-    "23": ("ffb612", "101820"),
-    "24": ("0080c6", "ffc20e"),
-    "25": ("aa0000", "b3995d"),
-    "26": ("002244", "69be28"),
-    "27": ("d50a0a", "34302b"),
-    "28": ("5a1414", "ffb612"),
-    "29": ("0085ca", "101820"),
-    "30": ("007487", "d7a22a"),
-    "33": ("29126f", "9e7c0c"),
-    "34": ("03202f", "a71930"),
+#: ESPN team id -> (nflverse abbreviation, primary, alternate hex colour). The colours style
+#: Game on Paper's header; the abbreviation is the reverse lookup that turns an nflverse
+#: schedule row into ESPN team ids when no id map is available (Game on Paper calls dispatch
+#: with the ESPN event id alone).
+# ponytail: static snapshot of the 32 franchises keyed by ESPN's own franchise id, which is
+# stable across relocations. If a rebrand ever moves a colour, add the column to the id map's
+# TEAM_SCHEMA rather than growing this table.
+_ESPN_TEAMS: Dict[str, Tuple[str, str, str]] = {
+    "1": ("ATL", "a71930", "000000"),
+    "2": ("BUF", "00338d", "d50a0a"),
+    "3": ("CHI", "0b162a", "c83803"),
+    "4": ("CIN", "fb4f14", "000000"),
+    "5": ("CLE", "311d00", "ff3c00"),
+    "6": ("DAL", "002a5c", "b0b7bc"),
+    "7": ("DEN", "0a2343", "fc4c02"),
+    "8": ("DET", "0076b6", "b0b7bc"),
+    "9": ("GB", "204e32", "ffb612"),
+    "10": ("TEN", "002c5f", "a71930"),
+    "11": ("IND", "003b75", "ffffff"),
+    "12": ("KC", "e31837", "ffb81c"),
+    "13": ("LV", "000000", "a5acaf"),
+    "14": ("LA", "003594", "ffd100"),
+    "15": ("MIA", "008e97", "fc4c02"),
+    "16": ("MIN", "4f2683", "ffc62f"),
+    "17": ("NE", "002a5e", "c60c30"),
+    "18": ("NO", "d3bc8d", "000000"),
+    "19": ("NYG", "0b2265", "a71930"),
+    "20": ("NYJ", "115740", "ffffff"),
+    "21": ("PHI", "004c54", "a5acaf"),
+    "22": ("ARI", "97233f", "000000"),
+    "23": ("PIT", "ffb612", "101820"),
+    "24": ("LAC", "0080c6", "ffc20e"),
+    "25": ("SF", "aa0000", "b3995d"),
+    "26": ("SEA", "002244", "69be28"),
+    "27": ("TB", "d50a0a", "34302b"),
+    "28": ("WAS", "5a1414", "ffb612"),
+    "29": ("CAR", "0085ca", "101820"),
+    "30": ("JAX", "007487", "d7a22a"),
+    "33": ("BAL", "29126f", "9e7c0c"),
+    "34": ("HOU", "03202f", "a71930"),
+}
+
+#: nflverse (and historical) club abbreviation -> ESPN franchise id. Relocations keep the id.
+_ESPN_TEAM_ID_BY_ABBR: Dict[str, str] = {
+    **{abbr: espn_id for espn_id, (abbr, _p, _a) in _ESPN_TEAMS.items()},
+    "OAK": "13",
+    "LV": "13",
+    "STL": "14",
+    "LAR": "14",
+    "SD": "24",
+    "LAC": "24",
+    "WSH": "28",
+    "WAS": "28",
 }
 
 #: Shield ``seasonType`` -> ESPN ``header.season.type``.
@@ -374,7 +389,7 @@ def _competitor(
     """One ``header.competitions[0].competitors[]`` entry, home first."""
     full_name = str(shield_team.get("fullName") or "").strip()
     location, mascot = _split_name(shield_team, abbreviation or espn_team_id)
-    primary, alternate = _ESPN_TEAM_COLORS.get(str(espn_team_id), ("000000", "ffffff"))
+    _abbr, primary, alternate = _ESPN_TEAMS.get(str(espn_team_id), ("", "000000", "ffffff"))
     quarters = [score.get(f"q{q}") for q in (1, 2, 3, 4)]
     if score.get("ot"):
         quarters.append(score.get("ot"))
@@ -978,6 +993,18 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     row = dict(ctx.idmap_row or {})
     row.setdefault("espn_event_id", str(espn_id))
+    # Game on Paper calls dispatch with the ESPN event id alone, so the row can arrive empty
+    # even after dispatch's own cascade. The nflverse schedule closes most of the gap offline
+    # (ESPN id -> nflverse game_id, both clubs, the closing line and the roof) -- everything
+    # except the Shield uuid, which only the id map has. Merge, never overwrite.
+    resolved_by = "idmap" if ctx.idmap_row else "none"
+    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+        from_schedule = _idmap_row_from_schedule(espn_id)
+        if from_schedule:
+            resolved_by = "nflverse_schedule" if resolved_by == "none" else "idmap+nflverse_schedule"
+            for key, value in from_schedule.items():
+                if row.get(key) is None:
+                    row[key] = value
     shield_game_id = row.get("shield_game_id")
     payload = ctx.payload
     if payload is None:
@@ -995,7 +1022,7 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     parsed = shield_nfl_pbp(game_detail=payload, enrich=False)
     if parsed.is_empty():
         raise SourceUnavailable(f"nfl {espn_id}: shield payload has no drive chart (not started, or cancelled)")
-    odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)
+    odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row) or _odds_override_from_row(row)
     summary, notes = shield_to_espn_summary(payload, row, parsed=parsed, odds=odds)
     if not any(d.get("plays") for d in summary["drives"]["previous"]):
         # a payload whose only rows are the feed's GAME_START marker: kicked off but nothing
@@ -1005,9 +1032,53 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         summary=summary,
         participants=ctx.participants,
         odds_override=ctx.odds_override,
-        native_ids={"espn_event_id": str(espn_id), "shield_game_id": shield_game_id},
+        native_ids={
+            "espn_event_id": str(espn_id),
+            "shield_game_id": shield_game_id,
+            "idmap_resolved_by": resolved_by,
+        },
         notes=notes,
     )
+
+
+def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
+    """Partial id-map row for one ESPN event id, from the nflverse schedule (offline, cached).
+
+    The schedule carries ``espn`` (the event id), ``game_id``, both clubs and the closing line,
+    so it supplies every field the adapter needs **except** ``shield_game_id`` -- ``nfl_detail_id``
+    is present in the schema but unpopulated in the published asset, so the Shield uuid still has
+    to come from the id map (or the caller's injected payload). Never invents a uuid.
+
+    Returns None when the schedule is unreachable or the event id is not in it.
+    """
+    try:
+        from sportsdataverse.nfl import load_nfl_schedule
+        from sportsdataverse.nfl.utils_date import get_current_nfl_season
+
+        season = int(get_current_nfl_season())
+        schedule = load_nfl_schedule([season - 1, season])
+        if not isinstance(schedule, pl.DataFrame):
+            schedule = pl.from_pandas(schedule)
+        hit = schedule.filter(pl.col("espn").cast(pl.Utf8) == str(espn_id))
+        if hit.is_empty():
+            return None
+        game = hit.row(0, named=True)
+    except Exception:  # noqa: BLE001 -- an unreachable release asset is a miss, never a raise
+        return None
+    home, away = game.get("home_team"), game.get("away_team")
+    return {
+        "league": "nfl",
+        "espn_event_id": str(espn_id),
+        "nflverse_game_id": game.get("game_id"),
+        "home_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(home)),
+        "away_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(away)),
+        "shield_game_id": game.get("nfl_detail_id"),
+        "spread_line": game.get("spread_line"),
+        "total_line": game.get("total_line"),
+        "odds_source": "nflverse_schedule",
+        "home_team": {"espn_abbr": home},
+        "away_team": {"espn_abbr": away},
+    }
 
 
 def _register_shield() -> None:

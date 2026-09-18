@@ -287,6 +287,56 @@ def test_modern_game_carries_no_era_note():
     assert not any("< 2014" in n for n in notes)
 
 
+# ------------------------------------------------- GOP's call shape: the ESPN id and nothing else
+
+
+def test_gop_call_shape_resolves_the_idmap_itself(cle_jax_shield, monkeypatch):
+    """``_process_game(league, espn_id, source=...)`` with no id map still serves Shield.
+
+    Game on Paper's Flask calls exactly this (GOP #260): no ``idmap_row``, no ``odds_override``.
+    Dispatch resolves the row once, and the adapter closes the rest from the nflverse schedule.
+    """
+    from sportsdataverse.football.sources import dispatch as dispatch_mod
+
+    monkeypatch.delenv(dispatch_mod.IDMAP_BASE_URL_ENV, raising=False)
+    monkeypatch.delenv(dispatch_mod.IDMAP_DIR_ENV, raising=False)
+    processed = _process_game(
+        "nfl", CLE_JAX_ESPN_ID, source="shield", fallthrough=False, payloads={"shield": cle_jax_shield}
+    )
+    assert processed.provenance["served"] == "shield"
+    # dispatch could not resolve a row, and says so rather than pretending it did
+    assert processed.provenance["idmap"] == {"source": "unresolved", "resolved": False}
+    # the adapter closed the gap from the schedule, and stamps that in provenance
+    assert processed.provenance["native_ids"]["idmap_resolved_by"] == "nflverse_schedule"
+    frame = processed.plays_frame
+    assert frame.height > 100
+    assert frame.select(pl.col("start.pos_team.id").is_null().sum()).item() == 0
+
+
+def test_unmapped_game_hands_over_rather_than_inventing_an_id(monkeypatch):
+    """No id map, no schedule row, no payload -> ``SourceUnavailable``, never a fabricated id."""
+    from sportsdataverse.football.sources import dispatch as dispatch_mod
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as adapter_mod
+
+    monkeypatch.delenv(dispatch_mod.IDMAP_BASE_URL_ENV, raising=False)
+    monkeypatch.delenv(dispatch_mod.IDMAP_DIR_ENV, raising=False)
+    monkeypatch.setattr(adapter_mod, "_idmap_row_from_schedule", lambda espn_id: None)
+    ctx = dispatch_mod.SourceContext()
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "shield")("nfl", 1, ctx)
+
+
+def test_idmap_lookup_failure_is_a_miss_not_a_raise(monkeypatch):
+    """A 404 / timeout / missing asset degrades to ``unresolved`` so fallthrough reaches ESPN."""
+    from sportsdataverse.football.sources import dispatch as dispatch_mod
+
+    monkeypatch.setenv(dispatch_mod.IDMAP_BASE_URL_ENV, "http://127.0.0.1:1/never")
+    monkeypatch.setenv(dispatch_mod.IDMAP_DIR_ENV, "/nonexistent/idmap")
+    with pytest.warns(RuntimeWarning):
+        row, how = dispatch_mod._resolve_idmap_row("nfl", CLE_JAX_ESPN_ID)
+    assert row is None and how == "unresolved"
+
+
 def test_missing_timeouts_is_surfaced_as_a_note():
     """``summary.timeouts`` is what a live consumer's timeouts-remaining comes from; say when it is gone."""
     payload = _load("2026_02_DET_BUF_ingame_q2.json.gz")
