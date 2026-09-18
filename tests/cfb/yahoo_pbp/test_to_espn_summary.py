@@ -21,7 +21,7 @@ from sportsdataverse.cfb.yahoo_pbp.fetch import _has_plays, _resolve_game_id, _y
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import _yahoo_to_espn_summary
 from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.football.sources.dispatch import SourceUnavailable, _adapter_for, _process_game
-from sportsdataverse.football.sources.parity import _compare_processed
+from sportsdataverse.football.sources.parity import _compare_plays
 
 YAHOO_FIX = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo_cfb"
 ESPN_FIX = Path(__file__).resolve().parents[1] / "fixtures"
@@ -58,29 +58,69 @@ FCS_ESPN_ID = 401866628
 #: anything about the id-map row, so the fall-through log says why for every FCS-hosted game.
 FCS_ROW = {"league": "cfb", "espn_event_id": str(FCS_ESPN_ID), "yahoo_game_id": "ncaaf.g.202609120206"}
 
-#: Observed on OSU @ TEX (185 ESPN plays, 177 Yahoo, 142 paired on the clock-free state key).
-#: Floors, never re-pinned down. The clock is deliberately NOT in the key: ESPN's CFB feed
-#: repeats one clock across consecutive plays while Yahoo stamps each one.
+#: Observed on OSU @ TEX: 185 ESPN plays / 177 Yahoo, 151 / 152 unambiguous snaps, 134 paired;
+#: EPA r .9948, EP_start .9997, EP_end .9987, WP .9995. Floors, never re-pinned down. The clock
+#: is deliberately NOT in the key: ESPN's CFB feed repeats one clock across several consecutive
+#: plays (15:00 x4, then 13:52 x3) while Yahoo stamps every play, so a clock-bearing key pairs
+#: about 8% of the rows.
 KEY = ("period", "start.down", "start.distance", "start.yardsToEndzone", "start.pos_team.id")
+#: Clock-stoppage rows carry the PRECEDING snap's state on both feeds, so on a clock-free key
+#: they collide with that snap; and a state key that occurs twice in a game cannot identify a
+#: play at all. Both are dropped from both sides before the join rather than paired wrongly.
+_ADMIN = (
+    "Timeout",
+    "End Period",
+    "End of Half",
+    "End of Game",
+    "End of Regulation",
+    "Official Timeout",
+    "Two-minute warning",
+)
+
+
+def _snaps(frame):
+    import polars as pl
+
+    frame = frame.filter(~pl.col("type.text").is_in(_ADMIN))
+    return frame.filter(pl.struct(list(KEY)).count().over(list(KEY)) == 1)
+
+
 PINNED = {
-    "paired_share": 0.70,
+    "paired_share": 0.85,
     # the five KEY columns are the join and are therefore not scored; what is scored is
     # everything the join does NOT force to agree.
     "agreement": {
         "start.yardLine": 0.99,
-        "type.id": 0.90,
-        "type.text": 0.90,
-        "rush": 0.95,
-        "pass": 0.95,
-        "td_play": 0.98,
+        "end.pos_team.id": 0.98,
+        "type.id": 0.96,
+        "type.text": 0.97,
+        "type.abbreviation": 0.96,
+        "rush": 0.99,
+        "pass": 0.97,
+        "td_play": 0.99,
     },
-    "correlation": {"EP_start": 0.99, "EP_end": 0.98, "EPA": 0.97, "wp_before": 0.99, "wp_after": 0.99},
+    "correlation": {"EP_start": 0.999, "EP_end": 0.995, "EPA": 0.99, "wp_before": 0.999, "wp_after": 0.999},
     "required_columns": ["type.id", "type.abbreviation", "start.yardsToEndzone", "drive.id"],
 }
 COMPARE_COLUMNS = (
-    "type.id", "type.text", "type.abbreviation", "start.down", "start.distance",
-    "start.yardsToEndzone", "start.yardLine", "start.pos_team.id", "end.pos_team.id", "period",
-    "EPA", "EP_start", "EP_end", "wp_before", "wp_after", "rush", "pass", "td_play",
+    "type.id",
+    "type.text",
+    "type.abbreviation",
+    "start.down",
+    "start.distance",
+    "start.yardsToEndzone",
+    "start.yardLine",
+    "start.pos_team.id",
+    "end.pos_team.id",
+    "period",
+    "EPA",
+    "EP_start",
+    "EP_end",
+    "wp_before",
+    "wp_after",
+    "rush",
+    "pass",
+    "td_play",
 )
 
 
@@ -105,12 +145,22 @@ def osu_tex_pair(osu_tex_yahoo):
     espn = json.loads((ESPN_FIX / f"summary_{OSU_TEX_ESPN_ID}.json").read_text(encoding="utf-8"))
     odds = {"gameSpread": 1.5, "overUnder": 44.5, "homeFavorite": True, "gameSpreadAvailable": True}
     reference = _process_game(
-        "cfb", OSU_TEX_ESPN_ID, source="espn", fallthrough=False,
-        payloads={"espn": espn}, idmap_row=OSU_TEX_ROW, odds_override=odds,
+        "cfb",
+        OSU_TEX_ESPN_ID,
+        source="espn",
+        fallthrough=False,
+        payloads={"espn": espn},
+        idmap_row=OSU_TEX_ROW,
+        odds_override=odds,
     )
     candidate = _process_game(
-        "cfb", OSU_TEX_ESPN_ID, source="yahoo", fallthrough=False,
-        payloads={"yahoo": osu_tex_yahoo}, idmap_row=OSU_TEX_ROW, odds_override=odds,
+        "cfb",
+        OSU_TEX_ESPN_ID,
+        source="yahoo",
+        fallthrough=False,
+        payloads={"yahoo": osu_tex_yahoo},
+        idmap_row=OSU_TEX_ROW,
+        odds_override=odds,
     )
     return reference, candidate
 
@@ -121,8 +171,11 @@ def osu_tex_pair(osu_tex_yahoo):
 def test_finals_parity_against_the_real_espn_summary(osu_tex_pair):
     reference, candidate = osu_tex_pair
     assert candidate.provenance["served"] == "yahoo"
-    report = _compare_processed(
-        reference, candidate, key=KEY, columns=COMPARE_COLUMNS,
+    report = _compare_plays(
+        _snaps(reference.plays_frame),
+        _snaps(candidate.plays_frame),
+        key=KEY,
+        columns=COMPARE_COLUMNS,
         numeric=("EPA", "EP_start", "EP_end", "wp_before", "wp_after"),
     )
     assert report.check(PINNED) == []
@@ -131,8 +184,12 @@ def test_finals_parity_against_the_real_espn_summary(osu_tex_pair):
 def test_dispatch_resolves_the_yahoo_source(osu_tex_yahoo):
     assert _adapter_for("cfb", "yahoo") is not None
     processed = _process_game(
-        "cfb", OSU_TEX_ESPN_ID, source="yahoo", fallthrough=False,
-        payloads={"yahoo": osu_tex_yahoo}, idmap_row=OSU_TEX_ROW,
+        "cfb",
+        OSU_TEX_ESPN_ID,
+        source="yahoo",
+        fallthrough=False,
+        payloads={"yahoo": osu_tex_yahoo},
+        idmap_row=OSU_TEX_ROW,
     )
     assert processed.provenance["served"] == "yahoo"
     assert processed.provenance["native_ids"]["yahoo_game_id"] == OSU_TEX_YAHOO_ID
@@ -160,7 +217,8 @@ def test_contract_and_gop_fields(osu_tex_summary):
     assert all(c["team"]["name"] for c in competitors)
     # the odds a caller supplies become pickcenter
     supplied = _yahoo_to_espn_summary(
-        _load(f"{OSU_TEX_YAHOO_ID}.json.gz"), OSU_TEX_ROW,
+        _load(f"{OSU_TEX_YAHOO_ID}.json.gz"),
+        OSU_TEX_ROW,
         odds={"gameSpread": 1.5, "overUnder": 44.5, "homeFavorite": True, "gameSpreadAvailable": True},
     )[0]
     assert supplied["pickcenter"][0]["overUnder"] == 44.5
@@ -206,10 +264,29 @@ def test_pat_is_folded_into_its_touchdown(osu_tex_summary):
     for i, play in enumerate(plays):
         if play["type"]["abbreviation"] == "TD" and (play.get("pointAfterAttempt") or {}).get("value") == 1:
             previous = plays[i - 1]
-            steps.append(
-                (play["homeScore"] - previous["homeScore"]) + (play["awayScore"] - previous["awayScore"])
-            )
+            steps.append((play["homeScore"] - previous["homeScore"]) + (play["awayScore"] - previous["awayScore"]))
     assert steps and all(s == 7 for s in steps), steps
+
+
+def test_pat_anchors_on_its_touchdown_across_an_intervening_row():
+    """The try is not always the row after its touchdown, and the fold must survive that.
+
+    Louisville at Ole Miss carries both shapes: a false start on the try (play 119, a PENALTY
+    row between the touchdown and "made PAT") and a timeout before a two-point try (play 152).
+    Mutated out (``target = emitted[-1]``), ``pointAfterAttempt`` hangs off the Penalty and
+    Timeout rows and the touchdowns step the scoreboard by 6 -- both assertions fail, and the
+    same mutation passes on a fixture whose tries are all adjacent, which is how this class of
+    defect shipped green in the Shield adapter.
+    """
+    summary, _notes = _yahoo_to_espn_summary(_load(f"{LOU_MISS_YAHOO_ID}.json.gz"), LOU_MISS_ROW)
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    tries = [p for p in plays if "pointAfterAttempt" in p]
+    assert len(tries) >= 6
+    assert all(p["type"]["abbreviation"] == "TD" for p in tries), [
+        (p["type"]["text"], p["text"][:40]) for p in tries if p["type"]["abbreviation"] != "TD"
+    ]
+    # the intervening rows themselves carry no try and no score step of their own
+    assert not any(p["type"]["text"] in ("Penalty", "Timeout") and "pointAfterAttempt" in p for p in plays)
 
 
 def test_an_fcs_hosted_game_reports_no_coverage_rather_than_an_empty_frame():
@@ -225,9 +302,7 @@ def test_an_fcs_hosted_game_reports_no_coverage_rather_than_an_empty_frame():
     assert game["status"] == "FINAL" and game["homeScore"] is not None  # a real game, not an error body
     assert not _has_plays(game)
     with pytest.raises(SourceUnavailable, match="no play-by-play"):
-        _adapter_for("cfb", "yahoo")(
-            "cfb", FCS_ESPN_ID, _ctx(idmap_row=FCS_ROW, payload=payload)
-        )
+        _adapter_for("cfb", "yahoo")("cfb", FCS_ESPN_ID, _ctx(idmap_row=FCS_ROW, payload=payload))
 
 
 def test_a_rate_limited_body_is_a_retryable_failure_not_an_empty_game():
@@ -278,8 +353,12 @@ def test_an_in_progress_payload_synthesizes_the_open_drive(osu_tex_yahoo, throug
     assert summary["drives"]["current"]["isScore"] is False
     assert _validate_summary(summary, "cfb").ok
     processed = _process_game(
-        "cfb", OSU_TEX_ESPN_ID, source="yahoo", fallthrough=False,
-        payloads={"yahoo": payload}, idmap_row=OSU_TEX_ROW,
+        "cfb",
+        OSU_TEX_ESPN_ID,
+        source="yahoo",
+        fallthrough=False,
+        payloads={"yahoo": payload},
+        idmap_row=OSU_TEX_ROW,
     )
     assert processed.plays_frame.height > 0
 
@@ -297,8 +376,12 @@ def test_the_opening_drive_of_a_live_game_is_servable(osu_tex_yahoo):
     assert summary["drives"]["previous"] == []
     assert summary["drives"]["current"]["plays"]
     processed = _process_game(
-        "cfb", OSU_TEX_ESPN_ID, source="yahoo", fallthrough=False,
-        payloads={"yahoo": payload}, idmap_row=OSU_TEX_ROW,
+        "cfb",
+        OSU_TEX_ESPN_ID,
+        source="yahoo",
+        fallthrough=False,
+        payloads={"yahoo": payload},
+        idmap_row=OSU_TEX_ROW,
     )
     assert processed.provenance["served"] == "yahoo"
 
@@ -327,9 +410,7 @@ def test_the_yahoo_game_id_is_computed_from_the_kickoff_and_the_home_team():
 def test_id_resolution_prefers_the_stored_id_and_never_invents_one():
     stored = _resolve_game_id(401856674, {"yahoo_game_id": "ncaaf.g.202609120069"}, ())
     assert stored == ("ncaaf.g.202609120069", "idmap")
-    computed = _resolve_game_id(
-        401856674, {"kickoff_utc": "2026-09-12T19:30Z", "home_espn_team_id": "96"}, ()
-    )
+    computed = _resolve_game_id(401856674, {"kickoff_utc": "2026-09-12T19:30Z", "home_espn_team_id": "96"}, ())
     assert computed == ("ncaaf.g.202609120069", "computed")
     # no row, and no crosswalk seasons to read: a miss, never a fabricated id
     assert _resolve_game_id(401856674, None, ()) == (None, "unresolved")
@@ -350,7 +431,8 @@ def test_an_unresolvable_id_hands_over_without_fetching(monkeypatch):
 def test_a_row_without_espn_team_ids_hands_over(osu_tex_yahoo):
     with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
         _adapter_for("cfb", "yahoo")(
-            "cfb", OSU_TEX_ESPN_ID,
+            "cfb",
+            OSU_TEX_ESPN_ID,
             _ctx(idmap_row={"espn_event_id": str(OSU_TEX_ESPN_ID)}, payload=osu_tex_yahoo),
         )
 
