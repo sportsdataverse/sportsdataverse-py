@@ -13,6 +13,8 @@ from typing import Any, Dict
 
 import polars as pl
 
+from sportsdataverse.nfl.shield_pbp.live import is_final
+
 
 def add_labels(df: pl.DataFrame, game: Dict[str, Any]) -> pl.DataFrame:
     """Add field_goal_result + final home_score/away_score + result.
@@ -25,17 +27,34 @@ def add_labels(df: pl.DataFrame, game: Dict[str, Any]) -> pl.DataFrame:
     Returns:
         The frame with ``field_goal_result`` (made/missed/blocked/None),
         ``home_score``, ``away_score`` (final, broadcast to every row), and
-        ``result`` (home_score - away_score).
+        ``result`` (home_score - away_score). The three game-outcome columns are
+        null unless the payload's ``summary.phase`` is FINAL / FINAL_OVERTIME.
     """
     if df.height == 0:
         return df
 
     summary = game.get("summary") or {}
-    home_total = ((summary.get("homeTeam") or {}).get("score") or {}).get("total")
-    away_total = ((summary.get("awayTeam") or {}).get("score") or {}).get("total")
-    home_total = int(home_total) if home_total is not None else None
-    away_total = int(away_total) if away_total is not None else None
-    result = (home_total - away_total) if (home_total is not None and away_total is not None) else None
+    # ``summary.*.score.total`` is the score AS OF the payload, so on an
+    # in-progress game it is the CURRENT score, not the final one. These three
+    # columns are nflverse *game-outcome* columns (``result`` feeds the
+    # margin-based labels and every "did the home team win" consumer), so
+    # stamping a mid-game score into them silently mislabels the game. They stay
+    # null until the feed says the game is over (``phase`` FINAL / FINAL_OVERTIME
+    # — the only status signal Shield gives; top-level ``status`` is always
+    # SCHEDULED). Archived finals are unaffected: of the 7,549 non-PRE payloads in
+    # the nfl/raw library, 7,291 carry phase FINAL or FINAL_OVERTIME and the 258 that
+    # do not build no play rows at all -- except 2022_17_BUF_CIN, the abandoned
+    # BUF-CIN game, which stays PREGAME with 2 plays. Its outcome columns go from
+    # 7 / 3 / 4 to null here, which matches nflverse: its own 2022 schedule has no
+    # row for that game.
+    if not is_final(game):
+        home_total = away_total = result = None
+    else:
+        home_total = ((summary.get("homeTeam") or {}).get("score") or {}).get("total")
+        away_total = ((summary.get("awayTeam") or {}).get("score") or {}).get("total")
+        home_total = int(home_total) if home_total is not None else None
+        away_total = int(away_total) if away_total is not None else None
+        result = (home_total - away_total) if (home_total is not None and away_total is not None) else None
 
     df = df.with_columns(
         field_goal_result=pl.when(pl.col("field_goal_made") == 1)

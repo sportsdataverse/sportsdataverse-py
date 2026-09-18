@@ -184,15 +184,31 @@ def _play_type(row: Dict[str, Any], shield_play_type: Optional[str]) -> Optional
 
 
 def _drive_ranges(drives: List[Dict[str, Any]]) -> List[tuple[float, float, Optional[str]]]:
-    """(startSeq, endSeq, teamId) per drive, for play->possession assignment."""
-    out = []
+    """(startSeq, endSeq, teamId) per drive, for play->possession assignment.
+
+    An **open** drive — the in-progress drive of a live game, which carries
+    ``endedPlaySequenceNumber: null`` (also ``endedPlayId`` / ``endedDescription``
+    null) — still carries its ``teamId`` and ``startedPlaySequenceNumber``, so it
+    gets a synthetic end: the next drive's start (exclusive) when a later drive
+    exists, else ``+inf``. Dropping it (the pre-live behaviour) left every play of
+    the current drive with a null ``posteam``, hence null ``defteam`` /
+    ``yardline_100`` / ``score_differential`` and a ``fixed_drive`` that never
+    advanced. Finals are unaffected: every drive there has both endpoints.
+
+    Drives missing ``startedPlaySequenceNumber`` are skipped (nothing anchors them).
+    """
+    out: List[List[Any]] = []
     for d in drives or []:
-        s = d.get("startedPlaySequenceNumber")
-        e = d.get("endedPlaySequenceNumber")
-        if s is None or e is None:
+        start = d.get("startedPlaySequenceNumber")
+        if start is None:
             continue
-        out.append((float(s), float(e), d.get("teamId")))
-    return out
+        end = d.get("endedPlaySequenceNumber")
+        out.append([float(start), None if end is None else float(end), d.get("teamId")])
+    out.sort(key=lambda r: r[0])
+    for i, row in enumerate(out):
+        if row[1] is None:
+            row[1] = (out[i + 1][0] - 1.0) if i + 1 < len(out) else float("inf")
+    return [(r[0], r[1], r[2]) for r in out]
 
 
 def _posteam_for(seq: Optional[float], ranges: List[tuple[float, float, Optional[str]]]) -> Optional[str]:
