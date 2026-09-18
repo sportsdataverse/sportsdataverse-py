@@ -126,7 +126,15 @@ def shield_nfl_pbp(
         | `provisional` | `int` | `1` when the feed has not closed the play (`playEndTime` null) and it is in the trailing run of such plays of a non-final game — its text, yardage and stats may still change. Always `0` on a final game. |
 
         ``home_score`` / ``away_score`` / ``result`` are null until the game is final.
-        An empty payload returns a zero-row frame.
+
+        The current-situation row is not inert once *enrich* is True: it is the next
+        state, so it also completes the **previous** play's lead-diff columns (``epa``,
+        ``qb_epa``, ``wpa``, ``vegas_wpa``, the ``total_*`` running sums). That play is
+        usually still ``provisional``, so those values can move on the next poll.
+
+        A payload Shield has not populated a drive chart for (every scheduled game
+        before kickoff) returns a zero-row frame carrying only the three live columns —
+        check ``df.is_empty()`` before selecting anything else.
 
     Raises:
         ValueError: Neither *game_detail* nor *shield_game_id* was given.
@@ -143,13 +151,23 @@ def shield_nfl_pbp(
         from sportsdataverse.nfl.nfl_api import nfl_game_details_v2
 
         game_detail = nfl_game_details_v2(shield_game_id, include_drive_chart=True, return_parsed=False)
-    game = game_detail.get("data") if "driveChart" not in game_detail and "data" in game_detail else game_detail
+    # ``or {}``: the fetch returns a ``{"data": null}`` envelope for a uuid Shield does
+    # not know, and an unguarded ``None`` here is an AttributeError three calls deeper
+    # instead of the documented empty frame.
+    game = (game_detail.get("data") if "driveChart" not in game_detail and "data" in game_detail else game_detail) or {}
 
     resolved_id = game_id or _game_id_of(game)
     roof, spread_line, total_line = resolve_context(game, context, game_id=resolved_id)
     df = build_pbp(game, roof=roof, spread_line=spread_line, total_line=total_line, game_id=game_id)
     if df.height == 0:
-        return df
+        # A scheduled game Shield has not populated a drive chart for yet -- the state
+        # every not-yet-played game is in, so a poller started before kickoff hits it
+        # first. ``build_pbp`` returns a schema-less frame there, which would make
+        # ``df.filter(pl.col("is_play") == 1)`` a ColumnNotFoundError rather than an
+        # empty result, so the live columns are declared even with nothing to describe.
+        # Declared via the schema, not ``with_columns``/``select``: a literal added to a
+        # 0x0 frame yields a ONE-row frame in polars, which would invent a play.
+        return pl.DataFrame(schema={**df.schema, "live_phase": pl.Utf8, "is_play": pl.Int64, "provisional": pl.Int64})
     df = add_live_columns(df, game)
     df = current_situation_row(df, game)
     if enrich:

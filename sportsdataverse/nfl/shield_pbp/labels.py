@@ -41,8 +41,12 @@ def add_labels(df: pl.DataFrame, game: Dict[str, Any]) -> pl.DataFrame:
     # stamping a mid-game score into them silently mislabels the game. They stay
     # null until the feed says the game is over (``phase`` FINAL / FINAL_OVERTIME
     # — the only status signal Shield gives; top-level ``status`` is always
-    # SCHEDULED). Archived finals are unaffected: every nfl/raw payload
-    # 1999-2026 carries phase FINAL or FINAL_OVERTIME.
+    # SCHEDULED). Archived finals are unaffected: of the 7,549 non-PRE payloads in
+    # the nfl/raw library, 7,291 carry phase FINAL or FINAL_OVERTIME and the 258 that
+    # do not build no play rows at all -- except 2022_17_BUF_CIN, the abandoned
+    # BUF-CIN game, which stays PREGAME with 2 plays. Its outcome columns go from
+    # 7 / 3 / 4 to null here, which matches nflverse: its own 2022 schedule has no
+    # row for that game.
     if not is_final(game):
         home_total = away_total = result = None
     else:

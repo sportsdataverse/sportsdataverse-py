@@ -109,6 +109,10 @@ def resolve_context(
     skipped (no network) when ``context`` already supplies all three, and degrades to
     the defaults with a ``RuntimeWarning`` when the schedule cannot be loaded.
 
+    Every field that reaches :data:`DEFAULT_CONTEXT` raises a ``RuntimeWarning`` naming
+    it: ``spread_line`` / ``total_line`` are the only inputs to ``vegas_wp``, and a
+    defaulted line is indistinguishable from a real one once it is in the frame.
+
     Args:
         game: The Shield game payload (for ``season``).
         context: Optional ``{"roof": ..., "spread_line": ..., "total_line": ...}``.
@@ -119,15 +123,32 @@ def resolve_context(
     Returns:
         A ``(roof, spread_line, total_line)`` tuple, never ``(None, None, None)`` —
         unresolved fields fall back to :data:`DEFAULT_CONTEXT`.
+
+    Warns:
+        RuntimeWarning: Once per call, naming every field that fell back to
+            :data:`DEFAULT_CONTEXT`; separately when the schedule lookup itself failed.
     """
     out = {k: (context or {}).get(k) for k in DEFAULT_CONTEXT}
     if any(v is None for v in out.values()) and game_id is not None and game.get("season") is not None:
         for key, value in _schedule_context(int(game["season"]), game_id).items():
             if out.get(key) is None:
                 out[key] = value
-    for key, value in DEFAULT_CONTEXT.items():
-        if out.get(key) is None:
-            out[key] = value
+    fell_back = sorted(k for k in DEFAULT_CONTEXT if out.get(k) is None)
+    if fell_back:
+        # These feed the EP/WP models -- ``spread_line`` / ``total_line`` are the only
+        # inputs to ``vegas_wp`` -- and the frame cannot tell a default apart from a
+        # real line, so the fallback has to announce itself. A live consumer that must
+        # not show a Vegas-informed number off a made-up line passes its own context.
+        warnings.warn(
+            f"shield_pbp: no {', '.join(fell_back)} for "
+            f"{game_id or 'this game'} from the caller or the nflverse schedule — "
+            f"using {', '.join(f'{k}={DEFAULT_CONTEXT[k]!r}' for k in fell_back)}; "
+            f"vegas_wp / vegas_wpa on this game are not market-informed.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        for key in fell_back:
+            out[key] = DEFAULT_CONTEXT[key]
     return out["roof"], out["spread_line"], out["total_line"]
 
 
@@ -170,7 +191,7 @@ def add_live_columns(df: pl.DataFrame, game: Mapping[str, Any]) -> pl.DataFrame:
 
         | col_name | type | description |
         |----------|------|-------------|
-        | `live_phase` | `str` | The payload's `summary.phase` (`PREGAME`, `INGAME`, `HALFTIME`, `FINAL`, `FINAL_OVERTIME`), broadcast to every row. |
+        | `live_phase` | `str` | The payload's `summary.phase` (`PREGAME`, `INGAME`, `HALFTIME`, `FINAL`, `FINAL_OVERTIME`), broadcast to every row; `None` when the payload carries no `summary`. |
         | `is_play` | `int` | `1` for a real play, `0` for a non-play row: the feed's `GAME_START` / `END_QUARTER` / `END_GAME` markers and the synthetic current-situation row. |
         | `provisional` | `int` | `1` when the row's outcome may still change: a play the feed has not closed (`playEndTime` null) in the trailing run of such plays of a non-final game. Always `0` once `phase` is `FINAL*`. |
     """
@@ -181,7 +202,11 @@ def add_live_columns(df: pl.DataFrame, game: Mapping[str, Any]) -> pl.DataFrame:
     return df.with_columns(
         live_phase=pl.lit(phase, dtype=pl.Utf8),
         is_play=(~pl.col("shield_play_type").fill_null("").is_in(_MARKER_PLAY_TYPES)).cast(pl.Int64),
-        provisional=pl.col("play_id").is_in(list(open_ids)).cast(pl.Int64) if open_ids else pl.lit(0, dtype=pl.Int64),
+        provisional=(
+            pl.col("play_id").is_in(list(open_ids)).fill_null(False).cast(pl.Int64)
+            if open_ids
+            else pl.lit(0, dtype=pl.Int64)
+        ),
     )
 
 
@@ -201,7 +226,11 @@ def _provisional_play_ids(game: Mapping[str, Any]) -> set:
     for play in reversed(plays):
         if play.get("playEndTime") is not None:
             break
-        out.add(play.get("playId"))
+        # A play with no playId cannot be matched against the frame's play_id, and a
+        # set holding only ``None`` is still truthy -- which would take the is_in
+        # branch in add_live_columns with a needle that matches nothing.
+        if play.get("playId") is not None:
+            out.add(play["playId"])
     return out
 
 
