@@ -10,7 +10,8 @@ ways in, both producing that same dict:
   ``ncaa-mfb-football-raw`` checkout, pointed at by ``SDV_NCAA_MFB_ARCHIVE``). The archive covers
   **fall 2013 onwards, FBS + FCS**, and is the only source that carries an FCS-hosted game in any
   era. The academic year is ``season + 1`` (season 2024 lives under ``mfb/raw/2025/``).
-* **live** -- the contest page itself, through the repo's existing NCAA transport
+* **live** -- **opt-in, off by default** (:data:`LIVE_FETCH_ENV`) -- the contest page itself,
+  through the repo's existing NCAA transport
   (:class:`sportsdataverse.mbb.mbb_ncaa_fetch.NcaaFetcher`, browser transport for the
   Akamai ``bm-verify`` wall, residential proxy). stats.ncaa.org is an unfriendly host and bans
   per IP **permanently**, so every request is paced to at most one per
@@ -26,7 +27,6 @@ the one that matters.
 from __future__ import annotations
 
 import gzip
-import io
 import json
 import os
 import threading
@@ -43,6 +43,19 @@ ARCHIVE_DIR_ENV = "SDV_NCAA_MFB_ARCHIVE"
 #: Minimum seconds between two stats.ncaa.org requests, process-wide. The host bans per IP and
 #: those bans are permanent, so this is a floor, never a target.
 MIN_REQUEST_INTERVAL = 3.0
+
+#: Opt-in for the **live** stats.ncaa.org path; the archive path never consults it.
+#:
+#: Off by default because the live fetch is unbounded on Game on Paper's request path and
+#: :mod:`...sources.dispatch` imposes no per-source time budget. Three pages, each paced to
+#: :data:`MIN_REQUEST_INTERVAL` behind a browser transport with a 45 s navigation timeout, an 8 s
+#: challenge wait and three solve attempts, then the fetch layer's own proxy rotations -- minutes,
+#: on a thread. Today it happens to fail in 0.00 s because ``patchright`` is an optional extra
+#: that is not installed; it IS installed in 16 venvs on the droplet, and "an optional dependency
+#: nobody installed" is not a timeout. The fetch also needs a RESIDENTIAL IP (a datacenter egress
+#: gets an instant edge 403) and stats.ncaa.org bans per IP permanently, so reaching it is a
+#: per-host choice, never a default.
+LIVE_FETCH_ENV = "SDV_NCAA_MFB_LIVE"
 
 #: The bundle keys the projection reads. ``drives`` refines ``period`` when the pbp page ships no
 #: quarter markers; the other two are mandatory.
@@ -114,7 +127,17 @@ def _fetch_bundle(contest_id: Any, *, fetcher: Any = None) -> Dict[str, Any]:
     browser-transport ``NcaaFetcher`` is built, which is what clears the Akamai ``bm-verify``
     wall. ``NcaaFetcher`` is itself cache-first, so a re-run of the same contest makes zero
     requests -- but a fresh page is still three requests, hence :func:`_pace`.
+
+    Raises:
+        RuntimeError: :data:`LIVE_FETCH_ENV` is not set. The live path is opt-in per host; see
+            that constant for why a request path must not take it by default.
     """
+    if os.environ.get(LIVE_FETCH_ENV, "").strip().lower() not in ("1", "true", "yes"):
+        raise RuntimeError(
+            f"the live stats.ncaa.org path is opt-in: set {LIVE_FETCH_ENV}=1. It needs patchright "
+            "and a residential IP, costs minutes per contest, and dispatch has no per-source time "
+            "budget, so a request path must not take it by default."
+        )
     if fetcher is None:
         from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
@@ -154,10 +177,10 @@ def _crosswalk() -> Dict[str, str]:
     global _CROSSWALK
     if _CROSSWALK is None:
         frame = pl.read_csv(
-            io.BytesIO(_CROSSWALK_PATH.read_bytes()),
+            _CROSSWALK_PATH,
             schema_overrides={"ncaa_team_id": pl.Utf8, "espn_team_id": pl.Utf8},
         )
-        _CROSSWALK = dict(zip(frame.get_column("ncaa_team_id"), frame.get_column("espn_team_id")))
+        _CROSSWALK = dict(frame.iter_rows())
     return _CROSSWALK
 
 
@@ -194,9 +217,15 @@ def _espn_team_ids_from_bundle(html: str, linescore_teams: Mapping[str, str]) ->
         espn_id = crosswalk.get(str(ncaa_id))
         if not espn_id:
             continue
-        for name, side in linescore_teams.items():
-            if name and label.startswith(name):
-                out.setdefault(side, str(espn_id))
+        # The LONGEST linescore name the label starts with wins, and only that one. "Texas A&M
+        # Aggies" starts with both "Texas" and "Texas A&M", so crediting every prefix match gave
+        # the shorter club's side the longer club's ESPN id: on all 38 same-prefix matchups in the
+        # 2024-25 archive -- Iowa/Iowa St., Florida/Florida St., and the FCS rivalries this source
+        # exists for (North Dakota, South Dakota, Montana, Idaho) -- both sides collapsed to one
+        # id and the game was refused by the ``home_id == away_id`` guard.
+        name = max((n for n in linescore_teams if n and label.startswith(n)), key=len, default=None)
+        if name is not None:
+            out.setdefault(linescore_teams[name], str(espn_id))
     return out
 
 
@@ -210,8 +239,10 @@ def _espn_team_ids_from_schedule(espn_id: Any, game_date: Optional[str]) -> Dict
     network, so it runs only on the fetch path; never raises -- an unreachable ESPN is a miss,
     which is the whole point of a failover source.
     """
-    parts = str(game_date or "").split()[0].split("/")
-    if len(parts) != 3:
+    # ``.split()[0]`` on an empty stamp is an IndexError, not a miss, and a linescore with no
+    # ``game_date`` is exactly the degraded payload that got us to this last leg.
+    parts = (str(game_date or "").split() or [""])[0].split("/")
+    if len(parts) != 3 or not all(p.strip().isdigit() for p in parts):
         return {}
     month, day, year = parts
     try:

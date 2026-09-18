@@ -106,11 +106,6 @@ def _norm(name: Optional[str]) -> str:
     return _norm_team(name)
 
 
-def _frame(rows: Any, schema: Mapping[str, Any]) -> pl.DataFrame:
-    """A polars frame in ``schema``; empty rows still carry the documented columns."""
-    return pl.DataFrame(rows, schema=dict(schema)) if rows else pl.DataFrame(schema=dict(schema))
-
-
 def _parse_bundle(
     bundle: Mapping[str, Any], season: Optional[int]
 ) -> Tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame, pl.DataFrame]:
@@ -600,7 +595,7 @@ def _ncaa_to_espn_summary(
         | item | type | description |
         |---|---|---|
         | summary | dict | An ESPN-summary-shaped payload: `header`, `drives.previous` (+ `drives.current` on a truncated page), `gameInfo`, `pickcenter` and empty `boxscore` / passthrough arrays. Feed it to `espn_cfb_pbp(summary=)`. |
-        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: synthesized overtime rows, a try with no touchdown to fold into, rows whose possession was carried forward, and the open drive synthesized for a truncated page. |
+        | notes | list[str] | Adapter-side degradations worth surfacing in provenance, all six of them: rows the page states no clock for (an EP/WP input, carried from the drive's stated start clock), synthesized overtime rows, a try with no touchdown to fold into, rows whose possession was carried forward, kickoff rows re-framed onto the kicking team, and the open drive synthesized for a truncated page. |
 
     Raises:
         KeyError: ``idmap_row`` states no ``espn_event_id``.
@@ -819,11 +814,15 @@ def _ncaa_to_espn_summary(
 def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     """Dispatch adapter for ``source="ncaa"`` (CFB). Registered in :mod:`...sources.dispatch`.
 
-    Hands over to the next source (:class:`...dispatch.SourceUnavailable`) when the contest id
-    cannot be resolved without inventing one, when neither the archive nor a live fetch produces
-    a bundle, when the bundle carries no play-by-play markup at all -- the shape stats.ncaa.org
-    answers HTTP 200 with for a game it does not hold, including every FBS game outside the
-    FBS/FCS divisions it sweeps -- and when no ESPN team id can be resolved for both clubs.
+    Raises:
+        SourceUnavailable: every hand-over, and there are seven -- the contest id cannot be
+            resolved without inventing one; neither the archive nor a live fetch produces a
+            bundle (the live path is opt-in, see :data:`...fetch.LIVE_FETCH_ENV`); the payload is
+            not a bundle-shaped mapping; the bundle carries no play-by-play markup at all -- the
+            shape stats.ncaa.org answers HTTP 200 with for a game it does not hold, including
+            every FBS game outside the FBS/FCS divisions it sweeps; no ESPN team id resolves for
+            both clubs; the projection rejects the bundle (:class:`ValueError`, re-wrapped); and
+            the served drive chart carries no plays across **both** groupings.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
     from sportsdataverse.football.sources.idmap import _odds_override_from_row

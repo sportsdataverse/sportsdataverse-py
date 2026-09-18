@@ -6,8 +6,7 @@ resolves a source adapter, validates the adapted summary against the contract, r
 unmodified processor on it, and returns the processed dict with provenance stamped in.
 
 ESPN, NFL Shield, NFL CBS, NFL Yahoo, CFB Yahoo, CFB CBS and CFB NCAA are registered today. Every other source in
-:data:`SOURCE_ORDER` is
-a named slot that is skipped with ``"not implemented"`` in ``provenance["attempts"]`` until
+:data:`SOURCE_ORDER` is a named slot that is skipped with ``"not implemented"`` in ``provenance["attempts"]`` until
 its adapter lands (Stage 2 items 2+), so the fall-through path is exercised now and the
 adapters plug in later without touching this module or GOP. A registered adapter hands over
 to the next source by raising anything (:class:`SourceUnavailable` is the conventional
