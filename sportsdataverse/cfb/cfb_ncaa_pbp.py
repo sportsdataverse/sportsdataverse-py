@@ -37,7 +37,9 @@ __all__ = ["DRIVE_TITLES_SCHEMA", "PBP_SCHEMA", "parse_cfb_ncaa_drive_titles", "
 #   * 2019-era "First Last" -- "Joe Burrow", "C. Ed.-Helaire", "K. Duncan Jr.", or a lone
 #     surname ("ALEXANDER-STEVE"); anchored by the play verb that follows it
 #   * 2025 jersey style -- "#95 K.Kimble"
-_SUFFIX = r"(?:\s(?:Jr|Sr|II|III|IV)\.?)?"
+# A suffix can be space- or comma-separated from the surname: the pages print
+# "Brown V,Samuel", "Didio, Jr.,Mark" and (with no first name at all) "GILLIAM, Jr.".
+_SUFFIX = r"(?:,?\s(?:Jr|Sr|II|III|IV|V)\.?)?"
 _TOKEN = r"[A-Z][A-Za-z.'\-]*"
 # The bare-token form ends on a non-word char: without that guard it reads the side code
 # out of a yard-line token ("thrown to NCSU50" -> receiver "NCSU").
@@ -56,8 +58,12 @@ def _clean_name(name: "str | None") -> "str | None":
     while name.endswith(".."):
         name = name[:-1]
     last = re.split(r"[,\s]+", name)[-1]
-    # count LETTERS, not characters: "D.J." is two initials, not a 3-letter word
-    return name[:-1] if name.endswith(".") and len(re.sub(r"[^A-Za-z]", "", last)) >= 3 else name
+    letters = re.sub(r"[^A-Za-z]", "", last)
+    # count LETTERS, not characters: "D.J." is two initials, not a 3-letter word.
+    # "Jr."/"Sr." own their period; a roman-numeral suffix does not, so a
+    # terminal one is the sentence's ("Wilbert Boyd IV.").
+    keep = len(letters) < 3 and letters.upper() not in ("II", "IV", "V")
+    return name if keep or not name.endswith(".") else name[:-1]
 
 
 # Yard-line token = side code + yard number (0-50). A code is NOT a fixed character

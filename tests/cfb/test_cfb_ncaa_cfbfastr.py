@@ -17,6 +17,7 @@ import os
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
+import re
 from pathlib import Path
 
 import polars as pl
@@ -524,7 +525,90 @@ def test_first_last_participants_reach_the_cfbfastr_frame() -> None:
     assert "Joe Burrow" in df.get_column("passer_player_name").to_list()
     assert "Derek Stingley" in df.get_column("interception_player_name").to_list()
     df = _frame("1735120")
-    assert "Mike BEAUDRY" in df.get_column("passer_player_name").to_list()
+    # was pinned as "Mike BEAUDRY": the 2019 pages shout the surname and cfbfastR
+    # does not, so the mapper now title-cases it (see the shouted-surname test).
+    assert "Mike Beaudry" in df.get_column("passer_player_name").to_list()
+
+
+def _participant_names(df: "pl.DataFrame") -> "set[str]":
+    """Every non-null value of every ``*_player_name`` column."""
+    return {v for c in df.columns if c.endswith("player_name") for v in df.get_column(c).drop_nulls().to_list()}
+
+
+def test_a_comma_separated_suffix_stays_a_suffix() -> None:
+    """The pages print "Didio, Jr.,Mark"; cfbfastR's form is "Mark Didio Jr." -- suffix LAST.
+
+    Verified against ``play_by_play_2024.parquet``: every suffix in
+    ``rusher_player_name`` trails the surname ("Gabe Ervin Jr.", "William
+    Atkins IV", "Samuel Brown V"), 5,307 rows; none leads it.
+    """
+    for cid, want in (("6386300", "Mark Didio Jr."), ("6386303", "Mark Didio Jr."), ("6396796", "Eric Singleton Jr.")):
+        names = _participant_names(_frame(cid))
+        assert want in names, cid
+        assert not [n for n in names if n.startswith(("Jr.", "Sr.", "II ", "III ", "IV ", "V "))], cid
+
+
+def test_a_bare_suffix_is_not_a_first_name() -> None:
+    """Real page strings whose contests are outside the committed corpus.
+
+    "Brown V,Samuel" (6412827) needs ``V`` in the parser's suffix list, and
+    cfbfastR publishes exactly "Samuel Brown V"; the 2019 pages also print a
+    surname with a suffix and NO first name ("GILLIAM, Jr.", 1736824), where
+    splitting on the comma made the suffix the first name.
+    """
+    assert _first_last("Brown V,Samuel") == "Samuel Brown V"
+    assert _first_last("GILLIAM, Jr.") == "Gilliam Jr."
+    # a one-letter first initial is written with a period, a roman-numeral
+    # suffix never is -- which is what keeps them apart
+    assert _first_last("Smith,V.") == "V. Smith"
+
+
+def test_a_suffix_keeps_no_sentence_period() -> None:
+    """ "Jr."/"Sr." own their period; "II"/"IV"/"V" do not, so a terminal one is the sentence's.
+
+    1735539 prints both "... to Wilbert Boyd IV for 7 yards" and the row that ends
+    on the name, "Tyler Pullum pass incomplete to Wilbert Boyd IV." -- the same
+    player has to come out of both as one value.
+    """
+    df = _frame("1735539")
+    row = df.filter(pl.col("play_text") == "Tyler Pullum pass incomplete to Wilbert Boyd IV.").row(0, named=True)
+    assert row["receiver_player_name"] == "Wilbert Boyd IV"
+    assert [n for n in _participant_names(df) if "Boyd" in n] == ["Wilbert Boyd IV"]
+    # a "Jr."/"Sr." period is the suffix's own and is kept
+    assert "Garrison Johnson Sr." in _participant_names(_frame("6414322"))
+
+
+def test_a_2019_shouted_surname_is_title_cased() -> None:
+    """The 2019 pages shout the surname ("HARRIS, Clayton"); cfbfastR is mixed case.
+
+    Conservative on purpose: only an all-uppercase token of three letters or
+    more is touched, so a mixed-case source keeps its own internal capitals, a
+    two-letter token survives, and the page's own "TEAM" is left alone.
+    """
+    df = _frame("1735120")
+    names = _participant_names(df)
+    assert {"Mike Beaudry", "Clayton Harris", "Alexander-Steve"} <= names
+    assert "D McKENZIE" in names  # mixed-case source: its "McK" is the page's, not a guess
+    assert [n for n in names if re.search(r"\b[A-Z]{3,}\b", n)] == ["TEAM"]
+    assert "Racey McMath" in _participant_names(_frame("1735890"))
+
+
+def test_a_team_rush_carries_cfbfastrs_team_marker() -> None:
+    """The 2025 pages print the TEAM as the carrier on a team rush; cfbfastR writes "TEAM".
+
+    16,008 published cfbfastR rows hold "TEAM"/"Team" in ``rusher_player_name``,
+    and the 2019 NCAA pages print it that way themselves -- so a team name in a
+    player column is the defect, not the marker.
+    """
+    df = _frame("5336803")
+    row = df.filter(pl.col("play_text").str.contains("Akron rush middle for 14 yards loss")).row(0, named=True)
+    assert (row["rusher_player_name"], row["pos_team"], row["rush"]) == ("TEAM", "Akron", True)
+    # the page's own "TEAM rush" is already right and is not re-cased
+    assert _frame("1735120").filter(pl.col("rusher_player_name") == "TEAM").height == 2
+    for cid in ALL_PBP_FIXTURES:
+        d = _frame(cid)
+        teams = set(d.get_column("pos_team").drop_nulls().to_list())
+        assert not (_participant_names(d) & teams), cid
 
 
 def test_td_and_pat_in_one_row_scores_seven() -> None:

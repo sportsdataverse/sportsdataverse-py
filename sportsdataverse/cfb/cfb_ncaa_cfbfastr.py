@@ -229,16 +229,56 @@ def _norm_team(name: "str | None") -> str:
     return re.sub(r"[^a-z0-9&]+", " ", s).strip()
 
 
-def _first_last(name: "str | None") -> "str | None":
-    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last[ Suffix]'; a 2019-era 'First Last'
-    is already in that form, and a 2025 jersey prefix ("#95 K.Kimble") is dropped."""
+#: a name suffix, never a first name and never title-cased ("III" is not "Iii").
+_SUFFIX_TOKENS = frozenset({"jr", "jr.", "sr", "sr.", "ii", "ii.", "iii", "iii.", "iv", "iv.", "v", "v."})
+
+#: "Last, Suffix,First" (2025: "Didio, Jr.,Mark") and the 2019 pages' "LAST, Suffix"
+#: with no first name at all ("GILLIAM, Jr."). A roman-numeral suffix carries no
+#: period, which is what keeps a "Smith,V." first initial out of this branch.
+_LAST_SUFFIX_FIRST_RE = re.compile(r"^(?P<last>[^,]+),\s*(?P<suffix>Jr\.?|Sr\.?|II|III|IV|V)(?:,\s*(?P<first>.+))?$")
+
+
+def _title_token(token: str) -> str:
+    """Title-case a 2019-era shouted surname ("HARRIS" -> "Harris"); leave the rest alone.
+
+    Deliberately conservative: only a token whose letters are ALL uppercase and at
+    least three long is touched, so a two-letter token ("JR", "AJ"), a suffix, a
+    mixed-case source ("McCord", "O'Brien") and the page's own "TEAM" survive. Each
+    letter run is capitalized separately, so "ALEXANDER-STEVE" -> "Alexander-Steve"
+    and "O'BRIEN" -> "O'Brien"; an all-caps "MCDONALD" cannot be told from a real
+    "Mcdonald", so it is not guessed at.
+    """
+    letters = re.sub(r"[^A-Za-z]", "", token)
+    if len(letters) < 3 or not letters.isupper() or token.lower() in _SUFFIX_TOKENS or letters.upper() == "TEAM":
+        return token
+    return re.sub(r"[A-Za-z]+", lambda m: m.group(0).capitalize(), token)
+
+
+def _first_last(name: "str | None", *, teams: "Optional[list[str]]" = None) -> "str | None":
+    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last Suffix'.
+
+    A 2019-era 'First Last' is already in that form (bar the shouted surname, see
+    :func:`_title_token`), a 2025 jersey prefix ("#95 K.Kimble") is dropped, and a
+    comma-separated suffix stays a suffix instead of becoming the first name
+    ("Didio, Jr.,Mark" -> "Mark Didio Jr.", not "Jr. Didio"). ``teams``: the game's
+    two team labels -- the 2025 pages print the team as the carrier on a team rush
+    ("Shotgun Butler rush middle for 18 yards loss"), which cfbfastR writes as
+    "TEAM" (16,008 published rows) and the 2019 pages already do.
+    """
     if not name:
         return name
     name = re.sub(r"^#\d{1,2}\s", "", name)
-    if "," not in name:
-        return name
-    last, first = name.split(",", 1)
-    return f"{first.strip()} {last.strip()}"
+    if teams and any(_norm_team(name) == _norm_team(t) for t in teams):
+        return "TEAM"
+    m = _LAST_SUFFIX_FIRST_RE.match(name)
+    if m:
+        parts = [m.group("first"), m.group("last"), m.group("suffix")]
+    elif "," in name:
+        last, first = name.split(",", 1)
+        parts = [first, last]
+    else:
+        parts = [name]
+    return " ".join(_title_token(tok) for part in parts if part for tok in part.split())
 
 
 def _clock_secs(clock: "str | None") -> "int | None":
@@ -848,7 +888,7 @@ def to_cfbfastr(
                 "penalty_text": r["penalty_type"],
                 "yds_penalty": r["penalty_yards"],
                 # participants (cfbfastR "First Last")
-                "rusher_player_name": _first_last(r["rusher"]) if is_rush else None,
+                "rusher_player_name": _first_last(r["rusher"], teams=teams) if is_rush else None,
                 "passer_player_name": _first_last(r["passer"]) if (is_pass_att or is_sack) else None,
                 "receiver_player_name": _first_last(r["receiver"]),
                 "interception_player_name": _first_last(int_m.group(1)) if int_m and interception else None,
