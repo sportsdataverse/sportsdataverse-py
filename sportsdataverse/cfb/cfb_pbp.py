@@ -136,6 +136,37 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
 
 
+#: Play types whose touchdown belongs to a returner, a recovering defender or a kick, never to
+#: the passer or rusher (the "Fumble Recovery (Own) Touchdown" is the recovering player's too).
+_NOT_OFFENSE_TD_TYPE_RE = r"(?i)interception|fumble|punt|kickoff|blocked|safety|defensive"
+
+
+#: A return clause before the out-of-bounds token: the returner went out, the kick did not.
+_RETURNER_STEPPED_OUT_RE = r"(?i)\breturn\w*\b.*out[- ]of[- ]bounds"
+
+
+def _repair_score(col: str, lag: str, final: str) -> pl.Expr:
+    """One team's per-row score with an unconfirmed change reverted to the previous row's (see the call site).
+
+    A change is confirmed when the next two rows repeat it; past the last row the header's final
+    score stands in, so a glitch on the last row is caught and a real final is kept. Applied twice,
+    so the second row of a two-row glitch is compared with the repaired first row.
+    """
+    cur, prev = pl.col(col), pl.col(lag)
+    n1 = cur.shift(-1).fill_null(pl.col(final))
+    n2 = cur.shift(-2).fill_null(pl.col(final))
+    confirmed = ((n1 == cur) & (n2 == cur)).fill_null(True)
+    return (
+        pl.when(pl.col("game_play_number") == 1)
+        .then(cur)
+        .when((cur < prev) & ~confirmed)
+        .then(prev)
+        .when((cur > prev) & (pl.col("scoringPlay") == False) & ~confirmed)
+        .then(prev)
+        .otherwise(cur)
+    )
+
+
 def _signed_yards(tail: pl.Expr, *, before_fumble: bool = False) -> pl.Expr:
     """The first stated yardage in *tail*, before any penalty clause; 0 for "no gain", negative for "-N" / "a loss of N".
 
@@ -593,6 +624,32 @@ def _timeout_team_token() -> pl.Expr:
     )
 
 
+def _timeout_initials_side(row) -> str | None:
+    """ "home" / "away" when the timeout token's initialism is exactly one team's abbreviation, else None.
+
+    Older feeds spell a team out where the header abbreviates it: "SOUTHERN CAL" (USC), "BRIGHAM
+    YOUNG" (BYU), "LOUISIANA STATE" (LSU), "TENN MARTIN" (UTM), "SOUTHERN METHODIST UNIVERSITY"
+    (SMU), "NORTH CAROLINA ST" (NCST). The token's initials, with a university "U" before or
+    after them, or the initials of all but its last word plus that word, are compared with both
+    abbreviations from the header; a strict winner is charged. This outranks a partial substring
+    match ("SOUTHERN CAL" contains Cal's abbreviation but is USC's timeout) but never a name part
+    that covers the whole token ("OREGON ST" is Oregon State's, although OSU is Ohio State's) --
+    the caller applies that guard.
+    """
+    words = [
+        w for w in re.split(r"[\s\-]+", (row["_timeout_token"] or "").upper().replace("&", "").replace(".", "")) if w
+    ]
+    if len(words) < 2:
+        return None
+    initials = "".join(w[0] for w in words)
+    forms = {initials, initials + "U", "U" + initials, "".join(w[0] for w in words[:-1]) + words[-1]}
+    home = _squash_team(row["homeTeamAbbrev"]) in forms
+    away = _squash_team(row["awayTeamAbbrev"]) in forms
+    if home == away:
+        return None
+    return "home" if home else "away"
+
+
 def _timeout_team_side(row) -> str | None:
     """ "home" / "away" for a timeout token that no team name part contains, else None.
 
@@ -997,14 +1054,15 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
-    """Chronological play sort with a 2023+ ESPN overtime correction.
+    """Chronological play sort with an overtime correction.
 
-    Regulation plays sort by ``(id, start.adj_TimeSecsRem)``. From 2023 ESPN slots
-    every overtime play into the same ``period.number`` rather than adding new
-    periods, and the clock-derived ``adj_TimeSecsRem`` collapses in OT -- so OT
-    plays (``period.number >= 5``) are instead ordered by ``sequenceNumber`` and
-    appended after regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__``
-    (commit ``a3dff20``); no-op for games without OT.
+    Regulation plays sort by ``(id, start.adj_TimeSecsRem)``. ESPN slots overtime
+    plays into one ``period.number`` (all of OT is period 5 from 2023) and the
+    clock-derived ``adj_TimeSecsRem`` collapses in OT, so OT plays (``period.number
+    >= 5``) are ordered separately -- by ``sequenceNumber`` or ``id``, whichever
+    keeps the score from stepping backwards (see below) -- and appended after
+    regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__`` (commit
+    ``a3dff20``); no-op for games without OT.
     """
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"])
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
@@ -1015,7 +1073,28 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     if ot.height == 0:
         return plays_df
     non_ot = plays_df.filter((period < 5).or_(period.is_null()))
-    ot = ot.sort(pl.col("sequenceNumber").cast(pl.Int64, strict=False))
+    # Neither key is chronological in every era. ``sequenceNumber`` restarts per drive through
+    # 2013 and is a garbled running count in the 2025+ vendor feed (an "End of Game" row at 82
+    # among plays at 161-186), while ``id`` is a re-keyed insert in the 2014-2024 scheme (a
+    # touchdown at ...021 that belongs before the "End of OT" row at ...020). Take the order
+    # under which the score steps backwards least; on a tie, ``sequenceNumber`` when it is
+    # ESPN's period-encoded 105xxxxxx scheme, else ``id``. Over 99 overtime games 2004-2026
+    # this leaves 31 backward steps against 60 for sequenceNumber alone and 41 for id alone.
+    seq = pl.col("sequenceNumber").cast(pl.Int64, strict=False)
+    by_seq = ot.sort(seq, pl.col("id"))
+    by_id = ot.sort(pl.col("id"))
+    if "homeScore" in ot.columns and "awayScore" in ot.columns:
+
+        def backsteps(frame: pl.DataFrame) -> int:
+            h = frame["homeScore"].cast(pl.Int64, strict=False).diff()
+            a = frame["awayScore"].cast(pl.Int64, strict=False).diff()
+            return int(((h < 0) | (a < 0)).sum())
+
+        seq_scheme = (ot.select(seq.min()).item() or 0) >= 100_000_000
+        s_seq, s_id = backsteps(by_seq), backsteps(by_id)
+        ot = by_seq if s_seq < s_id or (s_seq == s_id and seq_scheme) else by_id
+    else:
+        ot = by_seq
     return pl.concat([non_ot, ot])
 
 
@@ -1429,6 +1508,8 @@ class CFBPlayProcess(object):
                 .get("completed"),
                 homeTeamId=pl.lit(init["homeTeamId"]),
                 awayTeamId=pl.lit(init["awayTeamId"]),
+                homeFinalScore=pl.lit(init.get("homeFinalScore"), dtype=pl.Int64),
+                awayFinalScore=pl.lit(init.get("awayFinalScore"), dtype=pl.Int64),
                 homeTeamName=pl.lit(str(init["homeTeamName"])),
                 awayTeamName=pl.lit(str(init["awayTeamName"])),
                 homeTeamMascot=pl.lit(str(init["homeTeamMascot"])),
@@ -1544,16 +1625,22 @@ class CFBPlayProcess(object):
         away_match = _timeout_team_match_len(
             [init["awayTeamAbbrev"], init["awayTeamName"], init["awayTeamMascot"], init["awayTeamNameAlt"]]
         )
-        short_side = pl.when((pl.col("type.text") == "Timeout") & (home_match == 0) & (away_match == 0)).then(
-            pl.struct(
-                _timeout_team_token().alias("_timeout_token"),
-                *[
-                    f"{side}{part}"
-                    for side in ("homeTeam", "awayTeam")
-                    for part in ("Abbrev", "Name", "NameAlt", "Mascot")
-                ],
-            ).map_elements(_timeout_team_side, return_dtype=pl.Utf8)
+        _timeout_struct = pl.struct(
+            _timeout_team_token().alias("_timeout_token"),
+            *[f"{side}{part}" for side in ("homeTeam", "awayTeam") for part in ("Abbrev", "Name", "NameAlt", "Mascot")],
         )
+        short_side = pl.when((pl.col("type.text") == "Timeout") & (home_match == 0) & (away_match == 0)).then(
+            _timeout_struct.map_elements(_timeout_team_side, return_dtype=pl.Utf8)
+        )
+        # The initialism outranks a PARTIAL name match only ("SOUTHERN CAL" holds Cal's "cal" but
+        # is USC's). A name part that covers the whole token is that team's timeout: "Timeout
+        # OREGON ST" is Oregon State's own "Oregon St", although its initials are also Ohio
+        # State's OSU (2018 401012682). Over 5,180 games 2004-2026 the initialism disagreed with
+        # the literal match on 22 rows: 21 partial matches it corrects, 1 full match it broke.
+        initials_side = pl.when(
+            (pl.col("type.text") == "Timeout")
+            & (pl.max_horizontal(home_match, away_match) < _timeout_team_token().str.len_chars())
+        ).then(_timeout_struct.map_elements(_timeout_initials_side, return_dtype=pl.Utf8))
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1650,16 +1737,24 @@ class CFBPlayProcess(object):
                 # Charged to the team whose name part is the LONGER match, so "Timeout Indiana" is
                 # Indiana's and not Notre Dame's ("nd"), "Timeout Iowa State" is not Iowa's. A tie
                 # (two teams sharing a mascot) still charges both. A token no part matches goes to
-                # the shortened-name resolver, which charges a strict winner or nobody.
+                # the shortened-name resolver, which charges a strict winner or nobody. A token
+                # whose initialism is exactly one team's abbreviation outranks both, unless a
+                # name part covers the whole token.
                 (
                     (pl.col("type.text") == "Timeout")
-                    & (((home_match > 0) & (home_match >= away_match)) | (short_side == "home"))
+                    & pl.coalesce(
+                        initials_side == "home",
+                        ((home_match > 0) & (home_match >= away_match)) | (short_side == "home"),
+                    )
                 )
                 .fill_null(False)
                 .alias("homeTimeoutCalled"),
                 (
                     (pl.col("type.text") == "Timeout")
-                    & (((away_match > 0) & (away_match >= home_match)) | (short_side == "away"))
+                    & pl.coalesce(
+                        initials_side == "away",
+                        ((away_match > 0) & (away_match >= home_match)) | (short_side == "away"),
+                    )
                 )
                 .fill_null(False)
                 .alias("awayTimeoutCalled"),
@@ -2474,6 +2569,17 @@ class CFBPlayProcess(object):
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"] or "")
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"] or "")
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
+        # The header's final score (null while the game is live): the only statement of the end
+        # state that does not come from a play row, used to anchor the last row's score repair.
+        for side in ("home", "away"):
+            comp = next(
+                (c for c in pbp_txt["header"]["competitions"][0]["competitors"] if c.get("homeAway") == side), {}
+            )
+            score = str(comp.get("score") or "")
+            completed = (pbp_txt["header"]["competitions"][0].get("status") or {}).get("type", {}).get(
+                "completed"
+            ) is True
+            init[f"{side}FinalScore"] = int(score) if completed and score.isdigit() else None
         init["homeTeamId"] = homeTeamId
         init["homeTeamMascot"] = homeTeamMascot
         init["homeTeamName"] = homeTeamName
@@ -2508,6 +2614,22 @@ class CFBPlayProcess(object):
             subset=["text", "id", "type.text", "start.down", "sequenceNumber"],
             keep="last",
             maintain_order=True,
+        )
+        # An "End of Game" / "End of OT" marker is dropped below, but it is often the only row
+        # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
+        # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
+        # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
+        # it, so the game still ends at its final; a lower score on a marker is a glitch and is
+        # ignored.
+        marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
+        play_df = play_df.with_columns(
+            *[
+                pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
+                .then(pl.col(c).shift(-1))
+                .otherwise(pl.col(c))
+                .alias(c)
+                for c in ("homeScore", "awayScore")
+            ]
         )
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
@@ -2604,11 +2726,16 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                # In the jersey style a trailing ", out of bounds" after "#0 B.Inniss
-                # return 16 yards" is the returner stepping out, not the kick.
+                # An "out of bounds" written after a return clause is the returner stepping
+                # out, not the kick -- "returned by Tim Crawley for 22 yards to the SJSt 36,
+                # tackled by Stan Sedberry out-of-bounds" (2013), "#0 B.Inniss return 16 yards
+                # to the TEX48 (#81 N.Townsend), out of bounds" (2025) -- and a kick that goes
+                # out of bounds is never returned. 161 of the 1,529 kick and punt rows with the
+                # token in a 2004-2024 sample say "return" first.
                 kickoff_oob=pl.when(
                     (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
                         pl.col("kickoff_play") == True,
+                        pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False,
                         _espn_text.has_jersey_return() == False,
                     ),
                 )
@@ -2644,6 +2771,7 @@ class CFBPlayProcess(object):
                 punt_oob=pl.when(
                     (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
                         pl.col("punt") == True,
+                        pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False,
                         _espn_text.has_jersey_return() == False,
                     ),
                 )
@@ -2836,48 +2964,33 @@ class CFBPlayProcess(object):
                 A_score_diff=pl.col("awayScore") - pl.col("lag_awayScore"),
             )
             .with_columns(
-                homeScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= 9),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") < 9)
-                    & (pl.col("H_score_diff") > 1),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= -9)
-                    & (pl.col("H_score_diff") < -1),
-                )
-                .then(pl.col("homeScore"))
-                .otherwise(pl.col("homeScore")),
-                awayScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= 9),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") < 9)
-                    & (pl.col("A_score_diff") > 1),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= -9)
-                    & (pl.col("A_score_diff") < -1),
-                )
-                .then(pl.col("awayScore"))
-                .otherwise(pl.col("awayScore")),
+                # Score repair. ESPN's per-row score is wrong on about 0.7% of rows: a one-row
+                # dip or spike that the next row does not repeat (2005 401207158 goes 3-1 ->
+                # 7-1 -> 3-0 on a 5-yard run; 2021 401309611 shows 29-10 on two timeout rows
+                # between a 29-16 touchdown and a 29-16 kickoff), and occasionally a late
+                # attachment (the try's point on the next kickoff row), which persists. The
+                # previous version reverted every upward jump on a non-scoring row, so the
+                # real score carried by a game's last row ("End of Game" at 29-30 after the
+                # winning touchdown row went missing) was thrown away, and never repaired a
+                # drop: its "drop" branch returned the row's own value. The rule is now
+                # persistence: a change that the next row does not confirm is reverted to the
+                # previous row's score -- any drop, or a rise on a non-scoring row -- and the
+                # last row, which has no next row, is confirmed by the header's final score.
+                # A change that persists (a review reversal, a score the feed attached one
+                # row late, the real final) is kept. Scoring rows keep their rises. Two
+                # passes, so a two-row glitch is caught whole (73% of one-row deviations in
+                # the 2004-2026 sample return to the previous score after one row, 19% after
+                # two).
+                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
+                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
+            )
+            .with_columns(
+                lag_homeScore=pl.col("homeScore").shift(1),
+                lag_awayScore=pl.col("awayScore").shift(1),
+            )
+            .with_columns(
+                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
+                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
             )
             .drop(["lag_homeScore", "lag_awayScore"])
             .with_columns(
@@ -3810,10 +3923,21 @@ class CFBPlayProcess(object):
                 # Measured on 2025: 15 `pass_td` and 15 `rush_td` on negated
                 # plays, every one of them reaching a player leaderboard, where
                 # `summarize_passer` sums `pass_td` straight into `passing_td`.
+                # A return touchdown is not the offense's: "Interception Return Touchdown"
+                # rows carry pass = True (a pass was thrown) and td_play = True (the text
+                # says touchdown), so the text branch below credited the passer with the
+                # touchdown -- 26 of 26 interception-return and 13 of 13 opponent-fumble-
+                # recovery touchdowns in the 2004-2026 sweep sample -- and summarize_passer
+                # summed them into passing_td. cfbfastR sets pass_td / rush_td from the
+                # "Passing Touchdown" / "Rushing Touchdown" labels alone; the text branch is
+                # kept for the generic labels of 2004-2013 ("Pass Completion" with "for a 44
+                # yard touchdown") but never for a return, fumble, kick or defensive type.
                 pass_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
+                .when(pl.col("type.text").str.contains(_NOT_OFFENSE_TD_TYPE_RE))
+                .then(False)
                 .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
@@ -3821,6 +3945,8 @@ class CFBPlayProcess(object):
                 .then(False)
                 .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
+                .when(pl.col("type.text").str.contains(_NOT_OFFENSE_TD_TYPE_RE))
+                .then(False)
                 .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
@@ -4278,7 +4404,8 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)
-                .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds")),
+                .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds"))
+                .and_(pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False),
             )
             .then(40)
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
@@ -4777,8 +4904,13 @@ class CFBPlayProcess(object):
                             r"(?i)intercepted by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
                             1,
                         ),
+                        # 2014-2024 also writes the result between the verb and the name:
+                        # "pass intercepted, touchback. Jacoby Glenn return for no gain",
+                        # "pass intercepted for a TD Lamarcus Farmer return for 22 yds",
+                        # "pass intercepted for a 1ST down Damontae Kazee return for 28 yds".
                         pl.col("text").str.extract(
-                            r"(?i)pass intercepted (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            r"(?i)pass intercepted(?:,? touchback\.?| for a (?:td|1st down)|\.)? (?:#\d+\s+)?"
+                            r"(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
                             1,
                         ),
                     ),
@@ -4936,6 +5068,11 @@ class CFBPlayProcess(object):
                         # multi-word surnames ("#92 J.Echeverria Lozano", "#81 A.De La Poza") and
                         # stats.ncaa.org's "(00:00) Gilbert,Max field goal attempt"
                         pl.col("text").str.extract(_VENDOR_FG_KICKER_RE, 1),
+                        # 2004-2009: "30 yard field goal by Eric Neihouse (ASU) is good."
+                        pl.col("text").str.extract(
+                            r"(?i)yard field goal by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            1,
+                        ),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
@@ -5618,20 +5755,22 @@ class CFBPlayProcess(object):
         )
 
     def __process_epa(self, play_df):
-        # B5 (0.36-live): a penalty assessed BETWEEN a scoring play and the ensuing
+        # B5 (0.36-live): a penalty row sitting BETWEEN a scoring play and the ensuing
         # kickoff (the 2024 USC/LSU edge) inherits the prior play's field position and
         # earns a large spurious EPA/WPA. Flag it and give it the kickoff-touchback
-        # treatment below. The ``penalty_flag`` guard excludes Timeouts that also sit
-        # between a score and a kickoff (main already scores those EPA=0); the
-        # ``kickoff_vec`` exclusion keeps the flag strictly disjoint from main's
-        # existing ``kickoff_vec & penalty_in_text`` path (no double-handling).
+        # treatment below. The flag is positional: a Penalty row after a scoring play
+        # and before a kickoff. It used to also require a score change on the row, which
+        # a Penalty row shows only when ESPN's score on it is one row stale (0-7 between
+        # a 7-7 touchdown and a 7-7 kickoff), a glitch the score repair now removes: in
+        # a 345-game 2004-2026 sample the old test flagged 31 of the 42 such rows before
+        # the repair and none after (mean |EPA| 2.2, max 8.0 on the unflagged), and
+        # flagged 6 extra-point rows that merely mention a penalty. Timeouts and
+        # extra-point rows are not Penalty rows and stay out.
         play_df = play_df.with_columns(
             penalty_assessed_on_kickoff=(
                 (pl.col("scoring_play").shift(1) == True)
                 .and_(pl.col("kickoff_play").shift(-1) == True)
-                .and_(pl.col("end.pos_score_diff") != pl.col("start.pos_score_diff"))
-                .and_(pl.col("penalty_flag") == True)
-                .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+                .and_(pl.col("type.text") == "Penalty")
             ).fill_null(False),
         )
         # treat the flagged penalty like a kickoff for the start-state substitution

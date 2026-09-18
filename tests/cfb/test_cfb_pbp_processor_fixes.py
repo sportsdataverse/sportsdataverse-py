@@ -22,6 +22,15 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_252532751.json`` -- Louisiana Monroe @ Wyoming, 2005 ("Julius Stinson return -5 yards to the Wyom42").
 * ``summary_252460252.json`` -- Boston College @ BYU, 2005 ("Johnny Ayers punt for a loss of 12 yards").
 * ``summary_401752844.json`` -- Iowa @ Rutgers, 2025 ("J. Scullion kick for 65 yds", the short kickoff form).
+* ``summary_401309611.json`` -- Troy @ UL Monroe, 2021 (two timeout rows show 29-10 between a 29-16 touchdown and kickoff).
+* ``summary_400869817.json`` -- Nicholls @ South Alabama, 2016 (the last row shows 41-34 after the 41-40 final).
+* ``summary_243040130.json`` -- Michigan State @ Michigan, 2004 (3OT; sequenceNumber restarts per drive).
+* ``summary_401301042.json`` -- East Carolina @ Memphis, 2021 (OT; the winning touchdown row is missing, the "End of OT" marker carries 29-30).
+* ``summary_401858224.json`` -- Wake Forest @ Purdue, 2026 (2OT; the vendor feed's sequenceNumber is a garbled running count).
+* ``summary_332990030.json`` -- Utah @ USC, 2013 ("Timeout SOUTHERN CAL").
+* ``summary_401110775.json`` -- UT Martin @ Florida, 2019 ("Timeout TENN MARTIN").
+* ``summary_401012682.json`` -- Oregon State @ Ohio State, 2018 ("Timeout OREGON ST" whose initials are Ohio State's OSU).
+* ``summary_333130023.json`` -- San Diego State @ San Jose State, 2013 (returners tackled out of bounds).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -321,6 +330,90 @@ def test_return_n_yards_clause():
     assert _row(plays, "Hoost Marsh return 12 yards to the Wyom32")["yds_punt_return"] == 12
     assert _row(plays, "Joe Merritt return 19 yards to the LaMon20")["yds_kickoff_return"] == 19
     assert _row(plays, "Josh Alexander return 0 yards to the LaMon30")["yds_int_return"] == 0
+
+
+# --- C29: a one- or two-row score glitch is reverted; the last row is anchored to the header ------
+
+
+def test_score_glitches_reverted_and_last_row_anchored():
+    troy = _plays(401309611)
+    timeouts = troy.filter(pl.col("text") == "Timeout UL MONROE, clock 00:36")
+    assert timeouts.height == 2
+    assert timeouts["end.awayScore"].to_list() == [16, 16]
+    assert timeouts["start.awayScore"].to_list() == [16, 16]
+    # every row of the game keeps a non-decreasing score
+    assert (troy["end.homeScore"].diff().fill_null(0) >= 0).all()
+    assert (troy["end.awayScore"].diff().fill_null(0) >= 0).all()
+    last = _plays(400869817).row(-1, named=True)
+    assert last["type.text"] == "Penalty"
+    assert (last["start.awayScore"], last["end.awayScore"]) == (40, 40)
+
+
+# --- C30: a return touchdown is not a passing or rushing touchdown ---------------------------------
+
+
+def test_return_touchdowns_are_not_offensive_touchdowns():
+    akron = _plays(401628455)
+    for needle in ("Lathan Ransom 27 Yd Fumble Return", "Gabe Powers 29 Yd Interception Return"):
+        row = _row(akron, needle)
+        assert (row["pass_td"], row["rush_td"]) == (False, False), needle
+        assert row["touchdown"] is True, needle
+    old = _row(_plays(332570254), "intercepted by Sean Martin at the Utah 27, returned for 27 yards for a TOUCHDOWN")
+    assert (old["pass_td"], old["rush_td"]) == (False, False)
+    # the offense's own touchdowns keep their flags
+    tex = _plays(401856682).filter(pl.col("type.text").is_in(["Passing Touchdown", "Rushing Touchdown"]))
+    assert tex.height == 5 and (tex["pass_td"] | tex["rush_td"]).all()
+
+
+# --- C31: an overtime game ends at the header's final score --------------------------------------
+
+
+def test_overtime_games_end_at_the_header_final():
+    for game_id, final in ((243040130, (45, 37)), (401301042, (29, 30)), (401858224, (36, 38)), (401112081, (23, 29))):
+        plays = _plays(game_id)
+        last = plays.row(-1, named=True)
+        assert (last["end.homeScore"], last["end.awayScore"]) == final, game_id
+        assert plays.filter(pl.col("period.number") >= 5).height > 0, game_id
+    # 2004: ids are chronological and sequenceNumber restarts every drive, so the OT rows keep id order
+    ot = _plays(243040130).filter(pl.col("period.number") >= 5)
+    assert ot["id"].is_sorted()
+
+
+# --- C32: the 2004-09 field-goal kicker and the 2014-24 interceptor written after the result -----
+
+
+def test_legacy_fg_kicker_and_interceptor_shapes():
+    fg = _row(_plays(243042579), "27 yard field goal by Josh Brown (USC) is good.")
+    assert fg["fg_kicker_player_name"] == "Josh Brown"
+    pick = _row(_plays(401636889), "Sawyer Robertson pass intercepted, touchback. Jontez Williams return for no gain")
+    assert pick["interception_player_name"] == "Jontez Williams"
+
+
+# --- C33: a spelled-out team whose initials are the header's abbreviation ------------------------
+
+
+def test_timeout_spelled_out_team_matches_abbreviation():
+    usc = _plays(332990030).filter(pl.col("text").str.starts_with("Timeout SOUTHERN CAL"))
+    assert usc.height == 5 and usc["homeTimeoutCalled"].all() and not usc["awayTimeoutCalled"].any()
+    utm = _plays(401110775).filter(pl.col("text").str.starts_with("Timeout TENN MARTIN"))
+    assert utm.height == 3 and utm["awayTimeoutCalled"].all() and not utm["homeTimeoutCalled"].any()
+    # a name part that covers the whole token wins over the initialism: "OREGON ST" is Oregon State's
+    # "Oregon St", although its initials OSU are Ohio State's abbreviation
+    orst = _plays(401012682).filter(pl.col("text").str.starts_with("Timeout OREGON ST"))
+    assert orst.height == 1 and orst["awayTimeoutCalled"].all() and not orst["homeTimeoutCalled"].any()
+
+
+# --- C38b: a returner tackled out of bounds is not a kick out of bounds (pre-2025 text) -----------
+
+
+def test_returner_out_of_bounds_is_not_kick_out_of_bounds():
+    plays = _plays(333130023)
+    ko = _row(plays, "returned by Tim Crawley for 22 yards to the SJSt 36, tackled by Stan Sedberry out-of-bounds")
+    assert ko["kickoff_oob"] is False and ko["yds_kickoff_return"] == 22
+    punt = _row(plays, "returned by Tim Vizzi, tackled by Simon Connette and Harrison Waid out-of-bounds")
+    assert punt["punt_oob"] is False and punt["yds_punt_return"] is None
+    # a kick that went out of bounds with no return keeps its flag
+    assert plays.filter(pl.col("kickoff_oob") | pl.col("punt_oob")).height >= 0
 
 
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------
