@@ -160,8 +160,18 @@ def test_processor_exception_falls_through(nfl_summary, alternates_unavailable, 
 
 def test_no_fallthrough_raises_with_one_attempt():
     with pytest.raises(AllSourcesFailed) as ei:
+        _process_game("cfb", CFB_GAME_ID, source="fox", fallthrough=False)
+    assert [(a.source, a.error) for a in ei.value.attempts] == [("fox", "not implemented")]
+
+
+def test_a_registered_source_with_no_id_fails_on_its_own_terms():
+    """``ncaa`` IS registered now, so a game it cannot key must say so rather than report
+    "not implemented" -- the two are different failures and only one is worth retrying."""
+    with pytest.raises(AllSourcesFailed) as ei:
         _process_game("cfb", CFB_GAME_ID, source="ncaa", fallthrough=False)
-    assert [(a.source, a.error) for a in ei.value.attempts] == [("ncaa", "not implemented")]
+    (source, error), = [(a.source, a.error) for a in ei.value.attempts]
+    assert source == "ncaa"
+    assert "SourceUnavailable" in error and "no ncaa_game_id" in error
 
 
 def test_stored_closing_line_becomes_odds_override(nfl_summary, fast_processor):
