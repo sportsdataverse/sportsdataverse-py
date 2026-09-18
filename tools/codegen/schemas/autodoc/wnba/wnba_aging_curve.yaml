@@ -1,0 +1,12 @@
+schema: wnba_aging_curve
+kind: dataframe
+columns:
+- name: age
+  type: integer
+  description: ''
+- name: rel_value
+  type: double
+  description: ''
+- name: peak_age
+  type: double
+  description: ''

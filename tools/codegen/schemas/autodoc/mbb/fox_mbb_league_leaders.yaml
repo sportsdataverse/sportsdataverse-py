@@ -1,0 +1,27 @@
+schema: fox_mbb_league_leaders
+kind: dataframe
+columns:
+- name: players
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: gp
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: gs
+  type: character
+  description: ''
+- name: mpg
+  type: character
+  description: ''
+- name: ppg
+  type: character
+  description: ''
+- name: pts
+  type: character
+  description: ''

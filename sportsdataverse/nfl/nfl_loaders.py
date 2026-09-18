@@ -73,7 +73,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
             unchanged behavior. ``"sportsdataverse"`` / ``"sdv"`` returns the
             SDV-native ``nfl_model_pbp`` release: a Python-built, nflfastR-faithful
             enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that
-            covers 1999+ (27 assets, verified 2026-09-02) and drops administrative / timeout
+            covers 1999+ (28 assets, verified 2026-09-17) and drops administrative / timeout
             rows for a clean modeling subset. Any other value raises ``ValueError``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -144,8 +144,9 @@ def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFra
 
     A named alias for ``load_nfl_pbp(seasons, source="sportsdataverse")`` -- the
     Python-built, nflfastR-faithful enriched frame published as
-    ``nfl_model_pbp/model_pbp_{season}.parquet`` (27 assets, 1999-2025 as of
-    2026-09-02, 257 columns in every season). It carries ep/epa, wp/wpa/vegas_wp,
+    ``nfl_model_pbp/model_pbp_{season}.parquet`` (28 assets, 1999-2026 as of
+    2026-09-17; 326 columns in every season from 2002, while the 1999-2001
+    assets predate the 2026-09-10 rebuild and carry 257/256/256). It carries ep/epa, wp/wpa/vegas_wp,
     cp/cpoe and xyac_*/air_epa, and drops administrative / timeout rows for a
     clean modeling subset -- unlike the nflverse ``load_nfl_pbp`` default, which
     keeps them.
@@ -1614,6 +1615,40 @@ def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
     raise AssertionError("unreachable")
 
 
+# DynastyProcess ships a CSV, so an unpinned id takes whatever dtype the current
+# rows infer to (fantasypros_id / pff_id / nfl_id flipped Utf8 -> Int64 when
+# upstream happened to ship only numeric values). Every id is pinned Utf8: that
+# is how upstream's own db_playerids.rds stores all 20, it keeps zero-padded MFL
+# ids ("0156") intact, it matches the Utf8 ids of the roster / players schemas
+# these join against, and unlike an Int64 pin it cannot raise on a text value.
+# Ids are read straight from the CSV text, never via a float.
+_FF_PLAYERIDS_ID_DTYPES = {
+    col: pl.Utf8
+    for col in (
+        "mfl_id",
+        "sportradar_id",
+        "fantasypros_id",
+        "gsis_id",
+        "pff_id",
+        "sleeper_id",
+        "nfl_id",
+        "espn_id",
+        "yahoo_id",
+        "fleaflicker_id",
+        "cbs_id",
+        "pfr_id",
+        "cfbref_id",
+        "rotowire_id",
+        "rotoworld_id",
+        "ktc_id",
+        "stats_id",
+        "stats_global_id",
+        "fantasy_data_id",
+        "swish_id",
+    )
+}
+
+
 @cached_loader
 def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
     """Load fantasy football player IDs from DynastyProcess.com
@@ -1623,6 +1658,12 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
 
     Returns:
         pl.DataFrame: Polars dataframe containing fantasy football player ID mappings across platforms.
+
+    Note:
+        Every ``*_id`` column is ``Utf8``, pinned at read time rather than
+        inferred from the rows upstream currently ships. Zero-padded ids such
+        as ``mfl_id`` ``"0156"`` keep their padding, and the ids join directly
+        to the ``Utf8`` ids of ``build_nfl_rosters`` and ``build_nfl_players``.
 
     Example:
         Quick start::
@@ -1646,13 +1687,21 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         .. _DynastyProcess: https://github.com/dynastyprocess
         .. _nflverse: https://nflverse.nflverse.com
     """
-    return (
-        _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""]).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""])
+    data = _read_csv_retry(
+        NFL_FF_PLAYERIDS_URL,
+        null_values=["NA", "NULL", ""],
+        schema_overrides=_FF_PLAYERIDS_ID_DTYPES,
     )
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+# Same inference hazard as _FF_PLAYERIDS_ID_DTYPES, per CSV. The FantasyPros id
+# (``id`` in the draft file, ``fantasypros_id`` in the weekly one) is the key
+# that joins to load_nfl_ff_playerids' fantasypros_id, so it shares its Utf8.
+_FF_RANKINGS_ID_DTYPES = {
+    "draft": {"id": pl.Utf8, "sportsdata_id": pl.Utf8, "yahoo_id": pl.Utf8, "cbs_id": pl.Utf8},
+    "week": {"fantasypros_id": pl.Utf8, "player_opponent_id": pl.Utf8},
+}
 
 
 @cached_loader
@@ -1685,6 +1734,11 @@ def load_nfl_ff_rankings(
         Available as the alias ``sportsdataverse.nfl.load_ff_rankings`` for
         nflreadpy parity.
 
+        Id columns are ``Utf8`` in every kind (pinned at read time for the
+        CSV-backed ``"draft"`` and ``"week"``). The FantasyPros id (``id`` for ``"draft"``/``"all"``,
+        ``fantasypros_id`` for ``"week"``) joins directly to
+        ``load_nfl_ff_playerids``' ``fantasypros_id``.
+
     Example:
         Preferred ``kind=`` parameter::
 
@@ -1715,9 +1769,17 @@ def load_nfl_ff_rankings(
         raise ValueError("type/kind must be one of 'draft', 'week', 'all'")
 
     if effective == "draft":
-        data = _read_csv_retry(NFL_FF_RANKINGS_DRAFT_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(
+            NFL_FF_RANKINGS_DRAFT_URL,
+            null_values=["NA", "NULL", ""],
+            schema_overrides=_FF_RANKINGS_ID_DTYPES["draft"],
+        )
     elif effective == "week":
-        data = _read_csv_retry(NFL_FF_RANKINGS_WEEK_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(
+            NFL_FF_RANKINGS_WEEK_URL,
+            null_values=["NA", "NULL", ""],
+            schema_overrides=_FF_RANKINGS_ID_DTYPES["week"],
+        )
     else:  # all
         data = _fetch_release_parquet(NFL_FF_RANKINGS_ALL_URL)
 

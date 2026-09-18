@@ -1,0 +1,30 @@
+schema: toa_sports_scores
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: sport_key
+  type: character
+  description: ''
+- name: sport_title
+  type: character
+  description: ''
+- name: commence_time
+  type: character
+  description: ''
+- name: completed
+  type: logical
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: scores
+  type: character
+  description: ''
+- name: last_update
+  type: character
+  description: ''

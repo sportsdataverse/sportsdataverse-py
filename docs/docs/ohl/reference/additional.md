@@ -91,7 +91,7 @@ OHL statistical leaders for a given season.
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character | URL of the small-format team logo image for the player's OHL club. |
-| `stat_formatted` | character | Human-readable string representation of the leader's statistical value for display purposes (e.g., '42', '1.85', '93.5%'). |
+| `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
 | `type_formatted` | character | Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage'). |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character | URL of a small-format headshot image of the player from the OHL HockeyTech feed. |
@@ -389,7 +389,7 @@ OHL standings — one row per team.
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
 | `row` | character | Row index within the game grouping (sequencing helper). |
-| `points` | character | Total points (goals + assists). |
+| `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
@@ -399,7 +399,7 @@ OHL standings — one row per team.
 | `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character | Team record over the most recent ten games, formatted as a W-L or W-OTL-L string. |
+| `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team name. |
 
 ### `ohl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_team_roster}

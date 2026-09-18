@@ -291,7 +291,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `clock.seconds` | Int64 | Seconds component of the game clock at the play. |
 | `lag_half` | Int64 | Value of half on the previous play, used for sequence-aware derivations. |
 | `lead_half` | Int64 | Value of half on the next play, used for sequence-aware derivations. |
-| `start.TimeSecsRem` | Int64 | ESPN's `TimeSecsRem` value for the play state at the start of the play. |
+| `start.TimeSecsRem` | Int64 | Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005 and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800. |
 | `start.adj_TimeSecsRem` | Int64 | ESPN's `adj_TimeSecsRem` value for the play state at the start of the play. |
 | `lead_text` | String | Value of text on the next play, used for sequence-aware derivations. |
 | `lead_start_team` | String | Value of start_team on the next play, used for sequence-aware derivations. |
@@ -317,7 +317,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `end.awayTeamTimeouts` | Int64 | ESPN's `awayTeamTimeouts` value for the play state at the end of the play. |
 | `start.homeTeamTimeouts` | Int64 | ESPN's `homeTeamTimeouts` value for the play state at the start of the play. |
 | `start.awayTeamTimeouts` | Int64 | ESPN's `awayTeamTimeouts` value for the play state at the start of the play. |
-| `end.TimeSecsRem` | Int64 | ESPN's `TimeSecsRem` value for the play state at the end of the play. |
+| `end.TimeSecsRem` | Int64 | Seconds remaining in the half carried as this play's end state; currently the preceding row's clock stamp. |
 | `end.adj_TimeSecsRem` | Int64 | ESPN's `adj_TimeSecsRem` value for the play state at the end of the play. |
 | `start.posTeamTimeouts` | Int64 | ESPN's `posTeamTimeouts` value for the play state at the start of the play. |
 | `start.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
@@ -1932,7 +1932,7 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 | `start.distance` | Int64 | Yards the offense needs for a first down at the snap, carried through from ESPN without correction. |
 | `start.yardsToEndzone` | Int64 | Distance in yards from the offense's spot at the snap to the opponent's end zone, ranging 0 to 100. |
 | `pos_score_diff_start` | Int64 | Score differential for the possession team at the start of the play. |
-| `start.TimeSecsRem` | Int64 | Seconds remaining in the half at the snap, so it tops out at 1800 rather than counting down from a full game. |
+| `start.TimeSecsRem` | Int64 | Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005 and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800. |
 | `start.is_home` | Boolean | True when the team holding possession at the snap is the home team. |
 | `passing_down` | Boolean | True on second and eight or longer, third and five or longer, or fourth and five or longer, the standard obvious-passing-situation flag. |
 | `pass` | Boolean | Binary flag for a passing play (includes sacks). |

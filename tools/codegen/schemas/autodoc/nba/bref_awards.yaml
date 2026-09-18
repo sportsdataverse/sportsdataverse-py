@@ -1,0 +1,33 @@
+schema: bref_awards
+kind: dataframe
+columns:
+- name: rank
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: age
+  type: double
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: votes_first
+  type: double
+  description: ''
+- name: points_won
+  type: double
+  description: ''
+- name: points_max
+  type: double
+  description: ''
+- name: award_share
+  type: double
+  description: ''
+- name: award
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''

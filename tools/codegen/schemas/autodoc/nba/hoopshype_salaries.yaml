@@ -1,0 +1,42 @@
+schema: hoopshype_salaries
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: salary
+  type: double
+  description: ''
+- name: cap_allocation
+  type: double
+  description: ''
+- name: team_option
+  type: logical
+  description: ''
+- name: player_option
+  type: logical
+  description: ''
+- name: two_way
+  type: logical
+  description: ''
+- name: qualifying_offer
+  type: logical
+  description: ''

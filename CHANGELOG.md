@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release](#fixed--fantasy-football-ids-are-strings-pinned-instead-of-inferred-from-each-dynastyprocess-release)
   - [Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants](#fixed--the-usage-box-glued-shared-tackles-into-one-phantom-player-and-read-positions-only-from-participants)
   - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
   - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
@@ -332,6 +333,39 @@ fixture coverage/level gate, and the shipped weights tested against the committe
 fit. The new results fixture keeps completed games only: canceled and postponed
 games carry 0-0 scores (164 in 2016-2024) that the earlier capture admitted.
 
+### Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release
+
+`load_nfl_ff_playerids` / `load_ff_playerids` and the CSV-backed kinds of
+`load_nfl_ff_rankings` / `load_ff_rankings` read DynastyProcess CSVs with polars' type
+inference, so an id column's dtype depended on whatever the current upstream release
+happened to contain. `fantasypros_id`, `pff_id` and `nfl_id` used to come back as strings
+and now infer as `Int64`; ids that are null in the first 100 rows (`yahoo_id`,
+`fleaflicker_id`, `rotoworld_id`, `swish_id`) flip whenever upstream reorders. Integer
+inference also dropped zero-padding: 225 `mfl_id` values such as `"0156"`, and `nfl_id`
+`"038666"`. Every id column is now pinned to `Utf8` at read time. That matches upstream's
+own `db_playerids.rds` (all 20 ids are character), keeps the padding, and lines the ids up
+with the `Utf8` ids of `build_nfl_rosters` / `build_nfl_players` and with each other, so
+cross-loader joins no longer depend on the release.
+
+Returned dtype changes from `Int64` to `Utf8`:
+
+- `load_nfl_ff_playerids`: `mfl_id`, `fantasypros_id`, `pff_id`, `sleeper_id`, `nfl_id`,
+  `espn_id`, `cbs_id`, `rotowire_id`, `ktc_id`, `stats_id`, `stats_global_id`,
+  `fantasy_data_id`. The other eight id columns were already strings and are now pinned
+  so they cannot flip.
+- `load_nfl_ff_rankings(kind="draft")`: `id`, the FantasyPros id that joins to
+  `load_nfl_ff_playerids`' `fantasypros_id`. `sportsdata_id`, `yahoo_id` and `cbs_id` are
+  pinned `Utf8` (already strings).
+- `load_nfl_ff_rankings(kind="week")`: `fantasypros_id`. `player_opponent_id` is pinned
+  `Utf8` (already a string).
+
+`kind="all"` reads upstream's parquet, which already stores these ids as strings. Code
+that joined or compared these ids as integers needs to cast its own side to `pl.Utf8`.
+
+Cached frames keep their old dtypes until the cache entry expires, so call
+`sportsdataverse.nfl.clear_cache()` after upgrading (it matters most with
+`cache_mode="filesystem"`, which persists across processes).
+
 ### Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants
 
 `cfbfastR-cfb-raw` stores each game's play participants with every list cell written
@@ -481,6 +515,22 @@ windowed builds. Thin `CFBPlayProcess.create_drive_summary` /
 `.create_situational_stats` delegates mirror `create_box_score`. Both consume
 the post-pipeline `plays_frame`; drive-level attribution reads the drives
 grouping (`drive.team`), never plays grouped by `drive.id`.
+
+### Fixed — Statcast search runner ids are Int64, not Float64
+
+`mlb_statcast_search`, `mlb_statcast_search_minors` and `mlb_statcast_search_wbc`
+returned `on_1b` / `on_2b` / `on_3b` as Float64 (`660271.0`): pandas reads any
+integer CSV column holding a blank as float, and a base is blank whenever it is
+empty. Float ids break joins against `batter` / `pitcher` and stringify as
+`"660271.0"`. The 14 MLBAM id columns (`batter`, `pitcher`, `on_1b`..`on_3b`,
+`fielder_2`..`fielder_9`, `game_pk`) are now pinned to nullable Int64 (blank ->
+null), in polars and in `return_as_pandas=True` output, and the Returns docs say
+`integer`. An id column holding a non-integral value is left as read and warned
+about once per call rather than truncated.
+
+**Returned dtypes change:** `on_1b` / `on_2b` / `on_3b` go from Float64 to Int64,
+and pandas output from `parse_mlb_statcast_search` gives nullable `Int64` instead
+of numpy `int64` for the other ids.
 
 ### Fixed — MLB expected stats counted raw pitches as plate appearances
 

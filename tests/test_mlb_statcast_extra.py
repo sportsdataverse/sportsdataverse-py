@@ -1,4 +1,10 @@
 from __future__ import annotations
+
+import csv
+import io
+import warnings
+from pathlib import Path
+
 import polars as pl
 
 
@@ -107,3 +113,160 @@ def test_player_raw_returns_html_else_frame(monkeypatch):
 
     df = ex.mlb_statcast_player(592450)
     assert isinstance(df, pl.DataFrame) and df.height == 1 and "xwoba" in df.columns
+
+
+_SEARCH_HEAD = Path(__file__).resolve().parent / "fixtures" / "mlb_statcast" / "search_2024-06-15_head.csv"
+_RUNNERS = ["on_1b", "on_2b", "on_3b"]
+#: (on_1b, on_2b, on_3b) of the fixture's bases-loaded pitch: game 745329, AB 44, pitch 2.
+_BASES_LOADED = (656305, 671218, 596103)
+
+
+class _Resp:
+    def __init__(self, text: str) -> None:
+        self.text = text
+
+
+def _fixture_rows() -> list:
+    return list(csv.reader(io.StringIO(_SEARCH_HEAD.read_text(encoding="utf-8"))))
+
+
+def _to_csv(rows: list) -> str:
+    buf = io.StringIO()
+    csv.writer(buf, lineterminator="\n").writerows(rows)
+    return buf.getvalue()
+
+
+def _exact_ints(values: list) -> bool:
+    # type check, not just ==: 656305.0 == 656305 is True, so a float id would slip past a value compare.
+    return all(type(v) is int for v in values)
+
+
+def test_search_real_capture_ids_stay_int64_in_both_outputs(monkeypatch):
+    """Real Savant search CSV through the chunked search: runner ids exact Int64 in polars AND pandas output."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    body = _SEARCH_HEAD.read_text(encoding="utf-8")
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(body))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
+    key = (pl.col("game_pk") == 745329) & (pl.col("at_bat_number") == 44) & (pl.col("pitch_number") == 2)
+    row = list(df.filter(key).select(_RUNNERS).row(0))
+    assert row == list(_BASES_LOADED) and _exact_ints(row)
+    assert [df.schema[c] for c in (*_RUNNERS, "game_pk")] == [pl.Int64] * 4
+
+    pdf = ex.mlb_statcast_search("2024-06-15", "2024-06-15", return_as_pandas=True)
+    hit = pdf.loc[(pdf["game_pk"] == 745329) & (pdf["at_bat_number"] == 44) & (pdf["pitch_number"] == 2), _RUNNERS]
+    assert len(hit) == 1
+    prow = hit.iloc[0].tolist()
+    assert prow == list(_BASES_LOADED) and _exact_ints(prow)
+    assert [str(pdf[c].dtype) for c in _RUNNERS] == ["Int64"] * 3 and pdf["on_1b"].isna().sum() == 26
+
+
+def test_search_all_blank_chunk_concat_keeps_runner_ids_int64(monkeypatch):
+    """Two chunks, one with on_3b blank on every row: the stitched on_3b is Int64 with the real ids intact."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    rows = _fixture_rows()
+    idx = rows[0].index("on_3b")
+    expected = [int(r[idx]) for r in rows[1:] if r[idx]]
+    blanked = [rows[0]] + [r[:idx] + [""] + r[idx + 1 :] for r in rows[1:]]
+    bodies = {"2024-06-15": _to_csv(blanked), "2024-06-16": _SEARCH_HEAD.read_text(encoding="utf-8")}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[params["game_date_gt"]]))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.height == 92
+    assert df.schema["on_3b"] == pl.Int64
+    assert df["on_3b"].head(46).null_count() == 46
+    got = df["on_3b"].tail(46).drop_nulls().to_list()
+    assert got == expected and _exact_ints(got)
+
+
+def test_search_non_integral_id_warns_once_at_the_caller(monkeypatch):
+    """A non-integral id in every chunk warns ONCE per search call, attributed to the caller's line."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    rows = _fixture_rows()
+    idx = rows[0].index("on_1b")
+    target = next(r for r in rows[1:] if r[idx])
+    target[idx] = target[idx] + ".5"
+    body = _to_csv(rows)
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(body))
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        df = ex.mlb_statcast_search("2024-06-15", "2024-06-17", chunk_days=1)  # 3 chunks
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "on_1b" in str(w.message)]
+    assert len(hits) == 1, [str(w.message) for w in hits]
+    assert hits[0].filename == __file__
+    assert df.schema["on_1b"] == pl.Float64 and df.schema["on_2b"] == pl.Int64
+
+
+_MINORS_HEAD = _SEARCH_HEAD.with_name("search_minors_2024-06-01_head.csv")
+_WBC_HEAD = _SEARCH_HEAD.with_name("search_wbc_2023-03-11_head.csv")
+
+
+def test_minors_and_wbc_routes_send_their_population_flags(monkeypatch):
+    """Savant's /csv routes share one backend that defaults to MLB; the search UI selects the
+    population with ``minors=<bool>&wbc=<bool>``. Without them the MiLB route returns MLB games
+    and the WBC route returns spring training (reproduced live 2026-09-17)."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    seen: dict = {}
+
+    def fake_download(url, params=None, **kw):
+        seen[url] = dict(params)
+        return _Resp(_SEARCH_HEAD.read_text(encoding="utf-8"))
+
+    monkeypatch.setattr(ex, "download", fake_download)
+    ex.mlb_statcast_search("2024-06-01", "2024-06-01")
+    ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01", hfLevel="AAA|")
+    ex.mlb_statcast_search_wbc("2023-03-11", "2023-03-11")
+    assert (seen[ex._SEARCH_URL_MINORS]["minors"], seen[ex._SEARCH_URL_MINORS]["wbc"]) == ("true", "false")
+    assert seen[ex._SEARCH_URL_MINORS]["hfLevel"] == "AAA|"  # user filters still ride along
+    assert (seen[ex._SEARCH_URL_WBC]["minors"], seen[ex._SEARCH_URL_WBC]["wbc"]) == ("false", "true")
+    assert not {"minors", "wbc"} & seen[ex._SEARCH_URL].keys()  # MLB request unchanged
+
+
+def test_minors_and_wbc_real_captures_are_their_own_population(monkeypatch):
+    """Captures taken WITH the flags: MiLB affiliates (ROC/STP, NOR/GWN) and WBC nations (JPN/CZE,
+    game_type F = pool play); the same 119-column shape with MLBAM ids Int64."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    bodies = {ex._SEARCH_URL_MINORS: _MINORS_HEAD, ex._SEARCH_URL_WBC: _WBC_HEAD}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[url].read_text(encoding="utf-8")))
+
+    minors = ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01")
+    assert minors.shape == (5, 119)
+    assert set(minors.select("home_team", "away_team").rows()) == {("NOR", "GWN"), ("ROC", "STP")}
+    assert minors["game_pk"].unique().sort().to_list() == [752539, 752692] and minors.schema["game_pk"] == pl.Int64
+
+    wbc = ex.mlb_statcast_search_wbc("2023-03-11", "2023-03-11")
+    assert wbc.shape == (5, 119)
+    assert set(wbc.select("home_team", "away_team", "game_type").rows()) == {("JPN", "CZE", "F")}
+    assert wbc["game_pk"].unique().to_list() == [719529] and wbc.schema["batter"] == pl.Int64
+
+
+def test_search_header_only_every_chunk_keeps_the_schema(monkeypatch):
+    """Every chunk header-only (no games in the window): 0 rows with the 119 columns, not a 0-column frame."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    header_only = _SEARCH_HEAD.read_text(encoding="utf-8").splitlines()[0] + "\n"
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(header_only))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.shape == (0, 119) and df.schema["game_pk"] == pl.Int64
+    pdf = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1, return_as_pandas=True)
+    assert pdf.shape == (0, 119) and str(pdf["game_pk"].dtype) == "Int64"
+
+
+def test_search_header_only_chunk_does_not_poison_populated_chunk_dtypes(monkeypatch):
+    """A header-only chunk (all-String schema) next to a populated one must not widen Float64 to String."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    bodies = {"2024-06-15": text.splitlines()[0] + "\n", "2024-06-16": text}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[params["game_date_gt"]]))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.height == 46
+    assert df.schema["release_speed"] == pl.Float64 and df.schema["game_pk"] == pl.Int64

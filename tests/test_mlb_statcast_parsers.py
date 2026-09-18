@@ -164,3 +164,113 @@ def test_parse_player_missing_section_is_zero_rows():
     html = (FIX / "player_page.html").read_text()
     assert parse_mlb_statcast_player(html, section="does_not_exist").height == 0
     assert parse_mlb_statcast_player("<html></html>").height == 0
+
+
+# MLBAM integer id columns of a Savant search CSV (confirmed against the real header).
+_SEARCH_ID_COLS = ("batter", "pitcher", "on_1b", "on_2b", "on_3b", *(f"fielder_{i}" for i in range(2, 10)), "game_pk")
+_SEARCH_HEAD = FIX / "search_2024-06-15_head.csv"
+
+
+def test_parse_search_real_capture_ids_are_int64_exact():
+    """Real Savant search CSV: runner ids blank on empty bases must be Int64 (null), not Float64 660271.0."""
+    from io import StringIO
+
+    import pandas as pd
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    df = parse_mlb_statcast_search(text)
+    assert df.shape == (46, 119)
+    for col in _SEARCH_ID_COLS:
+        assert df.schema[col] == pl.Int64, f"{col} is {df.schema[col]}"
+    # blank -> null, value -> exact integer (bases-loaded pitch, game 745329 AB 44 pitch 2)
+    assert [df[c].null_count() for c in ("on_1b", "on_2b", "on_3b")] == [26, 35, 43]
+    row = df.filter((pl.col("game_pk") == 745329) & (pl.col("at_bat_number") == 44) & (pl.col("pitch_number") == 2))
+    assert row.select("on_1b", "on_2b", "on_3b").row(0) == (656305, 671218, 596103)
+    # every non-id column keeps the dtype a plain CSV read gives it (e.g. all-null sv_id stays Float64)
+    base = pl.from_pandas(pd.read_csv(StringIO(text)))
+    assert {c: t for c, t in df.schema.items() if c not in _SEARCH_ID_COLS} == {
+        c: t for c, t in base.schema.items() if c not in _SEARCH_ID_COLS
+    }
+    pdf = parse_mlb_statcast_search(text, return_as_pandas=True)
+    assert {c: str(pdf[c].dtype) for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, "Int64")
+    assert pdf["on_1b"].isna().sum() == 26
+
+
+def test_parse_search_non_integral_id_is_not_truncated():
+    """A non-integral value in an id column is surfaced (warning, column left as-is), never floored."""
+    import csv
+    import io
+    import warnings
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    # Mutate ONE on_1b cell of the real capture to a non-integral value.
+    rows = list(csv.reader(io.StringIO(_SEARCH_HEAD.read_text(encoding="utf-8"))))
+    idx = rows[0].index("on_1b")
+    target = next(r for r in rows[1:] if r[idx])
+    target[idx] = target[idx] + ".5"
+    buf = io.StringIO()
+    csv.writer(buf, lineterminator="\n").writerows(rows)
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        df = parse_mlb_statcast_search(buf.getvalue())
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "on_1b" in str(w.message)]
+    assert len(hits) == 1 and hits[0].filename == __file__  # once, attributed to the caller's line
+    assert df.schema["on_1b"] == pl.Float64
+    assert float(target[idx]) in df["on_1b"].to_list()
+    assert df.schema["on_2b"] == pl.Int64 and df.schema["batter"] == pl.Int64
+
+
+def test_gamefeed_and_search_agree_game_pk_is_int64():
+    """Real /gf JSON carries ``"game_pk": "745444"`` (a string); the search CSV carries an int.
+
+    Both parsers pin the MLBAM id columns to Int64 so a gamefeed<->search join on
+    game_pk never hits a String-vs-Int64 schema mismatch.
+    """
+    import json
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed, parse_mlb_statcast_search
+
+    gf = parse_mlb_statcast_gamefeed(json.loads((FIX / "gamefeed.json").read_text()))
+    search = parse_mlb_statcast_search(_SEARCH_HEAD.read_text(encoding="utf-8"))
+    for col in ("game_pk", "batter", "pitcher"):
+        assert gf.schema[col] == search.schema[col] == pl.Int64, (col, gf.schema[col], search.schema[col])
+    assert gf["game_pk"].unique().to_list() == [745444]
+    pdf = parse_mlb_statcast_gamefeed(json.loads((FIX / "gamefeed.json").read_text()), return_as_pandas=True)
+    assert str(pdf["game_pk"].dtype) == "Int64" and pdf["game_pk"].tolist() == [745444] * 4
+
+
+def test_gamefeed_non_numeric_game_pk_is_left_as_read_and_warned():
+    """A non-numeric id string is surfaced (warning, column left as read), never coerced to null."""
+    import json
+    import warnings
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed
+
+    payload = json.loads((FIX / "gamefeed.json").read_text())
+    payload["team_home"][0]["game_pk"] = "not-a-pk"
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        df = parse_mlb_statcast_gamefeed(payload)
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "game_pk" in str(w.message)]
+    assert len(hits) == 1 and hits[0].filename == __file__
+    assert df.schema["game_pk"] == pl.String and "not-a-pk" in df["game_pk"].to_list()
+    assert df.schema["batter"] == pl.Int64
+
+
+def test_header_only_csv_keeps_the_documented_columns():
+    """Savant answers a no-data query with the header row only: 0 rows WITH the 119 columns, ids Int64."""
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    header_only = text.splitlines()[0] + "\n"
+    full = parse_mlb_statcast_search(text)
+    df = parse_mlb_statcast_search(header_only)
+    assert df.shape == (0, 119) and df.columns == full.columns
+    assert {c: df.schema[c] for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, pl.Int64)
+    pdf = parse_mlb_statcast_search(header_only, return_as_pandas=True)
+    assert pdf.shape == (0, 119) and list(pdf.columns) == full.columns
+    assert {c: str(pdf[c].dtype) for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, "Int64")

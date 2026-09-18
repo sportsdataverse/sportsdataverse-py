@@ -1,0 +1,39 @@
+schema: fox_wbb_league_standings
+kind: dataframe
+columns:
+- name: section
+  type: character
+  description: ''
+- name: wcbk
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: conf
+  type: character
+  description: ''
+- name: w_l
+  type: character
+  description: ''
+- name: top_25
+  type: character
+  description: ''
+- name: home
+  type: character
+  description: ''
+- name: away
+  type: character
+  description: ''
+- name: pf
+  type: character
+  description: ''
+- name: pa
+  type: character
+  description: ''
+- name: strk
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''

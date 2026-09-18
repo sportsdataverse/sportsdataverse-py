@@ -13,6 +13,9 @@ columns:
 - name: season_type
   type: character
   description: ''
+- name: game_id
+  type: character
+  description: ''
 - name: opponent_team
   type: character
   description: ''
@@ -61,6 +64,18 @@ columns:
 - name: passing_2pt_conversions
   type: integer
   description: ''
+- name: passing_10
+  type: integer
+  description: ''
+- name: passing_16
+  type: integer
+  description: ''
+- name: passing_20
+  type: integer
+  description: ''
+- name: passing_40
+  type: integer
+  description: ''
 - name: carries
   type: integer
   description: ''
@@ -83,6 +98,18 @@ columns:
   type: double
   description: ''
 - name: rushing_2pt_conversions
+  type: integer
+  description: ''
+- name: rushing_10
+  type: integer
+  description: ''
+- name: rushing_12
+  type: integer
+  description: ''
+- name: rushing_20
+  type: integer
+  description: ''
+- name: rushing_40
   type: integer
   description: ''
 - name: receptions
@@ -116,6 +143,18 @@ columns:
   type: double
   description: ''
 - name: receiving_2pt_conversions
+  type: integer
+  description: ''
+- name: receiving_10
+  type: integer
+  description: ''
+- name: receiving_16
+  type: integer
+  description: ''
+- name: receiving_20
+  type: integer
+  description: ''
+- name: receiving_40
   type: integer
   description: ''
 - name: special_teams_tds
@@ -166,6 +205,21 @@ columns:
 - name: def_safeties
   type: integer
   description: ''
+- name: def_punt_blocks
+  type: integer
+  description: ''
+- name: def_pat_blocks
+  type: integer
+  description: ''
+- name: def_fg_blocks
+  type: integer
+  description: ''
+- name: def_2pt_atts
+  type: integer
+  description: ''
+- name: def_2pt_made
+  type: integer
+  description: ''
 - name: misc_yards
   type: integer
   description: ''
@@ -191,6 +245,21 @@ columns:
   type: integer
   description: ''
 - name: timeouts
+  type: integer
+  description: ''
+- name: fumbles_forced_by_opp
+  type: integer
+  description: ''
+- name: fumbles_not_forced
+  type: integer
+  description: ''
+- name: fumbles_out_of_bounds
+  type: integer
+  description: ''
+- name: fumbles_total
+  type: integer
+  description: ''
+- name: fumbles_lost_total
   type: integer
   description: ''
 - name: punt_returns
@@ -305,5 +374,44 @@ columns:
   type: integer
   description: ''
 - name: gwfg_distance
+  type: integer
+  description: ''
+- name: pt_att
+  type: integer
+  description: ''
+- name: pt_blocked
+  type: integer
+  description: ''
+- name: pt_long
+  type: integer
+  description: ''
+- name: pt_yards
+  type: integer
+  description: ''
+- name: pt_inside_20
+  type: integer
+  description: ''
+- name: pt_out_of_bounds
+  type: integer
+  description: ''
+- name: pt_downed
+  type: integer
+  description: ''
+- name: pt_touchback
+  type: integer
+  description: ''
+- name: pt_fair_caught
+  type: integer
+  description: ''
+- name: pt_returned
+  type: integer
+  description: ''
+- name: pt_return_yards
+  type: integer
+  description: ''
+- name: pt_return_tds
+  type: integer
+  description: ''
+- name: pt_net_yards
   type: integer
   description: ''

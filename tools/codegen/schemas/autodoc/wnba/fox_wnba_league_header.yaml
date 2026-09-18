@@ -1,0 +1,33 @@
+schema: fox_wnba_league_header
+kind: dataframe
+columns:
+- name: template
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: content_uri
+  type: character
+  description: ''
+- name: content_type
+  type: character
+  description: ''
+- name: color
+  type: character
+  description: ''
+- name: logo_url
+  type: character
+  description: ''
+- name: image_alt_text
+  type: character
+  description: ''
+- name: rank
+  type: character
+  description: ''
+- name: details
+  type: character
+  description: ''

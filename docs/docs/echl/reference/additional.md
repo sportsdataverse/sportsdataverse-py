@@ -124,6 +124,24 @@ ECHL schedule — one row per game.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `game_status` | character | Game status label. |
+| `home_team` | character | Home team name. |
+| `home_team_id` | character | Unique identifier for the home team. |
+| `home_score` | character | Home team score at the time of the play. |
+| `away_team` | character | Away team name. |
+| `away_team_id` | character | Unique identifier for the away team. |
+| `away_score` | character | Away team score at the time of the play. |
+| `venue` | character | Venue name. |
+| `season_id` | character | Unique season identifier. |
+| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+
 ### `echl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#echl_season_id}
 
 All ECHL seasons with end-year + game-type labels.
@@ -133,6 +151,21 @@ All ECHL seasons with end-year + game-type labels.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | integer | Unique season identifier. |
+| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | character | Short season name. |
+| `career` | character | Whether this is a career-stats season. |
+| `playoff` | character | Whether the row is playoff statistics. |
+| `start_date` | character | Start date (YYYY-MM-DD). |
+| `end_date` | character | End date (YYYY-MM-DD). |
+| `season_yr` | integer | Year derived from the season name (concluding year). |
+| `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
 ### `echl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#echl_standings}
 
@@ -145,6 +178,27 @@ ECHL standings — one row per team.
 | `season` | `Optional[int]` | `None` |  |
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `team_code` | character | Internal team code. |
+| `wins` | character | Total wins. |
+| `losses` | character | Total losses. |
+| `ot_losses` | character | Overtime losses. |
+| `shootout_losses` | character | Shootout losses. |
+| `points` | integer | Points scored. |
+| `penalty_minutes` | character | Penalty minutes. |
+| `streak` | character | Current streak (e.g. 'W3' for three-game win streak). |
+| `goals_for` | character | Goals for. |
+| `goals_against` | character | Goals against. |
+| `percentage` | character | Points percentage (feed header 'Percentage'): points earned divided by the maximum points available from games played, as a three-decimal string, e.g. '0.833' for 5 of 6 possible points; '0.000' before a team has played. |
+| `games_played` | character | Games played. |
+| `team_rank` | integer | Team rank in the standings. |
+| `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
+| `team` | character | Team-side label or team identifier. |
 
 ### `echl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#echl_team_roster}
 
@@ -170,3 +224,16 @@ ECHL teams for a given season.
 | `season` | `Optional[int]` | `None` |  |
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_id` | character | Unique team identifier. |
+| `team_code` | character | Internal team code. |
+| `team_nickname` | character | Team nickname. |
+| `team_label` | character | Short city label. |
+| `division` | character | Team division. |
+| `team_logo` | character | Team logo image URL. |

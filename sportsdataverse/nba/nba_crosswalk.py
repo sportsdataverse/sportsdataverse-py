@@ -27,6 +27,7 @@ from sportsdataverse._common_crosswalk_basketball import (
     str_id,
 )
 from sportsdataverse._crosswalk_basketball_sources import (
+    _stats_result_set,
     espn_scoreboard_games,
     espn_team_directory,
     require_source,
@@ -252,7 +253,11 @@ def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
     does this.
 
     Raises:
-        CrosswalkSourceError: The game log could not be produced.
+        CrosswalkSourceError: The game log fetch failed, was refused (the
+            runtime's ``{}`` for a non-200 / rate limit / blank body), or had
+            rows that did not parse. Only a real ``LeagueGameLog`` set with no
+            rows falls back a season. Throttles are retried only when
+            ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``).
     """
     out: Dict[str, str] = {}
     for year in (season, season - 1):
@@ -261,13 +266,14 @@ def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
         # Default-bound so the closure captures this iteration's season, not the
         # loop variable's final value. The provider import is inside the callable
         # so a missing/broken nba_stats module raises CrosswalkSourceError too.
+        # Raw payload: a refused request is `{}`, which would parse to the same
+        # zero rows as a season that has not tipped off.
         def _fetch(s: str = stats_season) -> Any:
             from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
 
-            raw = nba_stats_leaguegamelog(league_id="00", season=s, **kwargs)
-            return raw.get("LeagueGameLog") if isinstance(raw, dict) else raw
+            return nba_stats_leaguegamelog(league_id="00", season=s, return_parsed=False, **kwargs)
 
-        log = require_source(f"nba_stats_leaguegamelog(season={stats_season!r})", _fetch)
+        log = _stats_result_set(f"nba_stats_leaguegamelog(season={stats_season!r})", _fetch, "LeagueGameLog")
         if log.height == 0 or "team_abbreviation" not in log.columns:
             continue
         ids = log.select(str_id(log, "team_id")).to_series().to_list()
@@ -290,9 +296,12 @@ def _stats_team_directory(season: int, **kwargs: Any) -> pl.DataFrame:
 
     Raises:
         CrosswalkSourceError: ``leaguestandingsv3`` or ``leaguegamelog`` could
-            not be produced. A standings payload that renders to zero rows is
+            not be produced: the fetch raised, was refused (the runtime's
+            ``{}`` for a non-200 / rate limit / blank body), or had rows that
+            did not parse. Only a real ``Standings`` set with no rows is
             provably empty (a season whose standings have not opened) and
-            returns a typed empty frame instead.
+            returns a typed empty frame instead. Throttles are retried only
+            when ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``).
     """
     stats_season = f"{season - 1}-{str(season)[-2:]}"
     label = f"nba_stats_leaguestandingsv3(season={stats_season!r})"
@@ -300,10 +309,9 @@ def _stats_team_directory(season: int, **kwargs: Any) -> pl.DataFrame:
     def _fetch() -> Any:
         from sportsdataverse.nba.nba_stats import nba_stats_leaguestandingsv3
 
-        raw = nba_stats_leaguestandingsv3(season=stats_season, **kwargs)
-        return raw.get("Standings") if isinstance(raw, dict) else raw
+        return nba_stats_leaguestandingsv3(season=stats_season, return_parsed=False, **kwargs)
 
-    standings = require_source(label, _fetch)
+    standings = _stats_result_set(label, _fetch, "Standings")
     if standings.height == 0:
         return pl.DataFrame(schema=_STATS_SCHEMA)
     tricode = _stats_team_tricodes(season, **kwargs)
@@ -374,7 +382,10 @@ def nba_team_crosswalk(
     Note:
         ``stats.nba.com`` TLS-fingerprint-blocks plain ``requests`` and hangs
         on datacenter IPs; the live path needs ``curl_cffi`` and a residential
-        connection. Pass ``stats=`` to build fully offline.
+        connection. Pass ``stats=`` to build fully offline. A refused or
+        throttled Stats call raises rather than emptying ``nba_*``; the runtime
+        retries only when ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``,
+        backoff ``SDV_PY_NBA_STATS_BACKOFF``).
 
     Example:
         Quick start::
@@ -421,6 +432,7 @@ def nba_schedule_crosswalk(
     *,
     stats_games: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
@@ -435,10 +447,20 @@ def nba_schedule_crosswalk(
             NBA season.
         stats_games: Pre-fetched Stats schedule frame; ``None`` fetches live.
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
         ``pl.DataFrame`` (or pandas) with :data:`SCHEDULE_COLUMNS`.
+
+    Raises:
+        CrosswalkSourceError: The per-date ESPN scoreboard failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -464,7 +486,7 @@ def nba_schedule_crosswalk(
     if stats_games is None:
         stats_games = stats_schedule_games("nba", season, **kwargs)
     dates = sorted({d for d in stats_games["game_date"].to_list() if d is not None})
-    espn_games = espn_scoreboard_games("nba", dates, **kwargs)
+    espn_games = espn_scoreboard_games("nba", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, stats_games, team_xwalk, season)
     return out.to_pandas() if return_as_pandas else out
 
@@ -474,6 +496,7 @@ def nba_player_crosswalk(
     min_confidence: float = 0.92,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox).
@@ -488,10 +511,28 @@ def nba_player_crosswalk(
             NBA season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
         ``pl.DataFrame`` (or pandas), one row per ESPN athlete, 21 columns.
+
+    Raises:
+        CrosswalkSourceError: A Stats team-directory or ``commonteamroster``
+            call for any team failed or was refused (stats.nba.com answers a
+            throttle or block with an empty body), so ``nba_*`` would
+            otherwise be silently null. Throttles are retried only when
+            ``SDV_PY_NBA_STATS_RETRIES`` is set (default ``0``, backoff
+            ``SDV_PY_NBA_STATS_BACKOFF``); without it one transient refusal
+            aborts the whole build.
+
+        CrosswalkSourceError: The per-team ESPN or Fox rosters failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -515,22 +556,26 @@ def nba_player_crosswalk(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _nba_api: https://github.com/swar/nba_api
     """
-    from sportsdataverse._crosswalk_basketball_sources import espn_rosters, fox_rosters, stats_rosters
+    from sportsdataverse._crosswalk_basketball_sources import FetchTally, espn_rosters, fox_rosters, stats_rosters
     from sportsdataverse.nba.nba_schedule import most_recent_nba_season
 
     season = int(season) if season is not None else most_recent_nba_season()
     stats_season = f"{season - 1}-{str(season)[-2:]}"
     team_xwalk = nba_team_crosswalk(season=season, **kwargs)
     frames: List[pl.DataFrame] = []
+    espn_tally = FetchTally("espn_nba_team_roster", strict=strict)
+    fox_tally = FetchTally("fox_nba_team_roster", strict=strict)
     for row in team_xwalk.iter_rows(named=True):
-        espn = espn_rosters("nba", row["espn_team_id"], row["espn_abbreviation"], season, **kwargs)
+        espn = espn_rosters("nba", row["espn_team_id"], row["espn_abbreviation"], season, tally=espn_tally, **kwargs)
         if espn.height == 0:
             continue
         stats = stats_rosters("nba", row["espn_team_id"], row["nba_team_id"], stats_season, **kwargs)
-        fox = fox_rosters("nba", row["espn_team_id"], row["fox_team_id"], **kwargs)
+        fox = fox_rosters("nba", row["espn_team_id"], row["fox_team_id"], tally=fox_tally, **kwargs)
         frames.append(
             assemble_player_espn_stats_fox(espn, stats, fox, season, "nba", min_confidence, exact_tiebreak=True)
         )
+    espn_tally.finish()
+    fox_tally.finish()
     out = (
         pl.concat(frames, how="diagonal_relaxed")
         if frames

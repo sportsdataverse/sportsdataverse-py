@@ -1,0 +1,24 @@
+schema: fox_nhl_league_leaders
+kind: dataframe
+columns:
+- name: players
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: gp
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: g
+  type: character
+  description: ''
+- name: a
+  type: character
+  description: ''
+- name: p
+  type: character
+  description: ''
