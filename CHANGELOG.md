@@ -297,6 +297,19 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
+
+Three CFB-local regexes (`_VENDOR_FG_KICKER_RE`, `_VENDOR_KICKOFF_RETURNER_RE`,
+`_VENDOR_PUNT_RETURNER_RE`) read a kicker or returner whose name is not the abbreviated
+"X.Surname" shape -- stats.ncaa.org's surname-first "Arreola,Carlos" and 2005-2014's
+spelled-out "Bryan Hahnfeldt". They are now one name expression in
+`sportsdataverse.football.espn_text` (`CLAUSE_NAME`) plus the two anchors built from it
+(`CLAUSE_RETURNER_RE`, one expression for punts and kickoffs since the call site already
+knows which kick it has, and `CLAUSE_FG_KICKER_RE`), and `cfb_pbp` keeps no name regex of
+its own for them. Output is unchanged: replayed over every local ESPN summary (3,227,541
+plays / 20,718 games, 2004-2026), `punt_return_player_name`, `kickoff_return_player_name`
+and `fg_kicker_player_name` are identical -- 0 lost, 0 changed, 0 gained.
+
 ### Added — CFB kick distances and bare-punt returns derived from field position, with provenance
 
 ESPN's 2004 play text states no kick distance at all ("Punt by Vinnie Burns (VT)
@@ -318,9 +331,11 @@ parsed value is never changed.
   kickoffs). 2004
   stores the catch spot there instead, so 2004 assumes the 35, requires the computed
   landing to equal ESPN's catch spot, and skips kicks after a flag or safety.
-- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the text
-  describes no outcome, and the next snap starts at that spot with the receiving team.
-  Returner names are not recoverable.
+- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the next snap
+  starts at that spot with the receiving team, and the text either describes no outcome or
+  states only that the returner stepped out of bounds -- "Jared Ballman punt for 48 yards,
+  returned by Ryan Broyles out-of-bounds.", a return whose length ESPN never gives (41 such
+  rows in a 1,329-game 2004-2026 sample, 25 of them derivable under the guards above). Returner names are not recoverable.
 - **Never derived**: penalties, fumbles, muffs, blocks, laterals, safeties,
   touchdowns, onside kicks, out-of-bounds *kickoffs*, "for a 1ST down", unchanged
   possession, out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a

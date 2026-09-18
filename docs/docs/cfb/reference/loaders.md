@@ -299,7 +299,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `lead_start_down` | Int64 | Value of start_down on the next play, used for sequence-aware derivations. |
 | `lead_start_distance` | Int64 | Value of start_distance on the next play, used for sequence-aware derivations. |
 | `lead_scoringPlay` | Boolean | Value of scoringPlay on the next play, used for sequence-aware derivations. |
-| `text_dupe` | Boolean | True when the play description duplicates the previous row's text. |
+| `text_dupe` | Boolean | Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is returned, so it marks nothing and is retained only for schema stability. |
 | `end_state_missing` | Boolean | Flag that ESPN's end-of-play state (end.team.id) was absent and the end state was imputed. |
 | `start.pos_team.id` | Int64 | ESPN's `pos_team.id` value for the play state at the start of the play. |
 | `start.def_pos_team.id` | Int64 | ESPN's `def_pos_team.id` value for the play state at the start of the play. |
