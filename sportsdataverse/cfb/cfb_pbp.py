@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import html
 import json
 import logging
 import os
@@ -113,6 +114,18 @@ _JERSEY_PREFIX = r"^\s*#\d{1,3}\s+"
 #: clock precedes it. Published 2025 carries 3,682 kickoff_player_name values of
 #: the form "(15:00) #36 T.Morrison", plus rusher, passer and interception names.
 _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
+
+#: ESPN's feed carries a few escaped entities with the "&" already stripped -- "Deapos;Angelo
+#: Bryant", "Patrick Oapos;Bryan", "Timeout TEXAS Aamp;M" (10 rows over 1,328 games 2004-26,
+#: 9 of them in 2006); no intact entity survives. Python ``re``: polars has no lookbehind.
+_MANGLED_ENTITY = r"(amp|apos|quot|#39);"
+_MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
+
+
+def _repair_entities(text: str) -> str:
+    """Restore a stripped ``&`` and unescape: ``"Patrick Oapos;Bryan"`` -> ``"Patrick O'Bryan"``."""
+    return html.unescape(_MANGLED_ENTITY_RE.sub(r"&\1;", text))
+
 
 #: The vendor template's kicker / returner clauses with any name shape: the capture excludes
 #: "#", parentheses and digits, so it can neither run back across a jersey or a yardline nor
@@ -1064,7 +1077,9 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__`` (commit
     ``a3dff20``); no-op for games without OT.
     """
-    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"])
+    # maintain_order: a play repeated under drives.current sits after its
+    # drives.previous copy, so the same-id dedupe keeps the fresher one
+    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return plays_df
     plays_df = _reorder_late_inserts(plays_df)
@@ -1409,7 +1424,9 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pbp_features(self, pbp_txt, init):
         pbp_txt["plays"] = pd.DataFrame()
-        for key in pbp_txt.get("drives").keys():
+        # previous before current, whatever the feed's key order: a same-id repeat
+        # keeps its LAST copy, which must be the fresher drives.current one
+        for key in sorted(pbp_txt.get("drives").keys(), key=lambda k: k == "current"):
             logging.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
                 data=pbp_txt.get("drives").get(f"{key}"),
@@ -1451,6 +1468,14 @@ class CFBPlayProcess(object):
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         if len(pbp_txt["plays"]) == 0:
             return pbp_txt
+        # Repair the feed's pre-stripped entities once, at the boundary -- never in the 2025+
+        # vendor rows (clock-opened), where ";" separates tacklers and "#30 A.Agapos;" is a surname.
+        text = pl.col("text").cast(pl.Utf8)
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            text=pl.when(text.str.contains(_MANGLED_ENTITY) & (text.str.contains(_CLOCK_PREFIX) == False))
+            .then(text.map_elements(_repair_entities, return_dtype=pl.Utf8))
+            .otherwise(text)
+        )
         if (len(pbp_txt["plays"]) < 50) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
@@ -1562,7 +1587,13 @@ class CFBPlayProcess(object):
         )
         pbp_txt["plays"] = _sort_plays_ot_aware(pbp_txt["plays"])
 
-        # drop play text dupes intelligently, even if they have different play_id values
+        # Drop true duplicates only: the next row carries the same play id (a live
+        # feed repeating the drive in progress) or is an identical copy -- same text,
+        # clock, period and start state. The former loose test
+        # ``text.is_in(lead_text.implode())`` holds for every row after the first, so
+        # any play whose start state matched the next row's was deleted: 1,529 real
+        # plays over 1,328 games 2004-26, 969 of them in 2004, whose feed repeats the
+        # start state on every row (completions, rushes, penalties, extra points).
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1577,35 +1608,17 @@ class CFBPlayProcess(object):
                 text_dupe=pl.lit(False),
             )
             .with_columns(
-                text_dupe=pl.when(
-                    (pl.col("start.team.id") == pl.col("lead_start_team"))
-                    .and_(pl.col("start.down") == pl.col("lead_start_down"))
-                    .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
-                    .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
-                    .and_(pl.col("text") == pl.col("lead_text"))
-                    .and_(pl.col("type.text") != "Timeout"),
-                )
+                text_dupe=pl.when(pl.col("id") == pl.col("id").shift(-1))
                 .then(pl.lit(True))
                 .when(
                     (pl.col("start.team.id") == pl.col("lead_start_team"))
                     .and_(pl.col("start.down") == pl.col("lead_start_down"))
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
-                    .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
-                    .and_(pl.col("type.text") != "Timeout")
-                    # Guard: an "End of <period/half/game>" marker inherits the preceding
-                    # play's start state (team/down/distance/yardsToEndzone), so without
-                    # this the loose is_in(lead_text) match spuriously flags the real
-                    # play right before it (e.g. an end-of-half Hail Mary interception)
-                    # as a duplicate and drops it. Never dedupe against an end-marker lead.
-                    .and_(pl.col("lead_text").str.contains(r"(?i)end of|end period|end quarter") == False)
-                    # Same trap, different marker: a Timeout row (and a penalty row whose
-                    # play was wiped, "NO PLAY") also inherits the preceding play's start
-                    # state, so the loose is_in(lead_text) match deletes the real play in
-                    # front of it. 401864570 lost a 25-yard third-down completion this way
-                    # -- it sits immediately before "Timeout Florida State, clock 04:11".
-                    .and_(pl.col("type.text").shift(-1).str.contains("(?i)timeout") == False)
-                    .and_(pl.col("lead_text").str.contains(_PENALTY_NEGATED_TEXT) == False),
+                    .and_(pl.col("text") == pl.col("lead_text"))
+                    .and_(pl.col("clock.displayValue") == pl.col("clock.displayValue").shift(-1))
+                    .and_(pl.col("period.number") == pl.col("period.number").shift(-1))
+                    .and_(pl.col("type.text") != "Timeout"),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
@@ -1614,9 +1627,8 @@ class CFBPlayProcess(object):
         # The dupe rows are removed HERE, so the text_dupe column that reaches
         # the output is always False by construction -- it is the residue of a
         # filter that already ran, not a marker consumers can use to dedupe.
-        # Rows with identical text but DIFFERENT start states (e.g. repeated
-        # degenerate feed texts advancing the yardline) are deliberately kept:
-        # they are distinct plays with bad text, not duplicates.
+        # Rows with identical text but a different start state or clock are
+        # deliberately kept: they are distinct plays with bad text, not duplicates.
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
         home_match = _timeout_team_match_len(
