@@ -9230,6 +9230,9 @@ A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, o
 **Example**
 
 ```python
+import polars as pl
+from sportsdataverse.nfl import shield_nfl_pbp
+
 df = shield_nfl_pbp(shield_game_id="a9a8944e-4feb-11f1-abca-2c54536568a9")
 df.filter(pl.col("is_play") == 0).select("posteam", "down", "ydstogo", "wp")
 ```
@@ -9249,16 +9252,17 @@ Project one Shield game (any phase) onto an ESPN-summary-shaped dict.
 
 **Returns**
 
-`(summary, notes)`. | item | type | description | |---|---|---| | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, and empty `boxscore` / passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. | | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a PAT with no touchdown to fold into, an unparseable drive chart. |
+`(summary, notes)`. | item | type | description | |---|---|---| | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, and empty `boxscore` / passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. | | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
 
 **Example**
 
 ```python
 import json
-from sportsdataverse.nfl.shield_pbp import shield_to_espn_summary
-from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl import NFLPlayProcess, shield_to_espn_summary
 
-game = json.load(open("nfl/raw/2025/2025_07_LA_JAX.json"))
+# any Shield gamedetails body -- here the copy nfl-raw keeps
+with open("nfl/raw/2025/2025_07_LA_JAX.json") as fh:
+    game = json.load(fh)
 row = {"espn_event_id": "401772635", "home_espn_team_id": "30", "away_espn_team_id": "14"}
 summary, notes = shield_to_espn_summary(game, row)
 proc = NFLPlayProcess(gameId=401772635, join_participants=False)

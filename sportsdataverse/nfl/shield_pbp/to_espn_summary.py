@@ -98,7 +98,7 @@ _ESPN_TEAMS: Dict[str, Tuple[str, str, str]] = {
     "11": ("IND", "003b75", "ffffff"),
     "12": ("KC", "e31837", "ffb81c"),
     "13": ("LV", "000000", "a5acaf"),
-    "14": ("LA", "003594", "ffd100"),
+    "14": ("LAR", "003594", "ffd100"),
     "15": ("MIA", "008e97", "fc4c02"),
     "16": ("MIN", "4f2683", "ffc62f"),
     "17": ("NE", "002a5e", "c60c30"),
@@ -112,7 +112,7 @@ _ESPN_TEAMS: Dict[str, Tuple[str, str, str]] = {
     "25": ("SF", "aa0000", "b3995d"),
     "26": ("SEA", "002244", "69be28"),
     "27": ("TB", "d50a0a", "34302b"),
-    "28": ("WAS", "5a1414", "ffb612"),
+    "28": ("WSH", "5a1414", "ffb612"),
     "29": ("CAR", "0085ca", "101820"),
     "30": ("JAX", "007487", "d7a22a"),
     "33": ("BAL", "29126f", "9e7c0c"),
@@ -120,17 +120,37 @@ _ESPN_TEAMS: Dict[str, Tuple[str, str, str]] = {
 }
 
 #: nflverse (and historical) club abbreviation -> ESPN franchise id. Relocations keep the id.
+#: ``_ESPN_TEAMS`` holds **ESPN's** abbreviation, which is not always nflverse's (``LAR`` vs
+#: ``LA``, ``WSH`` vs ``WAS``), so both spellings are listed here explicitly -- the values this
+#: map is looked up with come from the nflverse schedule.
 _ESPN_TEAM_ID_BY_ABBR: Dict[str, str] = {
     **{abbr: espn_id for espn_id, (abbr, _p, _a) in _ESPN_TEAMS.items()},
     "OAK": "13",
     "LV": "13",
     "STL": "14",
+    "LA": "14",
     "LAR": "14",
     "SD": "24",
     "LAC": "24",
     "WSH": "28",
     "WAS": "28",
 }
+
+
+def _espn_abbr(idmap_row: Mapping[str, Any], side: str, espn_team_id: str) -> Optional[str]:
+    """The club's **ESPN** abbreviation: the id map's era-correct one, else the franchise table.
+
+    The Data API's id-map row is :data:`...idmap.GAME_SCHEMA` and carries no ``home_team`` /
+    ``away_team`` sub-row, so without a fallback that leg of dispatch's cascade reached
+    :func:`_competitor`'s ``mascot[:3]`` and put an invented abbreviation ("BIL", "LIO") in the
+    header -- and, worse, handed ``_nfl_timeout_side`` a name tuple with no abbreviation in it,
+    which charges no timeout to either club (measured: 0 of 8 timeout rows charged, against 8 of
+    8 with the sub-rows). ``_ESPN_TEAMS`` is keyed by ESPN's franchise id, which survives a
+    relocation, so the fallback is only ever out of date on the club's *era* name.
+    """
+    stated = ((idmap_row.get(f"{side}_team") or {}) or {}).get("espn_abbr")
+    return stated or _ESPN_TEAMS.get(str(espn_team_id), (None,))[0]
+
 
 #: Shield ``seasonType`` -> ESPN ``header.season.type``.
 _SEASON_TYPE = {"PRE": 1, "REG": 2, "POST": 3, "PRO": 4}
@@ -458,15 +478,15 @@ def _status(summary: Mapping[str, Any], phase: Optional[str], period: Optional[i
 
 def _pickcenter(odds: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     """The stored closing line as a one-provider ``pickcenter`` array (the offline odds path)."""
-    if not odds:
+    if not odds or odds.get("gameSpread") is None or odds.get("overUnder") is None:
         return []
     return [
         {
             "provider": {"id": "0", "name": "stored closing line", "priority": 0},
             "spread": abs(float(odds["gameSpread"])),
             "overUnder": float(odds["overUnder"]),
-            "homeTeamOdds": {"favorite": bool(odds["homeFavorite"])},
-            "awayTeamOdds": {"favorite": not bool(odds["homeFavorite"])},
+            "homeTeamOdds": {"favorite": bool(odds.get("homeFavorite"))},
+            "awayTeamOdds": {"favorite": not bool(odds.get("homeFavorite"))},
         }
     ]
 
@@ -515,7 +535,7 @@ def shield_to_espn_summary(
         | item | type | description |
         |---|---|---|
         | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, and empty `boxscore` / passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. |
-        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a PAT with no touchdown to fold into, an unparseable drive chart. |
+        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
 
     Raises:
         KeyError: ``idmap_row`` is missing ``espn_event_id`` or a team id.
@@ -524,10 +544,11 @@ def shield_to_espn_summary(
         Adapt a stored final and process it::
 
             import json
-            from sportsdataverse.nfl.shield_pbp import shield_to_espn_summary
-            from sportsdataverse.nfl import NFLPlayProcess
+            from sportsdataverse.nfl import NFLPlayProcess, shield_to_espn_summary
 
-            game = json.load(open("nfl/raw/2025/2025_07_LA_JAX.json"))
+            # any Shield gamedetails body -- here the copy nfl-raw keeps
+            with open("nfl/raw/2025/2025_07_LA_JAX.json") as fh:
+                game = json.load(fh)
             row = {"espn_event_id": "401772635", "home_espn_team_id": "30", "away_espn_team_id": "14"}
             summary, notes = shield_to_espn_summary(game, row)
             proc = NFLPlayProcess(gameId=401772635, join_participants=False)
@@ -541,8 +562,8 @@ def shield_to_espn_summary(
     event_id = str(idmap_row["espn_event_id"])
     home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
     abbrs = {
-        home_id: ((idmap_row.get("home_team") or {}) or {}).get("espn_abbr"),
-        away_id: ((idmap_row.get("away_team") or {}) or {}).get("espn_abbr"),
+        home_id: _espn_abbr(idmap_row, "home", home_id),
+        away_id: _espn_abbr(idmap_row, "away", away_id),
     }
 
     if parsed is None:
@@ -572,10 +593,21 @@ def shield_to_espn_summary(
     ]
     has_overtime = any((p.get("quarter") or 0) >= 5 for p in plays_raw)
 
+    # A null ``teamId`` must not become a dict KEY: with both sides null the mapping collapses
+    # to one entry, every play's ``start.team.id`` is None (the processor then forward-fills them
+    # all to the home club) and the whole scoreboard is credited to the away side -- silently,
+    # since the contract's all-null test only fires at a rate of 1.0. Skip the side instead and
+    # say so in the notes.
     shield_team_ids = {
-        (summary_block.get("homeTeam") or {}).get("teamId"): home_id,
-        (summary_block.get("awayTeam") or {}).get("teamId"): away_id,
+        shield_id: espn_id
+        for shield_id, espn_id in (
+            ((summary_block.get("homeTeam") or {}).get("teamId"), home_id),
+            ((summary_block.get("awayTeam") or {}).get("teamId"), away_id),
+        )
+        if shield_id is not None
     }
+    if len(shield_team_ids) < 2:
+        notes.append("summary.homeTeam/awayTeam teamId missing: possession and scoring cannot be attributed")
 
     # (abbreviation, location, mascot, name_alt) per side -- what ``_nfl_timeout_side`` matches.
     home_names, away_names = (
@@ -585,6 +617,7 @@ def shield_to_espn_summary(
     emitted: List[Tuple[int, Dict[str, Any]]] = []  # (drive index, play)
     scoring_teams: Dict[str, str] = {}  # play id -> the ESPN team id credited with the score
     home_points = away_points = 0
+    last_touchdown: Optional[int] = None  # index in ``emitted`` of the newest touchdown row
     last_yard_line: Optional[int] = None
     for raw_index, play in enumerate(plays_raw):
         play_type = play.get("playType") or "UNSPECIFIED"
@@ -599,12 +632,19 @@ def shield_to_espn_summary(
 
         if play_type in _PAT_PLAY_TYPES:
             # ESPN folds the try into its touchdown: same play id, one text, one score step.
-            if not emitted:
+            # The try is NOT always the row right before it: a timeout or a penalty on the
+            # try itself sits between them on 735 of the 30,279 PAT rows in nfl-raw (459 of
+            # them from 2014 on, 424 games), and folding onto ``emitted[-1]`` there hangs
+            # ``pointAfterAttempt`` off a Timeout row and leaves the touchdown stepping the
+            # scoreboard by 6. Anchor on the newest touchdown instead, and carry the
+            # post-try score onto the rows in between -- the scoreboard never steps back.
+            if last_touchdown is None:
                 notes.append(f"play {play.get('playId')}: {play_type} with no touchdown to fold into")
                 continue
-            target = emitted[-1][1]
+            target = emitted[last_touchdown][1]
             target["text"] = f"{target['text']} {text}".strip()
-            target["homeScore"], target["awayScore"] = home_points, away_points
+            for _drive_ix, later in emitted[last_touchdown:]:
+                later["homeScore"], later["awayScore"] = home_points, away_points
             after = _point_after(row)
             if after is not None:
                 target["pointAfterAttempt"] = after
@@ -672,6 +712,10 @@ def shield_to_espn_summary(
             espn_play["homeTimeoutCalled"] = side == "home"
             espn_play["awayTimeoutCalled"] = side == "away"
         emitted.append((_drive_index(drive_starts, play.get("playSequenceNumber")), espn_play))
+        if play.get("scoringPlayType") == "TOUCHDOWN":
+            # the anchor the next PAT row folds into (Shield's own scoring type, not the
+            # ESPN type: a sack-fumble-recovery touchdown is typed "SFOP", not "TD")
+            last_touchdown = len(emitted) - 1
 
     _order_stoppages(emitted, event_id)
     _fill_end_state(emitted, home_id, scoring_teams)
@@ -826,7 +870,14 @@ def _fill_end_state(emitted: List[Tuple[int, Dict[str, Any]]], home_id: str, sco
             (p["start"] for _, p in emitted[i + 1 :] if p["type"]["text"] not in _CLOCK_STOPPAGE),
             play["start"],
         )
-        if play["scoringPlay"] and play["type"]["abbreviation"] in ("TD", "FG", "SF"):
+        # ``type.abbreviation`` alone misses a strip-sack touchdown, which ESPN types 80
+        # ("Sack Opp Fumble Recovery", abbreviation "SFOP") -- 323 of the 32,985 touchdowns in
+        # nfl-raw, 155 of them from 2014 on. Those rows took the next-snap branch, i.e. the
+        # ENSUING KICKOFF's spot, which is the 100-yard flip the comment below warns about.
+        scored = play["type"]["abbreviation"] in ("TD", "FG", "SF") or (play.get("scoringType") or {}).get(
+            "abbreviation"
+        ) in ("TD", "FG", "SF")
+        if play["scoringPlay"] and scored:
             # the team **credited with the score**, not the team that snapped it: on a return
             # touchdown they are opposite sides, and crediting the offence flips the end spot
             # 100 yards and re-types the play ("Punt Return Touchdown" became "Punt Team Fumble
@@ -1024,7 +1075,12 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         raise SourceUnavailable(f"nfl {espn_id}: shield payload has no drive chart (not started, or cancelled)")
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row) or _odds_override_from_row(row)
     summary, notes = shield_to_espn_summary(payload, row, parsed=parsed, odds=odds)
-    if not any(d.get("plays") for d in summary["drives"]["previous"]):
+    # ``drives.current`` holds the OPEN drive, which ``shield_to_espn_summary`` pops out of
+    # ``previous``. Checking ``previous`` alone therefore refuses a live game for the whole of
+    # its opening drive: measured on the 223-snapshot TNF capture, 14 snapshots carrying 1-13
+    # real plays were rejected with "carries no plays yet" and handed to ESPN.
+    served = summary["drives"]["previous"] + [d for d in (summary["drives"].get("current"),) if d]
+    if not any(d.get("plays") for d in served):
         # a payload whose only rows are the feed's GAME_START marker: kicked off but nothing
         # snapped yet. The contract would fail on ``drives[].plays[]``; say why instead.
         raise SourceUnavailable(f"nfl {espn_id}: shield drive chart carries no plays yet")
@@ -1041,6 +1097,30 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     )
 
 
+#: nflverse-schedule frames already read, keyed by the season tuple. Only successful reads are
+#: cached: caching a miss would make one transient release-asset failure permanent for the life
+#: of the worker, and this runs on Game on Paper's request path.
+_SCHEDULE_CACHE: Dict[Tuple[int, ...], pl.DataFrame] = {}
+
+
+def _nflverse_schedule(seasons: Tuple[int, ...]) -> Optional[pl.DataFrame]:
+    """The nflverse schedule for ``seasons``, read at most once per process, or None.
+
+    ``load_nfl_schedule`` retries a failed release-asset fetch 15 times at a 30 s timeout
+    (``dl_utils._DEFAULT_RETRIES``), so an unreachable github.com parks a Game on Paper request
+    for minutes. Reading once per process bounds that to the first request of each worker.
+    """
+    if seasons in _SCHEDULE_CACHE:
+        return _SCHEDULE_CACHE[seasons]
+    from sportsdataverse.nfl import load_nfl_schedule
+
+    schedule = load_nfl_schedule(list(seasons))
+    if not isinstance(schedule, pl.DataFrame):
+        schedule = pl.from_pandas(schedule)
+    _SCHEDULE_CACHE[seasons] = schedule
+    return schedule
+
+
 def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
     """Partial id-map row for one ESPN event id, from the nflverse schedule (offline, cached).
 
@@ -1052,13 +1132,12 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
     Returns None when the schedule is unreachable or the event id is not in it.
     """
     try:
-        from sportsdataverse.nfl import load_nfl_schedule
         from sportsdataverse.nfl.utils_date import get_current_nfl_season
 
         season = int(get_current_nfl_season())
-        schedule = load_nfl_schedule([season - 1, season])
-        if not isinstance(schedule, pl.DataFrame):
-            schedule = pl.from_pandas(schedule)
+        schedule = _nflverse_schedule((season - 1, season))
+        if schedule is None:
+            return None
         hit = schedule.filter(pl.col("espn").cast(pl.Utf8) == str(espn_id))
         if hit.is_empty():
             return None
@@ -1066,6 +1145,12 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
     except Exception:  # noqa: BLE001 -- an unreachable release asset is a miss, never a raise
         return None
     home, away = game.get("home_team"), game.get("away_team")
+    # NO ``home_team`` / ``away_team`` sub-row here: the schedule's club code is **nflverse's**
+    # ("LA", "WAS"), and writing it into a field named ``espn_abbr`` puts it in the header, where
+    # ``nfl_pbp._nfl_norm_abbr`` has already folded the play text's own code into ESPN's scheme
+    # ("WAS" -> "WSH") -- so nothing matched and a Washington game charged no timeout, attributed
+    # no penalty and no fumble recovery to either club. ``_espn_abbr`` reads ESPN's own
+    # abbreviation off the franchise id instead.
     return {
         "league": "nfl",
         "espn_event_id": str(espn_id),
@@ -1076,8 +1161,6 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
         "spread_line": game.get("spread_line"),
         "total_line": game.get("total_line"),
         "odds_source": "nflverse_schedule",
-        "home_team": {"espn_abbr": home},
-        "away_team": {"espn_abbr": away},
     }
 
 

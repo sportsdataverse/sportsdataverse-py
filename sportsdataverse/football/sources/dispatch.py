@@ -138,13 +138,22 @@ _ADAPTER_MODULES: dict[tuple[str, str], str] = {
 }
 
 
+#: Why an adapter module failed to import, by ``(league, source)``. A broken adapter must fall
+#: through rather than break dispatch, but it must not then be indistinguishable from an
+#: unregistered slot: without this, an ``ImportError`` from a renamed symbol served every NFL
+#: game from ESPN with ``attempts=[{"source": "shield", "error": "not implemented"}]`` and no
+#: trace of the real cause anywhere.
+_ADAPTER_IMPORT_ERRORS: dict[tuple[str, str], str] = {}
+
+
 def _adapter_for(league: str, source: str) -> Adapter | None:
     """The registered adapter for ``(league, source)``, importing its module on first use."""
     key = (league, source)
     if key not in _ADAPTERS and key in _ADAPTER_MODULES:
         try:
             importlib.import_module(_ADAPTER_MODULES[key])
-        except Exception:  # noqa: BLE001 -- a broken adapter must fall through, not break dispatch
+        except Exception as exc:  # noqa: BLE001 -- a broken adapter falls through, but says so
+            _ADAPTER_IMPORT_ERRORS[key] = f"import failed: {type(exc).__name__}: {exc}"
             return None
     return _ADAPTERS.get(key)
 
@@ -335,16 +344,21 @@ def _process_game(
     order = _fallthrough_order(league, source, fallthrough)
     payloads = payloads or {}
     attempts: list[Attempt] = []
-    # GOP passes the ESPN event id and nothing else; resolve the id map once for every
-    # alternate source in the order, never per adapter and never inside the retry loop.
+    # GOP passes the ESPN event id and nothing else, so the id map is resolved here rather than
+    # per adapter -- but only once, and only when a non-ESPN source is actually *reached*. The
+    # default order puts ESPN first and it serves almost always, so resolving up front billed
+    # every ESPN page view for a Data API round trip (and a RuntimeWarning on a hiccup) for a
+    # row nothing would read.
     idmap_source = "caller" if idmap_row is not None else "not needed"
-    if idmap_row is None and any(s != "espn" for s in order):
-        idmap_row, idmap_source = _resolve_idmap_row(league, espn_id)
+    idmap_resolved = idmap_row is not None
     for src in order:
+        if src != "espn" and not idmap_resolved:
+            idmap_row, idmap_source = _resolve_idmap_row(league, espn_id)
+            idmap_resolved = True
         t0 = time.perf_counter()
         adapter = _adapter_for(league, src)
         if adapter is None:
-            attempts.append(Attempt(src, False, "not implemented"))
+            attempts.append(Attempt(src, False, _ADAPTER_IMPORT_ERRORS.get((league, src), "not implemented")))
             continue
         ctx = SourceContext(
             idmap_row=idmap_row,
