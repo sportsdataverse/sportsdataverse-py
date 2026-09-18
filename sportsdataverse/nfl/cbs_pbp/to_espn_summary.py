@@ -5,11 +5,15 @@ CBS's NFL feed is ``genius.feed.football.nfl`` -- the NFL's own GSIS feed via Ge
 
 * the play id is ``{espn_event_id}{cbs play id}``, because a CBS play ``id`` **is** the GSIS
   ``playId``; the drive id is ``{espn_event_id}{cbs drive_id}`` (both 1..N, like ESPN's);
-* possession is the row's own ``team_in_possession`` (the offence at the snap, even on an
-  interception or a lost fumble -- unlike the CFB twin, which needs the drive's team);
-* field position is ``subplays[0].*.yards_to_endzone``, which CBS states **from the
-  receiving team's perspective** on a kickoff, a punt and any change of possession, so those
-  rows are flipped ``100 - x``;
+* possession comes from the **drive** (:func:`_drive_teams`: the drives resource, else a
+  per-drive majority vote of the rows), with the kickoff row credited to the kicking team --
+  the row's own ``team_in_possession`` is the *post-play* team in 2019-2025 and only survives
+  as the fallback and as the per-subplay settle team;
+* field position is **not** a single flip rule: CBS's own ``yards_to_endzone`` frame moves
+  per row, per game and per era, so a kickoff reads its spot out of the GSIS text
+  (:func:`_kickoff_to_endzone`), a sack likewise (:func:`_sack_to_endzone`, because CBS
+  states the spot the sack *ended* at), and a punt or a turnover picks whichever of ``x`` /
+  ``100 - x`` continues its own drive (:func:`_choose_frame`);
 * the PAT is its own CBS row and is folded into its touchdown, ESPN's shape;
 * CBS emits **no admin rows at all** -- no timeout, no two-minute warning, no end of period
   -- so they are synthesized here from the per-play ``*_timeouts_remaining`` counters and
@@ -260,6 +264,32 @@ def _kickoff_to_endzone(text: str, kicker_abbrs: frozenset) -> Optional[int]:
         return None
     yards = int(match.group(2))
     return 100 - yards if match.group(1) in kicker_abbrs else yards
+
+
+#: The sack spot as GSIS writes it: ``"R.Wilson sacked at NYG 14 for -9 yards"`` (``ob`` on an
+#: out-of-bounds sack, ``no gain`` instead of ``0 yards``). The club code is the side of the
+#: field the ball ENDED on, and the yardage is signed from the offence.
+_SACK_SPOT_RE = re.compile(r"(?i)\bsacked\b(?:\s+ob)?\s+at\s+([A-Z]{2,3})\s+(\d{1,2})\s+for\s+(-?\d+|no gain)")
+
+
+def _sack_to_endzone(text: str, offense_abbrs: frozenset) -> Optional[int]:
+    """Pre-snap yards to the end zone on a sack, read off the GSIS text.
+
+    CBS's own ``yards_to_endzone`` on a sack row is the spot the play **ended** at, and from
+    2024 it is stated in the defence's frame as well -- measured over the 26-game capture, 24
+    sack rows (15 of 16 in 2025, 8 of 30 in 2024) land 3-63 yards out of place, worth up to
+    7.5 EPA on the sack and the same again on the play before it, whose end state is the
+    sack's start. ``_choose_frame`` cannot repair it: the drive's own continuity picks the
+    side but not the yardage. The text states both, in every era, so it is read instead:
+    the ball ended at ``ABBR NN`` and the offence lost ``X``, so it was snapped ``X`` closer.
+    """
+    match = _SACK_SPOT_RE.search(text or "")
+    if not match:
+        return None
+    ended = int(match.group(2))
+    to_endzone = (100 - ended) if match.group(1) in offense_abbrs else ended
+    gained = 0 if match.group(3).lower() == "no gain" else int(match.group(3))
+    return max(min(to_endzone + gained, 100), 0)
 
 
 def _choose_frame(candidate: int, expected: Optional[int]) -> int:
@@ -626,7 +656,7 @@ def _synthesize_admin_rows(
         this_period = (play.get("period") or {}).get("number")
         next_period = (emitted[index + 1].get("period") or {}).get("number") if index + 1 < len(emitted) else None
         if this_period and next_period != this_period:
-            has_overtime = any((p.get("period") or {}).get("number") or 0 > 4 for p in emitted)
+            has_overtime = any(((p.get("period") or {}).get("number") or 0) > 4 for p in emitted)
             type_id = _quarter_end_type_id(this_period, has_overtime)
             end_row = synthetic(index + 1, play, type_id, _type_object(type_id)["text"], 1)
             if end_row is None:
@@ -885,10 +915,20 @@ def _cbs_nfl_to_espn_summary(
         final_team = str(_subplay_body(settled[-1]).get("team_in_possession") or offense) if settled else offense
         possession_changed = final_team != offense
         to_endzone = _int(_subplay_body(subplays[0]).get("yards_to_endzone"), None) if subplays else None
+        own_abbrs = _text_abbrs(espn_team_of.get(offense, ""), abbrs.get(espn_team_of.get(offense, ""), ""))
         if kickoff:
-            to_endzone = _kickoff_to_endzone(
-                text, _text_abbrs(espn_team_of.get(offense, ""), abbrs.get(espn_team_of.get(offense, ""), ""))
-            ) or ((100 - to_endzone) if (to_endzone is not None and receiver_framed) else to_endzone)
+            to_endzone = _kickoff_to_endzone(text, own_abbrs) or (
+                (100 - to_endzone) if (to_endzone is not None and receiver_framed) else to_endzone
+            )
+        elif _SACKED_RE.search(text):
+            # CBS states the spot the SACK ended at, and from 2024 in the defence's frame; the
+            # text states the pre-snap spot in every era, so it wins outright here. A goal-line
+            # spot is 0, so the fallback tests for None rather than truthiness.
+            from_text = _sack_to_endzone(text, own_abbrs)
+            if from_text is not None:
+                to_endzone = from_text
+            elif to_endzone is not None:
+                to_endzone = _choose_frame(to_endzone, drive_spot.get(str(play.get("drive_id") or "")))
         elif to_endzone is not None and (kick or possession_changed):
             to_endzone = _choose_frame(to_endzone, drive_spot.get(str(play.get("drive_id") or "")))
         distance_raw = play.get("distance")

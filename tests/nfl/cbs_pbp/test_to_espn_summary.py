@@ -250,6 +250,67 @@ def test_timeouts_are_synthesized_and_an_implausible_drop_is_ignored(cle_jax_sum
     assert any("implausible timeouts-remaining drops" in n for n in notes)
 
 
+def test_a_sack_spot_is_read_from_the_text_not_from_cbs():
+    """CBS states where a sack ENDED, from 2024 in the defence's frame; the text states the snap.
+
+    Measured over the 26-game capture: 24 sack rows (15 of 16 in 2025, 8 of 30 in 2024) came
+    out 3-63 yards from ESPN's own spot, worth up to 7.5 EPA on the sack and the same again on
+    the play before it, whose end state is the sack's start.
+    """
+    from sportsdataverse.nfl.cbs_pbp.to_espn_summary import _sack_to_endzone
+
+    payload = _load()
+    plays, drives, scoreboard = _bodies(payload)
+    ordered = sorted(plays, key=lambda p: int(p["id"]))
+    # the real 2025 week 2 NYG @ DAL shape, on this game's visitor: a snap 77 yards out,
+    # sacked back to the offence's own 14, and CBS states "14" -- the post-play spot in the
+    # defence's frame.
+    victim = next(p for p in ordered if (p["subplays"]["subplay"] or [{}])[0].get("type") == "Rush")
+    sack = json.loads(json.dumps(victim))
+    sack["id"] = str(int(victim["id"]) + 1)
+    sack["score_on_play"], sack["score_type"] = "No", None
+    sack["down"], sack["distance"] = "2", "10"
+    sack["description"] = "3-R.Wilson sacked at CLE 14 for -9 yards (95-K.Clark)."
+    sack["subplays"]["subplay"] = [
+        {"type": "Sack", "order": "1", "sack": {"yards_to_endzone": "14", "yards_on_play": "-9"}}
+    ]
+    summary, _ = _cbs_nfl_to_espn_summary(
+        [p for p in ordered if p["id"] != sack["id"]] + [sack], drives, scoreboard, CLE_JAX_ROW
+    )
+    row = next(
+        p
+        for d in summary["drives"]["previous"]
+        for p in d["plays"]
+        if p["id"].endswith(sack["id"]) and p["text"].startswith("R.Wilson sacked")
+    )
+    # the ball ended on the offence's own 14 -> 86 to go; it was snapped 9 yards closer
+    assert row["start"]["yardsToEndzone"] == 77, row["start"]
+    # and the function itself, on both framings and on a zero-yard sack
+    assert _sack_to_endzone("D.Prescott sacked at DAL 29 for -9 yards (90-E.Garcia).", frozenset({"DAL"})) == 62
+    assert _sack_to_endzone("D.Prescott sacked at NYG 33 for -8 yards.", frozenset({"DAL"})) == 25
+    assert _sack_to_endzone("T.Taylor sacked ob at NYJ 39 for 0 yards.", frozenset({"NYJ"})) == 61
+    assert _sack_to_endzone("J.Allen scrambles for 5 yards.", frozenset({"BUF"})) is None
+
+
+def test_a_regulation_game_ends_on_a_clock_stoppage_row():
+    """The last synthesized admin row must be "End of Game", which the processor neutralises.
+
+    "End of Regulation" is in neither ``_CLOCK_STOPPAGE`` nor ``model_vars.clock_stoppage_vec``,
+    so typing a regulation finish that way makes the row a scrimmage play: it takes an end
+    state of its own, the last real play of the game takes *its* ``down = 0`` start as an end
+    state, and its EPA leaks into the team aggregates.
+    """
+    from sportsdataverse.nfl.model_vars import clock_stoppage_vec
+
+    payload = _load()
+    plays, drives, scoreboard = _bodies(payload)
+    summary, _ = _cbs_nfl_to_espn_summary(plays, drives, scoreboard, CLE_JAX_ROW)
+    rows = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    ends = [p["type"]["text"] for p in rows if p["type"]["text"].startswith("End")]
+    assert ends and ends[-1] == "End of Game", ends
+    assert all(text in clock_stoppage_vec for text in ends), ends
+
+
 # ---------------------------------------------------------------- gate 2: in progress
 
 
@@ -295,11 +356,13 @@ def test_the_open_drive_carries_no_invented_outcome(cle_jax_payload):
 @pytest.fixture(autouse=True)
 def _clear_scoreboard_cache():
     """The page cache is per process and would leak between tests (and across a stub)."""
-    from sportsdataverse.nfl.cbs_pbp.game_id import _PAGE_CACHE
+    from sportsdataverse.nfl.cbs_pbp.game_id import _PAGE_CACHE, _PAGE_MISSES
 
     _PAGE_CACHE.clear()
+    _PAGE_MISSES.clear()
     yield
     _PAGE_CACHE.clear()
+    _PAGE_MISSES.clear()
 
 
 def _stub_transport(html: str):

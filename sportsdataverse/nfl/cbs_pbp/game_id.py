@@ -82,9 +82,18 @@ CBS_SCOREBOARD_ABBRS: Dict[str, Tuple[str, ...]] = {
 
 #: Parsed scoreboard pages, keyed by ``(season, season_type, cbs_week)``. Cached for the
 #: life of the process: the page is ~1-5 MB and one NFL week is read once per worker.
-#: Only successful reads are cached -- caching a miss would make one transient failure
-#: permanent, and this runs on Game on Paper's request path.
 _PAGE_CACHE: Dict[Tuple[int, int, int], List[Dict[str, Any]]] = {}
+
+#: Weeks whose page came back with no cards, same key. A miss is remembered too, because the
+#: alternative is worse: ``dl_utils.download`` retries a 403 or a 5xx 15 times, and a
+#: postseason lookup tries three weeks, so one unreachable page re-billed per game is ~45
+#: requests and minutes of wall clock **per game** on Game on Paper's request path. A worker
+#: that has already failed this week hands over to the next source immediately instead.
+_PAGE_MISSES: set = set()
+
+#: Retries for the scoreboard page. The default 15 is sized for an asset a whole job depends
+#: on; this one is a best-effort lookup with a fall-through behind it, so it fails fast.
+_SCOREBOARD_RETRIES = 2
 
 
 def _regular_season_weeks(season: int) -> int:
@@ -138,13 +147,19 @@ def _week_cards(
     key = (int(season), int(season_type), int(cbs_week))
     if key in _PAGE_CACHE:
         return _PAGE_CACHE[key]
+    if key in _PAGE_MISSES:
+        return []
+    kwargs.setdefault("num_retries", _SCOREBOARD_RETRIES)
     try:
         resp = transport(url=_scoreboard_url(season, season_type, cbs_week), **kwargs)
     except Exception:  # noqa: BLE001 -- an unreachable page is a miss, never a raise
+        _PAGE_MISSES.add(key)
         return []
     cards = _parse_scoreboard(getattr(resp, "text", "") or "")
     if cards:
         _PAGE_CACHE[key] = cards
+    else:
+        _PAGE_MISSES.add(key)
     return cards
 
 
@@ -186,7 +201,10 @@ def _match_card(
         # schedule, which is right about who plays whom even when a game is rescheduled.
         # Two teams meet at most once per week, so the pair alone is already unique.
         hits = dated or hits
-    return hits[0] if len(hits) == 1 else None
+    # A page can render the same matchup twice (the grid card plus a "game of the week"
+    # module), both carrying the same ``id="game-{id}"``; that is still one game, so the
+    # uniqueness test counts distinct ids, not cards.
+    return hits[0] if len({c["cbs_game_id"] for c in hits}) == 1 else None
 
 
 def _resolve_cbs_game_id(

@@ -1164,6 +1164,12 @@ def _idmap_row_from_schedule(espn_id: int) -> Optional[Dict[str, Any]]:
         "season": game.get("season"),
         "season_type": season_type,
         "week": week,
+        # The date is the CBS resolver's only guard against matching the wrong game: without it
+        # ``_match_card`` joins on the club pair alone, and the postseason path tries three
+        # neighbouring weeks, so a regular-season meeting of the same two clubs on one of those
+        # pages would resolve as this game. ``gameday`` is a bare ET calendar date, which
+        # ``cbs_pbp.game_id._et_date`` already handles.
+        "kickoff_utc": game.get("gameday"),
         "nflverse_game_id": game.get("game_id"),
         "home_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(home)),
         "away_espn_team_id": _ESPN_TEAM_ID_BY_ABBR.get(str(away)),
