@@ -23,6 +23,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Mapping, Optional, Tuple
 
+import re
+
 import polars as pl
 
 from sportsdataverse.football.yahoo_common import (
@@ -45,6 +47,10 @@ __all__ = [
 ]
 
 
+#: ``nfl.t.21`` or a bare ``21``. A decimal (``"21.0"``) is deliberately NOT a match.
+_TEAM_NUMBER_RE = re.compile(r"(?:nfl\.t\.)?(\d+)")
+
+
 def _yahoo_nfl_game_id(
     kickoff_utc: Optional[str], home_espn_team_id: Any, *, et_date: Optional[str] = None
 ) -> Optional[str]:
@@ -58,10 +64,12 @@ def _yahoo_nfl_game_id(
     date = _kickoff_et_date(kickoff_utc) or (str(et_date).replace("-", "") if et_date else None)
     if not date or len(date) != 8 or not date.isdigit() or home_espn_team_id is None:
         return None
-    try:
-        number = int(str(home_espn_team_id).rsplit(".", 1)[-1])
-    except (TypeError, ValueError):
+    # ``nfl.t.21`` -> 21, ``21`` -> 21, but a float-typed id must MISS rather than resolve:
+    # ``str(21.0).rsplit(".")[-1]`` is ``"0"``, which would fetch ``nfl.g.<date>000``.
+    club = _TEAM_NUMBER_RE.fullmatch(str(home_espn_team_id).strip())
+    if club is None:
         return None
+    number = int(club.group(1))
     return f"nfl.g.{date}{number:03d}"
 
 

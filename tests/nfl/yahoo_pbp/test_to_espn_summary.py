@@ -27,7 +27,14 @@ from sportsdataverse.football.sources.dispatch import (
 )
 from sportsdataverse.football.sources.parity import GOP_HARD_COLUMNS, _compare_plays
 from sportsdataverse.nfl.yahoo_pbp.fetch import _resolve_row, _yahoo_nfl_game_id
-from sportsdataverse.nfl.yahoo_pbp.to_espn_summary import _STOPPAGE, _yahoo_to_espn_summary
+from sportsdataverse.nfl.yahoo_pbp.to_espn_summary import (
+    _RE_FUMBLE_TAIL,
+    _RE_PUNT,
+    _STOPPAGE,
+    _TWO_POINT_GOOD_RE,
+    _last,
+    _yahoo_to_espn_summary,
+)
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures"
 YAHOO_FIX = FIX / "yahoo_nfl"
@@ -495,3 +502,71 @@ def test_an_unresolvable_id_hands_over_without_fetching(monkeypatch):
     monkeypatch.setattr("sportsdataverse.nfl.yahoo_pbp.fetch._row_from_nflverse_schedule", lambda espn_id: None)
     with pytest.raises(SourceUnavailable, match="none computable"):
         _adapt(1, None, {"league": "nfl"})
+
+
+# ---------------------------------------------------------------------------------------
+# text attribution -- the club named in the text, not the one that shares its city
+# ---------------------------------------------------------------------------------------
+def test_a_timeout_is_charged_to_the_club_the_text_names_not_the_one_sharing_its_city():
+    """Giants/Jets and Rams/Chargers share a ``location``; the club map must not collapse.
+
+    Keying the club map on ``location`` put one entry under ``"New York"`` -- the away club,
+    which is written second -- and ``team_from_text`` scans it before either full name, so
+    **every** text-attributed timeout and penalty in those four games a season went to the away
+    club. ``posTeamTimeouts`` is an EP/WP input, so it is the rest of the half, not one row.
+    """
+    game = copy.deepcopy(_game(CLE_JAX_YAHOO_ID))
+    game["homeTeam"] = {**game["homeTeam"], "location": "New York", "fullName": "New York Giants"}
+    game["awayTeam"] = {**game["awayTeam"], "location": "New York", "fullName": "New York Jets"}
+    for play in game["playByPlay"]:
+        if str(play.get("playTypeId")) == "TIMEOUT" and "timeout" in str(play.get("text") or "").lower():
+            play["text"] = "New York Giants timeout"
+
+    summary, _ = _yahoo_to_espn_summary(game, CLE_JAX_ROW)
+    charged = [
+        p["text"]
+        for d in summary["drives"]["previous"]
+        + ([summary["drives"]["current"]] if summary["drives"].get("current") else [])
+        for p in d["plays"]
+        if p["type"]["text"] == "Timeout"
+    ]
+    assert charged, "the fixture carries no charged timeout"
+    # JAX is the HOME club (ESPN franchise 30); CLE is the away club the collision charged.
+    assert all("by JAX" in t for t in charged), charged
+
+
+def test_a_trailing_clause_is_cut_on_the_last_sentence_break_not_the_first():
+    """``_RE_FUMBLE_TAIL`` opens with ``.+?``, which spans a sentence.
+
+    ``finditer`` is leftmost-first, so it yields exactly ONE match -- the earliest break -- and
+    iterating it returns the first, not the last. On a punt whose return is its own sentence
+    that swallows the entire return leg into the capture, and ``body`` keeps only the kick, so
+    the re-skinned ESPN text books the return at 0 yards. The shape is not in the 30 captured
+    games (Yahoo comma-joins the return there), which is exactly why it needs a test.
+    """
+    text = (
+        "J.Hekker punted for 45 yards. D.Godchaux returned punt for 1 yard loss. "
+        "D.Godchaux fumbled. T.Lance recovered fumble"
+    )
+    match = _last(_RE_FUMBLE_TAIL, text)
+    assert match is not None
+    assert match.group("f") == "D.Godchaux", match.group("f")
+    assert text[: match.start()].endswith("for 1 yard loss")
+
+
+def test_a_failed_two_point_try_is_not_scored_as_a_good_one():
+    assert _TWO_POINT_GOOD_RE.search("2pt attempt converted")
+    assert _TWO_POINT_GOOD_RE.search("two point conversion is good")
+    assert not _TWO_POINT_GOOD_RE.search("two point conversion failed")
+
+
+def test_a_punt_return_touchdown_is_still_a_punt():
+    assert _RE_PUNT.match("J.Hekker punted for 45 yards, D.Godchaux returned punt for 22 yard touchdown")
+
+
+def test_a_float_typed_home_team_id_resolves_to_nothing_rather_than_team_000():
+    """``str(30.0).rsplit(".")[-1]`` is ``"0"``: a plausible, well-formed, wrong game id."""
+    assert _yahoo_nfl_game_id("2026-09-14T00:15Z", "nfl.t.30") == "nfl.g.20260913030"
+    assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30) == "nfl.g.20260913030"
+    assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30.0) is None
+    assert _yahoo_nfl_game_id("2026-09-14T00:15Z", "30.0") is None

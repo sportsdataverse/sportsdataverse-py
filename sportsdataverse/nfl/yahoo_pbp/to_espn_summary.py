@@ -91,7 +91,7 @@ _SUFFIX_RE = re.compile(r"\s+(?:Jr|Sr|II|III|IV|V)\.?$")
 _FG_YARDS_RE = re.compile(r"(?i)\b(\d{1,2})[- ]yard field goal")
 _RECOVERED_RE = re.compile(r"\[(nfl\.p\.\d+)\] recovered fumble")
 _PAT_GOOD_RE = re.compile(r"(?i)\bmade PAT\b|\bPAT is good\b")
-_TWO_POINT_GOOD_RE = re.compile(r"(?i)2pt attempt converted|two point conversion")
+_TWO_POINT_GOOD_RE = re.compile(r"(?i)2pt attempt converted|two point conversion (?:is )?(?:good|successful)")
 #: The try Yahoo writes **inside** a pre-2020 touchdown's text, e.g. "... for 2 yard touchdown.
 #: J.Tucker made PAT".
 #: ``". "`` (dot-SPACE) is the feed's sentence break: an abbreviated name never carries one
@@ -277,7 +277,7 @@ _RE_INT_LEGACY = re.compile(rf"^(?P<i>.+?) intercepted (?P<p>.+?) for {_RESULT}{
 _RE_SACK = re.compile(rf"^(?P<p>.+?) sacked(?: by (?P<t1>.+?)(?: and (?P<t2>.+?))?)? for {_RESULT}\.?$")
 _RE_PUNT = re.compile(
     r"^(?P<k>.+?) punted(?: for (?P<n>\d+) yards?)?"
-    r"(?:[,.]\s*(?:no return|(?P<r>.+?) returned punt for (?P<res>\d+ yard gain|\d+ yard loss|no gain|\d+ yards?)))?"
+    rf"(?:[,.]\s*(?:no return|(?P<r>.+?) returned punt for {_RESULT}))?"
     r"(?:,? tackled by (?P<t1>[^,]+?)(?: and (?P<t2>[^,]+?))?)?\.?$"
 )
 _RE_KICK_NO_RETURN = re.compile(
@@ -304,7 +304,7 @@ _RE_FUMBLE_TAIL = re.compile(
     r"\.\s+(?P<f>.+?) fumbled\.?(?:\s*(?P<r>.+?) recovered fumble(?: (?:and returned )?for (?P<res>[^.]+?))?)?\.?$"
 )
 #: A penalty the feed appends to the play it happened on. The club class allows "." ("St.
-#: Louis") and the match is anchored on a sentence break, so the leftmost break wins.
+#: Louis") and the match is anchored on a sentence break -- the LAST one (see :func:`_last`).
 _RE_PENALTY_TAIL = re.compile(
     r"\.\s+(?P<team>[A-Z][\w.'\- ]+?) committed (?P<n>\d+) yard penalty(?: \((?P<foul>[^)]+)\))?\.?$"
 )
@@ -373,11 +373,19 @@ class _TextContext:
 
 
 def _last(pattern: "re.Pattern[str]", text: str) -> "Optional[re.Match[str]]":
-    """The **last** match of ``pattern`` in ``text``; the trailing clauses are read right to left."""
-    match = None
-    for match in pattern.finditer(text):
-        pass
-    return match
+    r"""The match of ``pattern`` anchored on the **last** sentence break it can start at.
+
+    ``finditer`` is leftmost-first and both tail patterns open on ``\. `` with a class that
+    spans a sentence, so it yields exactly one match -- the earliest break -- and iterating it
+    returns the first, not the last. Scanning the candidate starts right to left is what
+    actually reads the clauses in the documented order: "... kicked off ... returned kickoff
+    ... . A committed 10 yard penalty. B committed 5 yard penalty" must cut on B's clause, not
+    swallow the return and A's penalty into the capture.
+    """
+    for index in range(len(text) - 1, -1, -1):
+        if text[index] == "." and (match := pattern.match(text, index)):
+            return match
+    return None
 
 
 def _sub_team(play: Mapping[str, Any], sub_type: str) -> Optional[str]:
@@ -940,14 +948,21 @@ def _yahoo_to_espn_summary(
     _, player_team = _lineups(game)
     if not names:
         notes.append("no lineups in the payload: play text keeps Yahoo's [nfl.p.N] placeholders")
+    # Full names first, and a location only when it names exactly one of the two clubs: the
+    # Giants/Jets and Rams/Chargers share theirs, so keying on it collapsed both to the away
+    # club and charged every named timeout and text-attributed penalty to the wrong side.
+    home_location = str((game.get("homeTeam") or {}).get("location") or "")
+    away_location = str((game.get("awayTeam") or {}).get("location") or "")
+    locations = {
+        str((game.get("homeTeam") or {}).get("fullName") or ""): str(yahoo_home),
+        str((game.get("awayTeam") or {}).get("fullName") or ""): str(yahoo_away),
+    }
+    if home_location != away_location:
+        locations[home_location] = str(yahoo_home)
+        locations[away_location] = str(yahoo_away)
     ctx = _TextContext(
         {str(yahoo_home): abbrs.get(home_id) or home_id, str(yahoo_away): abbrs.get(away_id) or away_id},
-        {
-            str((game.get("homeTeam") or {}).get("location") or ""): str(yahoo_home),
-            str((game.get("awayTeam") or {}).get("location") or ""): str(yahoo_away),
-            str((game.get("homeTeam") or {}).get("fullName") or ""): str(yahoo_home),
-            str((game.get("awayTeam") or {}).get("fullName") or ""): str(yahoo_away),
-        },
+        locations,
     )
 
     plays_raw = sorted(

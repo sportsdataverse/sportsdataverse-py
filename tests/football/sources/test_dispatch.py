@@ -100,9 +100,10 @@ def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, 
         ("espn", True),
     ]
     assert out.health["shield"] == "SourceUnavailable: shield down"
-    # cbs and yahoo are registered and hand over on their own terms; fox is still an empty slot
+    # cbs and yahoo are registered, so `alternates_unavailable` stubs them and they hand over on
+    # their own terms; fox is still an empty slot
     assert out.health["cbs"] == "SourceUnavailable: cbs down"
-    assert "no yahoo_game_id" in out.health["yahoo"]
+    assert out.health["yahoo"] == "SourceUnavailable: yahoo down"
     assert out.health["fox"] == "not implemented"
     assert fast_processor[0].summary is nfl_summary  # ESPN consumed its injected payload
 

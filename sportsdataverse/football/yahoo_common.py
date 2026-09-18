@@ -147,7 +147,7 @@ def _lineups(game: Mapping[str, Any]) -> Tuple[Dict[str, str], Dict[str, str]]:
                 continue
             if player.get("displayName"):
                 names[pid] = player["displayName"]
-            club = game.get(team_key) or player.get("teamId")
+            club = game.get(team_key)
             if club:
                 teams[pid] = str(club)
     return names, teams
