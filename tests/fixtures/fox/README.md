@@ -29,6 +29,9 @@ Captured 2026-06-09/12 by the `sdv-internal-refs/fox` crawl, used by
 | `cbk_team_gamelog.json` | `/cbk/team/27/gamelog` |
 | `cbk_event_data_pbp_first_half.json` | `/cbk/event/262052/data`, **trimmed** to `pbp.sections[0].groups[0]` (1ST HALF, 158 plays) |
 | `cfb_event_standings.json` | `/cfb/event/{id}/standings` |
+| `cbk_league_polls.json` | `/cbk/league/polls` (AP, Coaches, RPI -- RPI has no change column) |
+| `wcbk_league_polls.json` | `/wcbk/league/polls` (AP, Coaches, RPI) |
+| `cfb_league_polls.json` | `/cfb/league/polls` (CFP committee, AP, Coaches) |
 | `nfl_league_header.json` | `/nfl/league/header` |
 | `nfl_team_header.json` | `/nfl/team/10/header` |
 | `nfl_league_playernews.json` | `/nfl/league/playernews` |

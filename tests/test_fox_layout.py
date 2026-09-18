@@ -36,6 +36,7 @@ from sportsdataverse._fox_layout import (
     parse_odds_board,
     parse_period_pbp,
     parse_player_news,
+    parse_polls,
     parse_roster,
     parse_search_results,
     parse_segment_events,
@@ -60,6 +61,7 @@ ALL_PARSERS = [
     (parse_team_stats, ("1",)),
     (parse_team_gamelog, ("1",)),
     (parse_standings, ()),
+    (parse_polls, ()),
     (parse_teams, ()),
     (parse_league_leaders, ()),
     (parse_odds, ("1",)),
@@ -592,3 +594,184 @@ def test_fox_get_feed_targets_the_host_root(monkeypatch):
     monkeypatch.setattr(fox_layout, "_get", lambda url, **k: seen.update(url=url, **k) or {})
     fox_get_feed("foxpolls/v1/polls")
     assert seen["url"] == "https://api.foxsports.com/foxpolls/v1/polls"
+
+
+# --------------------------------------------------------------------------
+# 5. league/polls: a layout-stable ``team`` and a signed ``rank_change``
+# --------------------------------------------------------------------------
+# Blank headers are named by position, so ``v1`` is the movement magnitude on
+# AP/Coaches rows but the team name on RPI rows, and the magnitude alone drops
+# Fox's ``subType`` ("up"/"down"). Every (entity_id, team, change) below is read
+# straight from the committed captures.
+_AP, _RPI = "ASSOCIATED PRESS", "RPI RANKINGS"
+
+
+def _poll_rows(monkeypatch, prefix: str, fixture: str) -> Dict[Any, Dict[str, Any]]:
+    monkeypatch.setattr(fox_layout, "_get", lambda *a, **k: _load(fixture))
+    fn = getattr(__import__(f"sportsdataverse.{prefix}", fromlist=["*"]), f"fox_{prefix}_league_polls")
+    return {(r["section"], r["entity_id"]): r for r in fn().to_dicts()}
+
+
+_COACHES, _CFP = "USA TODAY COACHES POLL", "PLAYOFF SELECTION COMMITTEE"
+
+
+@pytest.mark.parametrize(
+    ("prefix", "fixture", "movers", "unmarked"),
+    [
+        (
+            "mbb",
+            "cbk_league_polls.json",
+            # AP Illinois +8 and Virginia -8: identical ``v1`` ("8"), opposite moves.
+            [
+                (_AP, "84", "Illinois", 8),
+                (_AP, "29", "Virginia", -8),
+                (_COACHES, "241", "Tennessee", 13),
+                (_COACHES, "303", "Gonzaga", -8),
+            ],
+            [(_AP, "57"), (_COACHES, "88")],
+        ),
+        (
+            "wbb",
+            "wcbk_league_polls.json",
+            [
+                (_AP, "65", "TCU", 8),
+                (_AP, "68", "West Virginia", -7),
+                (_COACHES, "38", "Duke", 5),
+                (_COACHES, "103", "Iowa", -5),
+            ],
+            [(_AP, "255")],
+        ),
+        (
+            "cfb",
+            "cfb_league_polls.json",
+            [
+                (_CFP, "11", "Miami (FL)", 2),
+                (_CFP, "8", "Virginia", -2),
+                (_AP, "11", "Miami (FL)", 8),
+                (_AP, "36", "Oklahoma", -5),
+                (_COACHES, "50", "Houston", 5),
+                (_COACHES, "90", "USC", -5),
+            ],
+            [(_CFP, "96"), (_AP, "113")],
+        ),
+    ],
+)
+def test_league_polls_rank_change_is_signed(monkeypatch, prefix, fixture, movers, unmarked):
+    rows = _poll_rows(monkeypatch, prefix, fixture)
+    for section, entity_id, team, change in movers:
+        row = rows[(section, entity_id)]
+        assert row["rank_change"] == change, (section, team)
+        assert row["team"] == team
+        # legacy positional columns keep today's meaning
+        assert row["v1"] == str(abs(change))
+        assert row["v2"] == team
+    # no movement indicator in the payload (unchanged or newly ranked) -> null
+    for key in unmarked:
+        assert rows[key]["rank_change"] is None, key
+
+
+def _polls_payload(fixture: str, *sections: str) -> Dict[str, Any]:
+    """A real polls capture cut down to the named sections (structure untouched)."""
+    raw = _load(fixture)
+    raw["standingsSections"] = [s for s in raw["standingsSections"] if s["title"] in sections]
+    assert len(raw["standingsSections"]) == len(sections)
+    return raw
+
+
+@pytest.mark.parametrize(
+    ("prefix", "payload"),
+    [
+        ("mbb", lambda: _load("cbk_league_polls.json")),
+        ("cfb", lambda: _load("cfb_league_polls.json")),
+        # a poll with no movement at all (RPI has no change column): all-null rank_change
+        ("mbb", lambda: _polls_payload("cbk_league_polls.json", _RPI)),
+        ("wbb", lambda: _polls_payload("wcbk_league_polls.json", _RPI)),
+    ],
+)
+def test_league_polls_rank_change_is_always_int64(monkeypatch, prefix, payload):
+    monkeypatch.setattr(fox_layout, "_get", lambda *a, **k: payload())
+    fn = getattr(__import__(f"sportsdataverse.{prefix}", fromlist=["*"]), f"fox_{prefix}_league_polls")
+    df = fn()
+    assert df.schema["rank_change"] == pl.Int64
+    pdf = fn(return_as_pandas=True)
+    assert str(pdf["rank_change"].dtype) == "Int64"
+    assert pdf["rank_change"].dropna().tolist() == df["rank_change"].drop_nulls().to_list()
+
+
+def test_frame_infers_over_every_row():
+    """Null-leading pulls > 100 rows: no append crash, no silently dropped columns."""
+    rpi = _polls_payload("cbk_league_polls.json", _RPI)
+    ap = _polls_payload("cbk_league_polls.json", _AP)
+    # 125 real no-movement rows, then the AP rows (ints + the AP-only ``pts`` column)
+    polls = frame(parse_polls(rpi) * 5 + parse_polls(ap), False)
+    assert polls.height == 150
+    assert polls.schema["rank_change"] == pl.Int64
+    assert polls["rank_change"].drop_nulls().len() == 20
+    standings = frame(parse_standings(rpi) * 5 + parse_standings(ap), False)
+    assert standings["pts"].drop_nulls().len() == 25
+
+
+def _mutated_ap(mutate) -> Dict[str, Any]:
+    raw = _polls_payload("cbk_league_polls.json", _AP)
+    mutate(raw)
+    return raw
+
+
+def _ap_table(raw):
+    return raw["standingsSections"][0]["standings"][0]
+
+
+def _none_table_first(raw):
+    raw["standingsSections"][0]["standings"].insert(0, None)
+
+
+def _plain_cells(raw):
+    for r in _ap_table(raw)["rows"]:
+        r["columns"] = [c.get("text") for c in r["columns"]]
+
+
+def _michigan_change(value):
+    def mutate(raw):
+        _ap_table(raw)["rows"][0]["columns"][1]["text"] = value  # Michigan, "2" / up
+
+    return mutate
+
+
+@pytest.mark.parametrize(
+    ("mutate", "team", "rank_change"),
+    [
+        (_none_table_first, "Michigan (57)", 2),  # a null table is skipped, the real one parses
+        (_plain_cells, "Michigan (57)", None),  # non-dict cells, as ``_cells`` tolerates
+        (_michigan_change(2), "Michigan (57)", None),  # non-str text
+        (_michigan_change("\u00b2"), "Michigan (57)", None),  # isdigit() but not int()-able
+    ],
+)
+def test_parse_polls_tolerates_malformed_cells(mutate, team, rank_change):
+    row = parse_polls(_mutated_ap(mutate))[0]
+    assert row["team"] == team
+    assert row["rank_change"] == rank_change
+
+
+def test_parse_polls_keeps_a_header_derived_team_column():
+    raw = _polls_payload("cbk_league_polls.json", _RPI)
+    header = raw["standingsSections"][0]["standings"][0]["headers"][0]["columns"][1]
+    header.update(text="TEAM", template="cell-text")  # a named team column, no cell-entity
+    rows = parse_polls(raw)
+    assert rows[0]["team"] == "Michigan"
+    assert all(r["team"] for r in rows)
+
+
+@pytest.mark.parametrize(
+    ("prefix", "fixture", "entity_id", "ap_team", "rpi_team"),
+    [
+        ("mbb", "cbk_league_polls.json", "87", "Michigan (57)", "Michigan"),
+        ("wbb", "wcbk_league_polls.json", "252", "UCLA (31)", "UCLA"),
+    ],
+)
+def test_league_polls_team_column_is_layout_stable(monkeypatch, prefix, fixture, entity_id, ap_team, rpi_team):
+    rows = _poll_rows(monkeypatch, prefix, fixture)
+    ap, rpi = rows[(_AP, entity_id)], rows[(_RPI, entity_id)]
+    assert ap["team"] == ap_team and ap["v2"] == ap_team
+    # RPI has no change column: the name sits in v1 (unchanged), rank_change is null
+    assert rpi["team"] == rpi_team and rpi["v1"] == rpi_team and rpi["v2"] is None
+    assert rpi["rank_change"] is None
