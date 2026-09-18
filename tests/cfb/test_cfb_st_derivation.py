@@ -328,6 +328,48 @@ def test_bare_punt_return_exclusions():
     assert out["yds_punt_return_source"].to_list() == [None] * 5
 
 
+def test_stepped_out_punt_return_is_derived():
+    # 282570264 (2008): the only outcome the text gives is the returner going out of
+    # bounds -- no yardage -- so the return was null; from the punter's 38 a 48-yard
+    # punt lands on the receiver's 14, and he ends on his 32 -> 18 yards
+    out = _run(
+        _punt("Jared Ballman punt for 48 yards, returned by Ryan Broyles out-of-bounds.", 2008, 62, 68, dist=48),
+        _snap(2008, 68, text="Chris Brown rush for 5 yards to the Okla 37."),
+    )
+    assert _cells(out, "yds_punt_return") == (18, "derived")
+    assert _cells(out, "yds_punted") == (48, "text")
+
+
+def test_stepped_out_punt_return_with_a_stated_yardage_stays_text():
+    out = _run(
+        _punt(
+            "Jared Ballman punt for 48 yards, returned by Ryan Broyles for 18 yards out-of-bounds.",
+            2008,
+            62,
+            68,
+            ret=18,
+            dist=48,
+        ),
+        _snap(2008, 68),
+    )
+    assert _cells(out, "yds_punt_return") == (18, "text")
+
+
+def test_other_stated_punt_outcomes_are_still_not_derived():
+    # the returner stepping out is the ONLY stated outcome that admits a derivation:
+    # a kick that itself went out of bounds, was downed, fair caught or recovered says
+    # where the ball died, and the processor's own 0 covers those (the fixture leaves
+    # them null to show the derivation does not step in)
+    rows = [
+        _punt("Jared Ballman punt for 48 yards, out-of-bounds.", 2008, 62, 68, dist=48),
+        _punt("Jared Ballman punt for 48 yards, downed by Ryan Reynolds.", 2008, 62, 68, dist=48),
+        _punt("Jared Ballman punt for 48 yards, recovered by Oklahoma.", 2008, 62, 68, dist=48),
+    ]
+    out = _run(*[x for r in rows for x in (r, _snap(2008, 68))]).filter(pl.col("punt") == True)
+    assert out["yds_punt_return"].to_list() == [None, None, None]
+    assert out["yds_punt_return_source"].to_list() == [None, None, None]
+
+
 def test_parsed_zero_return_is_kept_and_labelled_text():
     out = _run(
         _punt("Wilson Berry punt for 40 yds, fair catch by Zavion Thomas at the MSST 5", 2023, 50, 95, ret=0, dist=40),

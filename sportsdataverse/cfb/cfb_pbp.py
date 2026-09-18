@@ -1178,7 +1178,9 @@ def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataF
       two rows carry a flag or a safety. Touchback: the spot. Otherwise
       ``spot - landing`` from the end spot and a known return; skipped on kickoff
       touchbacks the text does not call touchbacks (2018+ fair catches).
-    * ``yds_punt_return`` on a punt whose text describes no outcome at all:
+    * ``yds_punt_return`` on a punt whose text describes no outcome at all, or whose only
+      outcome is the returner stepping out of bounds with no yardage stated ("returned by
+      Tim Crawley, out of bounds" -- a return whose length the text never gives):
       ``(100 - end.yardsToEndzone) - (start.yardsToEndzone - yds_punted)`` when that is
       positive and the next real play starts at that end spot with the receiving team
       in possession; otherwise left null. Not derived when the ball reached the end
@@ -1285,7 +1287,12 @@ def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataF
             & (pl.col("punt_tb") == False)
             & punt_return.is_null()
             & pl.col("yds_punted").is_not_null()
-            & ~text.str.contains(_PUNT_OUTCOME_RE).fill_null(True)
+            # no outcome stated at all, or the one outcome that states no yardage: the
+            # returner stepped out of bounds ("returned by X, out of bounds")
+            & (
+                ~text.str.contains(_PUNT_OUTCOME_RE).fill_null(True)
+                | text.str.contains(_RETURNER_STEPPED_OUT_RE).fill_null(False)
+            )
             & end.is_between(1, 99)
             & (start - pl.col("yds_punted") >= -10)
             # the ball reached the end zone and the receiver starts at the 20: an

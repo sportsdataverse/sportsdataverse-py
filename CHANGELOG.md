@@ -331,9 +331,11 @@ parsed value is never changed.
   kickoffs). 2004
   stores the catch spot there instead, so 2004 assumes the 35, requires the computed
   landing to equal ESPN's catch spot, and skips kicks after a flag or safety.
-- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the text
-  describes no outcome, and the next snap starts at that spot with the receiving team.
-  Returner names are not recoverable.
+- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the next snap
+  starts at that spot with the receiving team, and the text either describes no outcome or
+  states only that the returner stepped out of bounds -- "Jared Ballman punt for 48 yards,
+  returned by Ryan Broyles out-of-bounds.", a return whose length ESPN never gives (41 such
+  rows in a 1,329-game 2004-2026 sample, 25 of them derivable under the guards above). Returner names are not recoverable.
 - **Never derived**: penalties, fumbles, muffs, blocks, laterals, safeties,
   touchdowns, onside kicks, out-of-bounds *kickoffs*, "for a 1ST down", unchanged
   possession, out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a
