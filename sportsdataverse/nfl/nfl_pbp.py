@@ -2649,9 +2649,20 @@ class NFLPlayProcess(object):
                 scoring_play=pl.col("type.text").is_in(scores_vec),
                 yds_punted=pl.col("text").str.extract(r"(?i)(punt for \d+)").str.extract(r"(\d+)").cast(pl.Int32),
                 yds_punt_gained=pl.when(pl.col("punt") == True).then(pl.col("statYardage")).otherwise(None),
+                # "(Field Goal formation)" is ESPN's pre-snap formation annotation, not
+                # an attempt: 405 rows 2002-2026 (303 of them penalties enforced "- No
+                # Play", the rest fakes and aborted snaps) carry the annotation and no
+                # other mention of a kick, and every one of them booked fg_attempt True
+                # with no kicker. Drop the annotation before the text fallback reads it;
+                # a real kick in that formation still says "field goal" further along.
+                # ``punt`` needs no equivalent guard -- it reads type.text only, so the
+                # 1,365 "(Punt formation)" rows with no other "punt" mention are already
+                # False.
                 fg_attempt=pl.when(
                     (pl.col("type.text").str.contains(r"(?i)Field Goal")).or_(
-                        pl.col("text").str.contains(r"(?i)Field Goal"),
+                        pl.col("text")
+                        .str.replace_all(r"(?i)\(Field Goal formation\)", "")
+                        .str.contains(r"(?i)Field Goal"),
                     ),
                 )
                 .then(True)

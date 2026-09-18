@@ -477,3 +477,25 @@ def test_fourth_down_prepare_passes_the_game_roof_to_sdv_models(monkeypatch):
     assert seen and all(roofs == ["closed", "open", "outdoors"] for roofs in seen)
     # nfl4th's own fd / 2pt features keep nfl4th's mapping (open/closed -> retractable)
     assert d["retractable"].tolist() == [1, 1, 0] and d["dome"].tolist() == [0, 0, 0]
+
+
+# ---------------------------------------------------------------------------
+# Stage-1 tail: FG-formation penalties, mistyped admin rows, double initials
+# ---------------------------------------------------------------------------
+
+
+def test_a_penalty_in_field_goal_formation_is_not_a_field_goal_attempt(nyg_phi_2016, wsh_phi_2015):
+    """A "(Field Goal formation)" clause is a formation annotation, not an attempt."""
+    pen = _row(nyg_phi_2016, 4008744853519)
+    # "(5:36) (Field Goal formation) PENALTY on NYG-B.Jones, False Start, ... - No Play."
+    assert pen["type.text"] == "Penalty"
+    assert pen["fg_attempt"] is False
+    assert pen["fg_kicker_player_name"] is None
+    # a real kick in the same game still reads as an attempt
+    fg = _row(nyg_phi_2016, 400874485857)  # "Robbie Gould 35 Yd Field Goal"
+    assert fg["fg_attempt"] is True and fg["fg_kicker_player_name"] == "R.Gould"
+    # the punt twin needs no guard: ``punt`` reads type.text only, never the text
+    punt_pen = wsh_phi_2015.filter(pl.col("text").str.contains(r"\(Punt formation\) PENALTY"))
+    assert punt_pen.height == 1
+    assert punt_pen["punt"].to_list() == [False]
+    assert punt_pen["type.text"].to_list() == ["Penalty"]
