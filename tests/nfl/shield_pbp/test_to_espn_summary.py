@@ -277,7 +277,14 @@ def test_oldest_era_game_adapts():
     # the CLV/CLE gamebook rename must not push the ball into the wrong half of the field
     assert all(p["start"]["yardLine"] is None or 0 <= p["start"]["yardLine"] <= 100 for p in plays)
     assert all(p["start"]["yardsToEndzone"] is None or 0 <= p["start"]["yardsToEndzone"] <= 100 for p in plays)
-    assert notes == [] or all("timeouts" in n for n in notes)
+    # Stage 3 coverage study: pre-2014 ids do not join ESPN's own, and provenance must say so
+    assert any("< 2014" in n for n in notes), notes
+
+
+def test_modern_game_carries_no_era_note():
+    """The id-join caveat is era-specific: a 2026 game must not carry it."""
+    _summary, notes = shield_to_espn_summary(_load("2026_01_CLE_JAX.json.gz"), CLE_JAX_ROW)
+    assert not any("< 2014" in n for n in notes)
 
 
 def test_missing_timeouts_is_surfaced_as_a_note():

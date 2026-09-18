@@ -19,6 +19,12 @@ Documented divergences from a real ESPN summary (measured, see the Stage 2 Phase
   which is exactly what ESPN does.
 * Shield renumbers no timeouts, so timeout play ids are Shield's, not ESPN's (ESPN's own
   timeout ids do not line up with the GSIS ones either).
+* The play id is **always** ``{espn_event_id}{shield playId}`` and is never null, but it only
+  *equals* ESPN's id from the **2014** season on. The Stage 3 coverage study measured the
+  id-join rate against ESPN at ~1.00 for 2014+, 0.46-0.76 for 2005-2013 (ESPN truncates its
+  own play list) and ~0.04 for 2002-2004 (ESPN used its own sequence there). A pre-2014 game
+  therefore gets a note saying so: the ids stay stable and unique for Game on Paper, they just
+  cannot be joined to an ESPN-sourced frame.
 * ``boxscore`` is empty: ESPN's box is the only source of ESPN athlete ids, and the Shield
   path carries gsis ids instead. ``__attach_player_ids`` therefore fills nothing.
 """
@@ -655,6 +661,15 @@ def shield_to_espn_summary(
     _order_stoppages(emitted, event_id)
     _fill_end_state(emitted, home_id, scoring_teams)
 
+    season = game.get("season")
+    if season is not None and int(season) < 2014:
+        # Stage 3 coverage study: ESPN's own play ids only line up with the GSIS ones from
+        # 2014. The id emitted here is still stable and unique -- it just will not join an
+        # ESPN-sourced frame, which a shadow-mode comparison has to know.
+        notes.append(
+            f"season {season} < 2014: play ids are Shield-native "
+            f"({{espn_event_id}}{{playId}}); they do not join ESPN's own play ids"
+        )
     if not (summary_block.get("homeTeam") or {}).get("timeouts"):
         notes.append("summary.timeouts absent: live timeouts-remaining fall back to the play-derived count")
 
