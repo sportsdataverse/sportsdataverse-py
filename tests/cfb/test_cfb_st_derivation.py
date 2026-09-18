@@ -12,6 +12,9 @@ columns the processor has set by then. 2004 text carries no kick distances at al
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import polars as pl
 
 from sportsdataverse.cfb.cfb_pbp import _derive_special_teams_from_field_position as derive
@@ -29,6 +32,7 @@ _SCHEMA = {
     "punt": pl.Boolean,
     "punt_blocked": pl.Boolean,
     "punt_tb": pl.Boolean,
+    "punt_oob": pl.Boolean,
     "kickoff_play": pl.Boolean,
     "kickoff_tb": pl.Boolean,
     "kickoff_oob": pl.Boolean,
@@ -44,6 +48,7 @@ _DEFAULTS = {
     "punt": False,
     "punt_blocked": False,
     "punt_tb": False,
+    "punt_oob": False,
     "kickoff_play": False,
     "kickoff_tb": False,
     "kickoff_oob": False,
@@ -339,3 +344,80 @@ def test_non_kick_rows_carry_null_provenance_and_dtypes_hold():
     for col in ("yds_punted", "yds_kickoff", "yds_punt_return"):
         assert out.schema[col] == pl.Int32
         assert out.schema[f"{col}_source"] == pl.Utf8
+
+
+def test_punt_out_of_bounds_is_derived_unlike_a_kickoff_out_of_bounds():
+    # a punt out of bounds is dead where it crossed the sideline, so ESPN's end spot IS
+    # the landing spot (the processor already stores the 0 return): 2005 Boston College,
+    # with the text's distance hidden. A kickoff out of bounds is spotted by rule and
+    # stays excluded -- see test_kickoff_exclusions_leave_the_distance_null.
+    out = _run(
+        _punt("Johnny Ayers punt for 41 yards out-of-bounds.", 2005, 69, 72, ret=0, punt_oob=True),
+        _snap(2005, 72),
+    )
+    assert _cells(out, "yds_punted") == (41, "derived")
+
+
+def test_negative_parsed_values_are_not_treated_as_missing():
+    # "punt for a loss of N" stores -N and a punt returned backwards stores a negative
+    # return (both real, parsed upstream): a negative is a value, not a null, so it is
+    # kept, labelled "text", and the distance derived from it stays right.
+    out = _run(
+        _punt("Johnny Ayers punt for a loss of 12 yards", 2005, 90, 98, ret=0, dist=-12),
+        _snap(2005, 98),
+        _punt(
+            "Punt by Brandon Fields (MSU) returned -2 yards by Steve Breaston (MICH) to the Wolverines 13.",
+            2004,
+            45,
+            87,
+            ret=-2,
+        ),
+        _snap(2004, 87),
+    )
+    assert _cells(out, "yds_punted") == (-12, "text")
+    assert _cells(out, "yds_punt_return") == (0, "text")
+    # the 2004 row: the ball came down on the receiver's 15 and was returned BACK to the
+    # 13, so the punt was 30 yards -- reading -2 as missing would give 26
+    assert _cells(out, "yds_punted", 2) == (30, "derived")
+    assert _cells(out, "yds_punt_return", 2) == (-2, "text")
+
+
+# ------------------------------------------------------------------ through the pipeline
+def test_pipeline_derives_2004_kick_distances_on_a_stored_game():
+    """The production path: `CFBPlayProcess` on a committed 2004 summary.
+
+    2004 text states no kick distance, so this is the season the derivation actually
+    fires on -- and the only end-to-end check that a *derived* value reaches
+    ``plays_frame`` (``test_cfb_jersey_special_teams`` covers a game where every
+    distance is stated). Michigan State @ Michigan, 2004.
+    """
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    summary = json.loads((Path(__file__).parent / "fixtures" / "summary_243040130.json").read_text())
+    proc = CFBPlayProcess(gameId=243040130)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    plays = proc.plays_frame
+
+    for col in ("yds_punted", "yds_kickoff", "yds_punt_return"):
+        assert plays.schema[col] == pl.Int32
+        assert plays.schema[f"{col}_source"] == pl.Utf8
+    counts = {
+        c: dict(zip(*plays.group_by(f"{c}_source").len().sort(f"{c}_source").to_dict(as_series=False).values()))
+        for c in ("yds_punted", "yds_kickoff", "yds_punt_return")
+    }
+    # 10 of the 14 punts and all 9 kickoffs are derived; one punt distance is stated
+    assert counts["yds_punted"].get("derived") == 10
+    assert counts["yds_punted"].get("text") == 1
+    assert counts["yds_kickoff"].get("derived") == 9
+    # returns are all parsed from the text here: nothing derived
+    assert counts["yds_punt_return"].get("derived") is None
+    assert counts["yds_punt_return"].get("text") == 13
+
+    # a NEGATIVE parsed return (real: the returner lost 2) is not treated as missing,
+    # and the distance derived from it is the true 30, not 26
+    row = plays.filter(pl.col("text").str.contains("returned -2 yards by Steve Breaston", literal=True)).row(
+        0, named=True
+    )
+    assert (row["yds_punt_return"], row["yds_punt_return_source"]) == (-2, "text")
+    assert (row["yds_punted"], row["yds_punted_source"]) == (30, "derived")
