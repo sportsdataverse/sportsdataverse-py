@@ -274,3 +274,19 @@ def test_header_only_csv_keeps_the_documented_columns():
     pdf = parse_mlb_statcast_search(header_only, return_as_pandas=True)
     assert pdf.shape == (0, 119) and list(pdf.columns) == full.columns
     assert {c: str(pdf[c].dtype) for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, "Int64")
+
+
+def test_header_only_csv_unknown_columns_are_null_not_string():
+    """The 0-row frame keeps the documented columns; the columns with no values to infer a
+    dtype from carry ``Null`` (polars' unknown), so the frame widens into a populated one
+    instead of forcing its Float64 columns to String."""
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    full = parse_mlb_statcast_search(text)
+    empty = parse_mlb_statcast_search(text.splitlines()[0] + "\n")
+    assert empty.schema["release_speed"] == pl.Null and full.schema["release_speed"] == pl.Float64
+    assert empty.schema["pitch_type"] == pl.Null and full.schema["pitch_type"] == pl.String
+    assert {c: empty.schema[c] for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, pl.Int64)
+    widened = pl.concat([empty, full], how="diagonal_relaxed")
+    assert widened.schema == full.schema and widened.height == full.height
