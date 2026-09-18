@@ -12,6 +12,14 @@ The constants here are the one definition of that name shape; the NFL grammar
 in :mod:`sportsdataverse.nfl.nfl_pbp` composes its verb-anchored patterns from
 :data:`ABBREVIATED_NAME`, and the CFB processor reads the jersey-style
 special-teams clauses through the ``jersey_*`` expressions below.
+
+The same clauses also carry names in shapes that grammar does not cover -- the
+surname-first "Arreola,Carlos" / "Wesco Jr.,Bryant" stats.ncaa.org writes, and
+2005-2014's spelled-out "Bryan Hahnfeldt". Those are read through
+:data:`CLAUSE_NAME`, one loose name expression bounded by the kick and
+field-goal anchors built from it (:data:`CLAUSE_RETURNER_RE`,
+:data:`CLAUSE_FG_KICKER_RE`), so the CFB processor keeps no name regex of its
+own for them.
 """
 
 from __future__ import annotations
@@ -50,6 +58,16 @@ ABBREVIATED_NAME = (
     + r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|lll|ll)\b)?"
 )
 
+#: A name inside a vendor special-teams clause, WHATEVER its shape -- the abbreviated
+#: "#43 M.Chiumento", stats.ncaa.org's surname-first "Arreola,Carlos" / "Wesco Jr.,Bryant",
+#: and 2005-2014's spelled-out "Bryan Hahnfeldt". It is deliberately loose -- the clause
+#: anchors below are what bound it -- and the capture excludes "#", parentheses and digits,
+#: so it can neither run back across a jersey or a yardline nor take the spot token ("to the
+#: Bryant14  return 14 yards" names no returner and stays null). Group 1 is the name, never
+#: the jersey. This is the one definition of that shape; the CFB processor holds none of its
+#: own.
+CLAUSE_NAME = r"(?:#\d{1,3} )?([^#()\d]+?)"
+
 #: The jersey-prefixed form the 2025 college feed uses: "#43 M.Chiumento".
 #: Three digits: the vendor feed uses #99 and higher. Group 1 is the name.
 JERSEY_NAME = r"#\d{1,3} (" + ABBREVIATED_NAME + r")"
@@ -73,6 +91,16 @@ JERSEY_FAIR_CATCH_RE = r"(?i)fair catch by (?-i:" + JERSEY_NAME + r")"
 JERSEY_PUNTER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") punt "
 JERSEY_KICKER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") kickoff "
 JERSEY_FG_KICKER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") field goal attempt"
+
+#: The kick clause's returner in any name shape -- one expression for punts and kickoffs,
+#: since the call site already knows which kind of kick the row is. Anchored on the kick
+#: and its landing spot, which is what makes the loose name safe.
+CLAUSE_RETURNER_RE = (
+    r"(?:punt|kickoff) -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? " + CLAUSE_NAME + r" return -?\d+ yards?"
+)
+#: The field-goal kicker in any name shape: the name before "field goal attempt", at the
+#: text start, after the clock parenthetical, or after a jersey.
+CLAUSE_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)" + CLAUSE_NAME + r" field goal attempt"
 
 
 def _text(col: str) -> pl.Expr:
@@ -105,8 +133,9 @@ def jersey_name(pattern: str, col: str = "text") -> pl.Expr:
     """Capture group 1 of *pattern* on the play text: an abbreviated name without its jersey.
 
     Args:
-        pattern: A regex whose group 1 is the name (one of the ``JERSEY_*_RE``
-            name constants, or any pattern built on :data:`JERSEY_NAME`).
+        pattern: A regex whose group 1 is the name (one of the ``JERSEY_*_RE`` /
+            ``CLAUSE_*_RE`` name constants, or any pattern built on
+            :data:`JERSEY_NAME` or :data:`CLAUSE_NAME`).
         col: The play-text column. Defaults to ``"text"``.
 
     Returns:
@@ -228,7 +257,8 @@ def jersey_returner(col: str = "text") -> pl.Expr:
     """The returner: the jersey-prefixed name before ``return``, else the fair catcher.
 
     A muffed kick (``"muffed by #21 R.Niblett"``) names nobody -- a muff is not a
-    return.
+    return. A name written in another shape (surname-first, or spelled out) is read
+    through :data:`CLAUSE_RETURNER_RE` instead.
 
     Args:
         col: The play-text column. Defaults to ``"text"``.
@@ -289,6 +319,8 @@ def jersey_kicker(col: str = "text") -> pl.Expr:
 
 def jersey_fg_kicker(col: str = "text") -> pl.Expr:
     """The field-goal kicker: the jersey-prefixed name before ``field goal attempt``.
+
+    A name written in another shape is read through :data:`CLAUSE_FG_KICKER_RE`.
 
     Args:
         col: The play-text column. Defaults to ``"text"``.

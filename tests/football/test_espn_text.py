@@ -269,6 +269,60 @@ def test_jersey_helpers_read_real_name_shapes(expr, text, expected):
     assert pl.DataFrame({"text": [text]}).select(expr()).item() == expected
 
 
+# The clause patterns: the same special-teams clauses with a name in a shape the
+# abbreviated grammar does not cover -- surname-first (stats.ncaa.org) and, in
+# 2005-2014 text, spelled out. One name expression, two anchors; the CFB processor
+# reads them through jersey_name().
+CLAUSE = {
+    "returner, surname-first punt 401752723": (
+        espn_text.CLAUSE_RETURNER_RE,
+        "(12:31) Gerrand,Curtis punt 49 yards to the TEX22 Niblett,Ryan return 6 yards to the TEX28 "
+        "(Bailey,Tyler; Adams,Railyn) PENALTY SAM Illegal Formation (Wallace,Eli) 5 yards from SAM29 to SAM24. "
+        "NO PLAY.",
+        "Niblett,Ryan",
+    ),
+    "returner, spelled out punt 252950041": (
+        espn_text.CLAUSE_RETURNER_RE,
+        "Joe Radigan punt 48 yards to the UConn17, Brandon McLean return 32 yards to the UConn49, clock 13:50.",
+        "Brandon McLean",
+    ),
+    "returner, upper-case comma-space kickoff 272442305": (
+        espn_text.CLAUSE_RETURNER_RE,
+        "Webb, Scott kickoff 68 yards to the CM17, BROWN, Antonio return 17 yards to the CM34 "
+        "(McAnderson, Bra;Schermer, Jake), PENALTY KU holding declined",
+        "BROWN, Antonio",
+    ),
+    "returner, jersey kickoff 401858439": (
+        espn_text.CLAUSE_RETURNER_RE,
+        "(07:53) #93 Q.Warren kickoff 62 yards to the HOW03 #21 J.Washington lll return 21 yards to the HOW24 "
+        "(#34 J.Utzinger)",
+        "J.Washington lll",
+    ),
+    "returner, the spot token is not a name 401858439": (
+        espn_text.CLAUSE_RETURNER_RE,
+        "#93 Q.Warren kickoff 62 yards to the Bryant14  return 14 yards to the HOW24",
+        None,
+    ),
+    "fg kicker, surname-first after the clock 401752795": (
+        espn_text.CLAUSE_FG_KICKER_RE,
+        "David Olano 28 yd FG BLOCKED blocked by DJ Taylor (10:18) Olano,David field goal attempt from 28 yards "
+        "NO GOOD blocked by Taylor,DJ (H: Crimmins,Keelan, LS: Mahoney III,Patrick), clock 10:13 recovered by "
+        "ILL Olano,David at WIU18, End Of Play.",
+        "Olano,David",
+    ),
+    "fg kicker, spelled out at the text start 252440154": (
+        espn_text.CLAUSE_FG_KICKER_RE,
+        "Bryan Hahnfeldt field goal attempt from 34 GOOD, clock 08:41.",
+        "Bryan Hahnfeldt",
+    ),
+}
+
+
+@pytest.mark.parametrize(("pattern", "text", "expected"), list(CLAUSE.values()), ids=list(CLAUSE))
+def test_clause_patterns_read_any_name_shape(pattern, text, expected):
+    assert pl.DataFrame({"text": [text]}).select(espn_text.jersey_name(pattern)).item() == expected
+
+
 # Jersey-style yardage: a distance of one is singular and a return behind its catch
 # point reads "return for loss of N yards" -- both are signed yardages.
 YARDS = {

@@ -127,18 +127,6 @@ def _repair_entities(text: str) -> str:
     return html.unescape(_MANGLED_ENTITY_RE.sub(r"&\1;", text))
 
 
-#: The vendor template's kicker / returner clauses with any name shape: the capture excludes
-#: "#", parentheses and digits, so it can neither run back across a jersey or a yardline nor
-#: take the spot token ("to the Bryant14  return 14 yards" names no returner and stays null).
-_VENDOR_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)([^#()\d]+?) field goal attempt"
-_VENDOR_KICKOFF_RETURNER_RE = (
-    r"kickoff -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? (?:#\d{1,3} )?([^#()\d]+?) return -?\d+ yards?"
-)
-_VENDOR_PUNT_RETURNER_RE = (
-    r"punt -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? (?:#\d{1,3} )?([^#()\d]+?) return -?\d+ yards?"
-)
-
-
 #: A stated yardage: "no gain", "12 yds", "a loss of 9 yards", "-2 yards", "a 25 yard touchdown".
 #: The unit is required, so a spot ("to the Bayl 24") is never read as yardage, and a spot that
 #: does carry one ("to the 50 yard line") is recognised and refused.
@@ -5166,8 +5154,9 @@ class CFBPlayProcess(object):
                     pl.coalesce(
                         # "#0 B.Inniss return 16 yards" / "fair catch by #21 R.Niblett"
                         _espn_text.jersey_returner(),
-                        # other name shapes: "#2 R.Vander Zee", "#16 M.Beltran, Jr.", "#10 J.Malau’ulu"
-                        pl.col("text").str.extract(_VENDOR_PUNT_RETURNER_RE, 1),
+                        # the same clause with a name of any other shape: "#2 R.Vander Zee",
+                        # "#16 M.Beltran, Jr.", "Niblett,Ryan", 2005-07's "Brandon McLean"
+                        _espn_text.jersey_name(_espn_text.CLAUSE_RETURNER_RE),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",
@@ -5255,7 +5244,7 @@ class CFBPlayProcess(object):
                         # The same clause when the name is not "X.Surname" ("#10 J.Malau’ulu",
                         # "#21 J.Washington lll", "#9 J.Ruffin, Jr.") or is stats.ncaa.org's
                         # "Branch,Zachariah". Ahead of the legacy window, which reads "Jr." there.
-                        pl.col("text").str.extract(_VENDOR_KICKOFF_RETURNER_RE, 1),
+                        _espn_text.jersey_name(_espn_text.CLAUSE_RETURNER_RE),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
@@ -5274,9 +5263,10 @@ class CFBPlayProcess(object):
                 .then(
                     pl.coalesce(
                         _espn_text.jersey_fg_kicker(),
-                        # multi-word surnames ("#92 J.Echeverria Lozano", "#81 A.De La Poza") and
-                        # stats.ncaa.org's "(00:00) Gilbert,Max field goal attempt"
-                        pl.col("text").str.extract(_VENDOR_FG_KICKER_RE, 1),
+                        # multi-word surnames ("#92 J.Echeverria Lozano", "#81 A.De La Poza"),
+                        # stats.ncaa.org's "(00:00) Gilbert,Max field goal attempt" and 2005's
+                        # spelled-out "Bryan Hahnfeldt field goal attempt from 34 GOOD"
+                        _espn_text.jersey_name(_espn_text.CLAUSE_FG_KICKER_RE),
                         # 2004-2009: "30 yard field goal by Eric Neihouse (ASU) is good."
                         pl.col("text").str.extract(
                             r"(?i)yard field goal by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
