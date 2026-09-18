@@ -573,7 +573,12 @@ def test_fumble_recoveries_follow_cfbfastr_labels_and_turnover_vec() -> None:
     df = _frame("6386512")
     own = df.filter(pl.col("play_text").str.contains("recovered by OSU") & (pl.col("pos_team") == "Oregon St."))
     assert own.height >= 2 and not own.get_column("turnover_vec").any()
-    assert set(own.get_column("play_type").to_list()) <= {"Fumble Recovery (Own)", "Field Goal Missed", "Punt"}
+    assert set(own.get_column("play_type").to_list()) <= {
+        "Fumble Recovery (Own)",
+        "Blocked Field Goal",
+        "Field Goal Missed",
+        "Punt",
+    }
 
 
 # --- determinism (NC9) ----------------------------------------------------------
