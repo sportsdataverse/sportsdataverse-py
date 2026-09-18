@@ -302,7 +302,16 @@ def test_return_touchdowns_use_cfbfastr_labels_not_offensive_td_flags() -> None:
 # holding the ball after the play: a touchback is the receiver's 25 (75 to go).
 
 
-def test_kickoff_is_the_kicking_teams_play(field_position_frames: "list[tuple[str, pl.DataFrame]]") -> None:
+def test_kickoff_stays_with_the_receiver_and_is_measured_from_the_kicker(
+    field_position_frames: "list[tuple[str, pl.DataFrame]]",
+) -> None:
+    """cfbfastR's kickoff row: ``pos_team`` is the RECEIVING team, 65 to go from the kicker's 35.
+
+    ESPN/cfbfastR set ``pos_team`` to ``return_team`` on every kickoff (2024 parquet:
+    2,000/2,000 sampled rows) while ``start.yardsToEndzone`` is 65 -- the spot measured in
+    the KICKING team's direction. Possession and the yard-line frame are different teams,
+    so this pins both: a swap of possession to the kicker keeps 65 but fails ``pos_team``.
+    """
     n_touchbacks = 0
     for cid, df in field_position_frames:
         ko = df.filter(
@@ -315,6 +324,18 @@ def test_kickoff_is_the_kicking_teams_play(field_position_frames: "list[tuple[st
         tb = ko.filter(pl.col("play_text").str.contains("(?i)touchback"))
         n_touchbacks += tb.height
         assert tb.get_column("yards_to_goal_end").to_list() == [75] * tb.height, cid
+        # the kickoff sits in the RECEIVING team's drive: possession is never the team
+        # whose own side the ball was spotted on
+        for r in ko.select("pos_team", "def_pos_team", "yard_line").to_dicts():
+            assert r["yard_line"].startswith(("50",)) or not r["yard_line"].lower().startswith(
+                (r["pos_team"] or "\0")[:3].lower()
+            ), (cid, r)
+        drive1 = df.filter(pl.col("orig_play_type") == "kickoff").head(1)
+        after = df.filter(
+            pl.col("orig_play_type").is_in(["rush", "pass", "sack", "kneel"])
+            & (pl.col("game_play_number") > drive1.get_column("game_play_number")[0])
+        ).head(1)
+        assert drive1.get_column("pos_team")[0] == after.get_column("pos_team")[0], cid
     assert n_touchbacks > 0
 
 

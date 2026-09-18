@@ -698,9 +698,6 @@ def to_cfbfastr(
 
         if r["play_type"] in _MARKER_TYPES:
             continue
-        if kicker and kicker != offense:
-            # cfbfastR: a kickoff is the KICKING team's play (65 to go from its 35)
-            offense, defense, pts_off, pts_def = kicker, offense, pts_def, pts_off
         game_play_number += 1
         half_play_number += 1
         dn = r["drive_number"]
@@ -715,8 +712,12 @@ def to_cfbfastr(
 
         side, num = r["yard_line_side"], r["yard_line_number"]
         ytg = None
-        if side is not None and num is not None and offense in own_side:
-            ytg = 100 - num if own_side[offense] == side else num
+        # cfbfastR keeps a kickoff on the RECEIVING team (``pos_team`` == ESPN's
+        # ``return_team``) but measures its spot in the KICKING team's direction -- 65
+        # from the kicking team's own 35 -- so the kicker, not possession, sets the frame.
+        ref = kicker or offense
+        if side is not None and num is not None and ref in own_side:
+            ytg = 100 - num if own_side[ref] == side else num
         end_ytg = None
         if end and offense in own_side:
             end_side, end_num = end
@@ -849,13 +850,23 @@ def to_cfbfastr(
     for cur, nxt in zip(chain, [*chain[1:], None]):
         if cur["touchdown"]:
             cur["yards_to_goal_end"] = 0
+        elif cur["orig_play_type"] == "kickoff":
+            # the row already sits with the receiving team, so a returned kickoff's end
+            # spot needs no flip; only a touchback leaves no spot in the text
+            if "touchback" in (cur["play_text"] or "").lower():
+                cur["yards_to_goal_end"] = 75
+            elif cur["yards_to_goal_end"] is None and nxt is not None and nxt["half"] == cur["half"]:
+                cur["yards_to_goal_end"] = nxt["yards_to_goal"]
         elif nxt is not None and nxt["half"] == cur["half"] and None not in (cur["pos_team"], nxt["pos_team"]):
             if nxt["pos_team"] == cur["pos_team"]:
                 continue
             if "touchback" in (cur["play_text"] or "").lower():
                 cur["yards_to_goal_end"] = 75 if cur["orig_play_type"] == "kickoff" else 80
             elif cur["yards_to_goal_end"] is not None:
-                cur["yards_to_goal_end"] = 100 - cur["yards_to_goal_end"]
+                # a SAFETY hands over the ball but its end spot is already the old
+                # offense's own goal line, which is the frame cfbfastR keeps (~99)
+                if not cur["safety"]:
+                    cur["yards_to_goal_end"] = 100 - cur["yards_to_goal_end"]
             elif nxt["orig_play_type"] in ("rush", "pass", "sack", "kneel"):
                 cur["yards_to_goal_end"] = nxt["yards_to_goal"]
 
