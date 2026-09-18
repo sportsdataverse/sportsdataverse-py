@@ -224,7 +224,13 @@ def test_the_no_next_snap_end_state_is_derived_not_copied():
 
 
 def test_a_kickoff_is_framed_on_the_kicking_team_like_espns_own_feed():
-    """MUTATION TARGET. ESPN's raw summary puts a kickoff's ``start.team.id`` and yard line on the
+    """The frame's internal consistency only -- ``start.yardLine`` agrees with whichever club
+    ``start.team.id`` names, and the spot is the mapper's. That holds with or without the
+    re-frame, so this is NOT the mutation target for it;
+    ``test_the_ensuing_kickoff_is_kicked_by_the_team_that_just_scored`` is, and it is the one
+    that goes red when ``_kickoff_frame`` is turned off.
+
+    ESPN's raw summary puts a kickoff's ``start.team.id`` and yard line on the
     team that **kicked**; ``CFBPlayProcess`` derives ``pos_team`` as the return team from it.
     ``to_cfbfastr`` states the same spot but leaves possession on the drive's team, which on a
     stats.ncaa.org page is whichever club the row was printed under -- so passing it through made
@@ -252,10 +258,13 @@ def test_a_kickoff_is_framed_on_the_kicking_team_like_espns_own_feed():
     assert {p["start"]["team"]["id"] for p in kickoffs} <= {home, away}
 
 
-def test_the_ensuing_kickoff_is_kicked_by_the_team_that_just_scored():
-    """The derivation, checked against the game's own narrative: the club that does not have the
-    ball when play resumes is the one that kicked."""
-    served = summary("final_fbs_6386337")
+@pytest.mark.parametrize("name", list(GAMES))
+def test_the_ensuing_kickoff_is_kicked_by_the_team_that_just_scored(name):
+    """MUTATION TARGET for ``_kickoff_frame``. The derivation, checked against the game's own
+    narrative: the club that does not have the ball when play resumes is the one that kicked.
+    Turning the re-frame off drops pooled ``wp_before`` against ESPN from .9999 to .8725 over six
+    gate games."""
+    served = summary(name)
     ordered = plays(served)
     for index, play in enumerate(ordered):
         if not play["type"]["text"].startswith("Kickoff"):
@@ -401,3 +410,108 @@ def test_the_vendored_crosswalk_ships_with_the_package():
     table = _crosswalk()
     assert len(table) > 3000
     assert all(isinstance(k, str) and isinstance(v, str) for k, v in list(table.items())[:50])
+
+
+def test_a_same_prefix_matchup_resolves_two_different_clubs_from_the_crosswalk():
+    """MUTATION TARGET. The page links "Texas A&M Aggies", the linescore says "Texas" and
+    "Texas A&M", and crediting **every** linescore name the label starts with gave the shorter
+    club's side the longer club's ESPN id. Both sides then collapsed to one id and the
+    ``home_id == away_id`` guard refused the game -- on all 38 same-prefix matchups in the
+    2024-25 archive, including the FCS rivalries this source exists for (North Dakota, South
+    Dakota, Montana, Idaho). The longest matching name wins, and only it.
+    """
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _espn_team_ids_from_bundle
+
+    html = '<a href="/teams/100">Texas Longhorns</a><a href="/teams/200">Texas A&amp;M Aggies</a>'
+    crosswalk = {"100": "251", "200": "245"}
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("sportsdataverse.cfb.ncaa_pbp.fetch._crosswalk", lambda: crosswalk)
+        resolved = _espn_team_ids_from_bundle(html, {"Texas": "home", "Texas A&M": "away"})
+    assert resolved == {"home": "251", "away": "245"}
+    # and with the anchors in the other order, which is what made the bug order-dependent
+    flipped = '<a href="/teams/200">Texas A&amp;M Aggies</a><a href="/teams/100">Texas Longhorns</a>'
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("sportsdataverse.cfb.ncaa_pbp.fetch._crosswalk", lambda: crosswalk)
+        assert _espn_team_ids_from_bundle(flipped, {"Texas": "home", "Texas A&M": "away"}) == resolved
+
+
+def test_a_linescore_with_no_game_date_is_a_miss_not_an_indexerror():
+    """``_espn_team_ids_from_schedule`` is documented "never raises" and is the last leg of the
+    cascade, reached exactly when the payload is degraded -- which is also when the linescore
+    states no ``game_date``. ``"".split()[0]`` was an IndexError, not a miss."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _espn_team_ids_from_schedule
+
+    for stamp in (None, "", "   ", "not/a/date", "11/2025"):
+        assert _espn_team_ids_from_schedule("401762505", stamp) == {}
+
+
+def test_the_live_path_is_opt_in_and_never_taken_by_a_request_path_by_default(monkeypatch):
+    """MUTATION TARGET. With no archive configured every ``source="ncaa"`` call reaches
+    ``_fetch_bundle``; unguarded that is three paced pages behind a 45 s-navigation, 8 s-challenge,
+    3-attempt browser transport, and dispatch imposes no per-source time budget. It fails fast
+    today only because ``patchright`` is an optional extra nobody installed, which is not a
+    timeout. The guard must fire before any transport is touched."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import LIVE_FETCH_ENV, _fetch_bundle
+
+    monkeypatch.delenv(LIVE_FETCH_ENV, raising=False)
+    sentinel = object()
+
+    class _Boom:
+        def fetch_html(self, path):  # pragma: no cover - the guard must run first
+            raise AssertionError("the live transport was touched with the opt-in unset")
+
+    with pytest.raises(RuntimeError, match=LIVE_FETCH_ENV):
+        _fetch_bundle("6386337", fetcher=_Boom())
+    assert sentinel is not None
+
+    # and the adapter turns it into a hand-over, naming the opt-in rather than a traceback
+    row = {"espn_event_id": "401762505", "season": 2025, "ncaa_game_id": "6386337"}
+    monkeypatch.delenv("SDV_NCAA_MFB_ARCHIVE", raising=False)
+    with pytest.raises(SourceUnavailable, match=LIVE_FETCH_ENV):
+        adapter(401762505, _Ctx(payload=None, idmap_row=row))
+
+
+@pytest.mark.parametrize("name", list(GAMES))
+def test_rows_the_page_states_no_clock_for_carry_a_real_clock_not_a_0_00_fill(name):
+    """MUTATION TARGET, and the one the gate moved most. stats.ncaa.org prints ``(MM:SS)`` only
+    where the stat crew entered one; filling the rest with ``0:00`` puts those plays at the end of
+    their quarter, and the clock is an EP/WP input. Reverting to a ``0:00`` fill drops pooled
+    EP_start against ESPN from .9986 to .9487 over six gate games -- with, before this test, every
+    test in this module still green."""
+    from sportsdataverse.cfb.ncaa_pbp.to_espn_summary import _clocks, _parse_bundle
+
+    cfbfastr, _, _, drive_titles = _parse_bundle(bundle(name), GAMES[name][1])
+    rows = cfbfastr.to_dicts()
+    unstated = [i for i, r in enumerate(rows) if r.get("clock.minutes") is None and r.get("clock.seconds") is None]
+    assert unstated, "fixture no longer exercises the clockless branch"
+    clocks, carried = _clocks(rows, drive_titles)
+    assert carried == len(unstated)
+    # every clockless row takes a real clock from its own drive, never the 0:00 fill
+    assert [clocks[i] for i in unstated if clocks[i] == "0:00"] == []
+    # and it is the last clock the page actually stated, not an interpolation
+    for i in unstated:
+        stated_before = [_clock_text(rows[j]) for j in range(i) if rows[j].get("period") == rows[i].get("period")]
+        stated_before = [c for c in stated_before if c]
+        if stated_before:
+            assert clocks[i] in {stated_before[-1], *_drive_start_clocks(drive_titles)}
+    # the served summary carries them through
+    served = plays(summary(name))
+    assert sum(1 for p in served if p["clock"]["displayValue"] == "0:00") < len(unstated)
+
+
+def _clock_text(row: dict) -> str | None:
+    minutes, seconds = row.get("clock.minutes"), row.get("clock.seconds")
+    if minutes is None and seconds is None:
+        return None
+    return f"{int(minutes or 0)}:{int(seconds or 0):02d}"
+
+
+def _drive_start_clocks(drive_titles: pl.DataFrame) -> set:
+    if not drive_titles.height or "start_clock" not in drive_titles.columns:
+        return set()
+    out = set()
+    for value in drive_titles.get_column("start_clock").to_list():
+        parts = str(value or "").split(":")
+        if len(parts) == 2 and all(p.strip().isdigit() for p in parts):
+            out.add(f"{int(parts[0])}:{int(parts[1]):02d}")
+    return out

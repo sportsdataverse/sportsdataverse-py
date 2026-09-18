@@ -169,7 +169,7 @@ def test_a_registered_source_with_no_id_fails_on_its_own_terms():
     "not implemented" -- the two are different failures and only one is worth retrying."""
     with pytest.raises(AllSourcesFailed) as ei:
         _process_game("cfb", CFB_GAME_ID, source="ncaa", fallthrough=False)
-    (source, error), = [(a.source, a.error) for a in ei.value.attempts]
+    ((source, error),) = [(a.source, a.error) for a in ei.value.attempts]
     assert source == "ncaa"
     assert "SourceUnavailable" in error and "no ncaa_game_id" in error
 
