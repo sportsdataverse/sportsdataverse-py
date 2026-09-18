@@ -6,6 +6,7 @@ import warnings
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 
 def test_date_chunks_splits_inclusive_week():
@@ -270,3 +271,52 @@ def test_search_header_only_chunk_does_not_poison_populated_chunk_dtypes(monkeyp
     df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
     assert df.height == 46
     assert df.schema["release_speed"] == pl.Float64 and df.schema["game_pk"] == pl.Int64
+
+
+def test_empty_window_result_widens_into_a_populated_one(monkeypatch):
+    """A no-games window must not poison a caller's concat.
+
+    The header-only body has no values to infer dtypes from; read as String it would
+    silently widen a populated frame's Float64 columns (``diagonal_relaxed``) or make a
+    strict concat raise. Null is polars' unknown dtype, so it widens the other way.
+    """
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    bodies = {"2024-01-15": text.splitlines()[0] + "\n", "2024-06-15": text}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[params["game_date_gt"]]))
+
+    offseason = ex.mlb_statcast_search("2024-01-15", "2024-01-15")
+    june = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
+    assert offseason.shape == (0, 119) and offseason.schema["release_speed"] == pl.Null
+    for how in ("vertical_relaxed", "diagonal_relaxed"):
+        merged = pl.concat([offseason, june], how=how)
+        assert merged.height == june.height, how
+        assert merged.schema["release_speed"] == pl.Float64, (how, merged.schema["release_speed"])
+        assert merged.schema["game_pk"] == pl.Int64, how
+        assert merged.schema["pitch_type"] == pl.String, how
+
+
+def test_search_error_status_raises_instead_of_an_empty_window(monkeypatch):
+    """download() returns the last response when the retry budget is exhausted on a 403/5xx,
+    so the search must read the status: an outage is never reported as "no games"."""
+    from sportsdataverse.errors import AssetFetchError
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    class _Err:
+        status_code = 503
+        text = "<!DOCTYPE html><html><head><title>503 Service Unavailable</title></head></html>"
+
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Err())
+    with pytest.raises(AssetFetchError, match="503"):
+        ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01")
+
+
+def test_search_error_body_is_not_returned_as_the_documented_schema(monkeypatch):
+    """A 200 carrying an error page parses into a 1-column frame named after the error text;
+    it must never stand in as the schema-carrying empty result."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp("Error: invalid request\n"))
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
+    assert df.shape == (0, 0), df.columns

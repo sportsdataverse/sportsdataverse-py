@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 import polars as pl
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mlb.mlb_statcast_parsers import (
     _MLBAM_ID_COLUMNS,
     _csv_to_frame,
@@ -126,6 +127,12 @@ def _fetch_chunk(
     params.update(_translate_filters(filters))
     params.update(_ROUTE_FLAGS.get(base_url, {}))  # the route's population wins over a forwarded raw flag
     resp = download(base_url, params=params)
+    status = getattr(resp, "status_code", 200)
+    if status >= 400:
+        # download() returns the LAST response once the retry budget is exhausted on a
+        # retryable status (403/429/5xx), so without this the error page parses into an
+        # empty frame and the window silently looks like "no games".
+        raise AssetFetchError(f"Savant {base_url} answered HTTP {status} for {gt}..{lt} after retries.")
     text = getattr(resp, "text", resp if isinstance(resp, str) else "")
     return _csv_to_frame(text, uncast_ids=uncast_ids)
 
@@ -176,10 +183,12 @@ def _search_core(
     if populated:
         out = pl.concat(populated, how="diagonal_relaxed")
     else:
-        # Every chunk header-only (no games in the window): a header-only frame reads as all-String,
-        # so it is kept out of the concat above (String would widen the Float64 columns) but still
-        # carries the 119 documented columns with ids Int64.
-        out = next((f for f in frames if f.width), pl.DataFrame())
+        # Every chunk header-only (no games in the window): a header-only frame carries no values
+        # to infer dtypes from, so it is kept out of the concat above and stands in on its own,
+        # holding the 119 documented columns with ids Int64 and the rest Null (widens cleanly).
+        # A 200-with-error-body parses into a 1-column frame named after the error text -- require
+        # a real Statcast column so that is never handed back as "the documented schema".
+        out = next((f for f in frames if "game_pk" in f.columns), pl.DataFrame())
     if _uncast_ids is None:  # outermost call only
         _warn_uncast_ids(uncast_ids, stacklevel=3)  # _search_core <- mlb_statcast_search* <- caller
     if return_as_pandas:
@@ -219,7 +228,14 @@ def mlb_statcast_search(
             Savant params (``hfPT``, ``hfZ``, …) still work.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per pitch.
+        A polars (or pandas) DataFrame, one row per pitch. A window with no games
+        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
+        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
+        into a populated one.
+
+    Raises:
+        AssetFetchError: When Savant answers an error status for a chunk after
+            ``download``'s retries; an outage is never reported as an empty window.
 
     Example:
         Quick start::
@@ -251,19 +267,30 @@ def mlb_statcast_search_minors(
     """Minor-league Statcast search (``/statcast-search-minors/csv``), date-chunked.
 
     Same shape, columns, and 25,000-row chunking as :func:`mlb_statcast_search`,
-    against the MiLB CSV route with Savant's ``minors=true`` population flag sent
-    for you (the route path alone returns MLB games). Narrow further with
-    ``hfLevel`` (``"AAA|"``, ``"AA|"``, ``"A+|"``, ``"A|"``) and ``hfSea`` filters.
+    against the MiLB CSV route with Savant's ``minors=true&wbc=false`` population
+    flags sent for you (the route path alone returns MLB games). The route pins those
+    two flags and **overrides** a ``minors=``/``wbc=`` passed through ``**filters``;
+    every other filter rides along. Narrow further with ``hfLevel`` (``"AAA|"``,
+    ``"AA|"``, ``"A+|"``, ``"A|"``) and ``hfSea`` filters.
 
     Args:
         start_dt / end_dt: ``YYYY-MM-DD`` (inclusive).
         player_type: ``"batter"`` (default) or ``"pitcher"``.
         chunk_days: initial window size in days.
         return_as_pandas: return a pandas DataFrame instead of polars.
-        **filters: Savant filter params passed through verbatim.
+        **filters: the same friendly filter kwargs as :func:`mlb_statcast_search`
+            (``season``, ``game_type``, ``team``, …), unrecognized keys forwarded
+            verbatim -- except ``minors``/``wbc``, which this route pins and overrides.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per minor-league pitch.
+        A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no games
+        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
+        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
+        into a populated one.
+
+    Raises:
+        AssetFetchError: When Savant answers an error status for a chunk after
+            ``download``'s retries; an outage is never reported as an empty window.
 
     Example:
         Quick start::
@@ -295,20 +322,31 @@ def mlb_statcast_search_wbc(
     """World Baseball Classic Statcast search (``/statcast-search-world-baseball-classic/csv``).
 
     Same shape, columns, and 25,000-row chunking as :func:`mlb_statcast_search`,
-    against the WBC CSV route with Savant's ``wbc=true`` population flag sent for
-    you (the route path alone returns MLB spring training). Pass WBC date windows
-    (e.g. March of a WBC year); ``game_type`` is the tournament round (``F`` pool
-    play, ``D`` quarterfinals, ``L`` semifinals, ``W`` championship).
+    against the WBC CSV route with Savant's ``minors=false&wbc=true`` population
+    flags sent for you (the route path alone returns MLB spring training). The route
+    pins those two flags and **overrides** a ``minors=``/``wbc=`` passed through
+    ``**filters``; every other filter rides along. Pass WBC date windows (e.g. March
+    of a WBC year); ``game_type`` is the tournament round (``F`` pool play, ``D``
+    quarterfinals, ``L`` semifinals, ``W`` championship).
 
     Args:
         start_dt / end_dt: ``YYYY-MM-DD`` (inclusive).
         player_type: ``"batter"`` (default) or ``"pitcher"``.
         chunk_days: initial window size in days.
         return_as_pandas: return a pandas DataFrame instead of polars.
-        **filters: Savant filter params passed through verbatim.
+        **filters: the same friendly filter kwargs as :func:`mlb_statcast_search`
+            (``season``, ``game_type``, ``team``, …), unrecognized keys forwarded
+            verbatim -- except ``minors``/``wbc``, which this route pins and overrides.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per WBC pitch.
+        A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games
+        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
+        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
+        into a populated one.
+
+    Raises:
+        AssetFetchError: When Savant answers an error status for a chunk after
+            ``download``'s retries; an outage is never reported as an empty window.
 
     Example:
         Quick start::
