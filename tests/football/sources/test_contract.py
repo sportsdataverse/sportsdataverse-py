@@ -25,8 +25,11 @@ def test_real_espn_summaries_satisfy_the_contract(league, path):
     assert report.ok, (report.missing, report.invalid)
     assert report.gop_ok, report.gop_missing
     assert report.n_plays > 100 and report.n_drives > 10
-    # ESPN's own late inserts / duplicates only ever warn
-    assert all("feed order" in w or "duplicate" in w for w in report.warnings), report.warnings
+    # A real ESPN payload only ever produces the documented warnings: its own late inserts
+    # and duplicate play ids, and the fields ESPN's pre-2010 CFB feeds simply do not carry
+    # (``repaired`` / ``gop_soft`` levels -- the processor or Game on Paper covers those).
+    allowed = ("feed order", "duplicate", "absent: the processor fills it", "absent: Game on Paper falls back")
+    assert all(any(a in w for a in allowed) for w in report.warnings), report.warnings
 
 
 def _all_plays(summary):
