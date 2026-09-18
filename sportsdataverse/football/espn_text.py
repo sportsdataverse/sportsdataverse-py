@@ -13,6 +13,11 @@ in :mod:`sportsdataverse.nfl.nfl_pbp` composes its verb-anchored patterns from
 :data:`ABBREVIATED_NAME`, and the CFB processor reads the jersey-style
 special-teams clauses through the ``jersey_*`` expressions below.
 
+Beyond the names, the module holds the one definition of the turnover clause --
+:data:`TURNOVER_TAIL_RE`, read through :func:`before_turnover` and
+:func:`returned_for_touchdown` -- because both processors have to know where the
+offense's play ended before they credit a gain or a touchdown to it.
+
 The same clauses also carry names in shapes that grammar does not cover -- the
 surname-first "Arreola,Carlos" / "Wesco Jr.,Bryant" stats.ncaa.org writes, and
 2005-2014's spelled-out "Bryan Hahnfeldt". Those are read through
@@ -105,6 +110,62 @@ CLAUSE_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)" + CLAUSE_NAME + r" field goal att
 
 def _text(col: str) -> pl.Expr:
     return pl.col(col).cast(pl.Utf8, strict=False)
+
+
+#: The clause that hands the ball to the other team -- an interception, or a fumble and
+#: the recovery and return that follow it. Everything after it describes the defence's
+#: play, so a scrimmage-yardage extractor that reads past it credits the offense with the
+#: defender's return yards ("pass complete to R.Deehan, fumbled, recovered by D.Hagan at
+#: the Cal 18, D.Hagan for 82 yards ... for a TOUCHDOWN" booked 82 receiving yards).
+#: Group 1 is the tail -- the turnover and everything after it.
+TURNOVER_TAIL_RE = r"(?i)\b(?:intercept|fumbl)\w*\b(.*)$"
+
+
+def before_turnover(col: str = "text") -> pl.Expr:
+    """*col* truncated at the first interception / fumble clause.
+
+    Args:
+        col: The play-text column. Defaults to ``"text"``.
+
+    Returns:
+        pl.Expr: The text up to the turnover, unchanged where there is none.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.football.espn_text import before_turnover
+            df = pl.DataFrame({"text": ["J.Hurts up the middle for -4 yards. FUMBLES, N.Bolton for 36 yards, TOUCHDOWN."]})
+            df.with_columns(v=before_turnover())["v"].to_list()  # ["J.Hurts up the middle for -4 yards. "]
+    """
+    return _text(col).str.replace(TURNOVER_TAIL_RE, "")
+
+
+def returned_for_touchdown(col: str = "text") -> pl.Expr:
+    """Whether the text says the ball was intercepted or lost on a fumble and *then* returned for a score.
+
+    ESPN's ``type.text`` does not always say so -- 2005-2007 college pick-sixes are
+    labelled ``"Passing Touchdown"`` and some NFL ones ``"Interception Return"`` -- so the
+    offensive touchdown flags gate on this as well as on the play type. A try intercepted
+    after a touchdown ("... TOUCHDOWN. TWO-POINT CONVERSION ATTEMPT ... is intercepted.")
+    scores nothing after the turnover and reads ``False``.
+
+    Args:
+        col: The play-text column. Defaults to ``"text"``.
+
+    Returns:
+        pl.Expr: Boolean, ``False`` (never null) where there is no turnover.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.football.espn_text import returned_for_touchdown
+            df = pl.DataFrame({"text": ["B.Quinn pass intercepted by D.Adams at the NDame 31, returned for 31 yards for a TOUCHDOWN."]})
+            df.with_columns(v=returned_for_touchdown())["v"].to_list()  # [True]
+    """
+    tail = _text(col).str.extract(TURNOVER_TAIL_RE, 1)
+    return tail.str.contains(r"(?i)touchdown|(?-i:\bTD\b)").fill_null(False)
 
 
 def jersey_yards(pattern: str, col: str = "text") -> pl.Expr:

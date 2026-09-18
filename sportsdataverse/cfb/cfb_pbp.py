@@ -4136,7 +4136,12 @@ class CFBPlayProcess(object):
                 # "Passing Touchdown" / "Rushing Touchdown" labels alone; the text branch is
                 # kept for the generic labels of 2004-2013 ("Pass Completion" with "for a 44
                 # yard touchdown") but never for a return, fumble, kick or defensive type.
+                # ESPN's type alone does not catch every return TD: 2005-2007 pick-sixes
+                # are labelled "Passing Touchdown", so the text -- which says the ball was
+                # intercepted or lost and THEN scored -- gates ahead of the label (O3).
                 pass_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                .then(False)
+                .when(_espn_text.returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
@@ -4146,6 +4151,8 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 rush_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                .then(False)
+                .when(_espn_text.returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
@@ -4481,6 +4488,11 @@ class CFBPlayProcess(object):
             .then((pl.col("start.yardsToEndzone") - pl.col("end.yardsToEndzone")).cast(pl.Int64))
             .otherwise(pl.col("statYardage")),
         )
+        # The offense's gain ends at the turnover: every "for N yards" after an
+        # interception or a lost fumble is the defender's return, and reading past the
+        # clause booked it as receiving / rushing yards (O3). The guards still read the
+        # whole text, so the "intercepted" -> 0 branches below still fire.
+        _gain_text = _espn_text.before_turnover("cleaned_text")
         play_df = play_df.with_columns(
             # Rush yardage reads cleaned_text (direction word stripped) so
             # "rush middle for 5 yards" -> "rush for 5 yards" matches; raw `text`
@@ -4492,36 +4504,36 @@ class CFBPlayProcess(object):
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)for no gain")))
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for a loss of")))
-            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
-            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)rush for (-?\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)rush for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Run")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Rush")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
             # ESPN "N yds loss" / "N yds gain" phrasings (0.36-live port)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds loss")))
-            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)(\d+) y\w*ds loss").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)(\d+) y\w*ds loss").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) y\w*ds gain").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) y\w*ds gain").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == False),
             )
-            .then(pl.col("cleaned_text").str.extract(r"(?i)for (-?\d+) yards").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for (-?\d+) yards").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == True),
             )
-            .then(pl.col("cleaned_text").str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
             .otherwise(None),
             # Receiving yardage reads cleaned_text so the "complete to" guard fires
             # on modern "complete short middle to ..." phrasing (raw `text` left it
@@ -4537,9 +4549,9 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
                 .and_(pl.col("cleaned_text").str.contains(r"(?i)for a loss of")),
             )
-            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)for (-?\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for (-?\d+)").cast(pl.Int32))
             .when(
                 (pl.col("pass") == True).and_(
                     pl.col("cleaned_text").str.contains(
@@ -4551,7 +4563,7 @@ class CFBPlayProcess(object):
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)incompletion")))
             .then(0)
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)Yd pass")))
-            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
             .otherwise(None),
             yds_int_return=pl.when(
                 (pl.col("pass") == True)

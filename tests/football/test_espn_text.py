@@ -383,3 +383,72 @@ YARDS = {
 @pytest.mark.parametrize(("expr", "text", "expected"), list(YARDS.values()), ids=list(YARDS))
 def test_jersey_yardage_reads_singular_and_loss(expr, text, expected):
     assert pl.DataFrame({"text": [text]}).select(expr()).item() == expected
+
+
+# --- O3: the offense's gain ends at the turnover -------------------------------------------------
+
+#: ``(text, text before the turnover, returned for a touchdown)``. Verbatim ESPN text.
+TURNOVER = {
+    "cfb pick-six labelled a Passing Touchdown 252600087": (
+        "Brady Quinn pass intercepted by Darean Adams at the NDame 31, returned for 31 yards for a TOUCHDOWN.",
+        "Brady Quinn pass ",
+        True,
+    ),
+    "cfb catch, fumble, 82-yard opponent return 302540025": (
+        "Tyler Hansen pass complete to Ryan Deehan, fumbled, recovered by Cal Darian Hagan at the Cal 18, "
+        "Darian Hagan for 82 yards, to the Colo 0 for a TOUCHDOWN.",
+        "Tyler Hansen pass complete to Ryan Deehan, ",
+        True,
+    ),
+    "cfb rush stated before the fumble 253020077": (
+        "Tyrell Sutton rush for 83 yards, fumbled at the Mich 17, forced by Leon Hall, recovered by Leon Hall, "
+        "returned by Leon Hall for 83 yards for a TOUCHDOWN.",
+        "Tyrell Sutton rush for 83 yards, ",
+        True,
+    ),
+    "cfb rushing TD with a trailing interception note 400985386": (
+        "David Pindell run for 10 yds for a TD, (David Pindell intercepted )",
+        "David Pindell run for 10 yds for a TD, (David Pindell ",
+        False,
+    ),
+    "nfl pick-six labelled an Interception Return 400791590": (
+        "(8:17) (Shotgun) T.Romo pass short left intended for D.Street INTERCEPTED by T.McBride (B.Meriweather) "
+        "at DAL 20. T.McBride for 20 yards, TOUCHDOWN.",
+        "(8:17) (Shotgun) T.Romo pass short left intended for D.Street ",
+        True,
+    ),
+    "nfl run, fumble, 36-yard opponent return 401438030": (
+        "(9:48) (Shotgun) J.Hurts up the middle to PHI 45 for -4 yards. FUMBLES, touched at PHI 44, "
+        "RECOVERED by KC-N.Bolton at PHI 36. N.Bolton for 36 yards, TOUCHDOWN.",
+        "(9:48) (Shotgun) J.Hurts up the middle to PHI 45 for -4 yards. ",
+        True,
+    ),
+    "nfl the try, not the play, was intercepted 401671799": (
+        "(Shotgun) K.Hunt right guard for 2 yards, TOUCHDOWN. TWO-POINT CONVERSION ATTEMPT. "
+        "P.Mahomes pass to T.Kelce is intercepted. ATTEMPT FAILS.",
+        "(Shotgun) K.Hunt right guard for 2 yards, TOUCHDOWN. TWO-POINT CONVERSION ATTEMPT. P.Mahomes pass to "
+        "T.Kelce is ",
+        False,
+    ),
+    "nfl a clean completion is untouched": (
+        "J.Goff pass short left to A.St. Brown to DET 27 for 5 yards",
+        "J.Goff pass short left to A.St. Brown to DET 27 for 5 yards",
+        False,
+    ),
+}
+
+
+@pytest.mark.parametrize(("text", "expected", "_td"), list(TURNOVER.values()), ids=list(TURNOVER))
+def test_before_turnover_cuts_the_defence_s_return(text, expected, _td):
+    assert pl.DataFrame({"text": [text]}).select(espn_text.before_turnover()).item() == expected
+
+
+@pytest.mark.parametrize(("text", "_before", "expected"), list(TURNOVER.values()), ids=list(TURNOVER))
+def test_returned_for_touchdown_needs_the_score_after_the_turnover(text, _before, expected):
+    assert pl.DataFrame({"text": [text]}).select(espn_text.returned_for_touchdown()).item() is expected
+
+
+def test_turnover_helpers_are_null_safe():
+    frame = pl.DataFrame({"text": [None]}, schema={"text": pl.Utf8})
+    assert frame.select(espn_text.before_turnover()).item() is None
+    assert frame.select(espn_text.returned_for_touchdown()).item() is False
