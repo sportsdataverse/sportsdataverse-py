@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import logging
 import os
@@ -70,6 +71,7 @@ from sportsdataverse.nfl.ep_wp import (
     WP_SPREAD_FEATURES,
     _EP_POINT_VALUES,
     _XYAC_OUT_COLS,
+    _DEFAULT_ROOF,
     _espn_cp_features,
     _espn_ep_features,
     _espn_wp_features,
@@ -245,6 +247,107 @@ def _nfl_parse_penalty_spot(row):
     return f"{side}:{yardline}" if side else None
 
 
+# "L.Cooke punts 58 yards to CLV 20" / "... to end zone" / "... to 50": the kick
+# length plus the landing spot is the line of scrimmage (2008+ text).
+_NFL_PUNT_LOS_RE = re.compile(r"(?i)\bpunts (\d{1,2}) yards? to (?:(end zone)|(?:([A-Z]{2,3}) )?(\d{1,2}))\b")
+
+
+# One clause per penalty: "PENALTY on CAR-L.Kuechly, Defensive Pass Interference, 10 yards,
+# enforced at PHI 5 - No Play." Declined and offsetting clauses carry no enforced yardage.
+_NFL_PENALTY_CLAUSE_SPLIT_RE = re.compile(r"(?i)\bpenalty on\s+")
+_NFL_PENALTY_ENFORCED_RE = re.compile(r"(?i)^([A-Z]{2,3})\b.*?, (\d{1,2}) yards?, enforced\b")
+
+
+def _nfl_incompletion_end_y2e(text, start_y2e, down, offense_side, home_abbr, away_abbr):
+    """Yards to the end zone where an incompletion leaves the ball, in the end team's frame.
+
+    The pass gains nothing, so the ball stays at the line of scrimmage unless a penalty
+    is enforced, which moves it toward the penalized team's goal (ESPN enforced every one
+    of 839 sampled 2015-26 incompletion penalties at the line of scrimmage). Possession
+    changes only on a 4th down the defence was not penalised on, and the spot then flips
+    to the other team's frame -- the rule matches the next snap's team on 5,001 of 5,003
+    sampled incompletions, where ESPN's own ``end.team`` matches on 4,680. None when a
+    penalised team cannot be placed.
+    """
+    if start_y2e is None:
+        return None
+    pos, defence_penalised = start_y2e, False
+    for clause in _NFL_PENALTY_CLAUSE_SPLIT_RE.split(text or "")[1:]:
+        m = _NFL_PENALTY_ENFORCED_RE.match(clause)
+        if not m:
+            continue
+        penalized = _nfl_side_of_abbrev(m.group(1), home_abbr, away_abbr)
+        if penalized is None:
+            return None
+        defence_penalised |= penalized != offense_side
+        pos += int(m.group(2)) if penalized == offense_side else -int(m.group(2))
+    pos = min(max(pos, 1), 99)
+    return pos if down != 4 or defence_penalised else 100 - pos
+
+
+def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
+    """Yards to the end zone at a punt's line of scrimmage, read from its text (None if absent)."""
+    m = _NFL_PUNT_LOS_RE.search(text or "")
+    if not m:
+        return None
+    if m.group(2):
+        spot = 0
+    elif m.group(3) is None:
+        spot = int(m.group(4))
+    else:
+        side = _nfl_side_of_abbrev(m.group(3), home_abbr, away_abbr)
+        if side is None:
+            return None
+        spot = int(m.group(4)) if side != punting_side else 100 - int(m.group(4))
+    los = int(m.group(1)) + spot
+    return los if 0 < los < 100 else None
+
+
+# ESPN's summary names the venue but carries no roof; the models' one-hots come from
+# the game-level ``roof`` column through ep_wp's feature builders (_roof_one_hots).
+
+
+def _nfl_roof(game_info) -> str:
+    """The game's roof from ``gameInfo.venue.indoor`` when ESPN (or an adapter) supplies it."""
+    indoor = ((game_info or {}).get("venue") or {}).get("indoor")
+    return "dome" if indoor is True else "outdoors" if indoor is False else _DEFAULT_ROOF
+
+
+# "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),
+# "Timeout DENVER BRONCOS, clock 9:52.", "Indy timeout; 02:42 remaining 2nd quarter" (2002-2007).
+_NFL_TIMEOUT_CODE_RE = re.compile(r"(?i)\btimeout\s*#\s*\d+\s*(?:by\s+)?([A-Z]{2,3})\b")
+_NFL_TIMEOUT_NAME_RE = re.compile(r"(?i)^\s*timeout\s+(.+?),\s*clock\b|^\s*(.+?)\s+timeout\b")
+
+
+def _nfl_timeout_side(text, home, away):
+    """``"home"`` / ``"away"`` for the team a ``Timeout`` row charges, else None.
+
+    ``home`` / ``away`` are ``(abbreviation, location, mascot, name_alt)``. The
+    team token is parsed out of the text and matched whole -- a league code
+    through ``_NFL_TEXT_TEAM_ALIASES`` (``CLV`` -> ``CLE``), a name against the
+    location / mascot / "location mascot", else a nickname that starts with the
+    abbreviation ("Indy", "Philly") -- so ``LV`` inside ``CLV`` or ``la`` inside
+    "Cleveland" never charges the other side.
+    """
+    m = _NFL_TIMEOUT_CODE_RE.search(text or "")
+    if m:
+        return _nfl_side_of_abbrev(m.group(1), home[0], away[0])
+    m = _NFL_TIMEOUT_NAME_RE.search(text or "")
+    if not m:
+        return None
+    token = (m.group(1) or m.group(2)).strip().lower()
+
+    def names(team):
+        abbr, loc, mascot, alt = (str(x or "").lower() for x in team)
+        return {abbr, loc, mascot, alt, f"{loc} {mascot}"} - {""}
+
+    for match in (lambda t: token in names(t), lambda t: len(t[0]) >= 2 and token.startswith(str(t[0]).lower())):
+        h, a = match(home), match(away)
+        if h != a:
+            return "home" if h else "away"
+    return None
+
+
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
 # "fg" : float(p[2]),
@@ -396,6 +499,8 @@ class NFLPlayProcess(object):
         """
         pbp_txt = {"timeouts": {}}
         self._offline = summary is not None
+        # the pipeline writes into the payload (header home/away, ...): never the caller's dict
+        summary = copy.deepcopy(summary)
         if summary is not None and self.participants is None:
             # a supplied summary is the offline path: the pipeline must not reach
             # the network for participants (or a roster) unless they were passed in
@@ -501,24 +606,23 @@ class NFLPlayProcess(object):
         return self.json
 
     def nfl_pbp_json(self, **kwargs):
-        """Set ``self.json`` to the imported ``json`` module reference (legacy stub).
+        """Return the JSON payload currently attached to this :class:`NFLPlayProcess` instance.
 
-        Retained for API compatibility. Prefer ``espn_nfl_pbp()`` (live)
-        or ``nfl_pbp_disk()`` (offline) to populate ``self.json`` with an
-        actual ESPN payload.
+        ``espn_nfl_pbp()`` (live, or ``summary=`` offline) and ``nfl_pbp_disk()``
+        attach the payload; this returns it unchanged.
 
         Returns:
-            module: The Python ``json`` module reference (mirrors legacy behavior).
+            dict | None: The attached payload (``self.json``); ``None`` before one is attached.
 
         Example:
-            Stub usage (rarely needed -- prefer the live or disk loaders)::
+            Read back the payload a fetch attached::
 
                 from sportsdataverse.nfl import NFLPlayProcess
                 proc = NFLPlayProcess(gameId=401220403)
-                proc.nfl_pbp_json()  # populates `self.json` with the json module
+                proc.espn_nfl_pbp()
+                payload = proc.nfl_pbp_json()
         """
-        self.json = json
-        return self.json
+        return getattr(self, "json", None)
 
     def __helper_nfl_pbp_drives(self, pbp_txt):
         pbp_txt, init = self.__helper_nfl_pbp(pbp_txt)
@@ -572,8 +676,8 @@ class NFLPlayProcess(object):
             pbp_txt["plays"] = pd.concat([pbp_txt["plays"], prev_drives], axis=0, ignore_index=True)
         pbp_txt["plays"] = pl.from_pandas(pbp_txt["plays"])
         pbp_txt["timeouts"] = {
-            init["homeTeamId"]: {"1": [], "2": []},
-            init["awayTeamId"]: {"1": [], "2": []},
+            init["homeTeamId"]: {"1": [], "2": [], "OT": []},
+            init["awayTeamId"]: {"1": [], "2": [], "OT": []},
         }
 
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
@@ -617,6 +721,7 @@ class NFLPlayProcess(object):
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
                 # Defensive cast: ESPN sometimes returns this as a python float (no .astype()), sometimes as numpy. Same shape fix as the cfb_pbp version.
                 overUnder=pl.lit(float(np.asarray(init["overUnder"]).reshape(-1)[0])).first(),
+                roof=pl.lit(init["roof"]),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
@@ -655,9 +760,12 @@ class NFLPlayProcess(object):
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"])
+        # maintain_order: a play repeated under drives.current sorts after its
+        # drives.previous copy, so keeping the last copy keeps the fresher one
+        pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"], maintain_order=True)
 
-        # drop play text dupes intelligently, even if they have different play_id values
+        # drop true duplicates only: the same play id again, or an identical copy
+        # (same text and start state) on the next row
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -672,7 +780,9 @@ class NFLPlayProcess(object):
                 text_dupe=pl.lit(False),
             )
             .with_columns(
-                text_dupe=pl.when(
+                text_dupe=pl.when(pl.col("id") == pl.col("id").shift(-1))
+                .then(pl.lit(True))
+                .when(
                     (pl.col("start.team.id") == pl.col("lead_start_team"))
                     .and_(pl.col("start.down") == pl.col("lead_start_down"))
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
@@ -681,20 +791,32 @@ class NFLPlayProcess(object):
                     .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
                 )
                 .then(pl.lit(True))
-                .when(
-                    (pl.col("start.team.id") == pl.col("lead_start_team"))
-                    .and_(pl.col("start.down") == pl.col("lead_start_down"))
-                    .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
-                    .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
-                    .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
-                    .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
-                )
-                .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
             )
         )
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
+        home_names = tuple(init[f"homeTeam{k}"] for k in ("Abbrev", "Name", "Mascot", "NameAlt"))
+        away_names = tuple(init[f"awayTeam{k}"] for k in ("Abbrev", "Name", "Mascot", "NameAlt"))
+        timeout_side = pl.col("text").map_elements(
+            lambda t: _nfl_timeout_side(t, home_names, away_names),
+            return_dtype=pl.Utf8,
+        )
+        punt_los = (
+            pl.when(pl.col("type.text").is_in(punt_vec))
+            .then(
+                pl.struct("text", "start.team.id").map_elements(
+                    lambda r: _nfl_punt_los(
+                        r["text"],
+                        "home" if r["start.team.id"] == init["homeTeamId"] else "away",
+                        init["homeTeamAbbrev"],
+                        init["awayTeamAbbrev"],
+                    ),
+                    return_dtype=pl.Int64,
+                )
+            )
+            .otherwise(None)
+        )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -749,127 +871,96 @@ class NFLPlayProcess(object):
                 .then(True)
                 .otherwise(False)
                 .alias("end.is_home"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["homeTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
+                pl.when((pl.col("type.text") == "Timeout").and_(timeout_side == "home"))
                 .then(True)
                 .otherwise(False)
                 .alias("homeTimeoutCalled"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["awayTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
+                pl.when((pl.col("type.text") == "Timeout").and_(timeout_side == "away"))
                 .then(True)
                 .otherwise(False)
                 .alias("awayTimeoutCalled"),
             )
         )
 
-        pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
+        # The opening kicker receives the second-half kickoff: nflverse's first defteam of
+        # the game, i.e. the kicking team on a kickoff row (onside or re-kicked alike) and the
+        # defense on a scrimmage row when the feed lacks the opening kickoff.
+        opening = (
             pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
+            .filter(
+                (pl.col("type.text").is_in(clock_stoppage_vec) == False).and_(
+                    pl.col("type.text").str.contains(r"(?i)end of|coin toss|end period|wins toss") == False,
+                ),
+            )
+            .head(1)
+            .select(
+                pl.when(pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)\bkicks\b")))
+                .then(pl.col("start.team.id"))
+                .otherwise(pl.col("start.def_pos_team.id"))
+                .cast(pl.Int32),
+            )
         )
-        pbp_txt["timeouts"][init["homeTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
+        opening_kicker = opening.item() if opening.height else None
+        # Q2 -> Q3, Q4 -> OT and OT -> OT end a clock; Q1 -> Q2 and Q3 -> Q4 carry it over
+        period_over = (pl.col("period.number").shift(-1) != pl.col("period.number")).and_(
+            pl.col("period.number").is_in([1, 3]) == False,
         )
-        pbp_txt["timeouts"][init["awayTeamId"]]["1"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
+        # Timeouts are counted per nflverse game half (nfl-data native_pbp does the same):
+        # Q1-Q2, Q3-Q4 and overtime each start with 3, every overtime period sharing one pool.
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.when(pl.col("period.number") <= 2)
+            .then(pl.lit("1"))
+            .when(pl.col("period.number") <= 4)
+            .then(pl.lit("2"))
+            .otherwise(pl.lit("OT"))
+            .alias("_timeout_pool"),
         )
-        pbp_txt["timeouts"][init["awayTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
-        )
+        for team_id, called in ((init["homeTeamId"], "homeTimeoutCalled"), (init["awayTeamId"], "awayTimeoutCalled")):
+            for pool in ("1", "2", "OT"):
+                pbp_txt["timeouts"][team_id][pool] = (
+                    pbp_txt["plays"]
+                    .filter((pl.col(called) == True).and_(pl.col("_timeout_pool") == pool))
+                    .get_column("id")
+                    .to_list()
+                )
+        new_pool = pl.col("_timeout_pool") != pl.col("_timeout_pool").shift(1)
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.homeTeamTimeouts"),
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.awayTeamTimeouts"),
+                (3 - pl.col("homeTimeoutCalled").cast(pl.Int64).cum_sum().over("_timeout_pool"))
+                .clip(lower_bound=0)
+                .alias("end.homeTeamTimeouts"),
+                (3 - pl.col("awayTimeoutCalled").cast(pl.Int64).cum_sum().over("_timeout_pool"))
+                .clip(lower_bound=0)
+                .alias("end.awayTeamTimeouts"),
             )
             .with_columns(
-                pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3).alias("start.homeTeamTimeouts"),
-                pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3).alias("start.awayTeamTimeouts"),
-                pl.col("start.TimeSecsRem").shift(n=1).alias("end.TimeSecsRem"),
-                pl.col("start.adj_TimeSecsRem").shift(n=1).alias("end.adj_TimeSecsRem"),
+                # a new half (or overtime) starts with a full pool, not the last play's end count
+                pl.when(new_pool)
+                .then(3)
+                .otherwise(pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3))
+                .alias("start.homeTeamTimeouts"),
+                pl.when(new_pool)
+                .then(3)
+                .otherwise(pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3))
+                .alias("start.awayTeamTimeouts"),
+                # ESPN's clock is the snap, so a play ends when the next one starts
+                # (the lagged clock put the end before the start: 1800 vs 1792)
+                pl.col("start.TimeSecsRem").shift(n=-1).alias("end.TimeSecsRem"),
+                pl.col("start.adj_TimeSecsRem").shift(n=-1).alias("end.adj_TimeSecsRem"),
             )
             .with_columns(
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(1800))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                # ...unless the half, regulation or an overtime period runs out first;
+                # the last row of a live feed has no next snap and keeps its own clock
+                pl.when(period_over)
+                .then(pl.lit(0))
                 .otherwise(pl.col("end.TimeSecsRem"))
+                .fill_null(pl.col("start.TimeSecsRem"))
                 .alias("end.TimeSecsRem"),
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(3600))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                pl.when(period_over)
+                .then(pl.when(pl.col("period.number") == 2).then(pl.lit(1800)).otherwise(pl.lit(0)))
                 .otherwise(pl.col("end.adj_TimeSecsRem"))
+                .fill_null(pl.col("start.adj_TimeSecsRem"))
                 .alias("end.adj_TimeSecsRem"),
                 pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
                 .then(pl.col("start.homeTeamTimeouts"))
@@ -887,15 +978,7 @@ class NFLPlayProcess(object):
                 .then(pl.col("end.awayTeamTimeouts"))
                 .otherwise(pl.col("end.homeTeamTimeouts"))
                 .alias("end.defPosTeamTimeouts"),
-                pl.when(
-                    (pl.col("game_play_number") == 1).and_(
-                        pl.col("type.text").is_in(kickoff_vec),
-                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
-                    ),
-                )
-                .then(pl.col("homeTeamId"))
-                .otherwise(pl.col("awayTeamId"))
-                .alias("firstHalfKickoffTeamId"),
+                pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),
                 pl.col("period.number").alias("period"),
                 pl.when(pl.col("start.team.id") == pl.col("homeTeamId"))
                 .then(pl.lit(100) - pl.col("start.yardLine"))
@@ -912,6 +995,18 @@ class NFLPlayProcess(object):
                 pl.when(pl.col("start.yardLine").is_null() == False)
                 .then(pl.col("start.yardsToEndzone"))
                 .otherwise(pl.col("start.yardLine"))
+                .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # ESPN's start.yardsToEndzone disagrees with its own yardLine on punts
+                # (2024+ home punts carry the yardLine itself: JAX 22 -> 22, not 78) and on
+                # 2016-2024 incompletions (a stale value). A punt's line of scrimmage comes
+                # from its own text; an incompletion cannot move the ball, so its yardLine stands.
+                pl.when(punt_los.is_not_null())
+                .then(punt_los)
+                .when((pl.col("type.text") == "Pass Incompletion").and_(pl.col("start.yard").is_not_null()))
+                .then(pl.col("start.yard"))
+                .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
             )
             .with_columns(
@@ -948,15 +1043,32 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .with_columns(
+                # ESPN's end spot on an incompletion is as stale as its start (N6); the pass
+                # gains nothing, so it ends at the corrected start, moved by any enforced penalty
+                # and flipped to the defence's frame when a 4th down hands the ball over
+                pl.when(pl.col("type.text") == "Pass Incompletion")
+                .then(
+                    pl.struct("text", "start.yardsToEndzone", "start.down", "start.team.id")
+                    .map_elements(
+                        lambda r: _nfl_incompletion_end_y2e(
+                            r["text"],
+                            r["start.yardsToEndzone"],
+                            r["start.down"],
+                            "home" if r["start.team.id"] == init["homeTeamId"] else "away",
+                            init["homeTeamAbbrev"],
+                            init["awayTeamAbbrev"],
+                        ),
+                        return_dtype=pl.Int64,
+                    )
+                    .fill_null(pl.col("end.yardsToEndzone")),
+                )
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
         )
-        pbp_txt["firstHalfKickoffTeamId"] = np.where(
-            (pbp_txt["plays"]["game_play_number"] == 1)
-            & (pbp_txt["plays"]["type.text"].is_in(kickoff_vec))
-            & (pbp_txt["plays"]["start.team.id"] == init["homeTeamId"]),
-            init["homeTeamId"],
-            init["awayTeamId"],
-        )
-        pbp_txt["firstHalfKickoffTeamId"] = pbp_txt["firstHalfKickoffTeamId"][0]
+        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool")
+        pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:
             pbp_txt["plays"] = (
@@ -1228,6 +1340,7 @@ class NFLPlayProcess(object):
         init["awayTeamName"] = awayTeamName
         init["awayTeamAbbrev"] = awayTeamAbbrev
         init["awayTeamNameAlt"] = awayTeamNameAlt
+        init["roof"] = self.roof = _nfl_roof(pbp_txt.get("gameInfo"))
         self.homeTeamId = homeTeamId
         self.homeTeamMascot = homeTeamMascot
         self.homeTeamName = homeTeamName
@@ -1698,11 +1811,12 @@ class NFLPlayProcess(object):
                 .then(pl.col("pos_score_diff"))
                 .otherwise(pl.col("pos_score_diff_start"))
                 .alias("pos_score_diff_start"),
-                pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                # nflverse receive_2h_ko: a first-half play whose offense kicked the opening kickoff
+                pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("start.pos_team_receives_2H_kickoff"),
-                pl.when(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                pl.when((pl.col("period") <= 2).and_(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("end.pos_team_receives_2H_kickoff"),
@@ -3674,11 +3788,8 @@ class NFLPlayProcess(object):
             pl.when(scorer_is_pos).then(pl.col("pos_score_diff_start")).otherwise(-pl.col("pos_score_diff_start"))
         ).cast(pl.Float64) + 6.0
         qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
-        home_receives_2h = (
-            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-            .then(pl.col("start.pos_team_receives_2H_kickoff"))
-            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
-        )
+        # nflverse home_opening_kickoff: the home team received the opening kickoff
+        home_opening_kickoff = pl.col("firstHalfKickoffTeamId") != pl.col("homeTeamId")
         scorer_timeouts = (
             pl.when(scorer_is_pos).then(pl.col("start.posTeamTimeouts")).otherwise(pl.col("start.defPosTeamTimeouts"))
         )
@@ -3693,7 +3804,7 @@ class NFLPlayProcess(object):
             other.cast(pl.Utf8).alias("defteam"),
             pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
             pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
-            pl.lit("outdoors").alias("roof"),
+            pl.col("roof"),
             pl.col("period").alias("qtr"),
             qsr.alias("quarter_seconds_remaining"),
             pl.lit(10.0).alias("ydstogo"),
@@ -3701,8 +3812,8 @@ class NFLPlayProcess(object):
             lead_after_td.alias("score_differential"),
             scorer_timeouts.cast(pl.Int64).alias("posteam_timeouts_remaining"),
             other_timeouts.cast(pl.Int64).alias("defteam_timeouts_remaining"),
-            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
-            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            home_opening_kickoff.cast(pl.Int64).alias("home_opening_kickoff"),
+            pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),
             pl.col("overUnder").cast(pl.Float64).alias("total_line"),
         ).with_row_index("go_index")
         try:
@@ -5052,12 +5163,12 @@ class NFLPlayProcess(object):
             pl.col("start.defPosTeamTimeouts").alias("defteam_timeouts_remaining"),
             pl.col("pass").cast(pl.Int8).alias("pass"),
             pl.col("rush").cast(pl.Int8).alias("rush"),
+            pl.col("roof"),
         ).with_columns(
             # _make_cp_mutations derives `home` from posteam == home_team; the
             # ESPN frame already knows home via start.is_home, so synthesize a
             # home_team string that makes `home` resolve correctly.
             home_team=pl.when(pl.col("home_team_flag") == True).then(pl.col("posteam")).otherwise(pl.lit("__away__")),
-            roof=pl.lit("retractable"),
         )
 
         try:
@@ -5131,20 +5242,21 @@ class NFLPlayProcess(object):
         if any(c not in play_df.columns for c in required):
             return _with_null_decisions(play_df)
 
-        fourth = play_df.filter((pl.col("start.down") == 4).and_(pl.col("start.yardsToEndzone").is_not_null()))
+        # a 4th-down decision is a snap: timeouts, two-minute warnings and period ends
+        # carry the down but are not plays (nflverse has no such rows to score)
+        fourth = play_df.filter(
+            (pl.col("start.down") == 4)
+            .and_(pl.col("start.yardsToEndzone").is_not_null())
+            .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
+        )
         if fourth.height == 0:
             return _with_null_decisions(play_df)
 
         # quarter_seconds_remaining from the within-quarter clock (minutes/seconds).
         qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
-        # home_opening_kickoff: the home team received the opening kickoff iff it
-        # does NOT receive the 2H kickoff.  start.pos_team_receives_2H_kickoff is a
-        # per-play flag for the *current* posteam, so resolve it to the home team.
-        home_receives_2h = (
-            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-            .then(pl.col("start.pos_team_receives_2H_kickoff"))
-            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
-        )
+        # home_opening_kickoff: the home team received the opening kickoff, i.e. the
+        # opening kicker (firstHalfKickoffTeamId) is the away team
+        home_opening_kickoff = pl.col("firstHalfKickoffTeamId") != pl.col("homeTeamId")
 
         nflverse_view = fourth.select(
             pl.col("id").alias("play_id"),
@@ -5154,7 +5266,7 @@ class NFLPlayProcess(object):
             pl.col("start.def_pos_team.id").cast(pl.Utf8).alias("defteam"),
             pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
             pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
-            pl.lit("outdoors").alias("roof"),
+            pl.col("roof"),
             pl.col("period").alias("qtr"),
             qsr.alias("quarter_seconds_remaining"),
             pl.col("start.distance").cast(pl.Float64).alias("ydstogo"),
@@ -5162,10 +5274,10 @@ class NFLPlayProcess(object):
             pl.col("pos_score_diff_start").cast(pl.Float64).alias("score_differential"),
             pl.col("start.posTeamTimeouts").cast(pl.Int64).alias("posteam_timeouts_remaining"),
             pl.col("start.defPosTeamTimeouts").cast(pl.Int64).alias("defteam_timeouts_remaining"),
-            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
-            # nflverse spread_line is home-team-favored-positive; homeTeamSpread is
-            # the home team's point spread (negative when favored), so flip sign.
-            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            home_opening_kickoff.cast(pl.Int64).alias("home_opening_kickoff"),
+            # nflverse spread_line is positive when the home team is favoured, and so
+            # is homeTeamSpread (+|spread| when homeFavorite): same sign, no flip.
+            pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),
             pl.col("overUnder").cast(pl.Float64).alias("total_line"),
         )
 
@@ -6815,6 +6927,18 @@ class NFLPlayProcess(object):
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
 
+    def __pipeline_input(self):
+        """A pipeline replaces ``self.json`` with its result, so every run starts from a copy of
+        the payload it was given (``espn_nfl_pbp`` / ``nfl_pbp_disk`` / the caller), never from
+        the other pipeline's result."""
+        results = getattr(self, "_pipeline_results", {})
+        if not any(self.json is result for result in results.values()):
+            self._pipeline_source = self.json
+        return copy.deepcopy(self._pipeline_source)
+
+    def __pipeline_done(self, kind):
+        self._pipeline_results = {**getattr(self, "_pipeline_results", {}), kind: self.json}
+
     def run_processing_pipeline(self):
         """Run the full feature-engineering pipeline against ``self.json``.
 
@@ -6849,7 +6973,7 @@ class NFLPlayProcess(object):
                 sorted(slim.keys())
         """
         if self.ran_pipeline == False:
-            pbp_txt = self.__helper_nfl_pbp_drives(self.json)
+            pbp_txt = self.__helper_nfl_pbp_drives(self.__pipeline_input())
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -6882,6 +7006,8 @@ class NFLPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_pipeline = True
+                self.__pipeline_done("processing")
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none") and (
@@ -6954,7 +7080,9 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-            return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+            self.__pipeline_done("processing")
+        self.json = getattr(self, "_pipeline_results", {}).get("processing", self.json)
+        return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
     def run_cleaning_pipeline(self):
         """Run the lighter cleaning pipeline against ``self.json``.
@@ -6978,7 +7106,7 @@ class NFLPlayProcess(object):
                 "plays" in cleaned and "advBoxScore" not in cleaned
         """
         if self.ran_cleaning_pipeline == False:
-            pbp_txt = self.__helper_nfl_pbp_drives(self.json)
+            pbp_txt = self.__helper_nfl_pbp_drives(self.__pipeline_input())
             self.plays_json = pbp_txt["plays"]
 
             pbp_json = {
@@ -7011,6 +7139,8 @@ class NFLPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_cleaning_pipeline = True
+                self.__pipeline_done("cleaning")
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (
@@ -7063,7 +7193,9 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-            return self.json
+            self.__pipeline_done("cleaning")
+        self.json = getattr(self, "_pipeline_results", {}).get("cleaning", self.json)
+        return self.json
 
     def corrupt_pbp_check(self):
         """Detect ESPN payloads that look corrupt or partial.

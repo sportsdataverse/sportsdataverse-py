@@ -420,12 +420,44 @@ def _warn_if_season_beyond_known_eras(df: pl.DataFrame) -> None:
         )
 
 
+#: The roof assumed when a frame carries none (ESPN's summary never does) or a game's
+#: roof is null: the most common NFL venue, and a state the models were trained on.
+_DEFAULT_ROOF = "outdoors"
+
+
+def _roof_one_hots(roof: pl.Expr) -> dict[str, pl.Expr]:
+    """``retractable`` / ``dome`` / ``outdoors`` exactly as the bundled models were trained.
+
+    nfl-data ``model_training.play_level.make_model_mutations`` (EP, CP, xYAC, and
+    ``decision_models`` xpass): ``dome`` and ``closed`` roofs are domes, every other
+    roof (``outdoors``, ``open``) is outdoors, and ``retractable`` is 1 only for the
+    literal value ``"retractable"``, which nflverse never ships -- none of the boosters
+    splits on it. It is not nflfastR's mapping (open/closed/NA -> retractable), which
+    put the ~16% of 2023-24 plays under an open or closed roof in a state these models
+    never saw. A null roof takes
+    :data:`_DEFAULT_ROOF`.
+    """
+    roof = roof.fill_null(_DEFAULT_ROOF)
+    dome = roof.is_in(["dome", "closed"])
+    retractable = roof == "retractable"
+    return {
+        "retractable": retractable.cast(pl.Int32).alias("retractable"),
+        "dome": dome.cast(pl.Int32).alias("dome"),
+        "outdoors": ((dome == False) & (retractable == False)).cast(pl.Int32).alias("outdoors"),  # noqa: E712
+    }
+
+
+def _roof_expr(df: pl.DataFrame, roof_col: str = "roof") -> pl.Expr:
+    return pl.col(roof_col) if roof_col in df.columns else pl.lit(None, dtype=pl.Utf8)
+
+
 def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """Add era/roof/down one-hots and the ``home`` indicator.
 
-    Matches the R ``make_model_mutations()`` in nflfastR exactly:
-    era bins, retractable/dome/outdoors from ``roof``, down dummies,
-    home indicator from ``posteam == home_team``.  Warns
+    Matches the R ``make_model_mutations()`` in nflfastR: era bins, down
+    dummies, home indicator from ``posteam == home_team`` -- except the roof
+    one-hots, which follow the trainer of the bundled models
+    (:func:`_roof_one_hots`).  Warns
     (:class:`EraCoverageWarning`) when a season lies beyond
     ``ERA_MAX_KNOWN_SEASON`` instead of absorbing it into ``era4`` silently.
     """
@@ -446,25 +478,7 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
         pl.when(pl.col("posteam") == pl.col("home_team")).then(1).otherwise(0).alias("home"),
     )
 
-    # Roof one-hots: open/closed/null → retractable; dome → dome; outdoors → outdoors
-    if "roof" in df.columns:
-        df = df.with_columns(
-            pl.when(pl.col("roof").is_null() | pl.col("roof").is_in(["open", "closed"]))
-            .then(1)
-            .otherwise(0)
-            .alias("retractable"),
-            pl.when(pl.col("roof") == "dome").then(1).otherwise(0).alias("dome"),
-            pl.when(pl.col("roof") == "outdoors").then(1).otherwise(0).alias("outdoors"),
-        )
-    else:
-        # Default: treat as retractable when roof is unknown
-        df = df.with_columns(
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
-        )
-
-    return df
+    return df.with_columns(*_roof_one_hots(_roof_expr(df)).values())
 
 
 def _add_wp_aux(df: pl.DataFrame) -> pl.DataFrame:
@@ -562,21 +576,7 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     else:
         df = df.with_columns(pl.col("qb_hit").cast(pl.Int8))
 
-    if "roof" in df.columns:
-        df = df.with_columns(
-            pl.when(pl.col("roof").is_null() | pl.col("roof").is_in(["open", "closed"]))
-            .then(1)
-            .otherwise(0)
-            .alias("retractable"),
-            pl.when(pl.col("roof") == "dome").then(1).otherwise(0).alias("dome"),
-            pl.when(pl.col("roof") == "outdoors").then(1).otherwise(0).alias("outdoors"),
-        )
-    else:
-        df = df.with_columns(
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
-        )
+    df = df.with_columns(*_roof_one_hots(_roof_expr(df)).values())
 
     df = df.with_columns(
         pl.when(pl.col("down") == 1).then(1).otherwise(0).alias("down1"),
@@ -599,9 +599,8 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
 # wp_naive.ubj), so a fix to the feature engineering in one path must be
 # mirrored in the other.
 #
-# Roof: ESPN play-level data doesn't carry a per-play roof type, so all
-# ESPN plays default to retractable=1 / dome=0 / outdoors=0.  This matches
-# how nflfastR handles missing roof data in its make_model_mutations().
+# Roof: the feature builders read a game-level ``roof`` column (NFLPlayProcess
+# derives one); without it every play takes _DEFAULT_ROOF (see _roof_one_hots).
 
 
 def _espn_ep_features(
@@ -617,6 +616,7 @@ def _espn_ep_features(
     down4_col: str = "down_4",
     pos_timeouts_col: str = "start.posTeamTimeouts",
     def_timeouts_col: str = "start.defPosTeamTimeouts",
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 18-feature EP matrix (nflfastR format) from ESPN play data.
 
@@ -641,6 +641,8 @@ def _espn_ep_features(
             ``"down_1_end"`` … ``"down_4_end"`` for the end-of-play variant.
         pos_timeouts_col: Possessing-team timeouts remaining.
         def_timeouts_col: Defending-team timeouts remaining.
+        roof_col: Game roof (``outdoors`` / ``dome`` / ``closed`` / ``open``);
+            :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`EP_FEATURES` column order.
@@ -653,14 +655,15 @@ def _espn_ep_features(
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
     )
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(half_sec_col).alias("half_seconds_remaining"),
             pl.col(yardline_col).alias("yardline_100"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(1).alias("retractable"),  # ESPN data: default retractable
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
+            roof["retractable"],
+            roof["dome"],
+            roof["outdoors"],
             pl.col(ydstogo_col).alias("ydstogo"),
             pl.col("_era0").alias("era0"),
             pl.col("_era1").alias("era1"),
@@ -755,8 +758,8 @@ def _espn_wp_features(
 # ESPN-format adapters — CP and XYAC
 # ---------------------------------------------------------------------------
 # Both _espn_cp_features and _espn_xyac_features produce the same (N, K)
-# float32 arrays as the nflverse path via _make_cp_mutations.  ESPN plays
-# default to retractable=1/dome=0/outdoors=0 (no per-play roof column).
+# float32 arrays as the nflverse path via _make_cp_mutations, roof one-hots
+# included (read from ``roof``; _DEFAULT_ROOF when the frame has none).
 
 
 def _espn_cp_features(
@@ -772,6 +775,7 @@ def _espn_cp_features(
     pass_middle_col: str | None = None,
     qb_hit_col: str | None = None,
     home_col: str = "start.is_home",
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 18-feature CP matrix (nflfastR format) from ESPN play data.
 
@@ -794,6 +798,7 @@ def _espn_cp_features(
         qb_hit_col: Boolean/int QB-hit indicator column.  When ``None`` or
             not present, defaults to 0.
         home_col: Boolean home-team indicator.
+        roof_col: Game roof; :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`CP_FEATURES` column order.
@@ -811,6 +816,7 @@ def _espn_cp_features(
         else pl.lit(0)
     )
     qb_hit = pl.col(qb_hit_col).cast(pl.Int8) if qb_hit_col is not None and qb_hit_col in play_df.columns else pl.lit(0)
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(air_yards_col).alias("air_yards"),
@@ -827,9 +833,9 @@ def _espn_cp_features(
             pl.col("_era4").alias("era4"),
             qb_hit.alias("qb_hit"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(0).alias("outdoors"),
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
+            roof["outdoors"],
+            roof["retractable"],
+            roof["dome"],
             pl.col("_distance_to_sticks").alias("distance_to_sticks"),
         )
         .to_numpy(allow_copy=True)
@@ -850,6 +856,7 @@ def _espn_xyac_features(
     home_col: str = "start.is_home",
     qb_hit_col: str | None = None,
     pass_middle_col: str | None = None,
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 19-feature XYAC matrix (nflfastR format) from ESPN play data.
 
@@ -870,6 +877,7 @@ def _espn_xyac_features(
         home_col: Boolean home-team indicator.
         qb_hit_col: QB-hit indicator column.  Defaults to 0 when absent.
         pass_middle_col: Middle-field pass column.  Defaults to 0 when absent.
+        roof_col: Game roof; :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 19)`` float32 ndarray in :data:`XYAC_FEATURES` column order.
@@ -888,6 +896,7 @@ def _espn_xyac_features(
         else pl.lit(0)
     )
     qb_hit = pl.col(qb_hit_col).cast(pl.Int8) if qb_hit_col is not None and qb_hit_col in play_df.columns else pl.lit(0)
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(air_yards_col).alias("air_yards"),
@@ -905,9 +914,9 @@ def _espn_xyac_features(
             pl.col("_era4").alias("era4"),
             qb_hit.alias("qb_hit"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(0).alias("outdoors"),
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
+            roof["outdoors"],
+            roof["retractable"],
+            roof["dome"],
             pl.col("_distance_to_sticks").alias("distance_to_sticks"),
         )
         .to_numpy(allow_copy=True)

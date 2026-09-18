@@ -4130,22 +4130,22 @@ result = proc.run_processing_pipeline()
 
 #### `NFLPlayProcess.nfl_pbp_json(**kwargs)`
 
-Set `self.json` to the imported `json` module reference (legacy stub).
+Return the JSON payload currently attached to this `NFLPlayProcess` instance.
 
-Retained for API compatibility. Prefer `espn_nfl_pbp()` (live)
-or `nfl_pbp_disk()` (offline) to populate `self.json` with an
-actual ESPN payload.
+`espn_nfl_pbp()` (live, or `summary=` offline) and `nfl_pbp_disk()`
+attach the payload; this returns it unchanged.
 
 **Returns**
 
-The Python `json` module reference (mirrors legacy behavior).
+dict | None: The attached payload (`self.json`); `None` before one is attached.
 
 **Example**
 
 ```python
 from sportsdataverse.nfl import NFLPlayProcess
 proc = NFLPlayProcess(gameId=401220403)
-proc.nfl_pbp_json()  # populates `self.json` with the json module
+proc.espn_nfl_pbp()
+payload = proc.nfl_pbp_json()
 ```
 
 #### `NFLPlayProcess.run_cleaning_pipeline()`
