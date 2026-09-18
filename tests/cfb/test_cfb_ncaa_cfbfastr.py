@@ -143,6 +143,129 @@ def test_first_last_suffixes() -> None:
 # own-side vote stopped reading kickoff rows (a kickoff sits in the RECEIVING
 # team's drive but is spotted on the KICKING team's side).
 
+#: cfbfastR's post-clean ``play_type`` vocabulary: the distinct ``type.text``
+#: values of every ``cfbfastR-cfb-data/cfb/pbp/parquet/play_by_play_*.parquet``
+#: (2004-2026, 4.0M rows) that occur in MORE THAN ONE season, minus the two
+#: pre-clean labels ``pbp_clean_pbp_dat.R`` collapses on its way to that file
+#: ("Pass" -> Pass Completion/Incompletion/Sack, "Pass Interception" ->
+#: Interception Return). The single-season strays are stale builds of one asset
+#: and are excluded for the same reason -- "Pass Interception Return" survives
+#: only in 2015 (61 rows) against 29,361 "Interception Return" rows, so a
+#: downstream ``play_type == "Interception Return"`` filter is what every
+#: consumer writes. Rebuild the literal with::
+#:
+#:     per = {}
+#:     for f in sorted(glob("<...>/play_by_play_*.parquet")):
+#:         for v in pl.read_parquet(f, columns=["type.text"])["type.text"].drop_nulls().unique():
+#:             per.setdefault(v, set()).add(int(re.search(r"(\d{4})", f).group(1)))
+#:     sorted(v for v, y in per.items() if len(y) >= 2)
+CFBFASTR_PLAY_TYPES = frozenset(
+    {
+        "Blocked Field Goal",
+        "Blocked Field Goal Touchdown",
+        "Blocked Punt",
+        "Blocked Punt Touchdown",
+        "Defensive 2pt Conversion",
+        "End Period",
+        "End of Game",
+        "End of Half",
+        "Extra Point Good",
+        "Extra Point Missed",
+        "Field Goal Good",
+        "Field Goal Missed",
+        "Fumble",
+        "Fumble Recovery (Opponent)",
+        "Fumble Recovery (Opponent) Touchdown",
+        "Fumble Recovery (Own)",
+        "Fumble Recovery (Own) Touchdown",
+        "Fumble Return Touchdown",
+        "Interception Return",
+        "Interception Return Touchdown",
+        "Kickoff",
+        "Kickoff (Safety)",
+        "Kickoff Return (Offense)",
+        "Kickoff Return Touchdown",
+        "Kickoff Team Fumble Recovery",
+        "Missed Field Goal Return",
+        "Missed Field Goal Return Touchdown",
+        "Pass Incompletion",
+        "Pass Reception",
+        "Passing Touchdown",
+        "Penalty",
+        "Punt",
+        "Punt (Safety)",
+        "Punt Return",
+        "Punt Return Touchdown",
+        "Punt Team Fumble Recovery",
+        "Punt Team Fumble Recovery Touchdown",
+        "Rush",
+        "Rushing Touchdown",
+        "Sack",
+        "Safety",
+        "Timeout",
+        "Two Point Pass",
+        "Two Point Rush",
+        "Two-Point Conversion Good",
+        "Two-Point Conversion Missed",
+        "Unknown",
+        # cfbfastR's taxonomy label for a touchdown it cannot attribute
+        # (`.pbp_play_types()`; ported here in `sportsdataverse/cfb/model_vars.py`).
+        # The ESPN feed never produces it, so it is absent from the parquet, but
+        # a synthesized OT drive-summary row is exactly an unattributable TD.
+        "Uncategorized Touchdown",
+    }
+)
+
+#: every committed pbp capture, whatever the vendored filename.
+ALL_PBP_FIXTURES = sorted(
+    {p.stem.split("_")[-1] for p in FIX.glob("*.html") if "pbp" in p.stem or "play_by_play" in p.stem}
+)
+
+
+def test_every_play_type_is_in_cfbfastrs_vocabulary() -> None:
+    """``to_cfbfastr`` promises cfbfastR names, so every label it emits must be one.
+
+    Sweeps every committed capture (2019 + 2024 + 2025 page generations). This is
+    the guard that was missing when the mapper shipped "Pass Interception Return"
+    (cfbfastR's pre-clean value) and a raw structural ``"unknown"``.
+    """
+    emitted: "dict[str, set[str]]" = {}
+    for cid in ALL_PBP_FIXTURES:
+        for label in _frame(cid).get_column("play_type").drop_nulls().unique().to_list():
+            emitted.setdefault(label, set()).add(cid)
+    assert len(emitted) > 15, emitted
+    assert not {k: sorted(v) for k, v in emitted.items() if k not in CFBFASTR_PLAY_TYPES}
+
+
+def test_a_non_touchdown_interception_takes_cfbfastrs_collapsed_label() -> None:
+    """cfbfastR publishes "Interception Return", never the pre-clean "Pass Interception Return"."""
+    df = _frame("5336803")
+    row = df.filter(pl.col("play_text").str.contains("Finley,Ben pass intercepted by Burke,Denzel")).row(0, named=True)
+    assert (row["play_type"], row["int"], row["touchdown"]) == ("Interception Return", True, False)
+
+
+def test_a_returned_kickoff_and_a_blocked_field_goal_take_their_own_labels() -> None:
+    """Two labels cfbfastR emits that the mapper could not reach.
+
+    A kickoff the receiver runs back is "Kickoff Return (Offense)" (21,956
+    published rows) -- a touchback / fair catch / downed kick stays "Kickoff";
+    a blocked field goal is "Blocked Field Goal" (970), not "Field Goal Missed"
+    (the ESPN feed's own discriminator is the word "blocked" in the text,
+    78/79 blocked field-goal rows in 2024).
+    """
+    ko = _frame("5361446").filter(pl.col("orig_play_type") == "kickoff")
+    returned = ko.filter(pl.col("yds_kickoff_return").is_not_null() & ~pl.col("touchdown"))
+    touchbacks = ko.filter(pl.col("play_text").str.contains("(?i)touchback"))
+    assert returned.height >= 5 and touchbacks.height >= 3
+    assert returned.get_column("play_type").unique().to_list() == ["Kickoff Return (Offense)"]
+    assert touchbacks.get_column("play_type").unique().to_list() == ["Kickoff"]
+
+    fg = _bundle_frame("6386512").filter(pl.col("play_text").str.contains("NO GOOD blocked by"))
+    assert fg.height == 2, fg.get_column("play_text").to_list()
+    assert fg.get_column("play_type").unique().to_list() == ["Blocked Field Goal"]
+    assert fg.get_column("fg_made").unique().to_list() == [False]
+
+
 #: pbp-only fixtures (html) + the one full-bundle fixture (1OT, pbp+box+drives).
 FIELD_POSITION_FIXTURES = [
     *sorted(FINALS),

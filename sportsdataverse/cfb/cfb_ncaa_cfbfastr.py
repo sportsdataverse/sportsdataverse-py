@@ -56,15 +56,23 @@ _MARKER_TYPES = {"drive_start", "coin_toss"}
 #: vote on a team's own yard-line side (see :func:`_own_side`).
 _SCRIMMAGE_TYPES = ("rush", "pass", "sack", "kneel", "punt", "field_goal")
 
-#: end_how -> approximate cfbfastR play_type label for synthesized OT rows.
+#: end_how -> cfbfastR play_type label for synthesized OT rows. Every value is
+#: one cfbfastR publishes; a code with no entry falls back to "Unknown" rather
+#: than leaking the raw NCAA drive code into play_type.
 _OT_END_HOW_LABEL = {
-    "TD": "Touchdown",
+    # "Uncategorized Touchdown" is cfbfastR's label for a touchdown it cannot
+    # attribute to a rush/pass/return; a synthesized OT row is a drive summary,
+    # so the scoring play behind it is exactly that -- unattributable.
+    "TD": "Uncategorized Touchdown",
     "FG": "Field Goal Good",
     "FGA": "Field Goal Missed",
     "PUNT": "Punt",
-    "INT": "Pass Interception Return",
+    "INT": "Interception Return",
     "FUMB": "Fumble Recovery (Opponent)",
-    "DOWNS": "Turnover on Downs",
+    "SAF": "Safety",
+    # cfbfastR has no play-level label for a downs turnover (the drive result
+    # carries it); the last play of such a drive is unknowable from a summary.
+    "DOWNS": "Unknown",
     "HALF": "End of Game",
     "END": "End of Game",
 }
@@ -348,7 +356,9 @@ def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
         return "Rushing Touchdown" if td else "Rush"
     if pt == "pass":
         if r["turnover_type"] == "interception":
-            return "Interception Return Touchdown" if td else "Pass Interception Return"
+            # cfbfastR collapses "Interception"/"Pass Interception"/"Pass
+            # Interception Return" to one non-TD label in pbp_clean_pbp_dat.R
+            return "Interception Return Touchdown" if td else "Interception Return"
         if r["pass_complete"]:
             return "Passing Touchdown" if td else "Pass Reception"
         return "Pass Incompletion"
@@ -363,10 +373,14 @@ def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
     if pt == "kickoff":
         if td:
             return "Kickoff Return Touchdown" if return_td else "Kickoff Team Fumble Recovery Touchdown"
-        return "Kickoff"
+        # a returned kickoff is its own cfbfastR label; a touchback / fair
+        # catch / downed / out-of-bounds kick stays "Kickoff"
+        return "Kickoff Return (Offense)" if r["return_yards"] is not None else "Kickoff"
     if pt == "field_goal":
         if td and return_td:
             return "Blocked Field Goal Touchdown" if blocked else "Missed Field Goal Return Touchdown"
+        if blocked:
+            return "Blocked Field Goal"
         return "Field Goal Good" if r["fg_made"] else "Field Goal Missed"
     if pt == "extra_point":
         return "Extra Point Good" if _KICK_GOOD_RE.search(r["play_text"] or "") else "Extra Point Missed"
@@ -378,7 +392,7 @@ def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
         return "Timeout"
     if pt == "period_marker":
         return "End Period"
-    return str(pt)
+    return "Unknown"
 
 
 def to_cfbfastr(
@@ -949,7 +963,7 @@ def to_cfbfastr(
                     "scoring_play": scoring,
                     "scoring": scoring,
                     "yard_line": od["start_yard_line"],
-                    "play_type": _OT_END_HOW_LABEL.get(od["end_how"], od["end_how"]),
+                    "play_type": _OT_END_HOW_LABEL.get(od["end_how"], "Unknown"),
                     "orig_play_type": "ot_drive",
                     "play_text": summary_text
                     or (
