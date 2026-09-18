@@ -144,6 +144,36 @@ skip_if_no_rscript = pytest.mark.skipif(
 FIXTURES_ROOT = Path(__file__).parent / "fixtures"
 
 
+def patch_espn_fetch(monkeypatch, payload):
+    """Point every codegen-emitted ESPN wrapper at ``payload`` instead of the network.
+
+    The generated ``*_espn_ext`` modules import ``_get`` from
+    :mod:`sportsdataverse._codegen_runtime`, so rebinding
+    ``sportsdataverse._common_espn._get`` -- a re-export those modules never look at
+    -- patches nothing and silently leaves the real HTTP call in place. Five tests
+    did exactly that and reached live ESPN from inside the "offline" CI job. Patch
+    the sink ``download`` instead, which is what every generated wrapper bottoms out
+    in.
+
+    Args:
+        monkeypatch: the test's ``monkeypatch`` fixture.
+        payload: the JSON body to serve, or a ``url -> body`` callable for tests that
+            need to vary the response per endpoint.
+    """
+    import sportsdataverse._codegen_runtime as rt
+
+    resolve = payload if callable(payload) else (lambda url: payload)
+
+    class _Resp:
+        def __init__(self, body: object) -> None:
+            self._body = body
+
+        def json(self) -> object:
+            return self._body
+
+    monkeypatch.setattr(rt, "download", lambda url, params=None, **kwargs: _Resp(resolve(url)))
+
+
 def load_fixture(category: str, stem: str) -> dict:
     """Load a JSON fixture from ``tests/fixtures/{category}/{stem}.json``.
 

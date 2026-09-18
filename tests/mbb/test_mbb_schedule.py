@@ -6,6 +6,10 @@ from sportsdataverse.mbb.mbb_schedule import (
     espn_mbb_schedule,
     most_recent_mbb_season,
 )
+from tests.conftest import skip_if_no_live
+
+# Every test here fetches a live ESPN scoreboard/calendar; gate the module.
+pytestmark = skip_if_no_live
 
 
 @pytest.fixture()

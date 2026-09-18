@@ -197,13 +197,13 @@ def parse_cbs_napi(
     Example:
         Quick start::
 
-            from sportsdataverse.nfl import cbs_team_players
+            from sportsdataverse.cbs import cbs_team_players
             df = cbs_team_players(team_id=404)
             print(df.shape)
 
         Raw payload plus an explicit parse::
 
-            from sportsdataverse.nfl import cbs_season_teams, parse_cbs_napi
+            from sportsdataverse.cbs import cbs_season_teams, parse_cbs_napi
             raw = cbs_season_teams(season_id=59, return_parsed=False)
             df = parse_cbs_napi(raw, return_as_pandas=True)
 
@@ -253,7 +253,7 @@ def parse_cbs_napi_standings(
     Example:
         Quick start::
 
-            from sportsdataverse.nfl import cbs_team_standings
+            from sportsdataverse.cbs import cbs_team_standings
             df = cbs_team_standings(team_id=404)
             print(df.shape)
 

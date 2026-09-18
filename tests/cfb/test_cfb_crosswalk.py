@@ -16,6 +16,7 @@ import polars as pl
 import pytest
 
 import sportsdataverse.cfb.cfb_crosswalk as cw
+from tests.conftest import load_fixture
 from sportsdataverse.cfb.cfb_crosswalk import (
     _ascii_fold,
     _iso_date,
@@ -723,9 +724,43 @@ def test_fox_cfb_schedule_full_season_unions_and_dedups(monkeypatch: pytest.Monk
     assert df["game_id"].n_unique() == df.height
 
 
+def _patch_espn_roster(monkeypatch: pytest.MonkeyPatch, frame: pl.DataFrame) -> list[str]:
+    """Patch the crosswalk's ESPN roster leg (http fetch + parser) with ``frame``.
+
+    Returns the list the fetched URLs are appended to, so a caller can assert the
+    host/scheme actually requested.
+    """
+    seen: list[str] = []
+
+    def fake_get(url: str, params: Any = None, **kwargs: Any) -> Dict[str, Any]:
+        seen.append(url)
+        return {"athletes": []}
+
+    monkeypatch.setattr(cw, "_get", fake_get)
+    monkeypatch.setattr(cw, "parse_team_roster", lambda raw, **k: frame)
+    return seen
+
+
+def test_espn_roster_uses_the_http_host(monkeypatch: pytest.MonkeyPatch) -> None:
+    """ESPN's https host 403s from datacenter egress and every other ESPN leg of this
+    module is plain http, so the roster leg must be too -- pinned against a real
+    captured CFB roster payload run through the real parser."""
+    seen: list[str] = []
+
+    def fake_get(url: str, params: Any = None, **kwargs: Any) -> Dict[str, Any]:
+        seen.append(url)
+        return load_fixture("espn", "team_roster_cfb")
+
+    monkeypatch.setattr(cw, "_get", fake_get)
+    out = cw._espn_roster(194)
+    assert seen == ["http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194/roster"]
+    assert not any(u.startswith("https://") for u in seen)
+    assert out and all(r["person_key"] and r["athlete_id"] is not None for r in out)
+
+
 def test_espn_roster_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]})
-    monkeypatch.setattr(cw, "espn_cfb_team_roster", lambda tid, **k: fake)
+    _patch_espn_roster(monkeypatch, fake)
     out = cw._espn_roster(194)
     assert out == [
         {
@@ -1033,12 +1068,9 @@ def test_cfb_schedule_crosswalk_full_season_end_to_end(monkeypatch: pytest.Monke
 
 
 def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(
-        cw,
-        "espn_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame(
-            {"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}
-        ),
+    _patch_espn_roster(
+        monkeypatch,
+        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
     )
     monkeypatch.setattr(
         cw,
@@ -1054,12 +1086,9 @@ def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_cfb_rosters_crosswalk_three_way(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(
-        cw,
-        "espn_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame(
-            {"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}
-        ),
+    _patch_espn_roster(
+        monkeypatch,
+        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
     )
     monkeypatch.setattr(
         cw,

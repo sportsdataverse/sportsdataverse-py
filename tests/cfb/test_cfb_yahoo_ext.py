@@ -157,10 +157,14 @@ def test_scoreboard_flattens_games_map(monkeypatch):
 BOX_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo" / "editorial_boxscore_ncaaf_ala_at_uk.json"
 
 
-def test_boxscore_default_returns_raw(monkeypatch):
+def test_boxscore_default_is_parsed_like_its_siblings(monkeypatch):
+    """The module contract is polars-by-default; the box score used to be the lone
+    ``return_parsed=False`` outlier. Pin both directions so it cannot drift back."""
     monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
-    out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
-    assert "service" in out  # default return_parsed=False -> raw passthrough
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
+    assert isinstance(df, pl.DataFrame) and df.columns == list(y._BOXSCORE_SCHEMA)
+    out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
+    assert "service" in out  # return_parsed=False -> raw passthrough
 
 
 def test_boxscore_parsed_is_one_row_per_entity_stat(monkeypatch):

@@ -1,6 +1,10 @@
 import pytest
 
 from sportsdataverse.mbb import espn_mbb_pbp
+from tests.conftest import skip_if_no_live
+
+# The only test here fetches a live ESPN summary; gate the module.
+pytestmark = skip_if_no_live
 
 
 @pytest.fixture()

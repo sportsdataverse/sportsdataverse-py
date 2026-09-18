@@ -793,7 +793,7 @@ def _boxscore_rows(raw: Any) -> List[Dict[str, Any]]:
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: Literal[False] = ...,
+    return_parsed: Literal[False],
     return_as_pandas: bool = ...,
     **kwargs: Any,
 ) -> Dict[str, Any]: ...
@@ -801,7 +801,7 @@ def yahoo_cfb_boxscore(
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: Literal[True],
+    return_parsed: Literal[True] = ...,
     return_as_pandas: Literal[True],
     **kwargs: Any,
 ) -> "pd.DataFrame": ...
@@ -809,14 +809,14 @@ def yahoo_cfb_boxscore(
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: Literal[True],
+    return_parsed: Literal[True] = ...,
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
 ) -> pl.DataFrame: ...
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
@@ -829,22 +829,22 @@ def yahoo_cfb_boxscore(
     ``stat_categories`` dictionaries into a long frame: one row per team stat
     and per player stat. Pivot on ``stat_type_id`` for a wide box. The editorial
     payload carries no player names; a player's team comes from the game's
-    home/away lineups. Unlike its siblings this defaults to the raw payload
-    (``return_parsed=False``), which also carries play-by-play and drives.
+    home/away lineups. Pass ``return_parsed=False`` for the raw payload, which
+    also carries play-by-play and drives.
 
     Args:
         game_id: Dotted Yahoo game id (e.g. ``"ncaaf.g.202509200023"``).
-        return_parsed: If ``True``, decode the box score into a DataFrame; if
-            ``False`` (the default) return the raw JSON ``dict``.
+        return_parsed: If ``True`` (default) decode the box score into a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars. Ignored when ``return_parsed=False``.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        The raw editorial boxscore JSON ``dict`` by default. With
-        ``return_parsed=True``, a polars DataFrame (pandas when
-        ``return_as_pandas=True``) with one row per team or player stat, every
-        column ``Utf8``, and zero rows (same columns) for an empty payload:
+        A polars DataFrame by default (pandas when ``return_as_pandas=True``)
+        with one row per team or player stat, every column ``Utf8``, and zero
+        rows (same columns) for an empty payload; the raw editorial boxscore
+        JSON ``dict`` when ``return_parsed=False``:
 
         | Column | Type | Description |
         |---|---|---|
@@ -867,11 +867,11 @@ def yahoo_cfb_boxscore(
         Decoded box score for one game::
 
             from sportsdataverse.cfb import yahoo_cfb_boxscore
-            box = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
+            box = yahoo_cfb_boxscore("ncaaf.g.202509200023")
 
         Raw JSON (includes play-by-play and drives)::
 
-            raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+            raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
 
         Wide team box (one line)::
 
