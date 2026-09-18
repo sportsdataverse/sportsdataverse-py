@@ -147,7 +147,10 @@ def test_processor_exception_falls_through(nfl_summary, monkeypatch):
         _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary})
     errs = {a.source: a.error for a in ei.value.attempts}
     assert errs["espn"] == "processor: RuntimeError: boom"
-    assert errs["shield"] == "not implemented" and len(errs) == 5
+    # shield IS registered now, so it fails on its own terms (unmapped id, no payload) rather
+    # than "not implemented"; cbs / yahoo / fox are still unregistered slots
+    assert "SourceUnavailable" in errs["shield"] and len(errs) == 5
+    assert [errs[s] for s in ("cbs", "yahoo", "fox")] == ["not implemented"] * 3
 
 
 def test_no_fallthrough_raises_with_one_attempt():

@@ -138,9 +138,14 @@ def shield_nfl_pbp(
 
     Raises:
         ValueError: Neither *game_detail* nor *shield_game_id* was given.
+        NoDataError: Shield has no game for *shield_game_id* (HTTP 404).
+        AssetFetchError: The Shield fetch failed or exhausted its retries (HTTP 403 and up).
 
     Example:
         Poll a live game::
+
+            import polars as pl
+            from sportsdataverse.nfl import shield_nfl_pbp
 
             df = shield_nfl_pbp(shield_game_id="a9a8944e-4feb-11f1-abca-2c54536568a9")
             df.filter(pl.col("is_play") == 0).select("posteam", "down", "ydstogo", "wp")
