@@ -21,6 +21,13 @@ Field levels:
 * ``gop`` -- Game on Paper dereferences it unguarded (``python/app.py:199-322``
   bracket reads, ``GamePage.astro:72-95`` header fields); missing means an HTTP 404 or a
   blank header, not a processor failure.
+* ``gop_soft`` -- Game on Paper reads it *with* a fallback, so its absence costs a label and
+  nothing else: a warning, never ``gop_missing``. The four ``drives[]`` presentation fields
+  qualify (``DriveRow.astro:81`` ``{drive.displayResult || 'In Progress'}``, ``:98``
+  ``drive.result || drive.displayResult || 'In Progress'``, ``latestDrive.ts:41``
+  ``drive?.team?.shortDisplayName ?? "Unknown"``), and ESPN's pre-2010 CFB feeds carry none of
+  them -- game 252532751 (2005) has 27 drives with no ``displayResult``, ``result`` or
+  ``description``.
 
 Evidence for every level lives in
 ``background-research/2026-09-16-cfb-alt-sources/A_cfbplayprocess_contract.md`` (§1b, §1c,
@@ -95,10 +102,10 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
 DRIVE_FIELDS: tuple[tuple[str, str], ...] = (
     ("id", "required"),
     ("start.yardLine", "value"),
-    ("team.shortDisplayName", "gop"),  # Drives panel / Latest strip
-    ("displayResult", "gop"),
-    ("result", "gop"),
-    ("description", "gop"),
+    ("team.shortDisplayName", "gop_soft"),  # Drives panel / Latest strip, both fallback-guarded
+    ("displayResult", "gop_soft"),
+    ("result", "gop_soft"),
+    ("description", "gop_soft"),
 )
 
 #: Columns the processor derives from text only; every alternate source loses some of
@@ -270,6 +277,10 @@ def _iter_plays(drives: list[dict]) -> list[dict]:
 def _bucket(report: ContractReport, level: str, path: str) -> None:
     if level == "gop":
         report.gop_missing.append(path)
+    elif level == "gop_soft":
+        # Game on Paper reads these with a fallback ("In Progress", "Unknown"), so the page
+        # still renders; ESPN's pre-2010 CFB feeds ship no drive result fields at all
+        report.warnings.append(f"{path} absent: Game on Paper falls back to a placeholder label")
     elif level == "repaired":
         # absent on every row is the normal shape of a pre-2010 ESPN CFB feed; the
         # processor reconstructs it, so this must not fail the contract

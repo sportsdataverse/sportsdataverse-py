@@ -140,3 +140,21 @@ def test_a_feed_with_no_end_team_still_satisfies_the_contract(nfl_summary):
     assert report.ok, (report.missing, report.invalid)
     assert "plays[].end.team.id absent: the processor fills it from the next play's start team" in report.warnings
     assert "plays[].end.team.id" not in report.missing
+
+
+def test_a_feed_with_no_drive_result_fields_still_renders(nfl_summary):
+    """ESPN's pre-2010 CFB feeds carry no drive ``displayResult`` / ``result`` / ``description``.
+
+    Game on Paper reads all three with a fallback (``DriveRow.astro:81,98``,
+    ``latestDrive.ts:41``), so their absence costs a label, not a 404 — ``gop_ok`` must
+    survive it. Game 252532751 (2005) has 27 such drives.
+    """
+    stripped = copy.deepcopy(nfl_summary)
+    for d in stripped["drives"]["previous"]:
+        for k in ("displayResult", "result", "description"):
+            d.pop(k, None)
+        if isinstance(d.get("team"), dict):
+            d["team"].pop("shortDisplayName", None)
+    report = _validate_summary(stripped, "nfl")
+    assert report.ok and report.gop_ok, (report.missing, report.invalid, report.gop_missing)
+    assert sum("Game on Paper falls back" in w for w in report.warnings) == 4
