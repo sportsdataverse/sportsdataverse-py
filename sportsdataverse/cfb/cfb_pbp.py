@@ -1199,8 +1199,16 @@ def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataF
       Returner names are not recoverable.
 
     Never derived: penalties, fumbles, muffs, blocks, laterals, safeties, touchdowns,
-    onside or out-of-bounds kicks, rows where possession did not change on a punt, and
-    anything outside 0-80 (punt) / 0-75 (kickoff) or landing more than 10 yards deep.
+    onside kicks, out-of-bounds KICKOFFS, rows where possession did not change on a punt,
+    and anything outside 0-80 (punt) / 0-75 (kickoff) or landing more than 10 yards deep.
+
+    A punt out of bounds **is** derived, unlike a kickoff out of bounds. A kickoff that
+    goes out of bounds is spotted by rule (the receiving team's own 35, and the processor
+    stores the matching 40-yard "return"), so ESPN's end spot is a placement rather than
+    a landing; a punt out of bounds is dead where it crossed the sideline, which is the
+    landing spot. On the 22 ``punt_oob`` rows in a 2005-2025 sample the field position
+    reproduces the stated distance exactly 22 times, so excluding them would drop the
+    most reliable case rather than a doubtful one.
 
     Args:
         play_df: one game's plays in order, carrying ``text``, ``type.text``, ``season``,

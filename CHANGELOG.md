@@ -322,11 +322,16 @@ parsed value is never changed.
   describes no outcome, and the next snap starts at that spot with the receiving team.
   Returner names are not recoverable.
 - **Never derived**: penalties, fumbles, muffs, blocks, laterals, safeties,
-  touchdowns, onside or out-of-bounds kicks, "for a 1ST down", unchanged possession,
-  out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a no-return
-  punt ending exactly at the 20 (a 2004 touchback reads the same), an end-zone punt
-  with the receiver at the 20, and a derived return of exactly 5 or 15 (what an
-  unrecorded flag looks like).
+  touchdowns, onside kicks, out-of-bounds *kickoffs*, "for a 1ST down", unchanged
+  possession, out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a
+  no-return punt ending exactly at the 20 (a 2004 touchback reads the same), an
+  end-zone punt with the receiver at the 20, and a derived return of exactly 5 or 15
+  (what an unrecorded flag looks like).
+- A punt out of bounds **is** derived, unlike a kickoff out of bounds: a kickoff out of
+  bounds is spotted by rule (the receiving team's 35, stored as a 40-yard return), so
+  ESPN's end spot is a placement, while a punt out of bounds is dead where it crossed
+  the sideline -- the landing spot. On the 22 `punt_oob` rows of a 2005-2025 sample the
+  field position reproduces the stated distance exactly 22 times.
 
 Validated offline on 1,749 stored games (250 per season, 2004/2005/2009/2015/2023-2025;
 one 2009 game has no play-by-play).
