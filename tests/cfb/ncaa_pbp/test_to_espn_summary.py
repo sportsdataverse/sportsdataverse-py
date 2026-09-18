@@ -152,6 +152,23 @@ def test_a_defensive_touchdown_ends_in_the_scoring_teams_frame():
     assert {home_id, away_id} == {p["start"]["team"]["id"] for p in plays(served)} | {home_id, away_id}
 
 
+def test_espns_own_end_down_conventions_are_stated_not_the_next_snaps():
+    """MUTATION TARGET. Counted over 60 captured ESPN CFB summaries: every touchdown label and
+    every made field goal carries ``end.down = -1, end.distance = -1`` (171/171 Passing Touchdown,
+    128/128 Field Goal Good), and a **returned** kickoff carries ``(-1, 10)`` -- not the 1st and 10
+    the receiving team actually faces. The EP model reads ``down``, so emitting the next snap's
+    state moved EP_end by about a point on every kickoff return."""
+    for name in GAMES:
+        served = plays(summary(name))
+        returns = [p for p in served if p["type"]["text"] == "Kickoff Return (Offense)"]
+        assert returns, name
+        for play in returns:
+            assert (play["end"]["down"], play["end"]["distance"]) == (-1, 10), play["text"][:70]
+        for play in served:
+            if play["type"]["text"].endswith("Touchdown") or play["type"]["text"] == "Field Goal Good":
+                assert (play["end"]["down"], play["end"]["distance"]) == (-1, -1), play["text"][:70]
+
+
 def test_a_play_with_no_next_snap_ends_where_its_own_yardage_puts_it():
     """MUTATION TARGET. The last row of the page -- and, on a truncated page, the newest row,
     which is the one Game on Paper renders at the top -- has no next snap to read an end state

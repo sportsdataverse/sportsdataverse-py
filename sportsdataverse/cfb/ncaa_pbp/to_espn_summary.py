@@ -363,9 +363,7 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
             end_team = nxt["start"]["team"]["id"] or play["start"]["team"]["id"]
             if to_endzone is None:
                 to_endzone = nxt["start"]["yardsToEndzone"]
-            down, distance = _FIXED_END_DOWN.get(
-                play["type"]["text"], (nxt["start"]["down"], nxt["start"]["distance"])
-            )
+            down, distance = _FIXED_END_DOWN.get(play["type"]["text"], (nxt["start"]["down"], nxt["start"]["distance"]))
             play["end"] = {
                 "down": down,
                 "distance": distance,
