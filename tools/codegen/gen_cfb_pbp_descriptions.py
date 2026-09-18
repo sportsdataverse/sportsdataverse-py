@@ -142,7 +142,10 @@ STATIC: dict[str, str] = {
     "sack_weight": "Weighting applied to the sack component of the play.",
     "wp_touchback": "Win probability the offense would have had starting from a touchback.",
     "td_check": "Internal flag used while reconciling whether the play produced a touchdown.",
-    "text_dupe": "True when the play description duplicates the previous row's text.",
+    "text_dupe": (
+        "Always False in the emitted frame -- the duplicate-row filter it gates runs before the column "
+        "is returned, so it marks nothing and is retained only for schema stability."
+    ),
     "scoringPlay": "ESPN flag marking the play as a scoring play.",
     "scoringType.name": "ESPN's name for the scoring type (e.g. touchdown, field goal).",
     "scoringType.displayName": "ESPN's display label for the scoring type.",

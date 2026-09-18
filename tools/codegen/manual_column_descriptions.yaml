@@ -7795,7 +7795,8 @@ load_cfb_pbp:
   stopped_run: True when the rush was stopped at or behind the line of scrimmage.
   td_check: Internal flag used while reconciling whether the play produced a touchdown.
   teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
-  text_dupe: True when the play description duplicates the previous row's text.
+  text_dupe: Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is
+    returned, so it marks nothing and is retained only for schema stability.
   turnover_team: Team id charged with the giveaway on the play.
   two_point_conv_result: 'String result of the two-point conversion attempt: success, failure, or safety (touchback in the
     defensive end zone).'
