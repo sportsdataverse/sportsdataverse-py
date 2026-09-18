@@ -193,11 +193,11 @@ class ContractReport:
         | league | str | ``"nfl"`` or ``"cfb"`` |
         | n_plays | int | plays across ``drives.previous`` + ``drives.current`` |
         | n_drives | int | drives across both groupings |
-        | missing | list[str] | ``required``-level paths absent from the payload |
-        | invalid | list[str] | value rules violated (non-monotonic ids, empty mascot, foreign team ids, ...) |
+        | missing | list[str] | ``required``- and ``value``-level paths absent from every row (both fail ``ok``) |
+        | invalid | list[str] | value rules violated (empty mascot, foreign team ids, bad clock, all-null column, ...) |
         | gop_missing | list[str] | ``gop``-level paths absent (page 404 / blank header, processor unaffected) |
-        | warnings | list[str] | degradations that do not fail the contract (sparse feed, competitor order) |
-        | null_rate | dict[str, float] | share of plays with a null value, per ``value``-level play path present |
+        | warnings | list[str] | degradations that do not fail the contract (sparse feed, competitor order, late-inserted or duplicate play ids) |
+        | null_rate | dict[str, float] | per row-collection path present: rows whose value is absent or null, over all rows |
     """
 
     league: str
@@ -269,7 +269,12 @@ def _bucket(report: ContractReport, level: str, path: str) -> None:
 
 
 def _check_rows(report: ContractReport, rows: list[dict], fields: tuple[tuple[str, str], ...], prefix: str) -> None:
-    """Row-collection check: a path is *missing* when no row carries it; ``value`` paths also record a null rate."""
+    """Row-collection check: a path is *missing* when no row carries it; a null rate is recorded per path.
+
+    An all-null column is ``invalid`` at both ``required`` and ``value`` level: the key exists
+    so the processor does not raise, it just computes on nothing (an all-null ``statYardage``
+    zeroes every yardage column, an all-null ``homeScore`` erases the score after the play).
+    """
     if not rows:
         return
     n = len(rows)
@@ -279,7 +284,7 @@ def _check_rows(report: ContractReport, rows: list[dict], fields: tuple[tuple[st
         if not present:
             _bucket(report, level, f"{prefix}.{path}")
             continue
-        if level == "value":
+        if level in ("value", "required"):
             nulls = n - sum(v is not None for v in present)
             rate = nulls / n
             report.null_rate[f"{prefix}.{path}"] = rate

@@ -185,7 +185,7 @@ row's `built_at` is the last rebuild.
 | `espn_event_id`, `season`, `season_type`, `week`, `kickoff_utc`, `neutral_site`, `home/away_espn_team_id` | ESPN schedule (nfl-raw crosswalk today; `espn_cfb_schedule` for CFB) |
 | `shield_game_id`, `nflverse_game_id` | nfl-raw `nfl/espn/crosswalk/games.json` (exists; date/time matched) |
 | `yahoo_game_id` (NFL) | **computed**: `nfl.g.{YYYYMMDD US-Eastern}{ESPN home id:03d}`; team `nfl.t.{ESPN id}` (16/16 wk1 + SB LX verified) |
-| `yahoo_game_id` (CFB), `fox_game_id` | `load_cfb_schedule_crosswalk(season)` release parquet (built off-request); Fox NFL by name-join to the crosswalk (16/16) |
+| `yahoo_game_id` (CFB), `fox_event_id` | `load_cfb_schedule_crosswalk(season)` release parquet (built off-request); Fox NFL by name-join to the crosswalk (16/16) |
 | `spread_line`, `total_line`, `odds_source` | nflverse schedule (`load_nfl_schedule`: `spread_line`, `total_line`) for NFL; CFBD lines / ESPN pickcenter snapshot for CFB; provenance in `odds_source` |
 | `cbs_game_id` | **scraped from the CBS week scoreboard page** (`sb_<season>_<type>_<week>.html`; JAC→JAX, WAS→WSH); no API |
 | `ncaa_game_id` | ncaa.com GraphQL game ids (≠ stats.ncaa.org contest ids); pre-game tiers only (date + voted team map — the score-matched tiers of `ncaa_mfb_06_xwalk_build.py` are post-game) |

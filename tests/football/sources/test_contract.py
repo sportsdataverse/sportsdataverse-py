@@ -107,3 +107,19 @@ def test_no_drives_and_bad_inputs():
     assert _validate_summary("nope", "nfl").missing == ["<summary is not a dict>"]
     with pytest.raises(ValueError):
         _validate_summary({}, "nhl")
+
+
+def test_all_null_required_column_is_invalid(nfl_summary):
+    """An all-null ``required`` path keeps the column (no raise) but zeroes the output.
+
+    ``ok`` must be False so the dispatcher fails over instead of serving garbage.
+    """
+    gutted = copy.deepcopy(nfl_summary)
+    for d in gutted["drives"]["previous"]:
+        for p in d["plays"]:
+            p["statYardage"] = None
+    report = _validate_summary(gutted, "nfl")
+    assert report.missing == []  # the key is there: no ColumnNotFoundError
+    assert "plays[].statYardage: present but null on every row" in report.invalid
+    assert report.ok is False
+    assert report.null_rate["plays[].statYardage"] == 1.0

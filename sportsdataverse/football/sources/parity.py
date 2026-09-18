@@ -16,6 +16,7 @@ sources without an id join (Yahoo, Fox) pair on :data:`STATE_KEY`.
 
 from __future__ import annotations
 
+import math
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -128,7 +129,11 @@ class ParityReport:
         }
 
     def check(self, pinned: dict[str, Any]) -> list[str]:
-        """Failures where an observed gate fell below its pinned floor (never the other way)."""
+        """Failures where an observed gate fell below (or is not a finite number) its pinned floor.
+
+        Never the other way: an observed value above its floor is not a failure. A pinned
+        ``required_columns`` entry missing from the candidate is reported too.
+        """
         observed = self.gates()
         fails: list[str] = []
         if observed["paired_share"] < pinned.get("paired_share", 0.0):
@@ -136,7 +141,10 @@ class ParityReport:
         for group in ("agreement", "correlation", "box_equal_share"):
             for k, floor in (pinned.get(group) or {}).items():
                 got = observed[group].get(k)
-                if got is None or got < floor:
+                # NaN compares False against every floor: pl.corr is NaN on a zero-variance
+                # column (a source whose WP model never ran ships a constant), so a bare
+                # ``got < floor`` would let that pass forever.
+                if got is None or not math.isfinite(got) or got < floor:
                     fails.append(f"{group}.{k} {got} < {floor}")
         for c in pinned.get("required_columns", []):
             if c in self.missing_columns:
@@ -151,6 +159,16 @@ def _is_numeric(dtype: pl.DataType) -> bool:
 def _pair(reference: pl.DataFrame, candidate: pl.DataFrame, key: str | Sequence[str]) -> pl.DataFrame:
     """Inner-join reference and candidate on ``key`` (candidate columns suffixed ``_cand``); ids compared as strings."""
     keys = [key] if isinstance(key, str) else list(key)
+    for k in keys:
+        for name, frame in (("reference", reference), ("candidate", candidate)):
+            if k not in frame.columns:
+                raise ValueError(f"pairing key {k!r} is absent from the {name} frame")
+        if reference.schema[k] != candidate.schema[k]:
+            # one dtype per id, fixed at the boundary: Float64 "1.0" never joins Int64 "1",
+            # and the silent result is a zero-row pairing that pins itself as the gate
+            raise ValueError(
+                f"pairing key {k!r} dtype differs: reference {reference.schema[k]}, candidate {candidate.schema[k]}"
+            )
     ref = reference.with_columns([pl.col(k).cast(pl.Utf8) for k in keys])
     cand = candidate.with_columns([pl.col(k).cast(pl.Utf8) for k in keys])
     # one row per key on each side: late duplicates would inflate the pairing
@@ -180,13 +198,17 @@ def _compare_plays(
 
     Returns:
         :class:`ParityReport` (``box_rows`` empty; see :func:`_compare_processed`).
+
+    Raises:
+        ValueError: a pairing key is absent from either frame, or carries a different dtype
+            on each side (ids must agree before the join).
     """
     keys = [key] if isinstance(key, str) else list(key)
     missing = [c for c in columns if c not in candidate.columns]
     compared = [c for c in columns if c in reference.columns and c not in missing and c not in keys]
     paired = _pair(reference, candidate, key)
     report = ParityReport(reference.height, candidate.height, paired.height, missing_columns=missing)
-    if paired.is_empty():
+    if paired.is_empty() or not compared:
         return report
 
     exprs = []

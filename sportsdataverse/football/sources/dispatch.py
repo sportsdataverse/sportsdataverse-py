@@ -6,9 +6,11 @@ resolves a source adapter, validates the adapted summary against the contract, r
 unmodified processor on it, and returns the processed dict with provenance stamped in.
 
 Only the ESPN adapter is registered today. Every other source in :data:`SOURCE_ORDER` is
-a named slot that raises :class:`SourceUnavailable` until its adapter lands (Stage 2
-items 2+), so the fall-through path is exercised now and the adapters plug in later
-without touching this module or GOP.
+a named slot that is skipped with ``"not implemented"`` in ``provenance["attempts"]`` until
+its adapter lands (Stage 2 items 2+), so the fall-through path is exercised now and the
+adapters plug in later without touching this module or GOP. A registered adapter hands over
+to the next source by raising anything (:class:`SourceUnavailable` is the conventional
+choice) or by returning something other than an :class:`AdaptedGame`.
 """
 
 from __future__ import annotations
@@ -269,6 +271,8 @@ def _process_game(
         )
         try:
             adapted = adapter(league, espn_id, ctx)
+            if not isinstance(adapted, AdaptedGame):
+                raise SourceUnavailable(f"adapter returned {type(adapted).__name__}, expected AdaptedGame")
         except Exception as exc:
             attempts.append(Attempt(src, False, f"{type(exc).__name__}: {exc}", time.perf_counter() - t0))
             continue

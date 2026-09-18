@@ -108,3 +108,32 @@ def test_empty_pairing_is_reported_not_raised():
     b = pl.DataFrame({"id": [3], "EPA": [0.3]})
     r = _compare_plays(a, b, columns=("EPA",))
     assert r.n_paired == 0 and r.agreement == {} and r.gates()["paired_share"] == 0.0
+
+
+def test_a_nan_gate_is_a_failure_not_a_pass():
+    """``pl.corr`` is NaN on a zero-variance column; NaN < floor is False in Python.
+
+    A source whose WP model never ran ships a constant ``wp_before``, and a bare
+    ``got < floor`` would let that pin itself as a passing gate forever.
+    """
+    const = pl.DataFrame({"id": [1, 2, 3], "EPA": [0.5, 0.5, 0.5]})
+    r = _compare_plays(const, const, columns=("EPA",), numeric=("EPA",))
+    assert math.isnan(r.correlation["EPA"])
+    assert r.check({"correlation": {"EPA": 0.99}}) == ["correlation.EPA nan < 0.99"]
+
+
+def test_pairing_key_dtype_and_presence_are_asserted():
+    """Float64 "1.0" never joins Int64 "1": a silent zero-row pairing would pin itself as the gate."""
+    ref = pl.DataFrame({"id": [1, 2], "EPA": [0.1, 0.2]})
+    with pytest.raises(ValueError, match="dtype differs"):
+        _compare_plays(ref, pl.DataFrame({"id": [1.0, 2.0], "EPA": [0.1, 0.2]}), columns=("EPA",))
+    with pytest.raises(ValueError, match="absent from the candidate frame"):
+        _compare_plays(ref, pl.DataFrame({"play_id": [1, 2], "EPA": [0.1, 0.2]}), columns=("EPA",))
+
+
+def test_no_shared_compared_column_is_reported_not_raised():
+    """A candidate carrying none of the compared columns reports them missing, it does not crash."""
+    ref = pl.DataFrame({"id": [1, 2], "EPA": [0.1, 0.2]})
+    r = _compare_plays(ref, pl.DataFrame({"id": [1, 2], "other": [1, 2]}), columns=("EPA",))
+    assert r.n_paired == 2 and r.missing_columns == ["EPA"] and r.agreement == {}
+    assert r.check({"required_columns": ["EPA"]}) == ["column missing: EPA"]

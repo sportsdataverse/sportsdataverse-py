@@ -183,3 +183,15 @@ def test_default_odds_are_flagged_in_provenance(nfl_summary, no_network):
     stripped["pickcenter"] = []
     out = _process_game("nfl", NFL_GAME_ID, payloads={"espn": stripped})
     assert out.provenance["odds"] == {"source": "default", "default": True, "from_idmap": False}
+
+
+def test_adapter_returning_the_wrong_type_falls_through(nfl_summary, fast_processor, monkeypatch):
+    """A misbehaving adapter is a fall-through reason, not an AttributeError out of dispatch.
+
+    GOP maps :class:`AllSourcesFailed` to its 404; an exception escaping ``_process_game``
+    is a 500 on the game page instead.
+    """
+    monkeypatch.setitem(dispatch._ADAPTERS, ("nfl", "shield"), lambda league, espn_id, ctx: None)
+    out = _process_game("nfl", NFL_GAME_ID, source="shield", payloads={"espn": nfl_summary})
+    assert out.provenance["served"] == "espn"
+    assert out.health["shield"] == "SourceUnavailable: adapter returned NoneType, expected AdaptedGame"
