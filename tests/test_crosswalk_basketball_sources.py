@@ -8,6 +8,12 @@ was attempted and aborted:
    so a dead source degraded the whole crosswalk to ``unmatched`` instead of
    failing. The tests below assert the **raise**, and separately assert that a
    provably-empty-but-valid payload still returns the typed empty frame.
+   ``stats_rosters`` had the same swallow per team and is held to the same
+   contract. The ESPN/Fox per-item adapters (``espn_rosters``, ``fox_rosters``,
+   ``espn_scoreboard_games``, ``espn_conference_map``) keep skipping an
+   *isolated* failure (R parity) but tally them through ``FetchTally``: a
+   provider that failed every item and answered none raises after the loop,
+   and ``strict=True`` raises on the first failure.
 2. **Wrong envelope for ``scheduleleaguev2``.** The payload is
    ``{"meta":…, "leagueSchedule": {"gameDates": [...]}}``, not the
    ``resultSets`` envelope, so it parsed to zero rows against a healthy API.
@@ -18,23 +24,28 @@ was attempted and aborted:
 from __future__ import annotations
 
 import json
+import logging
 from datetime import date
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Callable, List, NamedTuple, Optional
 
 import polars as pl
 import pytest
 
 from sportsdataverse._crosswalk_basketball_sources import (
     CrosswalkSourceError,
+    FetchTally,
     bart_super_sked,
     espn_conference_map,
     espn_rosters,
     espn_scoreboard_games,
     espn_team_directory,
+    fox_rosters,
     require_source,
+    stats_rosters,
     stats_schedule_games,
 )
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 FIXTURES = {
@@ -269,19 +280,405 @@ def test_espn_rosters_raises_when_the_athlete_id_column_is_gone(monkeypatch: pyt
         espn_rosters("nba", 1, "ATL", 2026)
 
 
-def test_espn_rosters_still_tolerates_a_single_team_failure(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Per-item tolerance is deliberate and unchanged -- only whole sources raise."""
+# --------------------------------------------------------------------------
+# Per-item fetches (one call per team / date / conference): an isolated failure
+# is skipped and logged, as in the R producers' tryCatch-to-NULL; a provider
+# that failed EVERY item and answered none raises, because one unreachable or
+# rate-limited host fails every item identically and the crosswalk would
+# otherwise ship well-formed with that provider's columns all null. A 404
+# (NoDataError) is an answered item and never counts as a failure. strict=True
+# turns any non-404 failure into an immediate raise.
+#
+# Each adapter is driven over the same three items (1, 2, 3); ``outcome`` maps
+# an item to the exception it should raise, healthy otherwise.
+# --------------------------------------------------------------------------
 
-    def boom(**kwargs: Any) -> pl.DataFrame:
-        raise TimeoutError("one team is down")
+_ITEMS = (1, 2, 3)
+_DATES = {1: date(2026, 1, 15), 2: date(2026, 1, 16), 3: date(2026, 1, 17)}
+_SRC = "sportsdataverse._crosswalk_basketball_sources"
 
-    monkeypatch.setattr(
-        "sportsdataverse._crosswalk_basketball_sources._espn_accessors",
-        lambda league: {"roster": boom},
+
+def _outcome(failures: dict[int, Exception], healthy: Callable[[int], pl.DataFrame]) -> Callable[[int], pl.DataFrame]:
+    def call(item: int) -> pl.DataFrame:
+        if item in failures:
+            raise failures[item]
+        return healthy(item)
+
+    return call
+
+
+def _espn_roster(item: int) -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "athlete_id": [item * 10],
+            "full_name": [f"Player {item}"],
+            "jersey": ["1"],
+            "position_abbreviation": ["G"],
+            "date_of_birth": ["2000-01-01T08:00Z"],
+        }
     )
-    out = espn_rosters("nba", 1, "ATL", 2026)
+
+
+def _fox_roster(item: int) -> pl.DataFrame:
+    return pl.DataFrame(
+        {"athlete_id": [item * 10], "player": [f"Player {item}"], "jersey": ["1"], "position_group": ["G"]}
+    )
+
+
+def _scoreboard(item: int) -> pl.DataFrame:
+    return pl.DataFrame(
+        {"game_id": [item], "date": [f"{_DATES[item].isoformat()}T23:00Z"], "home_team_id": [1], "away_team_id": [2]}
+    )
+
+
+class _Adapter(NamedTuple):
+    endpoint: str
+    patch: Callable[[pytest.MonkeyPatch, Callable[[int], pl.DataFrame]], None]
+    run: Callable[[bool], pl.DataFrame]
+    survivors: Callable[[pl.DataFrame], set[int]]
+    label: Callable[[int], str]
+
+
+def _patch_espn_roster(mp: pytest.MonkeyPatch, call: Callable[[int], pl.DataFrame]) -> None:
+    mp.setattr(f"{_SRC}._espn_accessors", lambda league: {"roster": lambda team_id, **kw: call(int(team_id))})
+
+
+def _run_espn_rosters(strict: bool) -> pl.DataFrame:
+    tally = FetchTally("espn_nba_team_roster", strict=strict)
+    frames = [espn_rosters("nba", item, "T", 2026, tally=tally) for item in _ITEMS]
+    tally.finish()
+    return pl.concat(frames)
+
+
+def _patch_fox_roster(mp: pytest.MonkeyPatch, call: Callable[[int], pl.DataFrame]) -> None:
+    mp.setattr("sportsdataverse.nba.nba_fox_ext.fox_nba_team_roster", lambda fox_team_id, **kw: call(int(fox_team_id)))
+
+
+def _run_fox_rosters(strict: bool) -> pl.DataFrame:
+    tally = FetchTally("fox_nba_team_roster", strict=strict)
+    frames = [fox_rosters("nba", item, str(item), tally=tally) for item in _ITEMS]
+    tally.finish()
+    return pl.concat(frames)
+
+
+def _patch_scoreboard(mp: pytest.MonkeyPatch, call: Callable[[int], pl.DataFrame]) -> None:
+    by_stamp = {int(d.strftime("%Y%m%d")): item for item, d in _DATES.items()}
+    mp.setattr(f"{_SRC}._espn_accessors", lambda league: {"scoreboard": lambda dates, **kw: call(by_stamp[dates])})
+
+
+def _patch_conferences(mp: pytest.MonkeyPatch, call: Callable[[int], pl.DataFrame]) -> None:
+    stubs = _group_stubs({item: (f"Conference {item}", [item * 11]) for item in _ITEMS})
+    healthy_teams = stubs["teams"]
+
+    def teams(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
+        call(int(gid))  # raises for the failing items
+        return healthy_teams(season, stype, gid, **kw)
+
+    stubs["teams"] = teams
+    mp.setattr(f"{_SRC}._ncaa_group_accessors", lambda league: stubs)
+
+
+_PER_ITEM = {
+    "espn_rosters": _Adapter(
+        "espn_nba_team_roster",
+        _patch_espn_roster,
+        _run_espn_rosters,
+        lambda out: set(out["espn_team_id"].to_list()),
+        lambda item: f"team_id={item}",
+    ),
+    "fox_rosters": _Adapter(
+        "fox_nba_team_roster",
+        _patch_fox_roster,
+        _run_fox_rosters,
+        lambda out: set(out["espn_team_id"].to_list()),
+        lambda item: f"fox_team_id={item}",
+    ),
+    "espn_scoreboard_games": _Adapter(
+        "espn_nba_scoreboard",
+        _patch_scoreboard,
+        lambda strict: espn_scoreboard_games("nba", [_DATES[i] for i in _ITEMS], strict=strict),
+        lambda out: {int(v) for v in out["espn_game_id"].to_list()},
+        lambda item: f"dates={_DATES[item].strftime('%Y%m%d')}",
+    ),
+    "espn_conference_map": _Adapter(
+        "espn_wbb_season_group",
+        _patch_conferences,
+        lambda strict: espn_conference_map("wbb", 2026, strict=strict),
+        lambda out: {int(v) // 11 for v in out["team_id"].to_list()},
+        lambda item: f"group_id={item}",
+    ),
+}
+_HEALTHY = {
+    "espn_rosters": _espn_roster,
+    "fox_rosters": _fox_roster,
+    "espn_scoreboard_games": _scoreboard,
+    "espn_conference_map": _espn_roster,  # unused: the conference stub builds its own frames
+}
+
+
+def _install(monkeypatch: pytest.MonkeyPatch, adapter: str, failures: dict[int, Exception]) -> _Adapter:
+    spec = _PER_ITEM[adapter]
+    spec.patch(monkeypatch, _outcome(failures, _HEALTHY[adapter]))
+    return spec
+
+
+@pytest.mark.parametrize("adapter", sorted(_PER_ITEM))
+def test_per_item_adapters_skip_and_warn_on_an_isolated_failure(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture, adapter: str
+) -> None:
+    """One dead item among three is skipped (R parity) and logged, the rest survive."""
+    spec = _install(monkeypatch, adapter, {2: TimeoutError("one item is down")})
+    with caplog.at_level(logging.WARNING, logger=_SRC):
+        out = spec.run(False)
+    assert spec.survivors(out) == {1, 3}
+    warnings = [r for r in caplog.records if r.levelno == logging.WARNING]
+    assert len(warnings) == 1
+    assert spec.endpoint in warnings[0].getMessage()
+    assert "skipped 1 of 3" in warnings[0].getMessage()
+    assert spec.label(2) in warnings[0].getMessage()
+    assert "TimeoutError" in warnings[0].getMessage()
+
+
+@pytest.mark.parametrize("adapter", sorted(_PER_ITEM))
+def test_per_item_adapters_raise_when_every_item_fails(monkeypatch: pytest.MonkeyPatch, adapter: str) -> None:
+    """Every item failing identically is one unreachable host, not three empty items."""
+    spec = _install(monkeypatch, adapter, {item: TimeoutError("host unreachable") for item in _ITEMS})
+    with pytest.raises(CrosswalkSourceError, match=rf"{spec.endpoint}: all 3 per-item fetches failed") as exc:
+        spec.run(False)
+    assert "TimeoutError: host unreachable" in str(exc.value)
+    assert isinstance(exc.value.__cause__, TimeoutError)
+
+
+@pytest.mark.parametrize("adapter", sorted(_PER_ITEM))
+def test_per_item_adapters_treat_404_on_every_item_as_empty(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture, adapter: str
+) -> None:
+    """A 404 is an answer -- three of them are an empty provider, not a dead one."""
+    spec = _install(monkeypatch, adapter, {item: NoDataError("404") for item in _ITEMS})
+    if adapter == "espn_conference_map":
+        # Every conference 404ing still resolves no teams, which the walk refuses on its own.
+        with pytest.raises(CrosswalkSourceError, match="resolved no teams"):
+            spec.run(False)
+        return
+    with caplog.at_level(logging.WARNING, logger=_SRC):
+        out = spec.run(False)
     assert out.height == 0
-    assert "espn_athlete_id" in out.columns
+    assert out.width > 0, "an empty answer still carries the documented schema"
+    assert not [r for r in caplog.records if r.levelno == logging.WARNING]
+
+
+@pytest.mark.parametrize("adapter", sorted(_PER_ITEM))
+def test_per_item_adapters_raise_on_the_first_failure_when_strict(
+    monkeypatch: pytest.MonkeyPatch, adapter: str
+) -> None:
+    spec = _install(monkeypatch, adapter, {2: TimeoutError("one item is down")})
+    with pytest.raises(CrosswalkSourceError, match=rf"{spec.endpoint}\({spec.label(2)}\) failed: TimeoutError"):
+        spec.run(True)
+
+
+@pytest.mark.parametrize("adapter", ["espn_rosters", "fox_rosters"])
+def test_lone_roster_call_is_a_loop_of_one(monkeypatch: pytest.MonkeyPatch, adapter: str) -> None:
+    """Without a shared tally a failed roster fetch raises; a 404 is the typed empty frame."""
+    spec = _install(monkeypatch, adapter, {1: TimeoutError("down"), 2: NoDataError("404")})
+    call = espn_rosters if adapter == "espn_rosters" else (lambda lg, item, *_: fox_rosters(lg, item, str(item)))
+    with pytest.raises(CrosswalkSourceError, match="all 1 per-item fetches failed"):
+        call("nba", 1, "T", 2026)
+    out = call("nba", 2, "T", 2026)
+    assert out.height == 0 and out.width > 0
+
+
+# The builders own the per-team roster loop, so the tally wiring lives there:
+# a builder that forgot ``finish()`` would pass every adapter test above.
+_BUILDERS = {
+    "nba": ("sportsdataverse.nba.nba_crosswalk", "nba_team_crosswalk", "nba_player_crosswalk", {"nba_team_id": None}),
+    "wnba": (
+        "sportsdataverse.wnba.wnba_crosswalk",
+        "wnba_team_crosswalk",
+        "wnba_player_crosswalk",
+        {"wnba_team_id": None},
+    ),
+    "wbb": ("sportsdataverse.wbb.wbb_crosswalk", "wbb_team_crosswalk", "wbb_player_crosswalk", {}),
+    "mbb": ("sportsdataverse.mbb.mbb_crosswalk", "mbb_team_crosswalk", "mbb_player_crosswalk", {}),
+}
+
+
+def _player_builder(monkeypatch: pytest.MonkeyPatch, league: str, failures: dict[int, Exception]) -> Callable[..., Any]:
+    module, team_fn, player_fn, extra = _BUILDERS[league]
+    teams = pl.DataFrame(
+        {
+            "espn_team_id": pl.Series(list(_ITEMS), dtype=pl.Int32),
+            "espn_abbreviation": [f"T{i}" for i in _ITEMS],
+            "fox_team_id": pl.Series([None] * len(_ITEMS), dtype=pl.Utf8),
+            **{k: pl.Series([v] * len(_ITEMS), dtype=pl.Utf8) for k, v in extra.items()},
+        }
+    )
+    monkeypatch.setattr(f"{module}.{team_fn}", lambda **kw: teams)
+    monkeypatch.setattr(
+        f"{_SRC}._espn_accessors",
+        lambda lg: {"roster": lambda team_id, **kw: _outcome(failures, _espn_roster)(int(team_id))},
+    )
+    import importlib
+
+    return getattr(importlib.import_module(module), player_fn)
+
+
+@pytest.mark.parametrize("league", sorted(_BUILDERS))
+def test_player_crosswalk_skips_one_dead_team_and_warns(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture, league: str
+) -> None:
+    build = _player_builder(monkeypatch, league, {2: TimeoutError("one team is down")})
+    with caplog.at_level(logging.WARNING, logger=_SRC):
+        out = build(season=2026)
+    assert set(out["espn_team_id"].to_list()) == {1, 3}
+    assert any(f"espn_{league}_team_roster: skipped 1 of 3" in r.getMessage() for r in caplog.records)
+
+
+@pytest.mark.parametrize("league", sorted(_BUILDERS))
+def test_player_crosswalk_raises_when_every_team_roster_fails(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    build = _player_builder(monkeypatch, league, {item: TimeoutError("host unreachable") for item in _ITEMS})
+    with pytest.raises(CrosswalkSourceError, match=f"espn_{league}_team_roster: all 3 per-item fetches failed"):
+        build(season=2026)
+
+
+@pytest.mark.parametrize("league", sorted(_BUILDERS))
+def test_player_crosswalk_strict_raises_on_the_first_dead_team(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    build = _player_builder(monkeypatch, league, {2: TimeoutError("one team is down")})
+    with pytest.raises(CrosswalkSourceError, match=rf"espn_{league}_team_roster\(team_id=2\) failed: TimeoutError"):
+        build(season=2026, strict=True)
+
+
+# --------------------------------------------------------------------------
+# stats_rosters: a failed Stats roster fetch is not an empty roster.
+#
+# It wrapped the commonteamroster call in `except Exception: return empty`, and
+# the Stats runtime answers a 403 / rate limit / blank body with `{}` rather
+# than raising -- which parses to the same zero-row frame as a real empty
+# roster. From a host that cannot reach stats.nba.com the player crosswalk
+# therefore came back with every nba_* / wnba_* column null and no error.
+# --------------------------------------------------------------------------
+
+
+def _raising(exc: Exception) -> Any:
+    def fetch(*args: Any, **kwargs: Any) -> Any:
+        raise exc
+
+    return fetch
+
+
+_ROSTER_FIXTURES = {
+    "nba": ("nba_stats/commonteamroster_1610612747_2023_24.json", "1610612747", "2023-24"),
+    "wnba": ("wnba_stats/commonteamroster_1611661319_2023.json", "1611661319", "2023"),
+}
+
+
+def _roster_body(league: str) -> str:
+    return (Path(__file__).parent / "fixtures" / _ROSTER_FIXTURES[league][0]).read_text(encoding="utf-8")
+
+
+def _stats_rosters(league: str, transport: Any) -> pl.DataFrame:
+    """Drive the REAL wrapper + runtime; only the HTTP transport is replaced."""
+    _, team_id, season = _ROSTER_FIXTURES[league]
+    return stats_rosters(league, 13, team_id, season, transport=transport)
+
+
+@pytest.fixture
+def _no_stats_retries(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("SDV_PY_NBA_STATS_RETRIES", raising=False)
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_projects_the_real_capture(league: str) -> None:
+    body = _roster_body(league)
+    rows = next(rs for rs in json.loads(body)["resultSets"] if rs["name"] == "CommonTeamRoster")["rowSet"]
+    out = _stats_rosters(league, lambda *a: (200, body))
+    assert out.height == len(rows) > 0
+    assert out.schema[f"{league}_player_id"] == pl.Utf8
+    assert out[f"{league}_player_id"].to_list() == [str(r[14]) for r in rows]
+    assert out[f"{league}_player_name"].null_count() == 0
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_raises_when_the_transport_fails(league: str) -> None:
+    """A timeout (the observed droplet failure) must not read as an empty roster."""
+    with pytest.raises(CrosswalkSourceError, match="commonteamroster") as exc:
+        _stats_rosters(league, _raising(TimeoutError("stats.nba.com timed out")))
+    assert isinstance(exc.value.__cause__, TimeoutError)
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+@pytest.mark.parametrize(("status", "body"), [(403, ""), (429, ""), (500, "<html>"), (200, "")])
+def test_stats_rosters_raises_when_the_request_is_refused(league: str, status: int, body: str) -> None:
+    """The runtime answers a refused request with ``{}``, not an exception."""
+    _, team_id, season = _ROSTER_FIXTURES[league]
+    with pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set") as exc:
+        _stats_rosters(league, lambda *a: (status, body))
+    message = str(exc.value)
+    assert f"{league}_stats_commonteamroster" in message and team_id in message and season in message
+    assert "SDV_PY_NBA_STATS_RETRIES" in message, "the error must say how to ride out a throttle"
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_raises_when_rows_do_not_parse(league: str) -> None:
+    """Rows present but dropped by the parser (ragged) must not read as an empty roster."""
+    payload = json.loads(_roster_body(league))
+    for rs in payload["resultSets"]:
+        rs["rowSet"] = [row[:-1] for row in rs["rowSet"]]
+    with pytest.raises(CrosswalkSourceError, match="rows"):
+        _stats_rosters(league, lambda *a: (200, json.dumps(payload)))
+
+
+def _sequence(*responses: tuple) -> Any:
+    """A transport that answers each call with the next ``(status, body)``."""
+    queue = list(responses)
+
+    def transport(*args: Any) -> tuple:
+        return queue.pop(0)
+
+    return transport
+
+
+def test_stats_rosters_retries_a_transient_throttle_when_retries_are_set(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "1")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+    out = _stats_rosters("nba", _sequence((429, ""), (200, _roster_body("nba"))))
+    assert out.height > 0
+
+
+def test_stats_rosters_raises_once_retries_are_exhausted(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "1")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+    with pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set"):
+        _stats_rosters("nba", _sequence((429, ""), (429, "")))
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_allows_a_provably_empty_roster(league: str) -> None:
+    """The envelope answered with no players: the real capture, rowSet emptied."""
+    payload = json.loads(_roster_body(league))
+    for rs in payload["resultSets"]:
+        rs["rowSet"] = []
+    out = _stats_rosters(league, lambda *a: (200, json.dumps(payload)))
+    assert out.height == 0
+    assert dict(out.schema) == {
+        "espn_team_id": pl.Int32,
+        f"{league}_player_id": pl.Utf8,
+        f"{league}_player_name": pl.Utf8,
+        f"{league}_jersey_num": pl.Utf8,
+        f"{league}_position": pl.Utf8,
+        f"{league}_birth_date": pl.Utf8,
+    }
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_without_a_stats_team_id_is_empty(league: str) -> None:
+    out = stats_rosters(league, 13, None, "2023", transport=_raising(AssertionError("must not fetch")))
+    assert out.height == 0
+    assert f"{league}_player_id" in out.columns
 
 
 def test_bart_super_sked_raises_when_the_fetch_fails(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -362,6 +759,87 @@ def test_require_source_propagates_an_inner_source_error_unwrapped() -> None:
 
 
 _ESPN_DIR_COLS = ["team_id", "abbreviation", "display_name", "short_name", "team", "mascot"]
+
+
+# ---------------------------------------------------------------------------
+# NBA Stats team directory (standings + game log) behind nba_team_crosswalk.
+#
+# Both calls went through the parsed wrapper, so a refused request (`{}`)
+# rendered as zero rows and took the "standings not open yet" branch: every
+# nba_team_id came back null, and nba_player_crosswalk then handed stats_rosters
+# a None team id -- its legitimate "no team id -> empty" path -- so the
+# blocked-host scenario never reached a raise.
+# ---------------------------------------------------------------------------
+
+_NBA_STATS_FIXTURES = Path(__file__).parent / "fixtures" / "nba_stats"
+
+
+def _nba_stats_transport(standings: tuple, gamelog: tuple) -> Any:
+    def transport(url: str, *args: Any) -> tuple:
+        return standings if "leaguestandingsv3" in url else gamelog
+
+    return transport
+
+
+def _real(name: str) -> tuple:
+    return 200, (_NBA_STATS_FIXTURES / name).read_text(encoding="utf-8")
+
+
+def _nba_team_crosswalk(monkeypatch: pytest.MonkeyPatch, transport: Any) -> pl.DataFrame:
+    """Real Stats wrappers + runtime on a stubbed transport; ESPN stubbed, Fox pre-fetched."""
+    from sportsdataverse.nba import nba_crosswalk
+
+    monkeypatch.delenv("SDV_PY_NBA_STATS_RETRIES", raising=False)
+    espn = pl.DataFrame(
+        {
+            "team_id": ["13", "2", "99"],
+            "abbreviation": ["LAL", "BOS", "XXX"],
+            "display_name": ["Los Angeles Lakers", "Boston Celtics", "Nowhere Nobodies"],
+            "short_name": ["Lakers", "Celtics", "Nobodies"],
+            "team": ["Los Angeles", "Boston", "Nowhere"],
+            "mascot": ["Lakers", "Celtics", "Nobodies"],
+        }
+    )
+    monkeypatch.setattr(nba_crosswalk, "espn_team_directory", lambda *a, **k: espn)
+    return nba_crosswalk.nba_team_crosswalk(season=2024, fox=pl.DataFrame(), transport=transport)
+
+
+def test_nba_team_crosswalk_joins_the_real_stats_captures(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Healthy path; an ESPN team with no Stats match stays graceful (``unmatched``)."""
+    out = _nba_team_crosswalk(
+        monkeypatch,
+        _nba_stats_transport(_real("leaguestandingsv3_2023_24.json"), _real("leaguegamelog_team_2023_24.json")),
+    )
+    by_espn = {r["espn_team_id"]: r for r in out.iter_rows(named=True)}
+    assert by_espn[13]["nba_team_id"] == "1610612747" and by_espn[13]["nba_team_abbreviation"] == "LAL"
+    assert by_espn[2]["nba_team_id"] == "1610612738" and by_espn[2]["nba_team_abbreviation"] == "BOS"
+    assert by_espn[99]["nba_team_id"] is None and by_espn[99]["match_method"] == "unmatched"
+
+
+@pytest.mark.parametrize(("status", "body"), [(403, ""), (429, ""), (200, "")])
+def test_nba_team_crosswalk_raises_when_standings_are_refused(
+    monkeypatch: pytest.MonkeyPatch, status: int, body: str
+) -> None:
+    transport = _nba_stats_transport((status, body), _real("leaguegamelog_team_2023_24.json"))
+    with pytest.raises(CrosswalkSourceError, match="leaguestandingsv3.*SDV_PY_NBA_STATS_RETRIES"):
+        _nba_team_crosswalk(monkeypatch, transport)
+
+
+def test_nba_team_crosswalk_raises_when_the_game_log_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Refused tricode source: every nba_team_abbreviation would silently be null."""
+    transport = _nba_stats_transport(_real("leaguestandingsv3_2023_24.json"), (403, ""))
+    with pytest.raises(CrosswalkSourceError, match="leaguegamelog.*SDV_PY_NBA_STATS_RETRIES"):
+        _nba_team_crosswalk(monkeypatch, transport)
+
+
+def test_nba_team_crosswalk_allows_standings_that_have_not_opened(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A real Standings set with no rows is provably empty: every team unmatched, no raise."""
+    payload = json.loads(_real("leaguestandingsv3_2023_24.json")[1])
+    payload["resultSets"][0]["rowSet"] = []
+    transport = _nba_stats_transport((200, json.dumps(payload)), (403, ""))
+    out = _nba_team_crosswalk(monkeypatch, transport)
+    assert out.height == 3
+    assert out["match_method"].to_list() == ["unmatched"] * 3
 
 
 def _boom(*args: Any, **kwargs: Any) -> Any:
@@ -514,25 +992,6 @@ def test_espn_conference_map_raises_when_the_walk_resolves_nothing(monkeypatch: 
     _patch_tree(monkeypatch, {})
     with pytest.raises(CrosswalkSourceError, match="resolved no teams"):
         espn_conference_map("wbb", 2026)
-
-
-def test_espn_conference_map_tolerates_one_dead_conference(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Per-item tolerance, as in the R producer: one bad group is skipped."""
-    stubs = _group_stubs({2: ("Atlantic Coast Conference", [52]), 8: ("Southeastern Conference", [2579])})
-    healthy = stubs["teams"]
-
-    def flaky(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
-        if int(gid) == 8:
-            raise RuntimeError("ESPN 403")
-        return healthy(season, stype, gid, **kw)
-
-    stubs["teams"] = flaky
-    import sportsdataverse._crosswalk_basketball_sources as src
-
-    monkeypatch.setattr(src, "_ncaa_group_accessors", lambda league: stubs)
-
-    out = espn_conference_map("wbb", 2026)
-    assert out["team_id"].to_list() == ["52"]
 
 
 def test_espn_conference_map_is_empty_for_non_ncaa_leagues(monkeypatch: pytest.MonkeyPatch) -> None:

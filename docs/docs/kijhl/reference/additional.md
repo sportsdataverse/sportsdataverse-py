@@ -124,6 +124,24 @@ KIJHL schedule — one row per game.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `game_status` | character | Game status label. |
+| `home_team` | character | Home team name. |
+| `home_team_id` | character | Unique identifier for the home team. |
+| `home_score` | character | Home team score at the time of the play. |
+| `away_team` | character | Away team name. |
+| `away_team_id` | character | Unique identifier for the away team. |
+| `away_score` | character | Away team score at the time of the play. |
+| `venue` | character | Venue name. |
+| `season_id` | character | Unique season identifier. |
+| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+
 ### `kijhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_season_id}
 
 All KIJHL seasons with end-year + game-type labels.
@@ -133,6 +151,21 @@ All KIJHL seasons with end-year + game-type labels.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | integer | Unique season identifier. |
+| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | character | Short season name. |
+| `career` | character | Whether this is a career-stats season. |
+| `playoff` | character | Whether the row is playoff statistics. |
+| `start_date` | character | Start date (YYYY-MM-DD). |
+| `end_date` | character | End date (YYYY-MM-DD). |
+| `season_yr` | integer | Year derived from the season name (concluding year). |
+| `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
 ### `kijhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_standings}
 

@@ -1,0 +1,12 @@
+schema: fox_wbb_teams
+kind: dataframe
+columns:
+- name: fox_team_id
+  type: character
+  description: ''
+- name: fox_team_name
+  type: character
+  description: ''
+- name: fox_section
+  type: character
+  description: ''

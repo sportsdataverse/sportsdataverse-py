@@ -3,358 +3,358 @@ kind: dataframe
 columns:
 - name: pitch_type
   type: character
-  description: "Pitch type code."
+  description: ''
 - name: game_date
   type: character
-  description: "Game date."
+  description: ''
 - name: release_speed
-  type: numeric
-  description: "Release speed."
+  type: double
+  description: ''
 - name: release_pos_x
-  type: numeric
-  description: "Release pos x."
+  type: double
+  description: ''
 - name: release_pos_z
-  type: numeric
-  description: "Release pos z."
+  type: double
+  description: ''
 - name: player_name
   type: character
-  description: "Player name."
+  description: ''
 - name: batter
   type: integer
-  description: "MLBAM id of the batter."
+  description: ''
 - name: pitcher
   type: integer
-  description: "MLBAM id of the pitcher."
+  description: ''
 - name: events
   type: character
-  description: "Events."
+  description: ''
 - name: description
   type: character
-  description: "Description."
+  description: ''
 - name: spin_dir
-  type: character
-  description: "Spin dir."
+  type: double
+  description: ''
 - name: spin_rate_deprecated
-  type: character
-  description: "Spin rate deprecated."
+  type: double
+  description: ''
 - name: break_angle_deprecated
-  type: character
-  description: "Break angle deprecated."
+  type: double
+  description: ''
 - name: break_length_deprecated
-  type: character
-  description: "Break length deprecated."
+  type: double
+  description: ''
 - name: zone
-  type: integer
-  description: "Zone."
+  type: double
+  description: ''
 - name: des
   type: character
-  description: "Des."
+  description: ''
 - name: game_type
   type: character
-  description: "Game type."
+  description: ''
 - name: stand
   type: character
-  description: "Batter stance side (R/L)."
+  description: ''
 - name: p_throws
   type: character
-  description: "Pitcher throwing hand (R/L)."
+  description: ''
 - name: home_team
   type: character
-  description: "Home team."
+  description: ''
 - name: away_team
   type: character
-  description: "Away team."
+  description: ''
 - name: type
   type: character
-  description: "Record/pitch type."
+  description: ''
 - name: hit_location
-  type: integer
-  description: "Hit location."
+  type: double
+  description: ''
 - name: bb_type
   type: character
-  description: "Bb type."
+  description: ''
 - name: balls
   type: integer
-  description: "Balls."
+  description: ''
 - name: strikes
   type: integer
-  description: "Strikes."
+  description: ''
 - name: game_year
   type: integer
-  description: "Game year."
+  description: ''
 - name: pfx_x
-  type: numeric
-  description: "Horizontal movement (in, pitcher perspective)."
+  type: double
+  description: ''
 - name: pfx_z
-  type: numeric
-  description: "Induced vertical movement (in)."
+  type: double
+  description: ''
 - name: plate_x
-  type: numeric
-  description: "Plate x."
+  type: double
+  description: ''
 - name: plate_z
-  type: numeric
-  description: "Plate z."
+  type: double
+  description: ''
 - name: on_3b
-  type: character
-  description: "On 3b."
+  type: integer
+  description: ''
 - name: on_2b
-  type: character
-  description: "On 2b."
+  type: integer
+  description: ''
 - name: on_1b
-  type: character
-  description: "On 1b."
+  type: integer
+  description: ''
 - name: outs_when_up
   type: integer
-  description: "Outs when up."
+  description: ''
 - name: inning
   type: integer
-  description: "Inning."
+  description: ''
 - name: inning_topbot
   type: character
-  description: "Inning topbot."
+  description: ''
 - name: hc_x
-  type: numeric
-  description: "Hc x."
+  type: double
+  description: ''
 - name: hc_y
-  type: numeric
-  description: "Hc y."
+  type: double
+  description: ''
 - name: tfs_deprecated
-  type: character
-  description: "Tfs deprecated."
+  type: double
+  description: ''
 - name: tfs_zulu_deprecated
-  type: character
-  description: "Tfs zulu deprecated."
+  type: double
+  description: ''
 - name: umpire
-  type: character
-  description: "Umpire."
+  type: double
+  description: ''
 - name: sv_id
-  type: character
-  description: "Sv id."
+  type: double
+  description: ''
 - name: vx0
-  type: numeric
-  description: "Vx0."
+  type: double
+  description: ''
 - name: vy0
-  type: numeric
-  description: "Vy0."
+  type: double
+  description: ''
 - name: vz0
-  type: numeric
-  description: "Vz0."
+  type: double
+  description: ''
 - name: ax
-  type: numeric
-  description: "Ax."
+  type: double
+  description: ''
 - name: ay
-  type: numeric
-  description: "Ay."
+  type: double
+  description: ''
 - name: az
-  type: numeric
-  description: "Az."
+  type: double
+  description: ''
 - name: sz_top
-  type: numeric
-  description: "Sz top."
+  type: double
+  description: ''
 - name: sz_bot
-  type: numeric
-  description: "Sz bot."
+  type: double
+  description: ''
 - name: hit_distance_sc
-  type: integer
-  description: "Hit distance sc."
+  type: double
+  description: ''
 - name: launch_speed
-  type: numeric
-  description: "Exit velocity of the batted ball (mph)."
+  type: double
+  description: ''
 - name: launch_angle
-  type: integer
-  description: "Launch angle (deg)."
+  type: double
+  description: ''
 - name: effective_speed
-  type: integer
-  description: "Effective speed."
+  type: double
+  description: ''
 - name: release_spin_rate
-  type: integer
-  description: "Release spin rate."
+  type: double
+  description: ''
 - name: release_extension
-  type: numeric
-  description: "Release extension."
+  type: double
+  description: ''
 - name: game_pk
   type: integer
-  description: "MLBAM game id."
+  description: ''
 - name: fielder_2
   type: integer
-  description: "Fielder 2."
+  description: ''
 - name: fielder_3
   type: integer
-  description: "Fielder 3."
+  description: ''
 - name: fielder_4
   type: integer
-  description: "Fielder 4."
+  description: ''
 - name: fielder_5
   type: integer
-  description: "Fielder 5."
+  description: ''
 - name: fielder_6
   type: integer
-  description: "Fielder 6."
+  description: ''
 - name: fielder_7
   type: integer
-  description: "Fielder 7."
+  description: ''
 - name: fielder_8
   type: integer
-  description: "Fielder 8."
+  description: ''
 - name: fielder_9
   type: integer
-  description: "Fielder 9."
+  description: ''
 - name: release_pos_y
-  type: numeric
-  description: "Release pos y."
+  type: double
+  description: ''
 - name: estimated_ba_using_speedangle
-  type: numeric
-  description: "Estimated ba using speedangle."
+  type: double
+  description: ''
 - name: estimated_woba_using_speedangle
-  type: numeric
-  description: "Estimated woba using speedangle."
+  type: double
+  description: ''
 - name: woba_value
-  type: integer
-  description: "Woba value."
+  type: double
+  description: ''
 - name: woba_denom
-  type: integer
-  description: "Woba denom."
+  type: double
+  description: ''
 - name: babip_value
-  type: integer
-  description: "Babip value."
+  type: double
+  description: ''
 - name: iso_value
-  type: integer
-  description: "Iso value."
+  type: double
+  description: ''
 - name: launch_speed_angle
-  type: integer
-  description: "Launch speed angle."
+  type: double
+  description: ''
 - name: at_bat_number
   type: integer
-  description: "At bat number."
+  description: ''
 - name: pitch_number
   type: integer
-  description: "Pitch number."
+  description: ''
 - name: pitch_name
   type: character
-  description: "Pitch type name."
+  description: ''
 - name: home_score
   type: integer
-  description: "Home score."
+  description: ''
 - name: away_score
   type: integer
-  description: "Away score."
+  description: ''
 - name: bat_score
   type: integer
-  description: "Bat score."
+  description: ''
 - name: fld_score
   type: integer
-  description: "Fld score."
+  description: ''
 - name: post_away_score
   type: integer
-  description: "Post away score."
+  description: ''
 - name: post_home_score
   type: integer
-  description: "Post home score."
+  description: ''
 - name: post_bat_score
   type: integer
-  description: "Post bat score."
+  description: ''
 - name: post_fld_score
   type: integer
-  description: "Post fld score."
+  description: ''
 - name: if_fielding_alignment
   type: character
-  description: "If fielding alignment."
+  description: ''
 - name: of_fielding_alignment
   type: character
-  description: "Of fielding alignment."
+  description: ''
 - name: spin_axis
-  type: integer
-  description: "Spin axis."
+  type: double
+  description: ''
 - name: delta_home_win_exp
-  type: numeric
-  description: "Delta home win exp."
+  type: double
+  description: ''
 - name: delta_run_exp
-  type: numeric
-  description: "Delta run exp."
+  type: double
+  description: ''
 - name: bat_speed
-  type: numeric
-  description: "Bat speed (mph)."
+  type: double
+  description: ''
 - name: swing_length
-  type: numeric
-  description: "Swing length (ft, head travel)."
+  type: double
+  description: ''
 - name: miss_distance
-  type: character
-  description: "Average miss distance (in) on swings."
+  type: double
+  description: ''
 - name: estimated_slg_using_speedangle
-  type: numeric
-  description: "Estimated slg using speedangle."
+  type: double
+  description: ''
 - name: delta_pitcher_run_exp
-  type: numeric
-  description: "Delta pitcher run exp."
+  type: double
+  description: ''
 - name: hyper_speed
-  type: numeric
-  description: "Hyper speed."
+  type: double
+  description: ''
 - name: home_score_diff
   type: integer
-  description: "Home score diff."
+  description: ''
 - name: bat_score_diff
   type: integer
-  description: "Bat score diff."
+  description: ''
 - name: home_win_exp
-  type: numeric
-  description: "Home win exp."
+  type: double
+  description: ''
 - name: bat_win_exp
-  type: numeric
-  description: "Bat win exp."
+  type: double
+  description: ''
 - name: age_pit_legacy
   type: integer
-  description: "Age pit legacy."
+  description: ''
 - name: age_bat_legacy
   type: integer
-  description: "Age bat legacy."
+  description: ''
 - name: age_pit
   type: integer
-  description: "Age pit."
+  description: ''
 - name: age_bat
   type: integer
-  description: "Age bat."
+  description: ''
 - name: n_thruorder_pitcher
   type: integer
-  description: "Number of thruorder pitcher."
+  description: ''
 - name: n_priorpa_thisgame_player_at_bat
   type: integer
-  description: "Number of priorpa thisgame player at bat."
+  description: ''
 - name: pitcher_days_since_prev_game
-  type: integer
-  description: "Pitcher days since prev game."
+  type: double
+  description: ''
 - name: batter_days_since_prev_game
-  type: integer
-  description: "Batter days since prev game."
+  type: double
+  description: ''
 - name: pitcher_days_until_next_game
   type: integer
-  description: "Pitcher days until next game."
+  description: ''
 - name: batter_days_until_next_game
   type: integer
-  description: "Batter days until next game."
+  description: ''
 - name: api_break_z_with_gravity
-  type: numeric
-  description: "Api break z with gravity."
+  type: double
+  description: ''
 - name: api_break_x_arm
-  type: numeric
-  description: "Api break x arm."
+  type: double
+  description: ''
 - name: api_break_x_batter_in
-  type: numeric
-  description: "Api break x batter in."
+  type: double
+  description: ''
 - name: arm_angle
-  type: numeric
-  description: "Arm angle."
+  type: double
+  description: ''
 - name: attack_angle
-  type: numeric
-  description: "Attack angle (deg, bat path at contact)."
+  type: double
+  description: ''
 - name: attack_direction
-  type: numeric
-  description: "Attack direction (deg, pull/oppo)."
+  type: double
+  description: ''
 - name: swing_path_tilt
-  type: numeric
-  description: "Swing-path tilt (deg)."
+  type: double
+  description: ''
 - name: intercept_ball_minus_batter_pos_x_inches
-  type: numeric
-  description: "Intercept ball minus batter pos x inches."
+  type: double
+  description: ''
 - name: intercept_ball_minus_batter_pos_y_inches
-  type: numeric
-  description: "Intercept ball minus batter pos y inches."
+  type: double
+  description: ''

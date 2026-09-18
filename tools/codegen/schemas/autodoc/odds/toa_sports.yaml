@@ -1,0 +1,21 @@
+schema: toa_sports
+kind: dataframe
+columns:
+- name: key
+  type: character
+  description: ''
+- name: group
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: description
+  type: character
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: has_outrights
+  type: logical
+  description: ''

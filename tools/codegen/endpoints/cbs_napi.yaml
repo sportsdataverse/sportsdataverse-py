@@ -428,7 +428,7 @@ endpoints:
   returns_schema: native/cbs_napi/game_scoring_boxscores
   short: game_scoring_boxscores
   summary: Get an scoring box scores resource for a particular game.
-- parser: parse_cbs_napi
+- parser: parse_cbs_napi_scoring_drives
   path: /resource/game/scoring/drives/{game_id}
   path_params:
   - description: Numerical game ID
@@ -458,7 +458,7 @@ endpoints:
   returns_schema: native/cbs_napi/game_scoring_player_stats
   short: game_scoring_player_stats
   summary: Get an scoring player stats resource for a particular game.
-- parser: parse_cbs_napi
+- parser: parse_cbs_napi_scoring_plays
   path: /resource/game/scoring/plays/{game_id}
   path_params:
   - description: Numerical game ID

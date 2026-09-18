@@ -1,0 +1,36 @@
+schema: fox_wbb_league_polls
+kind: dataframe
+columns:
+- name: section
+  type: character
+  description: ''
+- name: ranking
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: v2
+  type: character
+  description: ''
+- name: pts
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: rpi
+  type: character
+  description: ''
+- name: sos
+  type: character
+  description: ''
+- name: home
+  type: character
+  description: ''
+- name: away
+  type: character
+  description: ''
+- name: neutral
+  type: character
+  description: ''

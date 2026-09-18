@@ -768,6 +768,19 @@ Wraps `wnba/league/header`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `template` | character | Fox layout template name for the header block; always 'entity-header' in sampled data. |
+| `title` | character | Title or label for the record. |
+| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | character | Fox Bifrost content URI of the league entity ('basketball/wnba/league/1' in sampled data). |
+| `content_type` | character | Fox entity type of the header's entity; always 'league' in sampled data. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+| `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's full name. |
+| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `details` | character | Details. |
+
 **Example**
 
 ```python
@@ -793,6 +806,15 @@ WNBA statistical leaders (`stats-con`); who=player|team.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `players` | character | Nested list of per-player box scores. |
+| `v1` | character | Leader's name as Fox abbreviates it, first initial plus surname ('F. Lastname'); the column is named v1 because its table header cell is blank. |
+| `gp` | character | Games played. |
+| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `min` | character | Minutes played. |
+| `mpg` | character | Minutes per game. |
+
 **Example**
 
 ```python
@@ -810,6 +832,17 @@ Wraps `wnba/league/odds`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the Fox odds-board section the game is listed under; always 'GAMES' in sampled data. |
+| `game_id` | character | Unique game identifier. |
+| `event_time` | character | Scheduled start of the game as an ISO-8601 UTC timestamp string (e.g. '2026-09-17T23:30:00Z'). |
+| `event_status` | integer | Fox numeric event-status code for the game (Int64); always 2 in the sampled board, where every game was still to be played at capture. |
+| `team` | character | Team-side label or team identifier. |
+| `spread` | character | Spread. |
+| `to_win` | character | Moneyline for the team on this row as an American-odds string with explicit sign (e.g. '+884', '-126'). |
+| `total` | character | Total. |
+
 **Example**
 
 ```python
@@ -826,6 +859,20 @@ Wraps `wnba/league/playernews`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `title` | character | Title or label for the record. |
+| `subtitle` | character | Player tag line shaped '<TEAM> #<jersey> - <position>' (e.g. 'PHX #2 - G/F'). |
+| `headline` | character | News headline. |
+| `description` | character | Long-form description text. |
+| `impact_title` | character | Heading label Fox shows above the impact note; always 'Impact' in sampled data. |
+| `impact` | character | Fox's free-text impact note for the item, describing the player's availability or outlook (e.g. games missed with an injury and the next chance to play). |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `source` | character | News source. |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `content_uri` | character | Fox Bifrost content URI of the athlete the item is about, shaped 'basketball/wnba/athletes/<athlete_id>'. |
+| `web_url` | character | Site-relative foxsports.com path of the player's page (e.g. '/wnba/kahleah-copper-player'). |
 
 **Example**
 
@@ -861,6 +908,17 @@ Wraps `wnba/league/schedule`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Unique play identification number |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/league/schedule-segment/<year>-YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/wnba/schedule?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
+
 **Example**
 
 ```python
@@ -877,6 +935,17 @@ Wraps `wnba/league/scores`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Unique play identification number |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/league/scores-segment/YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/wnba/scores?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
 
 **Example**
 
@@ -895,6 +964,24 @@ Wraps `wnba/league/standings`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the Fox standings section the row came from, such as 'CONFERENCE' or 'PRESEASON'; each team appears once per section. Values in sampled data: 'CONFERENCE', 'PRESEASON'. |
+| `eastern` | character | Team's position in the Eastern conference table, from the first column whose header is the table name; null on rows from other tables, as a number string ('1' to '7' in sampled data). |
+| `v1` | character | Team nickname as Fox displays it (e.g. 'Liberty', 'Fever'); the column is named v1 because its table header cell is blank. |
+| `w_l` | character | W l. |
+| `pct` | character | Win percentage. |
+| `gb` | character | Games behind the conference leader. |
+| `pf` | character | Personal fouls. |
+| `pa` | character | Points allowed per game as a one-decimal string (e.g. '86.0'). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `conf` | character | character. |
+| `l10` | character | L10. |
+| `strk` | character | Current streak. |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `western` | character | Team's position in the Western conference table, from the first column whose header is the table name; null on rows from other tables, as a number string ('1' to '8' in sampled data). |
+
 **Example**
 
 ```python
@@ -911,6 +998,14 @@ Wraps `wnba/league/stats`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Category label. |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character | Fox's short code for the leader stat, such as 'PPG', 'RPG', 'FG%', 'DBL DBL' or 'OFF RTG'; the spelled-out name is in stat. |
+| `player` | character | Player name. |
+| `value` | character | Numeric or string value field. |
 
 **Example**
 
@@ -974,6 +1069,17 @@ Wraps `wnba/scoreboard/main`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from ('groupList', 'dailyList' or 'selectionList'); always 'dailyList', one row per game date, in sampled data. |
+| `id` | character | Unique play identification number |
+| `title` | character | Title or label for the record. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../wnba/scoreboard/segment/YYYYMMDD). |
+| `web_url` | character | Site-relative foxsports.com path of the page for that date (e.g. '/scores/wnba?date=YYYY-MM-DD'). |
+| `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
+| `group_id` | character | ESPN group id. |
 
 **Example**
 
@@ -1135,6 +1241,18 @@ Wraps `wnba/league/teamnav`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Group identifier (e.g. conference 'group_id'). |
+| `fox_id` | character | Fox Sports team id as a string, the trailing number of content_uri (e.g. '6'). |
+| `abbreviation` | character | Short abbreviation. |
+| `name` | character | Display name. |
+| `content_uri` | character | Fox Bifrost content URI identifying the team, shaped 'basketball/wnba/teams/<fox_id>'. |
+| `content_type` | character | Fox entity type from the team's entity link; always 'team' in sampled data. |
+| `web_url` | character | Site-relative foxsports.com path of the team page, shaped '/wnba/<city-nickname>-team'. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+
 **Example**
 
 ```python
@@ -1160,6 +1278,12 @@ frame the wehoop WNBA team crosswalk consumes.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | character | Fox team name (NA if unmatched). |
+| `fox_section` | character | Fox conference/section label (NA if unmatched). |
 
 **Example**
 
@@ -1354,6 +1478,12 @@ bundled artifact.
 **Returns**
 
 Frame `age:Int64, rel_value:Float64, peak_age:Float64`.
+
+| col_name | type | description |
+|---|---|---|
+| `age` | integer | Player age (in years). |
+| `rel_value` | double | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
+| `peak_age` | double | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
 
 **Example**
 
@@ -1686,7 +1816,7 @@ clean = poss.filter(
 print(clean["is_transition"].mean())
 ```
 
-### `wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_player_crosswalk}
+### `wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_player_crosswalk}
 
 Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox).
 
@@ -1702,6 +1832,7 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -1919,7 +2050,7 @@ from sportsdataverse.wnba import wnba_rookie_projection
 board = wnba_rookie_projection(2023)
 ```
 
-### `wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_schedule_crosswalk}
+### `wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_schedule_crosswalk}
 
 Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
 
@@ -1935,6 +2066,7 @@ effectively current-season.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
 | `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 

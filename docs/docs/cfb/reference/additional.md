@@ -596,6 +596,10 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `passing_qbr` | double | ESPN Quarterback Rating (QBR) for the player in this game. |
 | `passing_adj_qbr` | double | ESPN's adjusted Total Quarterback Rating (QBR) for the player's passing performance, controlling for opponent difficulty and game situation. |
 | `passing_quarterback_rating` | double | Traditional passer rating for the quarterback, equivalent to passing_qb_rating, using the standard NCAA formula. |
+| `passing_offensive_snap_pct` | double | ESPN's offensiveSnapPct stat (described upstream as '% of plays the player was on the field'); 0.0 for every college player checked, so ESPN does not appear to populate it for college football. |
+| `passing_target_share_pct` | double | ESPN's targetSharePct stat (described upstream as '% of total team targets'); 0.0 for every college player checked, so ESPN does not appear to populate it for college football. |
+| `passing_yards_per_route_run` | double | ESPN's yardsPerRouteRun stat (yards per route run, YPRR) under the passing category; 0.0 for every college player checked, so ESPN does not appear to populate it for college football. |
+| `passing_avg_depth_of_target` | double | ESPN's avgDepthOfTarget stat (average depth of target, aDOT) under the passing category; 0.0 for every college player checked, so ESPN does not appear to populate it for college football. |
 | `rushing_avg_gain` | double | Average yards gained per rushing attempt for the player in the rushing category. |
 | `rushing_espnrb_rating` | double | ESPN's proprietary running back rating for the player's rushing performance. |
 | `rushing_long_rushing` | double | Longest single rushing carry in yards recorded by the player during the stat period. |
@@ -733,6 +737,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_id` | character | Referencing venue id. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
+| `venue_address_state` | character | Venue address state / region. |
 | `venue_address_country` | character | Country in which the game venue is located, as provided by ESPN's venue data. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `status_clock` | double | Game clock in seconds. |
@@ -745,6 +750,10 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
+| `groups_id` | character | Unique identifier for groups. |
+| `groups_name` | character | Groups name. |
+| `groups_short_name` | character | Groups short name. |
+| `groups_is_conference` | logical | Groups is conference. |
 | `format_regulation_periods` | integer | Format regulation periods. |
 | `home_id` | character | Home team referencing id. |
 | `home_uid` | character | Home team's uid. |
@@ -784,11 +793,6 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `season` | integer | Season (4-digit year). |
 | `season_type` | integer | ESPN season type (2 = regular, 3 = postseason). |
 | `week` | integer | Game week of the season. |
-| `venue_address_state` | character | Venue address state / region. |
-| `groups_id` | character | Unique identifier for groups. |
-| `groups_name` | character | Groups name. |
-| `groups_short_name` | character | Groups short name. |
-| `groups_is_conference` | logical | Groups is conference. |
 
 **Example**
 
@@ -949,6 +953,8 @@ Polars dataframe containing betting lines available for the available seasons.
 | `book` | character | Name of the sportsbook or oddsmaker that provided the betting line. |
 | `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
 | `week` | integer | Game week of the season. |
+| `home_team_id` | integer | ESPN home team id (parsed from `home_team_ref`). |
+| `away_team_id` | integer | ESPN away team id (parsed from `away_team_ref`). |
 
 **Example**
 
@@ -992,6 +998,23 @@ cadence.
 **Returns**
 
 one row per matched player, carrying `espn_team_id` / `fox_team_id` provenance plus each provider's athlete id, name, jersey, position, and the `match_method` / `matched_sources` flags.
+
+| col_name | type | description |
+|---|---|---|
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `person_key` | character | Normalized player-name join key: 'Last, First' flipped, lowercased, ASCII-folded, punctuation stripped and runs of initials merged, so 'C.J.' and 'CJ' both give 'cj' (e.g. 'josh brown'). |
+| `espn_athlete_id` | integer | ESPN athlete id. |
+| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
+| `yahoo_athlete_id` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo ids are joined. |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `espn_jersey` | character | ESPN jersey number. |
+| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
+| `espn_position` | character | ESPN position abbreviation. |
+| `fox_position` | character | Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null when the player has no Fox roster match or Fox lists no position. |
+| `yahoo_position` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo positions are joined. |
+| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `matched_sources` | character | Plus-joined provenance tag naming which rosters listed the player: 'espn+fox', 'espn' or 'fox'. The published asset is built without Yahoo, so 'yahoo' never appears. |
 
 **Example**
 
@@ -1800,6 +1823,17 @@ current/upcoming week.
 
 A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event, with columns `matchup_key`, `odds_event_id`, `espn_game_id`, `home_team`, `away_team`, `commence_time`, `espn_date`, `matched_sources`.
 
+| col_name | type | description |
+|---|---|---|
+| `matchup_key` | character | Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a pipe (e.g. 'akron zips\|minnesota golden gophers'). Built from the Odds API home_team and away_team names. |
+| `odds_event_id` | character | The Odds API event id, a 32-character lowercase hex string (e.g. 'f06e90b4212fb514f3564ded9f190107'); the id column of toa_sports_events. |
+| `espn_game_id` | integer | ESPN game id (NA for bart-only rows). |
+| `home_team` | character | Home team name. |
+| `away_team` | character | Away team name. |
+| `commence_time` | character | Scheduled kickoff of the Odds API event, an ISO-8601 UTC string with a trailing Z (e.g. '2026-09-19T16:00:00Z'), kept as text. |
+| `espn_date` | character | Kickoff date as YYYY-MM-DD: the first ten characters of the matched ESPN game's UTC start timestamp; null when no ESPN game matched. |
+| `matched_sources` | character | 'odds+espn' when the Odds API event matched an ESPN game on matchup_key, 'odds' when it did not; all 88 sampled rows were 'odds+espn'. |
+
 **Example**
 
 ```python
@@ -2266,6 +2300,20 @@ id, name, and abbreviation (`None` where a provider has no match). The
 
 A polars DataFrame (pandas when `return_as_pandas=True`) with columns `norm_key`, `espn_team_id`, `espn_team`, `espn_abbreviation`, `fox_team_id`, `fox_team`, `fox_abbreviation`, `yahoo_team_id`, `yahoo_team`, `yahoo_abbreviation`, `matched_sources`.
 
+| col_name | type | description |
+|---|---|---|
+| `norm_key` | character | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed and alias-mapped (e.g. 'alabama a m bulldogs'). |
+| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `espn_team` | character | ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team. |
+| `espn_abbreviation` | character | ESPN abbreviation. |
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `fox_team` | character | Fox Sports' team name, which that feed ships in all capitals (e.g. 'AIR FORCE FALCONS'); null when no Fox team matched. |
+| `fox_abbreviation` | character | Fox Sports' short team code from its teamnav directory (e.g. 'AC', 'AKRON'), which can differ from the Yahoo code for the same school ('AKRON' vs 'AKR'); null when no Fox team matched. |
+| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team` | character | Yahoo Sports' team display name, school plus mascot (e.g. 'Akron Zips'); null when no Yahoo team matched. |
+| `yahoo_abbreviation` | character | Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched. |
+| `matched_sources` | character | Plus-joined provenance tag naming which of espn, fox and yahoo contributed a directory row for this team, e.g. 'espn+fox+yahoo', 'espn', 'fox+yahoo'. |
+
 **Example**
 
 ```python
@@ -2628,6 +2676,18 @@ Wraps `cfb/league/conferences`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
+| `fox_id` | character | Fox group id of the conference as a string, the trailing number of content_uri (e.g. '9' for the ACC); the same ids are the groupId filters in the Fox scoreboard navigation. |
+| `abbreviation` | character | Metric abbreviation. |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `content_uri` | character | Fox Bifrost content path of the conference (e.g. 'football/cfb/groups/9'). |
+| `content_type` | character | Fox entity type of the linked item; 'league' on every sampled conference row. |
+| `web_url` | character | Site-relative foxsports.com path of the conference page (e.g. '/college-football/acc'). |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+
 **Example**
 
 ```python
@@ -2644,6 +2704,19 @@ Wraps `cfb/league/header`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `template` | character | Name of the Fox layout template for the header payload, 'entity-header' in the sample. |
+| `title` | character | Specific role title for the assignment. |
+| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | character | Fox Bifrost content path of the league entity (e.g. 'football/cfb/league/1'); entity_id is its trailing number. |
+| `content_type` | character | Fox entity type of the header; 'league' for this league-level header. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+| `image_alt_text` | character | Alt text Fox attaches to the league logo image, 'College Football' in the sample. |
+| `rank` | character | Position of the school within the poll for the given week (1 = top-ranked). |
+| `details` | character | ESPN's headline line string (e.g. `UGA -54.5`). |
 
 **Example**
 
@@ -2673,6 +2746,16 @@ Endpoint: `GET .../bifrost/v1/cfb/league/stats-con/{who}/{category}/{page}`
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `players` | character | Nested list of per-player box scores. |
+| `v1` | character | Abbreviated player name, first initial plus surname (e.g. 'M. Alejado'), from Fox's untitled second column; the players column beside it holds the rank. |
+| `comp` | character | Pass completions as a string (e.g. '81'). Filled only on the 25 rows of Fox's COMP table; null on the rows of the other two top-25 tables stacked into the default passing frame. |
+| `gp` | character | Games played. |
+| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `patt` | character | Pass attempts as a string (e.g. '137'). Filled only on the 25 rows of Fox's PATT table; null on the rows of the other two top-25 tables stacked into the default passing frame. |
+| `att_g` | character | Pass attempts per game with one decimal as a string (e.g. '45.7'). Filled only on the 25 rows of Fox's ATT/G table; null on the rows of the other two top-25 tables stacked into the default passing frame. |
+
 **Example**
 
 ```python
@@ -2689,6 +2772,17 @@ Wraps `cfb/league/odds`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Title of the board section holding the game module; always 'GAMES' in sampled data. |
+| `game_id` | character | ESPN game identifier. |
+| `event_time` | character | Scheduled start of the game, an ISO-8601 UTC string with a trailing Z (e.g. '2026-09-19T16:00:00Z'). |
+| `event_status` | integer | Fox's numeric event-status code for the game; always 2 in the sampled board, where no listed game had started. |
+| `team` | character | Team name. |
+| `spread` | character | Pre-game point spread from the selected provider. |
+| `to_win` | character | The team's moneyline in American odds, kept as a signed string (e.g. '-1818', '+923'); a bare '-' when no price is posted. |
+| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **Example**
 
@@ -2707,6 +2801,20 @@ Wraps `cfb/league/playernews`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `title` | character | Specific role title for the assignment. |
+| `subtitle` | character | Team abbreviation, jersey number and position of the player, formatted like 'LSU #10 - QB'. |
+| `headline` | character | Headline ESPN attaches to the poll release. |
+| `description` | character | ESPN's description of the stat. |
+| `impact_title` | character | Heading Fox shows above the impact paragraph; always 'Impact' in sampled data. |
+| `impact` | character | Fox's analysis paragraph under the 'Impact' heading, explaining what the news means for the player (e.g. 'Leavitt was listed as doubtful in LSU's initial injury report...'). |
+| `date` | character | Date of the poll release. |
+| `source` | character | News source. |
+| `athlete_id` | character | ESPN athlete id. |
+| `content_uri` | character | Fox Bifrost content path of the athlete the item is about (e.g. 'football/cfb/athletes/212300'); athlete_id is its trailing number. |
+| `web_url` | character | Site-relative foxsports.com path of the player's page (e.g. '/college-football/sam-leavitt-player'). |
+
 **Example**
 
 ```python
@@ -2723,6 +2831,15 @@ Wraps `cfb/league/polls`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character | Poll the row belongs to: 'ASSOCIATED PRESS' or 'USA TODAY COACHES POLL'. |
+| `ranking` | character | National rank of the team's overall SP+ rating (1 = best). |
+| `v1` | character | Places the team moved since the previous poll, as an unsigned string (e.g. '3'); null when Fox shows no movement. The parser drops Fox's up/down flag, so a rise and a fall look the same. |
+| `v2` | character | Team short name as Fox prints it in the poll, with first-place votes in parentheses when it got any (e.g. 'Texas (56)', 'Ohio State', 'Miami (FL) (4)'). |
+| `pts` | character | Points scored. |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
 
 **Example**
 
@@ -2741,6 +2858,17 @@ Wraps `cfb/league/schedule`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25, ACC) or 'selectionList' (the season's week segments); the parser also emits 'dailyList', which CFB samples never show. |
+| `id` | character | 247Sports referencing id for the recruit. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/league/schedule-segment/2026-1-1?groupId=-4'); null on every groupList row. |
+| `web_url` | character | Site-relative foxsports.com path for the selection, e.g. '/college-football/schedule?groupId=9' on a group row. |
+| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | character | ESPN group (conference) id for the season. |
+
 **Example**
 
 ```python
@@ -2757,6 +2885,17 @@ Wraps `cfb/league/scores`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25, ACC) or 'selectionList' (the season's week segments); the parser also emits 'dailyList', which CFB samples never show. |
+| `id` | character | 247Sports referencing id for the recruit. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/league/scores-segment/2026-1-1?groupId=-4'); null on every groupList row. |
+| `web_url` | character | Site-relative foxsports.com path for the selection, e.g. '/college-football/scores?groupId=9' on a group row. |
+| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | character | ESPN group (conference) id for the season. |
 
 **Example**
 
@@ -2791,6 +2930,14 @@ Wraps `cfb/league/stats`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character | Fox's short code for the leader's stat (e.g. 'PYDS', 'PTD', 'RECYDS'); some codes contain a space, such as 'KR YDS'. |
+| `player` | character | Player name. |
+| `value` | character | Metric value. |
 
 **Example**
 
@@ -2916,6 +3063,18 @@ The numeric `game_id` is the Fox Bifrost event id that `fox_cfb_pbp` /
 
 A polars DataFrame (default) with columns `game_id`, `date`, `status`, `week_label`, `home_team`, `home_team_id`, `away_team`, `away_team_id`, `segment_id`; a pandas DataFrame when `return_as_pandas=True`; or raw JSON when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | ESPN game identifier. |
+| `date` | character | Date of the poll release. |
+| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
+| `week_label` | character | Title of the Fox segment section that listed the game (e.g. 'WEEK 3'); often null because Fox leaves most section titles blank. |
+| `home_team` | character | Home team name. |
+| `home_team_id` | character | ESPN home team id (parsed from `home_team_ref`). |
+| `away_team` | character | Away team name. |
+| `away_team_id` | character | ESPN away team id (parsed from `away_team_ref`). |
+| `segment_id` | character | Fox scoreboard segment the game was fetched from: '{season}-{week}-1' for a regular-season week (sampled '2026-3-1'), '{season}-bowls-2' or '{season}-cfp-2' for the postseason. |
+
 **Example**
 
 ```python
@@ -2937,6 +3096,17 @@ Wraps `cfb/scoreboard/main`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25, ACC) or 'selectionList' (the season's week segments); the parser also emits 'dailyList', which CFB samples never show. |
+| `id` | character | 247Sports referencing id for the recruit. |
+| `title` | character | Specific role title for the assignment. |
+| `date` | character | Date of the poll release. |
+| `uri` | character | Absolute Bifrost API URL of the week segment (e.g. 'https://api.foxsports.com/bifrost/v1/cfb/scoreboard/segment/2026-1-1?groupId=-4'); null on every groupList row. |
+| `web_url` | character | Site-relative foxsports.com path for the selection, e.g. '/scores/college-football?groupId=9' on a group row; week rows add seasonType and week parameters ('...?groupId=-4&seasonType=reg&week=1'). |
+| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | character | ESPN group (conference) id for the season. |
 
 **Example**
 
@@ -3111,6 +3281,18 @@ Wraps `cfb/league/teamnav`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
+| `fox_id` | character | Fox Bifrost team id as a string, the trailing number of content_uri; the same id fox_cfb_teams returns as fox_team_id from this endpoint. |
+| `abbreviation` | character | Metric abbreviation. |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `content_uri` | character | Fox Bifrost content path of the team (e.g. 'football/cfb/teams/25'). |
+| `content_type` | character | Fox entity type of the linked item; 'team' on every sampled row. |
+| `web_url` | character | Site-relative foxsports.com team page path (e.g. '/college-football/ohio-state-buckeyes-team'); null for some teams. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
+
 **Example**
 
 ```python
@@ -3140,6 +3322,15 @@ other `fox_cfb_*` wrappers expect, and it is the Fox side of
 **Returns**
 
 A polars DataFrame (default) with columns `fox_team_id`, `abbreviation`, `name`, `slug`, `color`, `logo_url`; a pandas DataFrame when `return_as_pandas=True`; or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `abbreviation` | character | Metric abbreviation. |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `slug` | character | URL slug for the team. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `logo_url` | character | NBA CDN primary logo URL. |
 
 **Example**
 
@@ -3819,35 +4010,45 @@ from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
 win_prob_from_margin(7.0)
 ```
 
-### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Dict[str, Any]'` {#yahoo_cfb_boxscore}
+### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_boxscore}
 
-Yahoo CFB boxscore — raw JSON passthrough (parsing not yet implemented).
+Yahoo CFB box score: team and player stats, one row per entity stat.
 
-Wraps the editorial `boxscore/{game_id}` resource. The payload uses a
-normalized decoder-dictionary schema
-(`player_stats[playerId][variation][stat_type]=value` joined against the
-`stat_types`/`stat_categories` dictionaries). Flattening that into
-tidy frames is a follow-up; until then this returns the raw JSON `dict`
-and **fails fast** if a parsed frame is requested rather than silently
-ignoring `return_parsed`.
+Wraps the editorial `boxscore/{game_id}` resource. Its box score is a
+decoder-dictionary schema
+(`player_stats[playerId][variation][stat_type] = value`, same for
+`team_stats`) that this decodes against the payload's `stat_types` /
+`stat_categories` dictionaries into a long frame: one row per team stat
+and per player stat. Pivot on `stat_type_id` for a wide box. The editorial
+payload carries no player names; a player's team comes from the game's
+home/away lineups. Unlike its siblings this defaults to the raw payload
+(`return_parsed=False`), which also carries play-by-play and drives.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `Union[int, str]` |  | Dotted Yahoo game id (e.g. `"ncaaf.g.202509200023"`). |
-| `return_parsed` | `bool` | `False` | Must be `False` (the default). Passing `True` raises `NotImplementedError` because parsing is not implemented. |
-| `return_as_pandas` | `bool` | `False` | Accepted for signature parity with the sibling wrappers; has no effect while only raw output is supported. |
+| `return_parsed` | `bool` | `False` | If `True`, decode the box score into a DataFrame; if `False` (the default) return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
 **Returns**
 
-The raw editorial boxscore JSON as a `dict` (`service.boxscore`).
+The raw editorial boxscore JSON `dict` by default. With `return_parsed=True`, a polars DataFrame (pandas when `return_as_pandas=True`) with one row per team or player stat, every column `Utf8`, and zero rows (same columns) for an empty payload: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`); null for a player missing from the lineups. | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`); null on team-stat rows. | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Kicking`, `Returns`, `Punting`, `Defense` or `Team`. | | `stat_type_id` | Utf8 | Yahoo stat type id (`ncaaf.stat_type.105`). | | `stat_name` | Utf8 | Stat name (`Yards`, `Third Down Efficiency`). | | `stat_abbreviation` | Utf8 | Short stat label (`Yds`, `3DE`). | | `stat_variation` | Utf8 | Stat variation name (`Game`). | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`, `"73.2"`, `"1-14"`). |
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import yahoo_cfb_boxscore
+box = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
+
+# Raw JSON (includes play-by-play and drives)
+
 raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+
+# Wide team box (one line)
+
+box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
 ```
 
 ### `yahoo_cfb_player_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, qualified: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_player_season_stats}

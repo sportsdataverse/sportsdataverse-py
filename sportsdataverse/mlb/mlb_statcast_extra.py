@@ -5,23 +5,34 @@ page returns HTML with embedded JSON rather than CSV/JSON."""
 from __future__ import annotations
 import warnings
 from datetime import date, timedelta
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.mlb.mlb_statcast_parsers import _csv_to_frame, parse_mlb_statcast_player
+from sportsdataverse.mlb.mlb_statcast_parsers import (
+    _MLBAM_ID_COLUMNS,
+    _csv_to_frame,
+    _warn_uncast_ids,
+    parse_mlb_statcast_player,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import
     import pandas as pd
 
 _SAVANT_BASE = "https://baseballsavant.mlb.com"
 _SEARCH_URL = f"{_SAVANT_BASE}/statcast_search/csv"
-#: Minor-league search shares the search core but hits its own CSV route (verified
-#: to return the standard 119-column Statcast CSV for MiLB games).
+#: Minor-league and World Baseball Classic search CSV routes (same 119-column shape).
 _SEARCH_URL_MINORS = f"{_SAVANT_BASE}/statcast-search-minors/csv"
-#: World Baseball Classic search CSV route (same shape; scope with WBC date windows).
 _SEARCH_URL_WBC = f"{_SAVANT_BASE}/statcast-search-world-baseball-classic/csv"
+#: The three /csv routes share one backend that defaults to MLB; the route path alone selects
+#: nothing. Savant's search UI picks the population with ``minors=<bool>&wbc=<bool>`` (its bundle
+#: builds ``/csv?…&type=details&minors=${isMinors}&wbc=${isWbc}``). Without the flags the MiLB
+#: route returns MLB games and the WBC route returns spring training (reproduced 2026-09-17).
+_ROUTE_FLAGS = {
+    _SEARCH_URL_MINORS: {"minors": "true", "wbc": "false"},
+    _SEARCH_URL_WBC: {"minors": "false", "wbc": "true"},
+}
 
 
 def _date_chunks(start: str, end: str, days: int = 7) -> List[Tuple[str, str]]:
@@ -103,12 +114,20 @@ def _translate_filters(filters: dict) -> dict:
     return out
 
 
-def _fetch_chunk(gt: str, lt: str, player_type: str, filters: dict, base_url: str = _SEARCH_URL) -> pl.DataFrame:
+def _fetch_chunk(
+    gt: str,
+    lt: str,
+    player_type: str,
+    filters: dict,
+    base_url: str = _SEARCH_URL,
+    uncast_ids: Optional[Set[str]] = None,
+) -> pl.DataFrame:
     params = {"all": "true", "type": "details", "player_type": player_type, "game_date_gt": gt, "game_date_lt": lt}
     params.update(_translate_filters(filters))
+    params.update(_ROUTE_FLAGS.get(base_url, {}))  # the route's population wins over a forwarded raw flag
     resp = download(base_url, params=params)
     text = getattr(resp, "text", resp if isinstance(resp, str) else "")
-    return _csv_to_frame(text)
+    return _csv_to_frame(text, uncast_ids=uncast_ids)
 
 
 def _search_core(
@@ -119,6 +138,7 @@ def _search_core(
     player_type: str = "batter",
     chunk_days: int = 7,
     return_as_pandas: bool = False,
+    _uncast_ids: Optional[Set[str]] = None,
     **filters: Any,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Shared date-chunked, truncation-aware Savant search (MLB / MiLB / WBC).
@@ -126,14 +146,24 @@ def _search_core(
     Splits ``[start_dt, end_dt]`` into ``chunk_days`` windows, fetches each from
     ``base_url``, halving the window for any chunk that hits the 25,000-row cap,
     and warns once at the 1-day floor (where a single day can still truncate).
+    Id columns left uncast in any chunk are collected across chunks (and the
+    truncation recursion, via ``_uncast_ids``) and warned about once per call.
     """
+    uncast_ids: Set[str] = set() if _uncast_ids is None else _uncast_ids
     frames: list[pl.DataFrame] = []
     for gt, lt in _date_chunks(start_dt, end_dt, days=chunk_days):
-        df = _fetch_chunk(gt, lt, player_type, filters, base_url=base_url)
+        df = _fetch_chunk(gt, lt, player_type, filters, base_url=base_url, uncast_ids=uncast_ids)
         if df.height >= 25000 and chunk_days > 1:
             # truncated -> recurse on this sub-range with a smaller window
             df = _search_core(
-                gt, lt, base_url, label, player_type=player_type, chunk_days=max(1, chunk_days // 2), **filters
+                gt,
+                lt,
+                base_url,
+                label,
+                player_type=player_type,
+                chunk_days=max(1, chunk_days // 2),
+                _uncast_ids=uncast_ids,
+                **filters,
             )
         elif df.height >= 25000:
             warnings.warn(
@@ -142,10 +172,20 @@ def _search_core(
                 stacklevel=2,
             )
         frames.append(df)
-    frames = [f for f in frames if f.height]
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    populated = [f for f in frames if f.height]
+    if populated:
+        out = pl.concat(populated, how="diagonal_relaxed")
+    else:
+        # Every chunk header-only (no games in the window): a header-only frame reads as all-String,
+        # so it is kept out of the concat above (String would widen the Float64 columns) but still
+        # carries the 119 documented columns with ids Int64.
+        out = next((f for f in frames if f.width), pl.DataFrame())
+    if _uncast_ids is None:  # outermost call only
+        _warn_uncast_ids(uncast_ids, stacklevel=3)  # _search_core <- mlb_statcast_search* <- caller
     if return_as_pandas:
-        return out.to_pandas()
+        # polars -> pandas widens a nullable Int64 to float64; keep the pinned id columns nullable Int64.
+        ids = {c: "Int64" for c in _MLBAM_ID_COLUMNS if out.schema.get(c) == pl.Int64}
+        return out.to_pandas().astype(ids)
     return out
 
 
@@ -211,8 +251,9 @@ def mlb_statcast_search_minors(
     """Minor-league Statcast search (``/statcast-search-minors/csv``), date-chunked.
 
     Same shape, columns, and 25,000-row chunking as :func:`mlb_statcast_search`,
-    but against the MiLB CSV route. Scope with ``hfLevel`` (Triple-A/Double-A/…)
-    and ``hfSea`` filters.
+    against the MiLB CSV route with Savant's ``minors=true`` population flag sent
+    for you (the route path alone returns MLB games). Narrow further with
+    ``hfLevel`` (``"AAA|"``, ``"AA|"``, ``"A+|"``, ``"A|"``) and ``hfSea`` filters.
 
     Args:
         start_dt / end_dt: ``YYYY-MM-DD`` (inclusive).
@@ -254,7 +295,10 @@ def mlb_statcast_search_wbc(
     """World Baseball Classic Statcast search (``/statcast-search-world-baseball-classic/csv``).
 
     Same shape, columns, and 25,000-row chunking as :func:`mlb_statcast_search`,
-    against the WBC CSV route. Pass WBC date windows (e.g. March of a WBC year).
+    against the WBC CSV route with Savant's ``wbc=true`` population flag sent for
+    you (the route path alone returns MLB spring training). Pass WBC date windows
+    (e.g. March of a WBC year); ``game_type`` is the tournament round (``F`` pool
+    play, ``D`` quarterfinals, ``L`` semifinals, ``W`` championship).
 
     Args:
         start_dt / end_dt: ``YYYY-MM-DD`` (inclusive).

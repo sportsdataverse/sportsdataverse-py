@@ -1,12 +1,12 @@
 """ESPN football play-text grammar shared by the CFB and NFL processors.
 
 ESPN's newer play text names a player by an abbreviated form ("M.Chiumento",
-"A.St. Brown", "D.Jones Jr.") rather than spelling the name out. The NFL feed
-has always read that way; the college feed adopted the same vendor template in
-2025, with the jersey number inline ("#43 M.Chiumento punt 43 yards to the
-OSU36 #0 B.Inniss return 16 yards to the TEX48 (#81 N.Townsend), out of
-bounds"). Rust regex has no lookaround, so every pattern anchors on the verb
-that follows the name instead.
+"A.St. Brown", "D.Jones Jr.", "L.Vander Esch", "DK.Metcalf") rather than
+spelling the name out. The NFL feed has always read that way; the college feed
+adopted the same vendor template in 2025, with the jersey number inline ("#43
+M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48
+(#81 N.Townsend), out of bounds"). Rust regex has no lookaround, so every
+pattern anchors on the verb that follows the name instead.
 
 The constants here are the one definition of that name shape; the NFL grammar
 in :mod:`sportsdataverse.nfl.nfl_pbp` composes its verb-anchored patterns from
@@ -18,11 +18,36 @@ from __future__ import annotations
 
 import polars as pl
 
-#: An abbreviated player name: "X.Surname", optionally "Ja.Surname", with a
-#: particle ("A.St. Brown", "A.Van Ginkel") and a generational suffix.
+# One surname word: accented letters ("K.Colón"), straight and curly apostrophes
+# ("J.Malau’ulu"), hyphens, and the escaped apostrophe of the 2008-10 NFL feed
+# ("D.O&apos;Neal").
+_SURNAME_WORD = r"(?:[A-Za-zÀ-ÖØ-öø-ÿ'’\-]|&apos;)+"
+# A further surname word ("L.Vander Esch", "A.Randle El", "J.Echeverria Lozano").
+# Its second letter is lower-case, so an upper-case verb or team code ("R.Cobb
+# MUFFS", "to JAX 28") never joins the name, and it is never "Jr" / "Sr", so the
+# suffix keeps its period ("C.Harris Jr."). Where no verb follows to end the name,
+# a title-case word after it is read in: 2 of 1.09M NFL plays 2002-2026
+# ("Backward pass to T.Cohen The Replay Official ...", "to J.Lane For Two-Point").
+_NEXT_SURNAME_WORD = r"(?:[A-IK-RT-Z][a-z]|[JS][a-qs-z]|[JS]r[a-z])[A-Za-zÀ-ÖØ-öø-ÿ'’\-]*"
+
+#: An abbreviated player name as ESPN's NFL (2002-) and college vendor (2025-)
+#: text writes it: the initials ("T.", "Ja.", "Josh.", "Dari.", "A.J. ", and only at
+#: a word start "D.J." / "DK." / "SamL.", so "YACJ.Elliott" reads "J.Elliott" and
+#: "TOUCHDOWN.B.Maher" reads "B.Maher"), an
+#: optional "St." particle, one to three surname words (a lower-case particle
+#: allowed before the later ones: "J.van den Berg"), and a suffix -- "Jr." / "Sr"
+#: or a whole numeral ("III", never the "II" inside it), either after a comma
+#: ("J.Ruffin, Jr.", "R.Royal, III"; not "V", which after a comma is the next
+#: tackler: "(T.Bruschi, V.Wilfork)"), a numeral without a period ("W.Snead IV."
+#: ends a sentence), including the vendor feed's lower-case-L "lll".
 ABBREVIATED_NAME = (
-    r"[A-Z][a-z]{0,2}\.(?:St\. |Ste\. |Van |Von |De |Da |Del |Di |Du |La |Le )?[A-Za-z'\-]+"
-    r"(?: (?:Jr|Sr|II|III|IV)\.?)?"
+    r"(?:[A-Z]\.[A-Z]\. |\b[A-Z]\.[A-Z]\.|\b[A-Z]{2}\.|\b[A-Z][a-z]{1,3}[A-Z]\.|[A-Z][a-z]{0,4}\.)"
+    r"(?:St\. |Ste\. )?"
+    + _SURNAME_WORD
+    + r"(?: (?:(?:van|von|de|den|der|da|del|di|du|la|le) )?"
+    + _NEXT_SURNAME_WORD
+    + r"){0,2}"
+    + r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|lll|ll)\b)?"
 )
 
 #: The jersey-prefixed form the 2025 college feed uses: "#43 M.Chiumento".
@@ -34,12 +59,15 @@ _JERSEY_NAME_NOCAP = r"#\d{1,3} " + ABBREVIATED_NAME
 # (ESPN writes "Touchback" and "GOOD" / "NO GOOD" / "BLOCKED" in mixed case);
 # the name itself is matched case-sensitively so its capital initial keeps
 # meaning -- hence the ``(?i)`` prefix with a ``(?-i:...)`` island around the
-# name, the inline case toggle Rust regex offers in place of lookaround.
-JERSEY_PUNT_YDS_RE = r"(?i)\bpunt (\d+) yards"
-JERSEY_KICKOFF_YDS_RE = r"(?i)\bkickoff (\d+) yards"
-JERSEY_FG_YDS_RE = r"(?i)field goal attempt from (\d+) yards"
-JERSEY_FG_RESULT_RE = r"(?i)field goal attempt from \d+ yards (GOOD|NO GOOD|BLOCKED)"
-JERSEY_RETURN_YDS_RE = r"(?i)(?-i:" + _JERSEY_NAME_NOCAP + r") return (-?\d+) yards"
+# name, the inline case toggle Rust regex offers in place of lookaround. A
+# distance of one is singular ("punt 1 yard", "return 1 yard").
+JERSEY_PUNT_YDS_RE = r"(?i)\bpunt (\d+) yards?\b"
+JERSEY_KICKOFF_YDS_RE = r"(?i)\bkickoff (\d+) yards?\b"
+JERSEY_FG_YDS_RE = r"(?i)field goal attempt from (\d+) yards?\b"
+JERSEY_FG_RESULT_RE = r"(?i)field goal attempt from \d+ yards? (GOOD|NO GOOD|BLOCKED)"
+#: Group 1 is a return's signed yardage ("return 16 yards", "return 1 yard"); group 2
+#: is the loss in "return for loss of 2 yards" -- read both through jersey_return_yards().
+JERSEY_RETURN_YDS_RE = r"(?i)(?-i:" + _JERSEY_NAME_NOCAP + r") return (?:(-?\d+)|for loss of (\d+)) yards?\b"
 JERSEY_RETURNER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") return "
 JERSEY_FAIR_CATCH_RE = r"(?i)fair catch by (?-i:" + JERSEY_NAME + r")"
 JERSEY_PUNTER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") punt "
@@ -176,13 +204,13 @@ def jersey_fg_result(col: str = "text") -> pl.Expr:
 
 
 def jersey_return_yards(col: str = "text") -> pl.Expr:
-    """Return yardage from ``#N X.Surname return N yards`` (the first return clause; a penalty appended after it is not read).
+    """Return yardage from ``#N X.Surname return N yards`` / ``return for loss of N yards`` (the first return clause; a penalty appended after it is not read).
 
     Args:
         col: The play-text column. Defaults to ``"text"``.
 
     Returns:
-        pl.Expr: Int32 return yardage (may be negative), null on any other text.
+        pl.Expr: Int32 return yardage, negative for a loss, null on any other text.
 
     Example:
         Quick start::
@@ -192,7 +220,8 @@ def jersey_return_yards(col: str = "text") -> pl.Expr:
             df = pl.DataFrame({"text": ["#43 M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48"]})
             df.with_columns(v=jersey_return_yards())["v"].to_list()  # [16]
     """
-    return jersey_yards(JERSEY_RETURN_YDS_RE, col)
+    loss = _text(col).str.extract(JERSEY_RETURN_YDS_RE, 2).cast(pl.Int32, strict=False)
+    return pl.coalesce(jersey_yards(JERSEY_RETURN_YDS_RE, col), -loss)
 
 
 def jersey_returner(col: str = "text") -> pl.Expr:

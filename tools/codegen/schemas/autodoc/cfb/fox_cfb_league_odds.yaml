@@ -1,0 +1,27 @@
+schema: fox_cfb_league_odds
+kind: dataframe
+columns:
+- name: section
+  type: character
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: event_time
+  type: character
+  description: ''
+- name: event_status
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: spread
+  type: character
+  description: ''
+- name: to_win
+  type: character
+  description: ''
+- name: total
+  type: character
+  description: ''

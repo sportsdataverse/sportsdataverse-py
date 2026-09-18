@@ -32,7 +32,7 @@ columns:
   type: character
   description: ''
 - name: points
-  type: character
+  type: integer
   description: ''
 - name: penalty_minutes
   type: character

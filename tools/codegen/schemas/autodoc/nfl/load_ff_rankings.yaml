@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: id
-  type: integer
+  type: character
   description: ''
 - name: pos
   type: character

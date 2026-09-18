@@ -1,0 +1,4 @@
+fp_page,page_type,ecr_type,player,id,pos,team,ecr,sd,best,worst,sportsdata_id,player_filename,yahoo_id,cbs_id,player_owned_avg,player_owned_espn,player_owned_yahoo,player_image_url,player_square_image_url,rank_delta,bye,mergename,scrape_date,tm
+/nfl/rankings/dynasty-dst.php,dynasty-dst,dp,Denver Broncos,8090,DST,DEN,2.67,1.37,1,5,NA,denver-defense.php,NA,NA,97.7,NA,NA,NA,NA,1,10,Denver Broncos,2026-09-11,DEN
+/nfl/rankings/dynasty-superflex.php,dynasty-op,dsf,Josh Allen,17298,QB,BUF,1,0,1,1,NA,josh-allen-qb.php,NA,NA,99.9,NA,NA,NA,NA,NA,7,Josh Allen,2026-09-11,BUF
+/nfl/rankings/dynasty-superflex.php,dynasty-op,dsf,Fernando Mendoza,28013,QB,LV,57.38,7.78,49,71,NA,fernando-mendoza.php,NA,NA,17.6,NA,NA,NA,NA,-3,13,Fernando Mendoza,2026-09-11,LVR

@@ -1,0 +1,27 @@
+schema: fox_nba_league_scores
+kind: dataframe
+columns:
+- name: selection_list
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: uri
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''
+- name: selected
+  type: character
+  description: ''
+- name: group_id
+  type: character
+  description: ''

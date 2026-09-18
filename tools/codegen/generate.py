@@ -1614,19 +1614,25 @@ def refresh_loader_schemas() -> int:
     for ld in rel.loaders:
         if ld.stub:
             continue
-        # NEWEST season first: long-history loaders (cfb_pbp floor 2004,
-        # nba_stats floor 1996) have sparse early-era schemas, and capturing
-        # those shrinks the column inventory — orphaning manual descriptions
-        # and dropping columns from the docs. min_season is the last resort.
+        # RICHEST recent season wins (most columns; a tie goes to the newer one).
+        # Long-history loaders (cfb_pbp floor 2004, nba_stats floor 1996) have
+        # sparse early-era schemas, and a newest season still in progress is
+        # partial too (Sept 2026: cfb_game_rosters 2026 had 73 cols vs 77 for
+        # 2025) -- capturing either shrinks the column inventory, orphaning
+        # manual descriptions and dropping columns from the docs. Seasons are
+        # NOT unioned: test_declared_schema_matches_the_published_parquet
+        # asserts the declared schema equals ONE published season's columns, so
+        # a union would document a shape no single asset has. min_season is the
+        # last resort; a season whose footer read raises is skipped.
         seasons = [2026, 2025, 2024, 2023, 2022, ld.min_season or 2024]
         got = None
         for s in dict.fromkeys(seasons):
             try:
                 sch = pl.read_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
-                got = [{"name": k, "type": str(v)} for k, v in sch.items()]
-                break
             except Exception:  # noqa: BLE001
                 continue
+            if got is None or len(sch) > len(got):
+                got = [{"name": k, "type": str(v)} for k, v in sch.items()]
         # id_int64 columns are cast at the loader boundary AFTER read, so the
         # declared type is Int64 regardless of the parquet footer (enforced by
         # tests/codegen/test_id_casts.py; a raw re-capture must not regress it).
@@ -3454,6 +3460,42 @@ def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
     return result
 
 
+def _merge_autodoc_columns(committed: list, df) -> tuple:
+    """Union a committed autodoc schema with one live capture of ``df``.
+
+    One call is one moment: an off-season endpoint omits its in-season columns
+    (``home_team_score``, ``tournament_id``) and ships all-null placeholders, so a
+    single frame is never the whole schema. Committed columns keep their order
+    and genuinely new ones append. A committed type survives when the fresh
+    column is entirely null (a dtype inferred from no values is noise) or when
+    committed says ``list`` -- :func:`_pl_to_doc_type` folds ``List(Int64)`` to
+    ``integer``, so that "change" is the mapper, not the data. Any other dtype
+    change is real and wins.
+
+    Returns ``(columns, new, retained, types_preserved)``; the counts make a thin
+    capture visible in the summary line."""
+
+    def all_null(name: str) -> bool:
+        s = df[name]
+        return (s.null_count() if hasattr(s, "null_count") else int(s.isna().sum())) == len(s)
+
+    fresh = {c["name"]: c for c in _cols_from_frame(df, {})}
+    out: list = []
+    retained = types_kept = 0
+    for c in committed:
+        f = fresh.pop(c["name"], None)
+        if f is None:
+            out.append(c)
+            retained += 1
+            continue
+        keep = f["type"] == c["type"] or c["type"] == "list" or all_null(c["name"])
+        if keep and f["type"] != c["type"]:
+            types_kept += 1
+        out.append(c if keep else {**c, "type": f["type"]})
+    out.extend(fresh.values())
+    return out, len(fresh), retained, types_kept
+
+
 def refresh_autodoc_schemas() -> int:
     """Call every in-scope autodoc DataFrame-returning function and capture its
     column schema to ``schemas/autodoc/{scope}/{fn}.yaml`` (network; best-effort).
@@ -3461,17 +3503,19 @@ def refresh_autodoc_schemas() -> int:
     For each autodoc name (per :func:`_autodoc_names_by_scope`) the example call
     args are looked up in ``autodoc_example_args.yaml`` (else ``{}``), the live
     function is invoked, and -- when the result is a polars/pandas DataFrame with
-    >0 columns -- a ``kind: dataframe`` schema is written via :func:`_cols_from_frame`
-    (descriptions left blank; there is no per-column authored source). Any failure
-    (call error, non-DataFrame return, empty frame) is logged as a skip and the
-    function falls back to its docstring Returns prose at render time. Pre-existing
-    schemas for names that no longer capture are removed so the committed set never
-    goes stale."""
+    >0 columns -- a ``kind: dataframe`` schema is written as the UNION of the
+    committed schema and the fresh frame (:func:`_merge_autodoc_columns`;
+    descriptions left blank; there is no per-column authored source). A
+    ``hand_authored: true`` schema is never written. Any failure (call error,
+    non-DataFrame return, empty frame) is logged as a skip and the function falls
+    back to its docstring Returns prose at render time. Pre-existing schemas for
+    names that no longer capture are removed so the committed set never goes
+    stale."""
     import importlib
 
     import yaml
 
-    captured = skipped = 0
+    captured = skipped = cols_retained = types_preserved = hand_kept = 0
     skip_reasons: list[str] = []
     written_paths: set = set()
     # (scope_key, fn) for every name the autodoc set still resolves to a callable,
@@ -3504,10 +3548,18 @@ def refresh_autodoc_schemas() -> int:
                 skip_reasons.append(f"{scope_key}.{fn}: non-DataFrame ({type(df).__name__})")
                 skipped += 1
                 continue
-            doc = {"schema": fn, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
-            outdir = _AUTODOC_SCHEMA_DIR / scope_key
-            outdir.mkdir(parents=True, exist_ok=True)
-            dest = outdir / f"{fn}.yaml"
+            dest = _AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml"
+            committed = (yaml.safe_load(dest.read_text(encoding="utf-8")) or {}) if dest.exists() else {}
+            if committed.get("hand_authored"):
+                hand_kept += 1
+                continue
+            cols, new, retained, kept_types = _merge_autodoc_columns(committed.get("columns") or [], df)
+            if retained or kept_types:
+                print(f"  autodoc merge {scope_key}.{fn}: {new} new, {retained} retained, {kept_types} types preserved")
+            cols_retained += retained
+            types_preserved += kept_types
+            doc = {"schema": fn, "kind": "dataframe", "columns": cols}
+            dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n")
             written_paths.add(dest.resolve())
             captured += 1
@@ -3537,6 +3589,9 @@ def refresh_autodoc_schemas() -> int:
         f"autodoc schemas: {captured} captured, {skipped} skipped"
         + (f", {pruned} pruned" if pruned else "")
         + (f", {kept_stale} kept (in scope, capture failed)" if kept_stale else "")
+        + (f", {cols_retained} columns retained (absent from capture)" if cols_retained else "")
+        + (f", {types_preserved} types preserved (all-null or list)" if types_preserved else "")
+        + (f", {hand_kept} hand_authored kept" if hand_kept else "")
     )
     if skip_reasons:
         print("  sample skips: " + "; ".join(skip_reasons[:5]))

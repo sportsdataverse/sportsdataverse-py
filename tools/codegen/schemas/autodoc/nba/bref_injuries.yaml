@@ -1,0 +1,15 @@
+schema: bref_injuries
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: date_update
+  type: character
+  description: ''
+- name: note
+  type: character
+  description: ''

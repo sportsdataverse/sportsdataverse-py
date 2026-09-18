@@ -3,6 +3,7 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
+from sportsdataverse.football.usage_box import SECTIONS as USAGE_BOX_SECTIONS
 from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
 from tests.conftest import fetch_pbp_or_skip, skip_if_no_live
 
@@ -41,19 +42,22 @@ def test_basic_nfl_pbp(generated_nfl_data):
 
 def test_nfl_adv_box_score(nfl_box_score):
     assert nfl_box_score is not None
-    assert not set(nfl_box_score.keys()).difference(
-        {
-            "win_pct",
-            "pass",
-            "team",
-            "situational",
-            "rush",
-            "receiver",
-            "defensive",
-            "turnover",
-            "drives",
-        },
-    )
+    # Subset direction (expected ⊆ actual), as in test_cfb_adv_box_score: the box
+    # score must contain these sections, and new ones are allowed. The old
+    # "no keys outside this set" check went red when #496 added the usage box.
+    expected_sections = {
+        "pass",
+        "rush",
+        "receiver",
+        "team",
+        "situational",
+        "defensive",
+        "defensive_players",
+        "turnover",
+        "drives",
+        *USAGE_BOX_SECTIONS,
+    }
+    assert expected_sections.issubset(set(nfl_box_score.keys()))
 
 
 def test_havoc_rate(nfl_box_score):

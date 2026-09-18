@@ -148,3 +148,9 @@ columns:
 - name: home_team_record
   type: character
   description: ''
+- name: away_team_common_name_fr
+  type: character
+  description: ''
+- name: home_team_common_name_fr
+  type: character
+  description: ''

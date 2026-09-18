@@ -75,7 +75,7 @@ QMJHL statistical leaders for a given season.
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character | URL of the small-format team logo image for the player's QMJHL club. |
-| `stat_formatted` | character | Human-readable string representation of the leader's statistical value for display purposes (e.g., '42', '1.85', '93.5%'). |
+| `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
 | `type_formatted` | character | Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage'). |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character | URL of a small-format headshot image of the player from the QMJHL HockeyTech feed. |
@@ -253,7 +253,7 @@ QMJHL standings — one row per team.
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `row` | character | Row index within the game grouping (sequencing helper). |
-| `points` | character | Total points (goals + assists). |
+| `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
@@ -313,6 +313,7 @@ QMJHL team roster for a given team + season.
 | `latest_team_id` | character | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character | Text label describing the player's veteran status or classification under QMJHL roster rules. |
+| `team_id` | character | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `division` | character | Division identifier. |
 | `tp_jersey_number` | character | Jersey number assigned to the player on the QMJHL team's official roster (may differ from current game-night number). |

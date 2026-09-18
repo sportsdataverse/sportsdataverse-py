@@ -17,6 +17,10 @@ Envelope shapes actually observed in the committed captures
   surfaced in a ``key`` column.
 * ``{year: {season_type: {...}}}`` -- ``/resource/team/standings/{teamId}``:
   handled by :func:`parse_cbs_napi_standings`.
+* ``{"plays": [...]}`` / ``{"drives": [...]}`` --
+  ``/resource/game/scoring/plays/{gameId}`` and ``/scoring/drives/{gameId}``:
+  handled by :func:`parse_cbs_napi_scoring_plays` and
+  :func:`parse_cbs_napi_scoring_drives` (one row per play / drive).
 * ``{"error"|"errors"|"warnings": ...}`` -- NAPI answers an invalid id with
   **HTTP 200** plus this envelope and no ``data``; it parses to a zero-row frame.
 
@@ -50,6 +54,8 @@ from sportsdataverse.dl_utils import underscore
 
 __all__ = [
     "parse_cbs_napi",
+    "parse_cbs_napi_scoring_drives",
+    "parse_cbs_napi_scoring_plays",
     "parse_cbs_napi_standings",
 ]
 
@@ -282,3 +288,291 @@ def parse_cbs_napi_standings(
             )
     frame = _rows_to_frame(rows)
     return frame.to_pandas() if return_as_pandas else frame
+
+
+# Column order is pinned (CBS key order is not stable across games) so frames
+# from different games stack with a plain vertical concat.
+_PLAY_COLUMNS = (
+    "id",
+    "game_id",
+    "drive_id",
+    "quarter",
+    "time_remaining",
+    "down",
+    "distance",
+    "side",
+    "yardline",
+    "team_in_possession",
+    "description",
+    "medium",
+    "short",
+    "score_on_play",
+    "score_type",
+    "short_score",
+    "under_review",
+    "home_timeouts_remaining",
+    "away_timeouts_remaining",
+    "real_clock",
+    "subplays",
+)
+_DRIVE_COLUMNS = (
+    "id",
+    "team_id",
+    "quarter",
+    "starting_time",
+    "ending_time",
+    "time_of_possession",
+    "starting_yardline",
+    "ending_yardline",
+    "starting_play_id",
+    "ending_play_id",
+    "drive_plays",
+    "yards_on_drive",
+    "drive_yards_total",
+    "penalty_yards",
+    "first_downs_on_drive",
+    "inside_the_20",
+    "score_on_drive",
+    "result",
+)
+# CBS ships every scoring-feed value as a JSON string. These columns always hold
+# integers (ids, counts, yard lines), so they are pinned to Int64 regardless of
+# the game -- matching the Int64 teamId/playerId of the other NAPI resources.
+# ``distance`` is NOT here: CBS sends the literal "Goal" on goal-to-go downs.
+_PLAY_INT_COLUMNS = (
+    "id",
+    "game_id",
+    "drive_id",
+    "quarter",
+    "down",
+    "yardline",
+    "team_in_possession",
+    "home_timeouts_remaining",
+    "away_timeouts_remaining",
+)
+_DRIVE_INT_COLUMNS = (
+    "id",
+    "team_id",
+    "quarter",
+    "drive_plays",
+    "starting_play_id",
+    "ending_play_id",
+    "yards_on_drive",
+    "drive_yards_total",
+    "penalty_yards",
+    "first_downs_on_drive",
+)
+# "Yes"/"No" flags.
+_PLAY_BOOL_COLUMNS = ("score_on_play", "under_review")
+_DRIVE_BOOL_COLUMNS = ("score_on_drive", "inside_the_20")
+# Dtype of ``subplays`` when a body carries none: the two fields every sub-event
+# has. A populated frame's struct has more fields; ``vertical_relaxed`` unions them.
+_SUBPLAYS_DTYPE = pl.List(pl.Struct({"type": pl.String, "order": pl.String}))
+
+
+def _flat_subplays(subplays: Any) -> List[Dict[str, Any]]:
+    """``{"subplay": [{"type", "order", "<event>": {...}}]}`` -> flat event dicts.
+
+    Each sub-event's type-named block (``kickoff``, ``complete_pass``, ...) is
+    merged into the event, so the column holds one struct shape across types.
+    """
+    events = subplays.get("subplay") if isinstance(subplays, dict) else subplays
+    if isinstance(events, dict):  # a lone sub-event may arrive unwrapped
+        events = [events]
+    out: List[Dict[str, Any]] = []
+    for event in events if isinstance(events, list) else []:
+        if not isinstance(event, dict):
+            continue
+        flat: Dict[str, Any] = {}
+        for key, value in event.items():
+            if isinstance(value, dict):
+                flat.update(value)
+            else:
+                flat[key] = value
+        out.append(flat)
+    return out
+
+
+def _scoring_frame(
+    raw: Any,
+    key: str,
+    order: Iterable[str],
+    int_columns: Iterable[str],
+    bool_columns: Iterable[str],
+    return_as_pandas: bool,
+) -> DataFrameT:
+    # The documented columns are always present (typed null when CBS omits one,
+    # as older games do) so frames from any games -- or none -- stack.
+    schema: Dict[str, Any] = {
+        c: (
+            pl.Int64
+            if c in int_columns
+            else pl.Boolean
+            if c in bool_columns
+            else _SUBPLAYS_DTYPE
+            if c == "subplays"
+            else pl.String
+        )
+        for c in order
+    }
+    rows = raw.get(key) if isinstance(raw, dict) else None
+    records = [r for r in rows if isinstance(r, dict)] if isinstance(rows, list) else []
+    if not records:
+        empty = pl.DataFrame(schema=schema)
+        return empty.to_pandas() if return_as_pandas else empty
+    if key == "plays":
+        records = [{**r, "subplays": _flat_subplays(r.get("subplays"))} for r in records]
+    frame = pl.DataFrame(records, infer_schema_length=None)
+    frame = frame.with_columns(
+        *[pl.col(c).cast(pl.Int64, strict=False) for c in int_columns if c in frame.columns],
+        *[pl.col(c).cast(pl.String) == "Yes" for c in bool_columns if c in frame.columns],
+        *[pl.lit(None, dtype=dtype).alias(c) for c, dtype in schema.items() if c not in frame.columns],
+    )
+    frame = frame.select([*schema, *[c for c in frame.columns if c not in schema]])
+    return frame.to_pandas() if return_as_pandas else frame
+
+
+def parse_cbs_napi_scoring_plays(
+    raw: Union[Dict[str, Any], None],
+    *,
+    return_as_pandas: bool = False,
+) -> DataFrameT:
+    """Parse a CBS NAPI play-by-play body (``/resource/game/scoring/plays/{gameId}``).
+
+    The body is ``{"plays": [...]}``, one record per play with every value sent
+    as a string. This returns one row per play in feed order. Id, count and
+    yard-line columns are cast to ``Int64``, the ``"Yes"``/``"No"`` flags to
+    ``Boolean``, and each play's ``subplays`` (kickoff + return, pass + fumble
+    return, penalty, ...) is kept as a list of structs, the event block merged
+    into each sub-event. The sub-event struct carries only the fields that game
+    used, so stack several games with ``pl.concat(..., how="vertical_relaxed")``.
+    NFL play ``id`` values are GSIS play ids; NCAAF ids are CBS epoch-style stamps.
+
+    Args:
+        raw: a ``/resource/game/scoring/plays/{gameId}`` JSON body.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per play. Zero rows (same columns and dtypes) when the payload
+        is ``None`` / empty / malformed or NAPI's HTTP-200
+        ``{"errors"|"warnings": ...}`` not-found envelope. Columns CBS omits
+        for older games (``game_id``, ``real_clock``, the timeout columns) are
+        present and null.
+
+        | Column | Type | Description |
+        |---|---|---|
+        | ``id`` | Int64 | CBS play id (GSIS play id for NFL). |
+        | ``game_id`` | Int64 | CBS game id. |
+        | ``drive_id`` | Int64 | Drive number; joins ``id`` of :func:`parse_cbs_napi_scoring_drives`. |
+        | ``quarter`` | Int64 | Period of the snap. |
+        | ``time_remaining`` | String | Game clock at the snap (``"15:00"``). |
+        | ``down`` | Int64 | Down (``0`` on kickoffs and tries). |
+        | ``distance`` | String | Yards to go, or ``"Goal"`` on goal-to-go. |
+        | ``side`` | String | Team abbreviation for the ``yardline`` side of the field. |
+        | ``yardline`` | Int64 | Yard line on ``side``. |
+        | ``team_in_possession`` | Int64 | CBS team id with the ball at the snap. |
+        | ``description`` | String | Full play text. |
+        | ``medium`` | String | Medium-length play summary. |
+        | ``short`` | String | Short play summary. |
+        | ``score_on_play`` | Boolean | Whether the play scored. |
+        | ``score_type`` | String | Scoring type (``Touchdown``, ``FieldGoal``, ...) or null. |
+        | ``short_score`` | String | Short scoring summary (empty when no score). |
+        | ``under_review`` | Boolean | Whether the play was under review. |
+        | ``home_timeouts_remaining`` | Int64 | Home timeouts left after the play. |
+        | ``away_timeouts_remaining`` | Int64 | Away timeouts left after the play. |
+        | ``real_clock`` | String | UTC wall-clock time of the play (ISO 8601). |
+        | ``subplays`` | List(Struct) | Sub-events: ``type``, ``order``, player ids/names, yards. |
+
+    Raises:
+        No exception is raised for empty or malformed payloads.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cbs import cbs_game_scoring_plays
+            plays = cbs_game_scoring_plays(game_id=50029216)
+            print(plays.shape)
+
+        Explicit parse of a raw body::
+
+            from sportsdataverse.cbs import cbs_game_scoring_plays, parse_cbs_napi_scoring_plays
+            raw = cbs_game_scoring_plays(game_id=50029216, return_parsed=False)
+            plays = parse_cbs_napi_scoring_plays(raw, return_as_pandas=True)
+
+        Pipeline next step (one line)::
+
+            plays.select("id", "subplays").explode("subplays").unnest("subplays").select("id", "type", "yards_on_play")
+
+    See Also:
+        * `nflfastR`_ -- NFL play-by-play in R.
+        * `cfbfastR`_ -- college football play-by-play in R.
+
+    .. _nflfastR: https://www.nflfastr.com
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    return _scoring_frame(raw, "plays", _PLAY_COLUMNS, _PLAY_INT_COLUMNS, _PLAY_BOOL_COLUMNS, return_as_pandas)
+
+
+def parse_cbs_napi_scoring_drives(
+    raw: Union[Dict[str, Any], None],
+    *,
+    return_as_pandas: bool = False,
+) -> DataFrameT:
+    """Parse a CBS NAPI drive-chart body (``/resource/game/scoring/drives/{gameId}``).
+
+    The body is ``{"drives": [...]}`` with every value sent as a string. This
+    returns one row per drive in feed order, with id, count and yardage columns
+    cast to ``Int64`` and the ``"Yes"``/``"No"`` flags to ``Boolean``.
+
+    Args:
+        raw: a ``/resource/game/scoring/drives/{gameId}`` JSON body.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per drive. Zero rows (same columns and dtypes) when the payload
+        is ``None`` / empty / malformed or an ``{"errors"|"warnings": ...}``
+        envelope.
+
+        | Column | Type | Description |
+        |---|---|---|
+        | ``id`` | Int64 | Drive number; joins ``drive_id`` of :func:`parse_cbs_napi_scoring_plays`. |
+        | ``team_id`` | Int64 | CBS team id of the offense. |
+        | ``quarter`` | Int64 | Period the drive started in. |
+        | ``starting_time`` | String | Game clock at the drive's first snap. |
+        | ``ending_time`` | String | Game clock at the drive's last play. |
+        | ``time_of_possession`` | String | Drive duration (``"m:ss"``). |
+        | ``starting_yardline`` | String | Start field position (``"TEXAS 22"``). |
+        | ``ending_yardline`` | String | End field position. |
+        | ``starting_play_id`` | Int64 | CBS play id of the first play. |
+        | ``ending_play_id`` | Int64 | CBS play id of the last play. |
+        | ``drive_plays`` | Int64 | Plays in the drive. |
+        | ``yards_on_drive`` | Int64 | Net yards gained. |
+        | ``drive_yards_total`` | Int64 | Total drive yards as CBS reports them. |
+        | ``penalty_yards`` | Int64 | Penalty yards on the drive. |
+        | ``first_downs_on_drive`` | Int64 | First downs gained. |
+        | ``inside_the_20`` | Boolean | Whether the drive reached the red zone. |
+        | ``score_on_drive`` | Boolean | Whether the drive scored. |
+        | ``result`` | String | Drive result (``Punt``, ``Touchdown``, ``Field Goal``, ...). |
+
+    Raises:
+        No exception is raised for empty or malformed payloads.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cbs import cbs_game_scoring_drives
+            drives = cbs_game_scoring_drives(game_id=50029216)
+            print(drives.shape)
+
+        Pipeline next step (one line)::
+
+            drives.group_by("team_id").agg(pl.col("score_on_drive").sum())
+
+    See Also:
+        * `nflfastR`_ -- NFL play-by-play in R.
+        * `cfbfastR`_ -- college football play-by-play in R.
+
+    .. _nflfastR: https://www.nflfastr.com
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    return _scoring_frame(raw, "drives", _DRIVE_COLUMNS, _DRIVE_INT_COLUMNS, _DRIVE_BOOL_COLUMNS, return_as_pandas)

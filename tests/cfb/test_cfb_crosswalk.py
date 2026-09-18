@@ -1211,3 +1211,39 @@ def test_live_cfb_schedule_crosswalk_full_season() -> None:
     # + Fox bowls segment + Yahoo postseason weeks)
     jan = espn.filter(pl.col("espn_date").str.slice(0, 7) >= "2025-12")
     assert jan.filter(pl.col("matched_sources") == "espn+fox+yahoo").height > 10
+
+
+def test_schedule_crosswalk_espn_leg_uses_plain_http_site_api(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every ESPN request the schedule crosswalk makes (calendar + weekly
+    scoreboards) goes to ``http://site.api.espn.com`` -- the host the rest of
+    sdv-py uses -- not the https host, which 403s from some datacenter egress.
+    The calendar body is the real 2024 capture; scoreboards return no events."""
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_schedule as sched
+
+    calendar = json.loads(
+        (Path(__file__).resolve().parents[1] / "fixtures" / "cfb_schedule" / "cfb_calendar_2024.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    urls: list[str] = []
+
+    class _Resp:
+        def __init__(self, body: Dict[str, Any]) -> None:
+            self._body = body
+
+        def json(self) -> Dict[str, Any]:
+            return self._body
+
+    def fake_download(url: str, params: Any = None, **kwargs: Any) -> _Resp:
+        urls.append(url)
+        return _Resp(calendar if params and "week" not in params else {"events": []})
+
+    monkeypatch.setattr(sched, "download", fake_download)
+    cfb_schedule_crosswalk(2024, providers=("espn",))
+    cfb_schedule_crosswalk(2024, 5, providers=("espn",))
+    assert len(urls) == 20  # calendar + 16 regular weeks + bowls + CFP, then the week-5 slate
+    prefix = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
+    assert all(u == prefix for u in urls), sorted(set(urls))

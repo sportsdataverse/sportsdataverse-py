@@ -346,6 +346,7 @@ def wbb_team_crosswalk(
     fox: Optional[pl.DataFrame] = None,
     bart: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik).
@@ -362,6 +363,10 @@ def wbb_team_crosswalk(
             (~60 s); pass an empty frame to skip Fox entirely.
         bart: Pre-fetched ``bart_wbb_ratings()`` frame. ``None`` fetches live.
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-conference ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -390,6 +395,11 @@ def wbb_team_crosswalk(
             when the ESPN conference walk resolves no teams at all -- the ESPN
             directory is not opt-out-able.
 
+        CrosswalkSourceError: The ESPN conference group walk failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
+
     Example:
         Quick start::
 
@@ -416,7 +426,7 @@ def wbb_team_crosswalk(
     from sportsdataverse.wbb.wbb_schedule import most_recent_wbb_season
 
     season = int(season) if season is not None else most_recent_wbb_season()
-    espn = espn_team_directory("wbb", season=season, **kwargs)
+    espn = espn_team_directory("wbb", season=season, strict=strict, **kwargs)
     if fox is None:
 
         def _fox() -> Any:
@@ -443,6 +453,7 @@ def wbb_schedule_crosswalk(
     season: Optional[int] = None,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the WBB cross-source schedule crosswalk (ESPN / Torvik).
@@ -456,10 +467,21 @@ def wbb_schedule_crosswalk(
         season: Season year (e.g. ``2026``). Defaults to the most recent WBB
             season.
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-date ESPN scoreboard or per-conference
+            ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
         ``pl.DataFrame`` (or pandas) with :data:`SCHEDULE_COLUMNS`.
+
+    Raises:
+        CrosswalkSourceError: The per-date ESPN scoreboard or the conference walk failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -482,10 +504,10 @@ def wbb_schedule_crosswalk(
     season = int(season) if season is not None else most_recent_wbb_season()
     # An empty Fox frame skips the ~60 s enumeration: only espn_team_id and
     # bart_team are needed here (mirrors the R builder's `.empty_fox`).
-    team_xwalk = wbb_team_crosswalk(season=season, fox=pl.DataFrame(), **kwargs)
+    team_xwalk = wbb_team_crosswalk(season=season, fox=pl.DataFrame(), strict=strict, **kwargs)
     bart_games = bart_super_sked("wbb", season, **kwargs)
     dates = sorted({d for d in bart_games["game_date"].to_list() if d is not None})
-    espn_games = espn_scoreboard_games("wbb", dates, **kwargs)
+    espn_games = espn_scoreboard_games("wbb", dates, strict=strict, **kwargs)
     out = _assemble_schedule_crosswalk(espn_games, bart_games, team_xwalk, season)
     return out.to_pandas() if return_as_pandas else out
 
@@ -495,6 +517,7 @@ def wbb_player_crosswalk(
     min_confidence: float = 0.92,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Build the WBB cross-source player crosswalk (ESPN / Fox).
@@ -509,11 +532,22 @@ def wbb_player_crosswalk(
             season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
+        strict: Raise on the first failed per-team ESPN or Fox roster fetch, or
+            per-conference ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
         ``pl.DataFrame`` (or pandas), one row per ESPN athlete, 17 columns
         ending in ``match_method`` / ``match_confidence`` / ``match_keys``.
+
+    Raises:
+        CrosswalkSourceError: The per-team ESPN or Fox rosters or the conference walk failed every
+            per-item fetch and answered none -- the signature of an unreachable
+            or rate-limited host -- or, with ``strict``, any one fetch failed.
+            Isolated failures are skipped and logged as a warning.
 
     Example:
         Quick start::
@@ -535,18 +569,22 @@ def wbb_player_crosswalk(
 
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    from sportsdataverse._crosswalk_basketball_sources import espn_rosters, fox_rosters
+    from sportsdataverse._crosswalk_basketball_sources import FetchTally, espn_rosters, fox_rosters
     from sportsdataverse.wbb.wbb_schedule import most_recent_wbb_season
 
     season = int(season) if season is not None else most_recent_wbb_season()
-    team_xwalk = wbb_team_crosswalk(season=season, **kwargs)
+    team_xwalk = wbb_team_crosswalk(season=season, strict=strict, **kwargs)
     frames: List[pl.DataFrame] = []
+    espn_tally = FetchTally("espn_wbb_team_roster", strict=strict)
+    fox_tally = FetchTally("fox_wbb_team_roster", strict=strict)
     for row in team_xwalk.iter_rows(named=True):
-        espn = espn_rosters("wbb", row["espn_team_id"], row["espn_abbreviation"], season, **kwargs)
+        espn = espn_rosters("wbb", row["espn_team_id"], row["espn_abbreviation"], season, tally=espn_tally, **kwargs)
         if espn.height == 0:
             continue
-        fox = fox_rosters("wbb", row["espn_team_id"], row["fox_team_id"], **kwargs)
+        fox = fox_rosters("wbb", row["espn_team_id"], row["fox_team_id"], tally=fox_tally, **kwargs)
         frames.append(assemble_player_espn_fox(espn, fox, season, min_confidence))
+    espn_tally.finish()
+    fox_tally.finish()
     out = (
         pl.concat(frames, how="diagonal_relaxed")
         if frames

@@ -253,7 +253,7 @@ WHL standings — one row per team.
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
 | `row` | character | Row index within the game grouping (sequencing helper). |
-| `points` | character | Total points (goals + assists). |
+| `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
@@ -262,7 +262,7 @@ WHL standings — one row per team.
 | `percentage` | character | Team points percentage expressed as a string, calculated as points earned divided by maximum possible points. |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character | Team record over the most recent ten games, formatted as a W-L or W-OTL-L string. |
+| `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team name. |
 
 ### `whl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_team_roster}
