@@ -17,6 +17,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   Houshmandzadeh", and two untyped two-minute-warning rows)
 * ``summary_400951676_trimmed.json.gz`` -- SF @ SEA, 2017 week 2 (six home points carried by no
   scoring row; the header's final anchors the repair)
+* ``summary_400791590_trimmed.json.gz`` -- DAL @ NO, 2015 week 4 (a pick-six ESPN types
+  "Interception Return", not "... Touchdown")
 """
 
 from __future__ import annotations
@@ -568,3 +570,18 @@ def test_a_rise_to_the_header_final_that_the_game_keeps_is_kept(sf_sea_2017):
     for col in ("homeScore", "awayScore"):
         assert (f[col].diff().fill_null(0) >= 0).all(), col
     assert float(f["home_wp_after"].drop_nulls()[-1]) > 0.9  # SEA won
+
+
+# --- O3: a defensive return TD is not the offense's touchdown -------------------------------------
+
+
+def test_pick_six_typed_interception_return_is_not_a_passing_touchdown():
+    # "T.Romo pass short left intended for D.Street INTERCEPTED by T.McBride ... T.McBride for 20
+    # yards, TOUCHDOWN." ESPN types the row "Interception Return", which is not in
+    # ``defense_score_vec``, so ``pass & td_play`` booked it as Romo's passing touchdown.
+    row = _row(_process(400791590), 4007915903306)
+    assert row["type.text"] == "Interception Return"
+    assert row["td_play"] and row["int"]
+    assert not row["pass_td"] and not row["rush_td"]
+    assert row["yds_receiving"] == 0
+    assert row["yds_int_return"] == 20

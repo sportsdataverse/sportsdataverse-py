@@ -60,6 +60,8 @@ from sportsdataverse.football.box import build_specialists_box as _build_special
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
 from sportsdataverse.football.espn_text import ABBREVIATED_NAME as _ABBREVIATED_NAME
+from sportsdataverse.football.espn_text import before_turnover as _before_turnover
+from sportsdataverse.football.espn_text import returned_for_touchdown as _returned_for_touchdown
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
 from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS
 from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box
@@ -2660,8 +2662,13 @@ class NFLPlayProcess(object):
                 pass_breakup=pl.when(pl.col("text").str.contains("(?i)broken up by")).then(True).otherwise(False),
                 # --- Pass/Rush TDs ------
                 # the offense's touchdowns only: an interception or fumble returned for a
-                # score is a pass / rush play with td_play set, but the defence scored it
-                pass_td=pl.when(pl.col("type.text").is_in(["Passing Touchdown"]))
+                # score is a pass / rush play with td_play set, but the defence scored it.
+                # ``type.text`` alone does not catch every one: ESPN labels some pick-sixes
+                # "Passing Touchdown" and some "Interception Return", so the text -- which
+                # says the ball was intercepted or lost and THEN scored -- gates first (O3).
+                pass_td=pl.when(_returned_for_touchdown("text"))
+                .then(False)
+                .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
                 .when(
                     (pl.col("pass") == True)
@@ -2670,7 +2677,9 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(pl.col("type.text").is_in(["Rushing Touchdown"]))
+                rush_td=pl.when(_returned_for_touchdown("text"))
+                .then(False)
+                .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
                 .when(
                     (pl.col("rush") == True)
@@ -2957,37 +2966,41 @@ class NFLPlayProcess(object):
         return play_df
 
     def __add_yardage_cols(self, play_df):
+        # The offense's gain ends at the turnover: every "for N yards" after an
+        # interception or a lost fumble is the defender's return, and reading past
+        # the clause booked it as receiving / rushing yards (O3).
+        _gain_text = _before_turnover("text")
         play_df = play_df.with_columns(
             yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for no gain")))
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)for no gain")))
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for a loss of")))
-            .then(-1 * pl.col("text").str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)rush for a loss of")))
-            .then(-1 * pl.col("text").str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for")))
-            .then(pl.col("text").str.extract(r"(?i)run for (\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)run for (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)rush for")))
-            .then(pl.col("text").str.extract(r"(?i)rush for (\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)rush for (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yd Run")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yd Rush")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yard Rush")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("text").str.contains("(?i)rushed"))
                 .and_(pl.col("text").str.contains("(?i)touchdown") == False),
             )
-            .then(pl.col("text").str.extract(r"(?i)for (\d+) yards").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for (\d+) yards").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("text").str.contains("(?i)rushed"))
                 .and_(pl.col("text").str.contains("(?i)touchdown") == True),
             )
-            .then(pl.col("text").str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
             .otherwise(None),
             yds_receiving=pl.when(
                 (pl.col("pass") == True)
@@ -3000,9 +3013,9 @@ class NFLPlayProcess(object):
                 .and_(pl.col("text").str.contains(r"(?i)complete to"))
                 .and_(pl.col("text").str.contains(r"(?i)for a loss of")),
             )
-            .then(-1 * pl.col("text").str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
+            .then(-1 * _gain_text.str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)complete to")))
-            .then(pl.col("text").str.extract(r"(?i)for (\d+)").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)for (\d+)").cast(pl.Int32))
             .when(
                 (pl.col("pass") == True).and_(
                     pl.col("text").str.contains(r"(?i)incomplete|(?i) sacked|(?i)intercepted|(?i)pass defensed"),
@@ -3012,7 +3025,7 @@ class NFLPlayProcess(object):
             .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)incompletion")))
             .then(0)
             .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)Yd pass")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
+            .then(_gain_text.str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
             .otherwise(None),
             yds_int_return=pl.when(
                 (pl.col("pass") == True)
@@ -3118,7 +3131,7 @@ class NFLPlayProcess(object):
             yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed").is_null()))
             .then(
                 pl.coalesce(
-                    pl.col("text").str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
+                    _gain_text.str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
                     pl.col("statYardage").cast(pl.Int32, strict=False),
                 ),
             )
@@ -3136,7 +3149,7 @@ class NFLPlayProcess(object):
             .when((pl.col("pass") == True).and_(pl.col("yds_receiving").is_null()))
             .then(
                 pl.coalesce(
-                    pl.col("text").str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
+                    _gain_text.str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
                     pl.col("statYardage").cast(pl.Int32, strict=False),
                 ),
             )

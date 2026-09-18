@@ -31,6 +31,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401110775.json`` -- UT Martin @ Florida, 2019 ("Timeout TENN MARTIN").
 * ``summary_401012682.json`` -- Oregon State @ Ohio State, 2018 ("Timeout OREGON ST" whose initials are Ohio State's OSU).
 * ``summary_333130023.json`` -- San Diego State @ San Jose State, 2013 (returners tackled out of bounds).
+* ``summary_252600087.json`` -- Notre Dame @ Purdue, 2005 (a pick-six ESPN labels "Passing Touchdown").
+* ``summary_302540025.json`` -- Colorado @ California, 2010 (a catch fumbled and returned 82 yards for a score).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -520,3 +522,33 @@ def test_vendor_tackler_separator_is_not_an_entity():
     proc.run_processing_pipeline()
     row = proc.plays_frame.filter(pl.col("id") == 4017527533).row(0, named=True)
     assert row["text"] == real and row["kickoff_return_player_name"] == "D.Cobb"
+
+
+# --- O3: a defensive return TD is neither the offense's touchdown nor its yardage ----------------
+
+
+def test_mislabelled_pick_six_is_not_a_passing_touchdown():
+    # ESPN types the 2005 college pick-six "Passing Touchdown", so gating on the type alone left
+    # `pass_td` true and summarize_passer booked it as the thrower's passing TD.
+    row = _row(_plays(252600087), "Brady Quinn pass intercepted by Darean Adams")
+    assert row["type.text"] == "Passing Touchdown"
+    assert not row["pass_td"] and not row["rush_td"]
+    assert row["yds_receiving"] == 0
+
+
+def test_opponent_fumble_return_yards_are_not_receiving_yards():
+    # "pass complete to Ryan Deehan, fumbled, recovered by Cal Darian Hagan at the Cal 18,
+    # Darian Hagan for 82 yards ... for a TOUCHDOWN" booked 82 receiving yards for the receiver.
+    row = _row(_plays(302540025), "Darian Hagan for 82 yards")
+    assert row["type.text"] == "Fumble Recovery (Opponent) Touchdown"
+    assert not row["pass_td"] and not row["rush_td"]
+    assert row["yds_receiving"] is None
+
+
+def test_rush_yardage_stated_before_a_fumble_survives():
+    # The guard cuts only what follows the turnover: "rush for 1 yard, fumbled ..." keeps 1, and
+    # "rush for a loss of 1 yard, fumbled ..." keeps -1.
+    gain = _row(_plays(252600087), "Asaph Schwapp rush for 1 yard, fumbled")
+    loss = _row(_plays(302540025), "Kevin Riley rush for a loss of 1 yard, fumbled")
+    assert gain["yds_rushed"] == 1
+    assert loss["yds_rushed"] == -1
