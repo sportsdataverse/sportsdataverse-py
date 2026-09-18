@@ -206,18 +206,47 @@ def test_the_no_next_snap_end_state_is_derived_not_copied():
     assert punt["end"]["yardsToEndzone"] == 60
 
 
-def test_kickoff_possession_is_left_exactly_as_the_mapper_states_it():
-    """cfbfastR's convention (C15): the kicking team owns the kickoff's yard-line frame, and the
-    adapter re-derives none of it -- ``pos_team`` and ``yards_to_goal`` pass straight through."""
+def test_a_kickoff_is_framed_on_the_kicking_team_like_espns_own_feed():
+    """MUTATION TARGET. ESPN's raw summary puts a kickoff's ``start.team.id`` and yard line on the
+    team that **kicked**; ``CFBPlayProcess`` derives ``pos_team`` as the return team from it.
+    ``to_cfbfastr`` states the same spot but leaves possession on the drive's team, which on a
+    stats.ncaa.org page is whichever club the row was printed under -- so passing it through made
+    the processor read the kicking team backwards on 50 of 52 kickoff rows.
+
+    The spot is unchanged (``yards_to_goal`` is already measured in the kicker's direction); only
+    the club and the absolute yard line move with it.
+    """
     from sportsdataverse.cfb.ncaa_pbp.to_espn_summary import _parse_bundle
 
     name = "final_fcs_6386315"
-    cfbfastr, _, _, _ = _parse_bundle(bundle(name), 2025)
-    row = cfbfastr.filter(pl.col("play_type") == "Kickoff").row(0, named=True)
     home, away = GAMES[name][2], GAMES[name][3]
-    served = [p for p in plays(summary(name)) if p["type"]["text"] == "Kickoff"][0]
-    assert served["start"]["yardsToEndzone"] == row["yards_to_goal"]
-    assert served["start"]["team"]["id"] in (home, away)
+    cfbfastr, _, _, _ = _parse_bundle(bundle(name), 2025)
+    spots = cfbfastr.filter(pl.col("play_type") == "Kickoff").get_column("yards_to_goal").to_list()
+    kickoffs = [p for p in plays(summary(name)) if p["type"]["text"].startswith("Kickoff")]
+    assert kickoffs
+    for play in kickoffs:
+        expected = 100 - play["start"]["yardsToEndzone"] if play["start"]["team"]["id"] == home else None
+        if expected is not None:
+            assert play["start"]["yardLine"] == expected
+        else:
+            assert play["start"]["yardLine"] == play["start"]["yardsToEndzone"]
+    # the spot itself is the mapper's, untouched
+    assert [p["start"]["yardsToEndzone"] for p in kickoffs if p["type"]["text"] == "Kickoff"] == spots
+    assert {p["start"]["team"]["id"] for p in kickoffs} <= {home, away}
+
+
+def test_the_ensuing_kickoff_is_kicked_by_the_team_that_just_scored():
+    """The derivation, checked against the game's own narrative: the club that does not have the
+    ball when play resumes is the one that kicked."""
+    served = summary("final_fbs_6386337")
+    ordered = plays(served)
+    for index, play in enumerate(ordered):
+        if not play["type"]["text"].startswith("Kickoff"):
+            continue
+        snap = next((p for p in ordered[index + 1 :] if (p["start"]["down"] or 0) >= 1), None)
+        if snap is None or play["type"]["text"].endswith("Touchdown"):
+            continue
+        assert play["start"]["team"]["id"] != snap["start"]["team"]["id"], play["text"][:70]
 
 
 # --- G2: a truncated page is an in-progress game ----------------------------------------------

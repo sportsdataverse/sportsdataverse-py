@@ -86,6 +86,18 @@ _KEEPS_THE_BALL = frozenset({"Rush", "Pass Reception", "Pass Incompletion", "Sac
 
 _ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
 
+#: ``type.text`` -> the ``(end.down, end.distance)`` ESPN's own CFB summaries state instead of the
+#: next snap's. Counted over 60 captured ESPN summaries: every touchdown label and every made
+#: field goal is ``(-1, -1)`` (171/171 Passing Touchdown, 128/128 Field Goal Good, 7/7
+#: Interception Return Touchdown, ...), and a **returned** kickoff is ``(-1, 10)`` -- not the 1st
+#: and 10 the receiving team actually faces. The distinction is not cosmetic: the EP model reads
+#: ``down``, so emitting the next snap's 1 & 10 on a kickoff return moved EP_end by about one
+#: point on every one of them.
+_FIXED_END_DOWN: Dict[str, Tuple[int, int]] = {
+    "Kickoff Return (Offense)": (-1, 10),
+    "Field Goal Good": (-1, -1),
+}
+
 
 def _norm(name: Optional[str]) -> str:
     """Normalise a team label for cross-surface matching (the mapper's own rule)."""
@@ -273,6 +285,49 @@ def _yard_line(to_endzone: Optional[int], is_home: bool) -> Optional[int]:
     return (100 - int(to_endzone)) if is_home else int(to_endzone)
 
 
+def _kickoff_frame(plays: List[Dict[str, Any]], home_id: str, away_id: str) -> int:
+    """Re-frame every kickoff row onto the **kicking** team, ESPN's convention. Returns the count.
+
+    ESPN's raw summary puts a kickoff's ``start.team.id`` and yard line on the team that kicked
+    -- its own 35, absolute yard line 35 when it is the home club -- and ``CFBPlayProcess`` then
+    derives ``pos_team`` as the *return* team from it (``kicking_team`` / ``return_team``).
+    ``to_cfbfastr`` states the same spot (``yards_to_goal`` 65, measured in the kicker's
+    direction, which is the C15 convention) but leaves ``pos_team`` as the **drive's** team,
+    which on a stats.ncaa.org page is whichever club's drive the row was printed under. Passing
+    that through unchanged made the processor read the kicking team backwards on **50 of 52**
+    kickoff rows over the first six Stage 2 gate games -- every kickoff's EPA, and the
+    ``pos_team_receives_2H_kickoff`` flag that feeds win probability.
+
+    The kicking team is derived, never assumed: it is the club that does **not** have the ball
+    when play resumes -- the next scrimmage snap's possession -- except on a return touchdown,
+    where the feed names the scorer. A kickoff with neither (the last row of a truncated page)
+    keeps what the mapper said.
+    """
+    sides = (str(home_id), str(away_id))
+
+    def other(team: Any) -> Optional[str]:
+        return next((t for t in sides if t != str(team)), None)
+
+    reframed = 0
+    for i, play in enumerate(plays):
+        label = play["type"]["text"]
+        if not label.startswith("Kickoff"):
+            continue
+        if label == "Kickoff Return Touchdown" and play["_scoring_team"]:
+            kick_team = other(play["_scoring_team"])
+        elif label == "Kickoff Team Fumble Recovery Touchdown" and play["_scoring_team"]:
+            kick_team = str(play["_scoring_team"])
+        else:
+            snap = next((p for p in plays[i + 1 :] if (p["start"]["down"] or 0) >= 1), None)
+            kick_team = other(snap["start"]["team"]["id"]) if snap else None
+        if not kick_team or kick_team == str(play["start"]["team"]["id"]):
+            continue
+        play["start"]["team"]["id"] = kick_team
+        play["start"]["yardLine"] = _yard_line(play["start"]["yardsToEndzone"], kick_team == str(home_id))
+        reframed += 1
+    return reframed
+
+
 def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
     """Fill every play's ``end`` from its own end spot and the **next** snap, across drives.
 
@@ -296,7 +351,7 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
             team = play["_scoring_team"] or play["start"]["team"]["id"]
             play["end"] = {
                 "down": -1,
-                "distance": 0,
+                "distance": -1,
                 "yardLine": 100 if str(team) == str(home_id) else 0,
                 "yardsToEndzone": 0,
                 "team": {"id": team},
@@ -308,9 +363,12 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
             end_team = nxt["start"]["team"]["id"] or play["start"]["team"]["id"]
             if to_endzone is None:
                 to_endzone = nxt["start"]["yardsToEndzone"]
+            down, distance = _FIXED_END_DOWN.get(
+                play["type"]["text"], (nxt["start"]["down"], nxt["start"]["distance"])
+            )
             play["end"] = {
-                "down": nxt["start"]["down"],
-                "distance": nxt["start"]["distance"],
+                "down": down,
+                "distance": distance,
                 "yardLine": _yard_line(to_endzone, str(end_team) == str(home_id)),
                 "yardsToEndzone": to_endzone,
                 "team": {"id": end_team},
@@ -704,6 +762,9 @@ def _ncaa_to_espn_summary(
 
     if carried:
         notes.append(f"{carried} plays name a team the linescore does not: possession carried from the preceding play")
+    reframed = _kickoff_frame(emitted, home_id, away_id)
+    if reframed:
+        notes.append(f"{reframed} kickoff rows were re-framed onto the kicking team (ESPN's convention)")
     _fill_end_state(emitted, home_id)
 
     previous = [_drive(event_id, i, meta, plays) for i, (meta, plays) in enumerate(drives, start=1) if plays]
