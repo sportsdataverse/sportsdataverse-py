@@ -11,17 +11,24 @@ Modules (build order):
     repairs     -- nflfastR's hardcoded per-game repairs, scramble backfill, weird passes
     description -- play-text regex layer (pass_location, run_location, penalties)
     features    -- timeouts, score_differential, game_half, seconds, roof, era, spread join
+    live        -- phase / provisional rows / current-situation row / game context
     labels      -- EP/WP/CP label sources (sp/touchdown/td_team/field_goal_result/safety/result)
     drives      -- fixed_drive / fixed_drive_result + drive_* detail columns
     series      -- series / series_result / series_success
     playstats   -- long-format play-stats table (nflverse ``play_stats``)
-    build       -- build_pbp / build_pbp_from_file / build_season
+    build       -- build_pbp / build_pbp_from_file / build_season / shield_nfl_pbp
 """
 
 from __future__ import annotations
 
-from sportsdataverse.nfl.shield_pbp.build import build_pbp, build_pbp_from_file, build_season
+from sportsdataverse.nfl.shield_pbp.build import (
+    build_pbp,
+    build_pbp_from_file,
+    build_season,
+    shield_nfl_pbp,
+)
 from sportsdataverse.nfl.shield_pbp.game_id import nflverse_game_id
+from sportsdataverse.nfl.shield_pbp.live import is_final
 from sportsdataverse.nfl.shield_pbp.playstats import build_playstats_frame, build_playstats_season
 
 __all__ = [
@@ -30,5 +37,7 @@ __all__ = [
     "build_playstats_frame",
     "build_playstats_season",
     "build_season",
+    "is_final",
     "nflverse_game_id",
+    "shield_nfl_pbp",
 ]
