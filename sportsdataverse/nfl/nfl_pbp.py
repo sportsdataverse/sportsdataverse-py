@@ -349,7 +349,7 @@ def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
     return los if 0 < los < 100 else None
 
 
-def _nfl_repair_scores(scores, scoring, texts):
+def _nfl_repair_scores(scores, scoring, texts, final=None):
     """Carry a team's running score forward through ESPN's feed errors.
 
     A score only ever drops when a review takes points off the board (no such
@@ -358,6 +358,15 @@ def _nfl_repair_scores(scores, scoring, texts):
     error, replaced by the last accepted value -- which then anchors the next
     row, so a run of bad rows heals rather than re-seeding itself from the
     previous bad row.
+
+    ``final`` is the header's final score for this team (None while the game is
+    live), the one statement of the end state that does not come from a play
+    row, and it anchors the rule the way CFB's ``_repair_score`` does: a rise to
+    exactly that score which the rest of the game keeps is the game's last
+    points, however the feed typed the row, so it is never reverted. Without the
+    anchor a 2008 safety (SD @ NO, 37-30 against a 37-32 header) and six 2017
+    points carried by no scoring row at all (400951676, 6-9 against 12-9) were
+    thrown away.
     """
     # A rise on the row after a scoring play that the rest of the game keeps is a
     # try ESPN recorded one row late (the 2006 feed puts it on the kickoff row);
@@ -375,7 +384,11 @@ def _nfl_repair_scores(scores, scoring, texts):
             # rest of the game keeps it. A rise anywhere else is not accepted even
             # when kept -- the 2007 feed books a kick's points on the row BEFORE it.
             late_try = prev_scoring and not (later_min[i] is not None and later_min[i] < score)
-            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring and not late_try):
+            # the header's final, reached and kept to the last row: the real final score.
+            is_final = final is not None and score == final and not (later_min[i] is not None and later_min[i] < score)
+            if (delta < 0 and "revers" not in (text or "").lower()) or (
+                delta > 1 and not is_scoring and not late_try and not is_final
+            ):
                 score = prev
         out.append(score)
         if score is not None:
@@ -1421,6 +1434,17 @@ class NFLPlayProcess(object):
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
+        # The header's final score (null while the game is live): the only statement of the end
+        # state that does not come from a play row, used to anchor the last row's score repair.
+        for side in ("home", "away"):
+            comp = next(
+                (c for c in pbp_txt["header"]["competitions"][0]["competitors"] if c.get("homeAway") == side), {}
+            )
+            score = str(comp.get("score") or "")
+            completed = (pbp_txt["header"]["competitions"][0].get("status") or {}).get("type", {}).get(
+                "completed"
+            ) is True
+            setattr(self, f"{side}FinalScore", int(score) if completed and score.isdigit() else None)
         init["homeTeamId"] = homeTeamId
         init["homeTeamMascot"] = homeTeamMascot
         init["homeTeamName"] = homeTeamName
@@ -1776,6 +1800,7 @@ class NFLPlayProcess(object):
                         play_df["homeScore"].to_list(),
                         play_df["scoringPlay"].fill_null(False).to_list(),
                         play_df["text"].to_list(),
+                        getattr(self, "homeFinalScore", None),
                     ),
                     dtype=play_df.schema["homeScore"],
                 ),
@@ -1784,6 +1809,7 @@ class NFLPlayProcess(object):
                         play_df["awayScore"].to_list(),
                         play_df["scoringPlay"].fill_null(False).to_list(),
                         play_df["text"].to_list(),
+                        getattr(self, "awayFinalScore", None),
                     ),
                     dtype=play_df.schema["awayScore"],
                 ),
