@@ -77,6 +77,10 @@ _PAT_TYPES = frozenset({"EXTRA_POINT_ATTEMPT", "TWO_POINT_PASS", "TWO_POINT_RUSH
 #: ESPN ``type.text`` values that stop the clock rather than describing a snap. The end state of
 #: the play *before* one of these is the next real snap's spot, not the stoppage row's.
 _STOPPAGE = frozenset({"Timeout", "End Period", "End of Half", "End of Game"})
+#: ESPN type ids on which the offence keeps the ball where it left it, so a play with no next
+#: snap still has a derivable end spot (``start - statYardage``). Every other type either
+#: changes possession or is a kick, where the yardage says nothing about the next spot.
+_KEEPS_THE_BALL = frozenset({"3", "5", "7", "24"})
 
 _PLAYER_REF_RE = re.compile(r"\[(ncaaf\.p\.\d+)\]")
 _WHITESPACE_RE = re.compile(r"\s+")
@@ -233,6 +237,35 @@ def _down_distance_text(
     return f"{label} & {togo}" + (f" at {spot}" if spot else "")
 
 
+def _trailing_end(play: Dict[str, Any], home_id: str) -> Dict[str, Any]:
+    """The end state of a play the feed states no next snap for, derived from its own yardage.
+
+    Fires on the last row of every final and on the newest row of every live poll. Taking the
+    play's own start -- which is what "the next snap, or myself" does -- says the ball never
+    moved, so a 19-yard gain ends where it began and its EPA is computed against a spot no feed
+    reports. Measured against the 30 captured ESPN summaries, that was 27 of the 89 rows where
+    the two feeds put the ball in different places.
+
+    On a plain scrimmage snap (:data:`_KEEPS_THE_BALL`) the offence keeps the ball, so the end
+    spot is ``start - statYardage``. On a turnover or a kick the yardage says nothing about
+    where the next team starts and the start spot is still the least-wrong answer, so those are
+    left alone rather than guessed at.
+    """
+    start = play["start"]
+    gained = int(play.get("statYardage") or 0) if play["type"]["id"] in _KEEPS_THE_BALL else 0
+    to_endzone = start["yardsToEndzone"]
+    if to_endzone is not None and gained:
+        to_endzone = max(0, min(100, int(to_endzone) - gained))
+    is_home = str(start["team"]["id"]) == str(home_id)
+    return {
+        "down": start["down"],
+        "distance": start["distance"],
+        "yardLine": start["yardLine"] if to_endzone is None else ((100 - to_endzone) if is_home else to_endzone),
+        "yardsToEndzone": to_endzone,
+        "team": {"id": start["team"]["id"]},
+    }
+
+
 def _fill_end_state(plays: List[Dict[str, Any]], home_id: str, scoring_teams: Mapping[str, str]) -> None:
     """Fill every play's ``end`` from the **next** snap's start, across drive boundaries.
 
@@ -245,11 +278,13 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str, scoring_teams: Ma
     summaries: a **touchdown** ends at the goal line the scoring team was attacking
     (``down -1``, ``yardsToEndzone 0``) credited to **the team the feed says scored** -- the
     defence on a pick six, where crediting the offence would flip the spot 100 yards -- and a
-    **made field goal** ends at the ensuing kickoff spot (``down -1``, ``distance -1``,
-    ``yardsToEndzone 65``) credited to the kicking team.
+    **made field goal** ends where it was kicked from (``down -1``, ``distance -1``, the kick's
+    own spot) credited to the kicking team -- not at the ensuing kickoff, which is what the next
+    snap would say. Read off the raw captured summaries: every made field goal in ESPN's own
+    ``401628414`` payload carries ``end.yardsToEndzone == start.yardsToEndzone``.
     """
     for i, play in enumerate(plays):
-        nxt = next((p["start"] for p in plays[i + 1 :] if p["type"]["text"] not in _STOPPAGE), play["start"])
+        nxt = next((p["start"] for p in plays[i + 1 :] if p["type"]["text"] not in _STOPPAGE), None)
         type_id = play["type"]["id"]
         if play["scoringPlay"] and play["type"]["abbreviation"] == "TD":
             team = scoring_teams.get(play["id"]) or play["start"]["team"]["id"]
@@ -266,10 +301,13 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str, scoring_teams: Ma
             play["end"] = {
                 "down": -1,
                 "distance": -1,
-                "yardLine": 35 if str(team) == str(home_id) else 65,
-                "yardsToEndzone": 65,
+                "yardLine": play["start"]["yardLine"],
+                "yardsToEndzone": play["start"]["yardsToEndzone"],
                 "team": {"id": team},
             }
+            continue
+        if nxt is None:
+            play["end"] = _trailing_end(play, home_id)
             continue
         play["end"] = {
             "down": nxt["down"],
@@ -404,20 +442,10 @@ def _pickcenter(odds: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def _drive(
-    event_id: str,
-    index: int,
-    drive: Mapping[str, Any],
-    plays: List[Dict[str, Any]],
-    abbr: Optional[str],
-    open_drive: bool,
+    event_id: str, index: int, drive: Mapping[str, Any], plays: List[Dict[str, Any]], abbr: Optional[str]
 ) -> Dict[str, Any]:
     """One ``drives.previous[]`` / ``drives.current`` entry; ESPN's drive id is ``{event}{1-based index}``."""
     result = drive.get("result")
-    if open_drive:
-        # the open drive has not ended, so it states no outcome -- whatever a stored payload
-        # says. ESPN's own live feed carries none either, and Game on Paper's DriveRow falls
-        # back to exactly this label.
-        result = "In Progress"
     return {
         "id": f"{event_id}{index}",
         "description": f"{drive.get('numPlays')} plays, {drive.get('yards')} yards, {drive.get('duration')}",
@@ -472,11 +500,12 @@ def _yahoo_to_espn_summary(
         | item | type | description |
         |---|---|---|
         | summary | dict | An ESPN-summary-shaped payload: `header`, `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter` and empty `boxscore` / passthrough arrays. Feed it to `espn_cfb_pbp(summary=)`. |
-        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: an unresolved player-name map, a PAT with no touchdown to fold into, plays outside the drive chart, and the open drive synthesized for a live game. |
+        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: an unresolved player-name map, a PAT with no touchdown to fold into, plays credited to Yahoo's `ncaaf.t.0` placeholder whose possession was carried forward, plays outside the drive chart, and the open drive synthesized for a live game. |
 
     Raises:
         KeyError: ``idmap_row`` is missing ``espn_event_id`` or a team id.
-        ValueError: the payload carries no game object.
+        ValueError: the payload carries no game object, or states no home/away team id
+            (possession could not be attributed to either club).
 
     Example:
         Adapt a stored Yahoo final and process it::
@@ -493,7 +522,7 @@ def _yahoo_to_espn_summary(
             proc.espn_cfb_pbp(summary=summary)
             result = proc.run_processing_pipeline()
     """
-    game = _game_block(payload) if "playByPlay" not in payload else dict(payload)
+    game = dict(payload) if isinstance(payload, Mapping) and "playByPlay" in payload else _game_block(payload)
     if game is None:
         raise ValueError("payload carries no shangrila game object")
     notes: List[str] = []
@@ -658,16 +687,18 @@ def _yahoo_to_espn_summary(
         plays = grouped.get(drive.get("driveId")) or []
         if not plays:
             continue
-        open_drive = not final and index == len(drives_raw)
-        drives.append(
-            _drive(event_id, index, drive, plays, abbr_by_espn.get(str(plays[0]["start"]["team"]["id"])), open_drive)
-        )
+        drives.append(_drive(event_id, index, drive, plays, abbr_by_espn.get(str(plays[0]["start"]["team"]["id"]))))
     current: Optional[Dict[str, Any]] = None
     if drives and not final:
         # a live payload's last drive is still open: it becomes ``drives.current`` so Game on
         # Paper renders it as the current drive and the processor still sees its plays. Its
         # last play keeps its own start as its end (there is no next snap yet).
         current = drives.pop()
+        # the open drive has not ended, so it states no outcome -- whatever a stored payload
+        # says. Nulled here rather than at build time, because the drive that becomes ``current``
+        # is the last one that HAS plays, which is not always the last entry in the chart.
+        current["result"] = current["shortDisplayResult"] = current["displayResult"] = "In Progress"
+        current["isScore"] = False
         notes.append(f"game is {game.get('status')}: the open drive was moved to drives.current")
 
     return {
@@ -764,7 +795,8 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     Hands over to the next source (:class:`...dispatch.SourceUnavailable`) when the Yahoo game
     id cannot be resolved without inventing one, when the id map states no ESPN team ids, when
     the fetch fails or comes back without the shangrila envelope (a rate limit answers with a
-    23-byte ``text/html`` body), and -- the case three of the five CFB sources answer with
+    23-byte ``text/html`` body), when the body Yahoo serves echoes a **different** ``gameId``
+    than the one asked for, and -- the case three of the five CFB sources answer with
     HTTP 200 -- when Yahoo returns a real game object carrying **no plays**: every FCS-hosted
     game, in every era, and every game before Yahoo's 2014 play floor.
     """
@@ -787,7 +819,7 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             raise SourceUnavailable(f"yahoo playbookBoxscore fetch failed: {type(exc).__name__}: {exc}") from exc
     else:
         game_id, resolved_by = None, "payload"
-    game = _game_block(payload) if "playByPlay" not in payload else payload
+    game = payload if isinstance(payload, Mapping) and "playByPlay" in payload else _game_block(payload)
     if game is None:
         # not a game payload at all: a 429's 23-byte text/html body, an error envelope, a
         # truncated response. Worth another try later; never parsed as an empty game.
@@ -800,6 +832,14 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             f"cfb {espn_id}: yahoo game {game_id or game.get('gameId')} carries no play-by-play "
             "(FCS-hosted, or before Yahoo's 2014 play floor)"
         )
+    expected_id = game_id or row.get("yahoo_game_id")
+    served_id = game.get("gameId")
+    if expected_id and served_id and str(served_id) != str(expected_id):
+        # On the fetch path the Yahoo id is a FORMULA, so a stale team number or a moved
+        # kickoff resolves to a real game that is not this one; on the injected path the
+        # caller picked the payload. Yahoo echoes the id it served, so either way the mismatch
+        # is checkable -- and serving it would file another game's plays under this ESPN event.
+        raise SourceUnavailable(f"cfb {espn_id}: yahoo served game {served_id}, not {expected_id}")
     if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 

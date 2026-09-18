@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 
 from sportsdataverse.cfb.yahoo_pbp.fetch import _has_plays, _resolve_game_id, _yahoo_cfb_game_id
-from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import _yahoo_to_espn_summary
+from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import _STOPPAGE, _yahoo_to_espn_summary
 from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.football.sources.dispatch import SourceUnavailable, _adapter_for, _process_game
 from sportsdataverse.football.sources.parity import _compare_plays
@@ -289,6 +289,48 @@ def test_pat_anchors_on_its_touchdown_across_an_intervening_row():
     assert not any(p["type"]["text"] in ("Penalty", "Timeout") and "pointAfterAttempt" in p for p in plays)
 
 
+def test_the_newest_play_ends_where_its_own_yardage_puts_it():
+    """A play the feed states no next snap for must not end where it started.
+
+    Every game has exactly one such row -- the last snap of a final, and the newest snap of
+    every live poll, which is the row Game on Paper renders at the top of the page. Taking the
+    play's own start says the ball never moved, so a 9-yard completion is scored as a 0-yard
+    one. Mutated out (``nxt`` falling back to ``play["start"]``) the end spot is 75 and both
+    assertions fail; measured against the 30 captured ESPN summaries that fallback was **27 of
+    the 89 rows** where the two feeds put the ball in different places.
+    """
+    # Louisville at Ole Miss, cut after play 3: a 9-yard completion on the opening drive.
+    summary, _notes = _yahoo_to_espn_summary(_truncate(_load(f"{LOU_MISS_YAHOO_ID}.json.gz"), 3), LOU_MISS_ROW)
+    newest = (summary["drives"].get("current") or summary["drives"]["previous"][-1])["plays"][-1]
+    assert newest["statYardage"] == 9 and newest["start"]["yardsToEndzone"] == 75
+    assert newest["end"]["yardsToEndzone"] == 66, newest["end"]
+    assert newest["end"]["yardLine"] == 34  # the home club: yardLine is 100 - yardsToEndzone
+
+    # a turnover's yardage says nothing about where the next team starts, so it is left alone
+    # rather than guessed at: the OSU @ TEX final's last snap is an interception.
+    final, _ = _yahoo_to_espn_summary(_load(f"{OSU_TEX_YAHOO_ID}.json.gz"), OSU_TEX_ROW)
+    plays = [p for d in final["drives"]["previous"] for p in d["plays"] if p["type"]["text"] not in _STOPPAGE]
+    assert plays[-1]["type"]["text"] == "Interception"
+    assert plays[-1]["end"]["yardsToEndzone"] == plays[-1]["start"]["yardsToEndzone"]
+
+
+def test_a_made_field_goal_ends_where_it_was_kicked_from():
+    """ESPN's own convention, read off the captured summaries -- not the ensuing kickoff.
+
+    Every made field goal in ESPN's raw ``401628414`` payload carries ``down -1``,
+    ``distance -1`` and ``end.yardsToEndzone == start.yardsToEndzone``. Mutated to the kickoff
+    spot (``yardsToEndzone 65``) the end spot is wrong on every made kick, and the play before
+    it inherits nothing -- the scoring branch is the only writer of this row's end state.
+    """
+    summary, _notes = _yahoo_to_espn_summary(_load(f"{LOU_MISS_YAHOO_ID}.json.gz"), LOU_MISS_ROW)
+    kicks = [p for d in summary["drives"]["previous"] for p in d["plays"] if p["type"]["text"] == "Field Goal Good"]
+    assert kicks
+    for kick in kicks:
+        assert kick["end"]["down"] == -1 and kick["end"]["distance"] == -1
+        assert kick["end"]["yardsToEndzone"] == kick["start"]["yardsToEndzone"], kick["text"][:60]
+        assert kick["end"]["yardLine"] == kick["start"]["yardLine"]
+
+
 def test_an_fcs_hosted_game_reports_no_coverage_rather_than_an_empty_frame():
     """Yahoo answers HTTP 200 for a game it does not cover; the shape is the only signal.
 
@@ -303,6 +345,18 @@ def test_an_fcs_hosted_game_reports_no_coverage_rather_than_an_empty_frame():
     assert not _has_plays(game)
     with pytest.raises(SourceUnavailable, match="no play-by-play"):
         _adapter_for("cfb", "yahoo")("cfb", FCS_ESPN_ID, _ctx(idmap_row=FCS_ROW, payload=payload))
+
+
+def test_a_payload_for_a_different_game_is_refused():
+    """The Yahoo id is a formula, so a mis-resolution fetches a real game that is not this one.
+
+    Yahoo echoes the id it served, so the mismatch is checkable; without the check another
+    game's plays are filed under this ESPN event id, silently and with a valid contract.
+    """
+    payload = copy.deepcopy(_load(f"{OSU_TEX_YAHOO_ID}.json.gz"))
+    payload["data"]["games"][0]["gameId"] = "ncaaf.g.202609120069"
+    with pytest.raises(SourceUnavailable, match="not ncaaf.g.202609120083"):
+        _adapter_for("cfb", "yahoo")("cfb", OSU_TEX_ESPN_ID, _ctx(idmap_row=OSU_TEX_ROW, payload=payload))
 
 
 def test_a_rate_limited_body_is_a_retryable_failure_not_an_empty_game():

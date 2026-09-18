@@ -95,7 +95,11 @@ def _crosswalk_yahoo_id(espn_id: Any, seasons: Tuple[int, ...]) -> Optional[str]
             frame = load_cfb_schedule_crosswalk(list(seasons))
         except Exception:  # noqa: BLE001 -- an unreachable asset is a miss, never a raise
             return None
-        if not isinstance(frame, pl.DataFrame) or frame.is_empty() or "yahoo_game_id" not in frame.columns:
+        if (
+            not isinstance(frame, pl.DataFrame)
+            or frame.is_empty()
+            or not {"espn_game_id", "yahoo_game_id"} <= set(frame.columns)
+        ):
             return None
         _CROSSWALK_CACHE[seasons] = frame
     frame = _CROSSWALK_CACHE[seasons]
