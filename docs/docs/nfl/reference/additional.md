@@ -7967,8 +7967,12 @@ Reads nflverse's published players master and projects it down to just the
 cross-system identifier columns it carries (`gsis_id`, `esb_id`,
 `espn_id`, `pfr_id`, `pff_id`, `otc_id`, `nfl_id`, `smart_id` —
 whichever the parquet exposes) plus `full_name` and `position`, deduped
-on `gsis_id`. It is a convenience for joining nflverse identity IDs onto
-PBP / rosters / stats frames without carrying the full ~40-column master.
+on `gsis_id`. The players master has no Yahoo or CBS ids, so `yahoo_id`
+and `cbs_id` are joined on `gsis_id` from
+`load_nfl_ff_playerids` (DynastyProcess). A `gsis_id` that
+DynastyProcess lists twice is ambiguous upstream and gets null provider ids.
+It is a convenience for joining identity IDs onto PBP / rosters / stats
+frames without carrying the full ~40-column master.
 
 **Parameters**
 
@@ -7978,7 +7982,7 @@ PBP / rosters / stats frames without carrying the full ~40-column master.
 
 **Returns**
 
-A one-row-per-`gsis_id` `DataFrame` of cross-system IDs + `full_name` / `position`. A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails). A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
 
 **Example**
 

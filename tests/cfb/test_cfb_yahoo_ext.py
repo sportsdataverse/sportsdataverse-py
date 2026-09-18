@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import polars as pl
 import pytest
 
@@ -151,13 +154,66 @@ def test_scoreboard_flattens_games_map(monkeypatch):
     assert df.iloc[0]["week"] == 1  # self-describing
 
 
-def test_boxscore_scaffold_returns_raw(monkeypatch):
+BOX_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo" / "editorial_boxscore_ncaaf_ala_at_uk.json"
+
+
+def test_boxscore_default_returns_raw(monkeypatch):
     monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
     out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
     assert "service" in out  # default return_parsed=False -> raw passthrough
-    # parsing is not implemented yet -> explicit fail-fast, not a silent raw return
-    with pytest.raises(NotImplementedError):
-        y.yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
+
+
+def test_boxscore_parsed_is_one_row_per_entity_stat(monkeypatch):
+    """Real editorial boxscore, Alabama (ncaaf.t.73) at Kentucky (ncaaf.t.69), 2026-09-12:
+    both team_stats blocks plus four players (two per side), dictionaries untrimmed."""
+    raw = json.loads(BOX_FIXTURE.read_text(encoding="utf-8"))
+    seen = []
+
+    def fake_get(url, params=None, headers=None, **k):
+        seen.append(url)
+        return raw
+
+    monkeypatch.setattr(y, "_get", fake_get)
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202609120069", return_parsed=True)
+    assert seen == [f"{y.EDITORIAL_BASE}/boxscore/ncaaf.g.202609120069"]
+    assert df.columns == list(y._BOXSCORE_SCHEMA)
+    assert all(dtype == pl.Utf8 for dtype in df.schema.values())
+    assert df.height == 96  # 25 team stats x 2 teams + 15 + 15 + 6 + 10 player stats
+    assert df["game_id"].unique().to_list() == ["ncaaf.g.202609120069"]
+
+    teams = df.filter(pl.col("player_id").is_null())
+    assert teams.height == 50 and set(teams["stat_category"]) == {"Team"}
+    total = teams.filter(pl.col("stat_type_id") == "ncaaf.stat_type.945")
+    assert dict(zip(total["team_id"], total["value"])) == {"ncaaf.t.69": "209", "ncaaf.t.73": "343"}
+    third = teams.filter((pl.col("team_id") == "ncaaf.t.69") & (pl.col("stat_name") == "Third Down Efficiency"))
+    assert third.select("home_away", "stat_abbreviation", "value").row(0) == ("home", "3DE", "1-14")
+
+    qb = df.filter((pl.col("player_id") == "ncaaf.p.470424") & (pl.col("stat_type_id") == "ncaaf.stat_type.105"))
+    assert qb.select("team_id", "home_away", "stat_category", "stat_name", "stat_variation", "value").row(0) == (
+        "ncaaf.t.73",
+        "away",
+        "Passing",
+        "Yards",
+        "Game",
+        "188",
+    )
+    kicker = df.filter(pl.col("player_id") == "ncaaf.p.404415")
+    assert kicker.height == 6 and set(kicker["stat_category"]) == {"Kicking"}
+    assert set(kicker["team_id"]) == {"ncaaf.t.73"}
+
+
+@pytest.mark.parametrize("payload", [None, {}, {"service": {}}, {"service": {"boxscore": {}}}, "junk"])
+def test_boxscore_parsed_empty_payload_keeps_schema(monkeypatch, payload):
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: payload)
+    df = y.yahoo_cfb_boxscore("ncaaf.g.1", return_parsed=True)
+    assert df.height == 0 and df.columns == list(y._BOXSCORE_SCHEMA)
+
+
+def test_boxscore_parsed_pandas(monkeypatch):
+    raw = json.loads(BOX_FIXTURE.read_text(encoding="utf-8"))
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: raw)
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202609120069", return_parsed=True, return_as_pandas=True)
+    assert len(df) == 96 and "stat_name" in df.columns
 
 
 @skip_if_no_live

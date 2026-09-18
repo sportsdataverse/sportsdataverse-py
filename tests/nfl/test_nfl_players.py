@@ -9,6 +9,8 @@ and assert non-empty frames with the documented invariants.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import polars as pl
 
 import sportsdataverse.nfl.nfl_players as players_mod
@@ -146,6 +148,9 @@ def test_build_nfl_players_enrichment(monkeypatch):
     assert old["college"] == "State U"
 
 
+_LOADER_FIX = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_loaders"
+
+
 def test_nfl_players_crosswalk_empty(monkeypatch):
     monkeypatch.setattr(
         "sportsdataverse.nfl.nfl_loaders.load_nfl_players",
@@ -154,7 +159,38 @@ def test_nfl_players_crosswalk_empty(monkeypatch):
     xwalk = nfl_players_crosswalk()
     assert isinstance(xwalk, pl.DataFrame)
     assert xwalk.height == 0
-    assert "gsis_id" in xwalk.columns and "espn_id" in xwalk.columns
+    assert {"gsis_id", "espn_id", "yahoo_id", "cbs_id"} <= set(xwalk.columns)
+
+
+def test_nfl_players_crosswalk_keeps_yahoo_and_cbs_ids(monkeypatch):
+    """Real slices: nflverse players.parquet (no yahoo/cbs ids) + DynastyProcess
+    db_playerids. 00-0022888 is listed twice in db_playerids (Jake Schum AND Bobby
+    McCray), so it must not inherit Schum's yahoo_id."""
+    players = pl.read_parquet(_LOADER_FIX / "players_crosswalk_slice.parquet")
+    ff = pl.read_parquet(_LOADER_FIX / "ff_playerids_crosswalk_slice.parquet")
+    monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_players", lambda *a, **k: players)
+    monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_ff_playerids", lambda *a, **k: ff)
+    xwalk = nfl_players_crosswalk()
+    assert xwalk.height == 5
+    assert xwalk.schema["yahoo_id"] == pl.Utf8 and xwalk.schema["cbs_id"] == pl.Utf8
+    got = {r["gsis_id"]: (r["yahoo_id"], r["cbs_id"], r["espn_id"]) for r in xwalk.iter_rows(named=True)}
+    assert got["00-0033873"] == ("30123", "2142052", "3139477")  # Patrick Mahomes
+    assert got["00-0038124"] == ("33989", "2869806", "4248528")  # Christian Watson
+    assert got["00-0039406"] == (None, "2964221", "4362895")  # no Yahoo id upstream
+    assert got["00-0022888"][:2] == (None, None)  # ambiguous gsis_id upstream
+    assert got["00-0039808"][:2] == (None, None)  # not in db_playerids
+
+
+def test_nfl_players_crosswalk_survives_ff_failure(monkeypatch):
+    players = pl.read_parquet(_LOADER_FIX / "players_crosswalk_slice.parquet")
+
+    def boom(*a, **k):
+        raise OSError("dynastyprocess down")
+
+    monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_players", lambda *a, **k: players)
+    monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_ff_playerids", boom)
+    xwalk = nfl_players_crosswalk()
+    assert xwalk.height == 5 and xwalk["yahoo_id"].null_count() == 5
 
 
 def test_nfl_players_crosswalk_slices_and_dedups(monkeypatch):
@@ -172,6 +208,7 @@ def test_nfl_players_crosswalk_slices_and_dedups(monkeypatch):
         "sportsdataverse.nfl.nfl_loaders.load_nfl_players",
         lambda *a, **k: fake_players,
     )
+    monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_ff_playerids", lambda *a, **k: pl.DataFrame())
     xwalk = nfl_players_crosswalk()
     assert xwalk.height == 2  # deduped on gsis_id
     assert "full_name" in xwalk.columns and "position" in xwalk.columns

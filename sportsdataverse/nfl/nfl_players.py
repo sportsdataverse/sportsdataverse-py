@@ -371,6 +371,40 @@ _CROSSWALK_IDS: List[str] = [
     "nfl_id",
     "smart_id",
 ]
+# Provider ids nflverse's players.parquet does not carry, joined on gsis_id from
+# DynastyProcess's db_playerids (load_nfl_ff_playerids): the Yahoo and CBS player
+# ids the alternate play-by-play sources key their participants on.
+_FF_PROVIDER_IDS: List[str] = ["yahoo_id", "cbs_id"]
+
+
+def _ff_provider_ids() -> pl.DataFrame:
+    """``gsis_id`` -> ``yahoo_id`` / ``cbs_id`` (all ``Utf8``) from DynastyProcess.
+
+    A ``gsis_id`` listed on more than one db_playerids row is an upstream mapping
+    error (two players on one id), so those ids are dropped rather than guessed.
+    A failed load yields a zero-row frame so the crosswalk still returns.
+    """
+    from sportsdataverse.nfl.nfl_loaders import load_nfl_ff_playerids
+
+    schema = {c: pl.Utf8 for c in ["gsis_id", *_FF_PROVIDER_IDS]}
+    try:
+        ff = load_nfl_ff_playerids()
+    except Exception:  # noqa: BLE001 -- enrichment only; degrade to null ids
+        return pl.DataFrame(schema=schema)
+    if "gsis_id" not in ff.columns:
+        return pl.DataFrame(schema=schema)
+
+    def _utf8(col: str) -> pl.Expr:
+        if col not in ff.columns:
+            return pl.lit(None, dtype=pl.Utf8).alias(col)
+        expr = pl.col(col)
+        if ff.schema[col].is_float():  # never let an id render as "123.0"
+            expr = expr.cast(pl.Int64)
+        return expr.cast(pl.Utf8)
+
+    return ff.filter(pl.col("gsis_id").is_not_null() & pl.col("gsis_id").is_unique()).select(
+        [_utf8(c) for c in schema],
+    )
 
 
 @overload
@@ -389,17 +423,23 @@ def nfl_players_crosswalk(
     cross-system identifier columns it carries (``gsis_id``, ``esb_id``,
     ``espn_id``, ``pfr_id``, ``pff_id``, ``otc_id``, ``nfl_id``, ``smart_id`` —
     whichever the parquet exposes) plus ``full_name`` and ``position``, deduped
-    on ``gsis_id``. It is a convenience for joining nflverse identity IDs onto
-    PBP / rosters / stats frames without carrying the full ~40-column master.
+    on ``gsis_id``. The players master has no Yahoo or CBS ids, so ``yahoo_id``
+    and ``cbs_id`` are joined on ``gsis_id`` from
+    :func:`load_nfl_ff_playerids` (DynastyProcess). A ``gsis_id`` that
+    DynastyProcess lists twice is ambiguous upstream and gets null provider ids.
+    It is a convenience for joining identity IDs onto PBP / rosters / stats
+    frames without carrying the full ~40-column master.
 
     Args:
         return_as_pandas: If ``True``, return a ``pandas.DataFrame``; otherwise a
             ``polars.DataFrame`` (default).
 
     Returns:
-        A one-row-per-``gsis_id`` ``DataFrame`` of cross-system IDs +
-        ``full_name`` / ``position``. A failed / empty players load yields a
-        zero-row frame carrying the same column set (never a raise).
+        A one-row-per-``gsis_id`` ``DataFrame`` of cross-system IDs (all
+        ``Utf8``) + ``full_name`` / ``position``, with ``yahoo_id`` / ``cbs_id``
+        null where DynastyProcess has no unambiguous match (or its load fails).
+        A failed / empty players load yields a zero-row frame carrying the same
+        column set (never a raise).
 
     Example:
         Quick start::
@@ -422,7 +462,7 @@ def nfl_players_crosswalk(
     from sportsdataverse.nfl.nfl_loaders import load_nfl_players
 
     name_aliases = ["full_name", "display_name"]
-    base_cols = ["full_name", "position", *_CROSSWALK_IDS]
+    base_cols = ["full_name", "position", *_CROSSWALK_IDS, *_FF_PROVIDER_IDS]
 
     try:
         players = load_nfl_players()
@@ -442,4 +482,8 @@ def nfl_players_crosswalk(
     frame = players.select(keep)
     if "gsis_id" in frame.columns:
         frame = frame.unique(subset=["gsis_id"], keep="first", maintain_order=True)
+        provider_ids = _ff_provider_ids()
+        frame = frame.with_columns(pl.col("gsis_id").cast(pl.Utf8))
+        assert frame.schema["gsis_id"] == provider_ids.schema["gsis_id"]
+        frame = frame.join(provider_ids, on="gsis_id", how="left", maintain_order="left")
     return frame.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else frame

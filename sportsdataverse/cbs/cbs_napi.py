@@ -7,7 +7,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
-from sportsdataverse.cbs.cbs_napi_parsers import parse_cbs_napi, parse_cbs_napi_standings
+from sportsdataverse.cbs.cbs_napi_parsers import (
+    parse_cbs_napi,
+    parse_cbs_napi_scoring_drives,
+    parse_cbs_napi_scoring_plays,
+    parse_cbs_napi_standings,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -1566,7 +1571,7 @@ def cbs_game_scoring_drives(
 
     Args:
         game_id: Numerical game ID
-        return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_cbs_napi_scoring_drives -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -1598,7 +1603,7 @@ def cbs_game_scoring_drives(
         **kwargs,
     )
     if return_parsed:
-        return parse_cbs_napi(raw, return_as_pandas=return_as_pandas)
+        return parse_cbs_napi_scoring_drives(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -1716,7 +1721,7 @@ def cbs_game_scoring_plays(
 
     Args:
         game_id: Numerical game ID
-        return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_cbs_napi_scoring_plays -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -1748,7 +1753,7 @@ def cbs_game_scoring_plays(
         **kwargs,
     )
     if return_parsed:
-        return parse_cbs_napi(raw, return_as_pandas=return_as_pandas)
+        return parse_cbs_napi_scoring_plays(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

@@ -16,6 +16,8 @@ schema-drift regression test can run offline.
 |---|---|---|
 | `pbp_participation_2016_head3.parquet` | `pl.scan_parquet(NFL_PBP_PARTICIPATION_URL.format(season=2016)).head(3)` — `github.com/nflverse/nflverse-data` releases, `pbp_participation/pbp_participation_2016.parquet` | 2026-08-11 |
 | `pbp_participation_2023_head3.parquet` | same, `season=2023` | 2026-08-11 |
+| `players_crosswalk_slice.parquet` | `load_nfl_players()` (nflverse `players/players.parquet`) filtered to gsis ids `00-0033873`, `00-0038124`, `00-0039406`, `00-0022888`, `00-0039808` | 2026-09-17 |
+| `ff_playerids_crosswalk_slice.parquet` | `load_nfl_ff_playerids()` (DynastyProcess `db_playerids.csv`) filtered to the same gsis ids. `00-0022888` appears twice upstream (Jake Schum and Bobby McCray); `00-0039808` is absent | 2026-09-17 |
 
 Why this pair: the two seasons of the same release dataset differ in **both**
 ways a `pl.concat(..., how="vertical")` cannot survive.
@@ -31,3 +33,6 @@ ways a `pl.concat(..., how="vertical")` cannot survive.
 
 Only the first three rows of each season are kept — the test asserts on the
 schema union and the null-fill, never on values.
+
+The two `*_crosswalk_slice.parquet` files back `nfl_players_crosswalk`'s
+`yahoo_id` / `cbs_id` join test (`tests/nfl/test_nfl_players.py`).
