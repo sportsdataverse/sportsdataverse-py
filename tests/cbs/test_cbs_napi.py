@@ -281,9 +281,35 @@ def test_scoring_plays_and_drives_join_on_ids():
     ],
 )
 def test_scoring_parsers_never_raise(payload):
-    for parser in (parse_cbs_napi_scoring_plays, parse_cbs_napi_scoring_drives):
+    """A miss is a zero-row frame with the documented columns and dtypes, so a
+    season loop that hits one not-found envelope still stacks (a 0x0 frame makes
+    ``pl.concat`` raise ``schema lengths differ``)."""
+    for parser, fixture in (
+        (parse_cbs_napi_scoring_plays, "game_scoring_plays_nfl"),
+        (parse_cbs_napi_scoring_drives, "game_scoring_drives_nfl"),
+    ):
         frame = parser(payload)
+        full = parser(_load(fixture))
         assert isinstance(frame, pl.DataFrame) and frame.height == 0
+        assert frame.columns == full.columns
+        assert {c: t for c, t in frame.schema.items() if c != "subplays"} == {
+            c: t for c, t in full.schema.items() if c != "subplays"
+        }
+        assert pl.concat([full, frame], how="vertical_relaxed").height == full.height
+
+
+def test_scoring_plays_older_game_keeps_documented_columns():
+    """CBS omits ``game_id``, ``real_clock`` and the timeout columns on older
+    games; they come back typed null so eras stack."""
+    omitted = ("game_id", "real_clock", "home_timeouts_remaining", "away_timeouts_remaining")
+    raw = _load("game_scoring_plays_ncaaf")
+    older = {"plays": [{k: v for k, v in play.items() if k not in omitted} for play in raw["plays"]]}
+    frame = parse_cbs_napi_scoring_plays(older)
+    full = parse_cbs_napi_scoring_plays(_load("game_scoring_plays_nfl"))
+    assert frame.columns == full.columns
+    assert all(frame[c].null_count() == frame.height == 10 for c in omitted)
+    assert frame.schema["game_id"] == pl.Int64 and frame.schema["real_clock"] == pl.String
+    assert pl.concat([full, frame], how="vertical_relaxed").height == 20
 
 
 def test_scoring_parsers_return_as_pandas():

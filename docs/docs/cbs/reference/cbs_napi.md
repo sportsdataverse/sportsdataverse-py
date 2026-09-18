@@ -852,7 +852,7 @@ Get an scoring plays resource for a particular game.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games. |
-| `game_id` | integer | CBS game id (absent in older games). |
+| `game_id` | integer | CBS game id (null for older games, which lack it). |
 | `drive_id` | integer | CBS drive number within the game; joins id of the scoring-drives frame. |
 | `quarter` | integer | Period of the snap. |
 | `time_remaining` | character | Game clock (m:ss) at the snap. |
@@ -868,9 +868,9 @@ Get an scoring plays resource for a particular game.
 | `score_type` | character | Scoring type for a scoring play (Touchdown, FieldGoal, ...); null otherwise. |
 | `short_score` | character | Short scoring summary; empty string when the play did not score. |
 | `under_review` | logical | True when the play was under replay review (CBS "Yes"/"No" flag). |
-| `home_timeouts_remaining` | integer | Home team's timeouts left after the play (absent in older games). |
-| `away_timeouts_remaining` | integer | Away team's timeouts left after the play (absent in older games). |
-| `real_clock` | character | UTC wall-clock timestamp of the play in ISO 8601 (absent in older games). |
+| `home_timeouts_remaining` | integer | Home team's timeouts left after the play (null for older games, which lack it). |
+| `away_timeouts_remaining` | integer | Away team's timeouts left after the play (null for older games, which lack it). |
+| `real_clock` | character | UTC wall-clock timestamp of the play in ISO 8601 (null for older games, which lack it). |
 | `subplays` | character | Sub-events of the play as a list of structs: type, order, and the event fields (player ids and names, yards_on_play, yards_to_endzone, team_in_possession). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

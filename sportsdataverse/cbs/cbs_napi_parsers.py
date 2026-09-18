@@ -365,6 +365,9 @@ _DRIVE_INT_COLUMNS = (
 # "Yes"/"No" flags.
 _PLAY_BOOL_COLUMNS = ("score_on_play", "under_review")
 _DRIVE_BOOL_COLUMNS = ("score_on_drive", "inside_the_20")
+# Dtype of ``subplays`` when a body carries none: the two fields every sub-event
+# has. A populated frame's struct has more fields; ``vertical_relaxed`` unions them.
+_SUBPLAYS_DTYPE = pl.List(pl.Struct({"type": pl.String, "order": pl.String}))
 
 
 def _flat_subplays(subplays: Any) -> List[Dict[str, Any]]:
@@ -398,17 +401,34 @@ def _scoring_frame(
     bool_columns: Iterable[str],
     return_as_pandas: bool,
 ) -> DataFrameT:
+    # The documented columns are always present (typed null when CBS omits one,
+    # as older games do) so frames from any games -- or none -- stack.
+    schema: Dict[str, Any] = {
+        c: (
+            pl.Int64
+            if c in int_columns
+            else pl.Boolean
+            if c in bool_columns
+            else _SUBPLAYS_DTYPE
+            if c == "subplays"
+            else pl.String
+        )
+        for c in order
+    }
     rows = raw.get(key) if isinstance(raw, dict) else None
     records = [r for r in rows if isinstance(r, dict)] if isinstance(rows, list) else []
+    if not records:
+        empty = pl.DataFrame(schema=schema)
+        return empty.to_pandas() if return_as_pandas else empty
     if key == "plays":
         records = [{**r, "subplays": _flat_subplays(r.get("subplays"))} for r in records]
-    frame = pl.DataFrame(records, infer_schema_length=None) if records else pl.DataFrame()
+    frame = pl.DataFrame(records, infer_schema_length=None)
     frame = frame.with_columns(
         *[pl.col(c).cast(pl.Int64, strict=False) for c in int_columns if c in frame.columns],
         *[pl.col(c).cast(pl.String) == "Yes" for c in bool_columns if c in frame.columns],
+        *[pl.lit(None, dtype=dtype).alias(c) for c, dtype in schema.items() if c not in frame.columns],
     )
-    first = [c for c in order if c in frame.columns]
-    frame = frame.select(first + [c for c in frame.columns if c not in first])
+    frame = frame.select([*schema, *[c for c in frame.columns if c not in schema]])
     return frame.to_pandas() if return_as_pandas else frame
 
 
@@ -433,10 +453,11 @@ def parse_cbs_napi_scoring_plays(
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per play. Zero rows when the payload is ``None`` / empty /
-        malformed or NAPI's HTTP-200 ``{"errors"|"warnings": ...}`` not-found
-        envelope. Older games omit ``game_id``, ``real_clock`` and the timeout
-        columns.
+        One row per play. Zero rows (same columns and dtypes) when the payload
+        is ``None`` / empty / malformed or NAPI's HTTP-200
+        ``{"errors"|"warnings": ...}`` not-found envelope. Columns CBS omits
+        for older games (``game_id``, ``real_clock``, the timeout columns) are
+        present and null.
 
         | Column | Type | Description |
         |---|---|---|
@@ -480,7 +501,7 @@ def parse_cbs_napi_scoring_plays(
 
         Pipeline next step (one line)::
 
-            plays.explode("subplays").unnest("subplays").select("id", "type", "yards_on_play").head()
+            plays.select("id", "subplays").explode("subplays").unnest("subplays").select("id", "type", "yards_on_play")
 
     See Also:
         * `nflfastR`_ -- NFL play-by-play in R.
@@ -508,8 +529,9 @@ def parse_cbs_napi_scoring_drives(
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per drive. Zero rows when the payload is ``None`` / empty /
-        malformed or an ``{"errors"|"warnings": ...}`` envelope.
+        One row per drive. Zero rows (same columns and dtypes) when the payload
+        is ``None`` / empty / malformed or an ``{"errors"|"warnings": ...}``
+        envelope.
 
         | Column | Type | Description |
         |---|---|---|

@@ -4121,17 +4121,17 @@ game_scoring_drives:
   time_of_possession: Drive duration as m:ss.
   yards_on_drive: Net yards gained on the drive.
 game_scoring_plays:
-  away_timeouts_remaining: Away team's timeouts left after the play (absent in older games).
+  away_timeouts_remaining: Away team's timeouts left after the play (null for older games, which lack it).
   description: Full CBS play text, including tacklers and spots.
   distance: Yards to go for a first down, or the literal "Goal" on goal-to-go downs.
   down: Down at the snap; 0 on kickoffs and tries.
   drive_id: CBS drive number within the game; joins id of the scoring-drives frame.
-  game_id: CBS game id (absent in older games).
-  home_timeouts_remaining: Home team's timeouts left after the play (absent in older games).
+  game_id: CBS game id (null for older games, which lack it).
+  home_timeouts_remaining: Home team's timeouts left after the play (null for older games, which lack it).
   id: CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games.
   medium: Medium-length play summary (e.g. "J. Sayin pass to M. Williams for 6 yds").
   quarter: Period of the snap.
-  real_clock: UTC wall-clock timestamp of the play in ISO 8601 (absent in older games).
+  real_clock: UTC wall-clock timestamp of the play in ISO 8601 (null for older games, which lack it).
   score_on_play: True when the play scored (CBS "Yes"/"No" flag).
   score_type: Scoring type for a scoring play (Touchdown, FieldGoal, ...); null otherwise.
   short: Short play summary (e.g. "6 yd pass").
