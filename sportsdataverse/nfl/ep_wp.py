@@ -2281,11 +2281,18 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         )
 
     # the end-of-play margin for the team that STARTED the play: pos_score_diff_end
-    # is the end team's, negated where ESPN's end.team differs from start.pos_team
+    # is the end team's, negated where ESPN's end.team differs from start.pos_team.
+    # A null on either side makes the `==` null, which `when` reads as False -- the
+    # bare `.otherwise()` then NEGATED the margin on a row with no possession team
+    # and the game-over branch below published wp_after 0.0 for the winner. Null in,
+    # null out: the `> 0` / `< 0` tests go null, no game-over branch fires, and the
+    # row keeps the model's own wp_after.
     _start_pos_score_diff_end = (
         pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
         .then(pl.col("pos_score_diff_end"))
-        .otherwise(-pl.col("pos_score_diff_end"))
+        .when(pl.col("start.pos_team.id").is_not_null().and_(pl.col("end.pos_team.id").is_not_null()))
+        .then(-pl.col("pos_score_diff_end"))
+        .otherwise(None)
     )
     play_df = (
         df.with_columns(
@@ -2300,12 +2307,19 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             def_wp_before=1 - pl.col("wp_before"),
         )
         .with_columns(
+            # Null-guarded like the ``_after`` pair below: a null posteam would hand
+            # both sides the defensive complement, and leaving it unguarded here
+            # would publish a home_wp_before on a row whose home_wp_after is null.
             home_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_before"))
-            .otherwise(pl.col("def_wp_before")),
-            away_wp_before=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .when(pl.col("start.pos_team.id").is_not_null())
+            .then(pl.col("def_wp_before"))
+            .otherwise(None),
+            away_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("def_wp_before"))
+            .when(pl.col("start.pos_team.id").is_not_null())
             .then(pl.col("wp_before"))
-            .otherwise(pl.col("def_wp_before")),
+            .otherwise(None),
         )
         .with_columns(
             # Group EVERY shift by game_id so concatenated frames don't leak
@@ -2395,12 +2409,19 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             # the home/away split keys off start.pos_team.id. Keyed off end.pos_team.id
             # it came out complemented on every possession change (CFB fixed the same
             # code as B7): 70% of the sweep's possession-change rows, 100% of punts.
+            # Same null guard as _start_pos_score_diff_end: with a null posteam both
+            # the `==` and the `!=` read False, so home AND away took the defensive
+            # complement and the pair no longer summed to 1. Null in, null out.
             home_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
-            .otherwise(pl.col("def_wp_after")),
-            away_wp_after=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .when(pl.col("start.pos_team.id").is_not_null())
+            .then(pl.col("def_wp_after"))
+            .otherwise(None),
+            away_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("def_wp_after"))
+            .when(pl.col("start.pos_team.id").is_not_null())
             .then(pl.col("wp_after"))
-            .otherwise(pl.col("def_wp_after")),
+            .otherwise(None),
         )
         .with_columns(
             wpa=pl.col("wp_after") - pl.col("wp_before"),
