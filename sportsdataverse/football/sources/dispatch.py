@@ -5,7 +5,7 @@ of the ``(ProcessorClass, "espn_<league>_pbp")`` pair in its ``_PROCESSORS`` reg
 resolves a source adapter, validates the adapted summary against the contract, runs the
 unmodified processor on it, and returns the processed dict with provenance stamped in.
 
-Only the ESPN adapter is registered today. Every other source in :data:`SOURCE_ORDER` is
+ESPN and NFL Shield are registered today. Every other source in :data:`SOURCE_ORDER` is
 a named slot that is skipped with ``"not implemented"`` in ``provenance["attempts"]`` until
 its adapter lands (Stage 2 items 2+), so the fall-through path is exercised now and the
 adapters plug in later without touching this module or GOP. A registered adapter hands over
@@ -15,6 +15,7 @@ choice) or by returning something other than an :class:`AdaptedGame`.
 
 from __future__ import annotations
 
+import importlib
 import time
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
@@ -126,6 +127,24 @@ class ProcessedGame:
 Adapter = Callable[[str, int, SourceContext], AdaptedGame]
 
 _ADAPTERS: dict[tuple[str, str], Adapter] = {}
+
+#: Adapter modules imported on first use. Keeping the import lazy is what lets an adapter
+#: live next to its own parser (and import this module for ``AdaptedGame`` / ``_register``)
+#: without a cycle, and keeps the heavy Shield parser off the ESPN-only path.
+_ADAPTER_MODULES: dict[tuple[str, str], str] = {
+    ("nfl", "shield"): "sportsdataverse.nfl.shield_pbp.to_espn_summary",
+}
+
+
+def _adapter_for(league: str, source: str) -> Adapter | None:
+    """The registered adapter for ``(league, source)``, importing its module on first use."""
+    key = (league, source)
+    if key not in _ADAPTERS and key in _ADAPTER_MODULES:
+        try:
+            importlib.import_module(_ADAPTER_MODULES[key])
+        except Exception:  # noqa: BLE001 -- a broken adapter must fall through, not break dispatch
+            return None
+    return _ADAPTERS.get(key)
 
 
 def _register(league: str, source: str) -> Callable[[Adapter], Adapter]:
@@ -259,7 +278,7 @@ def _process_game(
     attempts: list[Attempt] = []
     for src in order:
         t0 = time.perf_counter()
-        adapter = _ADAPTERS.get((league, src))
+        adapter = _adapter_for(league, src)
         if adapter is None:
             attempts.append(Attempt(src, False, "not implemented"))
             continue
