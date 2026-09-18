@@ -39,7 +39,12 @@ __all__ = ["DRIVE_TITLES_SCHEMA", "PBP_SCHEMA", "parse_cfb_ncaa_drive_titles", "
 #   * 2025 jersey style -- "#95 K.Kimble"
 _SUFFIX = r"(?:\s(?:Jr|Sr|II|III|IV)\.?)?"
 _TOKEN = r"[A-Z][A-Za-z.'\-]*"
-_NAME = rf"(?-i:[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}|#\d{{1,2}}\s{_TOKEN}|{_TOKEN}(?:\s{_TOKEN}){{0,2}}{_SUFFIX})"
+# The bare-token form ends on a non-word char: without that guard it reads the side code
+# out of a yard-line token ("thrown to NCSU50" -> receiver "NCSU").
+_NAME = (
+    rf"(?-i:[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}|#\d{{1,2}}\s{_TOKEN}"
+    rf"|{_TOKEN}(?:\s{_TOKEN}){{0,2}}{_SUFFIX}(?!\w))"
+)
 _LAST_FIRST_RE = re.compile(rf"^[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}$")
 
 
@@ -51,7 +56,8 @@ def _clean_name(name: "str | None") -> "str | None":
     while name.endswith(".."):
         name = name[:-1]
     last = re.split(r"[,\s]+", name)[-1]
-    return name[:-1] if name.endswith(".") and len(last.rstrip(".")) >= 3 else name
+    # count LETTERS, not characters: "D.J." is two initials, not a 3-letter word
+    return name[:-1] if name.endswith(".") and len(re.sub(r"[^A-Za-z]", "", last)) >= 3 else name
 
 
 # Yard-line token = side code + yard number (0-50). A code is NOT a fixed character

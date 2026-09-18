@@ -499,3 +499,39 @@ def test_own_side_tie_broken_by_kickoff_geometry() -> None:
     assert _own_side_codes(tied) == truth
     # no kickoffs either: the documented last resort is the alphabetical pairing
     assert _own_side_codes([r for r in tied if r["play_type"] != "kickoff"]) == {"Samford": "CIT", "The Citadel": "SAM"}
+
+
+def test_a_yard_line_token_is_not_a_player_name() -> None:
+    """ "pass incomplete ... thrown to NHVN21" names a SPOT, not a receiver.
+
+    The bare "First Last" name form must end on a non-word character, or it reads the
+    side code out of the yard-line token and emits it as ``receiver`` (inflating
+    ``target``). Every committed fixture is checked: no participant may be a bare
+    all-caps code.
+    """
+    df = parse_cfb_ncaa_pbp(_variant("6386300"), contest_id="6386300")
+    # a row whose text names only the SPOT must leave receiver null
+    spot_only = df.filter(
+        pl.col("play_text").str.contains("thrown to NHVN") & ~pl.col("play_text").str.contains(" to [A-Z][a-z]")
+    )
+    assert spot_only.height > 0
+    assert spot_only.get_column("receiver").null_count() == spot_only.height
+    for path in sorted(FIX.glob("*.html")):
+        every = parse_cfb_ncaa_pbp(path.read_text(encoding="utf-8"), contest_id="x")
+        for col in ("rusher", "passer", "receiver", "kicker", "punter", "returner"):
+            codes = [
+                v
+                for v in every.get_column(col).drop_nulls().to_list()
+                # a side code: a short bare all-caps token ("NHVN", "AU", "AKRON").
+                # A 2019-era lone surname ("ALEXANDER-STEVE") is intended, as is "TEAM".
+                if v.isupper() and not set(v) & set(",. -'") and len(v) <= 5 and v != "TEAM"
+            ]
+            assert codes == [], f"{path.name}:{col} -> {codes}"
+
+
+def test_initials_keep_their_own_period() -> None:
+    """ "Hutchinson,K.D." is two initials, not a word with a sentence period."""
+    df = parse_cfb_ncaa_pbp(_variant("6386493"), contest_id="6386493")
+    assert "Hutchinson,K.D." in df.get_column("receiver").to_list()
+    old = parse_cfb_ncaa_pbp(_variant("1736435"), contest_id="1736435")
+    assert "Walker, A.J." in old.get_column("rusher").to_list()
