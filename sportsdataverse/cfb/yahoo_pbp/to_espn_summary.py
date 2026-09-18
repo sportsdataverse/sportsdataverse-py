@@ -35,6 +35,16 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from sportsdataverse.cfb.yahoo_pbp.fetch import _fetch_playbook_boxscore, _game_block, _has_plays, _resolve_game_id
+from sportsdataverse.football.yahoo_common import (
+    _clock,
+    _down_distance_text,
+    _lineups,
+    _odds_from_game,
+    _pickcenter,
+    _status,
+    _text,
+    _venue,
+)
 
 #: ESPN CFB ``type.id`` -> ``(type.text, type.abbreviation)``. Enumerated from the 24 real ESPN
 #: college-football summaries captured for the Stage 2 parity gate (2024-2026) plus the ESPN NFL
@@ -82,48 +92,10 @@ _STOPPAGE = frozenset({"Timeout", "End Period", "End of Half", "End of Game"})
 #: changes possession or is a kick, where the yardage says nothing about the next spot.
 _KEEPS_THE_BALL = frozenset({"3", "5", "7", "24"})
 
-_PLAYER_REF_RE = re.compile(r"\[(ncaaf\.p\.\d+)\]")
-_WHITESPACE_RE = re.compile(r"\s+")
-_CLOCK_RE = re.compile(r"^(\d{1,2}):(\d{2})$")
 _FG_YARDS_RE = re.compile(r"(?i)\b(\d{1,2})[- ]yard field goal")
 _RECOVERED_RE = re.compile(r"\[(ncaaf\.p\.\d+)\] recovered fumble")
 _PAT_GOOD_RE = re.compile(r"(?i)\bmade PAT\b|\bPAT is good\b")
 _TWO_POINT_GOOD_RE = re.compile(r"(?i)2pt attempt converted")
-_ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
-
-
-def _clock(clock: Optional[str]) -> str:
-    """Yahoo ``"07:12"`` -> ESPN ``"7:12"``; anything unparseable becomes ``"0:00"``."""
-    match = _CLOCK_RE.match(str(clock or "").strip())
-    return f"{int(match.group(1))}:{match.group(2)}" if match else "0:00"
-
-
-def _lineups(game: Mapping[str, Any]) -> Tuple[Dict[str, str], Dict[str, str]]:
-    """``(player id -> display name, player id -> Yahoo team id)`` from both lineups.
-
-    Yahoo writes play text with id placeholders (``"[ncaaf.p.455472] rushed for 3 yard gain"``)
-    and resolves them from the same payload, so a game whose lineups are empty (every season
-    before 2017) keeps the placeholders rather than losing the play.
-    """
-    names: Dict[str, str] = {}
-    teams: Dict[str, str] = {}
-    for side in ("homeTeamLineup", "awayTeamLineup"):
-        for entry in game.get(side) or []:
-            player = (entry or {}).get("player") or {}
-            pid = player.get("playerId")
-            if not pid:
-                continue
-            if player.get("displayName"):
-                names[pid] = player["displayName"]
-            if player.get("teamId"):
-                teams[pid] = player["teamId"]
-    return names, teams
-
-
-def _text(raw: Optional[str], names: Mapping[str, str]) -> str:
-    """Yahoo play text with ``[ncaaf.p.N]`` placeholders resolved to display names."""
-    flat = _WHITESPACE_RE.sub(" ", str(raw or "").replace("\r", " ").replace("\n", " ")).strip()
-    return _PLAYER_REF_RE.sub(lambda m: names.get(m.group(1), m.group(1)), flat)
 
 
 def _end_of_period_type_id(text: str, period: Optional[int]) -> str:
@@ -223,18 +195,6 @@ def _stat_yardage(play: Mapping[str, Any], type_id: str, text: str) -> int:
         return int(play.get("yards") or 0)
     except (TypeError, ValueError):
         return 0
-
-
-def _down_distance_text(
-    down: Optional[int], distance: Optional[int], to_endzone: Optional[int], spot: Optional[str]
-) -> Optional[str]:
-    """``"2nd & Goal at UK 3"`` -- the only ``downDistanceText`` the processor reads (its goal test)."""
-    if not down:
-        return None
-    label = _ORDINAL.get(int(down), f"{int(down)}th")
-    goal_to_go = to_endzone is not None and distance is not None and distance >= to_endzone
-    togo = "Goal" if goal_to_go else str(int(distance or 0))
-    return f"{label} & {togo}" + (f" at {spot}" if spot else "")
 
 
 def _trailing_end(play: Dict[str, Any], home_id: str) -> Dict[str, Any]:
@@ -360,85 +320,6 @@ def _competitor(
         "linescores": [{"displayValue": str((q or {}).get("score") or 0)} for q in linescore or []],
         "record": [],
     }
-
-
-_STATUS_BY_YAHOO = {
-    "FINAL": ("3", "STATUS_FINAL", "post", True, "Final"),
-    "FINAL_OVERTIME": ("3", "STATUS_FINAL", "post", True, "Final/OT"),
-    "HALFTIME": ("23", "STATUS_HALFTIME", "in", False, "Halftime"),
-    "IN_PROGRESS": ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress"),
-    "PREGAME": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-    "SCHEDULED": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-}
-
-
-def _status(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``header.competitions[0].status`` from Yahoo's own status word."""
-    phase = str(game.get("status") or "").upper()
-    if phase not in _STATUS_BY_YAHOO and game.get("isHalftime"):
-        phase = "HALFTIME"
-    type_id, name, state, completed, description = _STATUS_BY_YAHOO.get(
-        phase, ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress")
-    )
-    period = ((game.get("currentPeriod") or {}) or {}).get("period") or 0
-    clock = _clock(game.get("timeLeft")) if game.get("timeLeft") else None
-    detail = description
-    if state == "in" and name != "STATUS_HALFTIME" and period:
-        detail = (
-            f"{clock or '0:00'} - {_ORDINAL.get(period, str(period))}" if period <= 4 else f"{clock or '0:00'} - OT"
-        )
-    return {
-        "clock": 0.0,
-        "displayClock": clock or "0:00",
-        "period": period,
-        "type": {
-            "id": type_id,
-            "name": name,
-            "state": state,
-            "completed": completed,
-            "description": description,
-            "detail": detail,
-            "shortDetail": detail,
-        },
-        "yahooStatus": game.get("status"),
-    }
-
-
-_ODDS_RE = re.compile(r"(?i)(-?\d+(?:\.\d+)?)\s*,\s*O/U\s*(\d+(?:\.\d+)?)")
-
-
-def _odds_from_game(
-    game: Mapping[str, Any], espn_by_yahoo: Mapping[str, str], home_id: str
-) -> Optional[Dict[str, Any]]:
-    """``odds_override`` from Yahoo's own pregame line (``"-9.5, O/U 47.5"`` + ``favoriteId``)."""
-    summary = game.get("gameOddsSummary") or {}
-    match = _ODDS_RE.search(str(summary.get("pregameOddsDisplay") or ""))
-    if not match:
-        return None
-    favourite = espn_by_yahoo.get(str(summary.get("favoriteId") or ""))
-    if favourite is None:
-        return None
-    return {
-        "gameSpread": abs(float(match.group(1))),
-        "overUnder": float(match.group(2)),
-        "homeFavorite": str(favourite) == str(home_id),
-        "gameSpreadAvailable": True,
-    }
-
-
-def _pickcenter(odds: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
-    """The resolved line as a one-provider ``pickcenter`` array (the offline odds path)."""
-    if not odds or odds.get("gameSpread") is None or odds.get("overUnder") is None:
-        return []
-    return [
-        {
-            "provider": {"id": "0", "name": "stored closing line", "priority": 0},
-            "spread": abs(float(odds["gameSpread"])),
-            "overUnder": float(odds["overUnder"]),
-            "homeTeamOdds": {"favorite": bool(odds.get("homeFavorite"))},
-            "awayTeamOdds": {"favorite": not bool(odds.get("homeFavorite"))},
-        }
-    ]
 
 
 def _drive(
@@ -718,17 +599,6 @@ def _yahoo_to_espn_summary(
         "videos": [],
         "standings": {},
     }, notes
-
-
-def _venue(game: Mapping[str, Any]) -> Dict[str, Any]:
-    """``gameInfo.venue`` -- Yahoo states ``coverType``, which is the only roof signal any feed gives."""
-    venue = game.get("venue") or {}
-    return {
-        "id": venue.get("venueId"),
-        "fullName": venue.get("displayName"),
-        "address": {"city": venue.get("city"), "state": venue.get("state"), "country": venue.get("country")},
-        "indoor": (str(venue.get("coverType") or "").upper() in ("DOME", "INDOOR", "RETRACTABLE")) or None,
-    }
 
 
 def _header(game: Mapping[str, Any], event_id: str, home_id: str, away_id: str) -> Dict[str, Any]:

@@ -18,40 +18,31 @@ adapter exists for:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from typing import Any, Dict, Mapping, Optional, Tuple
-from zoneinfo import ZoneInfo
 
 import polars as pl
 
 from sportsdataverse.cfb.yahoo_pbp.teams import _yahoo_team_number
 
-_ET = ZoneInfo("America/New_York")
+# League-neutral Yahoo handling (fetching, the 429 / no-coverage shapes, the id arithmetic's
+# Eastern-date half) is shared with the NFL adapter; re-exported here so this module stays the
+# CFB adapter's one fetch surface.
+from sportsdataverse.football.yahoo_common import (
+    _fetch_playbook_boxscore,
+    _game_block,
+    _has_plays,
+    _kickoff_et_date,
+)
 
-#: ``kickoff_utc`` formats the id map has shipped. The minutes-only form is what
-#: ``idmap.GAME_SCHEMA`` documents; the others are what a schedule row carries.
-_KICKOFF_FORMATS = ("%Y-%m-%dT%H:%MZ", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M%z")
-
-
-def _kickoff_et_date(kickoff: Optional[str]) -> Optional[str]:
-    """``"2026-09-13T00:00Z"`` -> ``"20260912"``: the kickoff's **US-Eastern** calendar date.
-
-    Eastern, not the venue's local zone: it is what reproduces Yahoo's own ids on a full
-    season (934/934 in 2025, including the late-window West-coast games that roll past
-    midnight UTC).
-    """
-    if not kickoff:
-        return None
-    text = str(kickoff).strip()
-    for fmt in _KICKOFF_FORMATS:
-        try:
-            parsed = datetime.strptime(text, fmt)
-        except ValueError:
-            continue
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=timezone.utc)
-        return f"{parsed.astimezone(_ET):%Y%m%d}"
-    return None
+__all__ = [
+    "_crosswalk_yahoo_id",
+    "_fetch_playbook_boxscore",
+    "_game_block",
+    "_has_plays",
+    "_kickoff_et_date",
+    "_resolve_game_id",
+    "_yahoo_cfb_game_id",
+]
 
 
 def _yahoo_cfb_game_id(
@@ -135,38 +126,3 @@ def _resolve_game_id(
     if from_crosswalk:
         return str(from_crosswalk), "cfb_schedule_crosswalk"
     return None, "unresolved"
-
-
-def _game_block(payload: Any) -> Optional[Dict[str, Any]]:
-    """``data.games[0]`` of a shangrila playbook payload, or None when the envelope is absent.
-
-    None means "this is not a game payload" -- a 429's 23-byte ``text/html`` body, an error
-    envelope, a truncated response. It is deliberately **not** the same as a game with no
-    plays (:func:`_has_plays`), which is Yahoo saying it does not cover the game: the first
-    is worth another try, the second never is.
-    """
-    if not isinstance(payload, dict):
-        return None
-    games = (payload.get("data") or {}).get("games") if isinstance(payload.get("data"), dict) else None
-    if not isinstance(games, list) or not games or not isinstance(games[0], dict):
-        return None
-    return games[0]
-
-
-def _has_plays(game: Mapping[str, Any]) -> bool:
-    """True when the payload carries play-by-play.
-
-    Yahoo answers **HTTP 200** for a game it does not cover -- every FCS-hosted game, and
-    every game before its play floor -- with a real game object that has scores, odds and a
-    win-probability stub but an empty ``playByPlay``. Detecting that by shape is the only way
-    to tell "no coverage" from "fetch failed".
-    """
-    return bool(game.get("playByPlay"))
-
-
-def _fetch_playbook_boxscore(yahoo_game_id: str, *, live: bool = False, **kwargs: Any) -> Dict[str, Any]:
-    """The shangrila playbook boxscore for one Yahoo game id (``...Poll`` variant when ``live``)."""
-    from sportsdataverse.yahoo.yahoo_shangrila import yahoo_playbook_boxscore, yahoo_playbook_boxscore_poll
-
-    fetch = yahoo_playbook_boxscore_poll if live else yahoo_playbook_boxscore
-    return fetch(game_id=yahoo_game_id, is_football="true", return_parsed=False, **kwargs)
