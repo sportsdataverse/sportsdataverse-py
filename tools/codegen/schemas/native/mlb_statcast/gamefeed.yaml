@@ -29,7 +29,7 @@ columns:
   type: character
   description: "Outs."
 - name: batter
-  type: character
+  type: integer
   description: "MLBAM id of the batter."
 - name: stand
   type: character
@@ -38,7 +38,7 @@ columns:
   type: character
   description: "Batter name."
 - name: pitcher
-  type: character
+  type: integer
   description: "MLBAM id of the pitcher."
 - name: p_throws
   type: character
@@ -200,5 +200,5 @@ columns:
   type: character
   description: "Game total pitches."
 - name: game_pk
-  type: character
+  type: integer
   description: "MLBAM game id."
