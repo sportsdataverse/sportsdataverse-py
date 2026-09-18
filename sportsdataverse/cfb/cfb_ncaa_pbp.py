@@ -334,9 +334,11 @@ def _yards_gained(text: str) -> "int | None":
     """Signed yards of the play's FIRST ``for N yards`` clause -- the ball carrier's gain.
 
     After a fumble or lateral the text carries a second clause for the recovering /
-    trailing runner; it is deliberately ignored, matching cfbfastR, whose
-    ``yards_gained`` is ESPN's ``statYardage`` (the first carrier's yards, verified on
-    the 2024 parquet over 1,036 fumble continuations).
+    trailing runner; it is deliberately ignored, matching cfbfastR. The published
+    cfbfastR pbp parquet carries no ``yards_gained`` column: the column checked was
+    ESPN's ``statYardage``, which equals the FIRST clause on 336 of the 363 decisive
+    2023-24 scrimmage fumble continuations (92.6%; 18 match the last clause, and the
+    remainder are ``statYardage`` adjusted for an enforced penalty).
     """
     m = _YARDS_RE.search(text)
     if not m:
