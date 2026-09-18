@@ -15,8 +15,10 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.cfb.cfb_ncaa_pbp import (
+    _SCRIMMAGE_TYPES,
     DRIVE_TITLES_SCHEMA,
     PBP_SCHEMA,
+    _own_side_codes,
     parse_cfb_ncaa_drive_titles,
     parse_cfb_ncaa_pbp,
 )
@@ -345,3 +347,191 @@ def test_pass_result_does_not_depend_on_the_passer_name_format() -> None:
     assert comp.get_column("yards_gained").null_count() == 0
     inc = passes.filter(pl.col("play_text").str.contains(" pass incomplete"))
     assert inc.height > 0 and inc.get_column("pass_complete").to_list() == [False] * inc.height
+
+
+# --- NC5: replay reviews reprint the ORIGINAL call ------------------------
+# 6389205 Minnesota @ Ohio St. (2025): "PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)"
+# 6386512 Houston @ Oregon St. (2025): "PLAY STANDS." after an own recovery
+
+
+def test_review_reprint_feeds_no_flag_but_play_text_keeps_it() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("6389205"))
+    reviewed = df.filter(pl.col("play_text").str.contains("Original Play:"))
+    assert reviewed.height >= 3
+    # the overturned call carried TOUCHDOWN / a goal-line spot / a tackle; the ruling did not
+    short = reviewed.filter(
+        pl.col("play_text").str.starts_with("Donaldson Jr,CJ rush left for 1 yard gain to the MINN01")
+    )
+    assert short.height == 1
+    r = short.row(0, named=True)
+    assert (r["is_touchdown"], r["yards_gained"], r["end_yard_line"], r["tackler_1"]) == (
+        False,
+        1,
+        "MINN01",
+        "Roberson,Jeff",
+    )
+    assert "Original Play:" in r["play_text"]
+    over = reviewed.filter(
+        pl.col("play_text").str.starts_with("Shotgun Jackson,Bo rush middle for 5 yards gain to the MINN00 TOUCHDOWN")
+    )
+    assert over.row(0, named=True)["tackler_1"] is None  # the tackle belongs to the overturned call
+    assert over.row(0, named=True)["is_touchdown"] is True
+    stands = parse_cfb_ncaa_pbp(_variant("6386512")).filter(pl.col("play_text").str.contains("PLAY STANDS"))
+    assert stands.height >= 1 and stands.get_column("is_first_down").all()
+
+
+# --- NC3 / NC4: 2019-era "First Last" names and damaged tackler separators ----
+# 1735890 LSU @ Vanderbilt (2019): "SH," formation prefix, "First Last" names everywhere,
+#   "C. Ed.-Helaire", tacklers glued with no separator ("Kristian FultonJaCoby Stevens")
+# 1735120 Wagner @ UConn (2019): "LAST, First" with a space, tacklers joined by a mangled
+#   ":" ("MORGAN, D.J.3aPAUL, Keyshawn")
+
+
+def test_first_last_names_are_extracted() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735890"))
+    rush = df.filter(pl.col("play_type") == "rush")
+    assert rush.height > 40
+    assert rush.get_column("rusher").null_count() == 0
+    assert "KeShawn Vaughn" in rush.get_column("rusher").to_list()
+    assert "C. Ed.-Helaire" in rush.get_column("rusher").to_list()
+    assert rush.filter(pl.col("play_text").str.starts_with("SH, ")).get_column("formation").unique().to_list() == [
+        "SH,"
+    ]
+    passes = df.filter(pl.col("play_type") == "pass")
+    assert passes.get_column("passer").null_count() == 0
+    comp = passes.filter(pl.col("pass_complete") == True)  # noqa: E712
+    assert comp.get_column("receiver").null_count() == 0
+    assert {"Joe Burrow", "Riley Neal"} <= set(passes.get_column("passer").unique().to_list())
+    ko = df.filter(pl.col("play_type") == "kickoff")
+    assert ko.get_column("kicker").null_count() == 0
+    assert "C. Ed.-Helaire" in ko.get_column("returner").to_list()
+    punts = df.filter(pl.col("play_type") == "punt")
+    assert punts.filter(pl.col("punter").is_null()).get_column("play_text").str.contains("punt BLOCKED").all()
+    assert punts.get_column("punter").null_count() < punts.height
+    sacks = df.filter(pl.col("play_type") == "sack")
+    assert sacks.height > 0 and sacks.get_column("passer").null_count() == 0
+
+
+def test_last_first_with_space_and_initials() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    assert "BEAUDRY, Mike" in df.get_column("passer").to_list()
+    assert "DRAYTON, Matt" in df.get_column("receiver").to_list()  # sentence period dropped
+    assert "McKENZIE, D" in df.get_column("rusher").to_list()  # a bare initial
+    assert (
+        df.filter(pl.col("play_type").is_in(["rush", "pass"])).get_column("rusher").null_count()
+        < df.filter(pl.col("play_type") == "pass").height + 3
+    )
+
+
+def test_tacklers_split_on_the_mangled_separator_or_left_null() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    row = df.filter(pl.col("play_text").str.contains("MORGAN, D.J.3aPAUL, Keyshawn")).row(0, named=True)
+    assert (row["tackler_1"], row["tackler_2"]) == ("MORGAN, D.J.", "PAUL, Keyshawn")
+    assert not df.get_column("tackler_1").fill_null("").str.contains("3a").any()
+    df = parse_cfb_ncaa_pbp(_variant("1735890"))
+    single = df.filter(pl.col("play_text").str.ends_with("(Kristian Fulton).")).row(0, named=True)
+    assert (single["tackler_1"], single["tackler_2"]) == ("Kristian Fulton", None)
+    glued = df.filter(pl.col("play_text").str.contains("Kristian FultonJaCoby Stevens")).row(0, named=True)
+    assert (glued["tackler_1"], glued["tackler_2"]) == (None, None)  # separator lost: not recoverable
+
+
+# --- NC2: touchdown and PAT printed in one row (1735120) -----------------------
+
+
+def test_td_and_pat_in_one_row_is_the_scoring_play() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("1735120"))
+    both = df.filter(pl.col("play_text").str.contains("TOUCHDOWN") & pl.col("play_text").str.contains("kick attempt"))
+    assert both.height == 6
+    assert set(both.get_column("play_type").to_list()) == {"rush", "pass"}
+    assert both.get_column("is_touchdown").all()
+    row = both.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike rush for 2 yards")).row(0, named=True)
+    assert (row["rusher"], row["yards_gained"], row["end_yard_line"]) == ("BEAUDRY, Mike", 2, "WAGNER0")
+
+
+# --- NC1: a recovered fumble is a turnover only when the OTHER team recovered ---
+# 6386512 Houston @ Oregon St. (2025): own recoveries ("... recovered by OSU ..." in an
+#   Oregon St. drive); 6386493 Western Ky. @ LSU (2025): one own, one by the defense
+
+
+def test_own_recovery_is_not_a_turnover() -> None:
+    df = parse_cfb_ncaa_pbp(_variant("6386512"))
+    own = df.filter(
+        pl.col("play_text").str.contains("fumbled by")
+        & pl.col("play_text").str.contains("recovered by OSU")
+        & (pl.col("offense") == "Oregon St.")
+    )
+    assert own.height >= 2
+    assert own.get_column("is_fumble").all()
+    assert not own.get_column("is_turnover").any()
+    assert own.get_column("turnover_type").null_count() == own.height
+    df = parse_cfb_ncaa_pbp(_variant("6386493"))
+    lsu = df.filter(pl.col("play_text").str.contains("recovered by LSU Van Buren")).row(0, named=True)
+    wku = df.filter(pl.col("play_text").str.contains("recovered by WKU Flowers")).row(0, named=True)
+    assert (lsu["offense"], lsu["is_turnover"], lsu["turnover_type"]) == ("LSU", False, None)
+    assert (wku["offense"], wku["is_turnover"], wku["turnover_type"]) == ("LSU", True, "fumble")
+
+
+# --- own-side vote tie-break (NC9) --------------------------------------------
+
+
+def test_own_side_tie_broken_by_kickoff_geometry() -> None:
+    """A tied first-snap vote is settled by where the kickoffs were spotted, never by name order.
+
+    Samford @ The Citadel (6414322): the true assignment is the one that sorts SECOND
+    (Samford -> SAM, The Citadel -> CIT), so an alphabetical fallback would mirror the game.
+    The real rows are sliced to equally many own-side and opponent-side drive starts.
+    """
+    rows = parse_cfb_ncaa_pbp(
+        (FIX / "mfb_play_by_play_6414322.html").read_text(encoding="utf-8"), contest_id="6414322"
+    ).to_dicts()
+    truth = {"Samford": "SAM", "The Citadel": "CIT"}
+    assert _own_side_codes(rows) == truth
+    firsts: dict[int, dict] = {}
+    for r in rows:
+        if r["yard_line_side"] and r["play_type"] in _SCRIMMAGE_TYPES:
+            firsts.setdefault(r["drive_number"], r)
+    own = [dn for dn, r in firsts.items() if truth[r["offense"]] == r["yard_line_side"]]
+    opp = [dn for dn, r in firsts.items() if truth[r["offense"]] != r["yard_line_side"]]
+    n = min(len(own), len(opp))
+    assert n >= 1
+    keep = set(own[:n]) | set(opp[:n])
+    tied = [r for r in rows if r["drive_number"] in keep or r["play_type"] == "kickoff"]
+    assert _own_side_codes(tied) == truth
+    # no kickoffs either: the documented last resort is the alphabetical pairing
+    assert _own_side_codes([r for r in tied if r["play_type"] != "kickoff"]) == {"Samford": "CIT", "The Citadel": "SAM"}
+
+
+def test_a_yard_line_token_is_not_a_player_name() -> None:
+    """ "pass incomplete ... thrown to NHVN21" names a SPOT, not a receiver.
+
+    The bare "First Last" name form must end on a non-word character, or it reads the
+    side code out of the yard-line token and emits it as ``receiver`` (inflating
+    ``target``). Every committed fixture is checked: no participant may be a bare
+    all-caps code.
+    """
+    df = parse_cfb_ncaa_pbp(_variant("6386300"), contest_id="6386300")
+    # a row whose text names only the SPOT must leave receiver null
+    spot_only = df.filter(
+        pl.col("play_text").str.contains("thrown to NHVN") & ~pl.col("play_text").str.contains(" to [A-Z][a-z]")
+    )
+    assert spot_only.height > 0
+    assert spot_only.get_column("receiver").null_count() == spot_only.height
+    for path in sorted(FIX.glob("*.html")):
+        every = parse_cfb_ncaa_pbp(path.read_text(encoding="utf-8"), contest_id="x")
+        for col in ("rusher", "passer", "receiver", "kicker", "punter", "returner"):
+            codes = [
+                v
+                for v in every.get_column(col).drop_nulls().to_list()
+                # a side code: a short bare all-caps token ("NHVN", "AU", "AKRON").
+                # A 2019-era lone surname ("ALEXANDER-STEVE") is intended, as is "TEAM".
+                if v.isupper() and not set(v) & set(",. -'") and len(v) <= 5 and v != "TEAM"
+            ]
+            assert codes == [], f"{path.name}:{col} -> {codes}"
+
+
+def test_initials_keep_their_own_period() -> None:
+    """ "Hutchinson,K.D." is two initials, not a word with a sentence period."""
+    df = parse_cfb_ncaa_pbp(_variant("6386493"), contest_id="6386493")
+    assert "Hutchinson,K.D." in df.get_column("receiver").to_list()
+    old = parse_cfb_ncaa_pbp(_variant("1736435"), contest_id="1736435")
+    assert "Walker, A.J." in old.get_column("rusher").to_list()

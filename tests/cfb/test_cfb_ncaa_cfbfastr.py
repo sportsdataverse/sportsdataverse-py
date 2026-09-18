@@ -12,6 +12,12 @@ lowercase "kick attempt good") fails loudly. The field-position tests add the
 
 from __future__ import annotations
 
+import json
+import os
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor
+import re
 from pathlib import Path
 
 import polars as pl
@@ -376,6 +382,7 @@ def test_end_yards_to_goal_follows_a_clean_gain() -> None:
             & (pl.col("int") == False)  # noqa: E712
             & pl.col("play_text").str.contains(r"to the ")
             & ~pl.col("play_text").str.contains("lateral")
+            & ~pl.col("play_text").str.contains("Original Play:")  # play_text keeps the overturned call
         )
         assert clean.height > 50, cid
         bad = clean.filter(
@@ -509,3 +516,187 @@ def test_digit_side_code_end_spots_resolve_against_the_game_codes() -> None:
         row = df.filter(pl.col("play_text").str.starts_with(prefix))
         assert row.height == 1, prefix
         assert row.item(0, "yards_to_goal_end") == end, prefix
+
+
+def test_first_last_participants_reach_the_cfbfastr_frame() -> None:
+    """2019 "First Last" names arrive as they are; "LAST, First" is turned around (NC3)."""
+    df = _frame("1735890")
+    assert "KeShawn Vaughn" in df.get_column("rusher_player_name").to_list()
+    assert "Joe Burrow" in df.get_column("passer_player_name").to_list()
+    assert "Derek Stingley" in df.get_column("interception_player_name").to_list()
+    df = _frame("1735120")
+    # was pinned as "Mike BEAUDRY": the 2019 pages shout the surname and cfbfastR
+    # does not, so the mapper now title-cases it (see the shouted-surname test).
+    assert "Mike Beaudry" in df.get_column("passer_player_name").to_list()
+
+
+def _participant_names(df: "pl.DataFrame") -> "set[str]":
+    """Every non-null value of every ``*_player_name`` column."""
+    return {v for c in df.columns if c.endswith("player_name") for v in df.get_column(c).drop_nulls().to_list()}
+
+
+def test_a_comma_separated_suffix_stays_a_suffix() -> None:
+    """The pages print "Didio, Jr.,Mark"; cfbfastR's form is "Mark Didio Jr." -- suffix LAST.
+
+    Verified against ``play_by_play_2024.parquet``: every suffix in
+    ``rusher_player_name`` trails the surname ("Gabe Ervin Jr.", "William
+    Atkins IV", "Samuel Brown V"), 5,307 rows; none leads it.
+    """
+    for cid, want in (("6386300", "Mark Didio Jr."), ("6386303", "Mark Didio Jr."), ("6396796", "Eric Singleton Jr.")):
+        names = _participant_names(_frame(cid))
+        assert want in names, cid
+        assert not [n for n in names if n.startswith(("Jr.", "Sr.", "II ", "III ", "IV ", "V "))], cid
+
+
+def test_a_bare_suffix_is_not_a_first_name() -> None:
+    """Real page strings whose contests are outside the committed corpus.
+
+    "Brown V,Samuel" (6412827) needs ``V`` in the parser's suffix list, and
+    cfbfastR publishes exactly "Samuel Brown V"; the 2019 pages also print a
+    surname with a suffix and NO first name ("GILLIAM, Jr.", 1736824), where
+    splitting on the comma made the suffix the first name.
+    """
+    assert _first_last("Brown V,Samuel") == "Samuel Brown V"
+    assert _first_last("GILLIAM, Jr.") == "Gilliam Jr."
+    # a one-letter first initial is written with a period, a roman-numeral
+    # suffix never is -- which is what keeps them apart
+    assert _first_last("Smith,V.") == "V. Smith"
+
+
+def test_a_suffix_keeps_no_sentence_period() -> None:
+    """ "Jr."/"Sr." own their period; "II"/"IV"/"V" do not, so a terminal one is the sentence's.
+
+    1735539 prints both "... to Wilbert Boyd IV for 7 yards" and the row that ends
+    on the name, "Tyler Pullum pass incomplete to Wilbert Boyd IV." -- the same
+    player has to come out of both as one value.
+    """
+    df = _frame("1735539")
+    row = df.filter(pl.col("play_text") == "Tyler Pullum pass incomplete to Wilbert Boyd IV.").row(0, named=True)
+    assert row["receiver_player_name"] == "Wilbert Boyd IV"
+    assert [n for n in _participant_names(df) if "Boyd" in n] == ["Wilbert Boyd IV"]
+    # a "Jr."/"Sr." period is the suffix's own and is kept
+    assert "Garrison Johnson Sr." in _participant_names(_frame("6414322"))
+
+
+def test_a_2019_shouted_surname_is_title_cased() -> None:
+    """The 2019 pages shout the surname ("HARRIS, Clayton"); cfbfastR is mixed case.
+
+    Conservative on purpose: only an all-uppercase token of three letters or
+    more is touched, so a mixed-case source keeps its own internal capitals, a
+    two-letter token survives, and the page's own "TEAM" is left alone.
+    """
+    df = _frame("1735120")
+    names = _participant_names(df)
+    assert {"Mike Beaudry", "Clayton Harris", "Alexander-Steve"} <= names
+    assert "D McKENZIE" in names  # mixed-case source: its "McK" is the page's, not a guess
+    assert [n for n in names if re.search(r"\b[A-Z]{3,}\b", n)] == ["TEAM"]
+    assert "Racey McMath" in _participant_names(_frame("1735890"))
+
+
+def test_a_team_rush_carries_cfbfastrs_team_marker() -> None:
+    """The 2025 pages print the TEAM as the carrier on a team rush; cfbfastR writes "TEAM".
+
+    16,008 published cfbfastR rows hold "TEAM"/"Team" in ``rusher_player_name``,
+    and the 2019 NCAA pages print it that way themselves -- so a team name in a
+    player column is the defect, not the marker.
+    """
+    df = _frame("5336803")
+    row = df.filter(pl.col("play_text").str.contains("Akron rush middle for 14 yards loss")).row(0, named=True)
+    assert (row["rusher_player_name"], row["pos_team"], row["rush"]) == ("TEAM", "Akron", True)
+    # the page's own "TEAM rush" is already right and is not re-cased
+    assert _frame("1735120").filter(pl.col("rusher_player_name") == "TEAM").height == 2
+    for cid in ALL_PBP_FIXTURES:
+        d = _frame(cid)
+        teams = set(d.get_column("pos_team").drop_nulls().to_list())
+        assert not (_participant_names(d) & teams), cid
+
+
+def test_td_and_pat_in_one_row_scores_seven() -> None:
+    """1735120 prints "... TOUCHDOWN, ..., HARRIS, Clayton kick attempt good." on the scoring play (NC2)."""
+    df = _frame("1735120")
+    row = df.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike rush for 2 yards")).row(0, named=True)
+    assert (row["play_type"], row["rush_td"], row["score_pts"]) == ("Rushing Touchdown", True, 7)
+    six = df.filter(pl.col("play_text").str.starts_with("BEAUDRY, Mike pass intercepted by MORRIS, Myron")).row(
+        0, named=True
+    )
+    assert (six["play_type"], six["score_pts"]) == ("Interception Return Touchdown", -7)
+
+
+def test_2019_field_goal_text_scores() -> None:
+    """ "field goal attempt from 30 GOOD" (no "yards") is a made kick; 1735120's event-sourced final is 21-24."""
+    df = _frame("1735120")
+    fg = df.filter(pl.col("play_text").str.starts_with("HARRIS, Clayton field goal attempt from 30 GOOD")).row(
+        0, named=True
+    )
+    assert (fg["play_type"], fg["fg_made"], fg["yds_fg"], fg["score_pts"]) == ("Field Goal Good", True, 30, 3)
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Wagner": 21, "UConn": 24}  # no drive titles: pure event sourcing
+
+
+def test_fumble_recoveries_follow_cfbfastr_labels_and_turnover_vec() -> None:
+    """NC1 / NC6: own recoveries are not turnovers; the recovering team scores a return-less TD."""
+    df = _frame("6386493")
+    own = df.filter(pl.col("play_text").str.contains("recovered by LSU Van Buren")).row(0, named=True)
+    assert (own["play_type"], own["turnover_vec"], own["fumble_vec"], own["rush"]) == (
+        "Fumble Recovery (Own)",
+        False,
+        True,
+        True,
+    )
+    td = df.filter(pl.col("play_text").str.contains("recovered by WKU Flowers,Dylan at WKU29 TOUCHDOWN")).row(
+        0, named=True
+    )
+    assert (td["play_type"], td["rush_td"], td["score_pts"], td["turnover_vec"]) == (
+        "Fumble Recovery (Opponent) Touchdown",
+        False,
+        -6,
+        True,
+    )
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Western Ky.": 10, "LSU": 13}
+    df = _frame("6386512")
+    own = df.filter(pl.col("play_text").str.contains("recovered by OSU") & (pl.col("pos_team") == "Oregon St."))
+    assert own.height >= 2 and not own.get_column("turnover_vec").any()
+    assert set(own.get_column("play_type").to_list()) <= {
+        "Fumble Recovery (Own)",
+        "Blocked Field Goal",
+        "Field Goal Missed",
+        "Punt",
+    }
+
+
+# --- determinism (NC9) ----------------------------------------------------------
+
+_SEED_CHILD = """
+import json, sys
+from pathlib import Path
+from sportsdataverse.cfb.cfb_ncaa_cfbfastr import to_cfbfastr
+from sportsdataverse.cfb.cfb_ncaa_pbp import parse_cfb_ncaa_drive_titles, parse_cfb_ncaa_pbp
+html = Path(sys.argv[1]).read_text(encoding="utf-8")
+df = to_cfbfastr(parse_cfb_ncaa_pbp(html, contest_id="6386300"), season=2025, drive_titles=parse_cfb_ncaa_drive_titles(html))
+print(json.dumps(df.select("yards_to_goal", "yards_to_goal_end", "Goal_To_Go").rows()))
+"""
+
+
+def test_field_position_identical_across_hash_seeds() -> None:
+    """New Haven @ Saginaw Valley (6386300) built under PYTHONHASHSEED 0..5 must agree.
+
+    Two identical season builds on main disagreed on 54/1,685 games (this one flipped
+    ``yards_to_goal`` between 35,87,76... and 65,13,24...) because the own-side pick
+    fell out of hash order on a tied vote.
+    """
+    path = FIX / "mfb_play_by_play_6386300.html"
+
+    def run(seed: int) -> list:
+        env = {**os.environ, "PYTHONHASHSEED": str(seed), "PYTHONPATH": str(Path(__file__).resolve().parents[2])}
+        out = subprocess.run(
+            [sys.executable, "-c", _SEED_CHILD, str(path)], env=env, capture_output=True, text=True, check=True
+        )
+        return json.loads(out.stdout)
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(run, range(6)))
+    assert len(results[0]) > 100
+    assert results[0][0][0] == 65  # kickoff from the SVS 35: cfbfastR kicking-team convention
+    for seed, rows in enumerate(results[1:], start=1):
+        assert rows == results[0], f"seed {seed} differs from seed 0"
