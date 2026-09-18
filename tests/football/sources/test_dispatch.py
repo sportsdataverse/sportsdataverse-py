@@ -83,7 +83,7 @@ def fast_processor(monkeypatch):
     return calls
 
 
-def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, monkeypatch):
+def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, alternates_unavailable, monkeypatch):
     def _shield_down(league, espn_id, ctx):
         raise SourceUnavailable("shield down")
 
@@ -100,7 +100,9 @@ def test_alternate_requested_falls_through_to_espn(nfl_summary, fast_processor, 
         ("espn", True),
     ]
     assert out.health["shield"] == "SourceUnavailable: shield down"
-    assert out.health["cbs"] == out.health["yahoo"] == out.health["fox"] == "not implemented"
+    # cbs is registered and hands over on its own terms; yahoo / fox are still empty slots
+    assert out.health["cbs"] == "SourceUnavailable: cbs down"
+    assert out.health["yahoo"] == out.health["fox"] == "not implemented"
     assert fast_processor[0].summary is nfl_summary  # ESPN consumed its injected payload
 
 
@@ -138,7 +140,7 @@ def test_alternate_adapter_provenance(nfl_summary, fast_processor, monkeypatch):
     assert seen["ctx"].idmap_row is row and seen["ctx"].payload == {"raw": 1}
 
 
-def test_processor_exception_falls_through(nfl_summary, monkeypatch):
+def test_processor_exception_falls_through(nfl_summary, alternates_unavailable, monkeypatch):
     def _explode(league, espn_id, adapted):
         raise RuntimeError("boom")
 
@@ -147,10 +149,10 @@ def test_processor_exception_falls_through(nfl_summary, monkeypatch):
         _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary})
     errs = {a.source: a.error for a in ei.value.attempts}
     assert errs["espn"] == "processor: RuntimeError: boom"
-    # shield IS registered now, so it fails on its own terms (unmapped id, no payload) rather
-    # than "not implemented"; cbs / yahoo / fox are still unregistered slots
-    assert "SourceUnavailable" in errs["shield"] and len(errs) == 5
-    assert [errs[s] for s in ("cbs", "yahoo", "fox")] == ["not implemented"] * 3
+    # shield and cbs ARE registered now, so they fail on their own terms (unmapped id, no
+    # payload) rather than "not implemented"; yahoo / fox are still unregistered slots
+    assert "SourceUnavailable" in errs["shield"] and "SourceUnavailable" in errs["cbs"] and len(errs) == 5
+    assert [errs[s] for s in ("yahoo", "fox")] == ["not implemented"] * 2
 
 
 def test_no_fallthrough_raises_with_one_attempt():
@@ -188,7 +190,9 @@ def test_default_odds_are_flagged_in_provenance(nfl_summary, no_network):
     assert out.provenance["odds"] == {"source": "default", "default": True, "from_idmap": False}
 
 
-def test_adapter_returning_the_wrong_type_falls_through(nfl_summary, fast_processor, monkeypatch):
+def test_adapter_returning_the_wrong_type_falls_through(
+    nfl_summary, fast_processor, alternates_unavailable, monkeypatch
+):
     """A misbehaving adapter is a fall-through reason, not an AttributeError out of dispatch.
 
     GOP maps :class:`AllSourcesFailed` to its 404; an exception escaping ``_process_game``
