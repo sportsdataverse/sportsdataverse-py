@@ -9,6 +9,7 @@ import requests
 
 from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _parse_retry_after, _retry_delay, download
 from sportsdataverse.errors import NoESPNDataError
+from tests.conftest import skip_if_no_live
 
 
 class TestRetryDelay:
@@ -72,13 +73,19 @@ class TestRetryDelay:
 
 
 class TestDownload:
+    # The three happy-path tests below assert a real HTTP 200 from a third-party host
+    # (google.com / jsonplaceholder), so they are live tests and carry the live gate.
+    # Everything else in this class is offline.
+
     # Tests that the function can download a valid URL with default parameters
+    @skip_if_no_live
     def test_download_valid_url_default_params(self):
         url = "https://www.google.com"
         response = download(url)
         assert response.status_code == 200
 
     # Tests that the function can download a valid URL with custom parameters
+    @skip_if_no_live
     def test_download_valid_url_custom_params(self):
         url = "https://jsonplaceholder.typicode.com/posts"
         params = {"userId": 1}
@@ -86,6 +93,7 @@ class TestDownload:
         assert response.status_code == 200
 
     # Tests that the function can download a valid URL with custom headers
+    @skip_if_no_live
     def test_download_valid_url_custom_headers(self):
         url = "https://jsonplaceholder.typicode.com/posts"
         headers = {"User-Agent": "Mozilla/5.0"}
