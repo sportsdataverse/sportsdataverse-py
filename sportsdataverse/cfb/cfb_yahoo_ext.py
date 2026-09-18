@@ -720,47 +720,165 @@ def yahoo_cfb_teams(
     return _frame(rows, return_as_pandas)
 
 
+_BOXSCORE_SCHEMA: Dict[str, Any] = {
+    "game_id": pl.Utf8,
+    "team_id": pl.Utf8,
+    "home_away": pl.Utf8,
+    "player_id": pl.Utf8,
+    "stat_category": pl.Utf8,
+    "stat_type_id": pl.Utf8,
+    "stat_name": pl.Utf8,
+    "stat_abbreviation": pl.Utf8,
+    "stat_variation": pl.Utf8,
+    "value": pl.Utf8,
+}
+
+
+def _boxscore_rows(raw: Any) -> List[Dict[str, Any]]:
+    """Decode ``service.boxscore`` team/player stat maps into one row per entity stat.
+
+    ``{team_stats|player_stats}[entity][variation][stat_type] = value`` is joined
+    against the ``stat_types`` / ``stat_categories`` / ``stat_variations``
+    dictionaries; a player's team comes from the game's home/away lineups.
+    """
+    service = raw.get("service") if isinstance(raw, dict) else None
+    box = service.get("boxscore") if isinstance(service, dict) else None
+    if not isinstance(box, dict):
+        return []
+    games = box.get("games") or {}
+    game_id = next(iter(games), None)
+    game = games.get(game_id) or {}
+    lineups = (box.get("gamelineups") or {}).get(game_id) or {}
+    side_of: Dict[str, str] = {}
+    team_of: Dict[str, Any] = {}
+    for side in ("home", "away"):
+        team_id = game.get(f"{side}_team_id")
+        if team_id:
+            side_of[team_id] = side
+            team_of[team_id] = team_id
+        for player_id in (lineups.get(f"{side}_lineup") or {}).get("all") or {}:
+            side_of[player_id] = side
+            team_of[player_id] = team_id
+    types = box.get("stat_types") or {}
+    variations = box.get("stat_variations") or {}
+    category_of = {
+        stat: category.get("name")
+        for category in (box.get("stat_categories") or {}).values()
+        for stat in (category.get("stats") or [])
+    }
+    rows: List[Dict[str, Any]] = []
+    for kind in ("team_stats", "player_stats"):
+        for entity_id, by_variation in (box.get(kind) or {}).items():
+            for variation, stats in (by_variation or {}).items():
+                for stat_id, value in (stats or {}).items():
+                    stat = types.get(stat_id) or {}
+                    rows.append(
+                        {
+                            "game_id": game_id,
+                            "team_id": team_of.get(entity_id),
+                            "home_away": side_of.get(entity_id),
+                            "player_id": entity_id if kind == "player_stats" else None,
+                            "stat_category": category_of.get(stat_id),
+                            "stat_type_id": stat_id,
+                            "stat_name": stat.get("name"),
+                            "stat_abbreviation": stat.get("short_name"),
+                            "stat_variation": (variations.get(variation) or {}).get("name"),
+                            "value": None if value is None else str(value),
+                        }
+                    )
+    return rows
+
+
+@overload
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def yahoo_cfb_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs: Any,
-) -> Dict[str, Any]:
-    """Yahoo CFB boxscore — raw JSON passthrough (parsing not yet implemented).
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Yahoo CFB box score: team and player stats, one row per entity stat.
 
-    Wraps the editorial ``boxscore/{game_id}`` resource. The payload uses a
-    normalized decoder-dictionary schema
-    (``player_stats[playerId][variation][stat_type]=value`` joined against the
-    ``stat_types``/``stat_categories`` dictionaries). Flattening that into
-    tidy frames is a follow-up; until then this returns the raw JSON ``dict``
-    and **fails fast** if a parsed frame is requested rather than silently
-    ignoring ``return_parsed``.
+    Wraps the editorial ``boxscore/{game_id}`` resource. Its box score is a
+    decoder-dictionary schema
+    (``player_stats[playerId][variation][stat_type] = value``, same for
+    ``team_stats``) that this decodes against the payload's ``stat_types`` /
+    ``stat_categories`` dictionaries into a long frame: one row per team stat
+    and per player stat. Pivot on ``stat_type_id`` for a wide box. The editorial
+    payload carries no player names; a player's team comes from the game's
+    home/away lineups. Pass ``return_parsed=False`` for the raw payload, which
+    also carries play-by-play and drives.
 
     Args:
         game_id: Dotted Yahoo game id (e.g. ``"ncaaf.g.202509200023"``).
-        return_parsed: Must be ``False`` (the default). Passing ``True``
-            raises ``NotImplementedError`` because parsing is not implemented.
-        return_as_pandas: Accepted for signature parity with the sibling
-            wrappers; has no effect while only raw output is supported.
+        return_parsed: If ``True`` (default) decode the box score into a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        The raw editorial boxscore JSON as a ``dict`` (``service.boxscore``).
+        A polars DataFrame by default (pandas when ``return_as_pandas=True``)
+        with one row per team or player stat, every column ``Utf8``, and zero
+        rows (same columns) for an empty payload; the raw editorial boxscore
+        JSON ``dict`` when ``return_parsed=False``:
+
+        | Column | Type | Description |
+        |---|---|---|
+        | ``game_id`` | Utf8 | Dotted Yahoo game id (``ncaaf.g.<date><n>``). |
+        | ``team_id`` | Utf8 | Dotted Yahoo team id (``ncaaf.t.<n>``); null for a player missing from the lineups. |
+        | ``home_away`` | Utf8 | ``"home"`` or ``"away"``. |
+        | ``player_id`` | Utf8 | Dotted Yahoo player id (``ncaaf.p.<n>``); null on team-stat rows. |
+        | ``stat_category`` | Utf8 | ``Passing``, ``Rushing``, ``Receiving``, ``Kicking``, ``Returns``, ``Punting``, ``Defense`` or ``Team``. |
+        | ``stat_type_id`` | Utf8 | Yahoo stat type id (``ncaaf.stat_type.105``). |
+        | ``stat_name`` | Utf8 | Stat name (``Yards``, ``Third Down Efficiency``). |
+        | ``stat_abbreviation`` | Utf8 | Short stat label (``Yds``, ``3DE``). |
+        | ``stat_variation`` | Utf8 | Stat variation name (``Game``). |
+        | ``value`` | Utf8 | Stat value as Yahoo sends it (``"188"``, ``"73.2"``, ``"1-14"``). |
 
     Raises:
-        NotImplementedError: ``return_parsed=True`` — boxscore parsing is not
-            yet implemented; call with ``return_parsed=False`` for raw JSON.
+        requests.exceptions.RequestException: Propagated from the underlying
+            HTTP request on a network/transport failure.
 
     Example:
-        Fetch the raw boxscore JSON for a game::
+        Decoded box score for one game::
 
             from sportsdataverse.cfb import yahoo_cfb_boxscore
-            raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+            box = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+
+        Raw JSON (includes play-by-play and drives)::
+
+            raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
+
+        Wide team box (one line)::
+
+            box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
     """
-    if return_parsed:
-        raise NotImplementedError(
-            "yahoo_cfb_boxscore parsing is not yet implemented; call with return_parsed=False to get the raw JSON dict."
-        )
-    # TODO(scaffold): decode service.boxscore.player_stats via stat_types.
-    return _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)
+    raw = _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)
+    if not return_parsed:
+        return raw
+    frame = pl.DataFrame(_boxscore_rows(raw), schema=_BOXSCORE_SCHEMA)
+    return frame.to_pandas() if return_as_pandas else frame

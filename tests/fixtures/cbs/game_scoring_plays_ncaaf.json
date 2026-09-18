@@ -1,0 +1,423 @@
+{
+ "plays": [
+  {
+   "side": "OHIOST",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-12T23:50:05Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "kickoff": {
+       "kicker_name": "M. Diomede",
+       "yards_to_endzone": "65",
+       "yards_on_play": "59",
+       "team_in_possession": "758",
+       "kicker": "29133339"
+      },
+      "type": "Kickoff",
+      "order": "1"
+     },
+     {
+      "kick_return": {
+       "returned_by": "29151396",
+       "yards_to_endzone": "94",
+       "returned_by_name": "R. Niblett",
+       "yards_on_play": "16",
+       "team_in_possession": "853"
+      },
+      "type": "KickReturn",
+      "order": "2"
+     }
+    ]
+   },
+   "yardline": "35",
+   "description": "M.Diomede kicks 59 yards from OSU 35 to the TEX 6. R.Niblett returns the kickoff. Tackled by T.Moore at TEX 22.",
+   "medium": "Kickoff by M. Diomede to TEXAS 6, Return by R. Niblett for 16 yds to TEXAS 22",
+   "away_timeouts_remaining": "3",
+   "down": "0",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "15:00",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "59 yd kickoff",
+   "id": "1789257032308",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "10",
+   "real_clock": "2026-09-12T23:50:54Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "complete_pass": {
+       "yards_to_endzone": "78",
+       "receiver": "28916639",
+       "yards_on_play": "-4",
+       "passer": "29122638",
+       "receiver_name": "R. Brown",
+       "team_in_possession": "853",
+       "passer_name": "A. Manning"
+      },
+      "type": "CompletePass",
+      "order": "1"
+     },
+     {
+      "fumble_return": {
+       "returned_by": "50050778",
+       "yards_to_endzone": "78",
+       "returned_by_name": "J. Timmons",
+       "fumbled_by_name": "",
+       "yards_on_play": "0",
+       "fumbled_by": "0",
+       "team_in_possession": "758"
+      },
+      "type": "FumbleReturn",
+      "order": "2"
+     }
+    ]
+   },
+   "yardline": "22",
+   "description": "A.Manning pass complete. Catch made by R.Brown for -4 yards. R.Brown FUMBLES forced by J.Timmons. Fumble RECOVERED by OSU-J.Timmons at TEX 18. Tackled by TEX at TEX 18. The Replay Official reviewed the fumble and the play was upheld.",
+   "medium": "A. Manning pass to R. Brown for -4 yd, Fumble recovered by J. Timmons",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "853",
+   "score_type": null,
+   "time_remaining": "14:55",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "-4 yd pass",
+   "id": "1789257099387",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "10",
+   "real_clock": "2026-09-12T23:53:38Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "18",
+       "yards_on_play": "9",
+       "rusher_name": "B. Jackson",
+       "rusher": "28906284",
+       "team_in_possession": "758"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "18",
+   "description": "B.Jackson rushed for 9 yards. Pushed out of bounds by R.Biles at TEX 9.",
+   "medium": "B. Jackson rush for 9 yds",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "14:49",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "9 yd run",
+   "id": "1789257234221",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "1",
+   "real_clock": "2026-09-12T23:54:16Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "9",
+       "yards_on_play": "5",
+       "rusher_name": "B. Jackson",
+       "rusher": "28906284",
+       "team_in_possession": "758"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "9",
+   "description": "B.Jackson rushed for 5 yards. Tackled by J.Walker at TEX 4.",
+   "medium": "B. Jackson rush for 5 yds",
+   "away_timeouts_remaining": "3",
+   "down": "2",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "14:18",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "5 yd run",
+   "id": "1789257267424",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "Goal",
+   "real_clock": "2026-09-12T23:54:53Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "4",
+       "yards_on_play": "-9",
+       "rusher_name": "B. Jackson",
+       "rusher": "28906284",
+       "team_in_possession": "758"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "4",
+   "description": "B.Jackson rushed for -9 yards. Tackled by B.Spence at TEX 13.",
+   "medium": "B. Jackson rush for -9 yd",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "13:41",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "-9 yd run",
+   "id": "1789257303952",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "Goal",
+   "real_clock": "2026-09-12T23:56:18Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "IncompletePass",
+      "incomplete_pass": {
+       "yards_to_endzone": "7",
+       "yards_on_play": "0",
+       "passer": "28904779",
+       "team_in_possession": "758",
+       "passer_name": "J. Sayin"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "7",
+   "description": "J.Sayin steps back to pass. Pass incomplete intended for J.Smith.",
+   "medium": "J. Sayin incomplete pass to J. Smith",
+   "away_timeouts_remaining": "3",
+   "down": "3",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "12:12",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "Inc pass",
+   "id": "1789257387572",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "7",
+   "real_clock": "2026-09-12T23:56:58Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "FieldGoal",
+      "fieldgoal": {
+       "kicker_name": "C. Hawkins",
+       "yards_to_endzone": "16",
+       "yards_on_play": "26",
+       "team_in_possession": "758",
+       "kicker": "29439509"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "16",
+   "description": "C.Hawkins 26 yard field goal attempt is good Center-D.Riggs Holder-J.McGuire.",
+   "medium": "26 yd FG by C. Hawkins is good",
+   "away_timeouts_remaining": "3",
+   "down": "4",
+   "team_in_possession": "758",
+   "score_type": "FieldGoal",
+   "time_remaining": "12:08",
+   "score_on_play": "Yes",
+   "under_review": "No",
+   "short_score": "FG - C. Hawkins",
+   "short": "26 yd FG",
+   "id": "1789257427850",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-13T00:16:38Z",
+   "drive_id": "4",
+   "subplays": {
+    "subplay": [
+     {
+      "point_after_touchdown": {
+       "kicker_name": "C. Hawkins",
+       "yards_to_endzone": "15",
+       "yards_on_play": "15",
+       "team_in_possession": "758",
+       "kicker": "29439509"
+      },
+      "type": "PointAfterTouchdown",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "15",
+   "description": "C.Hawkins extra point is good.",
+   "medium": "PAT by C. Hawkins is good",
+   "away_timeouts_remaining": "2",
+   "down": "0",
+   "team_in_possession": "758",
+   "score_type": "PointAfterTouchdown",
+   "time_remaining": "5:39",
+   "score_on_play": "Yes",
+   "under_review": "No",
+   "short_score": "PAT - C. Hawkins",
+   "short": "Made PAT",
+   "id": "1789258600471",
+   "game_id": "50027666",
+   "quarter": "1"
+  },
+  {
+   "side": "TEXAS",
+   "home_timeouts_remaining": "1",
+   "distance": "10",
+   "real_clock": "2026-09-13T01:09:45Z",
+   "drive_id": "9",
+   "subplays": {
+    "subplay": [
+     {
+      "penalty": {
+       "yards_to_endzone": "50",
+       "yards_on_play": "5",
+       "team_penalized": "853",
+       "team_in_possession": "853"
+      },
+      "type": "Penalty",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "50",
+   "description": "PENALTY on TEX-R.Wingo False Start 5 yards accepted. No Play.",
+   "medium": "Penalty on TEXAS",
+   "away_timeouts_remaining": "2",
+   "down": "3",
+   "team_in_possession": "853",
+   "score_type": null,
+   "time_remaining": "1:04",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "Penalty",
+   "id": "1789261793557",
+   "game_id": "50027666",
+   "quarter": "2"
+  },
+  {
+   "side": "OHIOST",
+   "home_timeouts_remaining": "3",
+   "distance": "9",
+   "real_clock": "2026-09-13T02:08:14Z",
+   "drive_id": "16",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Punt",
+      "punt": {
+       "yards_to_endzone": "61",
+       "yards_on_play": "50",
+       "punter_name": "J. McGuire",
+       "punter": "29171647",
+       "team_in_possession": "758"
+      },
+      "order": "1"
+     },
+     {
+      "punt_return": {
+       "returned_by": "29151396",
+       "yards_to_endzone": "89",
+       "returned_by_name": "R. Niblett",
+       "yards_on_play": "-2",
+       "team_in_possession": "853"
+      },
+      "type": "PuntReturn",
+      "order": "2"
+     },
+     {
+      "fumble_return": {
+       "returned_by": "29129108",
+       "yards_to_endzone": "61",
+       "returned_by_name": "K. Phillips",
+       "fumbled_by_name": "",
+       "yards_on_play": "0",
+       "fumbled_by": "0",
+       "team_in_possession": "853"
+      },
+      "type": "FumbleReturn",
+      "order": "3"
+     }
+    ]
+   },
+   "yardline": "39",
+   "description": "J.McGuire punts 50 yards to TEX 11 Center-D.Riggs. R.Niblett returned punt from the TEX 11. R.Niblett FUMBLES forced by. Fumble RECOVERED by TEX-K.Phillips at TEX 8. Tackled by OSU at TEX 9.",
+   "medium": "Punt to TEXAS 11, Return by R. Niblett for -2 yd to TEXAS 9, Fumble recovered by K. Phillips",
+   "away_timeouts_remaining": "3",
+   "down": "4",
+   "team_in_possession": "758",
+   "score_type": null,
+   "time_remaining": "5:56",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "50 yd punt",
+   "id": "1789265326725",
+   "game_id": "50027666",
+   "quarter": "3"
+  }
+ ]
+}

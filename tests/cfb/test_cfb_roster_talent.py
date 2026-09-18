@@ -17,6 +17,25 @@ from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent, load_recrui
 _mod = sys.modules["sportsdataverse.cfb.cfb_roster_talent"]
 
 
+@pytest.fixture(autouse=True)
+def stub_team_info(monkeypatch) -> None:
+    """Stub the ESPN-id lookup for every test in this module.
+
+    ``load_recruit_classes`` resolves ``team_id`` by name against
+    ``load_cfb_team_info``, which fetches a release parquet. Mocking only
+    ``sports247_recruits`` left that leg live, so six tests in this "no network is
+    hit" module fetched cfb_team_info_2023.parquet from GitHub inside the offline
+    CI job. Michigan is the only school these fixtures name; a test that needs
+    different lookup behaviour re-patches ``load_cfb_team_info`` itself, which wins
+    over this fixture.
+    """
+    monkeypatch.setattr(
+        _mod,
+        "load_cfb_team_info",
+        lambda *a, **k: pl.DataFrame({"team_id": [130], "school": ["Michigan"], "mascot": ["Wolverines"]}),
+    )
+
+
 def _fake_recruit_page(*, year: int, page: int | None = None, **kwargs: object) -> pl.DataFrame:
     """Two committed recruits + one uncommitted (dropped); empty after page 1 (ends paging)."""
     if page and page > 1:

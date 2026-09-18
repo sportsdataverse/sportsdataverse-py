@@ -76,6 +76,15 @@ jobs:
       #                                         (it shells out to generate.py --check)
       # This is a CI-level dedupe only. A bare `uv run pytest` locally still runs
       # everything, and the pre-push hook still gates the drift check.
+      #
+      # HOW "offline" IS ENFORCED -- there is deliberately no `-m` marker filter here.
+      # Live tests are gated by `skipif` (tests/conftest.py: skip_if_no_live and the
+      # per-host SDV_PY_* variants), which reads the env var at COLLECTION time, so
+      # simply not setting SDV_PY_LIVE_TESTS in this job skips every live test. A
+      # marker filter would be a second, weaker gate that an ungated test slips past.
+      # Verified offline under bubblewrap with --unshare-net: 0 network-reaching tests
+      # as of 2026-09-18. If you add a test that fetches, gate it in conftest.py or
+      # mock the fetch -- do not add a marker here.
       - name: Run tests (offline)
         run: >
           uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -q

@@ -420,12 +420,44 @@ def _warn_if_season_beyond_known_eras(df: pl.DataFrame) -> None:
         )
 
 
+#: The roof assumed when a frame carries none (ESPN's summary never does) or a game's
+#: roof is null: the most common NFL venue, and a state the models were trained on.
+_DEFAULT_ROOF = "outdoors"
+
+
+def _roof_one_hots(roof: pl.Expr) -> dict[str, pl.Expr]:
+    """``retractable`` / ``dome`` / ``outdoors`` exactly as the bundled models were trained.
+
+    nfl-data ``model_training.play_level.make_model_mutations`` (EP, CP, xYAC, and
+    ``decision_models`` xpass): ``dome`` and ``closed`` roofs are domes, every other
+    roof (``outdoors``, ``open``) is outdoors, and ``retractable`` is 1 only for the
+    literal value ``"retractable"``, which nflverse never ships -- none of the boosters
+    splits on it. It is not nflfastR's mapping (open/closed/NA -> retractable), which
+    put the ~16% of 2023-24 plays under an open or closed roof in a state these models
+    never saw. A null roof takes
+    :data:`_DEFAULT_ROOF`.
+    """
+    roof = roof.fill_null(_DEFAULT_ROOF)
+    dome = roof.is_in(["dome", "closed"])
+    retractable = roof == "retractable"
+    return {
+        "retractable": retractable.cast(pl.Int32).alias("retractable"),
+        "dome": dome.cast(pl.Int32).alias("dome"),
+        "outdoors": ((dome == False) & (retractable == False)).cast(pl.Int32).alias("outdoors"),  # noqa: E712
+    }
+
+
+def _roof_expr(df: pl.DataFrame, roof_col: str = "roof") -> pl.Expr:
+    return pl.col(roof_col) if roof_col in df.columns else pl.lit(None, dtype=pl.Utf8)
+
+
 def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """Add era/roof/down one-hots and the ``home`` indicator.
 
-    Matches the R ``make_model_mutations()`` in nflfastR exactly:
-    era bins, retractable/dome/outdoors from ``roof``, down dummies,
-    home indicator from ``posteam == home_team``.  Warns
+    Matches the R ``make_model_mutations()`` in nflfastR: era bins, down
+    dummies, home indicator from ``posteam == home_team`` -- except the roof
+    one-hots, which follow the trainer of the bundled models
+    (:func:`_roof_one_hots`).  Warns
     (:class:`EraCoverageWarning`) when a season lies beyond
     ``ERA_MAX_KNOWN_SEASON`` instead of absorbing it into ``era4`` silently.
     """
@@ -446,25 +478,7 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
         pl.when(pl.col("posteam") == pl.col("home_team")).then(1).otherwise(0).alias("home"),
     )
 
-    # Roof one-hots: open/closed/null → retractable; dome → dome; outdoors → outdoors
-    if "roof" in df.columns:
-        df = df.with_columns(
-            pl.when(pl.col("roof").is_null() | pl.col("roof").is_in(["open", "closed"]))
-            .then(1)
-            .otherwise(0)
-            .alias("retractable"),
-            pl.when(pl.col("roof") == "dome").then(1).otherwise(0).alias("dome"),
-            pl.when(pl.col("roof") == "outdoors").then(1).otherwise(0).alias("outdoors"),
-        )
-    else:
-        # Default: treat as retractable when roof is unknown
-        df = df.with_columns(
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
-        )
-
-    return df
+    return df.with_columns(*_roof_one_hots(_roof_expr(df)).values())
 
 
 def _add_wp_aux(df: pl.DataFrame) -> pl.DataFrame:
@@ -562,21 +576,7 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     else:
         df = df.with_columns(pl.col("qb_hit").cast(pl.Int8))
 
-    if "roof" in df.columns:
-        df = df.with_columns(
-            pl.when(pl.col("roof").is_null() | pl.col("roof").is_in(["open", "closed"]))
-            .then(1)
-            .otherwise(0)
-            .alias("retractable"),
-            pl.when(pl.col("roof") == "dome").then(1).otherwise(0).alias("dome"),
-            pl.when(pl.col("roof") == "outdoors").then(1).otherwise(0).alias("outdoors"),
-        )
-    else:
-        df = df.with_columns(
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
-        )
+    df = df.with_columns(*_roof_one_hots(_roof_expr(df)).values())
 
     df = df.with_columns(
         pl.when(pl.col("down") == 1).then(1).otherwise(0).alias("down1"),
@@ -599,9 +599,8 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
 # wp_naive.ubj), so a fix to the feature engineering in one path must be
 # mirrored in the other.
 #
-# Roof: ESPN play-level data doesn't carry a per-play roof type, so all
-# ESPN plays default to retractable=1 / dome=0 / outdoors=0.  This matches
-# how nflfastR handles missing roof data in its make_model_mutations().
+# Roof: the feature builders read a game-level ``roof`` column (NFLPlayProcess
+# derives one); without it every play takes _DEFAULT_ROOF (see _roof_one_hots).
 
 
 def _espn_ep_features(
@@ -617,6 +616,7 @@ def _espn_ep_features(
     down4_col: str = "down_4",
     pos_timeouts_col: str = "start.posTeamTimeouts",
     def_timeouts_col: str = "start.defPosTeamTimeouts",
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 18-feature EP matrix (nflfastR format) from ESPN play data.
 
@@ -641,6 +641,8 @@ def _espn_ep_features(
             ``"down_1_end"`` … ``"down_4_end"`` for the end-of-play variant.
         pos_timeouts_col: Possessing-team timeouts remaining.
         def_timeouts_col: Defending-team timeouts remaining.
+        roof_col: Game roof (``outdoors`` / ``dome`` / ``closed`` / ``open``);
+            :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`EP_FEATURES` column order.
@@ -653,14 +655,15 @@ def _espn_ep_features(
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
     )
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(half_sec_col).alias("half_seconds_remaining"),
             pl.col(yardline_col).alias("yardline_100"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(1).alias("retractable"),  # ESPN data: default retractable
-            pl.lit(0).alias("dome"),
-            pl.lit(0).alias("outdoors"),
+            roof["retractable"],
+            roof["dome"],
+            roof["outdoors"],
             pl.col(ydstogo_col).alias("ydstogo"),
             pl.col("_era0").alias("era0"),
             pl.col("_era1").alias("era1"),
@@ -755,8 +758,8 @@ def _espn_wp_features(
 # ESPN-format adapters — CP and XYAC
 # ---------------------------------------------------------------------------
 # Both _espn_cp_features and _espn_xyac_features produce the same (N, K)
-# float32 arrays as the nflverse path via _make_cp_mutations.  ESPN plays
-# default to retractable=1/dome=0/outdoors=0 (no per-play roof column).
+# float32 arrays as the nflverse path via _make_cp_mutations, roof one-hots
+# included (read from ``roof``; _DEFAULT_ROOF when the frame has none).
 
 
 def _espn_cp_features(
@@ -772,6 +775,7 @@ def _espn_cp_features(
     pass_middle_col: str | None = None,
     qb_hit_col: str | None = None,
     home_col: str = "start.is_home",
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 18-feature CP matrix (nflfastR format) from ESPN play data.
 
@@ -794,6 +798,7 @@ def _espn_cp_features(
         qb_hit_col: Boolean/int QB-hit indicator column.  When ``None`` or
             not present, defaults to 0.
         home_col: Boolean home-team indicator.
+        roof_col: Game roof; :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`CP_FEATURES` column order.
@@ -811,6 +816,7 @@ def _espn_cp_features(
         else pl.lit(0)
     )
     qb_hit = pl.col(qb_hit_col).cast(pl.Int8) if qb_hit_col is not None and qb_hit_col in play_df.columns else pl.lit(0)
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(air_yards_col).alias("air_yards"),
@@ -827,9 +833,9 @@ def _espn_cp_features(
             pl.col("_era4").alias("era4"),
             qb_hit.alias("qb_hit"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(0).alias("outdoors"),
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
+            roof["outdoors"],
+            roof["retractable"],
+            roof["dome"],
             pl.col("_distance_to_sticks").alias("distance_to_sticks"),
         )
         .to_numpy(allow_copy=True)
@@ -850,6 +856,7 @@ def _espn_xyac_features(
     home_col: str = "start.is_home",
     qb_hit_col: str | None = None,
     pass_middle_col: str | None = None,
+    roof_col: str = "roof",
 ) -> np.ndarray:
     """Build the 19-feature XYAC matrix (nflfastR format) from ESPN play data.
 
@@ -870,6 +877,7 @@ def _espn_xyac_features(
         home_col: Boolean home-team indicator.
         qb_hit_col: QB-hit indicator column.  Defaults to 0 when absent.
         pass_middle_col: Middle-field pass column.  Defaults to 0 when absent.
+        roof_col: Game roof; :data:`_DEFAULT_ROOF` when the column is absent.
 
     Returns:
         ``(N, 19)`` float32 ndarray in :data:`XYAC_FEATURES` column order.
@@ -888,6 +896,7 @@ def _espn_xyac_features(
         else pl.lit(0)
     )
     qb_hit = pl.col(qb_hit_col).cast(pl.Int8) if qb_hit_col is not None and qb_hit_col in play_df.columns else pl.lit(0)
+    roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
         df.select(
             pl.col(air_yards_col).alias("air_yards"),
@@ -905,9 +914,9 @@ def _espn_xyac_features(
             pl.col("_era4").alias("era4"),
             qb_hit.alias("qb_hit"),
             pl.col(home_col).cast(pl.Int8).alias("home"),
-            pl.lit(0).alias("outdoors"),
-            pl.lit(1).alias("retractable"),
-            pl.lit(0).alias("dome"),
+            roof["outdoors"],
+            roof["retractable"],
+            roof["dome"],
             pl.col("_distance_to_sticks").alias("distance_to_sticks"),
         )
         .to_numpy(allow_copy=True)
@@ -1917,6 +1926,23 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             "before calling calculate_epa."
         )
 
+    # The try ESPN folds into a touchdown row, read from the parsed flags
+    # (``xp_attempt`` / ``xp_made`` / ``two_point_conv_result``, NFLPlayProcess) when
+    # the frame carries them, else from the text. The old text test matched an
+    # upper-case "PAT" against lower-cased text and never fired, so every failed
+    # try scored as made and every "extra point is GOOD" stayed at the 6.92 unknown.
+    _lower = pl.col("text").str.to_lowercase()
+    two_pt_good = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed") == False)  # noqa: E712
+    two_pt_failed = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed"))
+    if "two_point_conv_result" in df.columns:
+        two_pt_good = (pl.col("two_point_conv_result") == "success").or_(two_pt_good)
+        two_pt_failed = (pl.col("two_point_conv_result") == "failure").or_(two_pt_failed)
+    kick_good = _lower.str.contains(r"kick\)")
+    kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
+    if "xp_attempt" in df.columns and "xp_made" in df.columns:
+        kick_good = (pl.col("xp_made") == True).or_(kick_good)  # noqa: E712
+        kick_failed = ((pl.col("xp_attempt") == True).and_(pl.col("xp_made") == False)).or_(kick_failed)  # noqa: E712
+
     play_df = (
         df.with_columns(
             # --- Scoring-attempt EP_start override (must precede EP_end overlays) ---
@@ -1959,49 +1985,25 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
             .then(-8)
             # Defense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
             .then(-6)
             # Defense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_failed))
             .then(-6)
             # Defense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_good))
             .then(-7)
             # Defense TD
             .when(pl.col("type.text").is_in(defense_score_vec))
             .then(-6.92)
             # Offense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
             .then(6)
             # Offense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
             .then(8)
             # Offense Made FG
             .when(
@@ -2011,18 +2013,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(3)
             # Offense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_failed))
             .then(6)
             # Offense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_good))
             .then(7)
             # Offense TD
             .when(pl.col("type.text").is_in(offense_score_vec))
@@ -2286,6 +2280,20 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             "classify the plays before calling calculate_wpa."
         )
 
+    # the end-of-play margin for the team that STARTED the play: pos_score_diff_end
+    # is the end team's, negated where ESPN's end.team differs from start.pos_team.
+    # A null on either side makes the `==` null, which `when` reads as False -- the
+    # bare `.otherwise()` then NEGATED the margin on a row with no possession team
+    # and the game-over branch below published wp_after 0.0 for the winner. Null in,
+    # null out: the `> 0` / `< 0` tests go null, no game-over branch fires, and the
+    # row keeps the model's own wp_after.
+    _start_pos_score_diff_end = (
+        pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+        .then(pl.col("pos_score_diff_end"))
+        .when(pl.col("start.pos_team.id").is_not_null().and_(pl.col("end.pos_team.id").is_not_null()))
+        .then(-pl.col("pos_score_diff_end"))
+        .otherwise(None)
+    )
     play_df = (
         df.with_columns(
             # --- Leading overlay: kickoff wp_before uses the touchback view ---
@@ -2299,12 +2307,19 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             def_wp_before=1 - pl.col("wp_before"),
         )
         .with_columns(
+            # Null-guarded like the ``_after`` pair below: a null posteam would hand
+            # both sides the defensive complement, and leaving it unguarded here
+            # would publish a home_wp_before on a row whose home_wp_after is null.
             home_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_before"))
-            .otherwise(pl.col("def_wp_before")),
-            away_wp_before=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .when(pl.col("start.pos_team.id").is_not_null())
+            .then(pl.col("def_wp_before"))
+            .otherwise(None),
+            away_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("def_wp_before"))
+            .when(pl.col("start.pos_team.id").is_not_null())
             .then(pl.col("wp_before"))
-            .otherwise(pl.col("def_wp_before")),
+            .otherwise(None),
         )
         .with_columns(
             # Group EVERY shift by game_id so concatenated frames don't leak
@@ -2313,6 +2328,10 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),
         )
         .with_columns(
+            # The game-over branches judge the result in the START-possession frame,
+            # like every other wp_after branch: pos_score_diff_end is the END team's,
+            # and ESPN flips end.team on ~5% of final incompletions (the loser's
+            # last throw published home_wp_after 1.0 in 9 of 148 swept games).
             wp_after=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(pl.col("wp_before"))
             .when(
@@ -2324,7 +2343,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") > 0),
+                .and_(_start_pos_score_diff_end > 0),
             )
             .then(1.0)
             .when(
@@ -2334,7 +2353,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                         pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") < 0),
+                .and_(_start_pos_score_diff_end < 0),
             )
             .then(0.0)
             .when(
@@ -2350,12 +2369,6 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(1 - pl.col("lead_wp_before"))
             .when(
-                (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                .and_(pl.col("type.text").is_in(clock_stoppage_vec)),
-            )
-            .then(pl.col("wp_after"))
-            .when(
                 (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
                     pl.col("change_of_pos_team") == False,
                 ),
@@ -2369,22 +2382,46 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(1 - pl.col("lead_wp_before"))
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
             .then(pl.col("wp_after"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
-            .then(1 - pl.col("lead_wp_before"))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+            # A possession change borrows the next play's wp_before, which is stated
+            # in the NEXT play's possession perspective. Whether that needs flipping
+            # into this row's (start-possession) frame depends on who really has the
+            # ball next -- lead_pos_team -- not on ESPN's end.team, which flips on
+            # 5-7% of 2015-24 scrimmage plays that kept the ball (a 3-yard run at
+            # wp 0.81 published wp_after 0.20). Scoring plays follow the same rule:
+            # after a defensive touchdown the scorer runs the try, so the next row is
+            # the other team's frame. CFB fixed the non-scoring half as B6.
+            .when(
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
+                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                ),
+            )
             .then(pl.col("lead_wp_before"))
+            .when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+            .then(1 - pl.col("lead_wp_before"))
             .otherwise(pl.col("wp_after")),
         )
         .with_columns(
             def_wp_after=1 - pl.col("wp_after"),
         )
         .with_columns(
-            home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            # wp_after is stated in the START-possession team's perspective (every
+            # branch above takes lead_wp_before or its complement into that frame), so
+            # the home/away split keys off start.pos_team.id. Keyed off end.pos_team.id
+            # it came out complemented on every possession change (CFB fixed the same
+            # code as B7): 70% of the sweep's possession-change rows, 100% of punts.
+            # Same null guard as _start_pos_score_diff_end: with a null posteam both
+            # the `==` and the `!=` read False, so home AND away took the defensive
+            # complement and the pair no longer summed to 1. Null in, null out.
+            home_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("wp_after"))
-            .otherwise(pl.col("def_wp_after")),
-            away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            .when(pl.col("start.pos_team.id").is_not_null())
+            .then(pl.col("def_wp_after"))
+            .otherwise(None),
+            away_wp_after=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("def_wp_after"))
+            .when(pl.col("start.pos_team.id").is_not_null())
             .then(pl.col("wp_after"))
-            .otherwise(pl.col("def_wp_after")),
+            .otherwise(None),
         )
         .with_columns(
             wpa=pl.col("wp_after") - pl.col("wp_before"),

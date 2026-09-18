@@ -11,5 +11,7 @@ from __future__ import annotations
 from sportsdataverse.cbs.cbs_napi import *  # noqa: F401,F403
 from sportsdataverse.cbs.cbs_napi_parsers import (  # noqa: F401
     parse_cbs_napi,
+    parse_cbs_napi_scoring_drives,
+    parse_cbs_napi_scoring_plays,
     parse_cbs_napi_standings,
 )

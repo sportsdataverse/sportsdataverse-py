@@ -1,0 +1,433 @@
+{
+ "plays": [
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-13T17:03:54Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "kickoff": {
+       "kicker_name": "C. Little",
+       "yards_to_endzone": "35",
+       "yards_on_play": "62",
+       "team_in_possession": "416",
+       "kicker": "26702477"
+      },
+      "type": "Kickoff",
+      "order": "1"
+     },
+     {
+      "kick_return": {
+       "returned_by": "28912068",
+       "yards_to_endzone": "35",
+       "returned_by_name": "D. Sampson",
+       "yards_on_play": "37",
+       "team_in_possession": "434"
+      },
+      "type": "KickReturn",
+      "order": "2"
+     }
+    ]
+   },
+   "yardline": "35",
+   "description": "39-C.Little kicks 62 yards from JAC 35 to CLE 3. 22-D.Sampson to CLE 40 for 37 yards (19-J.Cameron; 1-M.Brown).",
+   "medium": "Kickoff by C. Little, Return by D. Sampson for 37 yds",
+   "away_timeouts_remaining": "3",
+   "down": "0",
+   "team_in_possession": "416",
+   "score_type": null,
+   "time_remaining": "15:00",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "62 yd kickoff",
+   "id": "40",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "10",
+   "real_clock": "2026-09-13T17:04:38Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "complete_pass": {
+       "yards_to_endzone": "60",
+       "receiver": "2964419",
+       "yards_on_play": "14",
+       "passer": "2133482",
+       "receiver_name": "B. Whiteheart",
+       "team_in_possession": "434",
+       "passer_name": "D. Watson"
+      },
+      "type": "CompletePass",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "40",
+   "description": "4-D.Watson pass short middle to 86-B.Whiteheart to JAC 46 for 14 yards (51-V.Miller; 47-D.Gardeck).",
+   "medium": "D. Watson pass to B. Whiteheart for 14 yds",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "434",
+   "score_type": null,
+   "time_remaining": "14:52",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "14 yd pass",
+   "id": "63",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "JAC",
+   "home_timeouts_remaining": "3",
+   "distance": "10",
+   "real_clock": "2026-09-13T17:05:14Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "46",
+       "yards_on_play": "4",
+       "rusher_name": "Q. Judkins",
+       "rusher": "28878286",
+       "team_in_possession": "434"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "46",
+   "description": "10-Q.Judkins up the middle to JAC 42 for 4 yards (91-A.Armstead).",
+   "medium": "Q. Judkins rush for 4 yds",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "434",
+   "score_type": null,
+   "time_remaining": "14:16",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "4 yd run",
+   "id": "88",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "JAC",
+   "home_timeouts_remaining": "3",
+   "distance": "6",
+   "real_clock": "2026-09-13T17:05:53Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "complete_pass": {
+       "yards_to_endzone": "42",
+       "receiver": "29123718",
+       "yards_on_play": "9",
+       "passer": "2133482",
+       "receiver_name": "K. Concepcion",
+       "team_in_possession": "434",
+       "passer_name": "D. Watson"
+      },
+      "type": "CompletePass",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "42",
+   "description": "4-D.Watson pass short middle to 1-K.Concepcion to JAC 33 for 9 yards (6-A.Johnson).",
+   "medium": "D. Watson pass to K. Concepcion for 9 yds",
+   "away_timeouts_remaining": "3",
+   "down": "2",
+   "team_in_possession": "434",
+   "score_type": null,
+   "time_remaining": "13:37",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "9 yd pass",
+   "id": "110",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "JAC",
+   "home_timeouts_remaining": "3",
+   "distance": "10",
+   "real_clock": "2026-09-13T17:06:33Z",
+   "drive_id": "1",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "33",
+       "yards_on_play": "5",
+       "rusher_name": "Q. Judkins",
+       "rusher": "28878286",
+       "team_in_possession": "434"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "33",
+   "description": "10-Q.Judkins left end to JAC 28 for 5 yards (29-E.Murray).",
+   "medium": "Q. Judkins rush for 5 yds",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "434",
+   "score_type": null,
+   "time_remaining": "12:57",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "5 yd run",
+   "id": "135",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "7",
+   "real_clock": "2026-09-13T17:14:52Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "complete_pass": {
+       "yards_to_endzone": "30",
+       "receiver": "3168820",
+       "yards_on_play": "30",
+       "passer": "2967185",
+       "receiver_name": "P. Washington",
+       "team_in_possession": "416",
+       "passer_name": "T. Lawrence"
+      },
+      "type": "CompletePass",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "30",
+   "description": "16-T.Lawrence pass deep right to 11-P.Washington for 30 yards TOUCHDOWN [96-M.Collins].",
+   "medium": "T. Lawrence pass to P. Washington for 30 yds",
+   "away_timeouts_remaining": "3",
+   "down": "3",
+   "team_in_possession": "416",
+   "score_type": "Touchdown",
+   "time_remaining": "8:18",
+   "score_on_play": "Yes",
+   "under_review": "No",
+   "short_score": "TD - P. Washington",
+   "short": "30 yd pass",
+   "id": "349",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-13T17:15:46Z",
+   "drive_id": "2",
+   "subplays": {
+    "subplay": [
+     {
+      "point_after_touchdown": {
+       "kicker_name": "C. Little",
+       "yards_to_endzone": "0",
+       "yards_on_play": "0",
+       "team_in_possession": "416",
+       "kicker": "26702477"
+      },
+      "type": "PointAfterTouchdown",
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "0",
+   "description": "39-C.Little extra point is GOOD Center-46-R.Matiscik Holder-9-L.Cooke.",
+   "medium": "PAT by C. Little is good",
+   "away_timeouts_remaining": "3",
+   "down": "0",
+   "team_in_possession": "416",
+   "score_type": "PointAfterTouchdown",
+   "time_remaining": "8:11",
+   "score_on_play": "Yes",
+   "under_review": "No",
+   "short_score": "PAT - C. Little",
+   "short": "Made PAT",
+   "id": "375",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-13T17:18:41Z",
+   "drive_id": "3",
+   "subplays": {
+    "subplay": [
+     {
+      "kickoff": {
+       "kicker_name": "C. Little",
+       "yards_to_endzone": "35",
+       "yards_on_play": "65",
+       "team_in_possession": "416",
+       "kicker": "26702477"
+      },
+      "type": "Kickoff",
+      "order": "1"
+     },
+     {
+      "kick_return": {
+       "returned_by": "28912068",
+       "yards_to_endzone": "35",
+       "returned_by_name": "D. Sampson",
+       "yards_on_play": "27",
+       "team_in_possession": "434"
+      },
+      "type": "KickReturn",
+      "order": "2"
+     },
+     {
+      "penalty": {
+       "yards_to_endzone": "35",
+       "yards_on_play": "10",
+       "team_penalized": "434",
+       "team_in_possession": "434"
+      },
+      "type": "Penalty",
+      "order": "3"
+     }
+    ]
+   },
+   "yardline": "35",
+   "description": "39-C.Little kicks 65 yards from JAC 35 to CLE 0. 22-D.Sampson to CLE 27 for 27 yards (31-J.Tavai). PENALTY on CLE-28-E.McNeil-Warren Offensive Holding 10 yards enforced at CLE 27.",
+   "medium": "Kickoff by C. Little, Return by D. Sampson for 27 yds to JAC 8, Penalty on CLE",
+   "away_timeouts_remaining": "3",
+   "down": "0",
+   "team_in_possession": "416",
+   "score_type": null,
+   "time_remaining": "8:11",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "65 yd kickoff",
+   "id": "390",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "Goal",
+   "real_clock": "2026-09-13T17:32:19Z",
+   "drive_id": "4",
+   "subplays": {
+    "subplay": [
+     {
+      "type": "Rush",
+      "rush": {
+       "yards_to_endzone": "9",
+       "yards_on_play": "5",
+       "rusher_name": "C. Rodriguez Jr.",
+       "rusher": "2964667",
+       "team_in_possession": "416"
+      },
+      "order": "1"
+     }
+    ]
+   },
+   "yardline": "9",
+   "description": "24-C.Rodriguez up the middle to CLE 4 for 5 yards (49-C.Schwesinger; 54-S.Williams).",
+   "medium": "C. Rodriguez Jr. rush for 5 yds",
+   "away_timeouts_remaining": "3",
+   "down": "1",
+   "team_in_possession": "416",
+   "score_type": null,
+   "time_remaining": "2:28",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "5 yd run",
+   "id": "816",
+   "game_id": "50029216",
+   "quarter": "1"
+  },
+  {
+   "side": "CLE",
+   "home_timeouts_remaining": "3",
+   "distance": "0",
+   "real_clock": "2026-09-13T19:06:23Z",
+   "drive_id": "15",
+   "subplays": {
+    "subplay": [
+     {
+      "kickoff": {
+       "kicker_name": "C. Little",
+       "yards_to_endzone": "35",
+       "yards_on_play": "65",
+       "team_in_possession": "416",
+       "kicker": "26702477"
+      },
+      "type": "Kickoff",
+      "order": "1"
+     },
+     {
+      "kick_return": {
+       "returned_by": "26700087",
+       "yards_to_endzone": "35",
+       "returned_by_name": "R. Sanders",
+       "yards_on_play": "25",
+       "team_in_possession": "434"
+      },
+      "type": "KickReturn",
+      "order": "2"
+     },
+     {
+      "penalty": {
+       "yards_to_endzone": "35",
+       "yards_on_play": "10",
+       "team_penalized": "434",
+       "team_in_possession": "434"
+      },
+      "type": "Penalty",
+      "order": "3"
+     }
+    ]
+   },
+   "yardline": "35",
+   "description": "39-C.Little kicks 65 yards from JAC 35 to CLE 0. 23-R.Sanders to CLE 37 for 37 yards (51-V.Miller). PENALTY on CLE-40-N.Watson Offensive Holding 10 yards enforced at CLE 25.",
+   "medium": "Kickoff by C. Little, Return by R. Sanders for 25 yds to JAC 10, Penalty on CLE",
+   "away_timeouts_remaining": "3",
+   "down": "0",
+   "team_in_possession": "416",
+   "score_type": null,
+   "time_remaining": "1:48",
+   "score_on_play": "No",
+   "under_review": "No",
+   "short_score": "",
+   "short": "65 yd kickoff",
+   "id": "2827",
+   "game_id": "50029216",
+   "quarter": "3"
+  }
+ ]
+}

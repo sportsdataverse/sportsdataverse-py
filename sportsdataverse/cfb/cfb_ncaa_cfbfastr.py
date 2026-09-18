@@ -31,6 +31,17 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 
+from sportsdataverse.cfb.cfb_ncaa_pbp import (
+    _NAME,
+    _RECOVERED_BY_RE,
+    _REVIEW_RE,
+    _match_code,
+    _norm_code,
+    _own_side_codes,
+    _split_yard_line,
+    _yl_candidates,
+)
+
 if TYPE_CHECKING:
     import pandas as pd
 
@@ -41,24 +52,35 @@ __all__ = [
 
 _TRAILING_CLOCK_RE = re.compile(r"clock (\d{1,2}:\d{2})")
 _QTR_MARKER_RE = re.compile(r"start of (\d)(?:st|nd|rd|th) quarter", re.I)
-_INT_BY_RE = re.compile(r"intercepted by ([A-Z][\w'.\- ]*,[\w'.\- ]+?)(?: at| return| for|\.|,|$)")
+_INT_BY_RE = re.compile(rf"intercepted by ({_NAME})")
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
 # XP/FG result: "good" appears in both cases and "NO GOOD"/"no good" must not match.
 _KICK_GOOD_RE = re.compile(r"(?<!no )good", re.I)
+# the try printed on the touchdown's own row (2019-era pages): "..., HARRIS, Clayton kick attempt good."
+_SAME_ROW_TRY_RE = re.compile(r"kick attempt good|(?:pass|run|rush) attempt successful", re.I)
 
 #: play rows that are game furniture, not plays (dropped from the cfbfastR frame
 #: after they've fed the stateful pass).
 _MARKER_TYPES = {"drive_start", "coin_toss"}
 
-#: end_how -> approximate cfbfastR play_type label for synthesized OT rows.
+
+#: end_how -> cfbfastR play_type label for synthesized OT rows. Every value is
+#: one cfbfastR publishes; a code with no entry falls back to "Unknown" rather
+#: than leaking the raw NCAA drive code into play_type.
 _OT_END_HOW_LABEL = {
-    "TD": "Touchdown",
+    # "Uncategorized Touchdown" is cfbfastR's label for a touchdown it cannot
+    # attribute to a rush/pass/return; a synthesized OT row is a drive summary,
+    # so the scoring play behind it is exactly that -- unattributable.
+    "TD": "Uncategorized Touchdown",
     "FG": "Field Goal Good",
     "FGA": "Field Goal Missed",
     "PUNT": "Punt",
-    "INT": "Pass Interception Return",
+    "INT": "Interception Return",
     "FUMB": "Fumble Recovery (Opponent)",
-    "DOWNS": "Turnover on Downs",
+    "SAF": "Safety",
+    # cfbfastR has no play-level label for a downs turnover (the drive result
+    # carries it); the last play of such a drive is unknowable from a summary.
+    "DOWNS": "Unknown",
     "HALF": "End of Game",
     "END": "End of Game",
 }
@@ -207,12 +229,56 @@ def _norm_team(name: "str | None") -> str:
     return re.sub(r"[^a-z0-9&]+", " ", s).strip()
 
 
-def _first_last(name: "str | None") -> "str | None":
-    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last[ Suffix]'."""
-    if not name or "," not in name:
+#: a name suffix, never a first name and never title-cased ("III" is not "Iii").
+_SUFFIX_TOKENS = frozenset({"jr", "jr.", "sr", "sr.", "ii", "ii.", "iii", "iii.", "iv", "iv.", "v", "v."})
+
+#: "Last, Suffix,First" (2025: "Didio, Jr.,Mark") and the 2019 pages' "LAST, Suffix"
+#: with no first name at all ("GILLIAM, Jr."). A roman-numeral suffix carries no
+#: period, which is what keeps a "Smith,V." first initial out of this branch.
+_LAST_SUFFIX_FIRST_RE = re.compile(r"^(?P<last>[^,]+),\s*(?P<suffix>Jr\.?|Sr\.?|II|III|IV|V)(?:,\s*(?P<first>.+))?$")
+
+
+def _title_token(token: str) -> str:
+    """Title-case a 2019-era shouted surname ("HARRIS" -> "Harris"); leave the rest alone.
+
+    Deliberately conservative: only a token whose letters are ALL uppercase and at
+    least three long is touched, so a two-letter token ("JR", "AJ"), a suffix, a
+    mixed-case source ("McCord", "O'Brien") and the page's own "TEAM" survive. Each
+    letter run is capitalized separately, so "ALEXANDER-STEVE" -> "Alexander-Steve"
+    and "O'BRIEN" -> "O'Brien"; an all-caps "MCDONALD" cannot be told from a real
+    "Mcdonald", so it is not guessed at.
+    """
+    letters = re.sub(r"[^A-Za-z]", "", token)
+    if len(letters) < 3 or not letters.isupper() or token.lower() in _SUFFIX_TOKENS or letters.upper() == "TEAM":
+        return token
+    return re.sub(r"[A-Za-z]+", lambda m: m.group(0).capitalize(), token)
+
+
+def _first_last(name: "str | None", *, teams: "Optional[list[str]]" = None) -> "str | None":
+    """NCAA 'Last[ Suffix],First' -> cfbfastR 'First Last Suffix'.
+
+    A 2019-era 'First Last' is already in that form (bar the shouted surname, see
+    :func:`_title_token`), a 2025 jersey prefix ("#95 K.Kimble") is dropped, and a
+    comma-separated suffix stays a suffix instead of becoming the first name
+    ("Didio, Jr.,Mark" -> "Mark Didio Jr.", not "Jr. Didio"). ``teams``: the game's
+    two team labels -- the 2025 pages print the team as the carrier on a team rush
+    ("Shotgun Butler rush middle for 18 yards loss"), which cfbfastR writes as
+    "TEAM" (16,008 published rows) and the 2019 pages already do.
+    """
+    if not name:
         return name
-    last, first = name.split(",", 1)
-    return f"{first.strip()} {last.strip()}"
+    name = re.sub(r"^#\d{1,2}\s", "", name)
+    if teams and any(_norm_team(name) == _norm_team(t) for t in teams):
+        return "TEAM"
+    m = _LAST_SUFFIX_FIRST_RE.match(name)
+    if m:
+        parts = [m.group("first"), m.group("last"), m.group("suffix")]
+    elif "," in name:
+        last, first = name.split(",", 1)
+        parts = [first, last]
+    else:
+        parts = [name]
+    return " ".join(_title_token(tok) for part in parts if part for tok in part.split())
 
 
 def _clock_secs(clock: "str | None") -> "int | None":
@@ -225,49 +291,143 @@ def _clock_secs(clock: "str | None") -> "int | None":
         return None
 
 
-def _own_side(df: pl.DataFrame) -> "dict[str, str]":
-    """Infer each offense's own yard-line side code (e.g. Merrimack -> 'MC').
+def _exact_side(token: "str | None", codes: "list[str]") -> "tuple[str, int] | None":
+    """(game side code, yard) when a token names one of the game's codes outright."""
+    lookup = {_norm_code(c): c for c in codes}
+    for code, num in _yl_candidates(token or ""):
+        if _norm_code(code) in lookup:
+            return lookup[_norm_code(code)], num
+    return None
 
-    Drives overwhelmingly start in the offense's own territory, so of the two
-    possible (team name -> side code) assignments, pick the one under which
-    more first-plays-of-drive sit on the offense's own side.
+
+def _end_code_aliases(df: pl.DataFrame, own_side: "dict[str, str]") -> "dict[str, str]":
+    """Map play-text side codes the drive headers never use ("OU" for "OKL") onto a game code.
+
+    A clean gain of ``g`` yards from ``yards_to_goal`` ends ``yards_to_goal - g`` from
+    the goal, so an unresolved text end token "X n" with ``n`` equal to that is the
+    defense's side and with ``n`` equal to 100 minus it the offense's own side.
+    Majority vote per text code.
     """
-    teams = [t for t in df.get_column("offense").unique().to_list() if t]
-    sides = [s for s in df.get_column("yard_line_side").unique().to_list() if s]
-    if len(teams) != 2 or len(sides) != 2:
-        return {}
-    firsts = (
-        df.filter(pl.col("yard_line_side").is_not_null())
-        .group_by("drive_number", maintain_order=True)
-        .first()
-        .select("offense", "yard_line_side")
-        .to_dicts()
+    codes = list(own_side.values())
+    votes: "dict[str, dict[str, int]]" = {}
+    clean = df.filter(
+        pl.col("play_type").is_in(["rush", "pass", "sack"])
+        & pl.col("yards_gained").is_not_null()
+        & pl.col("end_yard_line").is_not_null()
+        & (pl.col("penalty_flag") != True)  # noqa: E712
+        & (pl.col("is_fumble") != True)  # noqa: E712
     )
-    a = {teams[0]: sides[0], teams[1]: sides[1]}
-    b = {teams[0]: sides[1], teams[1]: sides[0]}
-    score_a = sum(1 for r in firsts if a.get(r["offense"]) == r["yard_line_side"])
-    score_b = sum(1 for r in firsts if b.get(r["offense"]) == r["yard_line_side"])
-    return a if score_a >= score_b else b
+    for r in clean.select("offense", "yard_line_side", "yard_line_number", "yards_gained", "end_yard_line").to_dicts():
+        off, side, num = r["offense"], r["yard_line_side"], r["yard_line_number"]
+        if off not in own_side or side is None or num is None or _exact_side(r["end_yard_line"], codes):
+            continue
+        to_go = (100 - num if own_side[off] == side else num) - r["yards_gained"]
+        if not 0 < to_go < 100 or to_go == 50:
+            continue
+        opp = next(c for c in codes if c != own_side[off])
+        for code, n in _yl_candidates(r["end_yard_line"]):
+            owner = opp if n == to_go else own_side[off] if n == 100 - to_go else None
+            if owner:
+                tally = votes.setdefault(_norm_code(code), {})
+                tally[owner] = tally.get(owner, 0) + 1
+    return {k: max(v, key=lambda c: v[c]) for k, v in votes.items()}
 
 
-def _play_type_label(r: "dict[str, Any]") -> str:
-    """Map the NCAA structural play_type to the cfbfastR play_type vocabulary."""
+def _split_end_yard_line(
+    token: "str | None", codes: "list[str]", aliases: "dict[str, str]"
+) -> "tuple[str | None, int] | None":
+    """(game side code, yard) of a play-text end yard line: the game's codes, then a learned
+    alias, then the shared rule's prefix match.
+
+    The learned alias comes first because a prefix match can be confidently wrong: in
+    Tulane (TLN) at Tulsa (TUL), the text's "TULANE30" starts with the OTHER team's code.
+    """
+    if not token:
+        return None
+    exact = _exact_side(token, codes)
+    if exact:
+        return exact
+    alias = next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
+    return alias or _split_yard_line(token, codes)
+
+
+def _recovering_team(text: str, own_side: "dict[str, str]", aliases: "dict[str, str]") -> "Optional[str]":
+    """The team named by the play's last "recovered by <code>", or None when the code
+    cannot be placed (the game's codes, then a learned alias, then a unique prefix)."""
+    recov = _RECOVERED_BY_RE.findall(_REVIEW_RE.split(text, 1)[0])
+    if not recov:
+        return None
+    codes = list(own_side.values())
+    code = _match_code(recov[-1], codes) or aliases.get(_norm_code(recov[-1]))
+    return next((t for t, c in own_side.items() if c == code), None)
+
+
+def _td_by_defense(
+    r: "dict[str, Any]", offense: "Optional[str]", own_side: "dict[str, str]", end: Any, recovered: "Optional[str]"
+) -> bool:
+    """Whether a TOUCHDOWN row was scored by its drive's DEFENSE (a return touchdown).
+
+    The team that last recovered a fumble scored it (a page can print "recovered by
+    WKU ... at WKU29 TOUCHDOWN" without narrating the return, so this comes before
+    the geometry). Else the end spot says whose end zone the ball reached: ending on
+    the offense's own side means the other team ran it back. Without either, fall
+    back to the text: an interception, a fumble recovery, or a punt / field goal.
+    """
+    if recovered is not None and offense is not None:
+        return recovered != offense
+    if end is not None and end[0] is not None and offense in own_side:
+        return own_side[offense] == end[0]
+    return r["turnover_type"] in ("interception", "fumble") or r["play_type"] in ("punt", "field_goal")
+
+
+def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
+    """Map the NCAA structural play_type to the cfbfastR play_type vocabulary.
+
+    ``return_td``: a touchdown scored by the team NOT in possession at the snap
+    (for a kickoff: by the receiving team), labelled the way cfbfastR does.
+    """
     pt, td = r["play_type"], bool(r["is_touchdown"])
+    blocked = "blocked" in (r["play_text"] or "").lower()
+    if td and return_td and pt in ("rush", "kneel", "pass", "sack"):
+        if r["turnover_type"] == "interception":
+            return "Interception Return Touchdown"
+        return "Fumble Recovery (Opponent) Touchdown"
+    if (
+        not td
+        and r["is_fumble"]
+        and pt in ("rush", "kneel", "pass", "sack")
+        and "recovered by" in (r["play_text"] or "").lower()
+    ):
+        return "Fumble Recovery (Opponent)" if r["turnover_type"] == "fumble" else "Fumble Recovery (Own)"
     if pt == "rush" or pt == "kneel":
         return "Rushing Touchdown" if td else "Rush"
     if pt == "pass":
         if r["turnover_type"] == "interception":
-            return "Interception Return Touchdown" if td else "Pass Interception Return"
+            # cfbfastR collapses "Interception"/"Pass Interception"/"Pass
+            # Interception Return" to one non-TD label in pbp_clean_pbp_dat.R
+            return "Interception Return Touchdown" if td else "Interception Return"
         if r["pass_complete"]:
             return "Passing Touchdown" if td else "Pass Reception"
         return "Pass Incompletion"
     if pt == "sack":
         return "Sack"
     if pt == "punt":
-        return "Blocked Punt" if "blocked" in (r["play_text"] or "").lower() else "Punt"
+        if td:
+            if not return_td:
+                return "Punt Team Fumble Recovery Touchdown"
+            return "Blocked Punt Touchdown" if blocked else "Punt Return Touchdown"
+        return "Blocked Punt" if blocked else "Punt"
     if pt == "kickoff":
-        return "Kickoff Return Touchdown" if td else "Kickoff"
+        if td:
+            return "Kickoff Return Touchdown" if return_td else "Kickoff Team Fumble Recovery Touchdown"
+        # a returned kickoff is its own cfbfastR label; a touchback / fair
+        # catch / downed / out-of-bounds kick stays "Kickoff"
+        return "Kickoff Return (Offense)" if r["return_yards"] is not None else "Kickoff"
     if pt == "field_goal":
+        if td and return_td:
+            return "Blocked Field Goal Touchdown" if blocked else "Missed Field Goal Return Touchdown"
+        if blocked:
+            return "Blocked Field Goal"
         return "Field Goal Good" if r["fg_made"] else "Field Goal Missed"
     if pt == "extra_point":
         return "Extra Point Good" if _KICK_GOOD_RE.search(r["play_text"] or "") else "Extra Point Missed"
@@ -279,7 +439,7 @@ def _play_type_label(r: "dict[str, Any]") -> str:
         return "Timeout"
     if pt == "period_marker":
         return "End Period"
-    return str(pt)
+    return "Unknown"
 
 
 def to_cfbfastr(
@@ -404,11 +564,13 @@ def to_cfbfastr(
             .fill_null(pl.col("offense"))
             .alias("offense")
         )
-    own_side = _own_side(pbp)
+    own_side = _own_side_codes(pbp.to_dicts())
+    side_codes = list(own_side.values())
+    end_aliases = _end_code_aliases(pbp, own_side) if own_side else {}
     teams = (
         sorted(set(title_team.values()))
         if len(set(title_team.values())) == 2
-        else [t for t in pbp.get_column("offense").unique().to_list() if t]
+        else sorted(t for t in pbp.get_column("offense").unique().to_list() if t)
     )
     home = away = None
     if linescore is not None and linescore.height:
@@ -546,6 +708,19 @@ def to_cfbfastr(
         defense = next((t for t in teams if t != offense), None) if offense else None
 
         # running score -- award points to the right side of the ball
+        end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
+        recovered = _recovering_team(text, own_side, end_aliases) if r["is_fumble"] else None
+        def_td = bool(r["is_touchdown"]) and _td_by_defense(r, offense, own_side, end, recovered)
+        return_td = def_td
+        # the kicking team owns the kickoff spot's side (the row sits in either drive)
+        kicker = (
+            next((t for t, sd in own_side.items() if sd == r["yard_line_side"]), defense)
+            if r["play_type"] == "kickoff"
+            else None
+        )
+        if kicker and r["is_touchdown"]:
+            # a kickoff's return TD is the RECEIVING team's
+            return_td = (defense if def_td else offense) != kicker
         pts_off = pts_def = 0
         if r["play_type"] not in (
             "timeout",
@@ -554,14 +729,20 @@ def to_cfbfastr(
             "coin_toss",
         ):
             if r["is_touchdown"]:
-                # a fumble-return TD has turnover_type set WITHOUT is_turnover
-                to_defense = r["turnover_type"] in ("interception", "fumble")
-                if to_defense:
+                if def_td:
                     pts_def += 6
                     last_td_team = defense
                 else:
                     pts_off += 6
                     last_td_team = offense
+                if r["play_type"] not in ("extra_point", "two_point"):
+                    tm = _SAME_ROW_TRY_RE.search(text)
+                    if tm:
+                        try_pts = 1 if tm.group(0).lower().startswith("kick") else 2
+                        if last_td_team == defense:
+                            pts_def += try_pts
+                        else:
+                            pts_off += try_pts
             if r["play_type"] == "field_goal" and r["fg_made"]:
                 pts_off += 3
             # XP/2pt belong to whoever scored the preceding TD (a defensive TD's
@@ -601,13 +782,16 @@ def to_cfbfastr(
 
         side, num = r["yard_line_side"], r["yard_line_number"]
         ytg = None
-        if side is not None and num is not None and offense in own_side:
-            ytg = 100 - num if own_side[offense] == side else num
+        # cfbfastR keeps a kickoff on the RECEIVING team (``pos_team`` == ESPN's
+        # ``return_team``) but measures its spot in the KICKING team's direction -- 65
+        # from the kicking team's own 35 -- so the kicker, not possession, sets the frame.
+        ref = kicker or offense
+        if side is not None and num is not None and ref in own_side:
+            ytg = 100 - num if own_side[ref] == side else num
         end_ytg = None
-        eyl = r["end_yard_line"] or ""
-        em = re.match(r"([A-Za-z&]{1,4})(\d+)$", eyl)
-        if em and offense in own_side:
-            end_ytg = 100 - int(em.group(2)) if own_side[offense] == em.group(1) else int(em.group(2))
+        if end and offense in own_side:
+            end_side, end_num = end
+            end_ytg = 100 - end_num if end_side is not None and own_side[offense] == end_side else end_num
 
         pt = r["play_type"]
         is_rush = pt in ("rush", "kneel")
@@ -666,13 +850,13 @@ def to_cfbfastr(
                 "log_ydstogo": math.log(r["distance"]) if r["distance"] else None,
                 "yards_gained": r["yards_gained"],
                 # typing
-                "play_type": _play_type_label(r),
+                "play_type": _play_type_label(r, return_td),
                 "orig_play_type": pt,
                 "play_text": r["play_text"],
                 "rush": is_rush,
-                "rush_td": is_rush and bool(r["is_touchdown"]),
+                "rush_td": is_rush and bool(r["is_touchdown"]) and not return_td,
                 "pass": is_pass_att or is_sack,
-                "pass_td": is_pass_att and completion and bool(r["is_touchdown"]),
+                "pass_td": is_pass_att and completion and bool(r["is_touchdown"]) and not return_td,
                 "pass_attempt": is_pass_att,
                 "completion": completion,
                 "target": is_pass_att and r["receiver"] is not None,
@@ -704,7 +888,7 @@ def to_cfbfastr(
                 "penalty_text": r["penalty_type"],
                 "yds_penalty": r["penalty_yards"],
                 # participants (cfbfastR "First Last")
-                "rusher_player_name": _first_last(r["rusher"]) if is_rush else None,
+                "rusher_player_name": _first_last(r["rusher"], teams=teams) if is_rush else None,
                 "passer_player_name": _first_last(r["passer"]) if (is_pass_att or is_sack) else None,
                 "receiver_player_name": _first_last(r["receiver"]),
                 "interception_player_name": _first_last(int_m.group(1)) if int_m and interception else None,
@@ -727,6 +911,34 @@ def to_cfbfastr(
                 "ot_synthesized": False,
             }
         )
+
+    # cfbfastR end state: yards_to_goal_end is measured for the team holding the ball
+    # AFTER the play -- 0 on a touchdown; flipped to the new offense when possession
+    # changes (kickoff, punt, turnover, downs); a touchback puts it at the receiver's 25
+    # (kickoff) or 20; an unknown end spot takes the next snap's yards_to_goal.
+    chain = [x for x in rows if x["orig_play_type"] not in ("timeout", "period_marker")]
+    for cur, nxt in zip(chain, [*chain[1:], None]):
+        if cur["touchdown"]:
+            cur["yards_to_goal_end"] = 0
+        elif cur["orig_play_type"] == "kickoff":
+            # the row already sits with the receiving team, so a returned kickoff's end
+            # spot needs no flip; only a touchback leaves no spot in the text
+            if "touchback" in (cur["play_text"] or "").lower():
+                cur["yards_to_goal_end"] = 75
+            elif cur["yards_to_goal_end"] is None and nxt is not None and nxt["half"] == cur["half"]:
+                cur["yards_to_goal_end"] = nxt["yards_to_goal"]
+        elif nxt is not None and nxt["half"] == cur["half"] and None not in (cur["pos_team"], nxt["pos_team"]):
+            if nxt["pos_team"] == cur["pos_team"]:
+                continue
+            if "touchback" in (cur["play_text"] or "").lower():
+                cur["yards_to_goal_end"] = 75 if cur["orig_play_type"] == "kickoff" else 80
+            elif cur["yards_to_goal_end"] is not None:
+                # a SAFETY hands over the ball but its end spot is already the old
+                # offense's own goal line, which is the frame cfbfastR keeps (~99)
+                if not cur["safety"]:
+                    cur["yards_to_goal_end"] = 100 - cur["yards_to_goal_end"]
+            elif nxt["orig_play_type"] in ("rush", "pass", "sack", "kneel"):
+                cur["yards_to_goal_end"] = nxt["yards_to_goal"]
 
     # --- OT synthesis: stats.ncaa.org pbp pages omit OT drives. Rebuild them
     # (one row per drive) from the drives tab, with scores walked through the
@@ -807,7 +1019,7 @@ def to_cfbfastr(
                     "scoring_play": scoring,
                     "scoring": scoring,
                     "yard_line": od["start_yard_line"],
-                    "play_type": _OT_END_HOW_LABEL.get(od["end_how"], od["end_how"]),
+                    "play_type": _OT_END_HOW_LABEL.get(od["end_how"], "Unknown"),
                     "orig_play_type": "ot_drive",
                     "play_text": summary_text
                     or (

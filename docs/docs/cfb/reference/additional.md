@@ -4010,35 +4010,45 @@ from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
 win_prob_from_margin(7.0)
 ```
 
-### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Dict[str, Any]'` {#yahoo_cfb_boxscore}
+### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_boxscore}
 
-Yahoo CFB boxscore — raw JSON passthrough (parsing not yet implemented).
+Yahoo CFB box score: team and player stats, one row per entity stat.
 
-Wraps the editorial `boxscore/{game_id}` resource. The payload uses a
-normalized decoder-dictionary schema
-(`player_stats[playerId][variation][stat_type]=value` joined against the
-`stat_types`/`stat_categories` dictionaries). Flattening that into
-tidy frames is a follow-up; until then this returns the raw JSON `dict`
-and **fails fast** if a parsed frame is requested rather than silently
-ignoring `return_parsed`.
+Wraps the editorial `boxscore/{game_id}` resource. Its box score is a
+decoder-dictionary schema
+(`player_stats[playerId][variation][stat_type] = value`, same for
+`team_stats`) that this decodes against the payload's `stat_types` /
+`stat_categories` dictionaries into a long frame: one row per team stat
+and per player stat. Pivot on `stat_type_id` for a wide box. The editorial
+payload carries no player names; a player's team comes from the game's
+home/away lineups. Unlike its siblings this defaults to the raw payload
+(`return_parsed=False`), which also carries play-by-play and drives.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `Union[int, str]` |  | Dotted Yahoo game id (e.g. `"ncaaf.g.202509200023"`). |
-| `return_parsed` | `bool` | `False` | Must be `False` (the default). Passing `True` raises `NotImplementedError` because parsing is not implemented. |
-| `return_as_pandas` | `bool` | `False` | Accepted for signature parity with the sibling wrappers; has no effect while only raw output is supported. |
+| `return_parsed` | `bool` | `False` | If `True`, decode the box score into a DataFrame; if `False` (the default) return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
 **Returns**
 
-The raw editorial boxscore JSON as a `dict` (`service.boxscore`).
+The raw editorial boxscore JSON `dict` by default. With `return_parsed=True`, a polars DataFrame (pandas when `return_as_pandas=True`) with one row per team or player stat, every column `Utf8`, and zero rows (same columns) for an empty payload: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`); null for a player missing from the lineups. | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`); null on team-stat rows. | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Kicking`, `Returns`, `Punting`, `Defense` or `Team`. | | `stat_type_id` | Utf8 | Yahoo stat type id (`ncaaf.stat_type.105`). | | `stat_name` | Utf8 | Stat name (`Yards`, `Third Down Efficiency`). | | `stat_abbreviation` | Utf8 | Short stat label (`Yds`, `3DE`). | | `stat_variation` | Utf8 | Stat variation name (`Game`). | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`, `"73.2"`, `"1-14"`). |
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import yahoo_cfb_boxscore
+box = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
+
+# Raw JSON (includes play-by-play and drives)
+
 raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
+
+# Wide team box (one line)
+
+box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
 ```
 
 ### `yahoo_cfb_player_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, qualified: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_player_season_stats}

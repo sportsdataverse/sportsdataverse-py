@@ -4244,22 +4244,22 @@ result = proc.run_processing_pipeline()
 
 #### `NFLPlayProcess.nfl_pbp_json(**kwargs)`
 
-Set `self.json` to the imported `json` module reference (legacy stub).
+Return the JSON payload currently attached to this `NFLPlayProcess` instance.
 
-Retained for API compatibility. Prefer `espn_nfl_pbp()` (live)
-or `nfl_pbp_disk()` (offline) to populate `self.json` with an
-actual ESPN payload.
+`espn_nfl_pbp()` (live, or `summary=` offline) and `nfl_pbp_disk()`
+attach the payload; this returns it unchanged.
 
 **Returns**
 
-The Python `json` module reference (mirrors legacy behavior).
+dict | None: The attached payload (`self.json`); `None` before one is attached.
 
 **Example**
 
 ```python
 from sportsdataverse.nfl import NFLPlayProcess
 proc = NFLPlayProcess(gameId=401220403)
-proc.nfl_pbp_json()  # populates `self.json` with the json module
+proc.espn_nfl_pbp()
+payload = proc.nfl_pbp_json()
 ```
 
 #### `NFLPlayProcess.run_cleaning_pipeline()`
@@ -4799,7 +4799,7 @@ import polars as pl
 build_nfl_rosters([2023]).filter(pl.col("team") == "KC").head()
 ```
 
-### `build_nfl_season(game_ids: 'list[int] | None' = None, *, seasons: 'list[int] | None' = None, source: 'str' = 'espn', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#build_nfl_season}
+### `build_nfl_season(game_ids: 'list[int] | None' = None, *, seasons: 'list[int] | None' = None, source: 'str' = 'espn', return_as_pandas: 'bool' = False, raw_dir: "'str | Path | None'" = None, schedule_lookup: "'dict[str, dict[str, Any]] | None'" = None) -> "'pl.DataFrame | pd.DataFrame'"` {#build_nfl_season}
 
 Compile play-by-play for multiple NFL games into one tidy frame.
 
@@ -4807,6 +4807,7 @@ The `source` parameter determines which input parameter is required:
 
 - `source="espn"` — requires *game_ids*; *seasons* must be `None`.
 - `source="nflverse"` — requires *seasons*; *game_ids* must be `None`.
+- `source="shield"` — requires *seasons* and *raw_dir*; *game_ids* must be `None`.
 
 For ESPN games the function either loads a previously cached plays frame or
 processes the game fresh via `NFLPlayProcess`.  Individual game failures
@@ -4821,12 +4822,14 @@ different column sets merge cleanly.
 |---|---|---|---|
 | `game_ids` | `list[int] \| None` | `None` | ESPN event IDs to compile (e.g. `[401671801, 401671802]`). Required when `source="espn"`; must be `None` for other sources. |
 | `seasons` | `list[int] \| None` | `None` | Season years to compile (e.g. `[2023, 2024]`). Required when `source="nflverse"`; must be `None` for other sources. |
-| `source` | `str` | `'espn'` | Data source. - `"espn"` *(default)*: each game is processed via `NFLPlayProcess(gameId=gid).espn_nfl_pbp()` + `run_processing_pipeline()`. Pass *game_ids*. - `"nflverse"`: delegates to `sportsdataverse.nfl.load_nfl_pbp` for the requested seasons. Pass *seasons*. Returns the full pre-enriched season frame as-is. - `"shield"`: raises `NotImplementedError` — Shield (api.nfl.com) play-by-play lives in the native-pipeline (`nfl-data`) repository, not sdv-py. |
+| `source` | `str` | `'espn'` | Data source. - `"espn"` *(default)*: each game is processed via `NFLPlayProcess(gameId=gid).espn_nfl_pbp()` + `run_processing_pipeline()`. Pass *game_ids*. - `"nflverse"`: delegates to `sportsdataverse.nfl.load_nfl_pbp` for the requested seasons. Pass *seasons*. Returns the full pre-enriched season frame as-is. - `"shield"`: reconstructs nflverse-shape play-by-play from a committed library of Shield (api.nfl.com) per-game JSON files via `sportsdataverse.nfl.shield_pbp.build_season` (the nflfastR parser port graduated from nfl-data's `native_pbp`). Pass *seasons* and *raw_dir*. Preseason games are skipped and TIMEOUT rows dropped, matching nflverse's row set. The frame is NOT EP/WP-enriched; feed it to `sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` for the `nfl_model_pbp` columns. |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of polars. |
+| `raw_dir` | `str \| Path \| None` | `None` | `source="shield"` only. Root of the per-game Shield JSON library laid out as `{raw_dir}/{season}/{game_id}.json` (the `nfl-raw` repo's `nfl/raw`). Required for the shield source; must be `None` otherwise. |
+| `schedule_lookup` | `dict[str, dict[str, Any]] \| None` | `None` | `source="shield"` only. `{game_id: {"roof": ..., "spread_line": ..., "total_line": ...}}` supplying the game-level fields the Shield feed omits. `None` *(default)* builds it from `sportsdataverse.nfl.load_nfl_schedule` for each season, degrading to nulls with a `RuntimeWarning` if the schedule cannot be loaded. Pass `{}` to skip the lookup (hermetic; the three columns stay null). |
 
 **Returns**
 
-All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead.
+All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead. For `source="shield"` the frame carries the nflverse base columns (233; a superset of the EP/WP/CP training contract) with the same names, types and meanings as `sportsdataverse.nfl.load_nfl_model_pbp` minus the EP/WP/CP enrichment columns: identifiers (`game_id`, `play_id`, `posteam`, `defteam`), game state (`down`, `ydstogo`, `yardline_100`, `qtr`, `half_seconds_remaining`, `game_seconds_remaining`, `score_differential`, `posteam_timeouts_remaining`), play classification (`play_type`, `pass`, `rush`, `desc`, `yards_gained`, `touchdown`, `field_goal_result`), drive/series (`fixed_drive`, `fixed_drive_result`, `series`, `series_result`), schedule fields (`roof`, `spread_line`, `total_line`) and game outcome (`home_score`, `away_score`, `result`).
 
 **Example**
 
@@ -4839,6 +4842,12 @@ print(df.shape)
 
 from sportsdataverse.nfl import build_nfl_season
 df = build_nfl_season(seasons=[2023], source="nflverse")
+print(df.shape)
+
+# Shield season compile from a committed raw library (nfl-raw checkout)
+
+from sportsdataverse.nfl import build_nfl_season
+df = build_nfl_season(seasons=[2024], source="shield", raw_dir="nfl-raw/nfl/raw")
 print(df.shape)
 
 # With filesystem cache enabled (ESPN)
@@ -8207,8 +8216,12 @@ Reads nflverse's published players master and projects it down to just the
 cross-system identifier columns it carries (`gsis_id`, `esb_id`,
 `espn_id`, `pfr_id`, `pff_id`, `otc_id`, `nfl_id`, `smart_id` —
 whichever the parquet exposes) plus `full_name` and `position`, deduped
-on `gsis_id`. It is a convenience for joining nflverse identity IDs onto
-PBP / rosters / stats frames without carrying the full ~40-column master.
+on `gsis_id`. The players master has no Yahoo or CBS ids, so `yahoo_id`
+and `cbs_id` are joined on `gsis_id` from
+`load_nfl_ff_playerids` (DynastyProcess). A `gsis_id` that
+DynastyProcess lists twice is ambiguous upstream and gets null provider ids.
+It is a convenience for joining identity IDs onto PBP / rosters / stats
+frames without carrying the full ~40-column master.
 
 **Parameters**
 
@@ -8218,7 +8231,7 @@ PBP / rosters / stats frames without carrying the full ~40-column master.
 
 **Returns**
 
-A one-row-per-`gsis_id` `DataFrame` of cross-system IDs + `full_name` / `position`. A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails). A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
 
 **Example**
 

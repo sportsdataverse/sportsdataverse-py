@@ -9,7 +9,7 @@ Test philosophy
 * Feature shape + dtype — both ESPN and nflverse paths produce (N, K) float32
 * Feature VALUES parity — ESPN path == nflverse path for identical game state
 * Era-bin edge cases — boundary seasons land in the right era bucket
-* Roof default — ESPN plays default retractable=1 / dome=0 / outdoors=0
+* Roof — one-hots follow the bundled models' trainer; no roof column → outdoors
 * Down casting — boolean down columns → int (0/1) without sign error
 * WP naive/spread shape — include_spread toggle changes column count
 * Public API output columns — calculate_expected_points / calculate_win_probability
@@ -235,14 +235,14 @@ class TestEspnEpFeatures:
         assert X_home[0, idx] == 1.0
         assert X_away[0, idx] == 0.0
 
-    def test_roof_defaults_retractable(self):
+    def test_roof_defaults_outdoors(self):
         X = _espn_ep_features(_espn_row())
         r_idx = EP_FEATURES.index("retractable")
         d_idx = EP_FEATURES.index("dome")
         o_idx = EP_FEATURES.index("outdoors")
-        assert X[0, r_idx] == 1.0
+        assert X[0, r_idx] == 0.0
         assert X[0, d_idx] == 0.0
-        assert X[0, o_idx] == 0.0
+        assert X[0, o_idx] == 1.0
 
     def test_down1_flag(self):
         X = _espn_ep_features(_espn_row(down=1))
@@ -372,26 +372,22 @@ def test_ep_feature_parity_outdoors():
         ),
     )
 
-    # Era flags + home + timeouts + yardline + ydstogo must be identical.
-    # Roof flags differ by design (nflverse gets outdoor=1; ESPN defaults retractable=1).
-    comparable = [f for f in EP_FEATURES if f not in ("retractable", "dome", "outdoors")]
-    for feat in comparable:
+    # Every feature must be identical, roof flags included (no roof column → outdoors).
+    for feat in EP_FEATURES:
         i = EP_FEATURES.index(feat)
         assert nv_X[0, i] == espn_X[0, i], f"parity failure on {feat}"
 
 
 def test_ep_feature_parity_dome():
-    """When roof='dome' on nflverse side, ESPN path still defaults retractable=1."""
-    nv_df = _make_model_mutations(_nflverse_row(roof="dome"))
-    nv_X = nv_df.select(EP_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
-    # nflverse: dome=1, retractable=0, outdoors=0
-    assert nv_X[0, EP_FEATURES.index("dome")] == 1.0
-    assert nv_X[0, EP_FEATURES.index("retractable")] == 0.0
-
-    espn_X = _espn_ep_features(_espn_row())
-    # ESPN: dome=0, retractable=1 (no per-play roof data)
-    assert espn_X[0, EP_FEATURES.index("dome")] == 0.0
-    assert espn_X[0, EP_FEATURES.index("retractable")] == 1.0
+    """A dome (or closed) roof reaches both paths as dome=1, retractable=0, outdoors=0."""
+    for roof in ("dome", "closed"):
+        nv_df = _make_model_mutations(_nflverse_row(roof=roof))
+        nv_X = nv_df.select(EP_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
+        espn_X = _espn_ep_features(_espn_row().with_columns(pl.lit(roof).alias("roof")))
+        for X in (nv_X, espn_X):
+            assert X[0, EP_FEATURES.index("dome")] == 1.0
+            assert X[0, EP_FEATURES.index("retractable")] == 0.0
+            assert X[0, EP_FEATURES.index("outdoors")] == 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -756,11 +752,11 @@ class TestEspnCpFeatures:
         assert X[0, CP_FEATURES.index("era3")] == 0.0
         assert X[0, CP_FEATURES.index("era4")] == 1.0
 
-    def test_roof_defaults_retractable(self):
+    def test_roof_defaults_outdoors(self):
         X = _espn_cp_features(_espn_pass_row())
-        assert X[0, CP_FEATURES.index("retractable")] == 1.0
+        assert X[0, CP_FEATURES.index("retractable")] == 0.0
         assert X[0, CP_FEATURES.index("dome")] == 0.0
-        assert X[0, CP_FEATURES.index("outdoors")] == 0.0
+        assert X[0, CP_FEATURES.index("outdoors")] == 1.0
 
     def test_qb_hit_default_zero(self):
         X = _espn_cp_features(_espn_pass_row())
@@ -832,11 +828,11 @@ class TestEspnXyacFeatures:
         assert X[0, XYAC_FEATURES.index("down3")] == 1.0
         assert X[0, XYAC_FEATURES.index("down4")] == 0.0
 
-    def test_roof_defaults_retractable(self):
+    def test_roof_defaults_outdoors(self):
         X = _espn_xyac_features(_espn_pass_row())
-        assert X[0, XYAC_FEATURES.index("retractable")] == 1.0
+        assert X[0, XYAC_FEATURES.index("retractable")] == 0.0
         assert X[0, XYAC_FEATURES.index("dome")] == 0.0
-        assert X[0, XYAC_FEATURES.index("outdoors")] == 0.0
+        assert X[0, XYAC_FEATURES.index("outdoors")] == 1.0
 
     def test_era_flags(self):
         X = _espn_xyac_features(_espn_pass_row(season=2015))

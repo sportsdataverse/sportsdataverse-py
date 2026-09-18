@@ -55,7 +55,8 @@ if TYPE_CHECKING:
     import pandas as pd
     from polars._typing import PolarsDataType
 
-from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_roster
+from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._common_espn_parsers import parse_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
 from sportsdataverse.cfb.cfb_teams import espn_cfb_teams
@@ -508,9 +509,21 @@ def _odds_events(sport: str, **kwargs: Any) -> List[Dict[str, Any]]:
     return out
 
 
+# Plain http, like every other ESPN call this module reaches (espn_cfb_teams,
+# espn_cfb_schedule, espn_cfb_calendar): ESPN's https host answers 403 from
+# datacenter egress, the http host does not, so a crosswalk that was otherwise
+# fully http died on this one leg. The codegen-emitted
+# `cfb_espn_ext.espn_cfb_team_roster` pins https and generated files are not
+# hand-edited, so the URL is built here instead of calling that wrapper.
+# ponytail: one endpoint, inlined. If a second generated wrapper needs the same
+# treatment, give _codegen_runtime._get a host-scheme override instead.
+_ESPN_ROSTER_URL = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/roster"
+
+
 def _espn_roster(team_id: Union[int, str], **kwargs: Any) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
-    for r in _rows(espn_cfb_team_roster(team_id, **kwargs)):
+    raw = _get(_ESPN_ROSTER_URL.format(team_id=team_id), **kwargs)
+    for r in _rows(parse_team_roster(raw)):
         name = _pick(r, "full_name", "display_name")
         jersey = _pick(r, "jersey")
         out.append(

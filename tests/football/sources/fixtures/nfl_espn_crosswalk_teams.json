@@ -1,0 +1,409 @@
+[
+ {
+  "espn_team_id": "1",
+  "espn_abbr": "ATL",
+  "name": "Atlanta Falcons",
+  "shield_team_id": "10400200-f401-4e53-5175-0974e4f16cf7",
+  "nflverse_abbr": "ATL",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "10",
+  "espn_abbr": "TEN",
+  "name": "Tennessee Titans",
+  "shield_team_id": "10402100-447f-396e-8149-0a434ffb2f23",
+  "nflverse_abbr": "TEN",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "11",
+  "espn_abbr": "IND",
+  "name": "Indianapolis Colts",
+  "shield_team_id": "10402200-2ea3-84c3-e627-6a6b3b39d56d",
+  "nflverse_abbr": "IND",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "12",
+  "espn_abbr": "KC",
+  "name": "Kansas City Chiefs",
+  "shield_team_id": "10402310-a47e-10ea-7442-16b633633637",
+  "nflverse_abbr": "KC",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "13",
+  "espn_abbr": "OAK",
+  "name": "Oakland Raiders",
+  "shield_team_id": "10402520-96bf-e9f2-4f68-8521ca896060",
+  "nflverse_abbr": "OAK",
+  "seasons": [
+   2002,
+   2019
+  ]
+ },
+ {
+  "espn_team_id": "13",
+  "espn_abbr": "LV",
+  "name": "Las Vegas Raiders",
+  "shield_team_id": "10402520-96bf-e9f2-4f68-8521ca896060",
+  "nflverse_abbr": "LV",
+  "seasons": [
+   2020,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "14",
+  "espn_abbr": "STL",
+  "name": "St. Louis Rams",
+  "shield_team_id": "10402510-8931-0d5f-9815-79bb79649a65",
+  "nflverse_abbr": "STL",
+  "seasons": [
+   2002,
+   2015
+  ]
+ },
+ {
+  "espn_team_id": "14",
+  "espn_abbr": "LAR",
+  "name": "Los Angeles Rams",
+  "shield_team_id": "10402510-8931-0d5f-9815-79bb79649a65",
+  "nflverse_abbr": "LA",
+  "seasons": [
+   2016,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "15",
+  "espn_abbr": "MIA",
+  "name": "Miami Dolphins",
+  "shield_team_id": "10402700-1662-d8ad-f45c-0b0ea460d045",
+  "nflverse_abbr": "MIA",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "16",
+  "espn_abbr": "MIN",
+  "name": "Minnesota Vikings",
+  "shield_team_id": "10403000-5851-f9d5-da45-78365a05b6b0",
+  "nflverse_abbr": "MIN",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "17",
+  "espn_abbr": "NE",
+  "name": "New England Patriots",
+  "shield_team_id": "10403200-69ab-9ea6-5af5-e240fbc08bea",
+  "nflverse_abbr": "NE",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "18",
+  "espn_abbr": "NO",
+  "name": "New Orleans Saints",
+  "shield_team_id": "10403300-f235-cf9b-6d3a-2f182be48dd1",
+  "nflverse_abbr": "NO",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "19",
+  "espn_abbr": "NYG",
+  "name": "New York Giants",
+  "shield_team_id": "10403410-997c-9c75-256b-3b012f468bd0",
+  "nflverse_abbr": "NYG",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "2",
+  "espn_abbr": "BUF",
+  "name": "Buffalo Bills",
+  "shield_team_id": "10400610-c40e-a673-1743-2ce2a5d5d731",
+  "nflverse_abbr": "BUF",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "20",
+  "espn_abbr": "NYJ",
+  "name": "New York Jets",
+  "shield_team_id": "10403430-1bc3-42c4-c7d8-39f38aed5f12",
+  "nflverse_abbr": "NYJ",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "21",
+  "espn_abbr": "PHI",
+  "name": "Philadelphia Eagles",
+  "shield_team_id": "10403700-b939-3cbd-3d16-24d4d6742fa2",
+  "nflverse_abbr": "PHI",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "22",
+  "espn_abbr": "ARI",
+  "name": "Arizona Cardinals",
+  "shield_team_id": "10403800-517c-7b8c-65a3-c61b95d86123",
+  "nflverse_abbr": "ARI",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "23",
+  "espn_abbr": "PIT",
+  "name": "Pittsburgh Steelers",
+  "shield_team_id": "10403900-8251-6892-d81c-4348525c2d47",
+  "nflverse_abbr": "PIT",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "24",
+  "espn_abbr": "SD",
+  "name": "San Diego Chargers",
+  "shield_team_id": "10404400-3b35-073f-197e-194bb8240723",
+  "nflverse_abbr": "SD",
+  "seasons": [
+   2002,
+   2016
+  ]
+ },
+ {
+  "espn_team_id": "24",
+  "espn_abbr": "LAC",
+  "name": "Los Angeles Chargers",
+  "shield_team_id": "10404400-3b35-073f-197e-194bb8240723",
+  "nflverse_abbr": "LAC",
+  "seasons": [
+   2017,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "25",
+  "espn_abbr": "SF",
+  "name": "San Francisco 49ers",
+  "shield_team_id": "10404500-e7cb-7fce-3f10-4eeb269bd179",
+  "nflverse_abbr": "SF",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "26",
+  "espn_abbr": "SEA",
+  "name": "Seattle Seahawks",
+  "shield_team_id": "10404600-adcd-28ac-5826-b4d95ec2a228",
+  "nflverse_abbr": "SEA",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "27",
+  "espn_abbr": "TB",
+  "name": "Tampa Bay Buccaneers",
+  "shield_team_id": "10404900-d59e-b449-ef75-961e09ca027e",
+  "nflverse_abbr": "TB",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "28",
+  "espn_abbr": "WSH",
+  "name": "Washington Redskins",
+  "shield_team_id": "10405110-ec3c-669e-2614-db3dc1736e95",
+  "nflverse_abbr": "WAS",
+  "seasons": [
+   2002,
+   2018
+  ]
+ },
+ {
+  "espn_team_id": "28",
+  "espn_abbr": "WSH",
+  "name": "Washington",
+  "shield_team_id": "10405110-ec3c-669e-2614-db3dc1736e95",
+  "nflverse_abbr": "WAS",
+  "seasons": [
+   2019,
+   2021
+  ]
+ },
+ {
+  "espn_team_id": "28",
+  "espn_abbr": "WSH",
+  "name": "Washington Commanders",
+  "shield_team_id": "10405110-ec3c-669e-2614-db3dc1736e95",
+  "nflverse_abbr": "WAS",
+  "seasons": [
+   2022,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "29",
+  "espn_abbr": "CAR",
+  "name": "Carolina Panthers",
+  "shield_team_id": "10400750-259b-33ac-eee3-a3852e83cd1f",
+  "nflverse_abbr": "CAR",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "3",
+  "espn_abbr": "CHI",
+  "name": "Chicago Bears",
+  "shield_team_id": "10400810-db30-43d6-221c-620006f3ca19",
+  "nflverse_abbr": "CHI",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "30",
+  "espn_abbr": "JAX",
+  "name": "Jacksonville Jaguars",
+  "shield_team_id": "10402250-89fe-7b86-ef98-9062cd354256",
+  "nflverse_abbr": "JAX",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "33",
+  "espn_abbr": "BAL",
+  "name": "Baltimore Ravens",
+  "shield_team_id": "10400325-48de-3d6a-be29-8f829437f4c8",
+  "nflverse_abbr": "BAL",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "34",
+  "espn_abbr": "HOU",
+  "name": "Houston Texans",
+  "shield_team_id": "10402120-b0bc-693d-098a-803014096eb0",
+  "nflverse_abbr": "HOU",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "4",
+  "espn_abbr": "CIN",
+  "name": "Cincinnati Bengals",
+  "shield_team_id": "10400920-57c1-7656-e77e-1af3d900483e",
+  "nflverse_abbr": "CIN",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "5",
+  "espn_abbr": "CLE",
+  "name": "Cleveland Browns",
+  "shield_team_id": "10401050-5e38-b907-1be1-55b91b19c057",
+  "nflverse_abbr": "CLE",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "6",
+  "espn_abbr": "DAL",
+  "name": "Dallas Cowboys",
+  "shield_team_id": "10401200-a308-98ca-ad5f-95df2fefea68",
+  "nflverse_abbr": "DAL",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "7",
+  "espn_abbr": "DEN",
+  "name": "Denver Broncos",
+  "shield_team_id": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+  "nflverse_abbr": "DEN",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "8",
+  "espn_abbr": "DET",
+  "name": "Detroit Lions",
+  "shield_team_id": "10401540-f97c-2d19-6fcd-fac6490a48b7",
+  "nflverse_abbr": "DET",
+  "seasons": [
+   2002,
+   2026
+  ]
+ },
+ {
+  "espn_team_id": "9",
+  "espn_abbr": "GB",
+  "name": "Green Bay Packers",
+  "shield_team_id": "10401800-ab22-323d-721a-cee4713c4c2d",
+  "nflverse_abbr": "GB",
+  "seasons": [
+   2002,
+   2026
+  ]
+ }
+]

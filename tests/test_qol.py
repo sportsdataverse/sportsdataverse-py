@@ -13,7 +13,7 @@ import pandas as pd
 import polars as pl
 import pytest
 
-from tests.conftest import load_fixture
+from tests.conftest import load_fixture, patch_espn_fetch
 
 
 # ===========================================================================
@@ -21,16 +21,9 @@ from tests.conftest import load_fixture
 # ===========================================================================
 
 
-def _fake_get_for(payload):
-    """Return a fake _get that always returns the given payload."""
-    return lambda *args, **kwargs: payload
-
-
-def test_parsed_namespace_defaults_to_polars_dataframe():
+def test_parsed_namespace_defaults_to_polars_dataframe(monkeypatch):
     """A wrapper imported from sportsdataverse.parsed.nba should return
     a polars frame by default, no return_parsed=True kwarg needed."""
-    import sportsdataverse._common_espn as ce
-
     fake_teams = {
         "sports": [
             {
@@ -44,38 +37,26 @@ def test_parsed_namespace_defaults_to_polars_dataframe():
             }
         ]
     }
-    original = ce._get
-    ce._get = _fake_get_for(fake_teams)
-    try:
-        from sportsdataverse.parsed.nba import espn_nba_teams_site
+    patch_espn_fetch(monkeypatch, fake_teams)
+    from sportsdataverse.parsed.nba import espn_nba_teams_site
 
-        df = espn_nba_teams_site()
-        assert isinstance(df, pl.DataFrame), f"expected polars from parsed.*, got {type(df)}"
-        assert df.height >= 1
-    finally:
-        ce._get = original
+    df = espn_nba_teams_site()
+    assert isinstance(df, pl.DataFrame), f"expected polars from parsed.*, got {type(df)}"
+    assert df.height >= 1
 
 
-def test_parsed_namespace_still_supports_return_parsed_false_override():
+def test_parsed_namespace_still_supports_return_parsed_false_override(monkeypatch):
     """Pass return_parsed=False from a parsed.* module → raw Dict."""
-    import sportsdataverse._common_espn as ce
-
     fake = {"sports": [{"leagues": [{"teams": []}]}]}
-    original = ce._get
-    ce._get = _fake_get_for(fake)
-    try:
-        from sportsdataverse.parsed.nba import espn_nba_teams_site
+    patch_espn_fetch(monkeypatch, fake)
+    from sportsdataverse.parsed.nba import espn_nba_teams_site
 
-        raw = espn_nba_teams_site(return_parsed=False)
-        assert isinstance(raw, dict)
-        assert "sports" in raw
-    finally:
-        ce._get = original
+    raw = espn_nba_teams_site(return_parsed=False)
+    assert isinstance(raw, dict)
+    assert "sports" in raw
 
 
-def test_parsed_namespace_supports_return_as_pandas():
-    import sportsdataverse._common_espn as ce
-
+def test_parsed_namespace_supports_return_as_pandas(monkeypatch):
     fake = {
         "sports": [
             {
@@ -89,25 +70,20 @@ def test_parsed_namespace_supports_return_as_pandas():
             }
         ]
     }
-    original = ce._get
-    ce._get = _fake_get_for(fake)
-    try:
-        from sportsdataverse.parsed.nba import espn_nba_teams_site
+    patch_espn_fetch(monkeypatch, fake)
+    from sportsdataverse.parsed.nba import espn_nba_teams_site
 
-        pdf = espn_nba_teams_site(return_as_pandas=True)
-        assert isinstance(pdf, pd.DataFrame)
-        assert len(pdf) >= 1
-    finally:
-        ce._get = original
+    pdf = espn_nba_teams_site(return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame)
+    assert len(pdf) >= 1
 
 
-def test_raw_module_not_mutated_by_parsed_import():
+def test_raw_module_not_mutated_by_parsed_import(monkeypatch):
     """Importing the parsed namespace must NOT mutate the raw module's
     behavior — the parsed.* build must not lock the raw wrapper into a
     single mode. Under the 0.0.54 contract the raw module itself defaults
     to a DataFrame, and ``return_parsed=False`` still recovers the Dict;
     both paths must survive a parsed.* import."""
-    import sportsdataverse._common_espn as ce
     import sportsdataverse.parsed.nba  # noqa: F401  triggers parsed-mod build
 
     fake = {
@@ -123,23 +99,19 @@ def test_raw_module_not_mutated_by_parsed_import():
             }
         ]
     }
-    original = ce._get
-    ce._get = _fake_get_for(fake)
-    try:
-        from sportsdataverse.nba import espn_nba_teams_site
+    patch_espn_fetch(monkeypatch, fake)
+    from sportsdataverse.nba import espn_nba_teams_site
 
-        # 0.0.54 default flip: no kwarg → DataFrame (raw module, post parsed import).
-        df = espn_nba_teams_site()
-        assert isinstance(df, pl.DataFrame), (
-            f"Raw module mutated by parsed import — expected DataFrame default, got {type(df)}"
-        )
-        assert df.height >= 1
-        # return_parsed=False must still recover the raw Dict from the raw module.
-        raw = espn_nba_teams_site(return_parsed=False)
-        assert isinstance(raw, dict), f"return_parsed=False broken on raw module — got {type(raw)}"
-        assert "sports" in raw
-    finally:
-        ce._get = original
+    # 0.0.54 default flip: no kwarg → DataFrame (raw module, post parsed import).
+    df = espn_nba_teams_site()
+    assert isinstance(df, pl.DataFrame), (
+        f"Raw module mutated by parsed import — expected DataFrame default, got {type(df)}"
+    )
+    assert df.height >= 1
+    # return_parsed=False must still recover the raw Dict from the raw module.
+    raw = espn_nba_teams_site(return_parsed=False)
+    assert isinstance(raw, dict), f"return_parsed=False broken on raw module — got {type(raw)}"
+    assert "sports" in raw
 
 
 def test_parsed_namespace_exposes_all_eight_leagues():

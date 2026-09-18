@@ -1,0 +1,1074 @@
+{
+ "data": {
+  "viewer": {
+   "gameDetail": {
+    "id": "a8fc1728-4feb-11f1-abca-2c54536568a9",
+    "attendance": 41156,
+    "distance": 13,
+    "down": 4,
+    "gameClock": "00:35",
+    "goalToGo": false,
+    "homePointsOvertime": null,
+    "homePointsOvertimeTotal": 0,
+    "homePointsTotal": 34,
+    "homePointsQ1": 14,
+    "homePointsQ2": 10,
+    "homePointsQ3": 10,
+    "homePointsQ4": 0,
+    "homeTeam": {
+     "id": "10402250-89fe-7b86-ef98-9062cd354256",
+     "abbreviation": "JAX",
+     "nickName": "Jaguars",
+     "franchise": {
+      "primaryColor": "#000000",
+      "secondaryColor": "#9F792C",
+      "tertiaryColor": "#FFFFFF",
+      "currentLogo": {
+       "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+      },
+      "largeTypeColor": {
+       "dark": "#9F792C",
+       "light": "#000000"
+      },
+      "decorativeElementsColor": {
+       "dark": "#9F792C",
+       "light": "#000000"
+      }
+     }
+    },
+    "homeTimeoutsUsed": 0,
+    "homeTimeoutsRemaining": 3,
+    "offset": 526,
+    "period": 4,
+    "phase": "FINAL",
+    "playReview": false,
+    "possessionTeam": {
+     "id": "10402250-89fe-7b86-ef98-9062cd354256",
+     "abbreviation": "JAX",
+     "nickName": "Jaguars",
+     "franchise": {
+      "primaryColor": "#000000",
+      "secondaryColor": "#9F792C",
+      "tertiaryColor": "#FFFFFF",
+      "currentLogo": {
+       "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+      },
+      "largeTypeColor": {
+       "dark": "#9F792C",
+       "light": "#000000"
+      },
+      "decorativeElementsColor": {
+       "dark": "#9F792C",
+       "light": "#000000"
+      }
+     }
+    },
+    "redzone": false,
+    "stadium": "EverBank Stadium",
+    "startTime": "9/13/26, 13:03:54",
+    "visitorPointsOvertime": null,
+    "visitorPointsOvertimeTotal": 0,
+    "visitorPointsTotal": 10,
+    "visitorPointsQ1": 0,
+    "visitorPointsQ2": 0,
+    "visitorPointsQ3": 3,
+    "visitorPointsQ4": 7,
+    "visitorTeam": {
+     "id": "10401050-5e38-b907-1be1-55b91b19c057",
+     "abbreviation": "CLE",
+     "nickName": "Browns",
+     "franchise": {
+      "primaryColor": "#FF3C00",
+      "secondaryColor": "#311D00",
+      "tertiaryColor": "#FFFFFF",
+      "currentLogo": {
+       "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+      },
+      "largeTypeColor": {
+       "dark": "#FF3C00",
+       "light": "#FF3C00"
+      },
+      "decorativeElementsColor": {
+       "dark": "#FF3C00",
+       "light": "#FF3C00"
+      }
+     }
+    },
+    "visitorTimeoutsUsed": 1,
+    "visitorTimeoutsRemaining": 2,
+    "weather": {
+     "shortDescription": "Temp: 89\u00b0 F, Humidity: 66%, Wind: W 3 mph"
+    },
+    "yardLine": "JAX 27",
+    "yardsToGo": 0,
+    "scoringSummaries": [
+     {
+      "playId": 349,
+      "playDescription": "P.Washington 30 yd. pass from T.Lawrence (C.Little kick) (8-59, 3:55)",
+      "patPlayId": 375,
+      "homeScore": 7,
+      "visitorScore": 0
+     }
+    ],
+    "drives": [
+     {
+      "quarterStart": 1,
+      "endTransition": "INTERCEPTION",
+      "endYardLine": "JAX 28",
+      "endedWithScore": false,
+      "firstDowns": 2,
+      "gameClockEnd": "12:06",
+      "gameClockStart": "15:00",
+      "howEndedDescription": "Interception",
+      "howStartedDescription": "Kickoff",
+      "inside20": false,
+      "orderSequence": 1,
+      "playCount": 5,
+      "playIdEnded": 157,
+      "playIdStarted": 40,
+      "playSeqEnded": 157,
+      "playSeqStarted": 40,
+      "possessionTeam": {
+       "id": "10401050-5e38-b907-1be1-55b91b19c057",
+       "abbreviation": "CLE",
+       "nickName": "Browns",
+       "franchise": {
+        "primaryColor": "#FF3C00",
+        "secondaryColor": "#311D00",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+        },
+        "largeTypeColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        },
+        "decorativeElementsColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        }
+       }
+      },
+      "quarterEnd": 1,
+      "realStartTime": "2026-09-13T17:03:54.720Z",
+      "startTransition": "KICKOFF",
+      "startYardLine": "CLE 40",
+      "timeOfPossession": "2:54",
+      "yards": 32,
+      "yardsPenalized": 0
+     }
+    ],
+    "plays": [
+     {
+      "clockTime": "",
+      "down": 0,
+      "driveNetYards": null,
+      "drivePlayCount": null,
+      "driveSequenceNumber": null,
+      "driveTimeOfPossession": null,
+      "endClockTime": "",
+      "endYardLine": "",
+      "firstDown": false,
+      "goalToGo": false,
+      "isBigPlay": null,
+      "latestPlay": null,
+      "nextPlayIsGoalToGo": false,
+      "nextPlayType": "FREE_KICK",
+      "orderSequence": 1,
+      "penaltyOnPlay": false,
+      "playClock": 0,
+      "playReviewStatus": null,
+      "playDeleted": false,
+      "playDescription": "GAME",
+      "playDescriptionWithJerseyNumbers": "GAME",
+      "playId": 1,
+      "playStats": [],
+      "playType": "GAME_START",
+      "possessionTeam": {
+       "id": "10402250-89fe-7b86-ef98-9062cd354256",
+       "abbreviation": "JAX",
+       "nickName": "Jaguars",
+       "franchise": {
+        "primaryColor": "#000000",
+        "secondaryColor": "#9F792C",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+        },
+        "largeTypeColor": {
+         "dark": "#9F792C",
+         "light": "#000000"
+        },
+        "decorativeElementsColor": {
+         "dark": "#9F792C",
+         "light": "#000000"
+        }
+       }
+      },
+      "prePlayByPlay": "CLE - JAX",
+      "quarter": 1,
+      "scoringPlay": false,
+      "scoringPlayType": null,
+      "scoringTeam": null,
+      "shortDescription": "GAME",
+      "specialTeamsPlay": false,
+      "stPlayType": null,
+      "timeOfDay": "",
+      "yardLine": "",
+      "yards": 0,
+      "yardsToGo": 0
+     },
+     {
+      "clockTime": "15:00",
+      "down": 0,
+      "driveNetYards": 32,
+      "drivePlayCount": 5,
+      "driveSequenceNumber": 1,
+      "driveTimeOfPossession": "2:54",
+      "endClockTime": "2026-09-13T17:04:05.287Z",
+      "endYardLine": "",
+      "firstDown": false,
+      "goalToGo": false,
+      "isBigPlay": null,
+      "latestPlay": null,
+      "nextPlayIsGoalToGo": false,
+      "nextPlayType": "PLAY_FROM_SCRIMMAGE",
+      "orderSequence": 40,
+      "penaltyOnPlay": false,
+      "playClock": 0,
+      "playReviewStatus": null,
+      "playDeleted": false,
+      "playDescription": "C.Little kicks 62 yards from JAX 35 to CLE 3. D.Sampson to CLE 40 for 37 yards (J.Cameron; M.Brown).",
+      "playDescriptionWithJerseyNumbers": "39-C.Little kicks 62 yards from JAX 35 to CLE 3. 22-D.Sampson to CLE 40 for 37 yards (19-J.Cameron; 1-M.Brown).",
+      "playId": 40,
+      "playStats": [
+       {
+        "statId": 41,
+        "yards": 62,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "C.Little",
+        "gsisPlayer": {
+         "id": "32004c49-5422-8870-662a-03e5e5f1c33d"
+        }
+       },
+       {
+        "statId": 45,
+        "yards": 37,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "D.Sampson",
+        "gsisPlayer": {
+         "id": "32005341-4d33-8622-de8a-1e3d03b08479"
+        }
+       },
+       {
+        "statId": 82,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "J.Cameron",
+        "gsisPlayer": {
+         "id": "32004341-4d10-8646-75f3-768d0dbaba55"
+        }
+       },
+       {
+        "statId": 82,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "M.Brown",
+        "gsisPlayer": {
+         "id": "32004252-4f56-5972-2e0a-45f2ccf2023c"
+        }
+       }
+      ],
+      "playType": "KICK_OFF",
+      "possessionTeam": {
+       "id": "10401050-5e38-b907-1be1-55b91b19c057",
+       "abbreviation": "CLE",
+       "nickName": "Browns",
+       "franchise": {
+        "primaryColor": "#FF3C00",
+        "secondaryColor": "#311D00",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+        },
+        "largeTypeColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        },
+        "decorativeElementsColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        }
+       }
+      },
+      "prePlayByPlay": "JAX  KO  JAX 35",
+      "quarter": 1,
+      "scoringPlay": false,
+      "scoringPlayType": null,
+      "scoringTeam": null,
+      "shortDescription": "C.Little kicks 62 yards from JAX 35 to CLE 3. D.Sampson to CLE 40 for 37 yards (J.Cameron; M.Brown).",
+      "specialTeamsPlay": true,
+      "stPlayType": null,
+      "timeOfDay": "2026-09-13T17:03:54.720Z",
+      "yardLine": "JAX 35",
+      "yards": 25,
+      "yardsToGo": 0
+     },
+     {
+      "clockTime": "14:52",
+      "down": 1,
+      "driveNetYards": 32,
+      "drivePlayCount": 5,
+      "driveSequenceNumber": 1,
+      "driveTimeOfPossession": "2:54",
+      "endClockTime": "2026-09-13T17:04:43.297Z",
+      "endYardLine": "",
+      "firstDown": false,
+      "goalToGo": false,
+      "isBigPlay": null,
+      "latestPlay": null,
+      "nextPlayIsGoalToGo": false,
+      "nextPlayType": "PLAY_FROM_SCRIMMAGE",
+      "orderSequence": 63,
+      "penaltyOnPlay": false,
+      "playClock": 0,
+      "playReviewStatus": null,
+      "playDeleted": false,
+      "playDescription": "(14:52) D.Watson pass short middle to B.Whiteheart to JAX 46 for 14 yards (V.Miller; D.Gardeck).",
+      "playDescriptionWithJerseyNumbers": "(14:52) 4-D.Watson pass short middle to 86-B.Whiteheart to JAX 46 for 14 yards (51-V.Miller; 47-D.Gardeck).",
+      "playId": 63,
+      "playStats": [
+       {
+        "statId": 4,
+        "yards": 0,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "",
+        "gsisPlayer": {
+         "id": ""
+        }
+       },
+       {
+        "statId": 15,
+        "yards": 14,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "D.Watson",
+        "gsisPlayer": {
+         "id": "32005741-5433-8355-e029-e49022cf4b81"
+        }
+       },
+       {
+        "statId": 111,
+        "yards": 6,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "D.Watson",
+        "gsisPlayer": {
+         "id": "32005741-5433-8355-e029-e49022cf4b81"
+        }
+       },
+       {
+        "statId": 21,
+        "yards": 14,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "B.Whiteheart",
+        "gsisPlayer": {
+         "id": "32005748-4963-9076-aca2-3ff9b42af377"
+        }
+       },
+       {
+        "statId": 115,
+        "yards": 0,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "B.Whiteheart",
+        "gsisPlayer": {
+         "id": "32005748-4963-9076-aca2-3ff9b42af377"
+        }
+       },
+       {
+        "statId": 113,
+        "yards": 8,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "B.Whiteheart",
+        "gsisPlayer": {
+         "id": "32005748-4963-9076-aca2-3ff9b42af377"
+        }
+       },
+       {
+        "statId": 82,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "V.Miller",
+        "gsisPlayer": {
+         "id": "32004d49-4c58-8972-3ccb-221b4a1c244f"
+        }
+       },
+       {
+        "statId": 82,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "D.Gardeck",
+        "gsisPlayer": {
+         "id": "32004741-5212-1450-fa3a-1b30e8e4d1dd"
+        }
+       }
+      ],
+      "playType": "PASS",
+      "possessionTeam": {
+       "id": "10401050-5e38-b907-1be1-55b91b19c057",
+       "abbreviation": "CLE",
+       "nickName": "Browns",
+       "franchise": {
+        "primaryColor": "#FF3C00",
+        "secondaryColor": "#311D00",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+        },
+        "largeTypeColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        },
+        "decorativeElementsColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        }
+       }
+      },
+      "prePlayByPlay": "CLE  1-10  CLE 40",
+      "quarter": 1,
+      "scoringPlay": false,
+      "scoringPlayType": null,
+      "scoringTeam": null,
+      "shortDescription": "(14:52) D.Watson pass short middle to B.Whiteheart to JAX 46 for 14 yards (V.Miller; D.Gardeck).",
+      "specialTeamsPlay": false,
+      "stPlayType": null,
+      "timeOfDay": "2026-09-13T17:04:37.557Z",
+      "yardLine": "CLE 40",
+      "yards": 14,
+      "yardsToGo": 10
+     },
+     {
+      "clockTime": "14:16",
+      "down": 1,
+      "driveNetYards": 32,
+      "drivePlayCount": 5,
+      "driveSequenceNumber": 1,
+      "driveTimeOfPossession": "2:54",
+      "endClockTime": "2026-09-13T17:05:18.873Z",
+      "endYardLine": "",
+      "firstDown": false,
+      "goalToGo": false,
+      "isBigPlay": null,
+      "latestPlay": null,
+      "nextPlayIsGoalToGo": false,
+      "nextPlayType": "PLAY_FROM_SCRIMMAGE",
+      "orderSequence": 88,
+      "penaltyOnPlay": false,
+      "playClock": 0,
+      "playReviewStatus": null,
+      "playDeleted": false,
+      "playDescription": "(14:16) (Shotgun) Q.Judkins up the middle to JAX 42 for 4 yards (A.Armstead).",
+      "playDescriptionWithJerseyNumbers": "(14:16) (Shotgun) 10-Q.Judkins up the middle to JAX 42 for 4 yards (91-A.Armstead).",
+      "playId": 88,
+      "playStats": [
+       {
+        "statId": 10,
+        "yards": 4,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "Q.Judkins",
+        "gsisPlayer": {
+         "id": "32004a55-4435-9919-355b-3e0aef2de56d"
+        }
+       },
+       {
+        "statId": 79,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "A.Armstead",
+        "gsisPlayer": {
+         "id": "32004152-4d05-7964-59d3-546e5e96e618"
+        }
+       }
+      ],
+      "playType": "RUSH",
+      "possessionTeam": {
+       "id": "10401050-5e38-b907-1be1-55b91b19c057",
+       "abbreviation": "CLE",
+       "nickName": "Browns",
+       "franchise": {
+        "primaryColor": "#FF3C00",
+        "secondaryColor": "#311D00",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+        },
+        "largeTypeColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        },
+        "decorativeElementsColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        }
+       }
+      },
+      "prePlayByPlay": "CLE  1-10  JAX 46",
+      "quarter": 1,
+      "scoringPlay": false,
+      "scoringPlayType": null,
+      "scoringTeam": null,
+      "shortDescription": "(14:16) (Shotgun) Q.Judkins up the middle to JAX 42 for 4 yards (A.Armstead).",
+      "specialTeamsPlay": false,
+      "stPlayType": null,
+      "timeOfDay": "2026-09-13T17:05:13.597Z",
+      "yardLine": "JAX 46",
+      "yards": 4,
+      "yardsToGo": 10
+     },
+     {
+      "clockTime": "13:37",
+      "down": 2,
+      "driveNetYards": 32,
+      "drivePlayCount": 5,
+      "driveSequenceNumber": 1,
+      "driveTimeOfPossession": "2:54",
+      "endClockTime": "2026-09-13T17:05:56.480Z",
+      "endYardLine": "",
+      "firstDown": false,
+      "goalToGo": false,
+      "isBigPlay": null,
+      "latestPlay": null,
+      "nextPlayIsGoalToGo": false,
+      "nextPlayType": "PLAY_FROM_SCRIMMAGE",
+      "orderSequence": 110,
+      "penaltyOnPlay": false,
+      "playClock": 0,
+      "playReviewStatus": null,
+      "playDeleted": false,
+      "playDescription": "(13:37) (Shotgun) D.Watson pass short middle to K.Concepcion to JAX 33 for 9 yards (A.Johnson).",
+      "playDescriptionWithJerseyNumbers": "(13:37) (Shotgun) 4-D.Watson pass short middle to 1-K.Concepcion to JAX 33 for 9 yards (6-A.Johnson).",
+      "playId": 110,
+      "playStats": [
+       {
+        "statId": 4,
+        "yards": 0,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "",
+        "gsisPlayer": {
+         "id": ""
+        }
+       },
+       {
+        "statId": 15,
+        "yards": 9,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "D.Watson",
+        "gsisPlayer": {
+         "id": "32005741-5433-8355-e029-e49022cf4b81"
+        }
+       },
+       {
+        "statId": 111,
+        "yards": 4,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "D.Watson",
+        "gsisPlayer": {
+         "id": "32005741-5433-8355-e029-e49022cf4b81"
+        }
+       },
+       {
+        "statId": 21,
+        "yards": 9,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "K.Concepcion",
+        "gsisPlayer": {
+         "id": "3200434f-4e04-6719-61ea-f84c4a062c16"
+        }
+       },
+       {
+        "statId": 115,
+        "yards": 0,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "K.Concepcion",
+        "gsisPlayer": {
+         "id": "3200434f-4e04-6719-61ea-f84c4a062c16"
+        }
+       },
+       {
+        "statId": 113,
+        "yards": 5,
+        "team": {
+         "id": "10401050-5e38-b907-1be1-55b91b19c057",
+         "abbreviation": "CLE",
+         "nickName": "Browns",
+         "franchise": {
+          "primaryColor": "#FF3C00",
+          "secondaryColor": "#311D00",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+          },
+          "largeTypeColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          },
+          "decorativeElementsColor": {
+           "dark": "#FF3C00",
+           "light": "#FF3C00"
+          }
+         }
+        },
+        "playerName": "K.Concepcion",
+        "gsisPlayer": {
+         "id": "3200434f-4e04-6719-61ea-f84c4a062c16"
+        }
+       },
+       {
+        "statId": 79,
+        "yards": 0,
+        "team": {
+         "id": "10402250-89fe-7b86-ef98-9062cd354256",
+         "abbreviation": "JAX",
+         "nickName": "Jaguars",
+         "franchise": {
+          "primaryColor": "#000000",
+          "secondaryColor": "#9F792C",
+          "tertiaryColor": "#FFFFFF",
+          "currentLogo": {
+           "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/JAX"
+          },
+          "largeTypeColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          },
+          "decorativeElementsColor": {
+           "dark": "#9F792C",
+           "light": "#000000"
+          }
+         }
+        },
+        "playerName": "A.Johnson",
+        "gsisPlayer": {
+         "id": "32004a4f-4806-1167-a48a-d4b74b81a5a9"
+        }
+       }
+      ],
+      "playType": "PASS",
+      "possessionTeam": {
+       "id": "10401050-5e38-b907-1be1-55b91b19c057",
+       "abbreviation": "CLE",
+       "nickName": "Browns",
+       "franchise": {
+        "primaryColor": "#FF3C00",
+        "secondaryColor": "#311D00",
+        "tertiaryColor": "#FFFFFF",
+        "currentLogo": {
+         "url": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/CLE"
+        },
+        "largeTypeColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        },
+        "decorativeElementsColor": {
+         "dark": "#FF3C00",
+         "light": "#FF3C00"
+        }
+       }
+      },
+      "prePlayByPlay": "CLE  2-6  JAX 42",
+      "quarter": 1,
+      "scoringPlay": false,
+      "scoringPlayType": null,
+      "scoringTeam": null,
+      "shortDescription": "(13:37) (Shotgun) D.Watson pass short middle to K.Concepcion to JAX 33 for 9 yards (A.Johnson).",
+      "specialTeamsPlay": false,
+      "stPlayType": null,
+      "timeOfDay": "2026-09-13T17:05:52.407Z",
+      "yardLine": "JAX 42",
+      "yards": 9,
+      "yardsToGo": 6
+     }
+    ]
+   }
+  }
+ }
+}

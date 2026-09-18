@@ -6,6 +6,11 @@ from sportsdataverse.cfb.cfb_schedule import (
     espn_cfb_schedule,
     most_recent_cfb_season,
 )
+from tests.conftest import skip_if_no_live
+
+# Every test here fetches a live ESPN scoreboard/calendar -- there is nothing here
+# but the live endpoints, so the whole module is gated rather than mocked.
+pytestmark = skip_if_no_live
 
 
 @pytest.fixture()

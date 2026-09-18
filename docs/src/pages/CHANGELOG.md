@@ -4,6 +4,8 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release](#fixed--fantasy-football-ids-are-strings-pinned-instead-of-inferred-from-each-dynastyprocess-release)
+  - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
+  - [Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`](#changed--cfb_returning_production-measures-defense-from-play-participants-and-weights-it-into-overall_returning)
   - [Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants](#fixed--the-usage-box-glued-shared-tackles-into-one-phantom-player-and-read-positions-only-from-participants)
   - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
   - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
@@ -294,6 +296,56 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+### Added — CFB kick distances and bare-punt returns derived from field position, with provenance
+
+ESPN's 2004 play text states no kick distance at all ("Punt by Vinnie Burns (VT)
+returned 15 yards by Reggie Bush (USC) to the Trojans 21.", "Trojans kickoff,
+touchback by Hokies."), so `yds_punted` was 2% filled and `yds_kickoff` empty for the
+season; and 29% of 2023 punts read only "Alex Weir punt for 44 yds", leaving
+`yds_punt_return` null. `CFBPlayProcess` now fills those nulls from ESPN's own field
+position at the end of the yardage step, and three new columns say where every value
+came from: `yds_punted_source`, `yds_kickoff_source`, `yds_punt_return_source` --
+`"text"` (present before, parsed or a flag convention), `"derived"`, or null. A
+parsed value is never changed.
+
+- **Punt distance**: `start.yardsToEndzone - landing`, `landing = (100 -
+  end.yardsToEndzone) - yds_punt_return`; a touchback is the distance to the goal line
+  (the text convention: 98.9-100% of stated touchback punts per sampled season).
+- **Kickoff distance**: the kick spot minus the landing, touchback = the spot. The spot
+  is ESPN's `start.yardsToEndzone` from 2005 (65 from the 35, and 70 in 2007-2011 when
+  kickoffs moved to the 30 -- a fixed 65 is exact on 0.06% of 2009 non-touchback
+  kickoffs). 2004
+  stores the catch spot there instead, so 2004 assumes the 35, requires the computed
+  landing to equal ESPN's catch spot, and skips kicks after a flag or safety.
+- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the text
+  describes no outcome, and the next snap starts at that spot with the receiving team.
+  Returner names are not recoverable.
+- **Never derived**: penalties, fumbles, muffs, blocks, laterals, safeties,
+  touchdowns, onside kicks, out-of-bounds *kickoffs*, "for a 1ST down", unchanged
+  possession, out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a
+  no-return punt ending exactly at the 20 (a 2004 touchback reads the same), an
+  end-zone punt with the receiver at the 20, and a derived return of exactly 5 or 15
+  (what an unrecorded flag looks like).
+- A punt out of bounds **is** derived, unlike a kickoff out of bounds: a kickoff out of
+  bounds is spotted by rule (the receiving team's 35, stored as a 40-yard return), so
+  ESPN's end spot is a placement, while a punt out of bounds is dead where it crossed
+  the sideline -- the landing spot. On the 22 `punt_oob` rows of a 2005-2025 sample the
+  field position reproduces the stated distance exactly 22 times.
+
+Validated offline on 1,749 stored games (250 per season, 2004/2005/2009/2015/2023-2025;
+one 2009 game has no play-by-play).
+With the parsed value hidden, derived punt distances match the text on 98.7-99.3% of
+derived punts in 2005/2009/2015 (87.7-91.5% in 2023-2025, where the stated distance
+already disagrees with the field position on 10-24% of punts) and kickoff distances on 99.3-99.7%
+(95.8-99.2% in 2023-2025). Simulated bare punts return the parsed yardage exactly on
+95.2-97.9% of derived returns in 2005-2015 and 82.2-87.4% in 2023-2025, with 0.9-3.1%
+of unreturned punts given a return. Against ESPN's box score, which neither the text
+nor the field position feeds: 2004 team-game punting yards match exactly as often
+with derived distances (23.6%) as 2005's parsed distances do (22.9%), and on the 105
+2023 team-games that gained a derived return, 102 moved closer to the box's punt-return
+yards and 3 farther. Sample fill: 2004 `yds_punted` 1.9% -> 86.2% and `yds_kickoff`
+0% -> 90.6%; 2023 `yds_punt_return` 68.9% -> 76.4%.
 
 ### Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`
 

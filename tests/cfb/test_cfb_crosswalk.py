@@ -16,6 +16,7 @@ import polars as pl
 import pytest
 
 import sportsdataverse.cfb.cfb_crosswalk as cw
+from tests.conftest import load_fixture
 from sportsdataverse.cfb.cfb_crosswalk import (
     _ascii_fold,
     _iso_date,
@@ -723,9 +724,43 @@ def test_fox_cfb_schedule_full_season_unions_and_dedups(monkeypatch: pytest.Monk
     assert df["game_id"].n_unique() == df.height
 
 
+def _patch_espn_roster(monkeypatch: pytest.MonkeyPatch, frame: pl.DataFrame) -> list[str]:
+    """Patch the crosswalk's ESPN roster leg (http fetch + parser) with ``frame``.
+
+    Returns the list the fetched URLs are appended to, so a caller can assert the
+    host/scheme actually requested.
+    """
+    seen: list[str] = []
+
+    def fake_get(url: str, params: Any = None, **kwargs: Any) -> Dict[str, Any]:
+        seen.append(url)
+        return {"athletes": []}
+
+    monkeypatch.setattr(cw, "_get", fake_get)
+    monkeypatch.setattr(cw, "parse_team_roster", lambda raw, **k: frame)
+    return seen
+
+
+def test_espn_roster_uses_the_http_host(monkeypatch: pytest.MonkeyPatch) -> None:
+    """ESPN's https host 403s from datacenter egress and every other ESPN leg of this
+    module is plain http, so the roster leg must be too -- pinned against a real
+    captured CFB roster payload run through the real parser."""
+    seen: list[str] = []
+
+    def fake_get(url: str, params: Any = None, **kwargs: Any) -> Dict[str, Any]:
+        seen.append(url)
+        return load_fixture("espn", "team_roster_cfb")
+
+    monkeypatch.setattr(cw, "_get", fake_get)
+    out = cw._espn_roster(194)
+    assert seen == ["http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194/roster"]
+    assert not any(u.startswith("https://") for u in seen)
+    assert out and all(r["person_key"] and r["athlete_id"] is not None for r in out)
+
+
 def test_espn_roster_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]})
-    monkeypatch.setattr(cw, "espn_cfb_team_roster", lambda tid, **k: fake)
+    _patch_espn_roster(monkeypatch, fake)
     out = cw._espn_roster(194)
     assert out == [
         {
@@ -1033,12 +1068,9 @@ def test_cfb_schedule_crosswalk_full_season_end_to_end(monkeypatch: pytest.Monke
 
 
 def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(
-        cw,
-        "espn_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame(
-            {"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}
-        ),
+    _patch_espn_roster(
+        monkeypatch,
+        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
     )
     monkeypatch.setattr(
         cw,
@@ -1054,12 +1086,9 @@ def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_cfb_rosters_crosswalk_three_way(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(
-        cw,
-        "espn_cfb_team_roster",
-        lambda tid, **k: pl.DataFrame(
-            {"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}
-        ),
+    _patch_espn_roster(
+        monkeypatch,
+        pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}),
     )
     monkeypatch.setattr(
         cw,
@@ -1211,3 +1240,39 @@ def test_live_cfb_schedule_crosswalk_full_season() -> None:
     # + Fox bowls segment + Yahoo postseason weeks)
     jan = espn.filter(pl.col("espn_date").str.slice(0, 7) >= "2025-12")
     assert jan.filter(pl.col("matched_sources") == "espn+fox+yahoo").height > 10
+
+
+def test_schedule_crosswalk_espn_leg_uses_plain_http_site_api(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every ESPN request the schedule crosswalk makes (calendar + weekly
+    scoreboards) goes to ``http://site.api.espn.com`` -- the host the rest of
+    sdv-py uses -- not the https host, which 403s from some datacenter egress.
+    The calendar body is the real 2024 capture; scoreboards return no events."""
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_schedule as sched
+
+    calendar = json.loads(
+        (Path(__file__).resolve().parents[1] / "fixtures" / "cfb_schedule" / "cfb_calendar_2024.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    urls: list[str] = []
+
+    class _Resp:
+        def __init__(self, body: Dict[str, Any]) -> None:
+            self._body = body
+
+        def json(self) -> Dict[str, Any]:
+            return self._body
+
+    def fake_download(url: str, params: Any = None, **kwargs: Any) -> _Resp:
+        urls.append(url)
+        return _Resp(calendar if params and "week" not in params else {"events": []})
+
+    monkeypatch.setattr(sched, "download", fake_download)
+    cfb_schedule_crosswalk(2024, providers=("espn",))
+    cfb_schedule_crosswalk(2024, 5, providers=("espn",))
+    assert len(urls) == 20  # calendar + 16 regular weeks + bowls + CFP, then the week-5 slate
+    prefix = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
+    assert all(u == prefix for u in urls), sorted(set(urls))

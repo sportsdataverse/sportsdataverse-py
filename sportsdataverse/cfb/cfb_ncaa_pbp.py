@@ -31,42 +31,206 @@ if TYPE_CHECKING:
 
 __all__ = ["DRIVE_TITLES_SCHEMA", "PBP_SCHEMA", "parse_cfb_ncaa_drive_titles", "parse_cfb_ncaa_pbp"]
 
-# NCAA official "Last,First", incl. suffixes ("Wilborn Jr.,James", "Jordan III,Tre").
-_NAME = r"[A-Z][\w.'\-]+(?:\s(?:Jr|Sr|II|III|IV)\.?)?,\s?[A-Z][\w.'\-]+"
+# A player name, in any of the page generations' forms (case-SENSITIVE inside the
+# case-insensitive play regexes: names are capitalised, the narrative is not):
+#   * official "Last[ Suffix],First" -- "Wilborn Jr.,James", "Smith, Danny", "McKENZIE, D"
+#   * 2019-era "First Last" -- "Joe Burrow", "C. Ed.-Helaire", "K. Duncan Jr.", or a lone
+#     surname ("ALEXANDER-STEVE"); anchored by the play verb that follows it
+#   * 2025 jersey style -- "#95 K.Kimble"
+# A suffix can be space- or comma-separated from the surname: the pages print
+# "Brown V,Samuel", "Didio, Jr.,Mark" and (with no first name at all) "GILLIAM, Jr.".
+_SUFFIX = r"(?:,?\s(?:Jr|Sr|II|III|IV|V)\.?)?"
+_TOKEN = r"[A-Z][A-Za-z.'\-]*"
+# The bare-token form ends on a non-word char: without that guard it reads the side code
+# out of a yard-line token ("thrown to NCSU50" -> receiver "NCSU").
+_NAME = (
+    rf"(?-i:[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}|#\d{{1,2}}\s{_TOKEN}"
+    rf"|{_TOKEN}(?:\s{_TOKEN}){{0,2}}{_SUFFIX}(?!\w))"
+)
+_LAST_FIRST_RE = re.compile(rf"^[A-Z][A-Za-z.'\-]+{_SUFFIX},\s?{_TOKEN}$")
 
-# Yard-line side code. NOT upper-case only: "Ric25" (Rice), "W&M25" (William &
-# Mary) -- an [A-Z]-only class silently drops every such team's drives/plays.
-_SIDE = r"[A-Za-z&]{1,8}"  # abbrev/mixed-case/&, or a nickname ("BEARS38", "SPARTANS25")
+
+def _clean_name(name: "str | None") -> "str | None":
+    """Drop the sentence period the regex swallows ("DRAYTON, Matt." / "Hodge, C..") -- an
+    initial keeps its own ("Covington, J.")."""
+    if not name:
+        return name
+    while name.endswith(".."):
+        name = name[:-1]
+    last = re.split(r"[,\s]+", name)[-1]
+    letters = re.sub(r"[^A-Za-z]", "", last)
+    # count LETTERS, not characters: "D.J." is two initials, not a 3-letter word.
+    # "Jr."/"Sr." own their period; a roman-numeral suffix does not, so a
+    # terminal one is the sentence's ("Wilbert Boyd IV.").
+    keep = len(letters) < 3 and letters.upper() not in ("II", "IV", "V")
+    return name if keep or not name.endswith(".") else name[:-1]
+
+
+# Yard-line token = side code + yard number (0-50). A code is NOT a fixed character
+# class: "Ric25", "W&M25", nicknames ("SPARTANS25"), digits ("SFA2" + 25 is printed
+# "SFA225"), hyphens ("SU-ETSU25"), "ST. FRAN20", "MONT_ST25", "HOW(3)30"; and play
+# text abbreviates differently from the drive headers ("SDSU00" / "Hawaii15" / "FAU 47"
+# against "SDS25" / "HAW25" / "FAU25"). Tokens are therefore captured whole and split
+# against the game's own codes (:func:`_side_codes`, :func:`_split_yard_line`) --
+# the one side-code rule shared by the parser and ``cfb_ncaa_cfbfastr``.
+_SIDE_CHARS = r"[\w&.'~()\-]"
+_YL_TOKEN = rf"{_SIDE_CHARS}+(?: [A-Za-z]{_SIDE_CHARS}*)? ?\d{{1,2}}"
 
 # h5 drive title: "{team} {RESULT} {clock},{yardline}, {n} plays, {yards} yards, {top} {a} - {h}".
 # RESULT is an OPTIONAL all-caps token (TD/FG/FGA/PUNT/INT/FUMB/DOWNS/HALF/...);
 # anchoring on that keeps multi-word team names intact when it is missing (a
 # lazy `.+?` team + mandatory result donates "Carolina" -> "East Carolina" = "East").
 _DRIVE_RE = re.compile(
-    rf"^(?P<team>.+?)(?:\s+(?P<result>[A-Z/]{{2,10}}))?\s+"
-    rf"(?P<start_clock>\d+:\d+),(?P<start_yard_line>{_SIDE}\d+),\s+"
+    r"^(?P<team>.+?)(?:\s+(?P<result>[A-Z/]{2,10}))?\s+"
+    r"(?P<start_clock>\d+:\d+),(?P<start_yard_line>[^,]*\d),\s+"
     r"(?P<n_plays>\d+)\s+plays?,\s+(?P<yards>-?\d+)\s+yards?,\s+(?P<top>\d+:\d+)\s+"
     r"(?P<score_away>\d+)\s*-\s*(?P<score_home>\d+)\s*$"
 )
 _DD_RE = re.compile(
-    rf"^(?P<down>1st|2nd|3rd|4th)\s+&\s+(?P<distance>\d+|Goal)\s+at\s+(?P<yard_line>{_SIDE}\d+)",
+    r"^(?P<down>1st|2nd|3rd|4th)\s+&\s+(?P<distance>\d+|Goal)\s+at\s+(?P<yard_line>\S.*\d)\s*$",
     re.I,
 )
 _DOWN = {"1st": 1, "2nd": 2, "3rd": 3, "4th": 4}
-_YL_SPLIT_RE = re.compile(rf"^({_SIDE})(\d+)$")
+
+
+def _yl_candidates(token: str) -> "list[tuple[str, int]]":
+    """(code, yard) splits of a token: the yard is its last 2 or 1 digits (<= 50)."""
+    out = []
+    for k in (2, 1):
+        num = token[-k:]
+        code = token[:-k].rstrip()
+        if len(token) > k and num.isdigit() and int(num) <= 50 and re.search("[A-Za-z]", code):
+            out.append((code, int(num)))
+    return out
+
+
+def _norm_code(code: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", code.lower())
+
+
+def _side_codes(tokens: "list[str]") -> "list[str]":
+    """The game's (up to two) side codes, from its drive-header/down-distance tokens.
+
+    Greedy cover: the code that explains the most tokens wins, then the best code
+    among the tokens it leaves (ties -> the shorter code). "SFA225"/"SFA232"/"SFA20"
+    all share "SFA2" but not "SFA" (225 > 50) nor "SFA22"/"SFA23".
+    """
+    remaining = [t for t in tokens if _yl_candidates(t)]
+    codes: "list[str]" = []
+    while remaining and len(codes) < 2:
+        counts: "dict[str, int]" = {}
+        for t in remaining:
+            for c, _ in _yl_candidates(t):
+                counts[c] = counts.get(c, 0) + 1
+        best = max(counts.items(), key=lambda kv: (kv[1], -len(kv[0])))[0]
+        codes.append(best)
+        remaining = [t for t in remaining if best not in (c for c, _ in _yl_candidates(t))]
+    return codes
+
+
+def _match_code(code: str, codes: "list[str]") -> "str | None":
+    """The game side code a text code names: the same code (case/punctuation aside) or a
+    unique prefix either way ("SDSU" -> "SDS", "Hawaii" -> "HAW")."""
+    n = _norm_code(code)
+    for c in codes:
+        if _norm_code(c) == n:
+            return c
+    hits = [c for c in codes if n.startswith(_norm_code(c)) or _norm_code(c).startswith(n)]
+    return hits[0] if len(hits) == 1 else None
+
+
+#: plays snapped from the drive offense's own spot -- the only rows that may vote on a
+#: team's own yard-line side (see :func:`_own_side_codes`).
+_SCRIMMAGE_TYPES = ("rush", "pass", "sack", "kneel", "punt", "field_goal")
+
+
+def _own_side_codes(rows: "list[dict]") -> "dict[str, str]":
+    """Each offense's own yard-line side code (e.g. Merrimack -> 'MC').
+
+    Drives overwhelmingly start in the offense's own territory, so of the two
+    possible (team name -> side code) assignments, pick the one under which more
+    first-SNAPS-of-drive sit on the offense's own side. Only scrimmage plays vote: a
+    drive's first row is usually the kickoff, which sits in the RECEIVING team's
+    drive but is spotted on the KICKING team's side. Drives with no scrimmage play
+    cast no vote. Rows need ``offense``, ``yard_line_side``, ``play_type``,
+    ``drive_number``.
+
+    A tied vote is broken by that same kickoff geometry: every kickoff votes for the
+    assignment under which the drive offense's own side is NOT the kickoff's side.
+    With no evidence either way the alphabetical pairing (sorted teams -> sorted
+    sides) is returned, so the result never depends on hash order (``PYTHONHASHSEED``).
+    """
+    teams = sorted({r["offense"] for r in rows if r["offense"]})
+    sides = sorted({r["yard_line_side"] for r in rows if r["yard_line_side"]})
+    if len(teams) != 2 or len(sides) != 2:
+        return {}
+    firsts: "dict[int, dict]" = {}
+    for r in rows:
+        if r["yard_line_side"] and r["play_type"] in _SCRIMMAGE_TYPES:
+            firsts.setdefault(r["drive_number"], r)
+    a = {teams[0]: sides[0], teams[1]: sides[1]}
+    b = {teams[0]: sides[1], teams[1]: sides[0]}
+    score_a = sum(1 for r in firsts.values() if a.get(r["offense"]) == r["yard_line_side"])
+    score_b = sum(1 for r in firsts.values() if b.get(r["offense"]) == r["yard_line_side"])
+    if score_a == score_b:
+        kickoffs = [r for r in rows if r["play_type"] == "kickoff" and r["yard_line_side"] and r["offense"] in a]
+        score_a = sum(1 for r in kickoffs if a[r["offense"]] != r["yard_line_side"])
+        score_b = sum(1 for r in kickoffs if b[r["offense"]] != r["yard_line_side"])
+    return a if score_a >= score_b else b
+
+
+def _split_yard_line(token: "str | None", codes: "list[str]") -> "tuple[str | None, int] | None":
+    """Split a yard-line token into (game side code, yard) -> ``None`` when unresolvable.
+
+    Matches a candidate code against ``codes`` case/punctuation-insensitively, then by a
+    unique prefix ("SDSU" -> "SDS", "Hawaii" -> "HAW"). With no ``codes`` the 2-digit
+    split wins. Midfield ("50") has no side: ``(None, 50)``.
+    """
+    if not token:
+        return None
+    if token.strip() == "50":
+        return None, 50
+    cands = _yl_candidates(token)
+    for c, n in cands:
+        for code in codes:
+            if _norm_code(c) == _norm_code(code):
+                return code, n
+    for c, n in cands:
+        hits = [
+            code
+            for code in codes
+            if _norm_code(c).startswith(_norm_code(code)) or _norm_code(code).startswith(_norm_code(c))
+        ]
+        if len(hits) == 1:
+            return hits[0], n
+    if codes or not cands:
+        return None
+    return cands[0]
+
 
 # --- play_text field regexes ----------------------------------------------
-_CLOCK_RE = re.compile(r"^\((\d{1,2}:\d{2})\)\s*")  # some games prefix each play with "(MM:SS)"
-_FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol)\s+")
-_YARDS_RE = re.compile(r"for (\d+) yards? (gain|loss)", re.I)
-_YARDS_PLAIN_RE = re.compile(r"for (\d+) yards? to the", re.I)  # completed pass / 0-yard run: positive
-_END_YL_RE = re.compile(rf"to the ({_SIDE}\d+)")
+# some games prefix each play with "(MM:SS)" / "Clock MM:SS,"
+_CLOCK_RE = re.compile(r"^(?:\((\d{1,2}:\d{2})\)|Clock (\d{1,2}:\d{2}),)\s*")
+_REVIEW_RE = re.compile(r"\s*(?:The previous play is under|\(Original Play:)")
+_RECOVERED_BY_RE = re.compile(r"recovered by (\S+) ")
+# 2025 words, or the 2019-era codes "SH,"/"SHOT,"/"SG,"/"SGUN,"/"NHSG,"/"NH,"/"PSTL,"
+_FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol|(?:SHOT|SGUN|NHSG|PSTL|SG|SH|NH),)\s+")
+# The play's yardage is its FIRST "for ..." clause: "for 7 yards gain" / "for 5 yards
+# loss" (2025), "for loss of 4 yards" / "for 13 yards" (2019-era), "for no gain".
+# Leftmost wins, so a later fumble-advance clause ("..., recovered by VU Smith at
+# VU36, Smith for 1 yard to the VU37") is not read as the play's gain.
+_YARDS_RE = re.compile(
+    r"for (?:(?P<n>\d+) yards? (?P<dir>gain|loss)|(?:a )?loss of (?P<loss>\d+) yards?|(?P<plain>\d+) yards?\b|no gain)",
+    re.I,
+)
+# "to the VU37" -- or "to the 50 yardline" (midfield has no side code; emitted as "50")
+_END_YL_RE = re.compile(rf"to the (?:(50) yard ?line|({_YL_TOKEN})(?!\w))")
 _RUSH_RE = re.compile(
     rf"(?P<rusher>{_NAME}) rush(?:es)?(?:\s+(?P<dir>left|right|middle|up the middle))?",
     re.I,
 )
 _PASS_RE = re.compile(
-    rf"(?P<passer>{_NAME}) pass (?P<result>complete|incomplete|intercepted)"
+    rf"(?P<passer>{_NAME})(?-i:(?:\s[a-z]+){{0,2}}) pass (?P<result>complete|incomplete|intercepted)"
     rf"(?:\s+(?P<depth>short|deep))?(?:\s+(?P<dir>left|right|middle))?"
     rf"(?:.*?\bto\s+(?P<receiver>{_NAME}))?",
     re.I,
@@ -79,7 +243,34 @@ _PUNT_RE = re.compile(
 _SACK_RE = re.compile(rf"(?P<passer>{_NAME}) sacked", re.I)
 _FG_RE = re.compile(rf"(?P<kicker>{_NAME}) field goal", re.I)
 _XP_RE = re.compile(rf"(?P<kicker>{_NAME}) kick attempt", re.I)
-_POSSESSION_RE = re.compile(rf"^{_SIDE} ball on {_SIDE}\d+")  # "AKR ball on AKR20." / "Ore ball on Ore25." drive marker
+#: play kinds by text marker, in tie-break order: the FIRST marker in the text types the
+#: play, so a row that prints the touchdown and its PAT together ("... TOUCHDOWN, clock
+#: 04:29, HARRIS, Clayton kick attempt good.") is the scoring play, not the kick. A 2-pt
+#: "rush attempt" also contains "rush", hence the order; "rush" needs its own spaces so a
+#: surname ("Rush,Jarvis pass ...") is not a verb.
+_KIND_MARKERS = (
+    ("kickoff", ("kickoff",)),
+    ("punt", ("punt",)),
+    ("field_goal", ("field goal",)),
+    ("extra_point", ("kick attempt", "extra point")),
+    ("two_point", ("pass attempt", "run attempt", "rush attempt")),
+    ("sack", ("sacked",)),
+    ("pass", ("pass complete", "pass incomplete", "pass intercepted")),
+    ("kneel", ("kneel",)),
+    ("rush", (r"(?<=\s)rush(?:es)?\s",)),
+)
+
+
+def _play_kind(tl: str) -> "str | None":
+    best: "tuple[int, int, str] | None" = None
+    for prio, (kind, markers) in enumerate(_KIND_MARKERS):
+        hits = [m.start() for m in (re.search(x, tl) for x in markers) if m]
+        if hits and (best is None or min(hits) < best[0]):
+            best = (min(hits), prio, kind)
+    return best[2] if best else None
+
+
+_POSSESSION_RE = re.compile(r"^[^,]{1,16}? ball on [^,]*\d")  # "AKR ball on AKR20." / "Ore ball on Ore25." drive marker
 _TWOPT_RE = re.compile(
     rf"(?P<player>{_NAME}) (?P<kind>pass|run|rush) attempt (?P<result>Successful|failed)",
     re.I,
@@ -87,9 +278,10 @@ _TWOPT_RE = re.compile(
 _KICK_YDS_RE = re.compile(r"kickoff (\d+) yards", re.I)
 _PUNT_YDS_RE = re.compile(r"punt (\d+) yards", re.I)
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
-_FG_DETAIL_RE = re.compile(r"field goal attempt from (\d+) yards\s+(GOOD|NO GOOD)", re.I)
+# "from 24 yards GOOD" (2025) / "from 24 GOOD" (2019-era)
+_FG_DETAIL_RE = re.compile(r"field goal attempt from (\d+)(?: yards)?\s+(GOOD|NO GOOD|BLOCKED)", re.I)
 _PENALTY_RE = re.compile(
-    rf"PENALTY (?P<team>[A-Z]{{2,4}}) (?P<type>[A-Za-z][A-Za-z /'\-]*?)"
+    rf"PENALTY (?P<team>{_SIDE_CHARS}{{2,10}}) (?P<type>[A-Za-z][A-Za-z /'\-]*?)"
     rf"(?:\s+\((?P<player>{_NAME})\))?\s+(?P<yards>\d+) yards",
     re.I,
 )
@@ -139,24 +331,62 @@ def _spaces(text: str) -> str:
 
 
 def _yards_gained(text: str) -> "int | None":
+    """Signed yards of the play's FIRST ``for N yards`` clause -- the ball carrier's gain.
+
+    After a fumble or lateral the text carries a second clause for the recovering /
+    trailing runner; it is deliberately ignored, matching cfbfastR. The published
+    cfbfastR pbp parquet carries no ``yards_gained`` column: the column checked was
+    ESPN's ``statYardage``, which equals the FIRST clause on 336 of the 363 decisive
+    2023-24 scrimmage fumble continuations (92.6%; 18 match the last clause, and the
+    remainder are ``statYardage`` adjusted for an enforced penalty).
+    """
     m = _YARDS_RE.search(text)
-    if m:
-        return int(m.group(1)) * (1 if m.group(2).lower() == "gain" else -1)
-    m = _YARDS_PLAIN_RE.search(text)
-    if m:
-        return int(m.group(1))
-    if re.search(r"for no gain", text, re.I):
-        return 0
-    return None
+    if not m:
+        return None
+    if m.group("n"):
+        return int(m.group("n")) * (1 if m.group("dir").lower() == "gain" else -1)
+    if m.group("loss"):
+        return -int(m.group("loss"))
+    return int(m.group("plain")) if m.group("plain") else 0
 
 
 def _tacklers(text: str) -> "tuple[str | None, str | None]":
+    """The (up to two) tacklers in the play's last parenthesised group.
+
+    2025 pages separate them with ";". 2019-era pages arrive damaged: the separator is
+    a mangled ":" ("MORGAN, D.J.3aPAUL, Keyshawn") or gone entirely, one name running
+    into the next ("Smith, JohnDOE, Jane", "Kristian FultonJaCoby Stevens"). "Last, First"
+    names can still be pulled apart at the "Last, " that starts the next one; "First Last"
+    names cannot (a CamelCase first name looks the same), so a comma-less group is trusted
+    only as a single name and is otherwise left null rather than emitted as garbage.
+    """
     pre = text.split("PENALTY")[0]  # tacklers belong to the play, before any penalty note
-    cand = [g for g in re.findall(r"\(([^)]+)\)", pre) if "," in g and not g.startswith(("H:", "LS:"))]
+    cand = [
+        g.strip()
+        for g in re.findall(r"\(([^()]+)\)", pre)
+        if not g.startswith(("H:", "LS:")) and not g.strip().isdigit()
+    ]
     if not cand:
         return None, None
-    names = [n.strip() for n in re.split(r";\s*", cand[-1]) if n.strip()]
-    return (names[0] if names else None), (names[1] if len(names) > 1 else None)
+    group = cand[-1]
+    if "," not in group:
+        one = re.fullmatch(rf"{_TOKEN}(?:\s{_TOKEN})?{_SUFFIX}", group) is not None  # one "First Last[ Jr.]"
+        return (group if one else None), None
+    pieces = [
+        x.strip()
+        for x in re.split(r";\s*|(?<=[\w.])3a(?=[A-Z])|(?<=[a-z.])(?=[A-Z][A-Za-z.'\-]*,\s?[A-Z])", group)
+        if x.strip()
+    ]
+    # a piece without a comma is a "Last, First" cut inside its surname ("Mc|Clellan, Matt")
+    names: "list[str]" = []
+    for piece in pieces:
+        if names and "," not in names[-1]:
+            names[-1] += piece
+        else:
+            names.append(piece)
+    if not all(_LAST_FIRST_RE.match(n) for n in names):
+        return None, None
+    return names[0], (names[1] if len(names) > 1 else None)
 
 
 def _decompose_play_text(text: str) -> "dict":
@@ -169,6 +399,10 @@ def _decompose_play_text(text: str) -> "dict":
     if fm:
         out["formation"] = fm.group(1)
         text = text[fm.end() :]
+    # a replay review appends its note and, when overturned, reprints the ORIGINAL call
+    # ("... PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)"); only the ruling before
+    # the note is the play (play_text keeps the whole string)
+    text = _REVIEW_RE.split(text, 1)[0]
     tl = text.lower()
 
     # non-play markers -- classify + return early (no per-play fields apply)
@@ -187,7 +421,8 @@ def _decompose_play_text(text: str) -> "dict":
 
     # universal flags (case-sensitive caps markers)
     out["is_first_down"] = "1ST DOWN" in text
-    out["is_touchdown"] = "TOUCHDOWN" in text
+    # "TOUCHDOWN nullified by penalty" scored nothing
+    out["is_touchdown"] = "TOUCHDOWN" in text and "TOUCHDOWN nullified" not in text
     out["is_safety"] = "SAFETY" in text
     out["is_fumble"] = "FUMBLE" in text.upper()
     out["out_of_bounds"] = "out of bounds" in tl
@@ -198,9 +433,9 @@ def _decompose_play_text(text: str) -> "dict":
     elif "INTERCEPT" in text.upper():
         out["is_turnover"], out["turnover_type"] = True, "interception"
     elif out["is_fumble"] and "recovered by" in tl:
-        out["turnover_type"] = "fumble"
+        out["turnover_type"] = "fumble"  # settled per game once the side codes are known
     out["tackler_1"], out["tackler_2"] = _tacklers(text)
-    out["end_yard_line"] = (_END_YL_RE.findall(text) or [None])[-1]
+    out["end_yard_line"] = next((a or b for a, b in reversed(_END_YL_RE.findall(text))), None)
     pm = _PENALTY_RE.search(text)
     if pm:
         out.update(
@@ -214,7 +449,8 @@ def _decompose_play_text(text: str) -> "dict":
         out["penalty_flag"] = "PENALTY" in text
 
     # play type + type-specific fields
-    if "kickoff" in tl:
+    kind = _play_kind(tl)
+    if kind == "kickoff":
         out["play_type"] = "kickoff"
         m = _KICKOFF_RE.search(text)
         if m:
@@ -226,7 +462,7 @@ def _decompose_play_text(text: str) -> "dict":
         ry = _RET_YDS_RE.search(text)
         out["kick_yards"] = int(ky.group(1)) if ky else None
         out["return_yards"] = int(ry.group(1)) if ry else None
-    elif "punt" in tl:
+    elif kind == "punt":
         out["play_type"] = "punt"
         m = _PUNT_RE.search(text)
         if m:
@@ -236,7 +472,7 @@ def _decompose_play_text(text: str) -> "dict":
         ry = _RET_YDS_RE.search(text)
         out["punt_yards"] = int(py.group(1)) if py else None
         out["return_yards"] = int(ry.group(1)) if ry else None
-    elif "field goal" in tl:
+    elif kind == "field_goal":
         out["play_type"] = "field_goal"
         m = _FG_RE.search(text)
         if m:
@@ -247,37 +483,39 @@ def _decompose_play_text(text: str) -> "dict":
                 int(fg.group(1)),
                 fg.group(2).upper() == "GOOD",
             )
-    elif "kick attempt" in tl or "extra point" in tl:
+    elif kind == "extra_point":
         out["play_type"] = "extra_point"
         m = _XP_RE.search(text)
         if m:
             out["kicker"] = m.group("kicker")
-    elif "pass attempt" in tl or "run attempt" in tl or "rush attempt" in tl:
+    elif kind == "two_point":
         out["play_type"] = "two_point"  # 2-pt conversion ("... attempt Successful/failed")
         tm = _TWOPT_RE.search(text)
         if tm:
             out["passer" if tm.group("kind").lower() == "pass" else "rusher"] = tm.group("player")
-    elif "sacked" in tl:
+    elif kind == "sack":
         out["play_type"] = "sack"
         out["yards_gained"] = _yards_gained(text)
         m = _SACK_RE.search(text)
         if m:
             out["passer"] = m.group("passer")
-    elif "pass complete" in tl or "pass incomplete" in tl or "pass intercepted" in tl:
+    elif kind == "pass":
         out["play_type"] = "pass"
+        # the result is in the text whether or not the passer's name matches _NAME
+        # (2019 pages print "First Last", which the "Last,First" pattern cannot)
+        complete = "pass complete" in tl
+        out["pass_complete"] = complete
+        out["yards_gained"] = _yards_gained(text) if complete else 0
         m = _PASS_RE.search(text)
         if m:
             out["passer"] = m.group("passer")
             out["receiver"] = m.groupdict().get("receiver")
             out["pass_depth"] = (m.groupdict().get("depth") or "").lower() or None
             out["pass_direction"] = (m.groupdict().get("dir") or "").lower() or None
-            complete = m.group("result").lower() == "complete"
-            out["pass_complete"] = complete
-            out["yards_gained"] = _yards_gained(text) if complete else 0
-    elif "kneel" in tl:
+    elif kind == "kneel":
         out["play_type"] = "kneel"
         out["yards_gained"] = _yards_gained(text)
-    elif "rush" in tl:
+    elif kind == "rush":
         out["play_type"] = "rush"
         out["yards_gained"] = _yards_gained(text)
         m = _RUSH_RE.search(text)
@@ -288,6 +526,8 @@ def _decompose_play_text(text: str) -> "dict":
         out["play_type"] = "penalty"
     else:
         out["play_type"] = "unknown"
+    for k in ("passer", "rusher", "receiver", "kicker", "punter", "returner", "penalty_player"):
+        out[k] = _clean_name(out[k])
     return out
 
 
@@ -398,6 +638,7 @@ def parse_cfb_ncaa_pbp(
     rows: "list[dict]" = []
     drive_number = 0
     cid = str(contest_id) if contest_id is not None else None
+    start_tokens: "list[str]" = []
 
     for container in soup.select("div.drives"):
         drive: "dict" = {}
@@ -408,6 +649,8 @@ def parse_cfb_ncaa_pbp(
             if child.name == "h5":
                 drive_number += 1
                 m = _DRIVE_RE.match(_spaces(child.get_text(" ", strip=True)))
+                if m:
+                    start_tokens.append(m.group("start_yard_line"))
                 drive = {
                     "drive_number": drive_number,
                     "offense": m.group("team") if m else None,
@@ -425,7 +668,6 @@ def parse_cfb_ncaa_pbp(
                     play_number += 1
                     dist = ddm.group("distance") if ddm else None
                     yl = ddm.group("yard_line") if ddm else None
-                    yl_m = _YL_SPLIT_RE.match(yl) if yl else None
                     play_text = _spaces(spans[1].get_text(" ", strip=True))
                     row = {
                         "contest_id": cid,
@@ -437,13 +679,35 @@ def parse_cfb_ncaa_pbp(
                         "down": _DOWN.get(ddm.group("down").lower()) if ddm else None,
                         "distance": int(dist) if dist and dist.isdigit() else None,
                         "yard_line": yl,
-                        "yard_line_side": yl_m.group(1) if yl_m else None,
-                        "yard_line_number": int(yl_m.group(2)) if yl_m else None,
                         "play_text": play_text,
                     }
                     row.update(_decompose_play_text(play_text))
                     rows.append(row)
 
+    # split every token against the game's own side codes (drive headers + down/distance)
+    codes = _side_codes(start_tokens + [r["yard_line"] for r in rows if r["yard_line"]])
+    for r in rows:
+        side, num = _split_yard_line(r["yard_line"], codes) or (None, None)
+        r["yard_line_side"], r["yard_line_number"] = side, num
+    # a recovered fumble is a turnover only when the OTHER team recovered: the last
+    # "recovered by <code>" names the team (matched to the game's side codes); a code
+    # the codes cannot place falls back to the drive structure (an own recovery keeps
+    # the drive alive) -- except on a touchdown, where the scorer is settled downstream
+    team_of = {v: k for k, v in _own_side_codes(rows).items()}
+    for i, r in enumerate(rows):
+        if r["turnover_type"] != "fumble":
+            continue
+        recov = _RECOVERED_BY_RE.findall(_REVIEW_RE.split(r["play_text"] or "", 1)[0])
+        code = _match_code(recov[-1], list(team_of)) if recov else None
+        if code is not None:
+            turnover = team_of[code] != r["offense"]
+        elif r["is_touchdown"]:
+            continue
+        else:
+            nxt = rows[i + 1] if i + 1 < len(rows) else None
+            turnover = nxt is not None and nxt["drive_number"] != r["drive_number"] and nxt["offense"] != r["offense"]
+        r["is_turnover"] = turnover
+        r["turnover_type"] = "fumble" if turnover else None
     df = pl.DataFrame(rows, schema=PBP_SCHEMA) if rows else pl.DataFrame(schema=PBP_SCHEMA)
     if df.height:
         # qb_scramble = a rush by a player who also passes in this game (QB run).

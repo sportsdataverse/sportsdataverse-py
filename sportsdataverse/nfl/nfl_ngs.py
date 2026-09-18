@@ -22,7 +22,9 @@ receiving/rushing summaries), ``/api/plays/highlights?gameId=`` and
 ``/api/participation/team/game`` answer an explicit-deny ``403``. The deny keys on
 the single-game parameter, not on the caller: the site's own frontend sends no
 credential, and US residential egress gets the same 403 (verified 2026-09-14).
-Those routes are intentionally **not** wrapped -- see ``_DENIED_ENDPOINTS``.
+Those routes are intentionally **not** wrapped -- see ``_DENIED_ENDPOINTS``. The
+week-scoped form of ``/api/live/game/scores`` (``season``/``seasonType``/``week``,
+no ``gameId``) is NOT denied: it answers 200 anonymously (verified 2026-09-17).
 
 Player-tracking coordinates and per-play participation ARE served, but only for
 plays NGS tagged as highlights (``/api/highlights/tracking/...`` and
@@ -51,12 +53,12 @@ _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 # they are absent. The live/* routes and participation/team/game 403 on their
 # required gameId/gameKey from every egress tested (datacenter and US
 # residential); plays/highlight/players answers 500 on every parameter shape.
-# NOT listed, because they answer: plays/highlights by season/seasonType/week
-# (403 only with gameId), and highlights/{tracking,participation} for highlight
-# plays (403 for other plays; 503 for a play id that does not exist).
+# NOT listed, because they answer: live/game/scores and plays/highlights by
+# season/seasonType/week (403 only with gameId), and
+# highlights/{tracking,participation} for highlight plays (403 for other plays;
+# 503 for a play id that does not exist).
 _DENIED_ENDPOINTS = (
     "/live/game/drives",
-    "/live/game/scores",
     "/live/plays/winProbability",
     "/live/plays/playlist/game",
     "/live/chart/drive",

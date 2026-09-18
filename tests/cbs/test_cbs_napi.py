@@ -20,7 +20,12 @@ import polars as pl
 import pytest
 import yaml
 
-from sportsdataverse.cbs.cbs_napi_parsers import parse_cbs_napi, parse_cbs_napi_standings
+from sportsdataverse.cbs.cbs_napi_parsers import (
+    parse_cbs_napi,
+    parse_cbs_napi_scoring_drives,
+    parse_cbs_napi_scoring_plays,
+    parse_cbs_napi_standings,
+)
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "cbs"
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -191,6 +196,137 @@ def test_return_as_pandas():
     assert isinstance(parse_cbs_napi(_load("season_teams_nfl"), return_as_pandas=True), pd.DataFrame)
     assert isinstance(parse_cbs_napi_standings(_load("team_standings_nfl"), return_as_pandas=True), pd.DataFrame)
     assert isinstance(parse_cbs_napi(None, return_as_pandas=True), pd.DataFrame)
+
+
+# ===========================================================================
+# game/scoring plays + drives -- real NCAAF (OHIOST @ TEXAS, 50027666) and NFL
+# (CLE @ JAX, 50029216) bodies, 10 plays / 3 drives each, rows sliced not edited
+# ===========================================================================
+
+_PLAY_INTS = ("id", "game_id", "drive_id", "quarter", "down", "yardline", "team_in_possession")
+
+
+@pytest.mark.parametrize("league", ["ncaaf", "nfl"])
+def test_scoring_plays_one_row_per_play(league):
+    raw = _load(f"game_scoring_plays_{league}")
+    frame = parse_cbs_napi_scoring_plays(raw)
+    assert frame.height == len(raw["plays"]) == 10
+    assert frame["id"].to_list() == [int(r["id"]) for r in raw["plays"]]
+    for col in (*_PLAY_INTS, "home_timeouts_remaining", "away_timeouts_remaining"):
+        assert frame.schema[col] == pl.Int64, col
+    assert frame.schema["distance"] == pl.String  # CBS sends the literal "Goal" on goal-to-go
+    assert "Goal" in frame["distance"].to_list()
+    assert frame.schema["score_on_play"] == pl.Boolean and frame.schema["under_review"] == pl.Boolean
+    assert frame["score_on_play"].to_list() == [r["score_on_play"] == "Yes" for r in raw["plays"]]
+    _assert_ids_are_clean(frame, f"scoring_plays_{league}")
+
+
+@pytest.mark.parametrize("league", ["ncaaf", "nfl"])
+def test_scoring_plays_keep_subplays_as_list_of_structs(league):
+    raw = _load(f"game_scoring_plays_{league}")
+    frame = parse_cbs_napi_scoring_plays(raw)
+    assert isinstance(frame.schema["subplays"], pl.List)
+    first = frame["subplays"][0].to_list()
+    src = raw["plays"][0]["subplays"]["subplay"]
+    assert [sp["type"] for sp in first] == [sp["type"] for sp in src] == ["Kickoff", "KickReturn"]
+    assert first[0]["kicker"] == src[0]["kickoff"]["kicker"]
+    assert first[1]["returned_by_name"] == src[1]["kick_return"]["returned_by_name"]
+    assert frame["subplays"].list.len().to_list() == [len(r["subplays"]["subplay"]) for r in raw["plays"]]
+
+
+@pytest.mark.parametrize("league", ["ncaaf", "nfl"])
+def test_scoring_drives_one_row_per_drive(league):
+    raw = _load(f"game_scoring_drives_{league}")
+    frame = parse_cbs_napi_scoring_drives(raw)
+    assert frame.height == len(raw["drives"]) == 3
+    for col in ("id", "team_id", "quarter", "drive_plays", "starting_play_id", "ending_play_id", "yards_on_drive"):
+        assert frame.schema[col] == pl.Int64, col
+    assert frame.schema["score_on_drive"] == pl.Boolean and frame.schema["inside_the_20"] == pl.Boolean
+    assert frame["result"].to_list() == [d["result"] for d in raw["drives"]]
+    _assert_ids_are_clean(frame, f"scoring_drives_{league}")
+
+
+def test_scoring_frames_from_two_leagues_stack_vertically():
+    """CBS key order differs between games; the pinned column order must not. The
+    ``subplays`` struct carries only the event fields a game used, so stacking
+    games takes ``vertical_relaxed`` (polars unions the struct fields)."""
+    plays = [parse_cbs_napi_scoring_plays(_load(f"game_scoring_plays_{lg}")) for lg in ("ncaaf", "nfl")]
+    drives = [parse_cbs_napi_scoring_drives(_load(f"game_scoring_drives_{lg}")) for lg in ("ncaaf", "nfl")]
+    assert plays[0].columns[:3] == ["id", "game_id", "drive_id"]
+    assert pl.concat(plays, how="vertical_relaxed").height == 20
+    assert pl.concat(drives, how="vertical").height == 6
+
+
+def test_scoring_plays_and_drives_join_on_ids():
+    """drive_id on a play and id on a drive share one dtype, so a join matches."""
+    plays = parse_cbs_napi_scoring_plays(_load("game_scoring_plays_nfl"))
+    drives = parse_cbs_napi_scoring_drives(_load("game_scoring_drives_nfl"))
+    assert plays.schema["drive_id"] == drives.schema["id"]
+    joined = plays.join(drives.select("id", "result"), left_on="drive_id", right_on="id", how="inner")
+    assert joined.height == plays.filter(pl.col("drive_id") <= 3).height > 0
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        None,
+        {},
+        [],
+        "nope",
+        {"plays": []},
+        {"drives": None},
+        # the real HTTP-200 not-found envelopes NAPI returns for these two routes
+        {"warnings": [{"code": 404, "type": "NotFoundException", "message": "No scoring plays data for that game."}]},
+        {"errors": [{"code": 404, "type": "NotFoundException", "message": "No scoring plays data for that game."}]},
+    ],
+)
+def test_scoring_parsers_never_raise(payload):
+    """A miss is a zero-row frame with the documented columns and dtypes, so a
+    season loop that hits one not-found envelope still stacks (a 0x0 frame makes
+    ``pl.concat`` raise ``schema lengths differ``)."""
+    for parser, fixture in (
+        (parse_cbs_napi_scoring_plays, "game_scoring_plays_nfl"),
+        (parse_cbs_napi_scoring_drives, "game_scoring_drives_nfl"),
+    ):
+        frame = parser(payload)
+        full = parser(_load(fixture))
+        assert isinstance(frame, pl.DataFrame) and frame.height == 0
+        assert frame.columns == full.columns
+        assert {c: t for c, t in frame.schema.items() if c != "subplays"} == {
+            c: t for c, t in full.schema.items() if c != "subplays"
+        }
+        assert pl.concat([full, frame], how="vertical_relaxed").height == full.height
+
+
+def test_scoring_plays_older_game_keeps_documented_columns():
+    """CBS omits ``game_id``, ``real_clock`` and the timeout columns on older
+    games; they come back typed null so eras stack."""
+    omitted = ("game_id", "real_clock", "home_timeouts_remaining", "away_timeouts_remaining")
+    raw = _load("game_scoring_plays_ncaaf")
+    older = {"plays": [{k: v for k, v in play.items() if k not in omitted} for play in raw["plays"]]}
+    frame = parse_cbs_napi_scoring_plays(older)
+    full = parse_cbs_napi_scoring_plays(_load("game_scoring_plays_nfl"))
+    assert frame.columns == full.columns
+    assert all(frame[c].null_count() == frame.height == 10 for c in omitted)
+    assert frame.schema["game_id"] == pl.Int64 and frame.schema["real_clock"] == pl.String
+    assert pl.concat([full, frame], how="vertical_relaxed").height == 20
+
+
+def test_scoring_parsers_return_as_pandas():
+    import pandas as pd
+
+    df = parse_cbs_napi_scoring_plays(_load("game_scoring_plays_nfl"), return_as_pandas=True)
+    assert isinstance(df, pd.DataFrame) and len(df) == 10
+    assert isinstance(parse_cbs_napi_scoring_drives(None, return_as_pandas=True), pd.DataFrame)
+
+
+def test_scoring_wrappers_use_row_parsers(monkeypatch):
+    import sportsdataverse.cbs.cbs_napi as mod
+
+    bodies = {"plays": _load("game_scoring_plays_nfl"), "drives": _load("game_scoring_drives_nfl")}
+    monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: bodies[url.rsplit("/", 2)[-2]])
+    assert mod.cbs_game_scoring_plays(game_id=50029216).height == 10
+    assert mod.cbs_game_scoring_drives(game_id=50029216).height == 3
 
 
 # ===========================================================================

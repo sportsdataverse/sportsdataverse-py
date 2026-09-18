@@ -6,6 +6,7 @@
   - [Box-score tabs (contest 5362283 — California @ Auburn, 2024-09-07)](#box-score-tabs-contest-5362283--california--auburn-2024-09-07)
   - [cfbfastR-mapper pbp fixtures (vendored from `ncaa-mfb-football-raw`)](#cfbfastr-mapper-pbp-fixtures-vendored-from-ncaa-mfb-football-raw)
   - [2025-season page variants (captured 2026-08-19)](#2025-season-page-variants-captured-2026-08-19)
+  - [2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)](#2019-season-and-2025-textside-code-variants-bundles-captured-2026-08-19--2026-08-21)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -60,7 +61,9 @@ Single tabs extracted from the `ncaa-mfb-football-raw` producer's per-game
 bundles (`mfb/json/{id}.json.gz`), captured 2026-08-19 via the same browser
 transport. They pin the page variants surfaced by the full 2025-season sweep
 (1,685 games, 1,685/1,685 exact-final QA) that the original FBS fixtures never
-exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`.
+exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`, and by
+`test_cfb_ncaa_cfbfastr.py` (field-position invariants: rushing/receiving TD
+`yards_to_goal == yards_gained`, touchback -> first snap at 75 to go).
 
 | file | contest_id | game | variant pinned | source URL |
 |---|---|---|---|---|
@@ -68,3 +71,26 @@ exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`
 | `mfb_play_by_play_6386574.html` | 6386574 | Rice @ South Fla., 2025-11-29 | mixed-case yard-line side code (`Ric25`) | <https://stats.ncaa.org/contests/6386574/play_by_play> |
 | `mfb_drives_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | drives tab with `1OT` quarter rows (`period` = 5) | <https://stats.ncaa.org/contests/6386512/drives> |
 | `mfb_box_score_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | `scoring_summary_table` with an OT row (concatenated `tr`s, re-chunked by 9) | <https://stats.ncaa.org/contests/6386512/box_score> |
+| `mfb_play_by_play_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT, 27-24) | completes the 1OT game's pbp + box + drives bundle, so `to_cfbfastr` runs exactly as the `-data` build calls it (drive titles, linescore, scoring summary, OT synthesis); consumed by `test_cfb_ncaa_cfbfastr.py` field-position tests | <https://stats.ncaa.org/contests/6386512/play_by_play> |
+
+## 2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)
+
+Single `play_by_play` tabs extracted byte-for-byte from the `ncaa-mfb-football-raw`
+per-game bundles (`mfb/raw/{academic_year}/{id}.json.gz`, same browser transport).
+Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` and `test_cfb_ncaa_cfbfastr.py`.
+
+| file | contest_id | game (page date) | variant pinned | source URL |
+|---|---|---|---|---|
+| `mfb_play_by_play_1735106.html` | 1735106 | Villanova @ Colgate (2019, 34-14) | 2019-era text: `"for loss of N yards"`, a fumble advance with a later `"for 1 yard"` clause, `"to the 50 yardline"` | <https://stats.ncaa.org/contests/1735106/play_by_play> |
+| `mfb_play_by_play_6386303.html` | 6386303 | WestConn @ New Haven (2025-10-11, 0-69) | 6-letter side code (`WSTCNN25`); sacks and kneels read `"for loss of N yards"` | <https://stats.ncaa.org/contests/6386303/play_by_play> |
+| `mfb_play_by_play_6396796.html` | 6396796 | Auburn @ Oklahoma (2025-09-20, 17-24) | play text writes side codes the drive headers never use (`"OU36"` for the headers' `OKL`) | <https://stats.ncaa.org/contests/6396796/play_by_play> |
+| `mfb_play_by_play_6386333.html` | 6386333 | Tulane @ Tulsa (2025-09-27, 31-14) | the text's side code starts with the OTHER team's header code (`"TULANE30"` vs Tulsa `TUL`, Tulane `TLN`), so a prefix match is confidently wrong | <https://stats.ncaa.org/contests/6386333/play_by_play> |
+| `mfb_play_by_play_6389205.html` | 6389205 | Minnesota @ Ohio St. (2025-10-04, 3-42) | replay reviews: `PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)` reprints the overturned call after the ruling | <https://stats.ncaa.org/contests/6389205/play_by_play> |
+| `mfb_play_by_play_1735890.html` | 1735890 | LSU @ Vanderbilt (2019-09-21, 66-38) | 2019 text: `SH,` formation prefix, `First Last` names throughout (`C. Ed.-Helaire`), tacklers glued with no separator (`Kristian FultonJaCoby Stevens`), a fumble recovered in the end zone by the defense | <https://stats.ncaa.org/contests/1735890/play_by_play> |
+| `mfb_play_by_play_1735120.html` | 1735120 | Wagner @ UConn (2019-08-29, 21-24) | `LAST, First` with a space and bare initials (`McKENZIE, D`), tacklers joined by a mangled `:` (`MORGAN, D.J.3aPAUL, Keyshawn`), TD and PAT printed in one row | <https://stats.ncaa.org/contests/1735120/play_by_play> |
+| `mfb_play_by_play_6386493.html` | 6386493 | Western Ky. @ LSU (2025-11-22, 10-13) | an own fumble recovery and a defensive fumble recovery for a touchdown printed with no return clause (`"... recovered by WKU Flowers,Dylan at WKU29 TOUCHDOWN"`) | <https://stats.ncaa.org/contests/6386493/play_by_play> |
+| `mfb_play_by_play_6386449.html` | 6386449 | South Carolina St. @ South Carolina (2025-09-06, 10-38) | return touchdowns by the drive's defense: punt return TD, blocked punt return TD, rush fumble-return TD | <https://stats.ncaa.org/contests/6386449/play_by_play> |
+| `mfb_play_by_play_6414322.html` | 6414322 | The Citadel @ Samford (2025-09-06, 40-13) | pass and rush fumble-return TDs; a punt return TD `"nullified by penalty"` | <https://stats.ncaa.org/contests/6414322/play_by_play> |
+| `mfb_play_by_play_6386300.html` | 6386300 | New Haven @ Saginaw Valley (2025-11-22) | own-side vote determinism (NC9): the game whose `yards_to_goal` flipped with `PYTHONHASHSEED` between two identical season builds on main | <https://stats.ncaa.org/contests/6386300/play_by_play> |
+| `mfb_play_by_play_1736435.html` | 1736435 | SFA @ Lamar University (2019-09-28, 24-17) | side code ending in a digit: `"SFA225"` is `SFA2` + 25 | <https://stats.ncaa.org/contests/1736435/play_by_play> |
+| `mfb_play_by_play_1735539.html` | 1735539 | Shorter @ ETSU (2019-09-07, 10-48) | hyphenated side code `SU-ETSU` (drive titles + yard lines) | <https://stats.ncaa.org/contests/1735539/play_by_play> |
