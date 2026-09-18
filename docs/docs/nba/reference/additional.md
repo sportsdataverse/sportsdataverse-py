@@ -3723,7 +3723,7 @@ ages = nba_player_ages("2023-24")
 print(ages.head())
 ```
 
-### `nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_player_crosswalk}
+### `nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_player_crosswalk}
 
 Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox).
 
@@ -3739,6 +3739,7 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 | `season` | `Optional[int]` | `None` | Season year per hoopR convention. Defaults to the most recent NBA season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -4085,7 +4086,7 @@ board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())
 ```
 
-### `nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_schedule_crosswalk}
+### `nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_schedule_crosswalk}
 
 Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
 
@@ -4101,6 +4102,7 @@ effectively current-season.
 | `season` | `Optional[int]` | `None` | Season year per hoopR convention. Defaults to the most recent NBA season. |
 | `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 

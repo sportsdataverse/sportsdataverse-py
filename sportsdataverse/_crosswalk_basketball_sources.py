@@ -13,6 +13,7 @@ These adapters own that rename so the assemblers can stay a literal port.
 from __future__ import annotations
 
 import json
+import logging
 import re
 from datetime import date, datetime
 from typing import Any, Callable, Dict, List, Optional, Sequence
@@ -20,10 +21,13 @@ from typing import Any, Callable, Dict, List, Optional, Sequence
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import str_id, to_eastern
-from sportsdataverse.errors import SportsDataverseError
+from sportsdataverse.errors import NoDataError, SportsDataverseError
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "CrosswalkSourceError",
+    "FetchTally",
     "require_source",
     "espn_conference_map",
     "espn_team_directory",
@@ -46,13 +50,18 @@ class CrosswalkSourceError(SportsDataverseError):
     could not be rendered): the first returns a typed empty frame, the second
     raises this.
 
-    Only whole-source fetches raise, plus :func:`stats_rosters`. The other
-    per-item loops (one scoreboard call per date, one ESPN or Fox roster call
-    per team) keep tolerating an individual failure, matching the R producers.
-    The NBA/WNBA Stats roster call raises instead: its runtime answers a
-    refused request with ``{}`` rather than an exception, and a host that
-    cannot reach stats.nba.com fails every team identically, which left every
-    ``nba_*`` / ``wnba_*`` player column null with no error.
+    Whole-source fetches raise, and so does :func:`stats_rosters`: its runtime
+    answers a refused request with ``{}`` rather than an exception, and a host
+    that cannot reach stats.nba.com fails every team identically, which left
+    every ``nba_*`` / ``wnba_*`` player column null with no error.
+
+    The ESPN/Fox per-item loops (one scoreboard call per date, one roster call
+    per team, one group call per conference) keep skipping an *isolated*
+    failure, matching the R producers' ``tryCatch``-to-``NULL``, but tally
+    them through :class:`FetchTally`: a provider that failed every item it was
+    asked for and answered none raises this after the loop instead of shipping
+    that provider's columns all null. Pass ``strict=True`` to make any non-404
+    failure raise immediately.
 
     Example:
         Fail loudly instead of publishing an all-null crosswalk::
@@ -202,6 +211,105 @@ def _stats_result_set(label: str, fetch: Callable[[], Any], name: str) -> pl.Dat
     return frame
 
 
+class FetchTally:
+    """Per-item fetch outcomes for one provider endpoint across a loop.
+
+    The ESPN/Fox adapters fetch one item at a time (a team's roster, a date's
+    scoreboard, a conference group). Skipping a single failed item matches the
+    R producers, but one unreachable or rate-limited host fails *every* item
+    identically, and a loop that skips each one returns well-formed with the
+    whole provider null. The tally tells the two apart: isolated failures are
+    skipped and logged once the loop ends; a provider with at least one failure
+    and no answer at all raises.
+
+    A :class:`~sportsdataverse.errors.NoDataError` (the host answered 404) is
+    an *answered* item -- it yields ``None`` and never counts as a failure.
+
+    Args:
+        endpoint: Provider call the tally covers, quoted into the error and
+            the warning (e.g. ``"espn_nba_team_roster"``).
+        strict: Raise :class:`CrosswalkSourceError` on the first non-404
+            failure instead of tallying it.
+
+    Example:
+        Skip isolated failures, refuse an all-failed provider::
+
+            from sportsdataverse._crosswalk_basketball_sources import FetchTally
+
+            tally = FetchTally("espn_nba_team_roster")
+            for team_id in team_ids:
+                raw = tally.fetch(f"team_id={team_id}", lambda: fetch_roster(team_id))
+                if raw is None:
+                    continue
+                ...
+            tally.finish()  # raises when every team failed, warns when some did
+    """
+
+    def __init__(self, endpoint: str, *, strict: bool = False) -> None:
+        self.endpoint = endpoint
+        self.strict = strict
+        self.answered = 0
+        self.failed: List[tuple[str, Exception]] = []
+
+    def fetch(self, item: str, call: Callable[[], Any]) -> Any:
+        """Run one item's fetch: its result, or ``None`` when it 404'd or failed.
+
+        Args:
+            item: Label for the item (e.g. ``"team_id=1"``), quoted into messages.
+            call: Zero-argument callable performing the fetch.
+
+        Returns:
+            Whatever ``call`` returned, or ``None`` for a 404 / tallied failure.
+
+        Raises:
+            CrosswalkSourceError: ``strict`` and the fetch failed with anything
+                but a 404. An inner :class:`CrosswalkSourceError` propagates
+                unwrapped either way.
+        """
+        try:
+            out = call()
+        except NoDataError:
+            self.answered += 1
+            return None
+        except CrosswalkSourceError:
+            raise
+        except Exception as exc:
+            if self.strict:
+                raise CrosswalkSourceError(f"{self.endpoint}({item}) failed: {type(exc).__name__}: {exc}") from exc
+            self.failed.append((item, exc))
+            return None
+        self.answered += 1
+        return out
+
+    def finish(self) -> None:
+        """Close the loop: raise if every item failed, warn if some did.
+
+        Raises:
+            CrosswalkSourceError: At least one item failed and none was
+                answered -- the systemic-failure signature of an unreachable
+                or rate-limited host. Names the endpoint, the count and the
+                first failure.
+        """
+        if not self.failed:
+            return
+        item, first = self.failed[0]
+        if self.answered == 0:
+            raise CrosswalkSourceError(
+                f"{self.endpoint}: all {len(self.failed)} per-item fetches failed, none answered; "
+                f"first: ({item}) {type(first).__name__}: {first}"
+            ) from first
+        logger.warning(
+            "%s: skipped %d of %d items after fetch failures [%s]; first: (%s) %s: %s",
+            self.endpoint,
+            len(self.failed),
+            self.answered + len(self.failed),
+            ", ".join(label for label, _ in self.failed),
+            item,
+            type(first).__name__,
+            first,
+        )
+
+
 def _pick(df: pl.DataFrame, *candidates: str) -> pl.Expr:
     """First present column among ``candidates``, else a null ``Utf8`` literal."""
     for name in candidates:
@@ -290,7 +398,7 @@ def _ref_ids(frame: Any) -> List[int]:
     return [int(m.group(1)) for ref in frame["$ref"].drop_nulls() if (m := _REF_ID.search(str(ref)))]
 
 
-def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
+def espn_conference_map(league: str, season: int, *, strict: bool = False, **kwargs: Any) -> pl.DataFrame:
     """ESPN team -> conference name for one NCAA season, via the Core v2 group tree.
 
     The Site v2 ``teams`` directory carries no conference, so the R producers
@@ -300,15 +408,18 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
     lists its member teams. This is the same walk, through sdv-py's existing
     ``espn_{lg}_season_group*`` wrappers.
 
-    One conference that fails to fetch is skipped rather than fatal, matching
-    the R producers' per-item tolerance; a walk that yields nothing at all
-    raises, because a silently empty map would ship an all-null
+    One conference that fails to fetch is skipped (and logged), matching the R
+    producers' per-item tolerance, but a walk on which *every* conference
+    failed raises (see :class:`FetchTally`), as does a walk that yields no
+    team at all: a silently empty map would ship an all-null
     ``espn_conference`` column.
 
     Args:
         league: ``"mbb"`` or ``"wbb"``. Any other league has no NCAA group
             tree and yields a typed empty frame.
         season: Season year (4-digit, e.g. ``2026``).
+        strict: Raise on the first conference whose fetch fails (a 404 is
+            still skipped) instead of tolerating isolated failures.
         **kwargs: Forwarded to the group wrappers.
 
     Returns:
@@ -316,8 +427,10 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
         and ``conference_name`` (``Utf8``), one row per team.
 
     Raises:
-        CrosswalkSourceError: ``league`` is an NCAA league but the walk
-            produced no team-to-conference rows at all.
+        CrosswalkSourceError: Every conference group fetch failed and none
+            answered (or, with ``strict``, any one did), or ``league`` is an
+            NCAA league but the walk produced no team-to-conference rows at
+            all.
 
     Example:
         Quick start::
@@ -351,12 +464,22 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
 
     team_ids: List[str] = []
     names: List[str] = []
+    tally = FetchTally(f"espn_{league}_season_group", strict=strict)
     for group_id in group_ids:
-        try:
-            group = accessors["group"](season, 2, group_id, return_parsed=True, **kwargs)
-            members = accessors["teams"](season, 2, group_id, limit=500, return_parsed=True, **kwargs)
-        except Exception:
+
+        def _pair(gid: int = group_id) -> tuple[Any, Any]:
+            # One item = the group AND its members: a host that answers the
+            # group call but refuses every teams call must still read as
+            # "every item failed", not as half answered.
+            return (
+                accessors["group"](season, 2, gid, return_parsed=True, **kwargs),
+                accessors["teams"](season, 2, gid, limit=500, return_parsed=True, **kwargs),
+            )
+
+        fetched = tally.fetch(f"group_id={group_id}", _pair)
+        if fetched is None:
             continue
+        group, members = fetched
         if not isinstance(group, pl.DataFrame) or group.height == 0 or "name" not in group.columns:
             continue
         name = group["name"][0]
@@ -365,6 +488,7 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
         for team_id in _ref_ids(members):
             team_ids.append(str(team_id))
             names.append(str(name))
+    tally.finish()
 
     if not team_ids:
         raise CrosswalkSourceError(
@@ -378,7 +502,9 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
     ).unique(subset=["team_id"], keep="first", maintain_order=True)
 
 
-def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any) -> pl.DataFrame:
+def espn_team_directory(
+    league: str, season: Optional[int] = None, *, strict: bool = False, **kwargs: Any
+) -> pl.DataFrame:
     """ESPN team directory projected onto the R accessor's column names.
 
     sdv-py's ``espn_{lg}_teams()`` returns ``team_*``-prefixed columns from
@@ -395,6 +521,7 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         season: Season year. Required to resolve ``conference_name`` for the
             NCAA leagues; unused by the ESPN teams endpoint itself.
+        strict: Forwarded to :func:`espn_conference_map`.
         **kwargs: Forwarded to the accessor.
 
     Returns:
@@ -403,7 +530,8 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
         crosswalks do not carry it).
 
     Raises:
-        CrosswalkSourceError: The NCAA conference walk produced nothing.
+        CrosswalkSourceError: The NCAA conference walk produced nothing, or
+            every conference group fetch failed.
 
     Example:
         Quick start::
@@ -435,7 +563,7 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
         return out
     # Not **kwargs: those are the *teams* accessor's, and the group endpoints
     # take a different parameter set.
-    conferences = espn_conference_map(league, int(season))
+    conferences = espn_conference_map(league, int(season), strict=strict)
     # Join on Utf8 both sides -- as_str_id keeps a numeric id off the float
     # path, so an Int64 team_id stringifies as "123" and never "123.0". The
     # assert makes that agreement a checked precondition instead of an
@@ -448,12 +576,18 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
     return out.join(conferences, on="team_id", how="left")
 
 
-def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> pl.DataFrame:
+def espn_scoreboard_games(league: str, dates: Sequence[date], *, strict: bool = False, **kwargs: Any) -> pl.DataFrame:
     """One ESPN scoreboard call per ET date, unioned to a game-level frame.
+
+    A date whose fetch fails is skipped (and logged) unless every date failed,
+    which raises (see :class:`FetchTally`). A date ESPN answers with no data
+    is simply a date with no games.
 
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         dates: ET calendar dates to fetch.
+        strict: Raise on the first date whose fetch fails (a 404 is still
+            skipped) instead of tolerating isolated failures.
         **kwargs: Forwarded to the scoreboard wrapper. For ``"mbb"`` / ``"wbb"``
             ``groups`` defaults to ESPN's Division I root group (50) so the full
             slate is returned; pass ``groups=`` explicitly to override.
@@ -461,7 +595,11 @@ def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> 
     Returns:
         ``pl.DataFrame`` with ``espn_game_id``, ``game_date`` (ET),
         ``home_espn_team_id``, ``away_espn_team_id``; a typed empty frame when
-        every call fails.
+        no date had games.
+
+    Raises:
+        CrosswalkSourceError: Every date's scoreboard fetch failed and none
+            answered (or, with ``strict``, any one did).
 
     Example:
         Quick start::
@@ -478,11 +616,14 @@ def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> 
     if _ncaa_group_accessors(league) is not None:
         kwargs.setdefault("groups", _NCAA_ROOT_GROUP)
     frames: List[pl.DataFrame] = []
+    tally = FetchTally(f"espn_{league}_scoreboard", strict=strict)
     for day in dates:
-        try:
-            sb = scoreboard(dates=int(day.strftime("%Y%m%d")), return_parsed=True, **kwargs)
-        except Exception:
-            continue
+        stamp = int(day.strftime("%Y%m%d"))
+
+        def _day(dates: int = stamp) -> Any:
+            return scoreboard(dates=dates, return_parsed=True, **kwargs)
+
+        sb = tally.fetch(f"dates={stamp}", _day)
         if sb is None or not isinstance(sb, pl.DataFrame) or sb.height == 0:
             continue
         stamps = sb.select(_pick(sb, "date", "game_date_time", "game_date")).to_series().to_list()
@@ -493,6 +634,7 @@ def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> 
                 _pick(sb, "away_team_id", "away_id").cast(pl.Int32, strict=False).alias("away_espn_team_id"),
             ).with_columns(pl.Series("game_date", [to_eastern(v) for v in stamps], dtype=pl.Date))
         )
+    tally.finish()
     if not frames:
         return pl.DataFrame(
             schema={
@@ -510,26 +652,42 @@ def espn_rosters(
     espn_team_id: Any,
     abbreviation: Optional[str],
     season: Optional[int] = None,
+    *,
+    tally: Optional[FetchTally] = None,
+    strict: bool = False,
     **kwargs: Any,
 ) -> pl.DataFrame:
     """One ESPN team roster projected onto the assembler's ESPN mini-schema.
+
+    The player builders call this once per team and share one
+    :class:`FetchTally` across the loop, so a team whose fetch fails is skipped
+    (and logged) while a provider that failed every team raises after the
+    loop. Without a shared ``tally`` the call is a loop of one: a fetch failure
+    raises, a 404 returns the typed empty frame.
 
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         espn_team_id: ESPN team id.
         abbreviation: Team abbreviation stamped onto every row.
         season: Season year (recorded, not always sent upstream).
+        tally: Shared per-item tally for the caller's team loop; the caller
+            owns :meth:`FetchTally.finish`. ``None`` tallies this call alone.
+        strict: Raise on a failed fetch (a 404 still returns empty). Ignored
+            when ``tally`` is given -- the tally's own ``strict`` applies. With
+            no ``tally`` this call is its own one-item loop, so a failed fetch
+            raises at :meth:`FetchTally.finish` whatever ``strict`` is set to.
         **kwargs: Forwarded to the roster accessor.
 
     Returns:
         ``pl.DataFrame`` with ``espn_team_id``, ``team_abbreviation``,
         ``espn_athlete_id``, ``espn_full_name``, ``espn_jersey``,
-        ``espn_position``, ``espn_birth_date``; empty on any fetch failure (a
-        single team's roster is per-item tolerant, as in the R producers).
+        ``espn_position``, ``espn_birth_date``; empty when ESPN answered with
+        no roster, or when the fetch failed and a shared ``tally`` absorbed it.
 
     Raises:
-        CrosswalkSourceError: The roster had rows but no resolvable athlete id,
-            which would silently break every join keyed on it.
+        CrosswalkSourceError: The fetch failed with no shared ``tally`` (or a
+            ``strict`` one), or the roster had rows but no resolvable athlete
+            id, which would silently break every join keyed on it.
 
     Example:
         Quick start::
@@ -548,10 +706,13 @@ def espn_rosters(
             "espn_birth_date": pl.Utf8,
         }
     )
-    try:
-        raw = _espn_accessors(league)["roster"](team_id=espn_team_id, season=season, **kwargs)
-    except Exception:
-        return empty
+    roster = _espn_accessors(league)["roster"]
+    own = tally is None
+    if tally is None:
+        tally = FetchTally(f"espn_{league}_team_roster", strict=strict)
+    raw = tally.fetch(f"team_id={espn_team_id}", lambda: roster(team_id=espn_team_id, season=season, **kwargs))
+    if own:
+        tally.finish()
     if raw is None or not isinstance(raw, pl.DataFrame) or raw.height == 0:
         return empty
     # The wbb/wnba roster module names the athlete key `athlete_id`; the generic
@@ -580,18 +741,43 @@ def espn_rosters(
     return out
 
 
-def fox_rosters(league: str, espn_team_id: Any, fox_team_id: Optional[str], **kwargs: Any) -> pl.DataFrame:
+def fox_rosters(
+    league: str,
+    espn_team_id: Any,
+    fox_team_id: Optional[str],
+    *,
+    tally: Optional[FetchTally] = None,
+    strict: bool = False,
+    **kwargs: Any,
+) -> pl.DataFrame:
     """One Fox team roster projected onto the assembler's Fox mini-schema.
+
+    Per-item failure handling is :func:`espn_rosters`'s: share a
+    :class:`FetchTally` across the team loop to skip isolated failures and
+    raise when every team failed; a lone call raises on a failed fetch.
 
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         espn_team_id: ESPN team id, stamped on as the match block.
-        fox_team_id: Fox Bifrost team id; ``None`` returns an empty frame.
+        fox_team_id: Fox Bifrost team id; ``None`` returns an empty frame
+            without fetching (and without touching ``tally``).
+        tally: Shared per-item tally for the caller's team loop; the caller
+            owns :meth:`FetchTally.finish`. ``None`` tallies this call alone.
+        strict: Raise on a failed fetch (a 404 still returns empty). Ignored
+            when ``tally`` is given -- the tally's own ``strict`` applies. With
+            no ``tally`` this call is its own one-item loop, so a failed fetch
+            raises at :meth:`FetchTally.finish` whatever ``strict`` is set to.
         **kwargs: Forwarded to the Fox roster wrapper.
 
     Returns:
         ``pl.DataFrame`` with ``espn_team_id``, ``fox_athlete_id``,
-        ``fox_player``, ``fox_jersey``, ``fox_position_group``.
+        ``fox_player``, ``fox_jersey``, ``fox_position_group``; empty when Fox
+        answered with no roster, or when the fetch failed and a shared
+        ``tally`` absorbed it.
+
+    Raises:
+        CrosswalkSourceError: The fetch failed with no shared ``tally`` (or a
+            ``strict`` one).
 
     Example:
         Quick start::
@@ -618,10 +804,12 @@ def fox_rosters(league: str, espn_team_id: Any, fox_team_id: Optional[str], **kw
     }
     module_path, func_name = getters[league].split(":")
     module = __import__(module_path, fromlist=[func_name])
-    try:
-        raw = getattr(module, func_name)(fox_team_id, **kwargs)
-    except Exception:
-        return empty
+    own = tally is None
+    if tally is None:
+        tally = FetchTally(func_name, strict=strict)
+    raw = tally.fetch(f"fox_team_id={fox_team_id}", lambda: getattr(module, func_name)(fox_team_id, **kwargs))
+    if own:
+        tally.finish()
     if raw is None or not isinstance(raw, pl.DataFrame) or raw.height == 0:
         return empty
     return raw.select(
