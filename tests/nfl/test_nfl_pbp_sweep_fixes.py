@@ -524,3 +524,19 @@ def test_mistyped_two_minute_warning_rows_are_admin_rows(mia_den_2002, mia_cin_2
     for play_id in (2409190041608, 2409190043804):
         r = _row(mia_cin_2004, play_id)
         assert r["type.text"] == "Two-minute warning" and r["play"] is False
+
+
+def test_double_initial_names_fold_like_the_abbreviated_grammar(mia_cin_2004):
+    """Double initials ("A.J. Feeley", "T.J. Houshmandzadeh") fold to the box's key."""
+    pas = _row(mia_cin_2004, 2409190040204)  # "A.J. Feeley (MIA) pass left side complete to ..."
+    assert pas["passer_player_name"] == "A.J.Feeley" and pas["passer_player_id"] == "2704"
+    rush = _row(mia_cin_2004, 2409190040805)  # "A.J. Feeley (MIA) rushed left side for 3 yards."
+    assert rush["rusher_player_name"] == "A.J.Feeley" and rush["rusher_player_id"] == "2704"
+    ret = _row(mia_cin_2004, 2409190041101)  # "Kickoff returned by T.J. Houshmandzadeh (CIN) for 19 yards."
+    assert ret["kickoff_return_player_name"] == "T.J.Houshmandzadeh"
+    assert ret["kickoff_return_player_id"] == "2753"
+    # a single-initial name in the same game is unchanged, and no fold doubles the dot
+    single = _row(mia_cin_2004, 2409190040403)
+    assert single["receiver_player_name"] == "L.Gordon"
+    for col in ("passer_player_name", "rusher_player_name", "receiver_player_name"):
+        assert mia_cin_2004.filter(pl.col(col).str.contains(r"\.\.")).height == 0

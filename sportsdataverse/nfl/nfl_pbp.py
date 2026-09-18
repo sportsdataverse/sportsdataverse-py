@@ -111,8 +111,17 @@ _NFL_NAME = _ABBREVIATED_NAME
 # ESPN's scoring-summary phrasing ("Denzel Boston 46 Yd pass from Deshaun Watson
 # (Andre Szmyt Kick)", "Bri.Thomas 5 Yd Run") spells names out; group 1 + "." +
 # group 2 folds them to the abbreviated form the rest of the game uses so a
-# player's rows group together in the box.
-_NFL_LONG_NAME = r"([A-Z])[A-Za-z'\-]+ ((?:St\. )?[A-Z][A-Za-z'\-]+)"
+# player's rows group together in the box. A double initial is already written the
+# way the abbreviated grammar spells it ("T.J. Houshmandzadeh", "A.J. Feeley" --
+# the ``[A-Z]\.[A-Z]\. `` alternative of ``football.espn_text.ABBREVIATED_NAME``),
+# so group 1 takes the whole "T.J." and ``_abbreviated_name`` drops its trailing
+# period; the fold reads "T.J.Houshmandzadeh", the same key ``__add_player_ids``
+# builds from the box ("T.J."[:3] + "." + surname). Without it neither initial
+# matched and the name column stayed null on 3,548 rows 2002-2026. The double
+# initial alternative must swallow its OWN second period -- ``([A-Z](?:\.[A-Z])?)``
+# with an optional period after it instead reads the modern abbreviated
+# "A.Randle El" as initials "A.R" + "andle" and folds it to "A.R.El".
+_NFL_LONG_NAME = r"([A-Z]\.[A-Z]\.|[A-Z])[A-Za-z'\-]* ((?:St\. )?[A-Z][A-Za-z'\-]+)"
 _NFL_LEGACY_PASSER_RE = r"Yd (?:TD )?pass from " + _NFL_LONG_NAME
 _NFL_LEGACY_RECEIVER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?pass"
 _NFL_LEGACY_RUSHER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?(?:Run|Rush)"
@@ -171,10 +180,15 @@ _NFL_DIRECT_SNAP_RE = r"Direct snap to " + _NFL_NAME + r"\.?\s*"
 
 
 def _abbreviated_name(pattern: str) -> pl.Expr:
-    """``"Deshaun Watson"`` -> ``"D.Watson"`` from a two-group ``_NFL_LONG_NAME`` match."""
+    """``"Deshaun Watson"`` -> ``"D.Watson"`` from a two-group ``_NFL_LONG_NAME`` match.
+
+    Group 1 is the first name's initial, or both initials of a double initial with
+    its trailing period ("T.J." -> "T.J.Houshmandzadeh"), which is stripped here so
+    the one separator below is never doubled.
+    """
     return pl.concat_str(
         [
-            pl.col("text").str.extract(pattern, 1),
+            pl.col("text").str.extract(pattern, 1).str.strip_chars_end("."),
             pl.lit("."),
             pl.col("text").str.extract(pattern, 2),
         ],
