@@ -121,7 +121,7 @@ def shield_nfl_pbp(
 
         | col_name | type | description |
         |----------|------|-------------|
-        | `live_phase` | `str` | The payload's `summary.phase`: `PREGAME`, `INGAME`, `FINAL` or `FINAL_OVERTIME`. |
+        | `live_phase` | `str` | The payload's `summary.phase`: `PREGAME`, `INGAME`, `HALFTIME`, `FINAL` or `FINAL_OVERTIME`. |
         | `is_play` | `int` | `1` for a real play; `0` for the feed's `GAME_START` / `END_QUARTER` / `END_GAME` markers and the current-situation row. |
         | `provisional` | `int` | `1` when the feed has not closed the play (`playEndTime` null) and it is in the trailing run of such plays of a non-final game — its text, yardage and stats may still change. Always `0` on a final game. |
 

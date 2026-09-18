@@ -170,7 +170,7 @@ def add_live_columns(df: pl.DataFrame, game: Mapping[str, Any]) -> pl.DataFrame:
 
         | col_name | type | description |
         |----------|------|-------------|
-        | `live_phase` | `str` | The payload's `summary.phase` (`PREGAME`, `INGAME`, `FINAL`, `FINAL_OVERTIME`), broadcast to every row. |
+        | `live_phase` | `str` | The payload's `summary.phase` (`PREGAME`, `INGAME`, `HALFTIME`, `FINAL`, `FINAL_OVERTIME`), broadcast to every row. |
         | `is_play` | `int` | `1` for a real play, `0` for a non-play row: the feed's `GAME_START` / `END_QUARTER` / `END_GAME` markers and the synthetic current-situation row. |
         | `provisional` | `int` | `1` when the row's outcome may still change: a play the feed has not closed (`playEndTime` null) in the trailing run of such plays of a non-final game. Always `0` once `phase` is `FINAL*`. |
     """
