@@ -673,7 +673,9 @@ def espn_rosters(
         tally: Shared per-item tally for the caller's team loop; the caller
             owns :meth:`FetchTally.finish`. ``None`` tallies this call alone.
         strict: Raise on a failed fetch (a 404 still returns empty). Ignored
-            when ``tally`` is given -- the tally's own ``strict`` applies.
+            when ``tally`` is given -- the tally's own ``strict`` applies. With
+            no ``tally`` this call is its own one-item loop, so a failed fetch
+            raises at :meth:`FetchTally.finish` whatever ``strict`` is set to.
         **kwargs: Forwarded to the roster accessor.
 
     Returns:
@@ -762,7 +764,9 @@ def fox_rosters(
         tally: Shared per-item tally for the caller's team loop; the caller
             owns :meth:`FetchTally.finish`. ``None`` tallies this call alone.
         strict: Raise on a failed fetch (a 404 still returns empty). Ignored
-            when ``tally`` is given -- the tally's own ``strict`` applies.
+            when ``tally`` is given -- the tally's own ``strict`` applies. With
+            no ``tally`` this call is its own one-item loop, so a failed fetch
+            raises at :meth:`FetchTally.finish` whatever ``strict`` is set to.
         **kwargs: Forwarded to the Fox roster wrapper.
 
     Returns:

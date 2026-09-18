@@ -1832,7 +1832,7 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -2066,7 +2066,7 @@ effectively current-season.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
 | `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-team, per-date or per-conference ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider that failed *every* item raises either way. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 

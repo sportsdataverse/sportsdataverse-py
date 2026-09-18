@@ -515,10 +515,10 @@ def mbb_team_crosswalk(
             or credential is involved: the bundled data is the public
             directory, not ratings.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-team, per-date or per-conference
-            ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated
-            failures. Default ``False`` matches the R producers; a provider
-            that failed *every* item raises either way.
+        strict: Raise on the first failed per-conference ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -623,10 +623,11 @@ def mbb_schedule_crosswalk(
         season: Season year (e.g. ``2026``). Defaults to the most recent MBB
             season.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-team, per-date or per-conference
-            ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated
-            failures. Default ``False`` matches the R producers; a provider
-            that failed *every* item raises either way.
+        strict: Raise on the first failed per-date ESPN scoreboard or per-conference
+            ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -685,10 +686,11 @@ def mbb_player_crosswalk(
             season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-team, per-date or per-conference
-            ESPN/Fox fetch (a 404 is still skipped) instead of skipping isolated
-            failures. Default ``False`` matches the R producers; a provider
-            that failed *every* item raises either way.
+        strict: Raise on the first failed per-team ESPN or Fox roster fetch, or
+            per-conference ESPN group fetch (a 404 is still
+            skipped) instead of skipping isolated failures. Default ``False`` matches the R
+            producers; a provider whose every item failed raises either way. An item
+            the host *answered* -- including a 404 -- counts as answered.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
