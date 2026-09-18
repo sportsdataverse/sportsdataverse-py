@@ -13,6 +13,11 @@ Field levels:
   (``ColumnNotFoundError`` / ``KeyError`` / ``NoDataError``).
 * ``value`` -- the processor runs but the output is wrong (possession, field position,
   clock, timeouts). Checked for presence and for an all-null column.
+* ``repaired`` -- a ``value`` field the processors *reconstruct* when it is absent or null, so
+  its absence is a warning, never a contract failure. Only ``plays[].end.team.id`` qualifies:
+  both processors fill it from the next play's start team (``cfb_pbp.py:1501-1535``,
+  ``nfl_pbp.py:703``), and ESPN's own pre-2010 CFB feeds ship no ``end.team`` at all -- game
+  252532751 (2005) processes to 163 plays with zero null ``end.team.id`` and zero null ``EPA``.
 * ``gop`` -- Game on Paper dereferences it unguarded (``python/app.py:199-322``
   bracket reads, ``GamePage.astro:72-95`` header fields); missing means an HTTP 404 or a
   blank header, not a processor failure.
@@ -75,7 +80,7 @@ PLAY_FIELDS: tuple[tuple[str, str], ...] = (
     ("start.distance", "value"),
     ("start.yardLine", "value"),  # hidden gate: yardsToEndzone is dropped when yardLine is null
     ("start.yardsToEndzone", "value"),
-    ("end.team.id", "value"),
+    ("end.team.id", "repaired"),  # both processors fill it from the next play's start team
     ("end.down", "required"),
     ("end.distance", "required"),
     ("end.yardLine", "value"),
@@ -194,6 +199,7 @@ class ContractReport:
         | n_plays | int | plays across ``drives.previous`` + ``drives.current`` |
         | n_drives | int | drives across both groupings |
         | missing | list[str] | ``required``- and ``value``-level paths absent from every row (both fail ``ok``) |
+        | (``repaired``-level absence goes to ``warnings``: the processor reconstructs the field) | | |
         | invalid | list[str] | value rules violated (empty mascot, foreign team ids, bad clock, all-null column, ...) |
         | gop_missing | list[str] | ``gop``-level paths absent (page 404 / blank header, processor unaffected) |
         | warnings | list[str] | degradations that do not fail the contract (sparse feed, competitor order, late-inserted or duplicate play ids) |
@@ -264,6 +270,10 @@ def _iter_plays(drives: list[dict]) -> list[dict]:
 def _bucket(report: ContractReport, level: str, path: str) -> None:
     if level == "gop":
         report.gop_missing.append(path)
+    elif level == "repaired":
+        # absent on every row is the normal shape of a pre-2010 ESPN CFB feed; the
+        # processor reconstructs it, so this must not fail the contract
+        report.warnings.append(f"{path} absent: the processor fills it from the next play's start team")
     else:
         report.missing.append(path)
 
@@ -284,11 +294,11 @@ def _check_rows(report: ContractReport, rows: list[dict], fields: tuple[tuple[st
         if not present:
             _bucket(report, level, f"{prefix}.{path}")
             continue
-        if level in ("value", "required"):
+        if level in ("value", "required", "repaired"):
             nulls = n - sum(v is not None for v in present)
             rate = nulls / n
             report.null_rate[f"{prefix}.{path}"] = rate
-            if rate >= 1.0:
+            if rate >= 1.0 and level != "repaired":
                 report.invalid.append(f"{prefix}.{path}: present but null on every row")
 
 

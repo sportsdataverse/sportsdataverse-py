@@ -123,3 +123,20 @@ def test_all_null_required_column_is_invalid(nfl_summary):
     assert "plays[].statYardage: present but null on every row" in report.invalid
     assert report.ok is False
     assert report.null_rate["plays[].statYardage"] == 1.0
+
+
+def test_a_feed_with_no_end_team_still_satisfies_the_contract(nfl_summary):
+    """ESPN's own pre-2010 CFB feeds carry no ``end.team``; both processors rebuild it.
+
+    Rejecting those payloads made ``_process_game`` raise ``AllSourcesFailed`` for a game
+    ESPN serves and the processor handles (252532751, 2005: 163 plays, 0 null
+    ``end.team.id``, 0 null ``EPA`` straight through ``CFBPlayProcess``).
+    """
+    stripped = copy.deepcopy(nfl_summary)
+    for d in stripped["drives"]["previous"]:
+        for p in d["plays"]:
+            p["end"].pop("team", None)
+    report = _validate_summary(stripped, "nfl")
+    assert report.ok, (report.missing, report.invalid)
+    assert "plays[].end.team.id absent: the processor fills it from the next play's start team" in report.warnings
+    assert "plays[].end.team.id" not in report.missing
