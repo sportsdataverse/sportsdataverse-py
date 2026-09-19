@@ -14,6 +14,7 @@ import pytest
 
 from sportsdataverse.football import fox_common
 from sportsdataverse.football.sources.contract import _validate_summary
+from sportsdataverse.cfb.fox_pbp.to_espn_summary import _fox_cfb_to_espn_summary
 from sportsdataverse.nfl.fox_pbp.to_espn_summary import _fox_nfl_to_espn_summary
 
 NFL_FIXTURES = pathlib.Path(__file__).resolve().parents[1] / "nfl" / "fixtures" / "fox"
@@ -41,6 +42,41 @@ def nfl_row():
 def nfl_summary(nfl_final, nfl_row):
     summary, _ = _fox_nfl_to_espn_summary(nfl_final, nfl_row)
     return summary
+
+
+CFB_ROW = {
+    "espn_event_id": "401856679",
+    "season": 2026,
+    "season_type": 2,
+    "week": 2,
+    "home_espn_team_id": "130",
+    "away_espn_team_id": "201",
+}
+
+
+@pytest.fixture(scope="module")
+def cfb_final():
+    return _load(CFB_FIXTURES / "fox_cfb_401856679.json")
+
+
+def _live_through(payload, last_id):
+    """The same capture re-served exactly as Fox serves a game in progress: cut at ``last_id``
+    and the whole ``pbp`` tree reversed."""
+    fox = json.loads(json.dumps(payload))
+    sections = []
+    for section in fox["pbp"]["sections"]:
+        groups = []
+        for group in section["groups"]:
+            plays = [p for p in group["plays"] if int(p["id"]) <= last_id]
+            if plays:
+                group["plays"] = list(reversed(plays))
+                groups.append(group)
+        if groups:
+            section["groups"] = list(reversed(groups))
+            sections.append(section)
+    fox["pbp"]["sections"] = list(reversed(sections))
+    fox["header"]["eventStatus"] = 1
+    return fox
 
 
 def _plays(summary):
@@ -156,6 +192,46 @@ def test_a_live_poll_is_re_sorted_and_its_open_drive_states_no_outcome(label, nf
 def test_the_final_of_the_same_game_is_served_oldest_first(nfl_final):
     feed_order = [int(p["id"]) for s in nfl_final["pbp"]["sections"] for g in s["groups"] for p in g["plays"]]
     assert feed_order == sorted(feed_order)
+
+
+def test_the_last_snap_of_a_half_does_not_end_at_the_next_half_kickoff(nfl_summary):
+    """MUTATION TARGET -- reading the end state through ``End of Half``.
+
+    The next snap after halftime is a kickoff in the other direction, so reading through the
+    boundary gave the clock-killing kneel an end spot of 65 yards to the goal in the
+    **receiving** team's frame: 33 of the 41 halves in the evidence capture, against 3 of 41
+    in ESPN's own summaries of the same games.
+    """
+    plays = _plays(nfl_summary)
+    index = next(i for i, p in enumerate(plays) if p["type"]["text"] == "End of Half")
+    last = [p for p in plays[:index] if p["type"]["text"] not in fox_common._STOPPAGE][-1]
+    assert last["end"]["team"]["id"] == last["start"]["team"]["id"]
+    assert last["end"]["yardsToEndzone"] == last["start"]["yardsToEndzone"] - last["statYardage"]
+
+
+def test_a_live_poll_ending_on_a_failed_fourth_down_turns_the_ball_over(cfb_final):
+    """MUTATION TARGET -- ``_trailing_end`` keeping the offence's frame on a fourth-down stop.
+
+    The newest row of a live poll is the row Game on Paper renders. ESPN writes a turnover on
+    downs in the DEFENCE's frame at 1st & 10 (51 of 51 such rows in the capture's ESPN
+    summaries); keeping the offence's puts the ball ~100 yards from where it is.
+    """
+    summary, _ = _fox_cfb_to_espn_summary(_live_through(cfb_final, 167), CFB_ROW)
+    last = _plays(summary)[-1]
+    assert last["start"]["down"] == 4 and last["statYardage"] < last["start"]["distance"]
+    assert last["start"]["team"]["id"] == CFB_ROW["away_espn_team_id"]
+    assert last["end"]["team"]["id"] == CFB_ROW["home_espn_team_id"]
+    assert (last["end"]["down"], last["end"]["distance"]) == (1, 10)
+    assert last["end"]["yardsToEndzone"] == 100 - last["start"]["yardsToEndzone"]
+    # a fourth down the offence CONVERTS keeps the ball, so the flip must not be unconditional
+    converted = [
+        p
+        for p in _plays(summary)
+        if p["start"]["down"] == 4 and p["type"]["id"] in fox_common._KEEPS_THE_BALL and p is not last
+    ]
+    for play in converted:
+        if (play["statYardage"] or 0) >= (play["start"]["distance"] or 0):
+            assert play["end"]["team"]["id"] == play["start"]["team"]["id"]
 
 
 # --------------------------------------------------------------------------------- mutations

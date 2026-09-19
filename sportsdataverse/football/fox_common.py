@@ -87,6 +87,13 @@ _PERIODS: Dict[str, int] = {
 #: of the play *before* one of these is the next real snap's spot, not the stoppage row's.
 _STOPPAGE = frozenset({"Timeout", "Official Timeout", "Two-minute warning", "End Period", "End of Half", "End of Game"})
 
+#: The two stoppages the end-state search must **stop** at rather than read through. The snap
+#: after one of them is the next half's kickoff, in the other team's frame: reading through it
+#: gave the clock-killing kneel at the end of a half an end spot of 65 yards to the goal, in
+#: the receiving team's frame, on 33 of the 41 halves in the evidence capture -- ESPN's own
+#: summaries carry the next-half snap's spot on only 3 of those 41.
+_HALF_BOUNDARY = frozenset({"End of Half", "End of Game"})
+
 #: ESPN type ids on which the offence keeps the ball where it left it, so a play with no next
 #: snap (the last row of a final, the newest row of every live poll) still has a derivable end
 #: spot: ``start - statYardage``. On a turnover or a kick the yardage says nothing about where
@@ -561,7 +568,7 @@ def _fold_target(emitted: List[Dict[str, Any]], last_touchdown: int) -> Dict[str
     return emitted[last_touchdown]
 
 
-def _trailing_end(play: Dict[str, Any], home_side: str) -> Dict[str, Any]:
+def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: str) -> Dict[str, Any]:
     """The end state of the one play the feed states no next snap for, from its own yardage.
 
     Fires on the last row of every final and -- the case that matters -- on the **newest row of
@@ -569,19 +576,35 @@ def _trailing_end(play: Dict[str, Any], home_side: str) -> Dict[str, Any]:
     the play's own start says the ball never moved, so a 19-yard gain ends where it began and
     its EPA is computed against a spot no feed reports (the #541 review measured 27 such rows).
     Only a plain scrimmage snap keeps the ball, so only those are derived.
+
+    **Fourth down short of the sticks is the exception**: the ball turns over where it lies,
+    and ESPN writes that row's end in the DEFENCE's frame at 1st & 10 -- 51 of 51 such rows in
+    the ESPN summaries of this capture. Keeping the offence's frame is a ~100-yard, multi-EPA
+    error on the highest-leverage snap in football, on the newest row of a live poll: 50 rows
+    of the 7,184 in the capture would be served that way (#545 finding 1, same class).
     """
     start = play["start"]
-    gained = int(play.get("statYardage") or 0) if play["type"]["id"] in _KEEPS_THE_BALL else 0
+    keeps = play["type"]["id"] in _KEEPS_THE_BALL
+    gained = int(play.get("statYardage") or 0) if keeps else 0
     to_endzone = start["yardsToEndzone"]
     if to_endzone is not None and gained:
         to_endzone = max(0, min(100, int(to_endzone) - gained))
-    is_home = start["team"]["side"] == home_side
+    side, down, distance = start["team"]["side"], start["down"], start["distance"]
+    # distance 0 is goal-to-go, where the sticks are the goal line: a row that kept the ball
+    # (so it is not a touchdown type) came up short by definition.
+    short = gained < int(distance) if distance else True
+    if keeps and int(start.get("down") or 0) == 4 and short:
+        side = "home" if side == "away" else "away"
+        down, distance = 1, 10
+        if to_endzone is not None:
+            to_endzone = 100 - to_endzone
+    is_home = side == home_side
     return {
-        "down": start["down"],
-        "distance": start["distance"],
+        "down": down,
+        "distance": distance,
         "yardLine": start["yardLine"] if to_endzone is None else ((100 - to_endzone) if is_home else to_endzone),
         "yardsToEndzone": to_endzone,
-        "team": {"id": start["team"]["id"]},
+        "team": {"id": team_ids[side]},
     }
 
 
@@ -592,6 +615,10 @@ def _fill_end_state(plays: List[Dict[str, Any]], team_ids: Mapping[str, str], ho
     and why the search must not stop at a drive boundary: a punt ends in the receiving team's
     frame, on the first row of the next drive. Clock stoppages carry no state of their own and
     are skipped, so the end spot of the play before a timeout is the ball's real spot.
+
+    The search **stops** at the end of a half (:data:`_HALF_BOUNDARY`): the next snap is then a
+    kickoff in the other direction, and reading through the boundary gave the clock-killing
+    kneel at the end of the half the ensuing kickoff's spot, in the receiving team's frame.
 
     Two shapes take ESPN's own scoring convention instead: a **touchdown** ends at the goal
     line the scoring team was attacking, credited to the club the play says scored -- the
@@ -619,9 +646,15 @@ def _fill_end_state(plays: List[Dict[str, Any]], team_ids: Mapping[str, str], ho
                 "team": {"id": team_ids[scoring_side] if scoring_side else play["start"]["team"]["id"]},
             }
             continue
-        nxt = next((p["start"] for p in plays[index + 1 :] if p["type"]["text"] not in _STOPPAGE), None)
+        nxt = None
+        for later in plays[index + 1 :]:
+            if later["type"]["text"] in _HALF_BOUNDARY:
+                break
+            if later["type"]["text"] not in _STOPPAGE:
+                nxt = later["start"]
+                break
         if nxt is None:
-            play["end"] = _trailing_end(play, home_side)
+            play["end"] = _trailing_end(play, team_ids, home_side)
             continue
         play["end"] = {
             "down": nxt["down"],
