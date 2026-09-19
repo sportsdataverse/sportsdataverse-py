@@ -651,7 +651,11 @@ def to_cfbfastr(
     game_id = pbp.get_column("contest_id")[0]
     gid = int(game_id) if game_id and str(game_id).isdigit() else None
 
-    period = 1
+    # NC12: a "Start of Nth quarter" row OPENS the period it names (its clock is that
+    # quarter's 15:00), and a drive that straddles the break keeps the drives tab's
+    # starting quarter -- so the marker, not the drive, sets the period from there on.
+    # ``drive_period`` only moves the period FORWARD (a page can print quarter 0).
+    marker_period = 1
     last_td_team: "Optional[str]" = None
     score: "dict[str, int]" = {t: 0 for t in teams}
     game_play_number = 0
@@ -727,9 +731,8 @@ def to_cfbfastr(
         text = r["play_text"] or ""
         qm = _QTR_MARKER_RE.search(text.lower())
         if qm:
-            period = int(qm.group(1))
-        if r["drive_number"] in drive_period:
-            period = drive_period[r["drive_number"]]
+            marker_period = int(qm.group(1))
+        period = max(drive_period.get(r["drive_number"]) or 0, marker_period)
         half = 1 if period <= 2 else 2
         if half != prev_half:
             half_play_number = 0

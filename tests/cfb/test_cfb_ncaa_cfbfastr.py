@@ -738,3 +738,24 @@ def test_field_position_identical_across_hash_seeds() -> None:
     assert results[0][0][0] == 65  # kickoff from the SVS 35: cfbfastR kicking-team convention
     for seed, rows in enumerate(results[1:], start=1):
         assert rows == results[0], f"seed {seed} differs from seed 0"
+
+
+def test_quarter_marker_row_opens_the_period_it_names() -> None:
+    """NC12: "Start of 3rd quarter, clock 15:00" is period 3, not the drive's period 2.
+
+    The drives tab stamps the drive that straddles the break with its STARTING quarter,
+    which overwrote the marker -- so the clock ran 0:00 -> 15:00 inside the old period on
+    every game.
+    """
+    df = _bundle_frame("6386512")
+    markers = df.filter(pl.col("play_text").str.contains(r"(?i)start of \dnd|start of \drd|start of \dth"))
+    assert markers.height == 3
+    for row in markers.iter_rows(named=True):
+        named = int(re.search(r"start of (\d)", row["play_text"], re.I).group(1))
+        assert (row["period"], row["clock.minutes"], row["clock.seconds"]) == (named, 15, 0)
+    # and no row now runs the clock backwards inside a period
+    clocked = df.filter(pl.col("clock.minutes").is_not_null()).with_columns(
+        __s=pl.col("clock.minutes") * 60 + pl.col("clock.seconds")
+    )
+    back = clocked.filter((pl.col("period") == pl.col("period").shift(1)) & (pl.col("__s") > pl.col("__s").shift(1)))
+    assert back.height == 0, back.select("game_play_number", "period", "play_text").rows()
