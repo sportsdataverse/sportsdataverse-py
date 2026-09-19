@@ -2106,6 +2106,23 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             EP_start=pl.when(pl.col("type.text").is_in(kickoff_vec))
             .then(pl.col("EP_start_touchback"))
+            # N38: the clock-stoppage inheritance above reads ``lag_EP_end``, which
+            # after a scoring play is a REALIZED point value (8.0 for a TD plus a
+            # successful two-point conversion, 7.0 for a TD plus a PAT), not a
+            # field-position expectation.  The timeout / two-minute-warning row that
+            # ESPN emits between the score and the kickoff therefore published
+            # ``EP_start = EP_end = 8.0``, outside the documented [-7, 7] band.
+            # 0.92 is the post-score state this codebase already uses for exactly
+            # this row -- ``__process_wpa``'s ``start.ExpScoreDiff`` branch for a
+            # clock stoppage with ``lag_scoringPlay``, and the ensuing kickoff's own
+            # ``EP_start_touchback`` (~0.87-0.93).  Applied after ``EP_between`` is
+            # derived so only the admin row's own EP moves; ``EPA`` stays 0 on it.
+            .when(
+                (pl.col("type.text").is_in(clock_stoppage_vec)).and_(
+                    pl.col("scoring_play").shift(1).over("game_id") == True,
+                ),
+            )
+            .then(0.92)
             .otherwise(pl.col("EP_start")),
         )
         .with_columns(
