@@ -48,6 +48,9 @@ c = pl.col
 #: Raw ESPN rows the processors drop on purpose (``__add_downs_data``).
 DOCUMENTED_DROP_RE = r"(?i)end of|coin toss|end period|wins toss"
 
+#: ESPN play types that are a try (PAT / two-point / defensive conversion), not a scrimmage down.
+TRY_RE = r"(?i)two.?point|extra point|conversion|\bPAT\b"
+
 #: ESPN play types that ARE a pass / a rush by definition.
 PASS_TYPES = (
     "Pass Reception",
@@ -161,11 +164,14 @@ def _row_rule(
     )
 
 
+def _is_try() -> pl.Expr:
+    """A point-after / two-point try (including a defensive conversion return)."""
+    return c("type.text").str.contains(TRY_RE).fill_null(False)
+
+
 def _scrimmage() -> pl.Expr:
     """A rush/pass play that is not a try (PAT / two-point attempt)."""
-    return (_t("rush") | _t("pass")) & ~c("type.text").str.contains(
-        r"(?i)two.?point|extra point|conversion|\bPAT\b"
-    ).fill_null(False)
+    return (_t("rush") | _t("pass")) & ~_is_try()
 
 
 # ---------------------------------------------------------------------------
@@ -1389,14 +1395,19 @@ def _aggregations(
             .agg(pl.col("EPA").cast(pl.Float64).sum().alias("__epa"))
         )
         bad = []
+        matched = 0
         for row in live.iter_rows(named=True):
             try:
                 tid = int(row["pos_team"])
             except (TypeError, ValueError):
-                continue
-            want = rows.get(tid, {}).get("EPA_overall_off")
+                tid = None
+            want = rows.get(tid, {}).get("EPA_overall_off") if tid is not None else None
             if want is None:
+                # a renamed box key or a float-origin id ("194.0") used to read as a clean
+                # pass; an unreconciled team is the failure this rule exists to catch
+                bad.append({"pos_team": row["pos_team"], "plays_EPA": round(float(row["__epa"]), 3), "box_EPA": None})
                 continue
+            matched += 1
             # the box rounds each team total to 2 dp (Float32 before that)
             if abs(float(row["__epa"]) - float(want)) > 0.05:
                 bad.append({"pos_team": tid, "plays_EPA": round(float(row["__epa"]), 3), "box_EPA": float(want)})
@@ -1405,22 +1416,28 @@ def _aggregations(
                 "epa.team_sum_matches_box",
                 12,
                 "the sum of row EPA over a team's scrimmage plays equals its advBoxScore EPA_overall_off",
-                live.height,
+                matched,
                 len(bad),
                 bad[:_SAMPLE_N],
             )
         )
     kickoffs = (
         int(df.filter(_t("kickoff_play")).height)
-        if _has(df, "kickoff_play", "period.number", "scoring_play", "td_play")
+        if _has(df, "kickoff_play", "period.number", "scoring_play", "type.text")
         else 0
     )
     # a feed that emits no kickoff rows at all (ESPN's pre-2010 CFB drives) says nothing
     # about whether the kickoffs it does emit are complete
     if kickoffs:
-        # one kickoff opens each half, plus one after every score that restarts play
+        # One kickoff opens each half, plus one after every score that restarts play.
+        # An overtime score restarts from the 25 and a try (PAT / two-point / defensive
+        # conversion) rides the touchdown's kickoff, so neither adds one -- counting them
+        # made every overtime game a false positive (cfb 401628439: 11 kickoffs vs 19
+        # "expected"; 401858224: 11 vs 16 -- the only two firings on the 105-game sweep).
         halves = 2
-        scores = int(df.filter(_t("scoring_play") & ~_t("kickoff_play")).height)
+        scores = int(
+            df.filter(_t("scoring_play") & ~_t("kickoff_play") & (c("period.number") <= 4) & ~_is_try()).height
+        )
         expected = scores + halves
         out.append(
             RuleResult(
@@ -1428,7 +1445,7 @@ def _aggregations(
                 12,
                 "kickoffs equal the scores that restart play plus one per half (onside recoveries and "
                 "score-ending halves make this approximate)",
-                1,
+                kickoffs,
                 int(abs(kickoffs - expected) > max(2, expected // 5)),
                 [{"kickoffs": kickoffs, "expected": expected, "scoring_plays": scores}]
                 if abs(kickoffs - expected) > max(2, expected // 5)

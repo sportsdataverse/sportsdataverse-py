@@ -463,6 +463,14 @@ def test_team_epa_sum_matches_box():
     # EPA over HOM's scrimmage plays: 0.5 + 3.5 + 0.1 = 4.1; AWY's: 0.3 - 0.7 = -0.4
     assert _fires(_game(), "epa.team_sum_matches_box", box=_team_box()) == 0
     assert _fires(_game(), "epa.team_sum_matches_box", box=_team_box(home_epa=1.0)) == 1
+    # a box that cannot be reconciled is a failure, not a clean pass: a renamed key and a
+    # float-origin id ("1.0") both used to leave the rule with nothing to compare
+    renamed = {"team": [{"pos_team": HOME, "EPA_off": 4.1}, {"pos_team": AWAY, "EPA_off": -0.4}]}
+    assert _by_rule(_game(), box=renamed)["epa.team_sum_matches_box"].n_violations == 2
+    stringy = {"team": [{"pos_team": f"{HOME}.0", "EPA_overall_off": 4.1}, {"pos_team": AWAY, "EPA_overall_off": -0.4}]}
+    assert _fires(_game(), "epa.team_sum_matches_box", box=stringy) == 1
+    # the denominator counts reconciled teams, so "nothing matched" is visible
+    assert _by_rule(_game(), box=renamed)["epa.team_sum_matches_box"].n_checked == 0
 
 
 def test_kickoff_count_and_drive_count():
@@ -476,6 +484,17 @@ def test_kickoff_count_and_drive_count():
     assert _fires(kicks, "plays.kickoff_count_matches_scores") == 0
     many = kicks.with_columns(pl.Series("scoring_play", [False, True, True, True, True, True]))
     assert _fires(many, "plays.kickoff_count_matches_scores") == 1
+    # an overtime score restarts from the 25 and a try rides the touchdown's kickoff, so
+    # neither expects a kickoff -- counting them made every OT game a false positive
+    # (cfb 401628439: 11 kickoffs vs 19 "expected"; 401858224: 11 vs 16)
+    overtime = many.with_columns(
+        pl.Series("period.number", [1, 1, 2, 5, 5, 5]),
+        pl.Series(
+            "type.text",
+            ["Kickoff", "Rushing Touchdown", "Pass Reception", "Passing Touchdown", "Two Point Rush", "Kickoff"],
+        ),
+    )
+    assert _fires(overtime, "plays.kickoff_count_matches_scores") == 0
     # the synthetic frame has three drives; the summary declares one
     assert _fires(_game(), "drive.count_matches_feed", summary=_summary()) == 1
     one_drive = _game().with_columns(pl.Series("drive.id", ["d1"] * 6))
