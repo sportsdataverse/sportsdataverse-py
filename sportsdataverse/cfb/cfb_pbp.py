@@ -8468,7 +8468,9 @@ class CFBPlayProcess(object):
         )
         return plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
 
-    def run_processing_pipeline(self, fourth_down_probs: bool = True, two_pt_probs: bool = True):
+    def run_processing_pipeline(
+        self, fourth_down_probs: bool = True, two_pt_probs: bool = True, validate: bool = False
+    ):
         """Run the full play-by-play processing pipeline.
 
         Applies every scoring/feature step in order: down detection, play type
@@ -8489,6 +8491,11 @@ class CFBPlayProcess(object):
                 (:func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`) and append
                 ``two_pt_wp`` / ``xp_wp`` / ``prob_2pt`` / ``two_pt_recommendation`` /
                 ``two_pt_wp_diff`` to point-after / two-point rows (null elsewhere).
+            validate: when True, score the processed frame with
+                :func:`sportsdataverse.validation.validate_game` and attach the
+                report dict under the ``"validation"`` key of the returned game
+                (``{}`` when the pipeline produced no plays). Off by default --
+                the gate costs a few milliseconds and most callers do not read it.
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
@@ -8620,7 +8627,29 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
+        if validate:
+            self.json["validation"] = self._validation_report("cfb")
         return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+
+    def _validation_report(self, league: str) -> dict:
+        """Score ``self.plays_frame`` with the packaged per-game gate (``validate=True``).
+
+        Returns an empty dict when the pipeline produced no frame (corrupt feed,
+        ``playByPlaySource == "none"``), so the caller never has to guard.
+        """
+        from sportsdataverse.validation import validate_game
+
+        frame = getattr(self, "plays_frame", None)
+        if not isinstance(frame, pl.DataFrame) or frame.height == 0:
+            return {}
+        return validate_game(
+            frame,
+            league,
+            header=self.json.get("header"),
+            source=getattr(self, "source", "espn"),
+            summary=self.json,
+            box=self.json.get("advBoxScore"),
+        ).to_dict()
 
     def add_fourth_down_probs(self):
         """Add the cfb4th 4th-down decision surface to the processed plays.

@@ -7142,7 +7142,7 @@ class NFLPlayProcess(object):
     def __pipeline_done(self, kind):
         self._pipeline_results = {**getattr(self, "_pipeline_results", {}), kind: self.json}
 
-    def run_processing_pipeline(self):
+    def run_processing_pipeline(self, validate: bool = False):
         """Run the full feature-engineering pipeline against ``self.json``.
 
         Pipes the plays frame through the chain of helpers: downs,
@@ -7150,6 +7150,13 @@ class NFLPlayProcess(object):
         types, penalties, play-category flags, yardage cols, player cols,
         post-play cols, spread time, EPA, WPA, drive data, and QBR --
         followed by the advanced box score build.
+
+        Args:
+            validate: when True, score the processed frame with
+                :func:`sportsdataverse.validation.validate_game` and attach the
+                report dict under the ``"validation"`` key of the returned game
+                (``{}`` when the pipeline produced no plays). Off by default --
+                the gate costs a few milliseconds and most callers do not read it.
 
         Returns:
             Dict | None: The full processed game dict (or the subset
@@ -7285,7 +7292,29 @@ class NFLPlayProcess(object):
             self.ran_pipeline = True
             self.__pipeline_done("processing")
         self.json = getattr(self, "_pipeline_results", {}).get("processing", self.json)
+        if validate:
+            self.json["validation"] = self._validation_report("nfl")
         return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+
+    def _validation_report(self, league: str) -> dict:
+        """Score ``self.plays_frame`` with the packaged per-game gate (``validate=True``).
+
+        Returns an empty dict when the pipeline produced no frame (corrupt feed,
+        ``playByPlaySource == "none"``), so the caller never has to guard.
+        """
+        from sportsdataverse.validation import validate_game
+
+        frame = getattr(self, "plays_frame", None)
+        if not isinstance(frame, pl.DataFrame) or frame.height == 0:
+            return {}
+        return validate_game(
+            frame,
+            league,
+            header=self.json.get("header"),
+            source=getattr(self, "source", "espn"),
+            summary=self.json,
+            box=self.json.get("advBoxScore"),
+        ).to_dict()
 
     def run_cleaning_pipeline(self):
         """Run the lighter cleaning pipeline against ``self.json``.

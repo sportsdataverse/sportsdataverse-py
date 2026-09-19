@@ -27,6 +27,10 @@ def _game(**overrides) -> pl.DataFrame:
         "period.number": [1, 1, 2, 2, 2, 3],
         "clock.displayValue": ["10:00", "9:30", "5:00", "4:30", "4:00", "15:00"],
         "type.text": ["Rush", "Rushing Touchdown", "Pass Reception", "Sack", "Timeout", "Rush"],
+        "type.id": ["5", "68", "24", "7", "21", "5"],
+        "type.abbreviation": ["RUSH", "TD", "REC", "SACK", "TO", "RUSH"],
+        "game_id": [999] * 6,
+        "season": [2023] * 6,
         "text": [
             "A.Back run for 5 yards",
             "A.Back run for 20 yards, TOUCHDOWN (K.Icker kick)",
@@ -385,7 +389,7 @@ def test_nfl_processor_fixture_smoke(monkeypatch):
     proc.espn_nfl_pbp(summary=json.loads(FIX.read_text()))
     result = proc.run_processing_pipeline()
     rules = _by_rule(proc.plays_frame, summary=summary, box=result["advBoxScore"], league="nfl")
-    assert {r.invariant for r in rules.values()} == set(range(1, 11))
+    assert {r.invariant for r in rules.values()} == set(range(1, 13))
     for rule in ("score.final_matches_header", "plays.unexplained_drop", "plays.duplicate_ids", "ytg.start_range"):
         assert rules[rule].n_checked > 0 and rules[rule].n_violations == 0, rule
     assert rules["attr.passer"].n_checked > 20
@@ -410,3 +414,69 @@ def test_sweep_era_buckets(season, era):
     from tools.validation.pbp_invariant_sweep import era_of
 
     assert era_of(season) == era
+
+
+# 11 -------------------------------------------------------------------------
+
+
+def test_play_order_and_type_identity():
+    assert _fires(_game(), "period.monotone") == 0
+    assert _fires(_game(**{"period__number": (3, 1)}), "period.monotone") == 1
+    assert _fires(_game(), "clock.monotone_within_period") == 0
+    # row 3 is in the same period as row 2 and shows MORE time left
+    assert _fires(_game(**{"clock__displayValue": (3, "6:00")}), "clock.monotone_within_period") == 1
+    # a clock that is not mm:ss is undecidable: both adjacent pairs leave the denominator
+    assert _by_rule(_game(**{"clock__displayValue": (3, "-")}))["clock.monotone_within_period"].n_checked == 1
+    assert _fires(_game(), "type.null_id") == 0
+    assert _fires(_game(**{"type__id": (2, None)}), "type.null_id") == 1
+    assert _fires(_game(), "type.null_abbreviation") == 0
+    assert _fires(_game(**{"type__abbreviation": (3, "")}), "type.null_abbreviation") == 1
+
+
+def test_next_snap_continuity_spans_drives():
+    assert _fires(_game(), "ytg.continuity_next_snap") == 0
+    # rows 2-3 are one drive: the sack starts where the reception ended
+    assert _fires(_game(**{"start__yardsToEndzone": (3, 60)}), "ytg.continuity_next_snap") == 1
+    # a turnover between two consecutive scrimmage rows: the new offense starts at 100 - end.
+    # ytg.continuity (same-drive only) cannot see this pair; the next-snap rule can.
+    flipped = _game().with_columns(
+        pl.Series("drive.id", ["d1", "d1", "d2", "d3", "d3", "d4"]),
+        pl.Series("start.pos_team.id", [HOME, HOME, AWAY, HOME, HOME, HOME]),
+        pl.Series("end.pos_team.id", [HOME, HOME, AWAY, HOME, HOME, HOME]),
+        pl.Series("start.yardsToEndzone", [25, 20, 75, 33, 73, 75]),
+        pl.Series("end.yardsToEndzone", [20, 0, 67, 73, 73, 72]),
+    )
+    assert _fires(flipped, "ytg.continuity_next_snap") == 0  # 100 - 67 == 33
+    assert _fires(flipped, "ytg.continuity") == 0
+    broken = flipped.with_columns(pl.Series("start.yardsToEndzone", [25, 20, 75, 67, 73, 75]))
+    assert _fires(broken, "ytg.continuity_next_snap") == 1
+
+
+# 12 -------------------------------------------------------------------------
+
+
+def _team_box(home_epa=4.1, away_epa=-0.4):
+    return {"team": [{"pos_team": HOME, "EPA_overall_off": home_epa}, {"pos_team": AWAY, "EPA_overall_off": away_epa}]}
+
+
+def test_team_epa_sum_matches_box():
+    # EPA over HOM's scrimmage plays: 0.5 + 3.5 + 0.1 = 4.1; AWY's: 0.3 - 0.7 = -0.4
+    assert _fires(_game(), "epa.team_sum_matches_box", box=_team_box()) == 0
+    assert _fires(_game(), "epa.team_sum_matches_box", box=_team_box(home_epa=1.0)) == 1
+
+
+def test_kickoff_count_and_drive_count():
+    # no kickoff rows at all: the rule is not emitted rather than failing the feed
+    assert "plays.kickoff_count_matches_scores" not in _by_rule(_game())
+    kicks = _game().with_columns(
+        pl.Series("kickoff_play", [True, False, False, False, False, True]),
+        pl.Series("scrimmage_play", [False, True, True, True, False, False]),
+    )
+    # 2 kickoffs against 1 scoring play + 2 halves = 3 expected, inside the +/-2 tolerance
+    assert _fires(kicks, "plays.kickoff_count_matches_scores") == 0
+    many = kicks.with_columns(pl.Series("scoring_play", [False, True, True, True, True, True]))
+    assert _fires(many, "plays.kickoff_count_matches_scores") == 1
+    # the synthetic frame has three drives; the summary declares one
+    assert _fires(_game(), "drive.count_matches_feed", summary=_summary()) == 1
+    one_drive = _game().with_columns(pl.Series("drive.id", ["d1"] * 6))
+    assert _fires(one_drive, "drive.count_matches_feed", summary=_summary()) == 0
