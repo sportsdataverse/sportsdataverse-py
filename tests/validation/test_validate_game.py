@@ -167,6 +167,7 @@ def test_every_scoped_rule_id_exists_in_the_rule_table():
     # the rules RULE_SCOPE names that a bare frame cannot produce are named here explicitly
     frame_only = set(RULE_SCOPE) - known
     assert frame_only <= {
+        "box.usage_shares_sum_to_one",  # needs an advBoxScore
         "plays.unexplained_drop",  # needs a summary
         "score.scoring_play_without_change",
         "wp.wpa_sums_to_result",

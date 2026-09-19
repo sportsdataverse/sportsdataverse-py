@@ -35,6 +35,7 @@ from typing import Any
 
 import polars as pl
 
+from sportsdataverse.validation.box_reconcile import evaluate_box
 from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 _SAMPLE_N = 5
@@ -1554,7 +1555,9 @@ def evaluate(
             processor row order.
         summary: The ESPN summary the game was processed from; enables the
             header-score, WP-result, dropped-play and ESPN box comparisons.
-        box: The processor's ``advBoxScore`` dict; enables the team-box rules.
+        box: The processor's ``advBoxScore`` dict; enables the team-box rules
+            and the ``box.*`` section reconciliations
+            (:mod:`sportsdataverse.validation.box_reconcile`).
         league: ``"nfl"`` or ``"cfb"`` -- selects the box-score sack convention.
 
     Returns:
@@ -1575,6 +1578,7 @@ def evaluate(
     groups += _order(plays)
     groups += _next_snap_continuity(plays)
     groups += _aggregations(plays, summary, box)
+    groups += evaluate_box(plays, box, league)
     return [r for r in groups if r is not None]
 
 
