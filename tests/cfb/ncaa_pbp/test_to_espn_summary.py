@@ -22,6 +22,7 @@ import pytest
 from sportsdataverse.cfb.ncaa_pbp.fetch import _archive_bundle, _has_plays, _resolve_contest_id
 from sportsdataverse.cfb.ncaa_pbp.to_espn_summary import _fill_end_state, _ncaa_to_espn_summary
 from sportsdataverse.football.sources.contract import _validate_summary
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.football.sources.dispatch import AllSourcesFailed, SourceUnavailable, _process_game
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -546,3 +547,195 @@ def test_one_club_from_the_id_map_and_one_from_the_crosswalk_is_enough():
         adapted = adapter(401762505, _Ctx(payload=bundle("final_fbs_6386337"), idmap_row=row))
     competitors = adapted.summary["header"]["competitions"][0]["competitors"]
     assert [c["team"]["id"] for c in competitors] == ["2226", "202"]
+
+
+# --- the Data API leg: archive -> Data API -> live (opt-in) ------------------------------------
+
+
+class _Resp:
+    """The two attributes ``_api_bundle`` touches on a ``download`` response."""
+
+    def __init__(self, body):
+        self._body = body
+
+    def json(self):
+        return self._body
+
+
+def _transport(body=None, raises=None, calls=None):
+    """A ``download`` stand-in recording its kwargs; ``raises`` is the exception to throw."""
+
+    def fake(**kwargs):
+        if calls is not None:
+            calls.append(kwargs)
+        if raises is not None:
+            raise raises
+        return _Resp(body)
+
+    return fake
+
+
+def test_the_data_api_leg_returns_the_same_bundle_the_archive_would_have(monkeypatch):
+    """The whole point of NCAA-PROD: the consumer that cannot mount the checkout reads the
+    identical payload over HTTP."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import CONTEST_ROUTE, _api_bundle
+
+    calls: list[dict] = []
+    served = _api_bundle(
+        "6386337",
+        season=2025,
+        base_url="http://127.0.0.1:8000/",
+        transport=_transport(bundle("final_fbs_6386337"), calls=calls),
+    )
+    assert served == bundle("final_fbs_6386337")
+    assert calls[0]["url"] == "http://127.0.0.1:8000" + CONTEST_ROUTE.format(contest_id="6386337")
+    assert calls[0]["params"] == {"season": 2025}
+
+
+def test_the_data_api_leg_is_bounded_and_never_retries(monkeypatch):
+    """MUTATION TARGET. It runs on Game on Paper's request path and dispatch imposes no
+    per-source budget, so the ceiling has to live here: ``download``'s defaults are a 30 s
+    timeout and **15** retries with backoff — minutes of retry storm per unservable game."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import API_TIMEOUT, _api_bundle
+
+    calls: list[dict] = []
+    _api_bundle("6386337", base_url="http://x", transport=_transport({}, calls=calls))
+    assert calls[0]["timeout"] == API_TIMEOUT <= 5.0
+    assert calls[0]["num_retries"] == 0
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        NoDataError("404: not archived"),  # the game is not in the archive
+        RuntimeError("503: no archive on this deployment"),
+        TimeoutError("read timed out"),
+        ValueError("not json"),  # a proxy's HTML error page
+    ],
+)
+def test_every_data_api_failure_is_a_miss_not_a_raise(failure):
+    """404, 503, a timeout and a junk body are one answer -- None -- so the caller falls to the
+    opt-in live leg and then to ``SourceUnavailable``. An HTTP exception must not escape onto a
+    request path from here."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _api_bundle
+
+    assert _api_bundle("6386337", base_url="http://x", transport=_transport(raises=failure)) is None
+
+
+@pytest.mark.parametrize("body", [None, {}, [], "html", 7])
+def test_a_non_bundle_body_is_a_miss(body):
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _api_bundle
+
+    assert _api_bundle("6386337", base_url="http://x", transport=_transport(body)) is None
+
+
+def test_no_data_api_configured_means_the_leg_is_skipped_entirely(monkeypatch):
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _api_bundle
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+
+    monkeypatch.delenv(IDMAP_BASE_URL_ENV, raising=False)
+    calls: list[dict] = []
+    assert _api_bundle("6386337", transport=_transport({}, calls=calls)) is None
+    assert calls == []  # not "called and ignored": never called
+
+
+def test_the_read_key_is_sent_when_one_is_configured(monkeypatch):
+    """Every ``/v1/`` route on the Data API needs a bearer key; without one the leg 401s."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import _api_bundle
+    from sportsdataverse.football.sources.idmap import API_KEY_ENV
+
+    calls: list[dict] = []
+    monkeypatch.setenv(API_KEY_ENV, "sdv_test_key")
+    _api_bundle("6386337", base_url="http://x", transport=_transport({}, calls=calls))
+    assert calls[0]["headers"] == {"Authorization": "Bearer sdv_test_key"}
+    monkeypatch.delenv(API_KEY_ENV)
+    _api_bundle("6386337", base_url="http://x", transport=_transport({}, calls=calls))
+    assert calls[1]["headers"] == {}
+
+
+def test_a_local_archive_wins_and_the_data_api_is_never_called(monkeypatch, tmp_path):
+    """Order matters for latency, not correctness: the droplet must keep reading its own disk."""
+    import gzip as _gzip
+
+    from sportsdataverse.cfb.ncaa_pbp.fetch import ARCHIVE_DIR_ENV
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+
+    year = tmp_path / "mfb" / "raw" / "2026"
+    year.mkdir(parents=True)
+    with _gzip.open(year / "6386337.json.gz", "wt", encoding="utf-8") as fh:
+        json.dump(bundle("final_fbs_6386337"), fh)
+    monkeypatch.setenv(ARCHIVE_DIR_ENV, str(tmp_path))
+    monkeypatch.setenv(IDMAP_BASE_URL_ENV, "http://127.0.0.1:8000")
+    calls: list[dict] = []
+    monkeypatch.setattr("sportsdataverse.dl_utils.download", _transport({}, calls=calls))
+
+    processed = _process_game(
+        "cfb", 401762505, source="ncaa", fallthrough=False, idmap_row=idmap_row("final_fbs_6386337")
+    )
+    assert processed.provenance["native_ids"]["ncaa_bundle_source"] == "archive"
+    assert calls == []
+
+
+def test_with_no_archive_the_data_api_serves_the_game_and_stamps_its_provenance(monkeypatch):
+    """The production shape: Game on Paper's API, which cannot mount the checkout."""
+    from sportsdataverse.cfb.ncaa_pbp.fetch import ARCHIVE_DIR_ENV
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+
+    monkeypatch.delenv(ARCHIVE_DIR_ENV, raising=False)
+    monkeypatch.setenv(IDMAP_BASE_URL_ENV, "http://127.0.0.1:8000")
+    monkeypatch.setattr("sportsdataverse.dl_utils.download", _transport(bundle("final_fbs_6386337")))
+
+    processed = _process_game(
+        "cfb", 401762505, source="ncaa", fallthrough=False, idmap_row=idmap_row("final_fbs_6386337")
+    )
+    assert processed.provenance["native_ids"]["ncaa_bundle_source"] == "data_api"
+    assert processed.plays_frame.height > 50
+
+
+def test_the_data_api_frame_is_identical_to_the_archive_frame(monkeypatch, tmp_path):
+    """Identity, not "looks right": the same game served by disk and by HTTP must produce the
+    same plays frame, or the Data API leg is a second source wearing the first one's name."""
+    import gzip as _gzip
+
+    from sportsdataverse.cfb.ncaa_pbp.fetch import ARCHIVE_DIR_ENV
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+
+    year = tmp_path / "mfb" / "raw" / "2026"
+    year.mkdir(parents=True)
+    with _gzip.open(year / "6386337.json.gz", "wt", encoding="utf-8") as fh:
+        json.dump(bundle("final_fbs_6386337"), fh)
+
+    def run() -> pl.DataFrame:
+        return _process_game(
+            "cfb", 401762505, source="ncaa", fallthrough=False, idmap_row=idmap_row("final_fbs_6386337")
+        ).plays_frame
+
+    monkeypatch.setenv(ARCHIVE_DIR_ENV, str(tmp_path))
+    monkeypatch.delenv(IDMAP_BASE_URL_ENV, raising=False)
+    from_disk = run()
+
+    monkeypatch.delenv(ARCHIVE_DIR_ENV)
+    monkeypatch.setenv(IDMAP_BASE_URL_ENV, "http://127.0.0.1:8000")
+    monkeypatch.setattr("sportsdataverse.dl_utils.download", _transport(bundle("final_fbs_6386337")))
+    over_http = run()
+
+    assert from_disk.to_dicts() == over_http.to_dicts()
+
+
+def test_neither_archive_nor_data_api_fails_closed_naming_both(monkeypatch):
+    """MUTATION TARGET. With every leg empty the caller gets ``SourceUnavailable`` -- not a
+    browser launch, not a hang -- and the message says which legs were tried."""
+    import time as _time
+
+    from sportsdataverse.cfb.ncaa_pbp.fetch import ARCHIVE_DIR_ENV, LIVE_FETCH_ENV
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+
+    monkeypatch.delenv(ARCHIVE_DIR_ENV, raising=False)
+    monkeypatch.delenv(LIVE_FETCH_ENV, raising=False)
+    monkeypatch.setenv(IDMAP_BASE_URL_ENV, "http://127.0.0.1:8000")
+    monkeypatch.setattr("sportsdataverse.dl_utils.download", _transport(raises=NoDataError("404: not archived")))
+
+    t0 = _time.monotonic()
+    with pytest.raises(SourceUnavailable, match="neither the local archive nor the Data API"):
+        adapter(401762505, _Ctx(idmap_row=idmap_row("final_fbs_6386337")))
+    assert _time.monotonic() - t0 < 1.0

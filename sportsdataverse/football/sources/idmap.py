@@ -19,6 +19,7 @@ pre-game tiers).
 from __future__ import annotations
 
 import json
+import os
 from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
@@ -57,6 +58,22 @@ Every id is Utf8: ids are labels, never arithmetic (join-key dtype discipline)."
 
 IDMAP_ROUTE = "/v1/{league}/idmap/{espn_id}"
 """Data API route GOP reads at request time (served by sdv-db's generated API)."""
+
+API_KEY_ENV = "SDV_DATA_API_KEY"
+"""Read-scoped Data API bearer token. Every ``/v1/`` route requires one
+(``sdv_db.api.auth.require``), so without it the Data API legs answer 401 and the caller
+falls through to whatever comes next -- optional here, mandatory in production."""
+
+
+def _api_headers() -> dict[str, str]:
+    """``Authorization`` for the Data API, or ``{}`` when no key is configured.
+
+    Shared by every Data API read in this package (the id-map row and the NCAA contest
+    bundle), so a deployment configures one env var, not one per route.
+    """
+    key = (os.environ.get(API_KEY_ENV) or "").strip()
+    return {"Authorization": f"Bearer {key}"} if key else {}
+
 
 TEAM_SCHEMA: dict[str, pl.DataType] = {
     "league": pl.Utf8,
@@ -229,6 +246,7 @@ def _fetch_idmap_row(
         Any other failure raises through ``download`` -- a failed fetch is never an empty row.
     """
     url = base_url.rstrip("/") + IDMAP_ROUTE.format(league=league, espn_id=espn_event_id)
+    kwargs.setdefault("headers", _api_headers())
     try:
         resp = transport(url=url, **kwargs)
     except NoDataError:
