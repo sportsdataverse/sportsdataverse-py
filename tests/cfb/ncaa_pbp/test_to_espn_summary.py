@@ -195,7 +195,18 @@ def test_a_trailing_kick_takes_the_end_spot_the_page_states():
     )[0]
     punt = [p for p in plays(served) if p["type"]["text"] == "Punt"][-1]
     assert punt["start"]["yardsToEndzone"] == 44
-    assert punt["end"]["yardsToEndzone"] == 5
+    # MUTATION TARGET. ``to_cfbfastr`` flips ``yards_to_goal_end`` into the new offence's frame
+    # only on the arm that can see the next snap, so on the trailing row it hands back **5** --
+    # the spot in the PUNTING team's frame. Emitting that verbatim, credited to the punting
+    # team, says North Dakota St. ended 5 yards from scoring immediately after punting the ball
+    # away. The same contest's complete page is the oracle: it states 95, for Youngstown St.
+    home, away = GAMES["final_fcs_6386315"][2], GAMES["final_fcs_6386315"][3]
+    assert punt["start"]["team"]["id"] == home
+    assert punt["end"]["team"]["id"] == away
+    assert punt["end"]["yardsToEndzone"] == 95
+    full = [p for p in plays(summary("final_fcs_6386315")) if p["type"]["text"] == "Punt"]
+    twin = next(p for p in full if p["text"] == punt["text"])
+    assert (twin["end"]["yardsToEndzone"], twin["end"]["team"]["id"]) == (95, away)
 
 
 def test_the_no_next_snap_end_state_is_derived_not_copied():
@@ -213,13 +224,15 @@ def test_the_no_next_snap_end_state_is_derived_not_copied():
             "_yards_to_goal_end": None,
             "_touchdown": False,
             "_scoring_team": None,
-            "_end_is_home": False,
         }
 
     rush, punt = play("Rush", 12), play("Punt", 45)
-    _fill_end_state([rush], "2")
-    _fill_end_state([punt], "2")
+    _fill_end_state([rush], "2", "1")
+    _fill_end_state([punt], "2", "1")
     assert rush["end"]["yardsToEndzone"] == 48
+    assert rush["end"]["team"]["id"] == "1"
+    # the punt states no end spot, so the ball keeps the start spot -- but it does NOT keep the
+    # punting team: the club in start.team.id no longer has it.
     assert punt["end"]["yardsToEndzone"] == 60
 
 
@@ -515,3 +528,21 @@ def _drive_start_clocks(drive_titles: pl.DataFrame) -> set:
         if len(parts) == 2 and all(p.strip().isdigit() for p in parts):
             out.add(f"{int(parts[0])}:{int(parts[1]):02d}")
     return out
+
+
+def test_one_club_from_the_id_map_and_one_from_the_crosswalk_is_enough():
+    """MUTATION TARGET. ``_ncaa_to_espn_summary`` resolves each side from the id-map row first
+    and the crosswalk second, so counting only the crosswalk's hits refused a game whose id map
+    carried one club and whose crosswalk carried the other -- a servable game, handed to the next
+    source for nothing. The completeness test is per side, across both sources."""
+    row = {k: v for k, v in idmap_row("final_fbs_6386337").items() if k != "away_espn_team_id"}
+    with pytest.MonkeyPatch.context() as mp:
+        # the crosswalk carries ONLY the away club -- the shape that made ``len(team_ids) < 2``
+        # refuse a game both sources together can key
+        mp.setattr(
+            "sportsdataverse.cfb.ncaa_pbp.to_espn_summary._espn_team_ids_from_bundle",
+            lambda html, sides: {"away": "202"},
+        )
+        adapted = adapter(401762505, _Ctx(payload=bundle("final_fbs_6386337"), idmap_row=row))
+    competitors = adapted.summary["header"]["competitions"][0]["competitors"]
+    assert [c["team"]["id"] for c in competitors] == ["2226", "202"]

@@ -246,7 +246,7 @@ def _point_after(row: Mapping[str, Any]) -> Dict[str, Any]:
     return {"id": 61 if good else 64, "text": text, "abbreviation": text, "value": 1 if good else 0}
 
 
-def _trailing_end(play: Dict[str, Any]) -> Dict[str, Any]:
+def _trailing_end(play: Dict[str, Any], home_id: str, away_id: str) -> Dict[str, Any]:
     """The end state of a play the feed states no next snap for, derived from its own yardage.
 
     Fires on the last row of every game and on the newest row of every truncated (in-progress)
@@ -256,20 +256,38 @@ def _trailing_end(play: Dict[str, Any]) -> Dict[str, Any]:
     (``yards_to_goal_end``, lifted from the play text's "to the ALA31"); where it does not, a
     scrimmage snap's end is ``start - yards gained``, and a kick or a turnover -- where the
     yardage says nothing about where the next team starts -- keeps the start spot.
+
+    **The frame is the trailing row's problem too, not just the spot.** ``to_cfbfastr`` flips
+    ``yards_to_goal_end`` into the new offence's frame only on the arm that can see the next snap
+    (``cfb_ncaa_cfbfastr``'s ``nxt is not None`` branch), so on the row that has none the spot is
+    still in the OLD offence's frame -- and the club in ``start.team.id`` no longer has the ball.
+    Passing both through said the punting team ended **5** yards from scoring right after punting
+    it away (``truncated_6386315``; the same contest's complete page states 95, for the receiving
+    team). A kickoff is the exception the mapper documents -- that row already sits with the
+    receiving team, so its spot needs no flip, only its club -- and a safety keeps the old
+    offence's frame by cfbfastR convention.
     """
     start = play["start"]
     to_endzone = play.pop("_yards_to_goal_end", None)
+    label = play["type"]["text"]
+    keeps_the_ball = label in _KEEPS_THE_BALL or label in _STOPPAGE or label == "Safety"
+    end_team = str(start["team"]["id"])
     if to_endzone is None:
-        gained = int(play.get("statYardage") or 0) if play["type"]["text"] in _KEEPS_THE_BALL else 0
+        gained = int(play.get("statYardage") or 0) if label in _KEEPS_THE_BALL else 0
         to_endzone = start["yardsToEndzone"]
         if to_endzone is not None and gained:
             to_endzone = max(0, min(100, int(to_endzone) - gained))
+    elif not keeps_the_ball:
+        end_team = str(away_id) if end_team == str(home_id) else str(home_id)
+        if not label.startswith("Kickoff"):
+            to_endzone = max(0, min(100, 100 - int(to_endzone)))
+    down, distance = _FIXED_END_DOWN.get(label, (start["down"], start["distance"]))
     return {
-        "down": start["down"],
-        "distance": start["distance"],
-        "yardLine": _yard_line(to_endzone, play["_end_is_home"]),
+        "down": down,
+        "distance": distance,
+        "yardLine": _yard_line(to_endzone, end_team == str(home_id)),
         "yardsToEndzone": to_endzone,
-        "team": {"id": start["team"]["id"]},
+        "team": {"id": end_team},
     }
 
 
@@ -323,7 +341,7 @@ def _kickoff_frame(plays: List[Dict[str, Any]], home_id: str, away_id: str) -> i
     return reframed
 
 
-def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
+def _fill_end_state(plays: List[Dict[str, Any]], home_id: str, away_id: str) -> None:
     """Fill every play's ``end`` from its own end spot and the **next** snap, across drives.
 
     ``yards_to_goal_end`` already answers "where did the ball finish, in whose frame" -- the
@@ -352,7 +370,7 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
                 "team": {"id": team},
             }
         elif nxt is None:
-            play["end"] = _trailing_end(play)
+            play["end"] = _trailing_end(play, home_id, away_id)
         else:
             to_endzone = play.pop("_yards_to_goal_end", None)
             end_team = nxt["start"]["team"]["id"] or play["start"]["team"]["id"]
@@ -367,7 +385,7 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
                 "team": {"id": end_team},
             }
         play.pop("_yards_to_goal_end", None)
-        for key in ("_touchdown", "_scoring_team", "_end_is_home"):
+        for key in ("_touchdown", "_scoring_team"):
             play.pop(key, None)
 
 
@@ -737,7 +755,6 @@ def _ncaa_to_espn_summary(
             "_yards_to_goal_end": row.get("yards_to_goal_end"),
             "_touchdown": touchdown,
             "_scoring_team": scoring_team,
-            "_end_is_home": pos_is_home,
         }
         emitted.append(play)
         if touchdown:
@@ -758,7 +775,7 @@ def _ncaa_to_espn_summary(
     reframed = _kickoff_frame(emitted, home_id, away_id)
     if reframed:
         notes.append(f"{reframed} kickoff rows were re-framed onto the kicking team (ESPN's convention)")
-    _fill_end_state(emitted, home_id)
+    _fill_end_state(emitted, home_id, away_id)
 
     previous = [_drive(event_id, i, meta, plays) for i, (meta, plays) in enumerate(drives, start=1) if plays]
     current: Optional[Dict[str, Any]] = None
@@ -864,17 +881,24 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
         from sportsdataverse.cfb.cfb_ncaa_box import parse_cfb_ncaa_linescore
 
+        # The completeness test is PER SIDE and spans both sources, because that is how
+        # ``_ncaa_to_espn_summary`` resolves them: the id-map row first, then this fallback.
+        # Counting ``team_ids`` alone refused a game whose id map carried one club and whose
+        # crosswalk carried the other -- a servable game, handed on for nothing.
+        def _unresolved() -> set:
+            return {side for side in ("home", "away") if not (row.get(f"{side}_espn_team_id") or team_ids.get(side))}
+
         linescore = parse_cfb_ncaa_linescore(bundle.get("box_score") or "")
         sides = {r["team"]: r["home_away"] for r in linescore.to_dicts() if r.get("team")}
         team_ids = _espn_team_ids_from_bundle(bundle.get("play_by_play") or "", sides)
-        if ctx.payload is None and len(team_ids) < 2:
+        if ctx.payload is None and _unresolved():
             # last leg, and network-bound: ESPN's own schedule for the game's date. Skipped on the
             # injected-payload path, which is what keeps an offline replay offline.
             from sportsdataverse.cfb.ncaa_pbp.fetch import _espn_team_ids_from_schedule
 
             date = linescore.row(0, named=True).get("game_date") if linescore.height else None
             team_ids = {**_espn_team_ids_from_schedule(espn_id, date), **team_ids}
-        if len(team_ids) < 2:
+        if _unresolved():
             raise SourceUnavailable(f"cfb {espn_id}: no ESPN team id for both clubs (id map, crosswalk, schedule)")
         resolved_by = f"{resolved_by}+crosswalk" if resolved_by != "unresolved" else "crosswalk"
 

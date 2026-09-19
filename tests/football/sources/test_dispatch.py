@@ -166,9 +166,16 @@ def test_no_fallthrough_raises_with_one_attempt():
 
 def test_a_registered_source_with_no_id_fails_on_its_own_terms():
     """``ncaa`` IS registered now, so a game it cannot key must say so rather than report
-    "not implemented" -- the two are different failures and only one is worth retrying."""
+    "not implemented" -- the two are different failures and only one is worth retrying.
+
+    The id-map row is explicit: omitting it lets ``_process_game`` resolve the cascade, and a
+    runner with ``SDV_DATA_API_URL`` or ``SDV_IDMAP_DIR`` set could hand back a row that DOES
+    carry ``ncaa_game_id``, so the assertion would stop reaching the path it names.
+    """
     with pytest.raises(AllSourcesFailed) as ei:
-        _process_game("cfb", CFB_GAME_ID, source="ncaa", fallthrough=False)
+        _process_game(
+            "cfb", CFB_GAME_ID, source="ncaa", fallthrough=False, idmap_row={"espn_event_id": str(CFB_GAME_ID)}
+        )
     ((source, error),) = [(a.source, a.error) for a in ei.value.attempts]
     assert source == "ncaa"
     assert "SourceUnavailable" in error and "no ncaa_game_id" in error
