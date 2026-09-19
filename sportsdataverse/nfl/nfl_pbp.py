@@ -1241,6 +1241,30 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
+            .with_columns(
+                # --- ESPN type 80, "Sack Opp Fumble Recovery" (N37) ----
+                # New in 2025 (84 rows in 2025, 17 so far in 2026) and emitted by the
+                # Shield adapter too. The string is in *none* of the play-type vectors
+                # -- not turnover_vec, not end_change_vec, not the pass/rush/sack lists
+                # -- so the row was neither a turnover nor a possession change: the end
+                # state stayed with the offense that had just lost the ball and the EPA
+                # sign flip never fired (3 of the first 5 gave the offense POSITIVE EPA,
+                # e.g. +3.71 where nflfastR has -5.48). Fold it into the three types
+                # ESPN already uses for the same three outcomes -- 9 / 39 / 29 -- so every
+                # downstream branch is the one that is already exercised. Possession
+                # comes from the feed (``end.team.id``), not from the type, so a type-80
+                # row the offense recovers itself stays the offense's play.
+                pl.when(pl.col("type.text") == "Sack Opp Fumble Recovery")
+                .then(
+                    pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+                    .then(pl.lit("Fumble Recovery (Own)"))
+                    .when(pl.col("scoringPlay") == True)  # noqa: E712
+                    .then(pl.lit("Fumble Return Touchdown"))
+                    .otherwise(pl.lit("Fumble Recovery (Opponent)")),
+                )
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
             # ESPN's "Blocked Field Goal" keeps its type: relabeled "Extra Point Missed"
             # it scored as a missed PAT (EPA -0.92) instead of the turnover it is, and
             # the "Blocked Field Goal Touchdown" relabel below never fired.
