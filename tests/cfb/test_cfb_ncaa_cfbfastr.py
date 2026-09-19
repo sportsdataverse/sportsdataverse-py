@@ -885,7 +885,7 @@ def test_a_synthesized_overtime_interception_is_a_pass_play() -> None:
     """NC14: 5367688's OT "Interception Return" row set ``int`` with ``pass`` False."""
     df = _parsed_frame("5367688")
     ot = df.filter(pl.col("ot_synthesized") & (pl.col("play_type") == "Interception Return")).row(0, named=True)
-    assert (ot["int"], ot["pass"], ot["period"]) == (True, True, 5)
+    assert (ot["int"], ot["pass"], ot["pass_attempt"], ot["period"]) == (True, True, True, 5)
     # an overtime possession starts 1st & 10 at the 25, so the one-play drive has a down
     assert (ot["down"], ot["distance"]) == (1, 10)
     assert df.filter(pl.col("int") & ~pl.col("pass")).height == 0

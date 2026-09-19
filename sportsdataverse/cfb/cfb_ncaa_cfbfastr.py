@@ -1178,6 +1178,7 @@ def to_cfbfastr(
                     # row is a pass play -- cfbfastR's "Interception Return" label and
                     # ``int`` never stand without it.
                     "pass": od["end_how"] == "INT",
+                    "pass_attempt": od["end_how"] == "INT",
                     "int": od["end_how"] == "INT",
                     "turnover_vec": od["end_how"] in ("INT", "FUMB", "DOWNS"),
                     "downs_turnover": od["end_how"] == "DOWNS",
