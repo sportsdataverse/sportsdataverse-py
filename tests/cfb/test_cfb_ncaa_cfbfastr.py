@@ -496,6 +496,44 @@ def test_punt_end_state_is_the_receivers_next_snap(field_position_frames: "list[
     assert not bad, bad
 
 
+#: the walk-off a page states for a penalty enforced on the play's own row
+#: ("... 10 yards from FIU49 to IND41"). Older pages write it as a plain
+#: "10 yards to the VU32", which the parser's end yard line already reads.
+_WALK_OFF_RE = re.compile(r"\d+ yards? from \S+ to \S*\d")
+
+
+def test_same_row_penalty_ends_at_the_enforcement_spot(
+    field_position_frames: "list[tuple[str, pl.DataFrame]]",
+) -> None:
+    """A penalty enforced on the play's own row ends where its text walks the ball TO (NC11).
+
+    The play's own end yard line is the PRE-enforcement spot, so the next snap disagreed
+    with this row's end on 199 of the 202 qualifying rows in the committed corpus before
+    the fix. ``yards_to_goal_end`` is framed on whoever has the ball after the play, so it
+    must equal the next snap's ``yards_to_goal``; a kickoff row is framed on the KICKING
+    team instead, so a row followed by one is out of frame and skipped.
+    """
+    n = 0
+    bad = {}
+    for cid, df in field_position_frames:
+        rows = df.filter(~pl.col("orig_play_type").is_in(["timeout", "period_marker"])).to_dicts()
+        for cur, nxt in zip(rows, rows[1:]):
+            if (
+                not cur["penalty_flag"]
+                or not _WALK_OFF_RE.search(cur["play_text"] or "")
+                or cur["touchdown"]
+                or cur["safety"]
+                or (nxt["play_type"] or "").startswith("Kickoff")
+                or nxt["yards_to_goal"] is None
+            ):
+                continue
+            n += 1
+            if cur["yards_to_goal_end"] != nxt["yards_to_goal"]:
+                bad.setdefault(cid, []).append((cur["yards_to_goal_end"], nxt["yards_to_goal"], cur["play_text"]))
+    assert n > 50, n
+    assert not bad, bad
+
+
 def test_nullified_touchdown_is_not_a_touchdown() -> None:
     """ "TOUCHDOWN nullified by penalty" scores nothing (6414322: real final The Citadel 40, Samford 13)."""
     df = _frame("6414322")
