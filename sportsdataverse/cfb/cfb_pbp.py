@@ -8493,9 +8493,11 @@ class CFBPlayProcess(object):
                 ``two_pt_wp_diff`` to point-after / two-point rows (null elsewhere).
             validate: when True, score the processed frame with the packaged
                 per-game gate (:mod:`sportsdataverse.validation`) and attach its
-                report dict under the ``"validation"`` key of the returned game
-                (``{}`` when the pipeline produced no plays). Off by default --
-                the gate costs a few milliseconds and most callers do not read it.
+                report dict under the ``"validation"`` key of the processed game
+                (``{}`` when the pipeline produced no plays). Name ``"validation"``
+                in ``return_keys`` to get it back when a subset was requested. Off
+                by default -- the gate costs a few milliseconds and most callers do
+                not read it.
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
