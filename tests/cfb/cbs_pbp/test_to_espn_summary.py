@@ -157,11 +157,13 @@ COMPARE_COLUMNS = (
 @pytest.fixture(autouse=True)
 def _no_cached_pages():
     """The scoreboard page cache is process-wide; a test must never inherit another's page."""
-    from sportsdataverse.cfb.cbs_pbp.game_id import _PAGE_CACHE
+    from sportsdataverse.cfb.cbs_pbp.game_id import _PAGE_CACHE, _PAGE_MISSES
 
     _PAGE_CACHE.clear()
+    _PAGE_MISSES.clear()
     yield
     _PAGE_CACHE.clear()
+    _PAGE_MISSES.clear()
 
 
 def _load(name: str) -> dict:
@@ -510,6 +512,40 @@ def test_an_unreachable_scoreboard_page_is_a_miss_not_a_raise():
     game_id, provenance = _resolve_cbs_game_id(2026, 3, "251", "194", transport=transport)
     assert game_id is None
     assert provenance["weeks_tried"], "every candidate week was attempted"
+
+
+def test_a_failing_week_page_is_read_once_per_process_on_a_bounded_retry_budget():
+    """Red without the miss cache: every game re-bills the same dead page, three weeks deep.
+
+    ``dl_utils.download`` retries 15 times by default, and each game tries three weeks, so an
+    unreachable CBS page cost ~45 requests **per game** on Game on Paper's request path. The
+    NFL twin took this fix in #542; this module was copied from it before that landed.
+    """
+    from sportsdataverse.cfb.cbs_pbp.game_id import _SCOREBOARD_RETRIES
+
+    calls = []
+
+    def transport(url, **kwargs):
+        calls.append(kwargs.get("num_retries"))
+        raise OSError("connection reset")
+
+    for _ in range(4):
+        assert _resolve_cbs_game_id(2026, 3, "251", "194", transport=transport)[0] is None
+    assert len(calls) == 3, "one read per candidate week, for the whole process"
+    assert calls == [_SCOREBOARD_RETRIES] * 3, "a best-effort lookup does not take the 15-retry budget"
+
+
+def test_a_week_page_that_parses_to_no_cards_is_also_remembered():
+    """A 200 that carries no card is a miss too -- otherwise it is re-fetched per game."""
+    calls = []
+
+    def transport(url, **kwargs):
+        calls.append(url)
+        return _Page("<html>no games</html>")
+
+    for _ in range(3):
+        assert _resolve_cbs_game_id(2026, 3, "251", "194", transport=transport)[0] is None
+    assert len(calls) == 3
 
 
 def test_the_card_parser_reads_both_team_ids_in_page_order():

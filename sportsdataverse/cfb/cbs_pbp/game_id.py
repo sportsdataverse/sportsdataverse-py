@@ -17,9 +17,10 @@ directory, ``TEXAS`` in ``data-abbrev`` and ``UT`` in ``shortName`` -- so a numb
 only stable key. :mod:`sportsdataverse.cfb.cbs_pbp.teams` holds the ESPN -> CBS team id
 snapshot; an ESPN team it does not carry resolves to nothing, never to a guess.
 
-**CBS's CFB week is not ESPN's.** It is its own count (``meta.cbsWeekNumber``) and has run
-level with ESPN's in 2022-2025 and one behind it in 2026, so a small window of weeks is
-tried and the *match* decides, rather than an offset rule that is wrong in some season.
+**CBS's CFB week is not ESPN's.** It is its own count, level with ESPN's in 2022-2025 and one
+behind it in 2026, so a small window of weeks is tried and the *match* decides, rather than
+an offset rule that is wrong in some season. Nothing here reads a stated week number: the
+page that holds the card is the one that names it.
 Only the ``FBS`` division page is read: CBS serves no play-by-play for an FCS-hosted game in
 any era, so not finding the card there is itself the right answer (:func:`_resolve_cbs_game_id`
 returns None and the adapter hands over).
@@ -53,10 +54,19 @@ _CARD_RE = re.compile(
 _LOGO_RE = re.compile(r"team-logos/alt/(\d+)\.svg")
 
 #: Parsed scoreboard pages, keyed by ``(season, division, cbs_week)``. Cached for the life of
-#: the process -- the page is large and one CFB Saturday is one page. Only successful reads
-#: are cached: caching a miss would make one transient failure permanent, and this runs on
-#: Game on Paper's request path.
+#: the process -- the page is large and one CFB Saturday is one page.
 _PAGE_CACHE: Dict[Tuple[int, str, int], List[Dict[str, Any]]] = {}
+
+#: Weeks whose page came back unreadable or with no cards, same key. A miss is remembered too,
+#: because the alternative is worse: ``dl_utils.download`` retries a 403 or a 5xx 15 times and
+#: :func:`_resolve_cbs_game_id` tries three weeks, so one unreachable page re-billed per game
+#: is ~45 requests and minutes of wall clock **per game** on Game on Paper's request path. The
+#: NFL twin took the same fix (#542); this file was copied from it before that landed.
+_PAGE_MISSES: set = set()
+
+#: Retries for the scoreboard page. The default 15 is sized for an asset a whole job depends
+#: on; this one is a best-effort lookup with a fall-through behind it, so it fails fast.
+_SCOREBOARD_RETRIES = 2
 
 
 def _scoreboard_url(season: int, cbs_week: int, division: str = "FBS") -> str:
@@ -102,13 +112,19 @@ def _week_cards(
     key = (int(season), division, int(cbs_week))
     if key in _PAGE_CACHE:
         return _PAGE_CACHE[key]
+    if key in _PAGE_MISSES:
+        return []
+    kwargs.setdefault("num_retries", _SCOREBOARD_RETRIES)
     try:
         response = transport(url=_scoreboard_url(season, cbs_week, division), **kwargs)
     except Exception:  # noqa: BLE001 -- an unreachable page is a miss, never a raise
+        _PAGE_MISSES.add(key)
         return []
     cards = _parse_scoreboard(getattr(response, "text", "") or "")
     if cards:
         _PAGE_CACHE[key] = cards
+    else:
+        _PAGE_MISSES.add(key)
     return cards
 
 
