@@ -37,6 +37,10 @@ See Also:
 
 from __future__ import annotations
 
+from sportsdataverse._xgb import apply_thread_env as _apply_thread_env
+
+_apply_thread_env()
+
 import logging as _logging
 
 # Library logging convention (PEP 282): attach a NullHandler at the package

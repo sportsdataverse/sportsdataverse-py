@@ -18,6 +18,8 @@ Attribution: this module continues fastRhockey's implementation (Apache-2.0) -- 
 
 from __future__ import annotations
 
+from sportsdataverse._xgb import xgb_threads
+
 import json
 import os
 from pathlib import Path
@@ -148,7 +150,7 @@ def load_xg_models(model_dir: str | Path | None = None) -> dict:
     import xgboost as xgb
 
     d = ensure_xg_models(model_dir)
-    b5, bst = xgb.Booster(), xgb.Booster()
+    b5, bst = xgb.Booster({"nthread": xgb_threads()}), xgb.Booster({"nthread": xgb_threads()})
     b5.load_model(str(d / "xg_model_5v5.json"))
     bst.load_model(str(d / "xg_model_st.json"))
     meta = d / "xg_model_meta.json"
