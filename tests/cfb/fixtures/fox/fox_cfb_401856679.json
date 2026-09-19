@@ -1,0 +1,3686 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 164, 31, 53",
+  "alternateRightColor": "1, 0, 40, 94",
+  "eventStatus": 3,
+  "eventTime": "2026-09-12T16:00:00Z",
+  "id": "43065",
+  "leftColor": "1, 164, 31, 53",
+  "leftTeam": {
+   "imageAltText": "Oklahoma Sooners",
+   "isLoser": true,
+   "longName": "Oklahoma",
+   "name": "OKLA",
+   "score": 10,
+   "stackedNameBottom": "Sooners",
+   "stackedNameTop": "Oklahoma",
+   "uri": "football/cfb/teams/36"
+  },
+  "rightColor": "1, 0, 40, 94",
+  "rightTeam": {
+   "imageAltText": "Michigan Wolverines",
+   "isLoser": false,
+   "longName": "Michigan",
+   "name": "MICH",
+   "score": 17,
+   "stackedNameBottom": "Wolverines",
+   "stackedNameTop": "Michigan",
+   "uri": "football/cfb/teams/21"
+  },
+  "statusLine": "FINAL"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135045",
+      "plays": [
+       {
+        "id": "1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 25,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Baggett kicks 65 yards from MICH 35 to the OKLA End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "MICH 35"
+       },
+       {
+        "id": "2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "L.Avant rushed for 8 yards. Tackled by MICH at OKLA 33.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 \u00b7 OKLA 25"
+       },
+       {
+        "id": "3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 33
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 7 yards. Tackled by MICH at OKLA 40.",
+        "timeOfPlay": "14:29",
+        "title": "2nd & 2 \u00b7 OKLA 33"
+       },
+       {
+        "id": "4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "I.Sategna rushed for 7 yards. Tackled by MICH at OKLA 47.",
+        "timeOfPlay": "13:52",
+        "title": "1st & 10 \u00b7 OKLA 40"
+       },
+       {
+        "id": "5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "13:30",
+        "title": "2nd & 3 \u00b7 OKLA 47"
+       },
+       {
+        "id": "6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 38,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Sacked at OKLA 38 for -9 yards (J.Daley).",
+        "timeOfPlay": "13:22",
+        "title": "3rd & 3 \u00b7 OKLA 47"
+       },
+       {
+        "id": "7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 78,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Miller punts 40 yards to MICH 22, Center-B.Anderson. Fair catch by A.Marsh.",
+        "timeOfPlay": "12:38",
+        "title": "4th & 12 \u00b7 OKLA 38"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "5 plays \u00b7 13 yards \u00b7 2:29",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135053",
+      "plays": [
+       {
+        "id": "8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 78
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Marshall rushed for 3 yards. Tackled by OKLA at MICH 25.",
+        "timeOfPlay": "12:31",
+        "title": "1st & 10 \u00b7 MICH 22"
+       },
+       {
+        "id": "9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 77,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood steps back to pass. Sacked at MICH 23 for -2 yards (T.Wein).",
+        "timeOfPlay": "11:55",
+        "title": "2nd & 7 \u00b7 MICH 25"
+       },
+       {
+        "id": "10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 69,
+            "yardStart": 77
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for A.Marsh. PENALTY on OKLA-C.Guillory, Defensive Pass Interference, 8 yards, accepted. No Play.",
+        "timeOfPlay": "11:12",
+        "title": "3rd & 9 \u00b7 MICH 23"
+       },
+       {
+        "id": "11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 69
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood rushed for 1 yard. Tackled by OKLA at MICH 32.",
+        "timeOfPlay": "11:06",
+        "title": "1st & 10 \u00b7 MICH 31"
+       },
+       {
+        "id": "12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood rushed for 3 yards. Tackled by OKLA at MICH 35.",
+        "timeOfPlay": "10:29",
+        "title": "2nd & 9 \u00b7 MICH 32"
+       },
+       {
+        "id": "13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "A.Marsh rushed for 15 yards. Tackled by OKLA at OKLA 50.",
+        "timeOfPlay": "10:23",
+        "title": "3rd & 6 \u00b7 MICH 35"
+       },
+       {
+        "id": "14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 38,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood pass complete. Catch made by J.Buchanan for 12 yards. Tackled by OKLA at OKLA 38.",
+        "timeOfPlay": "10:03",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 48,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "S.Hiter rushed for yards. Tackled by OKLA at OKLA 20. PENALTY on MICH-J.Guarnera, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "9:23",
+        "title": "1st & 10 \u00b7 OKLA 38"
+       },
+       {
+        "id": "16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood scrambles for 2 yards. Tackled by OKLA at OKLA 46.",
+        "timeOfPlay": "9:11",
+        "title": "1st & 20 \u00b7 OKLA 48"
+       },
+       {
+        "id": "17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 46
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for A.Marsh.",
+        "timeOfPlay": "8:23",
+        "title": "2nd & 18 \u00b7 OKLA 46"
+       },
+       {
+        "id": "18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 46
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "S.Hiter rushed for 3 yards. Tackled by OKLA at OKLA 43.",
+        "timeOfPlay": "8:13",
+        "title": "3rd & 18 \u00b7 OKLA 46"
+       },
+       {
+        "id": "19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 12,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "C.Brown punts 31 yards to OKLA 12, Center-N.Crawford. Fair catch by I.Sategna.",
+        "timeOfPlay": "7:32",
+        "title": "4th & 15 \u00b7 OKLA 43"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "9 plays \u00b7 35 yards \u00b7 5:10",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135078",
+      "plays": [
+       {
+        "id": "21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 18,
+            "yardStart": 12
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "L.Avant rushed for 6 yards. Tackled by MICH at OKLA 18.",
+        "timeOfPlay": "7:21",
+        "title": "1st & 10 \u00b7 OKLA 12"
+       },
+       {
+        "id": "22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 18
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for T.Harris.",
+        "timeOfPlay": "6:47",
+        "title": "2nd & 4 \u00b7 OKLA 18"
+       },
+       {
+        "id": "23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 18
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "6:41",
+        "title": "3rd & 4 \u00b7 OKLA 18"
+       },
+       {
+        "id": "24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 23,
+            "yardStart": 18
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Miller punts 82 yards to MICH End Zone, Center-B.Anderson. Touchback. PENALTY on MICH-D.Johnson, Roughing the Kicker, 5 yards, accepted. No Play. Michigan challenged the running into the kicker and the play was upheld. Timeout #1 by MICH.",
+        "timeOfPlay": "6:32",
+        "title": "4th & 4 \u00b7 OKLA 18"
+       },
+       {
+        "id": "25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 29,
+            "yardStart": 23
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer scrambles for 6 yards. Pushed out of bounds by MICH at OKLA 29.",
+        "timeOfPlay": "6:24",
+        "title": "1st & 10 \u00b7 OKLA 23"
+       },
+       {
+        "id": "26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 29,
+            "yardStart": 29
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 0 yards. Tackled by MICH at OKLA 29.",
+        "timeOfPlay": "5:44",
+        "title": "2nd & 4 \u00b7 OKLA 29"
+       },
+       {
+        "id": "27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 29
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer rushed for 12 yards. Tackled by MICH at OKLA 41.",
+        "timeOfPlay": "5:37",
+        "title": "3rd & 4 \u00b7 OKLA 29"
+       },
+       {
+        "id": "28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 40,
+            "yardStart": 41
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "X.Robinson rushed for -1 yards. Tackled by MICH at OKLA 40.",
+        "timeOfPlay": "5:10",
+        "title": "1st & 10 \u00b7 OKLA 41"
+       },
+       {
+        "id": "29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for H.Hansen.",
+        "timeOfPlay": "4:40",
+        "title": "2nd & 11 \u00b7 OKLA 40"
+       },
+       {
+        "id": "30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for R.Beers.",
+        "timeOfPlay": "4:35",
+        "title": "3rd & 11 \u00b7 OKLA 40"
+       },
+       {
+        "id": "31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 91,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Miller punts 51 yards to MICH 9, Center-B.Anderson. Fair catch by A.Marsh.",
+        "timeOfPlay": "4:30",
+        "title": "4th & 11 \u00b7 OKLA 40"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "9 plays \u00b7 28 yards \u00b7 2:54",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135097",
+      "plays": [
+       {
+        "id": "32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 88,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "S.Hiter rushed for 3 yards. Tackled by OKLA at MICH 12.",
+        "timeOfPlay": "4:27",
+        "title": "1st & 10 \u00b7 MICH 9"
+       },
+       {
+        "id": "33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 93,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood rushed for yards. Tackled by OKLA at MICH 17. PENALTY on MICH-A.Marsh, Illegal Motion, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:45",
+        "title": "2nd & 7 \u00b7 MICH 12"
+       },
+       {
+        "id": "34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 86,
+            "yardStart": 93
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood pass complete. Catch made by S.Hiter for 7 yards. Tackled by OKLA at MICH 14.",
+        "timeOfPlay": "3:28",
+        "title": "2nd & 12 \u00b7 MICH 7"
+       },
+       {
+        "id": "35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 91,
+            "yardStart": 86
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on MICH-B.Frazier, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "2:47",
+        "title": "3rd & 5 \u00b7 MICH 14"
+       },
+       {
+        "id": "36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood pass complete. Catch made by J.Buchanan for 36 yards. Tackled by OKLA at MICH 45.",
+        "timeOfPlay": "2:30",
+        "title": "3rd & 10 \u00b7 MICH 9"
+       },
+       {
+        "id": "37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Marshall rushed for 3 yards. Tackled by OKLA at MICH 48.",
+        "timeOfPlay": "1:50",
+        "title": "1st & 10 \u00b7 MICH 45"
+       },
+       {
+        "id": "38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 38,
+            "yardStart": 52
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for A.Marsh. PENALTY on OKLA-C.Guillory, Defensive Pass Interference, 14 yards, accepted. No Play.",
+        "timeOfPlay": "1:09",
+        "title": "2nd & 8 \u00b7 MICH 48"
+       },
+       {
+        "id": "39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for J.Buchanan.",
+        "timeOfPlay": "0:57",
+        "title": "1st & 10 \u00b7 OKLA 38"
+       },
+       {
+        "id": "40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Underwood rushed for 38 yards. TOUCHDOWN.",
+        "timeOfPlay": "0:52",
+        "title": "2nd & 10 \u00b7 OKLA 38"
+       },
+       {
+        "id": "41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 3
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Butkowski extra point is good.",
+        "timeOfPlay": "0:47",
+        "title": "OKLA 3"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 91 yards \u00b7 3:40",
+      "title": "TOUCHDOWN"
+     }
+    ],
+    "title": "1ST QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135112",
+      "plays": [
+       {
+        "id": "42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 25,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Baggett kicks 65 yards from MICH 35 to the OKLA End Zone. Touchback.",
+        "timeOfPlay": "0:47",
+        "title": "MICH 35"
+       },
+       {
+        "id": "43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Mateer pass complete. Catch made by T.Harris for 11 yards. Tackled by MICH at OKLA 36.",
+        "timeOfPlay": "0:47",
+        "title": "1st & 10 \u00b7 OKLA 25"
+       },
+       {
+        "id": "44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 36
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "L.Avant rushed for 2 yards. Tackled by MICH at OKLA 38.",
+        "timeOfPlay": "0:15",
+        "title": "1st & 10 \u00b7 OKLA 36"
+       },
+       {
+        "id": "45",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 54,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 16 yards. Tackled by MICH at MICH 46.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 8 \u00b7 OKLA 38"
+       },
+       {
+        "id": "47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 54
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "L.Avant rushed for 11 yards. Tackled by MICH at MICH 35.",
+        "timeOfPlay": "14:30",
+        "title": "1st & 10 \u00b7 MICH 46"
+       },
+       {
+        "id": "48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna. The Replay Official reviewed the pass completion and the play was upheld.",
+        "timeOfPlay": "13:43",
+        "title": "1st & 10 \u00b7 MICH 35"
+       },
+       {
+        "id": "49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 71,
+            "yardStart": 73
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer pass complete. Catch made by P.Livingstone for 8 yards. P.Livingstone FUMBLES, forced by C.Bracy. Fumble RECOVERED by MICH-T.Bowles at MICH 27. Tackled by OKLA at MICH 29.",
+        "timeOfPlay": "13:34",
+        "title": "2nd & 10 \u00b7 MICH 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 48 yards \u00b7 2:21",
+      "title": "FUMBLE"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135140",
+      "plays": [
+       {
+        "id": "51",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 71
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Hiter rushed for -4 yards. Tackled by OKLA at MICH 25.",
+        "timeOfPlay": "13:26",
+        "title": "1st & 10 \u00b7 MICH 29"
+       },
+       {
+        "id": "52",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 60,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood pass complete. Catch made by S.Hiter for 15 yards. Tackled by OKLA at MICH 40.",
+        "timeOfPlay": "12:47",
+        "title": "2nd & 14 \u00b7 MICH 25"
+       },
+       {
+        "id": "53",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood rushed for 3 yards. B.Underwood FUMBLES, forced by T.Wein. Fumble RECOVERED by MICH-B.Underwood at MICH 43. Tackled by OKLA at MICH 43.",
+        "timeOfPlay": "11:58",
+        "title": "1st & 10 \u00b7 MICH 40"
+       },
+       {
+        "id": "54",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 40,
+            "yardStart": 57
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Marshall rushed for 2 yards. Tackled by OKLA at MICH 45. PENALTY on OKLA-T.Wein, Personal Foul / Defense, 15 yards, accepted.",
+        "timeOfPlay": "11:14",
+        "title": "2nd & 7 \u00b7 MICH 43"
+       },
+       {
+        "id": "55",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for A.Marsh.",
+        "timeOfPlay": "10:41",
+        "title": "1st & 10 \u00b7 OKLA 40"
+       },
+       {
+        "id": "56",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Marshall rushed for 2 yards. Tackled by OKLA at OKLA 38.",
+        "timeOfPlay": "10:36",
+        "title": "2nd & 10 \u00b7 OKLA 40"
+       },
+       {
+        "id": "57",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 40,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Hiter rushed for -2 yards. S.Hiter FUMBLES. Fumble RECOVERED by MICH-S.Hiter at OKLA 40. Tackled by OKLA at OKLA 40.",
+        "timeOfPlay": "9:43",
+        "title": "3rd & 8 \u00b7 OKLA 38"
+       },
+       {
+        "id": "58",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 1,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Brown punts 39 yards to OKLA 1, Center-N.Crawford. Downed by Z.Berry.",
+        "timeOfPlay": "8:50",
+        "title": "4th & 10 \u00b7 OKLA 40"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "7 plays \u00b7 31 yards \u00b7 4:46",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135163",
+      "plays": [
+       {
+        "id": "60",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "8:40",
+        "title": "1st & 10 \u00b7 OKLA 1"
+       },
+       {
+        "id": "61",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 4,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Blaylock rushed for 3 yards. Tackled by MICH at OKLA 4.",
+        "timeOfPlay": "8:35",
+        "title": "2nd & 10 \u00b7 OKLA 1"
+       },
+       {
+        "id": "62",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "7:55",
+        "title": "3rd & 7 \u00b7 OKLA 4"
+       },
+       {
+        "id": "63",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 56,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Miller punts 52 yards to MICH 44, Center-B.Anderson. Downed by OKLA.",
+        "timeOfPlay": "7:48",
+        "title": "4th & 7 \u00b7 OKLA 4"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 3 yards \u00b7 1:04",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135176",
+      "plays": [
+       {
+        "id": "64",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 56
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood pass complete. Catch made by A.Marsh for -5 yards. Tackled by OKLA at MICH 39.",
+        "timeOfPlay": "7:36",
+        "title": "1st & 10 \u00b7 MICH 44"
+       },
+       {
+        "id": "65",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 42,
+            "yardStart": 61
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood pass complete. Catch made by S.Hiter for 19 yards. Tackled by OKLA at OKLA 42.",
+        "timeOfPlay": "6:57",
+        "title": "2nd & 15 \u00b7 MICH 39"
+       },
+       {
+        "id": "66",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for J.Buchanan. The Replay Official reviewed the pass completion and the play was upheld.",
+        "timeOfPlay": "6:23",
+        "title": "1st & 10 \u00b7 OKLA 42"
+       },
+       {
+        "id": "67",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood pass complete. Catch made by A.Marsh for 12 yards. Tackled by OKLA at OKLA 30.",
+        "timeOfPlay": "6:01",
+        "title": "2nd & 10 \u00b7 OKLA 42"
+       },
+       {
+        "id": "68",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 27,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Marshall rushed for 3 yards. Tackled by OKLA at OKLA 27.",
+        "timeOfPlay": "5:39",
+        "title": "1st & 10 \u00b7 OKLA 30"
+       },
+       {
+        "id": "69",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 27
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Hiter rushed for 2 yards. Tackled by OKLA at OKLA 25.",
+        "timeOfPlay": "4:47",
+        "title": "2nd & 7 \u00b7 OKLA 27"
+       },
+       {
+        "id": "70",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 18,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood rushed for 7 yards. Tackled by OKLA at OKLA 18.",
+        "timeOfPlay": "4:19",
+        "title": "3rd & 5 \u00b7 OKLA 25"
+       },
+       {
+        "id": "71",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 28,
+            "yardStart": 18
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Hiter rushed for yards. Tackled by OKLA at OKLA 15. PENALTY on MICH-N.Efobi, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "3:53",
+        "title": "1st & 10 \u00b7 OKLA 18"
+       },
+       {
+        "id": "72",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for J.Buchanan.",
+        "timeOfPlay": "3:21",
+        "title": "1st & 20 \u00b7 OKLA 28"
+       },
+       {
+        "id": "73",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 22,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Marshall rushed for 6 yards. Tackled by OKLA at OKLA 22.",
+        "timeOfPlay": "3:16",
+        "title": "2nd & 20 \u00b7 OKLA 28"
+       },
+       {
+        "id": "74",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for A.Marsh.",
+        "timeOfPlay": "2:34",
+        "title": "3rd & 14 \u00b7 OKLA 22"
+       },
+       {
+        "id": "75",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Butkowski 40 yard field goal attempt is good, Center-N.Crawford, Holder-C.Brown.",
+        "timeOfPlay": "2:30",
+        "title": "4th & 14 \u00b7 OKLA 22"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": true,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 34 yards \u00b7 5:08",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135192",
+      "plays": [
+       {
+        "id": "77",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 25,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Baggett kicks 65 yards from MICH 35 to the OKLA End Zone. Touchback.",
+        "timeOfPlay": "2:28",
+        "title": "MICH 35"
+       },
+       {
+        "id": "78",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer scrambles for -1 yards. Tackled by MICH at OKLA 24.",
+        "timeOfPlay": "2:26",
+        "title": "1st & 10 \u00b7 OKLA 25"
+       },
+       {
+        "id": "79",
+        "playDescription": "Two minute timeout.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Timeout"
+       },
+       {
+        "id": "80",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 24
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer rushed for 8 yards. Tackled by MICH at OKLA 32.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 11 \u00b7 OKLA 24"
+       },
+       {
+        "id": "81",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 39,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer rushed for 7 yards. Tackled by MICH at OKLA 39.",
+        "timeOfPlay": "1:21",
+        "title": "3rd & 3 \u00b7 OKLA 32"
+       },
+       {
+        "id": "82",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 39
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer pass complete. Catch made by L.Avant for 7 yards. Tackled by MICH at OKLA 46.",
+        "timeOfPlay": "1:11",
+        "title": "1st & 10 \u00b7 OKLA 39"
+       },
+       {
+        "id": "83",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 46
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "L.Avant rushed for 6 yards. Tackled by MICH at MICH 48.",
+        "timeOfPlay": "0:58",
+        "title": "2nd & 3 \u00b7 OKLA 46"
+       },
+       {
+        "id": "84",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 52
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer pass complete. Catch made by L.Avant for 3 yards. Tackled by MICH at MICH 45.",
+        "timeOfPlay": "0:41",
+        "title": "1st & 10 \u00b7 MICH 48"
+       },
+       {
+        "id": "85",
+        "playDescription": "Timeout #1 by OKLA.",
+        "timeOfPlay": "0:31",
+        "title": "Timeout"
+       },
+       {
+        "id": "86",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for X.Robinson.",
+        "timeOfPlay": "0:31",
+        "title": "2nd & 7 \u00b7 MICH 45"
+       },
+       {
+        "id": "87",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 53,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Mateer rushed for -2 yards. Tackled by MICH at MICH 47.",
+        "timeOfPlay": "0:26",
+        "title": "3rd & 7 \u00b7 MICH 45"
+       },
+       {
+        "id": "88",
+        "playDescription": "Timeout #2 by MICH.",
+        "timeOfPlay": "0:21",
+        "title": "Timeout"
+       },
+       {
+        "id": "89",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 91,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Miller punts 38 yards to MICH 9, Center-B.Anderson. Fair catch by A.Marsh.",
+        "timeOfPlay": "0:21",
+        "title": "4th & 9 \u00b7 MICH 47"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 28 yards \u00b7 2:16",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135209",
+      "plays": [
+       {
+        "id": "90",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 87,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Kuzdzal rushed for 4 yards. Tackled by OKLA at MICH 13.",
+        "timeOfPlay": "0:12",
+        "title": "1st & 10 \u00b7 MICH 9"
+       },
+       {
+        "id": "91",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "1 plays \u00b7 4 yards \u00b7 0:12",
+      "title": "END OF HALF"
+     }
+    ],
+    "title": "2ND QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135257",
+      "plays": [
+       {
+        "id": "92",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 75,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Sandell kicks 65 yards from OKLA 35 to the MICH End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "OKLA 35"
+       },
+       {
+        "id": "93",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Kuzdzal rushed for 7 yards. Tackled by OKLA at MICH 32.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 \u00b7 MICH 25"
+       },
+       {
+        "id": "94",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Kuzdzal rushed for 1 yard. Tackled by OKLA at MICH 33.",
+        "timeOfPlay": "14:32",
+        "title": "2nd & 3 \u00b7 MICH 32"
+       },
+       {
+        "id": "95",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for J.Buchanan.",
+        "timeOfPlay": "13:53",
+        "title": "3rd & 2 \u00b7 MICH 33"
+       },
+       {
+        "id": "96",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 10,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Brown punts 48 yards to OKLA 19, Center-N.Crawford. Fair catch by I.Sategna. PENALTY on OKLA-L.Bauer, Offensive Holding, 9 yards, accepted.",
+        "timeOfPlay": "13:31",
+        "title": "4th & 2 \u00b7 MICH 33"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 8 yards \u00b7 1:29",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135272",
+      "plays": [
+       {
+        "id": "98",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 13,
+            "yardStart": 10
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by I.Sategna for 3 yards. Tackled by MICH at OKLA 13.",
+        "timeOfPlay": "13:31",
+        "title": "1st & 10 \u00b7 OKLA 10"
+       },
+       {
+        "id": "99",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 12,
+            "yardStart": 13
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "L.Avant rushed for -1 yards. Tackled by T.Pierce at OKLA 12.",
+        "timeOfPlay": "13:01",
+        "title": "2nd & 7 \u00b7 OKLA 13"
+       },
+       {
+        "id": "100",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 37,
+            "yardStart": 12
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 25 yards. Tackled by MICH at OKLA 37.",
+        "timeOfPlay": "12:22",
+        "title": "3rd & 8 \u00b7 OKLA 12"
+       },
+       {
+        "id": "101",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "L.Avant rushed for 0 yards. Tackled by MICH at OKLA 37.",
+        "timeOfPlay": "11:45",
+        "title": "1st & 10 \u00b7 OKLA 37"
+       },
+       {
+        "id": "102",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 32,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "I.Sategna rushed for yards. Tackled by MICH at OKLA 46. PENALTY on OKLA-I.Sategna, Illegal Motion, 5 yards, accepted. No Play.",
+        "timeOfPlay": "11:09",
+        "title": "2nd & 10 \u00b7 OKLA 37"
+       },
+       {
+        "id": "103",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 49,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by T.Harris for 17 yards. Tackled by MICH at OKLA 49.",
+        "timeOfPlay": "10:22",
+        "title": "2nd & 15 \u00b7 OKLA 32"
+       },
+       {
+        "id": "104",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 74,
+            "yardStart": 49
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by T.Harris for 10 yards. Tackled by MICH at MICH 41. PENALTY on MICH-S.Earls, Face Mask (15 Yards), 15 yards, accepted.",
+        "timeOfPlay": "10:01",
+        "title": "1st & 10 \u00b7 OKLA 49"
+       },
+       {
+        "id": "105",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 78,
+            "yardStart": 74
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "X.Robinson rushed for 4 yards. Tackled by MICH at MICH 22.",
+        "timeOfPlay": "9:29",
+        "title": "1st & 10 \u00b7 MICH 26"
+       },
+       {
+        "id": "106",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 78
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by M.Alleyne for 22 yards. TOUCHDOWN.",
+        "timeOfPlay": "8:40",
+        "title": "2nd & 6 \u00b7 MICH 22"
+       },
+       {
+        "id": "107",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 97
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Sandell extra point is good.",
+        "timeOfPlay": "8:30",
+        "title": "MICH 3"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 90 yards \u00b7 5:01",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135298",
+      "plays": [
+       {
+        "id": "109",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 76,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Sandell kicks 65 yards from OKLA 35 to the MICH End Zone. B.Kuzdzal returns the kickoff. Pushed out of bounds by OKLA at MICH 24.",
+        "timeOfPlay": "8:30",
+        "title": "OKLA 35"
+       },
+       {
+        "id": "110",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 81,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on MICH-N.Efobi, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "8:24",
+        "title": "1st & 10 \u00b7 MICH 24"
+       },
+       {
+        "id": "111",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 75,
+            "yardStart": 81
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood pass complete. Catch made by A.Marsh for 6 yards. Tackled by OKLA at MICH 25.",
+        "timeOfPlay": "8:24",
+        "title": "1st & 15 \u00b7 MICH 19"
+       },
+       {
+        "id": "112",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "S.Hiter rushed for 5 yards. Tackled by OKLA at MICH 30.",
+        "timeOfPlay": "7:52",
+        "title": "2nd & 9 \u00b7 MICH 25"
+       },
+       {
+        "id": "113",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood rushed for 3 yards. Tackled by OKLA at MICH 33.",
+        "timeOfPlay": "7:21",
+        "title": "3rd & 4 \u00b7 MICH 30"
+       },
+       {
+        "id": "114",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood rushed for 3 yards. Tackled by OKLA at MICH 36.",
+        "timeOfPlay": "6:43",
+        "title": "4th & 1 \u00b7 MICH 33"
+       },
+       {
+        "id": "115",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 49,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood scrambles for 15 yards. Pushed out of bounds by OKLA at OKLA 49.",
+        "timeOfPlay": "5:58",
+        "title": "1st & 10 \u00b7 MICH 36"
+       },
+       {
+        "id": "116",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 49
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood rushed for 7 yards. Tackled by OKLA at OKLA 42.",
+        "timeOfPlay": "5:18",
+        "title": "1st & 10 \u00b7 OKLA 49"
+       },
+       {
+        "id": "117",
+        "playDescription": "Timeout #1 by MICH.",
+        "timeOfPlay": "4:23",
+        "title": "Timeout"
+       },
+       {
+        "id": "118",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood steps back to pass. Pass incomplete intended for M.Bonner.",
+        "timeOfPlay": "4:23",
+        "title": "2nd & 3 \u00b7 OKLA 42"
+       },
+       {
+        "id": "119",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Marshall rushed for 8 yards. Tackled by OKLA at OKLA 34.",
+        "timeOfPlay": "4:17",
+        "title": "3rd & 3 \u00b7 OKLA 42"
+       },
+       {
+        "id": "120",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Marshall rushed for 1 yard. Tackled by OKLA at OKLA 33.",
+        "timeOfPlay": "3:38",
+        "title": "1st & 10 \u00b7 OKLA 34"
+       },
+       {
+        "id": "121",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 31,
+            "yardStart": 33
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood rushed for 2 yards. Tackled by OKLA at OKLA 31.",
+        "timeOfPlay": "3:01",
+        "title": "2nd & 9 \u00b7 OKLA 33"
+       },
+       {
+        "id": "122",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 38,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Underwood steps back to pass. Sacked at OKLA 38 for -7 yards (R.Powers).",
+        "timeOfPlay": "2:18",
+        "title": "3rd & 7 \u00b7 OKLA 31"
+       },
+       {
+        "id": "123",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 43,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on MICH-C.Brown, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "1:31",
+        "title": "4th & 14 \u00b7 OKLA 38"
+       },
+       {
+        "id": "124",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 1,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Brown punts 42 yards to OKLA 1, Center-N.Crawford. Downed by MICH.",
+        "timeOfPlay": "1:31",
+        "title": "4th & 19 \u00b7 OKLA 43"
+       },
+       {
+        "id": "125",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 1,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on OKLA-R.Fodje, False Start, 0 yards, accepted. No Play.",
+        "timeOfPlay": "1:22",
+        "title": "1st & 10 \u00b7 OKLA 1"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 33 yards \u00b7 7:08",
+      "title": "PUNT"
+     }
+    ],
+    "title": "3RD QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135329",
+      "plays": [
+       {
+        "id": "126",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 17,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "L.Avant rushed for 1 yard. Tackled by MICH at OKLA 2. PENALTY on MICH-J.Hill, Unnecessary Roughness / Defense, 15 yards, accepted.",
+        "timeOfPlay": "1:22",
+        "title": "1st & 10 \u00b7 OKLA 1"
+       },
+       {
+        "id": "127",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 60,
+            "yardStart": 17
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 43 yards. Tackled by MICH at MICH 40.",
+        "timeOfPlay": "0:57",
+        "title": "1st & 10 \u00b7 OKLA 17"
+       },
+       {
+        "id": "128",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Mateer pass complete. Catch made by T.Harris for 5 yards. Tackled by MICH at MICH 35.",
+        "timeOfPlay": "0:08",
+        "title": "1st & 10 \u00b7 MICH 40"
+       },
+       {
+        "id": "129",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "130",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer rushed for -1 yards. Tackled by MICH at MICH 36.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 5 \u00b7 MICH 35"
+       },
+       {
+        "id": "131",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 79,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Sacked at MICH 45 for yards (D.Nichols). PENALTY on MICH-D.Nichols, Face Mask (15 Yards), 15 yards, accepted. No Play.",
+        "timeOfPlay": "14:24",
+        "title": "3rd & 6 \u00b7 MICH 36"
+       },
+       {
+        "id": "132",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 75,
+            "yardStart": 79
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Sacked at MICH 25 for -4 yards (C.Taylor; D.Nichols). PENALTY on OKLA-OKLA, Offensive Holding, 10 yards, declined.",
+        "timeOfPlay": "13:43",
+        "title": "1st & 10 \u00b7 MICH 21"
+       },
+       {
+        "id": "133",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 78,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer pass complete. Catch made by R.Beers for 3 yards. Tackled by MICH at MICH 22.",
+        "timeOfPlay": "13:00",
+        "title": "2nd & 14 \u00b7 MICH 25"
+       },
+       {
+        "id": "134",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 84,
+            "yardStart": 78
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer pass complete. Catch made by I.Sategna for 6 yards. Tackled by MICH at MICH 16.",
+        "timeOfPlay": "12:36",
+        "title": "3rd & 11 \u00b7 MICH 22"
+       },
+       {
+        "id": "135",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 84
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Sandell 34 yard field goal attempt is good, Center-B.Anderson, Holder-J.Ulrich.",
+        "timeOfPlay": "11:58",
+        "title": "4th & 5 \u00b7 MICH 16"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 83 yards \u00b7 4:33",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135359",
+      "plays": [
+       {
+        "id": "137",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 75,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Sandell kicks 65 yards from OKLA 35 to the MICH End Zone. Touchback.",
+        "timeOfPlay": "11:49",
+        "title": "OKLA 35"
+       },
+       {
+        "id": "138",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood rushed for -1 yards. Tackled by OKLA at MICH 24.",
+        "timeOfPlay": "11:49",
+        "title": "1st & 10 \u00b7 MICH 25"
+       },
+       {
+        "id": "139",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 67,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood pass complete. Catch made by J.Hoffman for 9 yards. Tackled by R.Powers at MICH 33.",
+        "timeOfPlay": "11:07",
+        "title": "2nd & 11 \u00b7 MICH 24"
+       },
+       {
+        "id": "140",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 71,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "S.Hiter rushed for -4 yards. Tackled by T.Wein at MICH 29.",
+        "timeOfPlay": "10:19",
+        "title": "3rd & 2 \u00b7 MICH 33"
+       },
+       {
+        "id": "141",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 20,
+            "yardStart": 71
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 15,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Brown punts 51 yards to OKLA 20, Center-N.Crawford. I.Sategna returned punt from the OKLA 20. Tackled by Z.Berry at OKLA 15.",
+        "timeOfPlay": "9:51",
+        "title": "4th & 6 \u00b7 MICH 29"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 4 yards \u00b7 2:13",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135371",
+      "plays": [
+       {
+        "id": "143",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 16,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "I.Sategna rushed for 1 yard. Tackled by MICH at OKLA 16.",
+        "timeOfPlay": "9:36",
+        "title": "1st & 10 \u00b7 OKLA 15"
+       },
+       {
+        "id": "144",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 16
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for T.Harris.",
+        "timeOfPlay": "8:55",
+        "title": "2nd & 9 \u00b7 OKLA 16"
+       },
+       {
+        "id": "145",
+        "playDescription": "Timeout #1 by OKLA.",
+        "timeOfPlay": "8:49",
+        "title": "Timeout"
+       },
+       {
+        "id": "146",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INT",
+            "yardEnd": 30,
+            "yardStart": 16
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 6,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer pass INTERCEPTED at OKLA 30. Intercepted by J.Hill at OKLA 30. Tackled by OKLA at OKLA 6.",
+        "timeOfPlay": "8:49",
+        "title": "3rd & 9 \u00b7 OKLA 16"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 1 yard \u00b7 0:56",
+      "title": "INTERCEPTION"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135389",
+      "plays": [
+       {
+        "id": "147",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood rushed for 5 yards. Tackled by OKLA at OKLA 1.",
+        "timeOfPlay": "8:40",
+        "title": "1st & 6 \u00b7 OKLA 6"
+       },
+       {
+        "id": "148",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Marshall rushed for 1 yard. TOUCHDOWN.",
+        "timeOfPlay": "8:01",
+        "title": "2nd & 1 \u00b7 OKLA 1"
+       },
+       {
+        "id": "149",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 3
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Butkowski extra point is good.",
+        "timeOfPlay": "7:53",
+        "title": "OKLA 3"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": true,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "2 plays \u00b7 6 yards \u00b7 0:47",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135398",
+      "plays": [
+       {
+        "id": "151",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 5,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Baggett kicks 60 yards from MICH 35 to the OKLA 5. Fair catch by L.Avant.",
+        "timeOfPlay": "7:53",
+        "title": "MICH 35"
+       },
+       {
+        "id": "152",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 28,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "I.Sategna rushed for 3 yards. Tackled by MICH at OKLA 28.",
+        "timeOfPlay": "7:53",
+        "title": "1st & 10 \u00b7 OKLA 25"
+       },
+       {
+        "id": "153",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer scrambles for 10 yards. Tackled by MICH at OKLA 38.",
+        "timeOfPlay": "7:20",
+        "title": "2nd & 7 \u00b7 OKLA 28"
+       },
+       {
+        "id": "154",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 40,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "L.Avant rushed for 2 yards. Tackled by MICH at OKLA 40.",
+        "timeOfPlay": "6:42",
+        "title": "1st & 10 \u00b7 OKLA 38"
+       },
+       {
+        "id": "155",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "6:02",
+        "title": "2nd & 7 \u00b7 OKLA 40"
+       },
+       {
+        "id": "156",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 30,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer scrambles for yards. Tackled by MICH at OKLA 46. PENALTY on OKLA-E.Pierre-Louis, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "5:53",
+        "title": "3rd & 7 \u00b7 OKLA 40"
+       },
+       {
+        "id": "157",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer scrambles for 7 yards. Tackled by MICH at OKLA 37.",
+        "timeOfPlay": "5:20",
+        "title": "3rd & 17 \u00b7 OKLA 30"
+       },
+       {
+        "id": "158",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 99,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Miller punts 62 yards to MICH 1, Center-B.Anderson. Downed by OKLA. PENALTY on MICH-MICH, Offensive Holding, 0 yards, accepted.",
+        "timeOfPlay": "4:50",
+        "title": "4th & 10 \u00b7 OKLA 37"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "5 plays \u00b7 12 yards \u00b7 3:10",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135408",
+      "plays": [
+       {
+        "id": "159",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 96,
+            "yardStart": 99
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Marshall rushed for 3 yards. Tackled by OKLA at MICH 4.",
+        "timeOfPlay": "4:43",
+        "title": "1st & 10 \u00b7 MICH 1"
+       },
+       {
+        "id": "160",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 94,
+            "yardStart": 96
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood rushed for 2 yards. Tackled by OKLA at MICH 6.",
+        "timeOfPlay": "4:14",
+        "title": "2nd & 7 \u00b7 MICH 4"
+       },
+       {
+        "id": "161",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 91,
+            "yardStart": 94
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "S.Hiter rushed for 3 yards. Tackled by OKLA at MICH 9.",
+        "timeOfPlay": "3:30",
+        "title": "3rd & 5 \u00b7 MICH 6"
+       },
+       {
+        "id": "162",
+        "playDescription": "Timeout #2 by OKLA.",
+        "timeOfPlay": "3:16",
+        "title": "Timeout"
+       },
+       {
+        "id": "163",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 48,
+            "yardStart": 91
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 50,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Brown punts 43 yards to OKLA 48, Center-N.Crawford. I.Sategna returned punt from the OKLA 48. Tackled by MICH at MICH 40. PENALTY on OKLA-M.Choice, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "3:16",
+        "title": "4th & 2 \u00b7 MICH 9"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 8 yards \u00b7 1:38",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135415",
+      "plays": [
+       {
+        "id": "164",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 53,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "X.Robinson rushed for 3 yards. Tackled by J.Daley at MICH 47.",
+        "timeOfPlay": "3:05",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "165",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "2:27",
+        "title": "2nd & 7 \u00b7 MICH 47"
+       },
+       {
+        "id": "166",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for I.Sategna.",
+        "timeOfPlay": "2:21",
+        "title": "3rd & 7 \u00b7 MICH 47"
+       },
+       {
+        "id": "167",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": 53,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for R.Beers.",
+        "timeOfPlay": "2:16",
+        "title": "4th & 7 \u00b7 MICH 47"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 3 yards \u00b7 0:53",
+      "title": "DOWNS"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/21"
+      },
+      "id": "135419",
+      "plays": [
+       {
+        "id": "168",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood rushed for 2 yards. Tackled by OKLA at MICH 49.",
+        "timeOfPlay": "2:12",
+        "title": "1st & 10 \u00b7 MICH 47"
+       },
+       {
+        "id": "169",
+        "playDescription": "Timeout #3 by OKLA.",
+        "timeOfPlay": "2:07",
+        "title": "Timeout"
+       },
+       {
+        "id": "170",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Underwood rushed for 4 yards. Tackled by OKLA at OKLA 47.",
+        "timeOfPlay": "2:07",
+        "title": "2nd & 8 \u00b7 MICH 49"
+       },
+       {
+        "id": "171",
+        "playDescription": "Two minute timeout.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Timeout"
+       },
+       {
+        "id": "172",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Marshall rushed for 0 yards. Tackled by OKLA at OKLA 47.",
+        "timeOfPlay": "2:00",
+        "title": "3rd & 4 \u00b7 OKLA 47"
+       },
+       {
+        "id": "173",
+        "playDescription": "Timeout #2 by MICH.",
+        "timeOfPlay": "1:14",
+        "title": "Timeout"
+       },
+       {
+        "id": "174",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 5,
+            "yardStart": 47
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 15,
+            "yardStart": 5
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Brown punts 42 yards to OKLA 5, Center-N.Crawford. I.Sategna returned punt from the OKLA 5. Pushed out of bounds by MICH at OKLA 15.",
+        "timeOfPlay": "1:14",
+        "title": "4th & 4 \u00b7 OKLA 47"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 6 yards \u00b7 1:06",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/cfb/teams/36"
+      },
+      "id": "135448",
+      "plays": [
+       {
+        "id": "175",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer scrambles for 22 yards. Pushed out of bounds by MICH at OKLA 37.",
+        "timeOfPlay": "1:06",
+        "title": "1st & 10 \u00b7 OKLA 15"
+       },
+       {
+        "id": "176",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer pass complete. Catch made by L.Avant for 3 yards. Tackled by MICH at OKLA 40.",
+        "timeOfPlay": "0:56",
+        "title": "1st & 10 \u00b7 OKLA 37"
+       },
+       {
+        "id": "177",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 35,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on OKLA-E.Harris, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:39",
+        "title": "2nd & 7 \u00b7 OKLA 40"
+       },
+       {
+        "id": "178",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Pass incomplete intended for R.Beers.",
+        "timeOfPlay": "0:22",
+        "title": "2nd & 12 \u00b7 OKLA 35"
+       },
+       {
+        "id": "179",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 25,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Mateer steps back to pass. Sacked at OKLA 25 for -10 yards (N.Marshall).",
+        "timeOfPlay": "0:17",
+        "title": "3rd & 12 \u00b7 OKLA 35"
+       },
+       {
+        "id": "180",
+        "playDescription": "End Game",
+        "timeOfPlay": "0:00",
+        "title": "Game End"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "OKLA"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "MICH"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 10 yards \u00b7 1:06",
+      "title": "END OF GAME"
+     }
+    ],
+    "title": "4TH QUARTER"
+   }
+  ]
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 170, 0, 49",
+  "alternateRightColor": "1, 0, 87, 244",
+  "eventStatus": 2,
+  "eventTime": "2026-09-20T20:25:00Z",
+  "id": "11192",
+  "leftColor": "1, 170, 0, 49",
+  "leftTeam": {
+   "imageAltText": "Washington Commanders",
+   "isLoser": false,
+   "longName": "Commanders",
+   "name": "WAS",
+   "stackedNameBottom": "Commanders",
+   "stackedNameTop": "Washington",
+   "uri": "football/nfl/teams/19"
+  },
+  "rightColor": "1, 0, 87, 244",
+  "rightTeam": {
+   "imageAltText": "Dallas Cowboys",
+   "isLoser": false,
+   "longName": "Cowboys",
+   "name": "DAL",
+   "stackedNameBottom": "Cowboys",
+   "stackedNameTop": "Dallas",
+   "uri": "football/nfl/teams/15"
+  }
+ },
+ "pbp": {
+  "sections": []
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "away_espn_team_id": null,
+ "espn_event_id": "fcs-41379",
+ "fbs_hosted": false,
+ "fox_event_id": "41379",
+ "group_id": "3",
+ "home_espn_team_id": null,
+ "league": "cfb",
+ "matchup": "Davidson Wildcats @ Elon Phoenix",
+ "n_plays": 0,
+ "resolved_by": "fox_scores_segment_name_join",
+ "season": 2025,
+ "season_type": 2,
+ "week": 2
+}

@@ -1,0 +1,126 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 82, 181, 255",
+  "alternateRightColor": "1, 240, 31, 65",
+  "eventStatus": 1,
+  "eventTime": "2026-09-18T00:15:00Z",
+  "id": "11052",
+  "leftColor": "1, 82, 181, 255",
+  "leftTeam": {
+   "imageAltText": "Detroit Lions",
+   "isLoser": false,
+   "longName": "Lions",
+   "name": "DET",
+   "score": 0,
+   "stackedNameBottom": "Lions",
+   "stackedNameTop": "Detroit",
+   "uri": "football/nfl/teams/21"
+  },
+  "rightColor": "1, 240, 31, 65",
+  "rightTeam": {
+   "imageAltText": "Buffalo Bills",
+   "isLoser": false,
+   "longName": "Bills",
+   "name": "BUF",
+   "score": 0,
+   "stackedNameBottom": "Bills",
+   "stackedNameTop": "Buffalo",
+   "uri": "football/nfl/teams/1"
+  },
+  "statusLine": "1ST 14:16"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15705",
+      "plays": [
+       {
+        "id": "3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed for 12 yards. Tackled by DET at BUF 36.",
+        "timeOfPlay": "14:27",
+        "title": "2nd & 1 \u00b7 BUF 24"
+       },
+       {
+        "id": "2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass short left complete. Catch made by K.Shakir for 9 yards. Pushed out of bounds by D.White at BUF 24.",
+        "timeOfPlay": "14:51",
+        "title": "1st & 10 \u00b7 BUF 15"
+       },
+       {
+        "id": "1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 85,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Bates kicks 65 yards from DET 35 to the BUF End Zone. G.Dortch returns the kickoff. Tackled by E.O'Neill at BUF 25. PENALTY on BUF-S.Franklin, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "15:00",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "2 plays \u00b7 21 yards \u00b7 0:44",
+      "title": "CURRENT - BALL ON BUF 36"
+     }
+    ],
+    "title": "1ST QUARTER"
+   }
+  ]
+ }
+}

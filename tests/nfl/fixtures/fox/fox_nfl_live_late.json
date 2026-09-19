@@ -1,0 +1,3850 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 82, 181, 255",
+  "alternateRightColor": "1, 240, 31, 65",
+  "eventStatus": 1,
+  "eventTime": "2026-09-18T00:15:00Z",
+  "id": "11052",
+  "leftColor": "1, 82, 181, 255",
+  "leftTeam": {
+   "imageAltText": "Detroit Lions",
+   "isLoser": false,
+   "longName": "Lions",
+   "name": "DET",
+   "score": 31,
+   "stackedNameBottom": "Lions",
+   "stackedNameTop": "Detroit",
+   "uri": "football/nfl/teams/21"
+  },
+  "rightColor": "1, 240, 31, 65",
+  "rightTeam": {
+   "imageAltText": "Buffalo Bills",
+   "isLoser": false,
+   "longName": "Bills",
+   "name": "BUF",
+   "score": 41,
+   "stackedNameBottom": "Bills",
+   "stackedNameTop": "Buffalo",
+   "uri": "football/nfl/teams/1"
+  },
+  "statusLine": "4TH 0:49"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15722",
+      "plays": [
+       {
+        "id": "193",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 22,
+            "yardStart": 21
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen kneels at the DET 22.",
+        "timeOfPlay": "0:51",
+        "title": "2nd & 11 \u00b7 DET 21"
+       },
+       {
+        "id": "192",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 21,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen kneels at the DET 21.",
+        "timeOfPlay": "1:28",
+        "title": "1st & 10 \u00b7 DET 20"
+       },
+       {
+        "id": "191",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 20,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed left tackle for yards. Tackled by T.Williams at DET 36. PENALTY on DET-T.Lacy, Face Mask (15 Yards), 15 yards, accepted. No Play.",
+        "timeOfPlay": "1:33",
+        "title": "2nd & 9 \u00b7 DET 35"
+       },
+       {
+        "id": "190",
+        "playDescription": "Timeout #2 by DET.",
+        "timeOfPlay": "1:33",
+        "title": "Timeout"
+       },
+       {
+        "id": "189",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 36
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed right guard for 1 yard. Tackled by M.Rodriguez; T.Williams at DET 35.",
+        "timeOfPlay": "1:39",
+        "title": "1st & 10 \u00b7 DET 36"
+       },
+       {
+        "id": "188",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 47,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 36,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Bates kicks onside 12 from DET 35 to DET 47. K.Shakir returns the kickoff. Tackled by J.Bachie at DET 36.",
+        "timeOfPlay": "1:42",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "31",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "41",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 14 yards \u00b7 0:53",
+      "title": "CURRENT - BALL ON DET 22"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15721",
+      "plays": [
+       {
+        "id": "187",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Bates extra point is good.",
+        "timeOfPlay": "1:42",
+        "title": "BUF 15"
+       },
+       {
+        "id": "186",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 73
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass deep middle complete. Catch made by A.St. Brown for 27 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:48",
+        "title": "1st & 10 \u00b7 BUF 27"
+       },
+       {
+        "id": "185",
+        "playDescription": "Timeout #1 by BUF.",
+        "timeOfPlay": "1:48",
+        "title": "Timeout"
+       },
+       {
+        "id": "184",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 56
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass deep left complete. Catch made by J.Williams for 17 yards. Tackled by T.Bernard at BUF 27.",
+        "timeOfPlay": "2:00",
+        "title": "1st & 10 \u00b7 BUF 44"
+       },
+       {
+        "id": "183",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "182",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 56,
+            "yardStart": 44
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass short middle complete. Catch made by J.Gibbs for 12 yards. Tackled by C.Bishop; T.Bernard at BUF 44.",
+        "timeOfPlay": "2:07",
+        "title": "1st & 10 \u00b7 DET 44"
+       },
+       {
+        "id": "181",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 24
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass deep left complete. Catch made by I.TeSlaa for 20 yards. Pushed out of bounds by C.Benford at DET 44.",
+        "timeOfPlay": "2:13",
+        "title": "4th & 18 \u00b7 DET 24"
+       },
+       {
+        "id": "180",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 24
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete deep middle intended for A.St. Brown.",
+        "timeOfPlay": "2:17",
+        "title": "3rd & 18 \u00b7 DET 24"
+       },
+       {
+        "id": "179",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 24,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Sacked at DET 24 for -8 yards (M.Hoecht; B.Chubb).",
+        "timeOfPlay": "2:41",
+        "title": "2nd & 10 \u00b7 DET 32"
+       },
+       {
+        "id": "178",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short right intended for J.Gibbs [M.Hoecht].",
+        "timeOfPlay": "2:45",
+        "title": "1st & 10 \u00b7 DET 32"
+       },
+       {
+        "id": "177",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 9,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 32,
+            "yardStart": 9
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Bass kicks 56 yards from BUF 35 to the DET 9. T.Kennedy returns the kickoff. Pushed out of bounds by D.Igbinosun at DET 32.",
+        "timeOfPlay": "2:50",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "31",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "41",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "7 plays \u00b7 68 yards \u00b7 1:08",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15720",
+      "plays": [
+       {
+        "id": "176",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Bass extra point is good.",
+        "timeOfPlay": "2:50",
+        "title": "DET 15"
+       },
+       {
+        "id": "175",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed right tackle for 1 yard. TOUCHDOWN.",
+        "timeOfPlay": "2:53",
+        "title": "1st & 1 \u00b7 DET 1"
+       },
+       {
+        "id": "174",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 23
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed right tackle for 22 yards. Pushed out of bounds by C.Clark at DET 1.",
+        "timeOfPlay": "3:02",
+        "title": "1st & 10 \u00b7 DET 23"
+       },
+       {
+        "id": "173",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 23,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen pass short middle complete [T.Nowaske]. Catch made by K.Coleman for 12 yards. Tackled by J.Campbell at DET 23.",
+        "timeOfPlay": "3:45",
+        "title": "1st & 10 \u00b7 DET 35"
+       },
+       {
+        "id": "172",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen pass short right complete. Catch made by K.Shakir for 16 yards. Tackled by C.Clark; J.Campbell at DET 35.",
+        "timeOfPlay": "4:30",
+        "title": "2nd & 12 \u00b7 BUF 49"
+       },
+       {
+        "id": "171",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 49
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed right tackle for -2 yards. Tackled by K.Dorsey at BUF 49.",
+        "timeOfPlay": "5:27",
+        "title": "1st & 10 \u00b7 DET 49"
+       },
+       {
+        "id": "170",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 49,
+            "yardStart": 58
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen pass short left complete. Catch made by K.Coleman for 9 yards. Tackled by R.Ya-Sin at DET 49.",
+        "timeOfPlay": "6:06",
+        "title": "3rd & 7 \u00b7 BUF 42"
+       },
+       {
+        "id": "169",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 59
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed left guard for 1 yard. Tackled by C.Izien at BUF 42.",
+        "timeOfPlay": "6:48",
+        "title": "2nd & 8 \u00b7 BUF 41"
+       },
+       {
+        "id": "168",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 61
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed left tackle for 2 yards. Tackled by C.Clark at BUF 41.",
+        "timeOfPlay": "7:28",
+        "title": "1st & 10 \u00b7 BUF 39"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "41",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 61 yards \u00b7 4:38",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15719",
+      "plays": [
+       {
+        "id": "166",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 61,
+            "yardStart": 10
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 61,
+            "yardStart": 61
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Fox punts 51 yards to BUF 39, Center-H.Hatten. G.Dortch returned punt from the BUF 39. G.Dortch ran out of bounds.",
+        "timeOfPlay": "7:36",
+        "title": "4th & 10 \u00b7 DET 10"
+       },
+       {
+        "id": "165",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 10
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short right intended for A.St. Brown (D.Walker).",
+        "timeOfPlay": "7:42",
+        "title": "3rd & 10 \u00b7 DET 10"
+       },
+       {
+        "id": "164",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 10,
+            "yardStart": 10
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Gibbs rushed up the middle for 0 yards. Tackled by C.Bishop at DET 10.",
+        "timeOfPlay": "8:21",
+        "title": "2nd & 10 \u00b7 DET 10"
+       },
+       {
+        "id": "163",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 10
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short middle intended for J.Gibbs (D.Walker).",
+        "timeOfPlay": "8:25",
+        "title": "1st & 10 \u00b7 DET 10"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "34",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 0 yards \u00b7 0:57",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15718",
+      "plays": [
+       {
+        "id": "161",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 10,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Doman punts 40 yards to DET 10, Center-R.Ferguson. Fair catch by T.Kennedy.",
+        "timeOfPlay": "8:32",
+        "title": "4th & 8 \u00b7  50"
+       },
+       {
+        "id": "160",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for K.Shakir.",
+        "timeOfPlay": "8:37",
+        "title": "3rd & 8 \u00b7  50"
+       },
+       {
+        "id": "159",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for D.Kincaid [A.Hutchinson].",
+        "timeOfPlay": "8:48",
+        "title": "2nd & 8 \u00b7  50"
+       },
+       {
+        "id": "158",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 52
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Cook rushed right guard for 2 yards. Tackled by T.Williams; T.Lacy at BUF 50.",
+        "timeOfPlay": "9:24",
+        "title": "1st & 10 \u00b7 BUF 48"
+       },
+       {
+        "id": "157",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 58
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen rushed left tackle for 6 yards. Tackled by T.Harper at BUF 48.",
+        "timeOfPlay": "10:07",
+        "title": "3rd & 3 \u00b7 BUF 42"
+       },
+       {
+        "id": "156",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen pass short left complete. Catch made by D.Kincaid for 7 yards. Tackled by T.Harper at BUF 42.",
+        "timeOfPlay": "10:47",
+        "title": "2nd & 10 \u00b7 BUF 35"
+       },
+       {
+        "id": "155",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "10:53",
+        "title": "1st & 10 \u00b7 BUF 35"
+       },
+       {
+        "id": "154",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 65,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Bates kicks 65 yards from DET 35 to the BUF End Zone. Touchback.",
+        "timeOfPlay": "10:53",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "34",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 15 yards \u00b7 2:28",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15717",
+      "plays": [
+       {
+        "id": "152",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Bates extra point is good.",
+        "timeOfPlay": "10:53",
+        "title": "BUF 15"
+       },
+       {
+        "id": "151",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass short left complete. Catch made by S.LaPorta for 1 yard. TOUCHDOWN.",
+        "timeOfPlay": "10:57",
+        "title": "1st & 1 \u00b7 BUF 1"
+       },
+       {
+        "id": "150",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 99,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short right intended for S.LaPorta. PENALTY on BUF-C.Benford, Defensive Pass Interference, 8 yards, accepted. No Play.",
+        "timeOfPlay": "11:04",
+        "title": "3rd & 7 \u00b7 BUF 9"
+       },
+       {
+        "id": "149",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 91,
+            "yardStart": 92
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Gibbs rushed right guard for -1 yards. Tackled by D.Williams at BUF 9.",
+        "timeOfPlay": "11:42",
+        "title": "2nd & 6 \u00b7 BUF 8"
+       },
+       {
+        "id": "148",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 92,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff scrambles left tackle for 4 yards. Pushed out of bounds by B.Chubb at BUF 8.",
+        "timeOfPlay": "12:18",
+        "title": "1st & 10 \u00b7 BUF 12"
+       },
+       {
+        "id": "147",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 88,
+            "yardStart": 83
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short left intended for J.Williams. PENALTY on BUF-D.Igbinosun, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "12:24",
+        "title": "4th & 8 \u00b7 BUF 17"
+       },
+       {
+        "id": "146",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 83,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on DET-L.Borom, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "12:24",
+        "title": "4th & 3 \u00b7 BUF 12"
+       },
+       {
+        "id": "145",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short left intended for I.TeSlaa (C.Benford).",
+        "timeOfPlay": "12:28",
+        "title": "3rd & 3 \u00b7 BUF 12"
+       },
+       {
+        "id": "144",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 88,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Gibbs rushed left tackle for 0 yards. Tackled by C.Benford at BUF 12.",
+        "timeOfPlay": "13:06",
+        "title": "2nd & 3 \u00b7 BUF 12"
+       },
+       {
+        "id": "143",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 88,
+            "yardStart": 81
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass short left complete. Catch made by S.LaPorta for 7 yards. Tackled by C.Bishop at BUF 12.",
+        "timeOfPlay": "13:38",
+        "title": "1st & 10 \u00b7 BUF 19"
+       },
+       {
+        "id": "142",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 81,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff pass short left complete. Catch made by A.St. Brown for 11 yards. Tackled by D.Alford at BUF 19.",
+        "timeOfPlay": "14:16",
+        "title": "3rd & 8 \u00b7 BUF 30"
+       },
+       {
+        "id": "141",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Gibbs rushed right guard for 2 yards. Tackled by C.Benford; D.Walker at BUF 30.",
+        "timeOfPlay": "14:55",
+        "title": "2nd & 10 \u00b7 BUF 32"
+       },
+       {
+        "id": "140",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete deep middle intended for A.St. Brown (D.Williams) [D.Walker].",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 \u00b7 BUF 32"
+       },
+       {
+        "id": "139",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "138",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass deep left complete. Catch made by A.St. Brown for 34 yards. Pushed out of bounds by D.Igbinosun at BUF 32.",
+        "timeOfPlay": "0:29",
+        "title": "2nd & 10 \u00b7 DET 34"
+       },
+       {
+        "id": "137",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Gibbs rushed right tackle for 0 yards. Pushed out of bounds by D.Igbinosun at DET 34.",
+        "timeOfPlay": "1:01",
+        "title": "1st & 10 \u00b7 DET 34"
+       },
+       {
+        "id": "136",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 4,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 34,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Bass kicks 61 yards from BUF 35 to the DET 4. J.Saylors returns the kickoff. Tackled by T.Parker at DET 34.",
+        "timeOfPlay": "1:07",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "24",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "34",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 66 yards \u00b7 5:14",
+      "title": "TOUCHDOWN"
+     }
+    ],
+    "title": "4TH QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15716",
+      "plays": [
+       {
+        "id": "135",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Bass extra point is good.",
+        "timeOfPlay": "1:07",
+        "title": "DET 15"
+       },
+       {
+        "id": "134",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 2
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen scrambles right end for 2 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:13",
+        "title": "1st & 2 \u00b7 DET 2"
+       },
+       {
+        "id": "133",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 2,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Cook rushed right end for 2 yards. Tackled by D.Reed at DET 4. PENALTY on DET-D.White, Face Mask (15 Yards), 2 yards, accepted.",
+        "timeOfPlay": "1:29",
+        "title": "1st & 6 \u00b7 DET 6"
+       },
+       {
+        "id": "132",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 6,
+            "yardStart": 29
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen pass short left complete. Catch made by D.Kincaid for 23 yards. Pushed out of bounds by C.Clark; D.White at DET 6.",
+        "timeOfPlay": "2:10",
+        "title": "1st & 10 \u00b7 DET 29"
+       },
+       {
+        "id": "131",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 29,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen rushed up the middle for 2 yards. Tackled by T.Lacy at DET 29.",
+        "timeOfPlay": "2:52",
+        "title": "3rd & 1 \u00b7 DET 31"
+       },
+       {
+        "id": "130",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 31,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen rushed left guard for 9 yards. Tackled by D.Wonnum; D.Barnes at DET 31.",
+        "timeOfPlay": "3:28",
+        "title": "2nd & 10 \u00b7 DET 40"
+       },
+       {
+        "id": "129",
+        "playDescription": "Timeout #1 by DET.",
+        "timeOfPlay": "3:28",
+        "title": "Timeout"
+       },
+       {
+        "id": "128",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short left intended for J.Cook [T.Williams].",
+        "timeOfPlay": "3:34",
+        "title": "1st & 10 \u00b7 DET 40"
+       },
+       {
+        "id": "127",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 40,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen rushed up the middle for 2 yards. Tackled by J.Campbell; A.McNeill at DET 40.",
+        "timeOfPlay": "4:16",
+        "title": "3rd & 1 \u00b7 DET 42"
+       },
+       {
+        "id": "126",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 42,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen pass short right complete. Catch made by K.Coleman for 9 yards. Tackled by R.Ya-Sin at DET 42.",
+        "timeOfPlay": "4:54",
+        "title": "2nd & 10 \u00b7 BUF 49"
+       },
+       {
+        "id": "125",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 51,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen steps back to pass. Sacked at BUF 49 for 0 yards (D.Barnes).",
+        "timeOfPlay": "5:43",
+        "title": "1st & 10 \u00b7 BUF 49"
+       },
+       {
+        "id": "124",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen pass short right complete. Catch made by D.Knox for 4 yards. Tackled by D.White at BUF 49.",
+        "timeOfPlay": "6:24",
+        "title": "3rd & 2 \u00b7 BUF 45"
+       },
+       {
+        "id": "123",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 59
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen pass short right complete. Catch made by J.Cook for 4 yards. Tackled by D.Reed; D.White at BUF 45.",
+        "timeOfPlay": "7:10",
+        "title": "2nd & 6 \u00b7 BUF 41"
+       },
+       {
+        "id": "122",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 63
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Cook rushed left tackle for 4 yards. Tackled by D.Wonnum at BUF 41.",
+        "timeOfPlay": "7:45",
+        "title": "1st & 10 \u00b7 BUF 37"
+       },
+       {
+        "id": "121",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 66
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen rushed up the middle for 3 yards. Tackled by A.McNeill at BUF 37.",
+        "timeOfPlay": "8:17",
+        "title": "3rd & 1 \u00b7 BUF 34"
+       },
+       {
+        "id": "120",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Cook rushed left tackle for 1 yard. Tackled by D.Reed; A.Hutchinson at BUF 34.",
+        "timeOfPlay": "8:43",
+        "title": "2nd & 2 \u00b7 BUF 33"
+       },
+       {
+        "id": "119",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Allen scrambles right end for 8 yards. Tackled by T.Williams at BUF 33.",
+        "timeOfPlay": "9:23",
+        "title": "1st & 10 \u00b7 BUF 25"
+       },
+       {
+        "id": "118",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 99,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 75,
+            "yardStart": 99
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Bates kicks 64 yards from DET 35 to the BUF 1. G.Dortch returns the kickoff. Tackled by T.Nowaske at BUF 25.",
+        "timeOfPlay": "9:29",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "34",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "15 plays \u00b7 75 yards \u00b7 8:22",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15715",
+      "plays": [
+       {
+        "id": "116",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Bates extra point is good.",
+        "timeOfPlay": "9:29",
+        "title": "BUF 15"
+       },
+       {
+        "id": "115",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 98
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short left complete. Catch made by A.St. Brown for 2 yards. TOUCHDOWN.",
+        "timeOfPlay": "9:32",
+        "title": "2nd & 1 \u00b7 BUF 2"
+       },
+       {
+        "id": "114",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 98,
+            "yardStart": 89
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short right complete. Catch made by A.St. Brown for 9 yards. Tackled by C.Bishop; C.Benford at BUF 2.",
+        "timeOfPlay": "10:10",
+        "title": "1st & 10 \u00b7 BUF 11"
+       },
+       {
+        "id": "113",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 89,
+            "yardStart": 80
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short right complete [G.Rousseau]. Catch made by J.Gibbs for 9 yards. Tackled by T.Bernard at BUF 11. PENALTY on BUF-C.Bishop, Defensive Holding, 5 yards, declined.",
+        "timeOfPlay": "10:42",
+        "title": "2nd & 8 \u00b7 BUF 20"
+       },
+       {
+        "id": "112",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 80,
+            "yardStart": 78
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Gibbs rushed left guard for 2 yards. Tackled by G.Gaines; L.Jackson at BUF 20.",
+        "timeOfPlay": "11:18",
+        "title": "1st & 10 \u00b7 BUF 22"
+       },
+       {
+        "id": "111",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 78,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short middle complete. Catch made by S.LaPorta for 18 yards. Tackled by J.Hancock at BUF 22.",
+        "timeOfPlay": "11:41",
+        "title": "4th & 5 \u00b7 BUF 40"
+       },
+       {
+        "id": "110",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 60,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short middle complete. Catch made by A.St. Brown for 5 yards. Tackled by J.Hancock; D.Williams at BUF 40.",
+        "timeOfPlay": "12:21",
+        "title": "3rd & 10 \u00b7 BUF 45"
+       },
+       {
+        "id": "109",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 55,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Gibbs rushed left guard for 0 yards. Tackled by D.Carter at BUF 45.",
+        "timeOfPlay": "12:57",
+        "title": "2nd & 10 \u00b7 BUF 45"
+       },
+       {
+        "id": "108",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 55
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short left intended for A.St. Brown (C.Benford).",
+        "timeOfPlay": "13:02",
+        "title": "1st & 10 \u00b7 BUF 45"
+       },
+       {
+        "id": "107",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass deep right complete. Catch made by A.St. Brown for 21 yards. Pushed out of bounds by C.Benford at BUF 45.",
+        "timeOfPlay": "13:37",
+        "title": "3rd & 2 \u00b7 DET 34"
+       },
+       {
+        "id": "106",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Goff pass short right complete. Catch made by I.TeSlaa for 6 yards. Pushed out of bounds by J.Hancock at DET 34.",
+        "timeOfPlay": "14:21",
+        "title": "2nd & 8 \u00b7 DET 28"
+       },
+       {
+        "id": "105",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 28,
+            "yardStart": 26
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Gibbs rushed left guard for 2 yards. Tackled by C.Gardner-Johnson at DET 28.",
+        "timeOfPlay": "14:54",
+        "title": "1st & 10 \u00b7 DET 26"
+       },
+       {
+        "id": "104",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 4,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 26,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Bass kicks 61 yards from BUF 35 to the DET 4. T.Kennedy returns the kickoff. Tackled by J.Solomon at DET 26.",
+        "timeOfPlay": "15:00",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "17",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 74 yards \u00b7 5:31",
+      "title": "TOUCHDOWN"
+     }
+    ],
+    "title": "3RD QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15714",
+      "plays": [
+       {
+        "id": "102",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 87
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Bates 31 yard field goal attempt is good, Center-H.Hatten, Holder-J.Fox.",
+        "timeOfPlay": "0:01",
+        "title": "1st & 10 \u00b7 BUF 13"
+       },
+       {
+        "id": "101",
+        "playDescription": "Timeout #3 by BUF.",
+        "timeOfPlay": "0:01",
+        "title": "Timeout"
+       },
+       {
+        "id": "100",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 87,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed left guard for 7 yards. Tackled by L.Jackson at BUF 26. PENALTY on BUF-L.Jackson, Tripping / Defense, 13 yards, accepted.",
+        "timeOfPlay": "0:06",
+        "title": "2nd & 10 \u00b7 BUF 33"
+       },
+       {
+        "id": "99",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete deep right intended for I.TeSlaa.",
+        "timeOfPlay": "0:10",
+        "title": "1st & 10 \u00b7 BUF 33"
+       },
+       {
+        "id": "98",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 67,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass deep right complete. Catch made by J.Williams for 16 yards. Pushed out of bounds by M.Hairston at BUF 33.",
+        "timeOfPlay": "0:16",
+        "title": "2nd & 15 \u00b7 BUF 49"
+       },
+       {
+        "id": "97",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 51,
+            "yardStart": 56
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on DET-L.Borom, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:16",
+        "title": "2nd & 10 \u00b7 BUF 44"
+       },
+       {
+        "id": "96",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 56
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short right intended for J.Williams.",
+        "timeOfPlay": "0:21",
+        "title": "1st & 10 \u00b7 BUF 44"
+       },
+       {
+        "id": "95",
+        "playDescription": "Timeout #2 by DET.",
+        "timeOfPlay": "0:21",
+        "title": "Timeout"
+       },
+       {
+        "id": "94",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 56,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short right complete. Catch made by A.St. Brown for 22 yards. Tackled by J.Hancock; C.Benford at BUF 44.",
+        "timeOfPlay": "0:28",
+        "title": "1st & 10 \u00b7 DET 34"
+       },
+       {
+        "id": "93",
+        "playDescription": "Timeout #1 by DET.",
+        "timeOfPlay": "0:28",
+        "title": "Timeout"
+       },
+       {
+        "id": "92",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short left complete. Catch made by S.LaPorta for 12 yards. Tackled by J.Hancock at DET 34.",
+        "timeOfPlay": "0:33",
+        "title": "2nd & 10 \u00b7 DET 22"
+       },
+       {
+        "id": "91",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete deep middle intended for I.TeSlaa (T.Bernard).",
+        "timeOfPlay": "0:39",
+        "title": "1st & 10 \u00b7 DET 22"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "10",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 65 yards \u00b7 0:39",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15713",
+      "plays": [
+       {
+        "id": "90",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 22,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Doman punts 43 yards to DET 22, Center-R.Ferguson. Fair catch by T.Kennedy.",
+        "timeOfPlay": "0:46",
+        "title": "4th & 5 \u00b7 BUF 35"
+       },
+       {
+        "id": "89",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short middle intended for K.Shakir.",
+        "timeOfPlay": "0:49",
+        "title": "3rd & 5 \u00b7 BUF 35"
+       },
+       {
+        "id": "88",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for J.Palmer.",
+        "timeOfPlay": "0:54",
+        "title": "2nd & 5 \u00b7 BUF 35"
+       },
+       {
+        "id": "87",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for J.Palmer (T.Harper).",
+        "timeOfPlay": "0:59",
+        "title": "1st & 5 \u00b7 BUF 35"
+       },
+       {
+        "id": "86",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 65,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete deep right intended for K.Shakir. PENALTY on DET-R.Ya-Sin, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "1:05",
+        "title": "1st & 10 \u00b7 BUF 30"
+       },
+       {
+        "id": "85",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short middle complete. Catch made by D.Kincaid for 6 yards. Tackled by J.Campbell; C.Clark at BUF 30.",
+        "timeOfPlay": "1:27",
+        "title": "2nd & 4 \u00b7 BUF 24"
+       },
+       {
+        "id": "84",
+        "playDescription": "Timeout #2 by BUF.",
+        "timeOfPlay": "1:27",
+        "title": "Timeout"
+       },
+       {
+        "id": "83",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 82
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short left complete. Catch made by D.Kincaid for 6 yards. Tackled by C.Clark at BUF 24.",
+        "timeOfPlay": "1:36",
+        "title": "1st & 10 \u00b7 BUF 18"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "5 plays \u00b7 17 yards \u00b7 0:57",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15712",
+      "plays": [
+       {
+        "id": "82",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 93,
+            "yardStart": 31
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 82,
+            "yardStart": 93
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Fox punts 62 yards to BUF 7, Center-H.Hatten. G.Dortch returned punt from the BUF 7. Tackled by T.Nowaske; T.Martin at BUF 18.",
+        "timeOfPlay": "1:51",
+        "title": "4th & 18 \u00b7 DET 31"
+       },
+       {
+        "id": "81",
+        "playDescription": "Timeout #1 by BUF.",
+        "timeOfPlay": "1:51",
+        "title": "Timeout"
+       },
+       {
+        "id": "80",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 31,
+            "yardStart": 44
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Sacked at DET 31 for -13 yards (B.Chubb).",
+        "timeOfPlay": "1:56",
+        "title": "3rd & 5 \u00b7 DET 44"
+       },
+       {
+        "id": "79",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 44,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on DET-J.Scruggs, False Start, 4 yards, accepted. No Play.",
+        "timeOfPlay": "1:56",
+        "title": "3rd & 1 \u00b7 DET 48"
+       },
+       {
+        "id": "78",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "1:56",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "77",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 39
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short middle complete. Catch made by J.Gibbs for 9 yards. Tackled by K.Elarms-Orr; T.Bernard at DET 48.",
+        "timeOfPlay": "2:03",
+        "title": "2nd & 10 \u00b7 DET 39"
+       },
+       {
+        "id": "76",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 39
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short left intended for J.Williams (D.Walker) [D.Walker].",
+        "timeOfPlay": "2:10",
+        "title": "1st & 10 \u00b7 DET 39"
+       },
+       {
+        "id": "75",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 27
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short left complete. Catch made by S.LaPorta for 12 yards. Tackled by T.Bernard at DET 39.",
+        "timeOfPlay": "2:46",
+        "title": "1st & 10 \u00b7 DET 27"
+       },
+       {
+        "id": "74",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 27,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Bass kicks 65 yards from BUF 35 to the DET End Zone. T.Kennedy returns the kickoff. Tackled by S.Franklin at DET 27.",
+        "timeOfPlay": "2:52",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 4 yards \u00b7 1:16",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15711",
+      "plays": [
+       {
+        "id": "73",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - NO GOOD",
+            "yardEnd": null,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Bass extra point is no good.",
+        "timeOfPlay": "2:52",
+        "title": "DET 15"
+       },
+       {
+        "id": "72",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 16
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass deep middle complete. Catch made by D.Kincaid for 16 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:56",
+        "title": "2nd & 13 \u00b7 DET 16"
+       },
+       {
+        "id": "71",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 16,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for D.Moore. PENALTY on BUF-D.Knox, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "3:02",
+        "title": "2nd & 3 \u00b7 DET 6"
+       },
+       {
+        "id": "70",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 6,
+            "yardStart": 13
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Cook rushed up the middle for 7 yards. Tackled by C.Clark; D.White at DET 6.",
+        "timeOfPlay": "3:43",
+        "title": "1st & 10 \u00b7 DET 13"
+       },
+       {
+        "id": "69",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 13,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Cook rushed left guard for 35 yards. Pushed out of bounds by D.Reed at DET 13.",
+        "timeOfPlay": "4:22",
+        "title": "1st & 10 \u00b7 DET 48"
+       },
+       {
+        "id": "68",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Cook rushed up the middle for 20 yards. Pushed out of bounds by R.Ya-Sin at DET 48.",
+        "timeOfPlay": "4:56",
+        "title": "1st & 10 \u00b7 BUF 32"
+       },
+       {
+        "id": "67",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 99,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 68,
+            "yardStart": 99
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Bates kicks 64 yards from DET 35 to the BUF 1. R.Davis returns the kickoff. Tackled by C.Izien at BUF 32.",
+        "timeOfPlay": "5:03",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "27",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 68 yards \u00b7 2:11",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15710",
+      "plays": [
+       {
+        "id": "65",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Bates extra point is good.",
+        "timeOfPlay": "5:03",
+        "title": "BUF 15"
+       },
+       {
+        "id": "64",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 89
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short right complete. Catch made by J.Gibbs for 11 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:07",
+        "title": "2nd & 4 \u00b7 BUF 11"
+       },
+       {
+        "id": "63",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 83
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed right tackle for 6 yards. Tackled by D.Alford; B.Chubb at BUF 11.",
+        "timeOfPlay": "5:46",
+        "title": "1st & 10 \u00b7 BUF 17"
+       },
+       {
+        "id": "62",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 72
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short right complete. Catch made by A.St. Brown for 11 yards. Pushed out of bounds by D.Igbinosun at BUF 17.",
+        "timeOfPlay": "6:17",
+        "title": "2nd & 10 \u00b7 BUF 28"
+       },
+       {
+        "id": "61",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 72
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff steps back to pass. Pass incomplete short left intended for S.LaPorta.",
+        "timeOfPlay": "6:24",
+        "title": "1st & 10 \u00b7 BUF 28"
+       },
+       {
+        "id": "60",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 72,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short left complete. Catch made by J.Gibbs for 8 yards. Tackled by C.Bishop at BUF 28.",
+        "timeOfPlay": "6:57",
+        "title": "3rd & 4 \u00b7 BUF 36"
+       },
+       {
+        "id": "59",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 57
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Vaki rushed up the middle for 7 yards. Tackled by K.Elarms-Orr; D.Alford at BUF 36.",
+        "timeOfPlay": "7:35",
+        "title": "2nd & 11 \u00b7 BUF 43"
+       },
+       {
+        "id": "58",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 58
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed up the middle for -1 yards. Tackled by T.Bernard at BUF 43.",
+        "timeOfPlay": "8:14",
+        "title": "1st & 10 \u00b7 BUF 42"
+       },
+       {
+        "id": "57",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed up the middle for 10 yards. Tackled by C.Benford at BUF 42.",
+        "timeOfPlay": "8:48",
+        "title": "3rd & 7 \u00b7 DET 48"
+       },
+       {
+        "id": "56",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short left complete [D.Walker]. Catch made by S.Vaki for 13 yards. Tackled by D.Williams at DET 48.",
+        "timeOfPlay": "9:30",
+        "title": "2nd & 20 \u00b7 DET 35"
+       },
+       {
+        "id": "55",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed left end for 0 yards. Tackled by D.Alford at DET 35.",
+        "timeOfPlay": "10:06",
+        "title": "1st & 20 \u00b7 DET 35"
+       },
+       {
+        "id": "54",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 35,
+            "yardStart": 45
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gibbs rushed left tackle for yards. Tackled by T.Bernard at BUF 36. PENALTY on DET-L.Borom, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "10:33",
+        "title": "1st & 10 \u00b7 DET 45"
+       },
+       {
+        "id": "53",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 45,
+            "yardStart": 33
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff pass short left complete. Catch made by J.Gibbs for 12 yards. Tackled by D.Williams at DET 45.",
+        "timeOfPlay": "11:08",
+        "title": "2nd & 7 \u00b7 DET 33"
+       },
+       {
+        "id": "52",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Goff scrambles up the middle for 3 yards. Tackled by D.Williams at DET 33.",
+        "timeOfPlay": "11:42",
+        "title": "1st & 10 \u00b7 DET 30"
+       },
+       {
+        "id": "51",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 3,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 30,
+            "yardStart": 3
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Bass kicks 62 yards from BUF 35 to the DET 3. T.Kennedy returns the kickoff. Pushed out of bounds by D.Igbinosun; K.Latu at DET 30.",
+        "timeOfPlay": "11:48",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "12 plays \u00b7 70 yards \u00b7 6:45",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15709",
+      "plays": [
+       {
+        "id": "50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Bass extra point is good.",
+        "timeOfPlay": "11:48",
+        "title": "DET 15"
+       },
+       {
+        "id": "49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short right complete. Catch made by D.Knox for 1 yard. TOUCHDOWN.",
+        "timeOfPlay": "11:53",
+        "title": "2nd & 1 \u00b7 DET 1"
+       },
+       {
+        "id": "48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 2
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Cook rushed left tackle for 1 yard. Tackled by A.Hutchinson at DET 1.",
+        "timeOfPlay": "12:38",
+        "title": "1st & 2 \u00b7 DET 2"
+       },
+       {
+        "id": "47",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "12:38",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 2,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Sacked at DET 11 for -7 yards (D.White). PENALTY on DET-J.Campbell, Defensive Holding, 2 yards, accepted. No Play.",
+        "timeOfPlay": "12:48",
+        "title": "1st & 4 \u00b7 DET 4"
+       },
+       {
+        "id": "45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 4,
+            "yardStart": 9
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short right INTERCEPTED at DET 4. Intercepted by D.Barnes at DET 4. Tackled by D.Kincaid at DET 4. PENALTY on DET-R.Ya-Sin, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "12:58",
+        "title": "3rd & 6 \u00b7 DET 9"
+       },
+       {
+        "id": "44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 9
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short left intended for J.Cook.",
+        "timeOfPlay": "13:04",
+        "title": "2nd & 6 \u00b7 DET 9"
+       },
+       {
+        "id": "43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 9,
+            "yardStart": 13
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short right complete. Catch made by K.Coleman for 4 yards. Tackled by R.Ya-Sin at DET 9.",
+        "timeOfPlay": "13:45",
+        "title": "1st & 10 \u00b7 DET 13"
+       },
+       {
+        "id": "42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 13,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short right complete. Catch made by K.Coleman for 22 yards. Tackled by C.Clark at DET 13.",
+        "timeOfPlay": "14:28",
+        "title": "1st & 10 \u00b7 DET 35"
+       },
+       {
+        "id": "41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Allen pass short right complete. Catch made by D.Kincaid for 12 yards. Pushed out of bounds by D.Barnes at DET 35.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 \u00b7 DET 47"
+       },
+       {
+        "id": "40",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed left guard for 1 yard. Tackled by T.Williams at DET 47.",
+        "timeOfPlay": "0:13",
+        "title": "3rd & 1 \u00b7 DET 48"
+       },
+       {
+        "id": "38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete deep right intended for D.Kincaid [A.McNeill].",
+        "timeOfPlay": "0:20",
+        "title": "2nd & 1 \u00b7 DET 48"
+       },
+       {
+        "id": "37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 57
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed right end for 9 yards. Tackled by C.Clark; T.Lacy at DET 48.",
+        "timeOfPlay": "0:57",
+        "title": "1st & 10 \u00b7 BUF 43"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "21",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "9 plays \u00b7 57 yards \u00b7 4:09",
+      "title": "TOUCHDOWN"
+     }
+    ],
+    "title": "2ND QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15708",
+      "plays": [
+       {
+        "id": "35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 82,
+            "yardStart": 38
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 57,
+            "yardStart": 82
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Fox punts 44 yards to BUF 18, Center-H.Hatten. G.Dortch returned punt from the BUF 18. Pushed out of bounds by D.Barnes at BUF 43.",
+        "timeOfPlay": "1:09",
+        "title": "4th & 22 \u00b7 DET 38"
+       },
+       {
+        "id": "34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 49
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Goff FUMBLES (aborted). Fumble RECOVERED by DET-J.Goff at DET 38.",
+        "timeOfPlay": "1:43",
+        "title": "3rd & 11 \u00b7 DET 49"
+       },
+       {
+        "id": "33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 49,
+            "yardStart": 59
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Goff steps back to pass. Sacked at DET 49 for -10 yards (G.Rousseau) [G.Rousseau]. J.Goff FUMBLES, forced by G.Rousseau. Fumble RECOVERED by DET-B.Wright at DET 49. ",
+        "timeOfPlay": "2:25",
+        "title": "2nd & 1 \u00b7 BUF 41"
+       },
+       {
+        "id": "32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Gibbs rushed right end for 9 yards. Pushed out of bounds by C.Benford at BUF 41.",
+        "timeOfPlay": "2:57",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Gibbs rushed right tackle for 16 yards. Tackled by C.Bishop at DET 50.",
+        "timeOfPlay": "3:34",
+        "title": "1st & 10 \u00b7 DET 34"
+       },
+       {
+        "id": "30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 6,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 34,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Bass kicks 59 yards from BUF 35 to the DET 6. J.Saylors returns the kickoff. Tackled by D.Hamlin at DET 34.",
+        "timeOfPlay": "3:42",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "14",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 4 yards \u00b7 2:45",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15707",
+      "plays": [
+       {
+        "id": "28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Bass extra point is good.",
+        "timeOfPlay": "3:42",
+        "title": "DET 15"
+       },
+       {
+        "id": "27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass deep middle complete [S.Gill-Howard]. Catch made by J.Palmer for 43 yards. TOUCHDOWN.",
+        "timeOfPlay": "3:49",
+        "title": "3rd & 11 \u00b7 DET 43"
+       },
+       {
+        "id": "26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete short right intended for [J.Campbell].",
+        "timeOfPlay": "3:57",
+        "title": "2nd & 11 \u00b7 DET 43"
+       },
+       {
+        "id": "25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Moore rushed left tackle for -1 yards. Tackled by D.Barnes at DET 43.",
+        "timeOfPlay": "4:34",
+        "title": "1st & 10 \u00b7 DET 42"
+       },
+       {
+        "id": "24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 42,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass deep middle complete. Catch made by D.Kincaid for 25 yards. Tackled by A.Maddox; D.Reed at DET 42.",
+        "timeOfPlay": "5:15",
+        "title": "2nd & 9 \u00b7 BUF 33"
+       },
+       {
+        "id": "23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed up the middle for 1 yard. Tackled by C.Izien; C.Clark at BUF 33.",
+        "timeOfPlay": "5:54",
+        "title": "1st & 10 \u00b7 BUF 32"
+       },
+       {
+        "id": "22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass short left complete. Catch made by K.Coleman for 7 yards. Pushed out of bounds by R.Ya-Sin at BUF 32.",
+        "timeOfPlay": "6:28",
+        "title": "3rd & 6 \u00b7 BUF 25"
+       },
+       {
+        "id": "21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 79
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed left guard for 4 yards. Tackled by S.Gill-Howard; D.Barnes at BUF 25.",
+        "timeOfPlay": "7:02",
+        "title": "2nd & 10 \u00b7 BUF 21"
+       },
+       {
+        "id": "20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 79
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen steps back to pass. Pass incomplete deep middle intended for K.Shakir.",
+        "timeOfPlay": "7:09",
+        "title": "1st & 10 \u00b7 BUF 21"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "14",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 79 yards \u00b7 3:27",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/21"
+      },
+      "id": "15706",
+      "plays": [
+       {
+        "id": "18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 79,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Fox punts 49 yards to BUF 21, Center-H.Hatten. Fair catch by G.Dortch.",
+        "timeOfPlay": "7:16",
+        "title": "4th & 15 \u00b7 DET 30"
+       },
+       {
+        "id": "17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 30,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Goff steps back to pass. Sacked at DET 30 for -7 yards (G.Rousseau).",
+        "timeOfPlay": "7:55",
+        "title": "3rd & 8 \u00b7 DET 37"
+       },
+       {
+        "id": "16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Gibbs rushed right tackle for 0 yards. Tackled by G.Rousseau at DET 37.",
+        "timeOfPlay": "8:35",
+        "title": "2nd & 8 \u00b7 DET 37"
+       },
+       {
+        "id": "15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 37,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Goff pass short left complete. Catch made by S.LaPorta for 2 yards. Tackled by D.Williams at DET 37.",
+        "timeOfPlay": "9:09",
+        "title": "1st & 10 \u00b7 DET 35"
+       },
+       {
+        "id": "14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 35,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Bass kicks 65 yards from BUF 35 to the DET End Zone. Touchback.",
+        "timeOfPlay": "9:09",
+        "title": "BUF 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 -5 yards \u00b7 2:00",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/1"
+      },
+      "id": "15705",
+      "plays": [
+       {
+        "id": "12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Bass extra point is good.",
+        "timeOfPlay": "9:09",
+        "title": "DET 15"
+       },
+       {
+        "id": "11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen rushed left guard for 1 yard. TOUCHDOWN.",
+        "timeOfPlay": "9:15",
+        "title": "1st & 1 \u00b7 DET 1"
+       },
+       {
+        "id": "10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen scrambles left tackle for 14 yards. Tackled by R.Ya-Sin; D.Reed at DET 1.",
+        "timeOfPlay": "9:43",
+        "title": "1st & 10 \u00b7 DET 15"
+       },
+       {
+        "id": "9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 15,
+            "yardStart": 25
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed right guard for 10 yards. Tackled by A.Maddox at DET 15.",
+        "timeOfPlay": "10:33",
+        "title": "1st & 10 \u00b7 DET 25"
+       },
+       {
+        "id": "8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 25,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass short middle complete. Catch made by K.Shakir for 13 yards. Tackled by J.Campbell at DET 25.",
+        "timeOfPlay": "11:13",
+        "title": "1st & 10 \u00b7 DET 38"
+       },
+       {
+        "id": "7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen scrambles right tackle for 12 yards. Pushed out of bounds by D.Barnes at DET 38.",
+        "timeOfPlay": "11:49",
+        "title": "2nd & 9 \u00b7  50"
+       },
+       {
+        "id": "6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed right guard for 1 yard. Tackled by J.Campbell; T.Williams at DET 50.",
+        "timeOfPlay": "12:27",
+        "title": "1st & 10 \u00b7 BUF 49"
+       },
+       {
+        "id": "5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 51,
+            "yardStart": 69
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen scrambles right end for 13 yards. Pushed out of bounds by D.White at BUF 44. PENALTY on DET-D.Reed, Defensive Holding, 5 yards, accepted.",
+        "timeOfPlay": "12:57",
+        "title": "2nd & 15 \u00b7 BUF 31"
+       },
+       {
+        "id": "4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 69,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen steps back to pass. Sacked at BUF 31 for -5 yards (A.Hutchinson). J.Allen FUMBLES, forced by A.Hutchinson. Fumble RECOVERED by BUF-S.Brown at BUF 31. ",
+        "timeOfPlay": "13:51",
+        "title": "1st & 10 \u00b7 BUF 36"
+       },
+       {
+        "id": "3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Cook rushed up the middle for 12 yards. Tackled by C.Clark; A.Maddox at BUF 36.",
+        "timeOfPlay": "14:27",
+        "title": "2nd & 1 \u00b7 BUF 24"
+       },
+       {
+        "id": "2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Allen pass short left complete. Catch made by K.Shakir for 9 yards. Pushed out of bounds by D.White at BUF 24.",
+        "timeOfPlay": "14:51",
+        "title": "1st & 10 \u00b7 BUF 15"
+       },
+       {
+        "id": "1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 101,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 85,
+            "yardStart": 101
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Bates kicks 66 yards from DET 35 to the BUF End Zone. G.Dortch returns the kickoff. Tackled by E.O'Neill at BUF 26. PENALTY on BUF-S.Franklin, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "15:00",
+        "title": "DET 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DET"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "BUF"
+       }
+      ],
+      "subtitle": "10 plays \u00b7 85 yards \u00b7 5:51",
+      "title": "TOUCHDOWN"
+     }
+    ],
+    "title": "1ST QUARTER"
+   }
+  ]
+ }
+}

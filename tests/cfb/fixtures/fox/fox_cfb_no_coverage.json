@@ -1,0 +1,35 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 227, 24, 55",
+  "alternateRightColor": "1, 115, 16, 18",
+  "eventStatus": 3,
+  "eventTime": "2025-09-06T22:00:00Z",
+  "id": "41379",
+  "leftColor": "1, 227, 24, 55",
+  "leftTeam": {
+   "imageAltText": "Davidson Wildcats",
+   "isLoser": true,
+   "longName": "Davidson",
+   "name": "DAVDSN",
+   "score": 7,
+   "stackedNameBottom": "Wildcats",
+   "stackedNameTop": "Davidson",
+   "uri": "football/cfb/teams/145"
+  },
+  "rightColor": "1, 115, 16, 18",
+  "rightTeam": {
+   "imageAltText": "Elon Phoenix",
+   "isLoser": false,
+   "longName": "Elon",
+   "name": "ELON",
+   "score": 55,
+   "stackedNameBottom": "Phoenix",
+   "stackedNameTop": "Elon",
+   "uri": "football/cfb/teams/146"
+  },
+  "statusLine": "FINAL"
+ },
+ "pbp": {
+  "sections": []
+ }
+}

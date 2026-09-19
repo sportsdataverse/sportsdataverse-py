@@ -1,0 +1,72 @@
+{
+ "sixPack": {
+  "odds": {
+   "rows": [
+    {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+     "fullText": "Arizona Cardinals",
+     "image": {
+      "altText": "Arizona Cardinals",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png"
+     },
+     "imageAltText": "Arizona Cardinals",
+     "imageType": "image-logo",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+     "template": "entity",
+     "text": "ARI",
+     "values": [
+      {
+       "id": "closing",
+       "odds": "-1.5",
+       "success": false
+      },
+      {
+       "id": "closing",
+       "odds": "-118",
+       "success": false
+      },
+      {
+       "id": "closing",
+       "odds": "O 46.5",
+       "success": false
+      }
+     ]
+    },
+    {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+     "fullText": "Seattle Seahawks",
+     "image": {
+      "altText": "Seattle Seahawks",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png"
+     },
+     "imageAltText": "Seattle Seahawks",
+     "imageType": "image-logo",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+     "template": "entity",
+     "text": "SEA",
+     "values": [
+      {
+       "id": "closing",
+       "odds": "+1.5",
+       "success": true
+      },
+      {
+       "id": "closing",
+       "odds": "-101",
+       "success": true
+      },
+      {
+       "id": "closing",
+       "odds": "U 46.5",
+       "success": true
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
