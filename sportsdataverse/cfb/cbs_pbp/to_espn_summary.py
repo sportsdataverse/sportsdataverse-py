@@ -53,6 +53,17 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from sportsdataverse.cfb.cbs_pbp.teams import _cbs_team
+from sportsdataverse.football.cbs_common import (
+    _admin_row,
+    _fetch_cbs_game,
+    _int,
+    _napi_list,
+    _norm_text,
+    _register_cbs,
+    _status,
+    _subplay_body,
+    _type_object,
+)
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import (
     ESPN_PLAY_TYPES,
     _clock,
@@ -80,12 +91,6 @@ _HALF_BOUNDARY = frozenset({"End of Half", "End of Game"})
 #: where the play's own yardage says nothing about where the next team starts.
 _KEEPS_THE_BALL = frozenset({"3", "5", "7", "24"})
 
-_WHITESPACE_RE = re.compile(r"\s+")
-#: GSIS/StatCrew jersey prefix CBS keeps and ESPN does not (``"2-S.Patterson"``, 2019 and
-#: earlier). ``Center-D.Riggs`` is deliberately untouched -- the prefix must be digits.
-_JERSEY_RE = re.compile(r"\b\d{1,3}-(?=[A-Z])")
-#: A replay reversal: CBS keeps the overturned narrative and appends the ruling after it.
-_REVERSED_RE = re.compile(r"(?i)\bwas\s+REVERSED\.\s*")
 #: The kick's own distance, in both CBS grammars: "26 yard field goal attempt" (2020+) and
 #: "28 yards Field Goal is Good." (2019).
 _FG_YARDS_RE = re.compile(r"(?i)\b(\d{1,3})\s*-?\s*yards?\s+field\s+goal")
@@ -93,7 +98,6 @@ _SAFETY_RE = re.compile(r"(?i)\bsafety\b")
 #: The kicker's name at the head of a CBS try row ("C.Hawkins extra point is good.").
 _TRY_KICKER_RE = re.compile(r"^([A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]+)*)\s+extra point")
 _BLOCKED_RE = re.compile(r"(?i)\bblock")
-_ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
 
 #: CBS ``score_type`` -> points. ``PointAfterTouchdown`` is folded, never scored here.
 _POINTS = {"Touchdown": 6, "FieldGoal": 3, "Safety": 2}
@@ -103,34 +107,6 @@ _POINTS = {"Touchdown": 6, "FieldGoal": 3, "Safety": 2}
 #: 0/+2), while CBS states the **kick spot**, a flat ``kick distance - 10``. So the text's own
 #: distance is the oracle, and ``kick spot - 8`` is the fallback for a payload that states none.
 _FG_ESPN_OFFSET, _FG_SNAP_OFFSET = 18, 8
-
-
-def _int(value: Any, default: Optional[int] = 0) -> Optional[int]:
-    """``"12"`` -> ``12``; anything unparseable -> ``default``."""
-    try:
-        return int(str(value).strip())
-    except (TypeError, ValueError):
-        return default
-
-
-def _norm_text(description: Optional[str]) -> str:
-    """CBS ``description`` -> ESPN ``text``: reversal tail, jersey prefixes, whitespace.
-
-    Order matters: the reversal tail is cut **first**, so the jersey strip only ever runs on
-    the ruling that actually stands.
-    """
-    text = _WHITESPACE_RE.sub(" ", str(description or "").replace("\r", " ").replace("\n", " ")).strip()
-    match = None
-    for match in _REVERSED_RE.finditer(text):  # noqa: B007 -- the LAST reversal is the ruling
-        pass
-    if match is not None:
-        text = text[match.end() :].strip()
-    return _JERSEY_RE.sub("", text).strip()
-
-
-def _subplay_body(subplay: Mapping[str, Any]) -> Mapping[str, Any]:
-    """The one nested object on a CBS subplay (``{"type": "Rush", "order": "1", "rush": {...}}``)."""
-    return next((v for v in subplay.values() if isinstance(v, dict)), {})
 
 
 def _subplays(play: Mapping[str, Any]) -> Tuple[List[Mapping[str, Any]], List[str]]:
@@ -215,12 +191,6 @@ def _espn_type_id(types: Sequence[str], score_type: Optional[str], own_recovery:
     # An unmapped CBS kind must not silently become a snap: Penalty is the processor's own
     # neutral row (no rush/pass/kick flag fires on it), which is what an unknown row deserves.
     return "8"
-
-
-def _type_object(type_id: str) -> Dict[str, Any]:
-    """``{"id", "text", "abbreviation"}`` -- Game on Paper bracket-reads all three."""
-    label, abbreviation = ESPN_PLAY_TYPES[type_id]
-    return {"id": type_id, "text": label, "abbreviation": abbreviation}
 
 
 def _stat_yardage(types: Sequence[str], subplays: Sequence[Mapping[str, Any]]) -> int:
@@ -409,7 +379,9 @@ def _synthesize_admin_rows(
                 glitches += 1
                 continue
             row = _admin_row(
-                play, "21", f"Timeout {names.get(str(team_id), '')}, clock {play['clock']['displayValue']}"
+                play,
+                _type_object(ESPN_PLAY_TYPES, "21"),
+                f"Timeout {names.get(str(team_id), '')}, clock {play['clock']['displayValue']}",
             )
             row["start"]["team"] = {"id": team_id}
             out.append(row)
@@ -422,76 +394,13 @@ def _synthesize_admin_rows(
         following = emitted[index + 1] if index + 1 < len(emitted) else None
         next_period = (following.get("period") or {}).get("number") if following else None
         if this_period and next_period != this_period and (following is not None or final):
-            type_id = _period_end_type_id(this_period, following is None)
-            end_row = _admin_row(play, type_id, _type_object(type_id)["text"])
+            type_object = _type_object(ESPN_PLAY_TYPES, _period_end_type_id(this_period, following is None))
+            end_row = _admin_row(play, type_object, type_object["text"])
             end_row["clock"] = {"displayValue": "0:00"}
             out.append(end_row)
     if glitches:
         notes.append(f"{glitches} implausible timeouts-remaining drops (>1 in one gap) ignored as feed glitches")
     return out
-
-
-def _admin_row(template: Mapping[str, Any], type_id: str, text: str) -> Dict[str, Any]:
-    """A stoppage row carrying the state of the play it follows; ``down 0`` keeps it a stoppage."""
-    return {
-        "id": None,
-        "sequenceNumber": None,
-        "type": _type_object(type_id),
-        "text": text,
-        "awayScore": template["awayScore"],
-        "homeScore": template["homeScore"],
-        "period": dict(template["period"]),
-        "clock": dict(template["clock"]),
-        "scoringPlay": False,
-        "priority": False,
-        "statYardage": 0,
-        "start": {
-            **template["start"],
-            "down": 0,
-            "distance": 0,
-            "downDistanceText": None,
-            "team": dict(template["start"]["team"]),
-        },
-        "end": {},
-    }
-
-
-_STATUS = {
-    "FINAL": ("3", "STATUS_FINAL", "post", True, "Final"),
-    "FINAL OT": ("3", "STATUS_FINAL", "post", True, "Final/OT"),
-    "HALFTIME": ("23", "STATUS_HALFTIME", "in", False, "Halftime"),
-    "INPROGRESS": ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress"),
-    "IN PROGRESS": ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress"),
-    "SCHEDULED": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-    "PREGAME": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-}
-
-
-def _status(game_status: Mapping[str, Any], period: Optional[int]) -> Dict[str, Any]:
-    """``header.competitions[0].status`` from CBS's own ``game_status`` block."""
-    raw = str(game_status.get("status") or "SCHEDULED").upper()
-    type_id, name, state, completed, description = _STATUS.get(
-        raw, ("2", "STATUS_IN_PROGRESS", "in", False, raw.title())
-    )
-    clock = _clock(str(game_status.get("time_remaining") or "0:00"))
-    detail = description
-    if state == "in" and name != "STATUS_HALFTIME" and period:
-        detail = f"{clock} - {_ORDINAL.get(period, str(period))}" if period <= 4 else f"{clock} - OT"
-    return {
-        "clock": 0.0,
-        "displayClock": clock,
-        "period": period or 0,
-        "type": {
-            "id": type_id,
-            "name": name,
-            "state": state,
-            "completed": completed,
-            "description": description,
-            "detail": detail,
-            "shortDetail": detail,
-        },
-        "cbsStatus": game_status.get("status"),
-    }
 
 
 def _competitor(side: str, order: int, espn_team_id: str, score: Mapping[str, Any], winner: bool) -> Dict[str, Any]:
@@ -825,7 +734,7 @@ def _cbs_cfb_to_espn_summary(
         row: Dict[str, Any] = {
             "id": None,
             "sequenceNumber": None,
-            "type": _type_object(type_id),
+            "type": _type_object(ESPN_PLAY_TYPES, type_id),
             "text": text,
             "awayScore": away_points,
             "homeScore": home_points,
@@ -1010,20 +919,6 @@ def _point_after(two_point: bool, text: str, good: bool) -> Tuple[int, Optional[
     }
 
 
-def _napi_list(payload: Any, key: str) -> Optional[List[Mapping[str, Any]]]:
-    """The ``key`` list out of a NAPI body, or None.
-
-    CBS answers a game it does not carry with an ``{"errors": [{"code": 404, ...}]}`` envelope
-    -- sometimes under an HTTP 404, sometimes under a 200 -- so "the key is there and is a
-    list" is the only honest coverage test. Treating the status as coverage is how a
-    green-but-empty game reaches the processor.
-    """
-    if not isinstance(payload, Mapping):
-        return None
-    value = payload.get(key)
-    return list(value) if isinstance(value, list) else None
-
-
 def _has_coverage(bundle: Mapping[str, Any]) -> bool:
     """True when the captured bundle carries CBS play-by-play for the game.
 
@@ -1032,36 +927,6 @@ def _has_coverage(bundle: Mapping[str, Any]) -> bool:
     about the source, so it is checked by shape before any id-map field is read.
     """
     return bool(_napi_list(bundle.get("plays"), "plays"))
-
-
-def _fetch_cbs_game(cbs_game_id: str, **kwargs: Any) -> Dict[str, Any]:
-    """The NAPI bodies one college-football game needs, through the package's own getter.
-
-    Three sequential requests on :func:`sportsdataverse.dl_utils.download`'s retry budget:
-    ``plays`` and ``scoreboard`` are required, ``drives`` is optional (CBS 404s that resource
-    before 2019 and the drives are rebuilt from the plays' own ``drive_id``) and so is the
-    game body, which only supplies the venue. The closing line is **not** fetched: the id-map
-    row already carries one for CFB (``spread_line`` / ``total_line``), and a request on Game
-    on Paper's path has to earn itself.
-    """
-    from sportsdataverse.cbs.cbs_napi import (
-        cbs_game,
-        cbs_game_scoring_drives,
-        cbs_game_scoring_plays,
-        cbs_game_scoring_scoreboard,
-    )
-
-    out: Dict[str, Any] = {
-        "cbs_game_id": str(cbs_game_id),
-        "plays": cbs_game_scoring_plays(cbs_game_id, return_parsed=False, **kwargs),
-        "scoreboard": cbs_game_scoring_scoreboard(cbs_game_id, return_parsed=False, **kwargs),
-    }
-    for key, fetch in (("drives", cbs_game_scoring_drives), ("game", cbs_game)):
-        try:
-            out[key] = fetch(cbs_game_id, return_parsed=False, **kwargs)
-        except Exception:  # noqa: BLE001 -- an optional resource is a degradation, not a failure
-            out[key] = None
-    return out
 
 
 def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
@@ -1133,7 +998,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     if payload is None:
         try:
-            payload = _fetch_cbs_game(str(cbs_game_id))
+            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives", "game"))
         except NoDataError as exc:
             # NAPI's own 404 envelope: CBS states it has no play-by-play for this game.
             raise SourceUnavailable(f"cfb {espn_id}: cbs carries no play-by-play for game {cbs_game_id}") from exc
@@ -1180,11 +1045,4 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     )
 
 
-def _register_cbs() -> None:
-    """Register :func:`_cbs_adapter` with the dispatcher (called on import)."""
-    from sportsdataverse.football.sources.dispatch import _register
-
-    _register("cfb", "cbs")(_cbs_adapter)
-
-
-_register_cbs()
+_register_cbs("cfb", _cbs_adapter)

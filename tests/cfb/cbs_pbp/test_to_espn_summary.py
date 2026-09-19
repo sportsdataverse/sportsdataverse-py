@@ -18,7 +18,8 @@ from pathlib import Path
 
 import pytest
 
-from sportsdataverse.cfb.cbs_pbp.game_id import _parse_scoreboard, _resolve_cbs_game_id
+from sportsdataverse.cfb.cbs_pbp.game_id import _CARD_RE, _resolve_cbs_game_id
+from sportsdataverse.football.cbs_common import _parse_scoreboard
 from sportsdataverse.cfb.cbs_pbp.to_espn_summary import (
     _cbs_cfb_to_espn_summary,
     _has_coverage,
@@ -179,7 +180,7 @@ COMPARE_COLUMNS = (
 @pytest.fixture(autouse=True)
 def _no_cached_pages():
     """The scoreboard page cache is process-wide; a test must never inherit another's page."""
-    from sportsdataverse.cfb.cbs_pbp.game_id import _PAGE_CACHE, _PAGE_MISSES
+    from sportsdataverse.football.cbs_common import _PAGE_CACHE, _PAGE_MISSES
 
     _PAGE_CACHE.clear()
     _PAGE_MISSES.clear()
@@ -613,7 +614,7 @@ def test_a_failing_week_page_is_read_once_per_process_on_a_bounded_retry_budget(
     unreachable CBS page cost ~45 requests **per game** on Game on Paper's request path. The
     NFL twin took this fix in #542; this module was copied from it before that landed.
     """
-    from sportsdataverse.cfb.cbs_pbp.game_id import _SCOREBOARD_RETRIES
+    from sportsdataverse.football.cbs_common import _SCOREBOARD_RETRIES
 
     calls = []
 
@@ -641,7 +642,7 @@ def test_a_week_page_that_parses_to_no_cards_is_also_remembered():
 
 
 def test_the_card_parser_reads_both_team_ids_in_page_order():
-    cards = _parse_scoreboard(_CARD)
+    cards = _parse_scoreboard(_CARD, _CARD_RE)
     assert cards == [
         {
             "cbs_game_id": "50027666",

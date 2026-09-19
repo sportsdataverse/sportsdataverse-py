@@ -41,6 +41,17 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse.football.cbs_common import (
+    _admin_row,
+    _fetch_cbs_game,
+    _int,
+    _napi_list,
+    _norm_text,
+    _register_cbs,
+    _status,
+    _subplay_body,
+    _type_object,
+)
 from sportsdataverse.nfl.shield_pbp.to_espn_summary import (
     ESPN_PLAY_TYPES,
     _ESPN_TEAMS,
@@ -96,26 +107,11 @@ CBS_TEAMS: Dict[str, Tuple[str, str, str, str]] = {
 #: folds; these two it does not, and ``JAC`` does not prefix-match ``JAX`` either, so a
 #: Jacksonville game lost ``penalty_spot_side``, ``recovery_team`` and every timeout charge.
 _TEXT_ABBR_FIXES = {"JAC": "JAX", "WAS": "WSH"}
-_TEXT_ABBR_RE = re.compile(r"\b(" + "|".join(_TEXT_ABBR_FIXES) + r")\b")
-
-#: GSIS jersey prefix on a name: ``"39-C.Little"``, ``"CLE-28-E.McNeil"``, ``"Center-46-R.X"``.
-#: CBS keeps them; ESPN does not. Present in 2026 regular season and Super Bowl LX, absent in
-#: 2026 preseason and in 2019 -- so the normalizer must be idempotent, which it is.
-_JERSEY_RE = re.compile(r"\b\d{1,3}-(?=[A-Z])")
-
-#: A replay reversal: CBS keeps the whole overturned narrative and appends the final ruling
-#: after ``"... was REVERSED. "``; ESPN keeps only the ruling. Keeping CBS's version invents a
-#: fumble (``fumble_vec``, ``fumble_player_name``, ``yds_fumble_return``) on a play that had
-#: none, and adds two phantom defenders to the participants.
-_REVERSED_RE = re.compile(r"(?i)\bwas\s+REVERSED\.\s*")
 
 #: An unresolved jersey placeholder in provisional live text (``"[14] kneels to JAC 27"``).
 #: Left in the text on purpose -- no name pattern can match it, so the name column is null,
 #: which is the truth until CBS re-sends the play with the name resolved.
 _PLACEHOLDER_RE = re.compile(r"\[\d{1,3}\]")
-
-_WHITESPACE_RE = re.compile(r"\s+")
-_ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
 
 #: CBS ``score_type`` -> (points, ESPN ``scoringType``).
 _SCORING = {
@@ -128,34 +124,6 @@ _SCORING = {
 _CLOCK_STOPPAGE = frozenset(
     {"Timeout", "Official Timeout", "Two-minute warning", "End Period", "End of Half", "End of Game"}
 )
-
-
-def _norm_text(description: Optional[str]) -> str:
-    """CBS ``description`` -> ESPN ``text``: reversal tail, jersey prefixes, club codes, whitespace.
-
-    Order matters: the reversal tail is cut **first**, so the jersey strip and the club-code
-    rewrite only ever run on the ruling that actually stands.
-    """
-    text = _WHITESPACE_RE.sub(" ", str(description or "").replace("\r", " ").replace("\n", " ")).strip()
-    match = None
-    for match in _REVERSED_RE.finditer(text):  # noqa: B007 -- the LAST reversal is the ruling
-        pass
-    if match is not None:
-        text = text[match.end() :].strip()
-    text = _JERSEY_RE.sub("", text)
-    return _TEXT_ABBR_RE.sub(lambda m: _TEXT_ABBR_FIXES[m.group(1)], text).strip()
-
-
-def _subplay_body(subplay: Mapping[str, Any]) -> Mapping[str, Any]:
-    """The one nested object on a CBS subplay (``{"type": "Rush", "order": "1", "rush": {...}}``)."""
-    return next((v for v in subplay.values() if isinstance(v, dict)), {})
-
-
-def _int(value: Any, default: Optional[int] = 0) -> Optional[int]:
-    try:
-        return int(str(value).strip())
-    except (TypeError, ValueError):
-        return default
 
 
 #: Subplay types that are a point-after try, not a play of their own (ESPN folds them).
@@ -388,12 +356,6 @@ def _espn_type_id(types: Sequence[str], score_type: Optional[str], poss_changed:
     return "8"
 
 
-def _type_object(type_id: str) -> Dict[str, Any]:
-    """``{"id", "text", "abbreviation"}`` -- Game on Paper bracket-reads all three."""
-    label, abbreviation = ESPN_PLAY_TYPES[type_id]
-    return {"id": type_id, "text": label, "abbreviation": abbreviation}
-
-
 def _stat_yardage(types: Sequence[str], subplays: Sequence[Mapping[str, Any]], offense: Optional[str]) -> int:
     """ESPN's ``statYardage`` for one CBS row.
 
@@ -473,45 +435,6 @@ def _competitor(side: str, order: int, espn_team_id: str, cbs_team_id: str, scor
         "score": str(_int(score.get("total")) or 0),
         "linescores": [{"displayValue": str(_int(q) or 0)} for q in quarters],
         "record": [],
-    }
-
-
-#: CBS ``game_status.status`` -> ESPN status ``(type id, name, state, completed, description)``.
-_STATUS = {
-    "FINAL": ("3", "STATUS_FINAL", "post", True, "Final"),
-    "FINAL OT": ("3", "STATUS_FINAL", "post", True, "Final/OT"),
-    "HALFTIME": ("23", "STATUS_HALFTIME", "in", False, "Halftime"),
-    "INPROGRESS": ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress"),
-    "IN PROGRESS": ("2", "STATUS_IN_PROGRESS", "in", False, "In Progress"),
-    "SCHEDULED": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-    "PREGAME": ("1", "STATUS_SCHEDULED", "pre", False, "Scheduled"),
-}
-
-
-def _status(game_status: Mapping[str, Any], period: Optional[int]) -> Dict[str, Any]:
-    """``header.competitions[0].status`` from CBS's ``game_status`` block."""
-    raw = str(game_status.get("status") or "SCHEDULED").upper()
-    type_id, name, state, completed, description = _STATUS.get(
-        raw, ("2", "STATUS_IN_PROGRESS", "in", False, raw.title())
-    )
-    clock = _clock(str(game_status.get("time_remaining") or "0:00"))
-    detail = description
-    if state == "in" and name != "STATUS_HALFTIME" and period:
-        detail = f"{clock} - {_ORDINAL.get(period, str(period))}" if period <= 4 else f"{clock} - OT"
-    return {
-        "clock": 0.0,
-        "displayClock": clock,
-        "period": period or 0,
-        "type": {
-            "id": type_id,
-            "name": name,
-            "state": state,
-            "completed": completed,
-            "description": description,
-            "detail": detail,
-            "shortDetail": detail,
-        },
-        "cbsStatus": game_status.get("status"),
     }
 
 
@@ -605,25 +528,9 @@ def _synthesize_admin_rows(
         if high is not None and number >= high:
             return None
         return {
+            **_admin_row(template, _type_object(ESPN_PLAY_TYPES, type_id), text),
             "id": f"{event_id}{number}",
             "sequenceNumber": str(number * 100),
-            "type": _type_object(type_id),
-            "text": text,
-            "awayScore": template["awayScore"],
-            "homeScore": template["homeScore"],
-            "period": dict(template["period"]),
-            "clock": dict(template["clock"]),
-            "scoringPlay": False,
-            "priority": False,
-            "statYardage": 0,
-            "start": {
-                **template["start"],
-                "down": 0,
-                "distance": 0,
-                "downDistanceText": None,
-                "team": dict(template["start"]["team"]),
-            },
-            "end": {},
         }
 
     for index, play in enumerate(emitted):
@@ -658,7 +565,7 @@ def _synthesize_admin_rows(
         next_period = (emitted[index + 1].get("period") or {}).get("number") if index + 1 < len(emitted) else None
         if this_period and next_period != this_period:
             type_id = _quarter_end_type_id(this_period, has_overtime)
-            end_row = synthetic(index + 1, play, type_id, _type_object(type_id)["text"], 1)
+            end_row = synthetic(index + 1, play, type_id, _type_object(ESPN_PLAY_TYPES, type_id)["text"], 1)
             if end_row is None:
                 skipped += 1
             else:
@@ -875,7 +782,7 @@ def _cbs_nfl_to_espn_summary(
     for play in ordered:
         subplays = list((play.get("subplays") or {}).get("subplay") or [])
         types = [str(s.get("type") or "") for s in subplays]
-        text = _norm_text(play.get("description"))
+        text = _norm_text(play.get("description"), _TEXT_ABBR_FIXES)
         placeholders += 1 if _PLACEHOLDER_RE.search(text) else 0
         offense = str(play.get("team_in_possession") or "")
         score_type = _score_type(play, types, text)
@@ -962,7 +869,7 @@ def _cbs_nfl_to_espn_summary(
         row: Dict[str, Any] = {
             "id": f"{event_id}{play.get('id')}",
             "sequenceNumber": str((_int(play.get("id")) or 0) * 100),
-            "type": _type_object(type_id),
+            "type": _type_object(ESPN_PLAY_TYPES, type_id),
             "text": text,
             "awayScore": away_points,
             "homeScore": home_points,
@@ -1066,48 +973,6 @@ def _cbs_nfl_to_espn_summary(
     return summary, notes
 
 
-def _napi_list(payload: Any, key: str) -> Optional[List[Mapping[str, Any]]]:
-    """The ``key`` list out of a NAPI body, or None.
-
-    **NAPI never 404s**: it answers an absent resource with HTTP 200 and an
-    ``{"warnings": [{"code": 404, ...}]}`` envelope, so "the key is there and is a list" is
-    the only honest coverage test. Treating the 200 as coverage is how a green-but-empty
-    game reaches the processor.
-    """
-    if not isinstance(payload, Mapping):
-        return None
-    value = payload.get(key)
-    return list(value) if isinstance(value, list) else None
-
-
-def _fetch_cbs_game(cbs_game_id: str, **kwargs: Any) -> Dict[str, Any]:
-    """The four NAPI bodies one game needs, through the package's own retry/backoff getter.
-
-    Four sequential requests (plays, drives, scoreboard, odds) on
-    :func:`sportsdataverse.dl_utils.download`'s retry budget. ``drives`` and ``odds`` are
-    optional: CBS 404s the drives resource for 2018 and a game with no consensus line simply
-    has no odds, and neither is a reason to refuse the game.
-    """
-    from sportsdataverse.cbs.cbs_napi import (
-        cbs_game_odds,
-        cbs_game_scoring_drives,
-        cbs_game_scoring_plays,
-        cbs_game_scoring_scoreboard,
-    )
-
-    out: Dict[str, Any] = {
-        "cbs_game_id": str(cbs_game_id),
-        "plays": cbs_game_scoring_plays(cbs_game_id, return_parsed=False, **kwargs),
-        "scoreboard": cbs_game_scoring_scoreboard(cbs_game_id, return_parsed=False, **kwargs),
-    }
-    for key, fetch in (("drives", cbs_game_scoring_drives), ("odds", cbs_game_odds)):
-        try:
-            out[key] = fetch(cbs_game_id, return_parsed=False, **kwargs)
-        except Exception:  # noqa: BLE001 -- an optional resource is a degradation, not a failure
-            out[key] = None
-    return out
-
-
 def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     """Dispatch adapter for ``source="cbs"`` (NFL). Registered in :mod:`...sources.dispatch`.
 
@@ -1163,7 +1028,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     if payload is None:
         try:
-            payload = _fetch_cbs_game(str(cbs_game_id))
+            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives", "odds"))
         except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
 
@@ -1199,11 +1064,4 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     )
 
 
-def _register_cbs() -> None:
-    """Register :func:`_cbs_adapter` with the dispatcher (called on import)."""
-    from sportsdataverse.football.sources.dispatch import _register
-
-    _register("nfl", "cbs")(_cbs_adapter)
-
-
-_register_cbs()
+_register_cbs("nfl", _cbs_adapter)
