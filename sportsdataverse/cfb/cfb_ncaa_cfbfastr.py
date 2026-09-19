@@ -726,8 +726,11 @@ def to_cfbfastr(
         if not team or not pts:
             return
         cap = _cap(team)
-        walked = score.get(team, 0) + pts
-        score[team] = walked if cap is None else min(walked, cap)
+        current = score.get(team, 0)
+        walked = current + pts
+        # the cap is a ceiling, never a floor: a checkpoint can be AHEAD for one team
+        # and BEHIND for the other, and the walk must not take points off the board
+        score[team] = walked if cap is None else max(current, min(walked, cap))
 
     def _raise_to(cp: "tuple[int, int]") -> None:
         for team, level in ((snap_first, cp[0]), (snap_second, cp[1])):

@@ -113,3 +113,4 @@ parsed before it shows the mapper reading one.
 | `mfb_parsed_5366625.json.gz` | 5366625 | Princeton @ Brown (2024, 6-…) | NC13 — `"kick attempt good ... NO PLAY."` scored, then the re-kick that replaced it failed |
 | `mfb_parsed_5367688.json.gz` | 5367688 | Robert Morris @ Central Conn. St. (2024, 2OT) | NC14 — a synthesized OT `Interception Return` row set `int` without `pass` |
 | `mfb_parsed_5361980.json.gz` | 5361980 | Eastern Ill. @ Illinois (2024) | NC15 — `PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)` kept the pre-review touchdown and its yardage |
+| `mfb_parsed_6398950.json.gz` | 6398950 | NC State @ Wake Forest (2025, 34-24) | NC13 — a checkpoint AHEAD for one team and BEHIND for the other clamped the behind side, so a touchdown walked its scorer 6 -> 0 |

@@ -838,6 +838,24 @@ def test_the_running_score_never_walks_backwards() -> None:
     assert {pos: pos_s, dpos: dpos_s} == {"Oregon": 37, "Boise St.": 34}
 
 
+def test_a_checkpoint_cap_never_takes_points_off_the_board() -> None:
+    """NC13: the cap is a ceiling, never a floor (6398950, NC State 34 at Wake Forest 24).
+
+    A checkpoint can run AHEAD for one team and BEHIND for the other, and ``_snap``
+    holds the whole pair. Clamping the behind side to its level made a scoring row
+    SUBTRACT: NC State's touchdown on game play 37 walked 6 -> 0.
+    """
+    df = _parsed_frame("6398950")
+    td = df.filter(pl.col("game_play_number") == 37).row(0, named=True)
+    assert (td["play_type"], td["score_pts"]) == ("Passing Touchdown", 6)
+    assert td["pos_team_score"] == 6, "a scoring row must never lower the scorer's own score"
+    scores = _running_scores(df)
+    for (ph, pa), (h, a) in zip(scores, scores[1:]):
+        assert h >= ph and a >= pa, f"score walked back: {(ph, pa)} -> {(h, a)}"
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"NC State": 34, "Wake Forest": 24}
+
+
 def test_a_kick_the_page_walked_back_does_not_score() -> None:
     """NC13: 5366625 prints the nullified try AND the re-kick that replaced it."""
     df = _parsed_frame("5366625")
