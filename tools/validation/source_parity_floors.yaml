@@ -1,0 +1,69 @@
+# Accepted cross-source parity floors, seeded from the football-sources program ledger
+# (background-research/2026-09-17-football-sources-program/LEDGER.md, 2026-09-17/18).
+#
+# `accepted` records the number the adapter's own G1 gate observed and its review accepted --
+# provenance, never an alert threshold. `floors` are the NIGHTLY alert thresholds: the accepted
+# number minus slack, because a night is 1-80 games while a gate pooled hundreds, and a pooled
+# r over one Thursday game is a much noisier statistic than the gate's. Floors are recorded
+# from observed values and lowered only with a ledger entry saying why.
+#
+# A source with no entry here is still measured and written -- it just has no floor, so it can
+# never alert. That is deliberate: an adapter registers in dispatch the day its PR merges, and
+# the harness must pick it up without an edit. Seed its floors from its gate report afterwards.
+#
+# `join`: how the candidate is paired with ESPN.
+#   id    -- the adapter emits ESPN play ids (`event_id || playId`): Shield, CBS NFL.
+#   state -- pair on game state (sources with no id mapping). The CFB state key drops the
+#            clock: ESPN's CFB vendor feed repeats a stale clock across consecutive plays
+#            while the alternates stamp every play (s2-yahoo-cfb/parity.py).
+
+defaults:
+  join: state
+  join_rate: 0.90        # alert below this share of ESPN plays paired
+  unavailable_share: 0.50  # alert when a source fails on more than this share of the day's games
+
+sources:
+  nfl.shield:
+    join: id
+    accepted: {EPA: 0.99}          # LEDGER: "Shield EPA ~= .99" (PR #540)
+    floors: {EPA: 0.97, EP_start: 0.99, wp_before: 0.99}
+    join_rate: 0.90
+
+  nfl.cbs:
+    join: id
+    accepted: {EPA: 0.83, EP_start: 0.9896, wp_before: 0.9982}  # PR #542 G1, 4,117 paired
+    # .81 vs ESPN is NOT an adapter defect: the nflfastR oracle puts CBS closer to truth than
+    # ESPN (MAE 0.191 vs 0.252) -- the gap is ESPN's own end.distance incoherence.
+    floors: {EPA: 0.78, EP_start: 0.97, wp_before: 0.99}
+    # CBS drops rows ESPN keeps (admin/aborted), so an ESPN-id join pairs ~.85 of ESPN's
+    # plays: PR #542's G1 paired 4,117 over 26 finals against ~185 ESPN rows a game.
+    join_rate: 0.80
+
+  nfl.yahoo:
+    join: state
+    accepted: {EPA: 0.9406, EP_start: 0.9993, wp_before: 1.0}   # PR #543 G1, 22 finals 2024-26
+    floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.99}
+    join_rate: 0.90
+
+  cfb.yahoo:
+    join: state
+    accepted: {EPA: 0.957}         # LEDGER: Yahoo CFB .957 (PR #541)
+    floors: {EPA: 0.92, EP_start: 0.99, wp_before: 0.99}
+    join_rate: 0.85
+
+  # --- adapters whose PRs were open when this file was seeded. Harmless until they register;
+  # the moment dispatch imports them the harness measures them against these floors.
+  cfb.cbs:
+    join: state
+    accepted: {EPA: 0.9522, EP_start: 0.9981, wp_before: 0.9992}  # PR #545 G1, 4,812 paired
+    floors: {EPA: 0.92, EP_start: 0.99, wp_before: 0.99}
+    join_rate: 0.75                # PR #545 paired 80.6% of ESPN rows on a clock-free key
+
+  cfb.ncaa:
+    join: state
+    accepted: {EPA: 0.9406, EP_start: 0.9988, wp_before: 0.9942}  # PR #544 G1, 2,985 paired
+    floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.98}
+    join_rate: 0.85
+
+  nfl.fox: {}   # PR open; measured with the defaults, no floor, cannot alert
+  cfb.fox: {}
