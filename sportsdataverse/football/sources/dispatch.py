@@ -323,7 +323,9 @@ def _validation_report(league: str, source: str, proc: Any, game: dict) -> dict:
         ).to_dict()
     except Exception as exc:  # noqa: BLE001 -- observability must not break dispatch
         warnings.warn(f"validate_game failed for {league} {game.get('gameId')}: {exc}", RuntimeWarning, stacklevel=2)
-        return {"error": f"{type(exc).__name__}: {exc}"}
+        # ``ok`` is always present so a consumer's ``report.get("ok", True)`` cannot read
+        # a crashed gate as a pass
+        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
 
 
 def _process_game(
