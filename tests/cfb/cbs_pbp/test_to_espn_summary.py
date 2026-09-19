@@ -79,6 +79,28 @@ ARIZ_USC_ROW = {
     "home_espn_team_id": "30",
     "away_espn_team_id": "12",
 }
+#: Michigan at Indiana, 2022 week 6 -- two **blocked** field goals whose subplay names the
+#: recovering club while still stating the kicking team's yardage.
+MICH_IU_ROW = {
+    "league": "cfb",
+    "season": 2022,
+    "season_type": 2,
+    "week": 6,
+    "espn_event_id": "401405108",
+    "home_espn_team_id": "84",
+    "away_espn_team_id": "130",
+}
+#: Kent State at Oklahoma, 2025 week 6 -- a strip-sack returned for a touchdown. CBS's subplays
+#: name the club that **lost** the ball as the offence; only the drive's outcome says otherwise.
+KENT_OU_ROW = {
+    "league": "cfb",
+    "season": 2025,
+    "season_type": 2,
+    "week": 6,
+    "espn_event_id": "401752729",
+    "home_espn_team_id": "201",
+    "away_espn_team_id": "2309",
+}
 #: Elon at Rhode Island, 2026 week 2 -- FCS-hosted. CBS answers **HTTP 200** with a 404
 #: envelope and no ``plays`` key. Deliberately without ESPN team ids: "CBS does not cover this
 #: game" must be reported before anything about the id-map row.
@@ -338,6 +360,54 @@ def test_a_penalty_against_the_defence_keeps_the_offences_frame():
     flagged = [p for p in _flat(summary) if p["type"]["text"] == "Penalty" and "PENALTY on ARI-" in p["text"]]
     assert len(flagged) == 2, "the fixture carries two flags against the defence"
     assert [p["start"]["yardsToEndzone"] for p in flagged] == [85, 80]
+
+
+def test_a_blocked_field_goal_keeps_the_kicking_teams_frame():
+    """A blocked kick's subplay names the **recovering** club; its yardage is still the kicker's.
+
+    Red when the kick row is flipped like any other row whose subplay names another club: a
+    blocked 26-yarder comes out 92 yards from the end zone instead of 8, and drags the play
+    before it with it through that row's end state.
+    """
+    summary, _notes = _adapt(_load("cbs_cfb_401405108_blocked_fg.json.gz"), MICH_IU_ROW)
+    kicks = [p for p in _flat(summary) if p["type"]["text"] == "Blocked Field Goal"]
+    assert len(kicks) == 2, "the fixture carries both clubs' blocked kicks"
+    # the snap is the kick's own distance less ESPN's college offset (26 - 18, 24 - 18)
+    assert [(p["start"]["yardsToEndzone"], p["start"]["team"]["id"]) for p in kicks] == [(8, "130"), (6, "84")]
+
+
+def test_a_strip_sack_touchdown_is_credited_to_the_defence():
+    """CBS types a strip-sack return as the offence's own play; the drive's outcome says no.
+
+    Red when the scorer comes from the subplay rather than the drive's result: the row is typed
+    a sack/rushing touchdown, credited to the club that **lost** the ball, and
+    ``_fill_end_state`` then puts its end 100 yards from where the ball actually crossed --
+    about 14 EPA on the row.
+    """
+    summary, _notes = _adapt(_load("cbs_cfb_401752729_strip_sack_td.json.gz"), KENT_OU_ROW)
+    scores = [p for p in _flat(summary) if p["scoringPlay"]]
+    assert len(scores) == 1
+    score = scores[0]
+    assert score["type"]["text"] == "Fumble Return Touchdown"
+    assert score["start"]["team"]["id"] == "2309", "the offence is still the club that snapped it"
+    assert score["end"]["team"]["id"] == "201", "the defence scored, so the end is the defence's goal line"
+    assert (score["end"]["down"], score["end"]["yardsToEndzone"]) == (-1, 0)
+
+
+def test_a_folded_try_is_written_in_espns_own_grammar(osu_tex_summary):
+    """``CFBPlayProcess`` reads the **text** for a try, not ``pointAfterAttempt``.
+
+    ESPN's college feed folds the try into the touchdown as ``(Name KICK)`` /
+    ``(Name PAT MISSED)``; CBS's own wording matches neither, so a try left in CBS's grammar
+    leaves the touchdown scored as a bare 6 (``__add_xp_suffix_cols``, ``cfb_pbp.py:6310+``).
+    """
+    summary, _notes = osu_tex_summary
+    folded = [p for p in _flat(summary) if p.get("pointAfterAttempt")]
+    assert len(folded) == 5
+    for play in folded:
+        assert play["pointAfterAttempt"]["text"] == "Extra Point Good"
+        assert play["text"].endswith(" KICK)"), play["text"]
+        assert "extra point" not in play["text"].lower(), "CBS's own wording must not survive"
 
 
 # ------------------------------------- mutation: the play the feed states no next snap for
