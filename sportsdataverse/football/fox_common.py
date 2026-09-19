@@ -418,18 +418,20 @@ def _classify(
     if "safety" in low:
         return "20", other
     if "PEN" in codes and not (codes & {"RUSH", "PASS", "INC", "SACK"}):
-        # A flag keeps the PLAY's own ESPN type, not "Penalty" -- ESPN types "(Shotgun) B.Purdy
-        # pass incomplete deep middle ... PENALTY on NYJ" a Pass Incompletion and "J.Mason right
-        # end for 17 yards, TOUCHDOWN NULLIFIED by Penalty" a Rushing Touchdown, whether or not
-        # the flag wiped the play. Fox collapses such a row to a single ``PEN`` event and states
-        # the action only in the text, so the action is read back from there; a row whose text
-        # describes no action at all (a bare false start) is the one that really is a Penalty.
-        # Typing the rest Penalty drops them out of ``scrimmage_play`` -- up to 3.7 EPA a row.
-        from_text = _action_from_text(low)
-        if from_text is None or ("no play" in low and from_text in _KICK_TYPES):
-            # a wiped kick is not a kick: keeping the type would set the punt/kickoff flags and
-            # hand the ball over on a play where possession never changed (ESPN's college feed
-            # types exactly this row "Penalty" too)
+        # A flag on a play that still happened keeps the PLAY's ESPN type, not "Penalty":
+        # ESPN types "... rush left for 2 yards ... PENALTY on OKLA, Personal Foul, 15 yards"
+        # a Rush, and typing it Penalty drops it out of ``scrimmage_play``. Fox collapses such
+        # a row to a single ``PEN`` event and states the action only in the text, so the action
+        # is read back from there.
+        #
+        # A **wiped** play ("- No Play") stays a Penalty even though ESPN's NFL feed types it
+        # by the action: on the wiped rows Fox states only the ENFORCEMENT geometry, so taking
+        # ESPN's type means booking the enforcement as a rush gain or zeroing an incompletion
+        # that ESPN books at the penalty's yards. Measured over the 18-game NFL gate, typing
+        # them by the action cost EPA r .9738 -> .9562 (statYardage .972 -> .957); the type
+        # string agrees more often and the numbers agree less, so the numbers win.
+        from_text = None if "no play" in low else _action_from_text(low)
+        if from_text is None:
             return "8", None
         return (from_text, offence) if from_text == "59" else (from_text, None)
     if touchdown:
