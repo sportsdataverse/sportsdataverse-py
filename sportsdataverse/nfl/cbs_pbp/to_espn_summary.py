@@ -273,6 +273,29 @@ def _choose_frame(candidate: int, expected: Optional[int]) -> int:
     return candidate if abs(candidate - expected) <= abs((100 - candidate) - expected) else 100 - candidate
 
 
+#: A drive's own stated start spot: ``"KC 3"``, ``"DEN 16"``, ``"50"`` at midfield.
+_DRIVE_START_RE = re.compile(r"^\s*(?:([A-Z]{2,3})\s+)?(\d{1,2})\s*$")
+
+
+def _drive_start_spot(starting_yardline: Any, own_abbrs: frozenset) -> Optional[int]:
+    """Yards to the end zone at a drive's FIRST snap, read off the drives resource.
+
+    :func:`_choose_frame` has no expectation to vote with on the first play of a drive --
+    which is precisely the change-of-possession row whose frame CBS is most likely to state
+    backwards, because the drive it belongs to has no earlier play to continue. CBS states
+    the answer one resource over: ``drives[].starting_yardline`` is a signed yard line in
+    club terms (``"KC 3"``), and it was right on the row this seed was written for -- a punt
+    downed at the KC 3, where the play row said ``side DEN / yardline 3 / distance Goal`` and
+    the drive chart said ``KC 3``. An unparseable or absent value seeds nothing, which is the
+    behaviour the adapter had before.
+    """
+    match = _DRIVE_START_RE.match(str(starting_yardline or ""))
+    if not match:
+        return None
+    yards = int(match.group(2))
+    return 100 - yards if match.group(1) and match.group(1) in own_abbrs else yards
+
+
 def _other_team(cbs_team_id: str, home_cbs_id: str, away_cbs_id: str) -> str:
     """The opposing CBS team id."""
     return away_cbs_id if str(cbs_team_id) == str(home_cbs_id) else home_cbs_id
@@ -768,8 +791,14 @@ def _cbs_nfl_to_espn_summary(
     ordered = sorted((p for p in plays if p.get("id") is not None), key=lambda p: _int(p.get("id")) or 0)
     receiver_framed = _receiver_framed(ordered)
     drive_teams = _drive_teams(ordered, drives)
-    #: Where the previous play of each drive left the ball, in the drive owner's frame.
+    #: Where the previous play of each drive left the ball, in the drive owner's frame --
+    #: seeded with the drive's own stated start so its FIRST play has an expectation too.
     drive_spot: Dict[str, int] = {}
+    for drive in drives or []:
+        owner = espn_team_of.get(str(drive_teams.get(str(drive.get("id"))) or ""), "")
+        spot = _drive_start_spot(drive.get("starting_yardline"), _text_abbrs(owner, abbrs.get(owner, "")))
+        if spot is not None:
+            drive_spot[str(drive.get("id"))] = spot
     emitted: List[Dict[str, Any]] = []
     timeouts: List[Tuple[Optional[int], Optional[int]]] = []
     drive_of: List[str] = []
@@ -807,6 +836,7 @@ def _cbs_nfl_to_espn_summary(
                 later["homeScore"], later["awayScore"] = home_points, away_points
             continue
 
+        stale_goal = False
         kickoff = bool(types) and types[0] == "Kickoff"
         kick = bool(types) and types[0] in ("Kickoff", "Punt")
         drive_owner = drive_teams.get(str(play.get("drive_id") or ""))
@@ -837,7 +867,10 @@ def _cbs_nfl_to_espn_summary(
             elif to_endzone is not None:
                 to_endzone = _choose_frame(to_endzone, drive_spot.get(str(play.get("drive_id") or "")))
         elif to_endzone is not None and (kick or possession_changed):
-            to_endzone = _choose_frame(to_endzone, drive_spot.get(str(play.get("drive_id") or "")))
+            framed = _choose_frame(to_endzone, drive_spot.get(str(play.get("drive_id") or "")))
+            # CBS states down/distance in the same frame as the spot, so a spot it stated
+            # backwards carries a backwards "Goal" with it: 97 yards to go is not a down.
+            stale_goal, to_endzone = framed != to_endzone, framed
         distance_raw = play.get("distance")
         espn_offense = espn_team_of.get(offense)
         is_home = espn_offense == home_id
@@ -852,7 +885,13 @@ def _cbs_nfl_to_espn_summary(
             to_endzone = None if yard_line is None else ((100 - yard_line) if is_home else yard_line)
         else:
             last_yard_line = yard_line
-        distance = to_endzone if str(distance_raw) == "Goal" else (_int(distance_raw) or 0)
+        if str(distance_raw) != "Goal":
+            distance = _int(distance_raw) or 0
+        else:
+            # goal-to-go: the line to gain IS the goal line, so the distance is the spot --
+            # unless the spot was just flipped out of CBS's frame, where the only sane
+            # reading left is a fresh set of downs.
+            distance = 10 if stale_goal else to_endzone
         scored = play.get("score_on_play") == "Yes" and score_type in _SCORING
         type_id = _espn_type_id(types, score_type, possession_changed, text)
         credited: Optional[str] = espn_offense

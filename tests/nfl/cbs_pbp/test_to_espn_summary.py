@@ -248,6 +248,61 @@ def test_the_pat_anchors_on_its_touchdown_not_on_the_previous_row():
     assert all(p["type"]["abbreviation"] == "TD" for p in holder)
 
 
+def test_a_drives_first_snap_takes_its_frame_from_the_drive_chart():
+    """CBS can state a change-of-possession row backwards, and the drive chart says so.
+
+    The shape is the real 2026-09-14 KC @ DEN row that tripped the nightly parity harness
+    (``h1-parity/triage-401872931``): a punt downed at the KC 3, and CBS's next play row --
+    the first of KC's drive -- says ``side DEN / yardline 3 / yards_to_endzone 3 /
+    distance Goal`` while its own drive chart says the drive started at ``KC 3``. It is the
+    first play of a drive, so ``_choose_frame`` had no earlier play of that drive to vote
+    with and kept CBS's 3: KC first-and-goal on the DEN 3 instead of its own 3, EP 6.22 vs
+    0.08, and the punt before it inherits the spot as its end state (EP_start r .9586 over
+    the game, below the .97 floor; .9995 with the drive chart seeding the vote).
+    """
+    from sportsdataverse.nfl.cbs_pbp.to_espn_summary import _drive_start_spot
+
+    payload = _load()
+    plays, drives, scoreboard = _bodies(payload)
+    drives = json.loads(json.dumps(drives))
+    turnover_drive = next(d for d in drives if d["id"] == "2")
+    turnover_drive["starting_yardline"] = "JAC 3"  # the drive chart, in club terms
+    ordered = sorted(plays, key=lambda p: int(p["id"]))
+    first = json.loads(json.dumps(next(p for p in ordered if p["id"] == turnover_drive["starting_play_id"])))
+    # ... and the play row for the same snap, stated in the other club's frame
+    first["side"], first["yardline"], first["down"], first["distance"] = "CLE", "3", "1", "Goal"
+    first["description"] = (
+        "16-T.Lawrence pass deep middle intended for 1-B.Thomas INTERCEPTED by 22-D.Ward at JAC 29. "
+        "22-D.Ward to JAC 5 for 24 yards."
+    )
+    first["subplays"]["subplay"] = [
+        {"type": "IncompletePass", "order": "1", "incomplete_pass": {"yards_to_endzone": "3", "yards_on_play": "24"}},
+        {
+            "type": "InterceptionReturn",
+            "order": "2",
+            "interception_return": {"yards_to_endzone": "3", "yards_on_play": "24", "team_in_possession": "434"},
+        },
+    ]
+    spliced = [p for p in ordered if p["id"] != first["id"]] + [first]
+
+    summary, _ = _cbs_nfl_to_espn_summary(spliced, drives, scoreboard, CLE_JAX_ROW)
+    row = next(p for d in summary["drives"]["previous"] for p in d["plays"] if p["id"].endswith(first["id"]))
+    assert row["start"]["yardsToEndzone"] == 97, row["start"]
+    # "Goal" is stated in the frame that was just flipped away, so it cannot survive it
+    assert row["start"]["distance"] == 10, row["start"]
+
+    # without the drive chart there is nothing to vote with and CBS's frame stands: this is
+    # the pre-fix output, pinned so the seed cannot be removed silently
+    no_chart, _ = _cbs_nfl_to_espn_summary(spliced, None, scoreboard, CLE_JAX_ROW)
+    kept = next(p for d in no_chart["drives"]["previous"] for p in d["plays"] if p["id"].endswith(first["id"]))
+    assert kept["start"]["yardsToEndzone"] == 3, kept["start"]
+
+    assert _drive_start_spot("KC 3", frozenset({"KC"})) == 97  # own side
+    assert _drive_start_spot("KC 3", frozenset({"DEN"})) == 3  # the opponent's
+    assert _drive_start_spot("50", frozenset({"KC"})) == 50  # midfield carries no club
+    assert _drive_start_spot(None, frozenset({"KC"})) is None
+
+
 def test_timeouts_are_synthesized_and_an_implausible_drop_is_ignored(cle_jax_summary):
     """CBS emits no admin row; a decrement of exactly 1 is a timeout, a bigger one is a glitch."""
     summary, notes = cle_jax_summary
