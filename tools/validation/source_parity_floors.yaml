@@ -64,6 +64,8 @@ sources:
     accepted: {EPA: 0.9443, EP_start: 0.9988, wp_before: 0.9942}  # PR #544 G1, 2,985 paired; .9406 -> .9443 after NC11 (#550)
     floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.98}
     join_rate: 0.85
+    # first live run 2026-09-19: 0/3 games -- coverage gap, not drift.
+    unavailable_share: 1.0   # NCAA contest ids in the id map are sparse for 2026 (166/888 at seed); a game without one is unavailable by design until the idmap builder backfills them
 
   # Fox (PR #548, merged 2026-09-18): last in every failover order. The review's reproduced G1 --
   # NFL 7 finals 2024-26 EPA .9788 (min .9309), EP_start 1.0000, wp_before .9695, 99.1% paired;
@@ -82,3 +84,5 @@ sources:
     accepted: {EPA: 0.9537, EP_start: 0.9997, wp_before: 0.9569}
     floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.92}
     join_rate: 0.90
+    # first live run 2026-09-19: 0/3 games -- coverage gap, not drift.
+    unavailable_share: 1.0   # Fox college ids come only from the cfb_schedule_crosswalk asset (2025 rows); 2026 games have no id -> unavailable by design until a weekly crosswalk feed exists
