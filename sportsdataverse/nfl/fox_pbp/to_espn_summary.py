@@ -219,7 +219,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if not _has_pbp(payload):
         raise SourceUnavailable(
             f"nfl {espn_id}: fox event {fox_event_id or payload.get('header', {}).get('id')} carries no "
-            "play-by-play (HTTP 200 with no pbp key: before Fox's 2024 NFL play floor)"
+            "play-by-play (HTTP 200 with no pbp key: before Fox's 2024 NFL play floor, "
+            "or a listed game Fox has not served yet)"
         )
     if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
