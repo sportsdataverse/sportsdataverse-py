@@ -34,17 +34,23 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_252600087.json`` -- Notre Dame @ Purdue, 2005 (a pick-six ESPN labels "Passing Touchdown").
 * ``summary_302540025.json`` -- Colorado @ California, 2010 (a catch fumbled and returned 82 yards for a score).
 
-The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
+* ``summary_400953391_trimmed.json.gz`` -- Army @ San Diego State, 2017 (a touchdown with a
+  successful two-point conversion, followed by the SAME timeout row twice).
+
+The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``; the
+``*_trimmed.json.gz`` ones keep only the keys the processor reads.
 """
 
 from __future__ import annotations
 
 import copy
+import gzip
 import json
 from functools import lru_cache
 from pathlib import Path
 
 import polars as pl
+import pytest
 from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
@@ -552,3 +558,39 @@ def test_rush_yardage_stated_before_a_fumble_survives():
     loss = _row(_plays(302540025), "Kevin Riley rush for a loss of 1 yard, fumbled")
     assert gain["yds_rushed"] == 1
     assert loss["yds_rushed"] == -1
+
+
+# --- N38: an admin row after a score carries the post-score EP, not the score's -------------------
+
+
+def test_timeout_after_a_score_does_not_inherit_the_realized_ep():
+    # The timeout ESPN emits between a touchdown and the kickoff inherits ``lag_EP_end``, which
+    # after "(Kell Walker Run for Two-Point Conversion)" is the realized 8.0 rather than a
+    # field-position expectation, so EP_start/EP_end published 8.0 -- outside the [-7, 7] band the
+    # invariants assert.  ESPN logs this timeout twice, so the guard tracks the forward-filled
+    # ``lag_EP_end`` (which skips Timeout rows) rather than the immediately-preceding row.
+    with gzip.open(FIX / "summary_400953391_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=400953391)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    plays = proc.plays_frame.sort("game_play_number")
+
+    td = _row(plays, "(Kell Walker Run for Two-Point Conversion)")
+    assert td["EP_end"] == 8.0
+
+    dupes = plays.filter(pl.col("text") == "Timeout SAN DIEGO ST, clock 00:18")
+    assert dupes.height == 2  # the same timeout, logged twice
+    assert dupes["EP_start"].to_list() == pytest.approx([0.92, 0.92])
+    assert dupes["EP_end"].to_list() == pytest.approx([0.92, 0.92])
+    assert dupes["EPA"].to_list() == [0.0, 0.0]
+
+    assert plays["EP_start"].drop_nulls().abs().max() <= 7.0
+    assert (
+        plays.filter(pl.col("EP_end").is_not_null() & (pl.col("scoring_play") == False))[  # noqa: E712
+            "EP_end"
+        ]
+        .abs()
+        .max()
+        <= 7.0
+    )

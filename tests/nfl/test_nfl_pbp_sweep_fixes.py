@@ -19,6 +19,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   scoring row; the header's final anchors the repair)
 * ``summary_400791590_trimmed.json.gz`` -- DAL @ NO, 2015 week 4 (a pick-six ESPN types
   "Interception Return", not "... Touchdown")
+* ``summary_401547449_trimmed.json.gz`` -- LA @ IND, 2023 week 4 (two touchdowns with a
+  successful two-point conversion, each followed by a clock-stoppage row)
 """
 
 from __future__ import annotations
@@ -585,3 +587,32 @@ def test_pick_six_typed_interception_return_is_not_a_passing_touchdown():
     assert not row["pass_td"] and not row["rush_td"]
     assert row["yds_receiving"] == 0
     assert row["yds_int_return"] == 20
+
+
+# --- N38: an admin row after a score carries the post-score EP, not the score's -------------------
+
+
+def test_clock_stoppage_after_a_score_does_not_inherit_the_realized_ep():
+    # The timeout ESPN emits between a touchdown and the kickoff inherits ``lag_EP_end``, which
+    # after "TWO-POINT CONVERSION ATTEMPT ... ATTEMPT SUCCEEDS" is the realized 8.0 rather than a
+    # field-position expectation, so EP_start/EP_end published 8.0 -- outside the [-7, 7] band the
+    # invariants assert.  Both stoppages take the post-score 0.92 the WP path already uses.
+    f = _process(401547449)
+    scored = f.filter(pl.col("EP_end") == 8.0)
+    assert scored["type.text"].to_list() == ["Passing Touchdown", "Passing Touchdown"]
+
+    # every clock-stoppage row that follows a score takes the post-score 0.92 the WP path
+    # already uses, whatever the score was worth
+    after_score = f.filter(
+        pl.col("type.text").is_in(["Official Timeout", "Timeout", "Two-minute warning"])
+        & (pl.col("lag_scoringPlay") == True)  # noqa: E712
+    )
+    assert after_score.height == 8
+    assert after_score["EP_start"].to_list() == [0.92] * 8
+    assert after_score["EP_end"].to_list() == [0.92] * 8
+    assert after_score["EPA"].to_list() == [0.0] * 8
+
+    # nothing else is out of band, and EPA on the admin rows is still zero
+    assert f["EP_start"].drop_nulls().abs().max() <= 7.0
+    non_scoring = f.filter(pl.col("EP_end").is_not_null() & (pl.col("scoring_play") == False))  # noqa: E712
+    assert non_scoring["EP_end"].abs().max() <= 7.0

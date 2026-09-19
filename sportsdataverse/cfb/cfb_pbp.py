@@ -6274,6 +6274,20 @@ class CFBPlayProcess(object):
             .otherwise(None),
         ).drop(["_cf_play_yards", "_cf_converted", "_cf_y2ez", "_cf_ok", "_cf_down", "_cf_distance"])
 
+        # N38: "was the play ``lag_EP_end`` was forward-filled from a scoring play?".
+        # Mirrors the ``lag_EP_end`` construction below exactly (skip Timeout rows,
+        # forward-fill, shift), so it stays true across a RUN of Timeout rows -- ESPN
+        # emits the same timeout twice in 400953391, and a plain ``lag_scoringPlay``
+        # is False on the second one while its ``lag_EP_end`` is still the score's.
+        lag_of_scoring_play = (
+            pl.when(pl.col("type.text") == "Timeout")
+            .then(None)
+            .otherwise(pl.col("scoringPlay"))
+            .forward_fill()
+            .shift(1)
+            == True
+        )
+
         play_df = (
             play_df.with_columns(
                 EP_start=pl.when(
@@ -6486,6 +6500,19 @@ class CFBPlayProcess(object):
             .with_columns(
                 EP_start=pl.when(pl.col("type.text").is_in(kickoff_vec))
                 .then(pl.col("EP_start_touchback"))
+                # N38: the Timeout / End Period inheritance above reads ``lag_EP_end``,
+                # which after a scoring play is a REALIZED point value (8.0 for a TD
+                # plus a successful two-point conversion, 7.00 for a TD plus a PAT),
+                # not a field-position expectation.  The timeout row ESPN emits between
+                # the score and the kickoff therefore published ``EP_start = EP_end =
+                # 8.0``, outside the documented [-7, 7] band.  0.92 is the post-score
+                # state this codebase already uses for exactly this row --
+                # ``__process_wpa``'s ``start.ExpScoreDiff`` branch for a Timeout with
+                # ``lag_scoringPlay``, and the ensuing kickoff's own
+                # ``EP_start_touchback``.  Applied after ``EP_between`` is derived so
+                # only the admin row's own EP moves; ``EPA`` stays 0 on it.
+                .when((pl.col("type.text").is_in(["Timeout", "End Period"])).and_(lag_of_scoring_play))
+                .then(0.92)
                 .otherwise(pl.col("EP_start")),
             )
             .with_columns(
