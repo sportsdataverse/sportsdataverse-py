@@ -225,6 +225,13 @@ _YARDS_RE = re.compile(
 )
 # "to the VU37" -- or "to the 50 yardline" (midfield has no side code; emitted as "50")
 _END_YL_RE = re.compile(rf"to the (?:(50) yard ?line|({_YL_TOKEN})(?!\w))")
+
+
+def _end_yard_line(text: str) -> "str | None":
+    """The last spot the text walks the ball to -- the play's end yard line."""
+    return next((a or b for a, b in reversed(_END_YL_RE.findall(text))), None)
+
+
 _RUSH_RE = re.compile(
     rf"(?P<rusher>{_NAME}) rush(?:es)?(?:\s+(?P<dir>left|right|middle|up the middle))?",
     re.I,
@@ -435,7 +442,7 @@ def _decompose_play_text(text: str) -> "dict":
     elif out["is_fumble"] and "recovered by" in tl:
         out["turnover_type"] = "fumble"  # settled per game once the side codes are known
     out["tackler_1"], out["tackler_2"] = _tacklers(text)
-    out["end_yard_line"] = next((a or b for a, b in reversed(_END_YL_RE.findall(text))), None)
+    out["end_yard_line"] = _end_yard_line(text)
     pm = _PENALTY_RE.search(text)
     if pm:
         out.update(

@@ -738,3 +738,169 @@ def test_field_position_identical_across_hash_seeds() -> None:
     assert results[0][0][0] == 65  # kickoff from the SVS 35: cfbfastR kicking-team convention
     for seed, rows in enumerate(results[1:], start=1):
         assert rows == results[0], f"seed {seed} differs from seed 0"
+
+
+def test_quarter_marker_row_opens_the_period_it_names() -> None:
+    """NC12: "Start of 3rd quarter, clock 15:00" is period 3, not the drive's period 2.
+
+    The drives tab stamps the drive that straddles the break with its STARTING quarter,
+    which overwrote the marker -- so the clock ran 0:00 -> 15:00 inside the old period on
+    every game.
+    """
+    df = _bundle_frame("6386512")
+    markers = df.filter(pl.col("play_text").str.contains(r"(?i)start of \dnd|start of \drd|start of \dth"))
+    assert markers.height == 3
+    for row in markers.iter_rows(named=True):
+        named = int(re.search(r"start of (\d)", row["play_text"], re.I).group(1))
+        assert (row["period"], row["clock.minutes"], row["clock.seconds"]) == (named, 15, 0)
+    # and no row now runs the clock backwards inside a period
+    clocked = df.filter(pl.col("clock.minutes").is_not_null()).with_columns(
+        __s=pl.col("clock.minutes") * 60 + pl.col("clock.seconds")
+    )
+    back = clocked.filter((pl.col("period") == pl.col("period").shift(1)) & (pl.col("__s") > pl.col("__s").shift(1)))
+    assert back.height == 0, back.select("game_play_number", "period", "play_text").rows()
+
+
+# --- NC12-NC15: quarter markers, the score walk, OT flags, overturned calls -----------
+#
+# These run on the producer's own PARSED bundles (``mfb_parsed_<contest>.json.gz``,
+# vendored from ``ncaa-mfb-football-raw/mfb/json``) rather than on a page: that store is
+# what ``ncaa-mfb-football-data`` compiles, its rows were parsed by whichever
+# ``sportsdataverse`` the sweep ran, and the mapper is the one stage every republish
+# re-runs. The HTML fixtures cannot reach this path -- today's parser already cuts the
+# reprinted call.
+
+
+def _parsed_bundle(cid: str) -> "dict":
+    import gzip
+
+    with gzip.open(FIX / f"mfb_parsed_{cid}.json.gz", "rt", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _parsed_frame(cid: str) -> "pl.DataFrame":
+    """The mapped frame of a vendored parsed bundle, built as the producer builds it."""
+    from sportsdataverse.cfb.cfb_ncaa_box import DRIVES_SCHEMA, LINESCORE_SCHEMA, SCORING_SUMMARY_SCHEMA
+    from sportsdataverse.cfb.cfb_ncaa_pbp import DRIVE_TITLES_SCHEMA, PBP_SCHEMA
+
+    def frame(rows: list, schema: dict) -> "pl.DataFrame":
+        if not rows:
+            return pl.DataFrame(schema=schema)
+        df = pl.DataFrame(rows, infer_schema_length=None)
+        return df.cast({k: v for k, v in schema.items() if k in df.columns}).select(
+            [k for k in schema if k in df.columns]
+        )
+
+    p = _parsed_bundle(cid)
+    df = to_cfbfastr(
+        frame(p["pbp"], PBP_SCHEMA),
+        season=p["season"],
+        drives=frame(p["drives"], DRIVES_SCHEMA),
+        linescore=frame(p["linescore"], LINESCORE_SCHEMA),
+        drive_titles=frame(p["drive_titles"], DRIVE_TITLES_SCHEMA),
+        ot_drives=frame(p["drives"], DRIVES_SCHEMA),
+        scoring_summary=frame(p["scoring_summary"], SCORING_SUMMARY_SCHEMA),
+    )
+    assert isinstance(df, pl.DataFrame)
+    return df
+
+
+def _running_scores(df: "pl.DataFrame") -> "list[tuple[int, int]]":
+    """(home, away) after every row."""
+    return (
+        df.with_columns(
+            __h=pl.when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.col("pos_team_score"))
+            .otherwise(pl.col("def_pos_team_score")),
+            __a=pl.when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.col("def_pos_team_score"))
+            .otherwise(pl.col("pos_team_score")),
+        )
+        .select("__h", "__a")
+        .rows()
+    )
+
+
+def test_the_running_score_never_walks_backwards() -> None:
+    """NC13: 5361987 (Boise St. 34 at Oregon 37) counted the kickoff return twice.
+
+    The page books the points of a return touchdown into the title of the drive BEFORE
+    the kickoff it happened on, so snapping to that checkpoint and then walking the
+    return row put Oregon on 40 -- six ahead of a 37 final -- until the next checkpoint
+    pulled it back down.
+    """
+    df = _parsed_frame("5361987")
+    scores = _running_scores(df)
+    for (ph, pa), (h, a) in zip(scores, scores[1:]):
+        assert h >= ph and a >= pa, f"score walked back: {(ph, pa)} -> {(h, a)}"
+    assert max(h for h, _ in scores) == 37 and max(a for _, a in scores) == 34
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Oregon": 37, "Boise St.": 34}
+
+
+def test_a_checkpoint_cap_never_takes_points_off_the_board() -> None:
+    """NC13: the cap is a ceiling, never a floor (6398950, NC State 34 at Wake Forest 24).
+
+    A checkpoint can run AHEAD for one team and BEHIND for the other, and ``_snap``
+    holds the whole pair. Clamping the behind side to its level made a scoring row
+    SUBTRACT: NC State's touchdown on game play 37 walked 6 -> 0.
+    """
+    df = _parsed_frame("6398950")
+    td = df.filter(pl.col("game_play_number") == 37).row(0, named=True)
+    assert (td["play_type"], td["score_pts"]) == ("Passing Touchdown", 6)
+    assert td["pos_team_score"] == 6, "a scoring row must never lower the scorer's own score"
+    scores = _running_scores(df)
+    for (ph, pa), (h, a) in zip(scores, scores[1:]):
+        assert h >= ph and a >= pa, f"score walked back: {(ph, pa)} -> {(h, a)}"
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"NC State": 34, "Wake Forest": 24}
+
+
+def test_a_kick_the_page_walked_back_does_not_score() -> None:
+    """NC13: 5366625 prints the nullified try AND the re-kick that replaced it."""
+    df = _parsed_frame("5366625")
+    nullified = df.filter(pl.col("game_play_number") == 6).row(0, named=True)
+    assert nullified["play_text"].endswith("NO PLAY.") and nullified["penalty_no_play"]
+    assert (nullified["score_pts"], nullified["pos_team_score"]) == (0, 6)
+    rekick = df.filter(pl.col("game_play_number") == 7).row(0, named=True)
+    assert "kick attempt failed" in rekick["play_text"]
+    assert (rekick["score_pts"], rekick["pos_team_score"]) == (0, 6)
+
+
+def test_kick_result_is_read_from_the_attempt_not_a_tackler_name() -> None:
+    """NC13: a bare "good" also reads out of "Gooden,Darius" (5366306, play 192)."""
+    from sportsdataverse.cfb.cfb_ncaa_cfbfastr import _KICK_GOOD_RE
+
+    blocked = (
+        "Groff,Ty kick attempt failed ( blocked by Yeoman,Corey) (H: Walter,Devin, "
+        "LS: Crisanti,Donato) recovered by URI Groff,Ty at Groff,Ty return 0 yards to "
+        "the HAMP03 (Gooden,Darius)."
+    )
+    assert _KICK_GOOD_RE.search(blocked) is None
+    assert _KICK_GOOD_RE.search("Massick,Sam kick attempt good (H: Clark,Brady).") is not None
+    assert _KICK_GOOD_RE.search("Massick,Sam kick attempt NO GOOD.") is None
+
+
+def test_a_synthesized_overtime_interception_is_a_pass_play() -> None:
+    """NC14: 5367688's OT "Interception Return" row set ``int`` with ``pass`` False."""
+    df = _parsed_frame("5367688")
+    ot = df.filter(pl.col("ot_synthesized") & (pl.col("play_type") == "Interception Return")).row(0, named=True)
+    assert (ot["int"], ot["pass"], ot["pass_attempt"], ot["period"]) == (True, True, True, 5)
+    # an overtime possession starts 1st & 10 at the 25, so the one-play drive has a down
+    assert (ot["down"], ot["distance"]) == (1, 10)
+    assert df.filter(pl.col("int") & ~pl.col("pass")).height == 0
+
+
+def test_an_overturned_touchdown_neither_scores_nor_keeps_its_yardage() -> None:
+    """NC15: 5361980 reprints the call the review took away.
+
+    "... rush middle for 1 yard gain to the EIU01 ... PLAY OVERTURNED. (Original Play:
+    ... for 2 yards gain to the EIU00 () TOUCHDOWN ...)" -- the mapper read the reprint,
+    so the row stayed a 2-yard touchdown ending on the goal line while its own yardage
+    said 1.
+    """
+    row = _parsed_frame("5361980").filter(pl.col("id_play") == 53619800109).row(0, named=True)
+    assert "PLAY OVERTURNED" in row["play_text"]
+    assert (row["play_type"], row["touchdown"], row["rush_td"]) == ("Rush", False, False)
+    assert (row["yards_to_goal"], row["yards_gained"], row["yards_to_goal_end"]) == (2, 1, 1)
+    assert row["score_pts"] == 0
