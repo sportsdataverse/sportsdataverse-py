@@ -10,6 +10,11 @@ ways in, both producing that same dict:
   ``ncaa-mfb-football-raw`` checkout, pointed at by ``SDV_NCAA_MFB_ARCHIVE``). The archive covers
   **fall 2013 onwards, FBS + FCS**, and is the only source that carries an FCS-hosted game in any
   era. The academic year is ``season + 1`` (season 2024 lives under ``mfb/raw/2025/``).
+* **Data API** -- the same archive payload over HTTP (:data:`CONTEST_ROUTE`, served by sdv-db
+  from its own checkout on the droplet), used when no local archive is configured. This is what
+  makes ``source="ncaa"`` work off the droplet at all: Game on Paper's API cannot mount the
+  checkout, so before this leg existed ``source="ncaa"`` was inert everywhere but the droplet.
+  Bounded hard (:data:`API_TIMEOUT`, no retries) because it sits on a request path.
 * **live** -- **opt-in, off by default** (:data:`LIVE_FETCH_ENV`) -- the contest page itself,
   through the repo's existing NCAA transport
   (:class:`sportsdataverse.mbb.mbb_ncaa_fetch.NcaaFetcher`, browser transport for the
@@ -39,6 +44,15 @@ from bs4 import BeautifulSoup
 
 #: Environment variable naming a ``ncaa-mfb-football-raw`` checkout (the offline archive root).
 ARCHIVE_DIR_ENV = "SDV_NCAA_MFB_ARCHIVE"
+
+#: Data API route serving the same archived bundle over HTTP (sdv-db ``api/ncaa_routes.py``).
+#: The base URL is the one the id-map resolver already reads (``SDV_DATA_API_URL``).
+CONTEST_ROUTE = "/v1/cfb/ncaa/contest/{contest_id}"
+
+#: Seconds allowed for the Data API leg, and it does not retry. It runs on Game on Paper's
+#: request path with no per-source budget above it, so "slow" must fail closed as fast as
+#: "absent": a miss here costs one 5 s ceiling, not ``download``'s 15-retry default.
+API_TIMEOUT = 5.0
 
 #: Minimum seconds between two stats.ncaa.org requests, process-wide. The host bans per IP and
 #: those bans are permanent, so this is a floor, never a target.
@@ -117,6 +131,56 @@ def _archive_bundle(
         if isinstance(bundle, dict):
             return bundle
     return None
+
+
+def _api_bundle(
+    contest_id: Any,
+    *,
+    season: Optional[int] = None,
+    base_url: "str | None" = None,
+    transport: Any = None,
+) -> Optional[Dict[str, Any]]:
+    """The archived bundle from the Data API, or None when it cannot answer.
+
+    The same payload :func:`_archive_bundle` returns, read over HTTP from the deployment that
+    *does* hold the checkout. Used when no local archive is configured -- which is every
+    consumer but the droplet itself.
+
+    Args:
+        contest_id: stats.ncaa.org contest id.
+        season: the **starting** year; forwarded so the server skips its year scan.
+        base_url: Data API base; defaults to ``$SDV_DATA_API_URL`` (the id-map resolver's).
+        transport: injection seam for tests; defaults to :func:`...dl_utils.download`.
+
+    Returns:
+        The bundle, or None -- for **every** failure: no base URL, a 404 (not archived), a 503
+        (no archive on that deployment), a timeout, an auth failure, a non-dict body. Never
+        raises: the caller's next leg is the opt-in live fetch and then
+        :class:`SourceUnavailable`, and a request path must not learn about HTTP from here.
+    """
+    from sportsdataverse.football.sources.dispatch import IDMAP_BASE_URL_ENV
+    from sportsdataverse.football.sources.idmap import _api_headers
+
+    base_url = base_url or os.environ.get(IDMAP_BASE_URL_ENV)
+    if not base_url:
+        return None
+    if transport is None:
+        from sportsdataverse.dl_utils import download
+
+        transport = download
+    url = base_url.rstrip("/") + CONTEST_ROUTE.format(contest_id=contest_id)
+    try:
+        resp = transport(
+            url=url,
+            params={"season": int(season)} if season is not None else None,
+            headers=_api_headers(),
+            timeout=API_TIMEOUT,
+            num_retries=0,
+        )
+        bundle = resp.json()
+    except Exception:  # noqa: BLE001 -- 404 / 503 / timeout / auth / bad body are all one miss
+        return None
+    return bundle if isinstance(bundle, dict) and bundle else None
 
 
 def _fetch_bundle(contest_id: Any, *, fetcher: Any = None) -> Dict[str, Any]:

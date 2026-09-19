@@ -833,7 +833,7 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     Raises:
         SourceUnavailable: every hand-over, and there are seven -- the contest id cannot be
-            resolved without inventing one; neither the archive nor a live fetch produces a
+            resolved without inventing one; no leg of archive -> Data API -> live produces a
             bundle (the live path is opt-in, see :data:`...fetch.LIVE_FETCH_ENV`); the payload is
             not a bundle-shaped mapping; the bundle carries no play-by-play markup at all -- the
             shape stats.ncaa.org answers HTTP 200 with for a game it does not hold, including
@@ -844,7 +844,12 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
     from sportsdataverse.football.sources.idmap import _odds_override_from_row
 
-    from sportsdataverse.cfb.ncaa_pbp.fetch import _archive_bundle, _fetch_bundle, _resolve_contest_id
+    from sportsdataverse.cfb.ncaa_pbp.fetch import (
+        _api_bundle,
+        _archive_bundle,
+        _fetch_bundle,
+        _resolve_contest_id,
+    )
 
     row = dict(ctx.idmap_row or {})
     row.setdefault("espn_event_id", str(espn_id))
@@ -853,17 +858,22 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if bundle is None:
         if not contest_id:
             raise SourceUnavailable(f"cfb {espn_id}: no ncaa_game_id (stats.ncaa.org contest id) in the id map")
-        season = row.get("season")
-        bundle = _archive_bundle(contest_id, season=int(season) if season is not None else None)
+        season = int(season_value) if (season_value := row.get("season")) is not None else None
+        bundle = _archive_bundle(contest_id, season=season)
         source = "archive"
+        if bundle is None:
+            # The Data API serves the same archived payload from the deployment that holds the
+            # checkout. Bounded and non-retrying (see ``fetch.API_TIMEOUT``); a miss is None.
+            bundle = _api_bundle(contest_id, season=season)
+            source = "data_api"
         if bundle is None:
             try:
                 bundle = _fetch_bundle(contest_id)
                 source = "live"
             except Exception as exc:  # noqa: BLE001 -- network / browser / proxy -> the next source
                 raise SourceUnavailable(
-                    f"cfb {espn_id}: stats.ncaa.org contest {contest_id} is not in the archive and the "
-                    f"live fetch failed: {type(exc).__name__}: {exc}"
+                    f"cfb {espn_id}: stats.ncaa.org contest {contest_id} is in neither the local archive "
+                    f"nor the Data API, and the live fetch failed: {type(exc).__name__}: {exc}"
                 ) from exc
     else:
         source = "payload"
@@ -920,7 +930,7 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             "espn_event_id": str(espn_id),
             "ncaa_contest_id": contest_id or bundle.get("contest_id"),
             "ncaa_id_resolved_by": resolved_by,
-            "ncaa_bundle_source": source,
+            "ncaa_bundle_source": source,  # "payload" | "archive" | "data_api" | "live"
             "ncaa_captured_at": bundle.get("captured_at"),
         },
         notes=notes,
