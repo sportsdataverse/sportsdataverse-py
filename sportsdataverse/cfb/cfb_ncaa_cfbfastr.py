@@ -730,8 +730,9 @@ def to_cfbfastr(
         score[team] = walked if cap is None else min(walked, cap)
 
     def _raise_to(cp: "tuple[int, int]") -> None:
-        score[snap_first] = max(score[snap_first], cp[0])
-        score[snap_second] = max(score[snap_second], cp[1])
+        for team, level in ((snap_first, cp[0]), (snap_second, cp[1])):
+            if team is not None:
+                score[team] = max(score[team], level)
 
     def _snap(drive: "Optional[int]") -> None:
         """Settle the running score against the checkpoint of a finished drive."""
@@ -779,8 +780,10 @@ def to_cfbfastr(
             team = title_team.get(r["drive_number"]) or r["offense"]
         else:
             continue
-        if team in teams:
-            kicker_votes.setdefault(who, {})[team] = kicker_votes.setdefault(who, {}).get(team, 0) + 1
+        if team is None or team not in teams:
+            continue
+        votes = kicker_votes.setdefault(who, {})
+        votes[team] = votes.get(team, 0) + 1
     kicker_team = {
         who: max(votes, key=lambda t: (votes[t], t)) for who, votes in kicker_votes.items() if len(votes) == 1
     }
