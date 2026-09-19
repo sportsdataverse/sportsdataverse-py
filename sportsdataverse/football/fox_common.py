@@ -112,8 +112,6 @@ _TOUCHDOWN_TYPES = frozenset({"32", "34", "36", "37", "38", "39", "67", "68"})
 #: Kickoffs are excluded: their group already names the *receiving* team.
 _CHANGES_POSSESSION = frozenset({"17", "18", "26", "29", "30", "52", "60"})
 
-#: Kick types, which a "No Play" flag nullifies outright.
-_KICK_TYPES = frozenset({"17", "18", "52", "53", "59", "60"})
 
 #: A touchdown the officials took off the board; its text still says TOUCHDOWN.
 _NULLIFIED_RE = re.compile(r"(?i)\bnullified\b|\boverturned\b|\bno play\b|\breversed\b")
@@ -124,7 +122,10 @@ _PENALTY_RE = re.compile(
     r"PENALTY on ([A-Z]{2,4})(?:-[^,]+)?, ([^,]+), (\d+) yards?, (accepted|declined|offsetting)", re.I
 )
 _FG_YARDS_RE = re.compile(r"(?i)\b(\d{1,2})[- ]yard field goal")
-_DRIVE_SUBTITLE_RE = re.compile(r"\s*(-?\d+) plays?\D+(-?\d+) yards?\D+(\d+:\d+)")
+#: ``"12 plays, -7 yards, 5:01"`` -> plays / yards / elapsed. The separator class excludes the
+#: minus sign: a greedy ``\D+`` eats it, and a drive that LOST ground then reported its yardage
+#: as a gain (88 of the drives in the evidence capture state negative yards).
+_DRIVE_SUBTITLE_RE = re.compile(r"\s*(-?\d+) plays?[^\d-]+(-?\d+) yards?\D+(\d+:\d+)")
 _CLOCK_RE = re.compile(r"^(\d{1,2}):(\d{2})$")
 _WHITESPACE_RE = re.compile(r"\s+")
 _ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
@@ -728,12 +729,15 @@ def _fox_to_espn_summary(
             ``home_espn_team_id`` and ``away_espn_team_id`` are required -- Fox's team ids are
             its own (Cleveland is 7 on Fox and 5 on ESPN), and both processors cast
             ``team.id`` to ``int`` and use it for possession, logos and the box score.
-        league: ``"nfl"`` or ``"cfb"``; only tags the notes and the season type default.
+        league: ``"nfl"`` or ``"cfb"``. Nothing in the projection branches on it -- the two
+            feeds are one product -- so it is carried only to keep the two call sites symmetric
+            with the other adapters.
         play_types: ESPN ``type.id`` -> ``(type.text, type.abbreviation)`` for the league.
         espn_uid_league: ESPN's numeric league slot for the ``uid`` strings (28 NFL, 23 CFB).
         team_meta: Optional per-ESPN-team-id metadata (``abbreviation``, ``color``,
             ``alternateColor``) from the league's own franchise table. Used **only** to prefer
-            ESPN's own abbreviation over Fox's; nothing is invented when it is absent.
+            ESPN's own abbreviation and franchise colours over Fox's; nothing is invented when
+            it is absent (college football has no such table and falls back to Fox's colours).
         text_aliases: Extra ``play-text club code -> header club code`` fixes for codes Fox's
             text spells differently from its own header (NFL: ``JAC`` for ``JAX``).
         odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}``; becomes the
@@ -745,11 +749,14 @@ def _fox_to_espn_summary(
         | item | type | description |
         |---|---|---|
         | summary | dict | An ESPN-summary-shaped payload: `header`, `drives.previous` (+ `drives.current` while the game is live), `pickcenter` and empty `boxscore` / passthrough arrays. Feed it to `espn_{nfl,cfb}_pbp(summary=)`. |
-        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a PAT with no touchdown to fold into, rows whose drive states no team, and the open drive synthesized for a live game. |
+        | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a PAT with no touchdown to fold into, rows whose drive states no team, rows filed in the drive group of the possession that just ended (possession flipped), and the open drive moved to `drives.current` for a live game. |
 
     Raises:
         ValueError: the payload carries no ``header`` with both teams, the id-map row states no
             ESPN team ids, or the payload carries no plays.
+        KeyError: the id-map row states no ``espn_event_id``, or the league's ``play_types``
+            table has no entry for a type id the classifier emitted. Both reach dispatch as a
+            hand-over (it treats any exception from an adapter as one), not as a crash.
 
     Example:
         Adapt a stored Fox final and process it::

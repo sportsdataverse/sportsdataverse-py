@@ -173,8 +173,25 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     Hands over to the next source (:class:`...dispatch.SourceUnavailable`) when the Fox event
     id cannot be resolved without inventing one, when the id map states no ESPN team ids, when
-    the fetch fails, and -- the case Fox answers with **HTTP 200** -- when the payload carries
-    no ``pbp`` at all: every NFL game before the **2024** season.
+    the fetch fails, when the payload carries no ``pbp`` at all -- the case Fox answers with
+    **HTTP 200**: every NFL game before the **2024** season -- and when the adapted drive chart
+    carries no play yet.
+
+    Args:
+        league: ``"nfl"``; the dispatcher passes it, this adapter does not branch on it.
+        espn_id: The ESPN event id being served.
+        ctx: The dispatcher's :class:`...dispatch.SourceContext` (``payload``, ``idmap_row``,
+            ``participants``, ``odds_override``).
+
+    Returns:
+        :class:`...dispatch.AdaptedGame` -- the ESPN-shaped summary plus ``native_ids`` and the
+        adapter notes.
+
+    Raises:
+        SourceUnavailable: no Fox event id could be resolved without inventing one; the fetch
+            failed; the payload carries no ``header`` (the shared ``_get`` returns ``{}`` on
+            any failure); the payload carries no ``pbp``; the id-map row states no ESPN team
+            ids; or the adapted drive chart carries no plays yet.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
     from sportsdataverse.football.sources.idmap import _odds_override_from_row

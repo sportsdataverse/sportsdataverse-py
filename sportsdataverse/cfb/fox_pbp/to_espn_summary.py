@@ -37,9 +37,10 @@ from sportsdataverse.football.fox_common import (
 )
 
 #: ESPN CFB ``type.id`` -> ``(type.text, type.abbreviation)``. The table the Yahoo CFB adapter
-#: enumerated from real ESPN college summaries, plus the four special-teams types Fox can emit
-#: that a Yahoo payload never distinguishes (a blocked punt, its touchdown, a muffed punt and
-#: the officials' timeout). Shared rather than re-derived so two CFB adapters cannot drift.
+#: enumerated from real ESPN college summaries, plus six types a Yahoo payload never
+#: distinguishes: a blocked punt and its touchdown, a muffed punt, the officials' timeout, the
+#: two-minute warning and the end of regulation. A vocabulary may be wider than what the
+#: classifier emits; it is shared rather than re-derived so two CFB adapters cannot drift.
 ESPN_PLAY_TYPES: Dict[str, Tuple[str, Optional[str]]] = {
     **_YAHOO_CFB_PLAY_TYPES,
     "17": ("Blocked Punt", "BP"),
@@ -128,7 +129,24 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     id cannot be resolved without inventing one, when the id map states no ESPN team ids, when
     the fetch fails, and -- the case three of the five CFB sources answer with **HTTP 200** --
     when the payload carries no ``pbp`` at all: **every FCS-hosted game in every era**, and
-    every game before Fox's 2022 play floor.
+    every game before Fox's 2022 play floor -- and when the adapted drive chart carries no play
+    yet.
+
+    Args:
+        league: ``"cfb"``; the dispatcher passes it, this adapter does not branch on it.
+        espn_id: The ESPN event id being served.
+        ctx: The dispatcher's :class:`...dispatch.SourceContext` (``payload``, ``idmap_row``,
+            ``participants``, ``odds_override``).
+
+    Returns:
+        :class:`...dispatch.AdaptedGame` -- the ESPN-shaped summary plus ``native_ids`` and the
+        adapter notes.
+
+    Raises:
+        SourceUnavailable: no Fox event id could be resolved without inventing one; the fetch
+            failed; the payload carries no ``header`` (the shared ``_get`` returns ``{}`` on
+            any failure); the payload carries no ``pbp``; the id-map row states no ESPN team
+            ids; or the adapted drive chart carries no plays yet.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
     from sportsdataverse.football.sources.idmap import _odds_override_from_row
@@ -182,7 +200,12 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
 
 def _fox_odds(payload: Mapping[str, Any], odds_payload: Any, fox_event_id: Optional[str]) -> Optional[Dict[str, Any]]:
-    """Fox's closing six-pack as ``odds_override``, fetched only when nothing else stated one."""
+    """Fox's closing six-pack as ``odds_override``, fetched only when nothing else stated one.
+
+    The stored closing line beside the id map wins; this is the fall-back that keeps a Fox
+    failover off the processor's 2.5 / 55.5 default. Never raises and never fetches on the
+    injected-payload path.
+    """
     home = ((payload.get("header") or {}).get("rightTeam") or {}).get("imageAltText")
     if odds_payload is None:
         if fox_event_id is None:

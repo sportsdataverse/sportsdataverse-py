@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 
 import pytest
 
@@ -192,6 +193,21 @@ def test_a_live_poll_is_re_sorted_and_its_open_drive_states_no_outcome(label, nf
 def test_the_final_of_the_same_game_is_served_oldest_first(nfl_final):
     feed_order = [int(p["id"]) for s in nfl_final["pbp"]["sections"] for g in s["groups"] for p in g["plays"]]
     assert feed_order == sorted(feed_order)
+
+
+def test_a_drive_that_lost_ground_reports_negative_yards(nfl_summary, cfb_final):
+    """MUTATION TARGET -- a greedy ``\\D+`` in the drive-subtitle regex eats the minus sign.
+
+    ``drives[].yards`` is what Game on Paper prints in the drive chart, and a drive that lost
+    ground then read as a gain of the same size (88 of the drives in the evidence capture
+    state negative yardage).
+    """
+    summary, _ = _fox_cfb_to_espn_summary(cfb_final, CFB_ROW)
+    drives = nfl_summary["drives"]["previous"] + summary["drives"]["previous"]
+    negative = [d for d in drives if re.search(r"-\d+ yards?", str(d["description"] or ""))]
+    assert negative, "the fixtures no longer carry a drive that lost ground"
+    for drive in negative:
+        assert drive["yards"] < 0, drive["description"]
 
 
 def test_the_last_snap_of_a_half_does_not_end_at_the_next_half_kickoff(nfl_summary):
