@@ -904,3 +904,65 @@ def test_an_overturned_touchdown_neither_scores_nor_keeps_its_yardage() -> None:
     assert (row["play_type"], row["touchdown"], row["rush_td"]) == ("Rush", False, False)
     assert (row["yards_to_goal"], row["yards_gained"], row["yards_to_goal_end"]) == (2, 1, 1)
     assert row["score_pts"] == 0
+
+
+# --- NC16/NC17: try attribution and nullified plays ------------------------------------
+
+
+def test_a_block_printed_try_carries_the_kicking_team() -> None:
+    """NC16: 5361987 prints both teams' tries in one block (Boise St. 34 at Oregon 37).
+
+    The kicker vote already sent the POINT to the right side, but the row kept the
+    drive's offense in ``pos_team`` -- so one row of every such pair named the wrong
+    club and booked its point as ``score_pts`` -1 against itself. 51/51 adjacent
+    extra-point pairs in ay2026 shared a ``pos_team`` before this.
+    """
+    df = _parsed_frame("5361987")
+    first, second = (df.filter(pl.col("game_play_number") == n).row(0, named=True) for n in (154, 155))
+    assert (first["play_type"], second["play_type"]) == ("Extra Point Good", "Extra Point Good")
+    assert (first["pos_team"], first["def_pos_team"]) == ("Boise St.", "Oregon")
+    assert (second["pos_team"], second["def_pos_team"]) == ("Oregon", "Boise St.")
+    # each row books its own point on its own side of the ball
+    assert (first["score_pts"], second["score_pts"]) == (1, 1)
+    assert second["pos_team_score"] == 28 and second["def_pos_team_score"] == 34
+    # no adjacent try pair anywhere in the game shares a possession team
+    pt, pos = df["play_type"].to_list(), df["pos_team"].to_list()
+    pairs = [i for i in range(len(pt) - 1) if pt[i] == pt[i + 1] == "Extra Point Good"]
+    assert pairs and all(pos[i] != pos[i + 1] for i in pairs)
+    assert df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1) == (
+        "Oregon",
+        37,
+        "Boise St.",
+        34,
+    )
+
+
+def test_a_nullified_play_carries_no_yardage_and_no_outcome() -> None:
+    """NC17: 6398950's "... complete ... for 25 yards ... PENALTY ... NO PLAY." kept its 25.
+
+    The NCAA page prints the whole attempt the penalty wiped out, so the mapper booked
+    rushing/receiving/punt yardage and rush/pass attempts for plays that never counted --
+    ``flags.no_play_yardage_credited`` fired on 284 of the 340 published 2026 games. The
+    ESPN processor's cut (``_PENALTY_NEGATED_TEXT`` in ``cfb_pbp.py``) types the row
+    "Penalty", which zeroes every one of these downstream; this matches it.
+    """
+    df = _parsed_frame("6398950")
+    wiped = df.filter(pl.col("game_play_number") == 146).row(0, named=True)
+    assert wiped["play_text"].endswith("NO PLAY.") and wiped["penalty_no_play"]
+    assert (wiped["play_type"], wiped["orig_play_type"]) == ("Penalty", "pass")
+    assert (wiped["yards_gained"], wiped["yds_receiving"], wiped["completion"], wiped["pass_attempt"]) == (
+        None,
+        None,
+        False,
+        False,
+    )
+    # the participants, the penalty columns and the spot survive -- only the outcome goes
+    assert wiped["receiver_player_name"] == "Justin Joly"
+    assert wiped["penalty_flag"] and "PENALTY" in wiped["play_text"]
+    nop = df.filter(pl.col("penalty_no_play"))
+    assert nop.height == 15
+    assert nop["play_type"].unique().to_list() == ["Penalty"]
+    for col in ("yards_gained", "yds_rushed", "yds_receiving", "yds_sacked", "yds_punted", "yds_fg"):
+        assert nop[col].null_count() == nop.height, col
+    for col in ("rush", "pass", "pass_attempt", "completion", "sack", "touchdown", "punt", "kickoff_play"):
+        assert not nop[col].fill_null(False).any(), col

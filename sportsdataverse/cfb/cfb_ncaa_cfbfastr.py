@@ -418,6 +418,48 @@ def _td_by_defense(
     return r["turnover_type"] in ("interception", "fumble") or r["play_type"] in ("punt", "field_goal")
 
 
+#: NC17 -- columns a play wiped out by penalty ("... NO PLAY.") must not carry.
+#: ``_NO_PLAY_FALSE`` are outcome flags, ``_NO_PLAY_NULL`` the yardage columns; the
+#: ESPN processor reaches the same state by typing the row "Penalty" (every one of
+#: these is gated on a flag that type turns off).
+_NO_PLAY_FALSE = (
+    "rush",
+    "rush_td",
+    "pass",
+    "pass_td",
+    "pass_attempt",
+    "completion",
+    "target",
+    "sack",
+    "sack_vec",
+    "int",
+    "int_td",
+    "turnover_vec",
+    "downs_turnover",
+    "touchdown",
+    "td_play",
+    "safety",
+    "punt",
+    "punt_play",
+    "kickoff_play",
+    "kick_play",
+    "fg_inds",
+    "fg_made",
+)
+_NO_PLAY_NULL = (
+    "yards_gained",
+    "yds_rushed",
+    "yds_receiving",
+    "yds_sacked",
+    "yds_punted",
+    "yds_punt_return",
+    "yds_kickoff",
+    "yds_kickoff_return",
+    "yds_int_return",
+    "yds_fg",
+)
+
+
 def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
     """Map the NCAA structural play_type to the cfbfastR play_type vocabulary.
 
@@ -528,6 +570,13 @@ def to_cfbfastr(
         ``return_as_pandas``) with one row per play (markers/furniture dropped)
         and the columns of :data:`CFBFASTR_SCHEMA`. Empty input returns a
         **zero-row frame carrying the documented schema**.
+
+        Two conventions the NCAA page forces, both matching the ESPN processor:
+        a play wiped out by a penalty ("... NO PLAY.") is typed ``"Penalty"``
+        with every outcome flag ``False`` and every yardage column null (it
+        keeps its participants, its ``penalty_*`` columns and its spot); and a
+        try is attributed to the team that scored the touchdown, so a
+        block-printed pair of tries carries a different ``pos_team`` per row.
 
     Example:
         Quick start::
@@ -808,6 +857,11 @@ def to_cfbfastr(
         ruled = _REVIEW_RE.split(text, 1)[0]
         if r["is_touchdown"] and ("TOUCHDOWN" not in ruled or "TOUCHDOWN nullified" in ruled):
             r = {**r, "is_touchdown": False, "end_yard_line": _end_yard_line(ruled)}
+        # the same cut settles "NO PLAY": a review can OVERTURN the call that was wiped
+        # out, and the reprint -- not the ruling -- is the text carrying "NO PLAY", so a
+        # bundle parsed before this cut marks a play that stands as a no-play (NC17).
+        if r["no_play"] and "NO PLAY" not in ruled:
+            r = {**r, "no_play": False}
         qm = _QTR_MARKER_RE.search(text.lower())
         if qm:
             marker_period = int(qm.group(1))
@@ -839,6 +893,17 @@ def to_cfbfastr(
             # a kickoff's return TD is the RECEIVING team's
             return_td = (defense if def_td else offense) != kicker
         pts_off = pts_def = 0
+        # NC16: a try belongs to the team that scored the touchdown, not to the drive's
+        # offense -- and when the page prints both teams' tries in one block, the drive
+        # offense is wrong for one of the pair. The kicker names the team when the page
+        # knows him; the touchdown he is kicking for otherwise (a defensive TD's try is
+        # the drive DEFENSE's). Resolved for every try, made or missed, so the row's
+        # ``pos_team``/``def_pos_team`` agree with where the point lands.
+        try_team = None
+        if r["play_type"] in ("extra_point", "two_point"):
+            try_team = kicker_team.get(r["kicker"] or "") if r["play_type"] == "extra_point" else None
+            if try_team not in (offense, defense):
+                try_team = last_td_team or offense
         # a play walked back by a penalty ("... NO PLAY.") never scored -- the page
         # reprints the attempt that replaces it on its own row (NC13)
         if not r["no_play"] and r["play_type"] not in (
@@ -867,17 +932,12 @@ def to_cfbfastr(
             # XP/2pt belong to whoever scored the preceding TD (a defensive TD's
             # try is kicked by the drive's DEFENSE, so drive offense is wrong).
             if r["play_type"] == "extra_point" and _KICK_GOOD_RE.search(text):
-                # the kicker names the team when the page knows him; the touchdown he is
-                # kicking for otherwise (a defensive TD's try is the drive DEFENSE's)
-                kicked_for = kicker_team.get(r["kicker"] or "")
-                if kicked_for not in (offense, defense):
-                    kicked_for = last_td_team or offense
-                if kicked_for == defense:
+                if try_team == defense:
                     pts_def += 1
                 else:
                     pts_off += 1
             if r["play_type"] == "two_point" and "successful" in text.lower():
-                if (last_td_team or offense) == defense:
+                if try_team == defense:
                     pts_def += 2
                 else:
                     pts_off += 2
@@ -885,6 +945,11 @@ def to_cfbfastr(
                 pts_def += 2
         _award(offense, pts_off)
         _award(defense, pts_def)
+        if try_team == defense:
+            # the kicking team owns the try row: swap possession so the row's labels
+            # agree with the side the point was awarded to (NC16)
+            offense, defense = defense, offense
+            pts_off, pts_def = pts_def, pts_off
         if last_play_of_drive.get(r["drive_number"]) == i:
             _snap(r["drive_number"])
 
@@ -1033,6 +1098,19 @@ def to_cfbfastr(
                 "ot_synthesized": False,
             }
         )
+        if r["no_play"]:
+            # NC17: the page prints the whole nullified attempt ("... rush for 7 yards
+            # ... PENALTY ... NO PLAY."), so every outcome the text states belongs to a
+            # play that did not happen. Same cut the ESPN processor makes with
+            # ``_PENALTY_NEGATED_TEXT`` (``cfb_pbp.py``): the row becomes a "Penalty"
+            # play whose outcome flags are all False and whose yardage columns are all
+            # null. It keeps its participants, its ``penalty_*`` columns, its spot and
+            # its first-down marks -- measured on the published espn_cfb 2025 pbp, all
+            # 7,382 "Penalty"-typed no-play rows carry 0 True in each of these flags and
+            # 100% null in each of these yardage columns, with names still populated.
+            rows[-1].update(dict.fromkeys(_NO_PLAY_FALSE, False))
+            rows[-1].update(dict.fromkeys(_NO_PLAY_NULL, None))
+            rows[-1]["play_type"] = "Penalty"
 
     # cfbfastR end state: yards_to_goal_end is measured for the team holding the ball
     # AFTER the play -- 0 on a touchdown; flipped to the new offense when possession

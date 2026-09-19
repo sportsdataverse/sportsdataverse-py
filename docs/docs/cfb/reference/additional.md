@@ -907,7 +907,7 @@ cfbfastR-named play frame from the NCAA structural pbp frame.
 
 **Returns**
 
-A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas`) with one row per play (markers/furniture dropped) and the columns of `CFBFASTR_SCHEMA`. Empty input returns a **zero-row frame carrying the documented schema**.
+A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas`) with one row per play (markers/furniture dropped) and the columns of `CFBFASTR_SCHEMA`. Empty input returns a **zero-row frame carrying the documented schema**. Two conventions the NCAA page forces, both matching the ESPN processor: a play wiped out by a penalty ("... NO PLAY.") is typed `"Penalty"` with every outcome flag `False` and every yardage column null (it keeps its participants, its `penalty_*` columns and its spot); and a try is attributed to the team that scored the touchdown, so a block-printed pair of tries carries a different `pos_team` per row.
 
 **Example**
 
