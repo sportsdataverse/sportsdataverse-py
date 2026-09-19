@@ -363,6 +363,28 @@ def test_the_newest_play_ends_where_its_own_yardage_puts_it(osu_tex_cbs):
     assert top["end"]["yardsToEndzone"] == 9, "the ball moved; its own start is not its end"
 
 
+def test_a_failed_fourth_down_with_no_next_snap_turns_the_ball_over(osu_tex_cbs):
+    """The newest row of a live poll on 4th & 2 short: the ball changes hands where it lies.
+
+    Red when ``_trailing_end`` keeps the offence's frame: the top of the page would say the
+    offence still has it 12 yards out, instead of the defence 88 from its own end zone. ESPN's
+    own captured summaries write the defence at 1st & 10 on 50 of 50 failed fourth downs.
+    """
+    live = copy.deepcopy(osu_tex_cbs)
+    plays = sorted(live["plays"]["plays"], key=lambda p: int(p["id"]))[:39]
+    live["plays"] = {"plays": plays}
+    kept = {str(p["drive_id"]) for p in plays}
+    live["drives"] = {"drives": [d for d in live["drives"]["drives"] if str(d["id"]) in kept]}
+    live["scoreboard"]["scoreboard"]["game_status"]["status"] = "INPROGRESS"
+    summary, _notes = _adapt(live, OSU_TEX_ROW)
+    top = _flat(summary)[-1]
+    assert (top["start"]["down"], top["start"]["distance"]) == (4, 2)
+    assert top["start"]["yardsToEndzone"] == 13 and top["statYardage"] == 1
+    assert top["end"]["team"]["id"] != top["start"]["team"]["id"], "fourth and short: the ball turned over"
+    assert (top["end"]["down"], top["end"]["distance"]) == (1, 10)
+    assert top["end"]["yardsToEndzone"] == 88, "100 - (13 - 1), in the defence's frame"
+
+
 def test_the_last_snap_of_a_half_keeps_its_own_end_spot(osu_tex_summary):
     """The next snap after a half is a kickoff in the other direction, 65 yards out.
 

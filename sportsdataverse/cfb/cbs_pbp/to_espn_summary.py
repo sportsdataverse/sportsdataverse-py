@@ -23,9 +23,9 @@ How a spot is read, which is the whole game with CBS:
 * **the offence is the drive's team, never the row's** ``team_in_possession``, which is the
   club that *ended* the play: on a turnover, a flagged snap and every kickoff it names the
   wrong side, and reading it inverts ``pos_team``, the spot and therefore EP / EPA / WP;
-* **a field goal's spot is the kick spot, about 7 yards behind the snap**, so the line of
-  scrimmage is read from the kick's own distance in the text (``distance - 17``), which is
-  stated in every era CBS covers.
+* **a field goal's spot is the kick spot, 8 yards behind where ESPN puts the snap**, so the
+  line of scrimmage is read from the kick's own distance in the text (``distance - 18``,
+  :data:`_FG_ESPN_OFFSET`), which is stated in every era CBS covers.
 
 Documented divergences from a real ESPN summary (measured, ``s2-cbs-cfb`` gate):
 
@@ -259,7 +259,7 @@ def _field_goal_line_of_scrimmage(text: str, kick_spot: Optional[int]) -> Option
     return max(0, min(100, kick_spot - _FG_SNAP_OFFSET))
 
 
-def _trailing_end(play: Dict[str, Any], home_id: str) -> Dict[str, Any]:
+def _trailing_end(play: Dict[str, Any], home_id: str, away_id: str) -> Dict[str, Any]:
     """The end state of a play the feed states no next snap for, from its own yardage.
 
     Fires on the last row of every final and on the newest row of every live poll -- the row
@@ -269,23 +269,36 @@ def _trailing_end(play: Dict[str, Any], home_id: str) -> Dict[str, Any]:
     offence keeps the ball, so the end is ``start - statYardage``; on a turnover or a kick the
     yardage says nothing about where the next team starts and the start spot is left alone
     rather than guessed at.
+
+    **Fourth down short of the sticks is the exception**: the ball turns over where it lies,
+    and ESPN writes that row's end in the DEFENCE's frame at 1st & 10 -- 50 of 50 such rows in
+    the captured ESPN summaries, at exactly ``100 - (start - statYardage)``. Keeping the
+    offence's frame is a ~100-yard, multi-EPA error on the highest-leverage event in football,
+    on the newest row of every live poll (53 such snaps in the 35-game evidence capture).
     """
     start = play["start"]
-    gained = int(play.get("statYardage") or 0) if play["type"]["id"] in _KEEPS_THE_BALL else 0
+    keeps = play["type"]["id"] in _KEEPS_THE_BALL
+    gained = int(play.get("statYardage") or 0) if keeps else 0
     to_endzone = start["yardsToEndzone"]
     if to_endzone is not None and gained:
         to_endzone = max(0, min(100, int(to_endzone) - gained))
-    is_home = str(start["team"]["id"]) == str(home_id)
+    team, down, distance = start["team"]["id"], start["down"], start["distance"]
+    if keeps and (_int(start.get("down")) or 0) == 4 and gained < (_int(start.get("distance")) or 0):
+        team = away_id if str(team) == str(home_id) else home_id
+        down, distance = 1, 10
+        if to_endzone is not None:
+            to_endzone = 100 - to_endzone
+    is_home = str(team) == str(home_id)
     return {
-        "down": start["down"],
-        "distance": start["distance"],
+        "down": down,
+        "distance": distance,
         "yardLine": start["yardLine"] if to_endzone is None else ((100 - to_endzone) if is_home else to_endzone),
         "yardsToEndzone": to_endzone,
-        "team": {"id": start["team"]["id"]},
+        "team": {"id": team},
     }
 
 
-def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
+def _fill_end_state(plays: List[Dict[str, Any]], home_id: str, away_id: str) -> None:
     """Fill every play's ``end`` from the **next** snap's start, across drive boundaries.
 
     CBS states no end state at all, so the next snap is it -- which is how ESPN builds its own,
@@ -338,7 +351,7 @@ def _fill_end_state(plays: List[Dict[str, Any]], home_id: str) -> None:
                 nxt = later["start"]
                 break
         if nxt is None:
-            play["end"] = _trailing_end(play, home_id)
+            play["end"] = _trailing_end(play, home_id, away_id)
             continue
         play["end"] = {
             "down": nxt["down"],
@@ -851,7 +864,7 @@ def _cbs_cfb_to_espn_summary(
     final = str(status_block.get("status") or "").upper().startswith("FINAL")
     drive_by_row = {id(row): drive for row, drive in zip(emitted, drive_of)}
     all_rows = _synthesize_admin_rows(emitted, timeouts, home_id, away_id, names, final, notes)
-    _fill_end_state(all_rows, home_id)
+    _fill_end_state(all_rows, home_id, away_id)
     for number, row in enumerate(all_rows, start=1):
         row["id"] = f"{event_id}{number:04d}"
         row["sequenceNumber"] = str(number * 100)
@@ -1054,12 +1067,29 @@ def _fetch_cbs_game(cbs_game_id: str, **kwargs: Any) -> Dict[str, Any]:
 def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     """Dispatch adapter for ``source="cbs"`` (CFB). Registered in :mod:`...sources.dispatch`.
 
-    Hands over to the next source (:class:`...dispatch.SourceUnavailable`) when CBS carries no
-    play-by-play for the game -- checked by **shape**, before any id-map field, because "CBS
-    does not cover this game" is true of every FCS-hosted game whatever the row says -- when
-    CBS's own game id cannot be resolved from the week scoreboard without inventing one, when
-    the fetch fails, when the body CBS serves is for a different game, and when the id map
-    states no ESPN team ids.
+    Args:
+        league: the dispatch league key; always ``"cfb"`` for this registration.
+        espn_id: the ESPN event id the caller asked for.
+        ctx: the dispatcher's :class:`...dispatch.SourceContext` -- ``payload`` (an injected
+            NAPI bundle, which is what makes every test offline), ``idmap_row``,
+            ``participants`` and ``odds_override``.
+
+    Returns:
+        An :class:`...dispatch.AdaptedGame` carrying the ESPN-shaped ``summary``, the
+        ``native_ids`` provenance (``cbs_game_id``, how it was resolved and, on the scrape
+        path, the scoreboard URL / ``data-enhanced`` flag / weeks tried) and the adapter's
+        own ``notes``.
+
+    Raises:
+        SourceUnavailable: every hand-over to the next source, in the order checked --
+            the payload is not a NAPI bundle; **CBS carries no play-by-play**, tested by
+            shape before any id-map field, because "CBS does not cover this game" is true of
+            every FCS-hosted game whatever the row says; the id-map row states no ESPN team
+            ids; there is no season/week to look the game id up with; the week scoreboard
+            names no card for the matchup (the id is never synthesized); the NAPI fetch
+            fails or answers its own 404 envelope; the body carries no ``scoreboard`` block;
+            CBS served a **different** game id than the one asked for; or the drive chart it
+            did serve carries no plays yet.
     """
     from sportsdataverse.errors import NoDataError
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
