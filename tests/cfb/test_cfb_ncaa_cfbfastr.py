@@ -761,9 +761,6 @@ def test_quarter_marker_row_opens_the_period_it_names() -> None:
     assert back.height == 0, back.select("game_play_number", "period", "play_text").rows()
 
 
-
-
-
 # --- NC12-NC15: quarter markers, the score walk, OT flags, overturned calls -----------
 #
 # These run on the producer's own PARSED bundles (``mfb_parsed_<contest>.json.gz``,
@@ -874,3 +871,18 @@ def test_a_synthesized_overtime_interception_is_a_pass_play() -> None:
     # an overtime possession starts 1st & 10 at the 25, so the one-play drive has a down
     assert (ot["down"], ot["distance"]) == (1, 10)
     assert df.filter(pl.col("int") & ~pl.col("pass")).height == 0
+
+
+def test_an_overturned_touchdown_neither_scores_nor_keeps_its_yardage() -> None:
+    """NC15: 5361980 reprints the call the review took away.
+
+    "... rush middle for 1 yard gain to the EIU01 ... PLAY OVERTURNED. (Original Play:
+    ... for 2 yards gain to the EIU00 () TOUCHDOWN ...)" -- the mapper read the reprint,
+    so the row stayed a 2-yard touchdown ending on the goal line while its own yardage
+    said 1.
+    """
+    row = _parsed_frame("5361980").filter(pl.col("id_play") == 53619800109).row(0, named=True)
+    assert "PLAY OVERTURNED" in row["play_text"]
+    assert (row["play_type"], row["touchdown"], row["rush_td"]) == ("Rush", False, False)
+    assert (row["yards_to_goal"], row["yards_gained"], row["yards_to_goal_end"]) == (2, 1, 1)
+    assert row["score_pts"] == 0

@@ -36,6 +36,7 @@ from sportsdataverse.cfb.cfb_ncaa_pbp import (
     _RECOVERED_BY_RE,
     _REVIEW_RE,
     _YL_TOKEN,
+    _end_yard_line,
     _match_code,
     _norm_code,
     _own_side_codes,
@@ -791,6 +792,16 @@ def to_cfbfastr(
 
     for i, r in enumerate(all_rows):
         text = r["play_text"] or ""
+        # NC15: a replay review reprints the call it took away ("... PLAY OVERTURNED.
+        # (Original Play: ... TOUCHDOWN ...)") and a penalty can wipe a touchdown off the
+        # board ("TOUCHDOWN nullified by penalty"). The RULING -- the text before the
+        # review note, the NC5 cut this module already applies to penalty spots and
+        # fumble recoveries -- also governs whether the play scored and where it ended,
+        # so a frame parsed before that cut does not score, label or measure a play the
+        # review reversed.
+        ruled = _REVIEW_RE.split(text, 1)[0]
+        if r["is_touchdown"] and ("TOUCHDOWN" not in ruled or "TOUCHDOWN nullified" in ruled):
+            r = {**r, "is_touchdown": False, "end_yard_line": _end_yard_line(ruled)}
         qm = _QTR_MARKER_RE.search(text.lower())
         if qm:
             marker_period = int(qm.group(1))
