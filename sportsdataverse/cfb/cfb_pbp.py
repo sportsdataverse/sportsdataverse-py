@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from sportsdataverse._xgb import xgb_threads
+
 import copy
 import html
 import json
@@ -297,30 +299,30 @@ cp_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/cfb_cp_mod
 cp_air_yards_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/cfb_cp_model_air_yards.ubj")
 xpass_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/xpass_model.ubj")
 
-ep_model = Booster({"nthread": 4})  # init model
+ep_model = Booster({"nthread": xgb_threads()})  # init model
 ep_model.load_model(ep_model_file)
 
-wp_model = Booster({"nthread": 4})  # init model
+wp_model = Booster({"nthread": xgb_threads()})  # init model
 wp_model.load_model(wp_spread_file)
 
 # Spread-free win-probability booster (12-feat = wp_final_names minus spread_time).
-wp_naive_model = Booster({"nthread": 4})  # init model
+wp_naive_model = Booster({"nthread": xgb_threads()})  # init model
 wp_naive_model.load_model(wp_naive_file)
 
-qbr_model = Booster({"nthread": 4})  # init model
+qbr_model = Booster({"nthread": xgb_threads()})  # init model
 qbr_model.load_model(qbr_model_file)
 
 # Completion-probability booster (8-feat, binary:logistic) -> cp / cpoe.
-cp_model = Booster({"nthread": 4})  # init model
+cp_model = Booster({"nthread": xgb_threads()})  # init model
 cp_model.load_model(cp_model_file)
 
 # Completion-probability booster with throw depth (11-feat) -> cp / cpoe on the
 # plays that have air yards. See CP_AIR_YARDS_FEATURES and __process_cpoe.
-cp_air_yards_model = Booster({"nthread": 4})  # init model
+cp_air_yards_model = Booster({"nthread": xgb_threads()})  # init model
 cp_air_yards_model.load_model(cp_air_yards_model_file)
 
 # Expected-pass booster (7-feat, binary:logistic) -> xpass / pass_oe.
-xpass_model = Booster({"nthread": 4})  # init model
+xpass_model = Booster({"nthread": xgb_threads()})  # init model
 xpass_model.load_model(xpass_model_file)
 
 from sportsdataverse.cfb.model_cards import card_features as _card_features

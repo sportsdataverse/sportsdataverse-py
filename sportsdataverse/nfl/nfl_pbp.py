@@ -59,6 +59,7 @@ from sportsdataverse.football.box import build_defensive_players_box as _build_d
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
+from sportsdataverse._xgb import xgb_threads
 from sportsdataverse.football.espn_text import ABBREVIATED_NAME as _ABBREVIATED_NAME
 from sportsdataverse.football.espn_text import before_turnover as _before_turnover
 from sportsdataverse.football.espn_text import returned_for_touchdown as _returned_for_touchdown
@@ -452,7 +453,7 @@ def _nfl_timeout_side(text, home, away):
 # "opp_safety" : float(p[5]),
 # "no_score" : float(p[6])
 qbr_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/qbr_model.ubj")
-qbr_model = Booster({"nthread": 4})
+qbr_model = Booster({"nthread": xgb_threads()})
 qbr_model.load_model(qbr_model_file)
 # ep_model and wp_model are loaded lazily via _ep_wp_load_model() (lru_cache)
 # so that import succeeds even when .ubj files are absent.

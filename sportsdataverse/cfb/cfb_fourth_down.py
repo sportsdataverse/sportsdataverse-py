@@ -58,6 +58,8 @@ recommendation is taken over whichever options are available. Check
 
 from __future__ import annotations
 
+from sportsdataverse._xgb import xgb_threads
+
 import os
 from functools import lru_cache
 from pathlib import Path
@@ -144,7 +146,7 @@ def _cfb_model_cache_dir() -> Path:
 
 
 def _load_booster(path: Path | str) -> Booster:
-    b = Booster({"nthread": 4})
+    b = Booster({"nthread": xgb_threads()})
     b.load_model(str(path))
     return b
 
@@ -192,7 +194,7 @@ try:
     import os as _os
 
     if _os.path.exists(_fg_model_file):
-        fg_model = Booster({"nthread": 4})
+        fg_model = Booster({"nthread": xgb_threads()})
         fg_model.load_model(_fg_model_file)
     else:  # pragma: no cover - depends on bundling
         fg_model = None

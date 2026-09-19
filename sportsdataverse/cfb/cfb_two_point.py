@@ -41,6 +41,8 @@ state machinery in :mod:`sportsdataverse.cfb.cfb_fourth_down`
 
 from __future__ import annotations
 
+from sportsdataverse._xgb import xgb_threads
+
 import os
 from typing import Any
 
@@ -84,7 +86,7 @@ two_pt_model: Booster | None = None
 try:
     _two_pt_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/two_pt_model.ubj")
     if os.path.exists(_two_pt_model_file):
-        two_pt_model = Booster({"nthread": 4})
+        two_pt_model = Booster({"nthread": xgb_threads()})
         two_pt_model.load_model(_two_pt_model_file)
     else:  # pragma: no cover - depends on bundling
         two_pt_model = None
