@@ -309,7 +309,7 @@ cleaned = game.run_cleaning_pipeline()
 print(len(cleaned["plays"]))
 ```
 
-#### `CFBPlayProcess.run_processing_pipeline(fourth_down_probs: 'bool' = True, two_pt_probs: 'bool' = True)`
+#### `CFBPlayProcess.run_processing_pipeline(fourth_down_probs: 'bool' = True, two_pt_probs: 'bool' = True, validate: 'bool' = False)`
 
 Run the full play-by-play processing pipeline.
 
@@ -327,6 +327,7 @@ Idempotent -- subsequent calls return the cached `self.json`.
 |---|---|---|---|
 | `fourth_down_probs` | `bool` | `True` | when True (default), run the cfb4th decision surface (`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`) on the enriched frame and append the go/field-goal/punt WP columns plus the `fourth_down_recommendation` to 4th-down plays (null elsewhere). Pass False to skip it (e.g. to avoid loading the fourth-down model). |
 | `two_pt_probs` | `bool` | `True` | when True (default), run the cfb4th two-point decision surface (`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`) and append `two_pt_wp` / `xp_wp` / `prob_2pt` / `two_pt_recommendation` / `two_pt_wp_diff` to point-after / two-point rows (null elsewhere). |
+| `validate` | `bool` | `False` | when True, score the processed frame with the packaged per-game gate (`sportsdataverse.validation`) and attach its report dict under the `"validation"` key of the returned game (`{}` when the pipeline produced no plays). Off by default -- the gate costs a few milliseconds and most callers do not read it. |
 
 **Returns**
 

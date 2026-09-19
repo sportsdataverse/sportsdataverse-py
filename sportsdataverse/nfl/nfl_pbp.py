@@ -7152,8 +7152,8 @@ class NFLPlayProcess(object):
         followed by the advanced box score build.
 
         Args:
-            validate: when True, score the processed frame with
-                :func:`sportsdataverse.validation.validate_game` and attach the
+            validate: when True, score the processed frame with the packaged
+                per-game gate (:mod:`sportsdataverse.validation`) and attach its
                 report dict under the ``"validation"`` key of the returned game
                 (``{}`` when the pipeline produced no plays). Off by default --
                 the gate costs a few milliseconds and most callers do not read it.

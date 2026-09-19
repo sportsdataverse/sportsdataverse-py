@@ -132,6 +132,9 @@ from sportsdataverse.cache import (
     set_default_ttl,
 )
 from sportsdataverse.discover import function_count, list_functions
+# The per-game data-integrity gate (0.1.5+): one pure function every consumer --
+# a release build stage, the Data API, Game on Paper -- calls on a processed game.
+from sportsdataverse.validation import validate_game
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,
