@@ -300,6 +300,34 @@ def _run_processor(league: str, espn_id: int, adapted: AdaptedGame):
     return proc, game
 
 
+def _validation_report(league: str, source: str, proc: Any, game: dict) -> dict:
+    """Score the processed frame with the packaged per-game gate.
+
+    Always run (this is the one call GOP and the release stages share), and never
+    allowed to fail the request: a rule that raises on an unusual frame degrades to
+    ``{"error": ...}`` in the provenance rather than costing the caller its game.
+    """
+    from sportsdataverse.validation import validate_game
+
+    frame = getattr(proc, "plays_frame", None)
+    if not isinstance(frame, pl.DataFrame) or frame.height == 0:
+        return {}
+    try:
+        return validate_game(
+            frame,
+            league,
+            header=game.get("header"),
+            source=source,
+            summary=game,
+            box=game.get("advBoxScore"),
+        ).to_dict()
+    except Exception as exc:  # noqa: BLE001 -- observability must not break dispatch
+        warnings.warn(f"validate_game failed for {league} {game.get('gameId')}: {exc}", RuntimeWarning, stacklevel=2)
+        # ``ok`` is always present so a consumer's ``report.get("ok", True)`` cannot read
+        # a crashed gate as a pass
+        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+
+
 def _process_game(
     league: str,
     espn_id: int,
@@ -341,6 +369,7 @@ def _process_game(
         | native_ids | dict | the producing adapter's native ids |
         | idmap | dict | how the id-map row was obtained: ``caller`` / ``data_api`` / ``offline_parquet`` / ``unresolved`` |
         | contract | dict | ``ContractReport.summary()`` for the adapted summary |
+        | validation | dict | ``GameReport.to_dict()`` -- the per-game invariant gate on the processed frame |
         | odds | dict | ``{source, default, from_idmap}`` -- the processor's ``odds_source`` and whether the 2.5 / 55.5 default was used |
         | lossy_columns | list[str] | :data:`KNOWN_LOSSY` for ``(league, source)`` |
         | notes | list[str] | adapter notes |
@@ -411,6 +440,7 @@ def _process_game(
             "native_ids": adapted.native_ids,
             "idmap": {"source": idmap_source, "resolved": idmap_row is not None},
             "contract": report.summary(),
+            "validation": _validation_report(league, src, proc, game),
             "odds": {
                 # "injected" = stored closing line (or adapter odds); "default" = the 2.5 / 55.5 fallback
                 "source": odds_source,

@@ -235,7 +235,7 @@ include = ["sportsdataverse*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "wbb/data/*", "schemas/raw/*.yaml", "py.typed"]
+sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "wbb/data/*", "schemas/raw/*.yaml", "validation/*.yaml", "py.typed"]
 
 
 [tool.isort]
@@ -315,6 +315,9 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/validation/findings.py",
+    "sportsdataverse/validation/pbp_invariants.py",
+    "sportsdataverse/validation/report.py",
     "sportsdataverse/_rds.py",
     "sportsdataverse/release.py",
     "sportsdataverse/espn_snapshots.py",
@@ -597,7 +600,6 @@ files = [
     "sportsdataverse/wbb/wbb_ncaa_shots.py",
     "sportsdataverse/wbb/wbb_ncaa_stats_agg.py",
     "sportsdataverse/wbb/wbb_ncaa_team_ids.py",
-    "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",
     "tools/validation/cli.py",

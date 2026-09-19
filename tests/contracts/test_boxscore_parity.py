@@ -12,7 +12,7 @@ import polars as pl
 import pytest
 
 from tools.validation.checks import boxscore_parity
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 
 def _ctx(dataset="toy", **kw):

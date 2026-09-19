@@ -1,7 +1,7 @@
 import polars as pl
 
 from tools.validation.checks import definitional
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 
 def _ctx(dataset="cfb_model_pbp", domain="cfb", **kw):

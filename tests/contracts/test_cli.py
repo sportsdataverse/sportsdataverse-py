@@ -3,7 +3,7 @@ from __future__ import annotations
 import polars as pl
 
 from tools.validation import cli, registry
-from tools.validation.findings import CheckContext
+from sportsdataverse.validation.findings import CheckContext
 
 # `cli` imports `resolve` / `LINT_TARGETS` lazily, inside the functions that use
 # them, so that `compare` does not drag in pyyaml (a dev-only dependency -- see

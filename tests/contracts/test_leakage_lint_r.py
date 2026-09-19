@@ -4,7 +4,7 @@ import csv
 from pathlib import Path
 
 from tests.conftest import skip_if_no_rscript
-from tools.validation.findings import Severity
+from sportsdataverse.validation.findings import Severity
 from tools.validation.lint import leakage_r
 
 _FIXTURES = Path(__file__).parent / "fixtures" / "lint_r"

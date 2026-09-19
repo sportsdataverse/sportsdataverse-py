@@ -1,7 +1,7 @@
 import polars as pl
 
 from tools.validation.checks import numeric_parity
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 
 def test_prob_group_not_summing_to_one_is_error():

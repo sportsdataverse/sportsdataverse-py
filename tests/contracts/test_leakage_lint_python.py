@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from tools.validation.findings import Severity
+from sportsdataverse.validation.findings import Severity
 from tools.validation.lint import leakage_python
 
 _FIXTURES = Path(__file__).parent / "fixtures" / "lint_python"

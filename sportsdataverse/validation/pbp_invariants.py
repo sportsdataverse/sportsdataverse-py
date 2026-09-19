@@ -18,13 +18,14 @@ failed.
 :func:`evaluate` returns one :class:`RuleResult` per applicable rule, carrying
 its denominator (``n_checked``) as well as its violation count, so a sweep can
 report *rates* by league and era. :func:`run` is the harness-shaped wrapper
-that turns fired rules into :class:`~tools.validation.findings.Finding` records.
+that turns fired rules into :class:`~sportsdataverse.validation.findings.Finding` records.
 
 The invariants are grouped by number (``invariant`` on each result):
 
 1. timeouts  2. field position  3. score  4. possession  5. down/distance
 6. EP/WP     7. play-type flags 8. dropped/duplicated plays  9. box score
-10. player attribution coverage
+10. player attribution coverage  11. play order / type identity
+12. game-level aggregations
 """
 
 from __future__ import annotations
@@ -34,7 +35,7 @@ from typing import Any
 
 import polars as pl
 
-from tools.validation.findings import CheckContext, Finding, Severity
+from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 _SAMPLE_N = 5
 _TEXT_CHARS = 140
@@ -46,6 +47,9 @@ c = pl.col
 
 #: Raw ESPN rows the processors drop on purpose (``__add_downs_data``).
 DOCUMENTED_DROP_RE = r"(?i)end of|coin toss|end period|wins toss"
+
+#: ESPN play types that are a try (PAT / two-point / defensive conversion), not a scrimmage down.
+TRY_RE = r"(?i)two.?point|extra point|conversion|\bPAT\b"
 
 #: ESPN play types that ARE a pass / a rush by definition.
 PASS_TYPES = (
@@ -70,7 +74,7 @@ class RuleResult:
 
     Attributes:
         rule: Stable ``<group>.<name>`` identifier.
-        invariant: Invariant group number (1-10, see module docstring).
+        invariant: Invariant group number (1-12, see module docstring).
         description: The definition a violating row breaks.
         n_checked: Rows (or teams / games) the rule applied to.
         n_violations: How many of those broke it.
@@ -160,11 +164,14 @@ def _row_rule(
     )
 
 
+def _is_try() -> pl.Expr:
+    """A point-after / two-point try (including a defensive conversion return)."""
+    return c("type.text").str.contains(TRY_RE).fill_null(False)
+
+
 def _scrimmage() -> pl.Expr:
     """A rush/pass play that is not a try (PAT / two-point attempt)."""
-    return (_t("rush") | _t("pass")) & ~c("type.text").str.contains(
-        r"(?i)two.?point|extra point|conversion|\bPAT\b"
-    ).fill_null(False)
+    return (_t("rush") | _t("pass")) & ~_is_try()
 
 
 # ---------------------------------------------------------------------------
@@ -1094,7 +1101,7 @@ def _plays(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
     seen_text: dict[str, int] = {}
     for p in raw:
         try:
-            pid = int(p.get("id"))
+            pid = int(p.get("id"))  # type: ignore[arg-type]
         except (TypeError, ValueError):
             continue
         raw_ids.append(pid)
@@ -1150,7 +1157,7 @@ def espn_team_stats(summary: dict[str, Any] | None) -> dict[int, dict[str, int |
     out: dict[int, dict[str, int | None]] = {}
     for team in ((summary or {}).get("boxscore") or {}).get("teams") or []:
         try:
-            tid = int((team.get("team") or {}).get("id"))
+            tid = int((team.get("team") or {}).get("id"))  # type: ignore[arg-type]
         except (TypeError, ValueError):
             continue
         stats = {s.get("name"): s.get("displayValue") for s in team.get("statistics") or []}
@@ -1258,6 +1265,214 @@ def _box(
 
 
 # ---------------------------------------------------------------------------
+# 11. play order: period / clock / type identity
+# ---------------------------------------------------------------------------
+
+
+def _order(df: pl.DataFrame) -> list[RuleResult | None]:
+    """Period and clock move forward, and every live row carries ESPN's play type."""
+    out: list[RuleResult | None] = []
+    if _has(df, "period.number"):
+        f = df.with_columns(__prev_period=c("period.number").shift(1))
+        out.append(
+            _row_rule(
+                f,
+                "period.monotone",
+                11,
+                "the period never decreases in processor row order",
+                c("__prev_period").is_not_null(),
+                c("period.number") < c("__prev_period"),
+                ("period.number", "__prev_period"),
+            )
+        )
+    if _has(df, "period.number", "clock.displayValue"):
+        # "12:34" -> seconds; a malformed clock leaves the row undecidable, not failing
+        secs = c("clock.displayValue").str.extract_groups(r"^(\d+):(\d{2})$").struct.rename_fields(["m", "s"])
+        f = df.with_columns(
+            __secs=secs.struct.field("m").cast(pl.Int32, strict=False) * 60
+            + secs.struct.field("s").cast(pl.Int32, strict=False)
+        ).with_columns(__prev_secs=c("__secs").shift(1), __prev_period=c("period.number").shift(1))
+        out.append(
+            _row_rule(
+                f,
+                "clock.monotone_within_period",
+                11,
+                "the game clock never runs backwards within a period",
+                (c("period.number") == c("__prev_period")) & c("__secs").is_not_null() & c("__prev_secs").is_not_null(),
+                c("__secs") > c("__prev_secs"),
+                ("period.number", "clock.displayValue", "__prev_secs", "__secs"),
+                severity=Severity.WARN,
+            )
+        )
+    live = ~_t("penalty_no_play") if "penalty_no_play" in df.columns else pl.lit(True)
+    for rule, col, sev in (
+        ("type.null_id", "type.id", Severity.ERROR),
+        # ESPN itself emits a null abbreviation on Sack / Pass Incompletion (sources/contract.py)
+        ("type.null_abbreviation", "type.abbreviation", Severity.WARN),
+    ):
+        if col in df.columns:
+            out.append(
+                _row_rule(
+                    df,
+                    rule,
+                    11,
+                    f"every live play carries ESPN's {col}",
+                    live,
+                    _blank(col),
+                    (col,),
+                    severity=sev,
+                )
+            )
+    return out
+
+
+def _next_snap_continuity(df: pl.DataFrame) -> list[RuleResult | None]:
+    """The end state of a snap is where the next snap starts -- across a drive boundary too.
+
+    :func:`_field_position`'s ``ytg.continuity`` only looks within one drive, so a
+    turnover on downs, an interception or a fumble that hands the ball over between two
+    consecutive scrimmage rows is never checked. Yards-to-goal is measured from the
+    offense, so the expected next start is ``100 - end`` when possession flips.
+    """
+    need = ("start.yardsToEndzone", "end.yardsToEndzone", "start.pos_team.id", "period.number")
+    if not _has(df, *need) or not _has(df, "rush", "pass", "type.text"):
+        return []
+    f = (
+        df.with_columns(__scrim=_scrimmage())
+        .with_columns(
+            __prev_scrim=c("__scrim").shift(1),
+            __prev_end_ytg=c("end.yardsToEndzone").shift(1),
+            __prev_pos=c("start.pos_team.id").shift(1),
+            __prev_period=c("period.number").shift(1),
+            __prev_score=(_t("scoringPlay") | _t("td_play")).shift(1)
+            if _has(df, "scoringPlay", "td_play")
+            else pl.lit(False),
+        )
+        .with_columns(
+            __want=pl.when(c("__prev_pos") == c("start.pos_team.id"))
+            .then(c("__prev_end_ytg"))
+            .otherwise(100 - c("__prev_end_ytg"))
+        )
+    )
+    return [
+        _row_rule(
+            f,
+            "ytg.continuity_next_snap",
+            2,
+            "a scrimmage play starts where the previous scrimmage play ended (100 - end when possession flips)",
+            c("__scrim")
+            & c("__prev_scrim").fill_null(False)
+            & (c("period.number") == c("__prev_period"))
+            & ~c("__prev_score").fill_null(False),
+            c("__want") != c("start.yardsToEndzone"),
+            ("__prev_end_ytg", "__want", "start.yardsToEndzone", "start.pos_team.id"),
+            severity=Severity.WARN,
+        )
+    ]
+
+
+# ---------------------------------------------------------------------------
+# 12. game-level aggregations
+# ---------------------------------------------------------------------------
+
+
+def _aggregations(
+    df: pl.DataFrame, summary: dict[str, Any] | None, box: dict[str, Any] | None
+) -> list[RuleResult | None]:
+    """Per-game totals: team EPA vs the box, kickoffs vs scores, drives vs the feed."""
+    out: list[RuleResult | None] = []
+    team_box = (box or {}).get("team") or []
+    if team_box and _has(df, "pos_team", "EPA", "scrimmage_play"):
+        rows = {}
+        for r in team_box:
+            try:
+                rows[int(r["pos_team"])] = r
+            except (KeyError, TypeError, ValueError):
+                continue
+        live = (
+            df.filter(_t("scrimmage_play"))
+            .group_by("pos_team")
+            .agg(pl.col("EPA").cast(pl.Float64).sum().alias("__epa"))
+        )
+        bad = []
+        matched = 0
+        for row in live.iter_rows(named=True):
+            try:
+                tid = int(row["pos_team"])
+            except (TypeError, ValueError):
+                tid = None
+            want = rows.get(tid, {}).get("EPA_overall_off") if tid is not None else None
+            if want is None:
+                # a renamed box key or a float-origin id ("194.0") used to read as a clean
+                # pass; an unreconciled team is the failure this rule exists to catch
+                bad.append({"pos_team": row["pos_team"], "plays_EPA": round(float(row["__epa"]), 3), "box_EPA": None})
+                continue
+            matched += 1
+            # the box rounds each team total to 2 dp (Float32 before that)
+            if abs(float(row["__epa"]) - float(want)) > 0.05:
+                bad.append({"pos_team": tid, "plays_EPA": round(float(row["__epa"]), 3), "box_EPA": float(want)})
+        out.append(
+            RuleResult(
+                "epa.team_sum_matches_box",
+                12,
+                "the sum of row EPA over a team's scrimmage plays equals its advBoxScore EPA_overall_off",
+                matched,
+                len(bad),
+                bad[:_SAMPLE_N],
+            )
+        )
+    kickoffs = (
+        int(df.filter(_t("kickoff_play")).height)
+        if _has(df, "kickoff_play", "period.number", "scoring_play", "type.text")
+        else 0
+    )
+    # a feed that emits no kickoff rows at all (ESPN's pre-2010 CFB drives) says nothing
+    # about whether the kickoffs it does emit are complete
+    if kickoffs:
+        # One kickoff opens each half, plus one after every score that restarts play.
+        # An overtime score restarts from the 25 and a try (PAT / two-point / defensive
+        # conversion) rides the touchdown's kickoff, so neither adds one -- counting them
+        # made every overtime game a false positive (cfb 401628439: 11 kickoffs vs 19
+        # "expected"; 401858224: 11 vs 16 -- the only two firings on the 105-game sweep).
+        halves = 2
+        scores = int(
+            df.filter(_t("scoring_play") & ~_t("kickoff_play") & (c("period.number") <= 4) & ~_is_try()).height
+        )
+        expected = scores + halves
+        out.append(
+            RuleResult(
+                "plays.kickoff_count_matches_scores",
+                12,
+                "kickoffs equal the scores that restart play plus one per half (onside recoveries and "
+                "score-ending halves make this approximate)",
+                kickoffs,
+                int(abs(kickoffs - expected) > max(2, expected // 5)),
+                [{"kickoffs": kickoffs, "expected": expected, "scoring_plays": scores}]
+                if abs(kickoffs - expected) > max(2, expected // 5)
+                else [],
+                Severity.WARN,
+            )
+        )
+    feed_drives = [d for d in ((summary or {}).get("drives") or {}).get("previous") or [] if isinstance(d, dict)]
+    if feed_drives and "drive.id" in df.columns:
+        processed = df.get_column("drive.id").drop_nulls().n_unique()
+        out.append(
+            RuleResult(
+                "drive.count_matches_feed",
+                12,
+                "the processed frame keeps one drive per drive in the feed",
+                len(feed_drives),
+                int(processed != len(feed_drives)),
+                [{"processed_drives": processed, "feed_drives": len(feed_drives)}]
+                if processed != len(feed_drives)
+                else [],
+                Severity.WARN,
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
 # 10. attribution coverage
 # ---------------------------------------------------------------------------
 
@@ -1357,6 +1572,9 @@ def evaluate(
     groups += _plays(plays, summary)
     groups += _box(plays, summary, box, league)
     groups += _attribution(plays)
+    groups += _order(plays)
+    groups += _next_snap_continuity(plays)
+    groups += _aggregations(plays, summary, box)
     return [r for r in groups if r is not None]
 
 

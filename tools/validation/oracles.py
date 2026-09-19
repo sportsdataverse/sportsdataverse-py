@@ -5,7 +5,7 @@ import os
 
 import polars as pl
 
-from tools.validation.findings import OracleLike
+from sportsdataverse.validation.findings import OracleLike
 
 
 class CfbSelfOracle:

@@ -1,4 +1,4 @@
-from tools.validation.findings import Finding, Severity
+from sportsdataverse.validation.findings import Finding, Severity
 
 
 def test_to_dict_serializes_severity_as_plain_string():
