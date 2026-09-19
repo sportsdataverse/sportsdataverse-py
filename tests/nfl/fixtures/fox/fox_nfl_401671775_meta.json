@@ -1,0 +1,14 @@
+{
+ "away_espn_team_id": "22",
+ "espn_event_id": "401671775",
+ "fox_event_id": "10625",
+ "home_espn_team_id": "26",
+ "kickoff_utc": "2024-11-24T21:25Z",
+ "league": "nfl",
+ "n_plays": 163,
+ "neutral_site": false,
+ "resolved_by": "scores_segment:2024-12-1",
+ "season": 2024,
+ "season_type": 2,
+ "week": 12
+}

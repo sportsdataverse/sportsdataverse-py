@@ -5,8 +5,9 @@ of the ``(ProcessorClass, "espn_<league>_pbp")`` pair in its ``_PROCESSORS`` reg
 resolves a source adapter, validates the adapted summary against the contract, runs the
 unmodified processor on it, and returns the processed dict with provenance stamped in.
 
-ESPN, NFL Shield, NFL CBS, NFL Yahoo, CFB Yahoo, CFB CBS and CFB NCAA are registered today. Every other source in
-:data:`SOURCE_ORDER` is a named slot that is skipped with ``"not implemented"`` in ``provenance["attempts"]`` until
+ESPN, NFL Shield, NFL CBS, NFL Yahoo, NFL Fox, CFB Yahoo, CFB CBS, CFB NCAA and CFB Fox are registered today.
+Every other source in :data:`SOURCE_ORDER` is a named slot that is skipped with
+``"not implemented"`` in ``provenance["attempts"]`` until
 its adapter lands (Stage 2 items 2+), so the fall-through path is exercised now and the
 adapters plug in later without touching this module or GOP. A registered adapter hands over
 to the next source by raising anything (:class:`SourceUnavailable` is the conventional
@@ -140,6 +141,8 @@ _ADAPTER_MODULES: dict[tuple[str, str], str] = {
     ("cfb", "yahoo"): "sportsdataverse.cfb.yahoo_pbp.to_espn_summary",
     ("nfl", "yahoo"): "sportsdataverse.nfl.yahoo_pbp.to_espn_summary",
     ("cfb", "ncaa"): "sportsdataverse.cfb.ncaa_pbp.to_espn_summary",
+    ("nfl", "fox"): "sportsdataverse.nfl.fox_pbp.to_espn_summary",
+    ("cfb", "fox"): "sportsdataverse.cfb.fox_pbp.to_espn_summary",
 }
 
 

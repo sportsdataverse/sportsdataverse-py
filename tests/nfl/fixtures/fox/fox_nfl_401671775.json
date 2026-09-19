@@ -1,0 +1,3470 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 170, 0, 49",
+  "alternateRightColor": "1, 0, 87, 244",
+  "eventStatus": 3,
+  "eventTime": "2024-11-24T21:25:00Z",
+  "id": "10625",
+  "leftColor": "1, 170, 0, 49",
+  "leftTeam": {
+   "imageAltText": "Arizona Cardinals",
+   "isLoser": true,
+   "longName": "Cardinals",
+   "name": "ARI",
+   "score": 6,
+   "stackedNameBottom": "Cardinals",
+   "stackedNameTop": "Arizona",
+   "uri": "football/nfl/teams/18"
+  },
+  "rightColor": "1, 0, 87, 244",
+  "rightTeam": {
+   "imageAltText": "Seattle Seahawks",
+   "isLoser": false,
+   "longName": "Seahawks",
+   "name": "SEA",
+   "score": 16,
+   "stackedNameBottom": "Seahawks",
+   "stackedNameTop": "Seattle",
+   "uri": "football/nfl/teams/14"
+  },
+  "statusLine": "FINAL"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6213",
+      "plays": [
+       {
+        "id": "1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 8,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 33,
+            "yardStart": 8
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Myers kicks 57 yards from SEA 35 to the ARI 8. D.Dallas returns the kickoff. Tackled by D.Thomas at ARI 33.",
+        "timeOfPlay": "15:00",
+        "title": "SEA 35"
+       },
+       {
+        "id": "2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 33
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass short right complete. Catch made by T.McBride for 11 yards. Pushed out of bounds by T.Knight at ARI 44.",
+        "timeOfPlay": "14:55",
+        "title": "1st & 10 \u00b7 ARI 33"
+       },
+       {
+        "id": "3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 44
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Conner rushed left guard for 4 yards. Tackled by L.Williams; T.Knight at ARI 48.",
+        "timeOfPlay": "14:19",
+        "title": "1st & 10 \u00b7 ARI 44"
+       },
+       {
+        "id": "4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 40,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray steps back to pass. Sacked at ARI 40 for -8 yards (B.Mafe).",
+        "timeOfPlay": "13:31",
+        "title": "2nd & 6 \u00b7 ARI 48"
+       },
+       {
+        "id": "5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 34,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray steps back to pass. Sacked at ARI 34 for -6 yards (T.Knight).",
+        "timeOfPlay": "12:57",
+        "title": "3rd & 14 \u00b7 ARI 40"
+       },
+       {
+        "id": "6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 85,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Gillikin punts 51 yards to SEA 15, Center-A.Brewer. Fair catch by D.Williams.",
+        "timeOfPlay": "12:19",
+        "title": "4th & 20 \u00b7 ARI 34"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 1 yard \u00b7 2:51",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6214",
+      "plays": [
+       {
+        "id": "7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Walker rushed left tackle for -5 yards. Tackled by K.White at SEA 10.",
+        "timeOfPlay": "12:09",
+        "title": "1st & 10 \u00b7 SEA 15"
+       },
+       {
+        "id": "8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 82,
+            "yardStart": 90
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Bobo for 8 yards. Tackled by B.Baker; K.White at SEA 18.",
+        "timeOfPlay": "11:31",
+        "title": "2nd & 15 \u00b7 SEA 10"
+       },
+       {
+        "id": "9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 53,
+            "yardStart": 82
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass deep middle complete. Catch made by D.Metcalf for 29 yards. Tackled by G.Williams at SEA 47.",
+        "timeOfPlay": "10:48",
+        "title": "3rd & 7 \u00b7 SEA 18"
+       },
+       {
+        "id": "10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 53
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Walker rushed left tackle for 6 yards. Tackled by D.Stills, S.Murphy-Bunting at ARI 47.",
+        "timeOfPlay": "10:13",
+        "title": "1st & 10 \u00b7 SEA 47"
+       },
+       {
+        "id": "11",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "9:54",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Charbonnet rushed left guard for 0 yards. Tackled by R.Lopez at ARI 47.",
+        "timeOfPlay": "9:54",
+        "title": "2nd & 4 \u00b7 ARI 47"
+       },
+       {
+        "id": "13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 60,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith steps back to pass. Sacked at SEA 40 for -13 yards (D.Stills). PENALTY on SEA-A.Lucas, Illegal Formation, 5 yards, declined.",
+        "timeOfPlay": "9:06",
+        "title": "3rd & 4 \u00b7 ARI 47"
+       },
+       {
+        "id": "14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 9,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Dickson punts 51 yards to ARI 9, Center-C.Stoll. Out of bounds.",
+        "timeOfPlay": "8:51",
+        "title": "4th & 17 \u00b7 SEA 40"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 25 yards \u00b7 3:37",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6215",
+      "plays": [
+       {
+        "id": "16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 9,
+            "yardStart": 9
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Conner rushed right tackle for 0 yards. Tackled by D.Witherspoon, B.Mafe at ARI 9. PENALTY on ARI-M.Wilson, Offensive Holding, 10 yards, declined.",
+        "timeOfPlay": "8:32",
+        "title": "1st & 10 \u00b7 ARI 9"
+       },
+       {
+        "id": "17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 15,
+            "yardStart": 9
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass short right complete. Catch made by T.McBride for 6 yards. Tackled by J.Love at ARI 15.",
+        "timeOfPlay": "8:22",
+        "title": "2nd & 10 \u00b7 ARI 9"
+       },
+       {
+        "id": "18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass short left complete. Catch made by M.Harrison for 11 yards. Tackled by D.Witherspoon at ARI 26.",
+        "timeOfPlay": "7:43",
+        "title": "3rd & 4 \u00b7 ARI 15"
+       },
+       {
+        "id": "19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 28,
+            "yardStart": 26
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Benson rushed left guard for 2 yards. Tackled by J.Hankins; L.Williams at ARI 28.",
+        "timeOfPlay": "7:02",
+        "title": "1st & 10 \u00b7 ARI 26"
+       },
+       {
+        "id": "20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short middle intended for E.Higgins (J.Love).",
+        "timeOfPlay": "6:10",
+        "title": "2nd & 8 \u00b7 ARI 28"
+       },
+       {
+        "id": "21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 28
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass short middle complete. Catch made by T.McBride for 7 yards. Tackled by C.Bryant at ARI 35.",
+        "timeOfPlay": "6:07",
+        "title": "3rd & 8 \u00b7 ARI 28"
+       },
+       {
+        "id": "22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 93,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 84,
+            "yardStart": 93
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Gillikin punts 58 yards to SEA 7, Center-A.Brewer. D.Williams returned punt from the SEA 7. Tackled by E.Higgins at SEA 16.",
+        "timeOfPlay": "5:23",
+        "title": "4th & 1 \u00b7 ARI 35"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 26 yards \u00b7 3:23",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6216",
+      "plays": [
+       {
+        "id": "24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 84
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short left complete. Catch made by K.Walker for 19 yards. Pushed out of bounds by Z.Collins at SEA 35.",
+        "timeOfPlay": "5:09",
+        "title": "1st & 10 \u00b7 SEA 16"
+       },
+       {
+        "id": "25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Walker rushed left guard for -2 yards. Tackled by D.Taylor-Demerson at SEA 33.",
+        "timeOfPlay": "4:21",
+        "title": "1st & 10 \u00b7 SEA 35"
+       },
+       {
+        "id": "26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 67
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 8 yards. Tackled by S.Murphy-Bunting at SEA 41.",
+        "timeOfPlay": "3:38",
+        "title": "2nd & 12 \u00b7 SEA 33"
+       },
+       {
+        "id": "27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 64,
+            "yardStart": 59
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on SEA-J.Smith-Njigba, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:11",
+        "title": "3rd & 4 \u00b7 SEA 41"
+       },
+       {
+        "id": "28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 72,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith steps back to pass. Sacked at SEA 28 for -8 yards (L.Collier).",
+        "timeOfPlay": "2:51",
+        "title": "3rd & 9 \u00b7 SEA 36"
+       },
+       {
+        "id": "29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 20,
+            "yardStart": 72
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 20,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Dickson punts 52 yards to ARI 20, Center-C.Stoll. G.Dortch returned punt from the ARI 20. G.Dortch ran out of bounds.",
+        "timeOfPlay": "2:14",
+        "title": "4th & 17 \u00b7 SEA 28"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 12 yards \u00b7 3:03",
+      "title": "PUNT"
+     }
+    ],
+    "title": "1ST QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6217",
+      "plays": [
+       {
+        "id": "31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Conner rushed left guard for 4 yards. Tackled by R.Robertson-Harris; E.Jones at ARI 24.",
+        "timeOfPlay": "2:06",
+        "title": "1st & 10 \u00b7 ARI 20"
+       },
+       {
+        "id": "32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": 25,
+            "yardStart": 24
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray steps back to pass. Sacked at ARI 15 for yards (L.Williams). K.Murray FUMBLES, forced by L.Williams. Fumble RECOVERED by SEA-T.Knight at ARI 33. TOUCHDOWN. The Replay Official reviewed the fumble and the play was overturned. K.Murray steps back to pass. Pass incomplete short right intended for M.Harrison (L.Williams) [L.Williams].",
+        "timeOfPlay": "1:33",
+        "title": "2nd & 6 \u00b7 ARI 24"
+       },
+       {
+        "id": "33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 24
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass deep left complete. Catch made by M.Harrison for 22 yards. Pushed out of bounds by D.Witherspoon at ARI 46.",
+        "timeOfPlay": "1:29",
+        "title": "3rd & 6 \u00b7 ARI 24"
+       },
+       {
+        "id": "34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 36,
+            "yardStart": 46
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Conner rushed right tackle for yards. Tackled by E.Jones; T.Knight at ARI 48. PENALTY on ARI-T.Colon, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "0:56",
+        "title": "1st & 10 \u00b7 ARI 46"
+       },
+       {
+        "id": "35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 38,
+            "yardStart": 36
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Murray pass short left complete. Catch made by J.Conner for 2 yards. Tackled by E.Jones; T.Knight at ARI 38.",
+        "timeOfPlay": "0:28",
+        "title": "1st & 20 \u00b7 ARI 36"
+       },
+       {
+        "id": "36",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray pass short left complete. Catch made by E.Higgins for 5 yards. Pushed out of bounds by C.Bryant at ARI 43.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 18 \u00b7 ARI 38"
+       },
+       {
+        "id": "38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete deep right intended for G.Dortch (J.Love).",
+        "timeOfPlay": "14:23",
+        "title": "3rd & 13 \u00b7 ARI 43"
+       },
+       {
+        "id": "39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 87,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Gillikin punts 44 yards to SEA 13, Center-A.Brewer. Fair catch by D.Williams.",
+        "timeOfPlay": "14:12",
+        "title": "4th & 13 \u00b7 ARI 43"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 23 yards \u00b7 3:01",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6218",
+      "plays": [
+       {
+        "id": "41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 93,
+            "yardStart": 87
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Smith-Njigba for yards. Tackled by M.Melton at SEA 27. PENALTY on SEA-P.Brown, Offensive Holding, 6 yards, accepted. No Play.",
+        "timeOfPlay": "14:05",
+        "title": "1st & 10 \u00b7 SEA 13"
+       },
+       {
+        "id": "42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 91,
+            "yardStart": 93
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 2 yards. Tackled by B.Browning at SEA 9.",
+        "timeOfPlay": "13:39",
+        "title": "1st & 16 \u00b7 SEA 7"
+       },
+       {
+        "id": "43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for [M.Wilson].",
+        "timeOfPlay": "13:01",
+        "title": "2nd & 14 \u00b7 SEA 9"
+       },
+       {
+        "id": "44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep right intended for D.Metcalf (D.Taylor-Demerson). PENALTY on SEA-A.Lucas, Illegal Formation, 5 yards, declined.",
+        "timeOfPlay": "12:54",
+        "title": "3rd & 14 \u00b7 SEA 9"
+       },
+       {
+        "id": "45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 50,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Dickson punts 41 yards to SEA 50, Center-C.Stoll. Downed by T.Knight.",
+        "timeOfPlay": "12:48",
+        "title": "4th & 14 \u00b7 SEA 9"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 -4 yards \u00b7 1:27",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6219",
+      "plays": [
+       {
+        "id": "47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray pass short middle complete. Catch made by T.McBride for 15 yards. Tackled by D.Witherspoon at SEA 35.",
+        "timeOfPlay": "12:38",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 85,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray pass deep left complete. Catch made by T.McBride for 20 yards. Pushed out of bounds by R.Woolen at SEA 15.",
+        "timeOfPlay": "12:08",
+        "title": "1st & 10 \u00b7 SEA 35"
+       },
+       {
+        "id": "49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 88,
+            "yardStart": 85
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray rushed right end for 3 yards. Tackled by C.Bryant at SEA 12.",
+        "timeOfPlay": "11:30",
+        "title": "1st & 10 \u00b7 SEA 15"
+       },
+       {
+        "id": "50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 93,
+            "yardStart": 88
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray pass short middle complete. Catch made by G.Dortch for 5 yards. Tackled by T.Knight at SEA 7.",
+        "timeOfPlay": "10:48",
+        "title": "2nd & 7 \u00b7 SEA 12"
+       },
+       {
+        "id": "51",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 83,
+            "yardStart": 93
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray pass short right complete. Catch made by M.Wilson for yards. TOUCHDOWN. PENALTY on ARI-P.Johnson, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "9:57",
+        "title": "3rd & 2 \u00b7 SEA 7"
+       },
+       {
+        "id": "52",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 83
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete deep left intended for M.Harrison (J.Jobe). Arizona challenged the pass completion and the play was upheld. Timeout #1 by ARI.",
+        "timeOfPlay": "9:51",
+        "title": "3rd & 12 \u00b7 SEA 17"
+       },
+       {
+        "id": "53",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 83
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Ryland 35 yard field goal attempt is good, Center-A.Brewer, Holder-B.Gillikin.",
+        "timeOfPlay": "9:47",
+        "title": "4th & 12 \u00b7 SEA 17"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "6 plays \u00b7 33 yards \u00b7 2:55",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6220",
+      "plays": [
+       {
+        "id": "55",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Ryland kicks 65 yards from ARI 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "9:43",
+        "title": "ARI 35"
+       },
+       {
+        "id": "56",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Walker rushed right end for 5 yards. Tackled by D.Taylor-Demerson; M.Wilson at SEA 35.",
+        "timeOfPlay": "9:43",
+        "title": "1st & 10 \u00b7 SEA 30"
+       },
+       {
+        "id": "57",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 65
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Walker rushed right guard for 14 yards. Tackled by D.Taylor-Demerson at SEA 49.",
+        "timeOfPlay": "9:05",
+        "title": "2nd & 5 \u00b7 SEA 35"
+       },
+       {
+        "id": "58",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Walker rushed right end for 0 yards. Pushed out of bounds by Z.Collins at SEA 49.",
+        "timeOfPlay": "8:25",
+        "title": "1st & 10 \u00b7 SEA 49"
+       },
+       {
+        "id": "59",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 11 yards. Tackled by K.White at ARI 40.",
+        "timeOfPlay": "7:54",
+        "title": "2nd & 10 \u00b7 SEA 49"
+       },
+       {
+        "id": "60",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Walker rushed right guard for 2 yards. Tackled by K.White; S.Thomas at ARI 38.",
+        "timeOfPlay": "7:24",
+        "title": "1st & 10 \u00b7 ARI 40"
+       },
+       {
+        "id": "61",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep right intended for.",
+        "timeOfPlay": "6:45",
+        "title": "2nd & 8 \u00b7 ARI 38"
+       },
+       {
+        "id": "62",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 42,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Sacked at ARI 42 for -4 yards (B.Baker).",
+        "timeOfPlay": "6:32",
+        "title": "3rd & 8 \u00b7 ARI 38"
+       },
+       {
+        "id": "63",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 6,
+            "yardStart": 42
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Dickson punts 36 yards to ARI 6, Center-C.Stoll. Downed by J.Reed.",
+        "timeOfPlay": "5:52",
+        "title": "4th & 12 \u00b7 ARI 42"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "7 plays \u00b7 28 yards \u00b7 4:01",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6221",
+      "plays": [
+       {
+        "id": "65",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short right intended for T.McBride.",
+        "timeOfPlay": "5:42",
+        "title": "1st & 10 \u00b7 ARI 6"
+       },
+       {
+        "id": "66",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 7,
+            "yardStart": 6
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Conner rushed right guard for 1 yards. Tackled by J.Reed at ARI 7.",
+        "timeOfPlay": "5:39",
+        "title": "2nd & 10 \u00b7 ARI 6"
+       },
+       {
+        "id": "67",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 7
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete deep right intended for M.Harrison (R.Woolen).",
+        "timeOfPlay": "4:57",
+        "title": "3rd & 9 \u00b7 ARI 7"
+       },
+       {
+        "id": "68",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 61,
+            "yardStart": 7
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Gillikin punts 54 yards to SEA 39, Center-A.Brewer. Fair catch by D.Williams.",
+        "timeOfPlay": "4:46",
+        "title": "4th & 9 \u00b7 ARI 7"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 1 yard \u00b7 1:03",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6222",
+      "plays": [
+       {
+        "id": "70",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 61,
+            "yardStart": 61
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Walker rushed right guard for 0 yards. Tackled by K.White at SEA 39.",
+        "timeOfPlay": "4:39",
+        "title": "1st & 10 \u00b7 SEA 39"
+       },
+       {
+        "id": "71",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 61
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short left complete. Catch made by A.Barner for 11 yards. Tackled by M.Melton at SEA 50.",
+        "timeOfPlay": "4:04",
+        "title": "2nd & 10 \u00b7 SEA 39"
+       },
+       {
+        "id": "72",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 50,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Sacked at SEA 50 for 0 yards (J.Luketa).",
+        "timeOfPlay": "3:17",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "73",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 4,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Smith-Njigba for 46 yards. Tackled by G.Williams at ARI 4.",
+        "timeOfPlay": "2:34",
+        "title": "2nd & 10 \u00b7  50"
+       },
+       {
+        "id": "74",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "75",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 4
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed left guard for 3 yards. Tackled by B.Baker, D.Taylor-Demerson at ARI 1.",
+        "timeOfPlay": "2:00",
+        "title": "1st & 4 \u00b7 ARI 4"
+       },
+       {
+        "id": "76",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 3,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed left guard for -2 yards. Tackled by K.Barnes; B.Baker at ARI 3.",
+        "timeOfPlay": "1:28",
+        "title": "2nd & 1 \u00b7 ARI 1"
+       },
+       {
+        "id": "77",
+        "playDescription": "Timeout #2 by ARI.",
+        "timeOfPlay": "1:17",
+        "title": "Timeout"
+       },
+       {
+        "id": "78",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 3
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 3 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:17",
+        "title": "3rd & 3 \u00b7 ARI 3"
+       },
+       {
+        "id": "79",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Myers extra point is good.",
+        "timeOfPlay": "1:14",
+        "title": "ARI 15"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "7 plays \u00b7 61 yards \u00b7 3:25",
+      "title": "TOUCHDOWN"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6223",
+      "plays": [
+       {
+        "id": "81",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 1,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 20,
+            "yardStart": 1
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Myers kicks 64 yards from SEA 35 to the ARI 1. G.Dortch returns the kickoff. Tackled by J.Bobo; C.White at ARI 20.",
+        "timeOfPlay": "1:14",
+        "title": "SEA 35"
+       },
+       {
+        "id": "82",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 12,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Sacked at ARI 12 for -8 yards (L.Williams; J.Reed).",
+        "timeOfPlay": "1:07",
+        "title": "1st & 10 \u00b7 ARI 20"
+       },
+       {
+        "id": "83",
+        "playDescription": "Timeout #1 by SEA.",
+        "timeOfPlay": "1:00",
+        "title": "Timeout"
+       },
+       {
+        "id": "84",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 12
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "1:00",
+        "title": "2nd & 18 \u00b7 ARI 12"
+       },
+       {
+        "id": "85",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 26,
+            "yardStart": 12
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "E.Demercado rushed right end for 14 yards. Tackled by D.Hall; R.Jenkins at ARI 26.",
+        "timeOfPlay": "0:56",
+        "title": "3rd & 18 \u00b7 ARI 12"
+       },
+       {
+        "id": "86",
+        "playDescription": "Timeout #2 by SEA.",
+        "timeOfPlay": "0:50",
+        "title": "Timeout"
+       },
+       {
+        "id": "87",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 75,
+            "yardStart": 26
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Gillikin punts 49 yards to SEA 25, Center-A.Brewer. Downed by J.Blount.",
+        "timeOfPlay": "0:50",
+        "title": "4th & 4 \u00b7 ARI 26"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "3 plays \u00b7 6 yards \u00b7 0:35",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6224",
+      "plays": [
+       {
+        "id": "88",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for A.Barner (Z.Collins).",
+        "timeOfPlay": "0:39",
+        "title": "1st & 10 \u00b7 SEA 25"
+       },
+       {
+        "id": "89",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 75
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short left complete. Catch made by A.Barner for 5 yards. Tackled by O.Pappoe at SEA 30.",
+        "timeOfPlay": "0:36",
+        "title": "2nd & 10 \u00b7 SEA 25"
+       },
+       {
+        "id": "90",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by K.Walker for 8 yards. Tackled by S.Thomas at SEA 38.",
+        "timeOfPlay": "0:17",
+        "title": "3rd & 5 \u00b7 SEA 30"
+       },
+       {
+        "id": "91",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 62
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep right intended for.",
+        "timeOfPlay": "0:09",
+        "title": "1st & 10 \u00b7 SEA 38"
+       },
+       {
+        "id": "92",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 62
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith kneels at the SEA 37.",
+        "timeOfPlay": "0:02",
+        "title": "2nd & 10 \u00b7 SEA 38"
+       },
+       {
+        "id": "93",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "5 plays \u00b7 12 yards \u00b7 0:39",
+      "title": "END OF HALF"
+     }
+    ],
+    "title": "2ND QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6225",
+      "plays": [
+       {
+        "id": "94",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Ryland kicks 65 yards from ARI 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "ARI 35"
+       },
+       {
+        "id": "95",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short middle complete. Catch made by P.Brown for 6 yards. Tackled by B.Baker at SEA 36.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 \u00b7 SEA 30"
+       },
+       {
+        "id": "96",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 64
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Walker rushed right end for 4 yards. Tackled by S.Murphy-Bunting at SEA 40.",
+        "timeOfPlay": "14:20",
+        "title": "2nd & 4 \u00b7 SEA 36"
+       },
+       {
+        "id": "97",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 40,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for T.Lockett. PENALTY on ARI-S.Thomas, Defensive Pass Interference, 20 yards, accepted. No Play.",
+        "timeOfPlay": "13:38",
+        "title": "1st & 10 \u00b7 SEA 40"
+       },
+       {
+        "id": "98",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 40
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Walker rushed right guard for 5 yards. Tackled by B.Browning, K.White at ARI 35.",
+        "timeOfPlay": "13:30",
+        "title": "1st & 10 \u00b7 ARI 40"
+       },
+       {
+        "id": "99",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 32,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short left complete. Catch made by T.Lockett for 3 yards. Tackled by B.Baker at ARI 32.",
+        "timeOfPlay": "13:02",
+        "title": "2nd & 5 \u00b7 ARI 35"
+       },
+       {
+        "id": "100",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 41,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Sacked at ARI 41 for -9 yards (Z.Collins). G.Smith FUMBLES, forced by Z.Collins. Fumble RECOVERED by SEA-G.Smith at ARI 41. ",
+        "timeOfPlay": "12:17",
+        "title": "3rd & 2 \u00b7 ARI 32"
+       },
+       {
+        "id": "101",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 18,
+            "yardStart": 41
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Dickson punts 38 yards to ARI 3, Center-C.Stoll. Downed by T.Brown. PENALTY on SEA-P.Brown, Unsportsmanlike Conduct / Offense, 15 yards, accepted.",
+        "timeOfPlay": "11:49",
+        "title": "4th & 11 \u00b7 ARI 41"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "5 plays \u00b7 29 yards \u00b7 3:31",
+      "title": "PUNT"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6226",
+      "plays": [
+       {
+        "id": "103",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 18
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray pass short right complete. Catch made by T.McBride for 13 yards. Pushed out of bounds by R.Woolen at ARI 31.",
+        "timeOfPlay": "11:29",
+        "title": "1st & 10 \u00b7 ARI 18"
+       },
+       {
+        "id": "104",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 22,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Conner rushed left end for 1 yards. Pushed out of bounds by E.Jones at ARI 32. PENALTY on ARI-T.Reiman, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "10:48",
+        "title": "1st & 10 \u00b7 ARI 31"
+       },
+       {
+        "id": "105",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray pass short left complete. Catch made by T.McBride for 11 yards. Tackled by T.Knight at ARI 33.",
+        "timeOfPlay": "10:32",
+        "title": "1st & 19 \u00b7 ARI 22"
+       },
+       {
+        "id": "106",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 33
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray pass short left complete. Catch made by T.McBride for 18 yards. Pushed out of bounds by C.Bryant at SEA 49.",
+        "timeOfPlay": "9:58",
+        "title": "2nd & 8 \u00b7 ARI 33"
+       },
+       {
+        "id": "107",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 51
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Benson rushed up the middle for 7 yards. Tackled by E.Jones; T.Knight at SEA 42.",
+        "timeOfPlay": "9:18",
+        "title": "1st & 10 \u00b7 SEA 49"
+       },
+       {
+        "id": "108",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 58
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Benson rushed left end for 0 yards. Pushed out of bounds by R.Woolen at SEA 42.",
+        "timeOfPlay": "8:36",
+        "title": "2nd & 3 \u00b7 SEA 42"
+       },
+       {
+        "id": "109",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 58
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Conner rushed up the middle for 2 yards. Tackled by J.Reed; B.Murphy at SEA 40.",
+        "timeOfPlay": "8:00",
+        "title": "3rd & 3 \u00b7 SEA 42"
+       },
+       {
+        "id": "110",
+        "playDescription": "Timeout #1 by SEA.",
+        "timeOfPlay": "7:25",
+        "title": "Timeout"
+       },
+       {
+        "id": "111",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INT",
+            "yardEnd": 69,
+            "yardStart": 60
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": -5,
+            "yardStart": 69
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray pass short right INTERCEPTED at SEA 31. Intercepted by C.Bryant at SEA 31. TOUCHDOWN.",
+        "timeOfPlay": "7:25",
+        "title": "4th & 1 \u00b7 SEA 40"
+       },
+       {
+        "id": "112",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 30,
+            "yardStart": 15
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on SEA-D.Witherspoon, Unsportsmanlike Conduct / Offense, 15 yards, accepted. No Play.",
+        "timeOfPlay": "7:12",
+        "title": "ARI 15"
+       },
+       {
+        "id": "113",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - NO GOOD",
+            "yardEnd": null,
+            "yardStart": 30
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Myers extra point is no good.",
+        "timeOfPlay": "7:12",
+        "title": "ARI 30"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": true,
+        "score": "13",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 42 yards \u00b7 4:17",
+      "title": "INTERCEPTION"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6227",
+      "plays": [
+       {
+        "id": "115",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 3,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 38,
+            "yardStart": 3
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Myers kicks 62 yards from SEA 35 to the ARI 3. D.Dallas returns the kickoff. Tackled by D.Young at ARI 38.",
+        "timeOfPlay": "7:12",
+        "title": "SEA 35"
+       },
+       {
+        "id": "116",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 52,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray pass short right complete. Catch made by M.Harrison for 14 yards. Tackled by T.Knight; E.Jones at SEA 48.",
+        "timeOfPlay": "7:03",
+        "title": "1st & 10 \u00b7 ARI 38"
+       },
+       {
+        "id": "117",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 52
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Conner rushed left guard for -4 yards. Tackled by L.Williams at ARI 48.",
+        "timeOfPlay": "6:34",
+        "title": "1st & 10 \u00b7 SEA 48"
+       },
+       {
+        "id": "118",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "5:57",
+        "title": "2nd & 14 \u00b7 ARI 48"
+       },
+       {
+        "id": "119",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 37,
+            "yardStart": 48
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Murray steps back to pass. Sacked at ARI 37 for -11 yards (L.Williams).",
+        "timeOfPlay": "5:48",
+        "title": "3rd & 14 \u00b7 ARI 48"
+       },
+       {
+        "id": "120",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 91,
+            "yardStart": 37
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Gillikin punts 54 yards to SEA 9, Center-A.Brewer. Fair catch by D.Williams.",
+        "timeOfPlay": "5:04",
+        "title": "4th & 25 \u00b7 ARI 37"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "4 plays \u00b7 -1 yard \u00b7 2:14",
+      "title": "PUNT"
+     }
+    ],
+    "title": "3RD QUARTER"
+   },
+   {
+    "groups": [
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6228",
+      "plays": [
+       {
+        "id": "122",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short left intended for J.Smith-Njigba (N.Jones).",
+        "timeOfPlay": "4:58",
+        "title": "1st & 10 \u00b7 SEA 9"
+       },
+       {
+        "id": "123",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 87,
+            "yardStart": 91
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short left complete. Catch made by D.Metcalf for 4 yards. Tackled by N.Jones; M.Wilson at SEA 13.",
+        "timeOfPlay": "4:55",
+        "title": "2nd & 10 \u00b7 SEA 9"
+       },
+       {
+        "id": "124",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 87
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short right complete. Catch made by T.Lockett for 17 yards. Tackled by S.Thomas at SEA 30.",
+        "timeOfPlay": "4:11",
+        "title": "3rd & 6 \u00b7 SEA 13"
+       },
+       {
+        "id": "125",
+        "playDescription": "Timeout #2 by SEA.",
+        "timeOfPlay": "3:22",
+        "title": "Timeout"
+       },
+       {
+        "id": "126",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 71,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Walker rushed right end for -1 yards. Tackled by J.Luketa at SEA 29.",
+        "timeOfPlay": "3:22",
+        "title": "1st & 10 \u00b7 SEA 30"
+       },
+       {
+        "id": "127",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 71
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short right complete. Catch made by K.Walker for 21 yards. Pushed out of bounds by M.Wilson at SEA 50.",
+        "timeOfPlay": "2:44",
+        "title": "2nd & 11 \u00b7 SEA 29"
+       },
+       {
+        "id": "128",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Walker rushed right guard for 3 yards. Tackled by L.Collier; S.Murphy-Bunting at ARI 47.",
+        "timeOfPlay": "2:15",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "129",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Charbonnet rushed left guard for 12 yards. Tackled by K.White at ARI 35.",
+        "timeOfPlay": "1:43",
+        "title": "2nd & 7 \u00b7 ARI 47"
+       },
+       {
+        "id": "130",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 22,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short left complete. Catch made by P.Brown for 13 yards. Tackled by V.Dimukeje at ARI 22.",
+        "timeOfPlay": "0:58",
+        "title": "1st & 10 \u00b7 ARI 35"
+       },
+       {
+        "id": "131",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for K.Walker (R.Lopez).",
+        "timeOfPlay": "0:09",
+        "title": "1st & 10 \u00b7 ARI 22"
+       },
+       {
+        "id": "132",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 18,
+            "yardStart": 22
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Walker rushed left end for 4 yards. Tackled by K.White; D.Taylor-Demerson at ARI 18.",
+        "timeOfPlay": "0:04",
+        "title": "2nd & 10 \u00b7 ARI 22"
+       },
+       {
+        "id": "133",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "134",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INT",
+            "yardEnd": 0,
+            "yardStart": 18
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 0,
+            "yardStart": 0
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 20,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass deep right INTERCEPTED at ARI End Zone. Intercepted by G.Williams at ARI End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 6 \u00b7 ARI 18"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 73 yards \u00b7 5:07",
+      "title": "INTERCEPTION"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6229",
+      "plays": [
+       {
+        "id": "136",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short left complete. Catch made by J.Conner for 11 yards. Tackled by E.Jones at ARI 31.",
+        "timeOfPlay": "14:51",
+        "title": "1st & 10 \u00b7 ARI 20"
+       },
+       {
+        "id": "137",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short right complete. Catch made by T.McBride for 3 yards. Tackled by J.Love at ARI 34.",
+        "timeOfPlay": "14:17",
+        "title": "1st & 10 \u00b7 ARI 31"
+       },
+       {
+        "id": "138",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 34
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short middle complete. Catch made by T.McBride for 9 yards. Tackled by E.Jones at ARI 43.",
+        "timeOfPlay": "13:50",
+        "title": "2nd & 7 \u00b7 ARI 34"
+       },
+       {
+        "id": "139",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 54,
+            "yardStart": 43
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short left complete. Catch made by J.Conner for 11 yards. Pushed out of bounds by E.Jones at SEA 46.",
+        "timeOfPlay": "13:18",
+        "title": "1st & 10 \u00b7 ARI 43"
+       },
+       {
+        "id": "140",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 54
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Benson rushed right end for 9 yards. Tackled by D.Jones; B.Murphy at SEA 37.",
+        "timeOfPlay": "12:49",
+        "title": "1st & 10 \u00b7 SEA 46"
+       },
+       {
+        "id": "141",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 60,
+            "yardStart": 63
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray steps back to pass. Sacked at SEA 40 for -3 yards (L.Williams).",
+        "timeOfPlay": "12:16",
+        "title": "2nd & 1 \u00b7 SEA 37"
+       },
+       {
+        "id": "142",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 90,
+            "yardStart": 60
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass deep left complete. Catch made by M.Wilson for 30 yards. Tackled by R.Woolen at SEA 10.",
+        "timeOfPlay": "11:32",
+        "title": "3rd & 4 \u00b7 SEA 40"
+       },
+       {
+        "id": "143",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "11:11",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "144",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 90
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short left intended for.",
+        "timeOfPlay": "11:11",
+        "title": "1st & 10 \u00b7 SEA 10"
+       },
+       {
+        "id": "145",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 96,
+            "yardStart": 90
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray scrambles right end for 6 yards. Tackled by E.Jones at SEA 4.",
+        "timeOfPlay": "10:56",
+        "title": "2nd & 10 \u00b7 SEA 10"
+       },
+       {
+        "id": "146",
+        "playDescription": "Timeout #1 by ARI.",
+        "timeOfPlay": "10:13",
+        "title": "Timeout"
+       },
+       {
+        "id": "147",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 96
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete short right intended for T.McBride.",
+        "timeOfPlay": "10:13",
+        "title": "3rd & 4 \u00b7 SEA 4"
+       },
+       {
+        "id": "148",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 96
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Ryland 22 yard field goal attempt is good, Center-A.Brewer, Holder-B.Gillikin.",
+        "timeOfPlay": "10:11",
+        "title": "4th & 4 \u00b7 SEA 4"
+       }
+      ],
+      "scores": [
+       {
+        "changed": true,
+        "score": "6",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "11 plays \u00b7 76 yards \u00b7 4:43",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6230",
+      "plays": [
+       {
+        "id": "150",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 101,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 81,
+            "yardStart": 101
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Ryland kicks 66 yards from ARI 35 to the SEA End Zone. K.McIntosh returns the kickoff. Tackled by J.Luketa at SEA 19.",
+        "timeOfPlay": "10:08",
+        "title": "ARI 35"
+       },
+       {
+        "id": "151",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 81
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for K.Walker.",
+        "timeOfPlay": "10:03",
+        "title": "1st & 10 \u00b7 SEA 19"
+       },
+       {
+        "id": "152",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 77,
+            "yardStart": 81
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short middle complete. Catch made by K.Walker for 4 yards. Tackled by S.Murphy-Bunting at SEA 23.",
+        "timeOfPlay": "9:59",
+        "title": "2nd & 10 \u00b7 SEA 19"
+       },
+       {
+        "id": "153",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 77
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short left complete. Catch made by J.Smith-Njigba for 7 yards. Tackled by D.Taylor-Demerson at SEA 30.",
+        "timeOfPlay": "9:13",
+        "title": "3rd & 6 \u00b7 SEA 23"
+       },
+       {
+        "id": "154",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 80,
+            "yardStart": 70
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Walker rushed left end for yards. Tackled by K.White at SEA 37. PENALTY on SEA-J.Bobo, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "8:34",
+        "title": "1st & 10 \u00b7 SEA 30"
+       },
+       {
+        "id": "155",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 80
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith scrambles left end for 4 yards. Pushed out of bounds by S.Murphy-Bunting at SEA 24.",
+        "timeOfPlay": "8:15",
+        "title": "1st & 20 \u00b7 SEA 20"
+       },
+       {
+        "id": "156",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 76
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Smith-Njigba for 8 yards. Pushed out of bounds by D.Taylor-Demerson at SEA 32.",
+        "timeOfPlay": "7:32",
+        "title": "2nd & 16 \u00b7 SEA 24"
+       },
+       {
+        "id": "157",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 68
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass deep middle complete [B.Browning]. Catch made by D.Metcalf for 18 yards. Tackled by D.Taylor-Demerson at SEA 50.",
+        "timeOfPlay": "6:44",
+        "title": "3rd & 8 \u00b7 SEA 32"
+       },
+       {
+        "id": "158",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 50
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Walker rushed left guard for 3 yards. Tackled by K.Tonga at ARI 47.",
+        "timeOfPlay": "5:51",
+        "title": "1st & 10 \u00b7  50"
+       },
+       {
+        "id": "159",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short left complete. Catch made by A.Barner for 3 yards. Tackled by M.Melton at ARI 44.",
+        "timeOfPlay": "5:20",
+        "title": "2nd & 7 \u00b7 ARI 47"
+       },
+       {
+        "id": "160",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 44
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Charbonnet rushed left guard for 6 yards. Tackled by M.Wilson; B.Baker at ARI 38.",
+        "timeOfPlay": "4:36",
+        "title": "3rd & 4 \u00b7 ARI 44"
+       },
+       {
+        "id": "161",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 38
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Walker rushed left guard for 6 yards. Tackled by D.Taylor-Demerson at ARI 32.",
+        "timeOfPlay": "4:00",
+        "title": "1st & 10 \u00b7 ARI 38"
+       },
+       {
+        "id": "162",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Walker rushed left guard for -3 yards. Tackled by V.Dimukeje at ARI 35.",
+        "timeOfPlay": "3:16",
+        "title": "2nd & 4 \u00b7 ARI 32"
+       },
+       {
+        "id": "163",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 35
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Charbonnet rushed right guard for 3 yards. Tackled by G.Williams at ARI 32.",
+        "timeOfPlay": "2:37",
+        "title": "3rd & 7 \u00b7 ARI 35"
+       },
+       {
+        "id": "164",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "165",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Myers 50 yard field goal attempt is good, Center-C.Stoll, Holder-M.Dickson.",
+        "timeOfPlay": "2:00",
+        "title": "4th & 4 \u00b7 ARI 32"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "ARI"
+       },
+       {
+        "changed": true,
+        "score": "16",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "13 plays \u00b7 49 yards \u00b7 8:12",
+      "title": "FIELD GOAL"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/18"
+      },
+      "id": "6231",
+      "plays": [
+       {
+        "id": "166",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 20,
+            "yardStart": 0
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the ARI End Zone. Touchback.",
+        "timeOfPlay": "1:56",
+        "title": "SEA 35"
+       },
+       {
+        "id": "167",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 20
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short left complete. Catch made by T.McBride for 11 yards. Tackled by C.Bryant at ARI 31.",
+        "timeOfPlay": "1:56",
+        "title": "1st & 10 \u00b7 ARI 20"
+       },
+       {
+        "id": "168",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete deep middle intended for T.McBride.",
+        "timeOfPlay": "1:36",
+        "title": "1st & 10 \u00b7 ARI 31"
+       },
+       {
+        "id": "169",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 32,
+            "yardStart": 31
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short middle complete. Catch made by J.Conner for 11 yards. Tackled by T.Knight at ARI 42. PENALTY on ARI-T.McBride, Offensive Illegal Block Above the Waist, 10 yards, accepted.",
+        "timeOfPlay": "1:30",
+        "title": "2nd & 10 \u00b7 ARI 31"
+       },
+       {
+        "id": "170",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 32
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short middle complete. Catch made by T.McBride for 9 yards. Tackled by D.Witherspoon at ARI 41.",
+        "timeOfPlay": "1:18",
+        "title": "2nd & 9 \u00b7 ARI 32"
+       },
+       {
+        "id": "171",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 41
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass short middle complete. Catch made by J.Conner for 6 yards. Tackled by E.Jones; R.Jenkins at ARI 47.",
+        "timeOfPlay": "1:07",
+        "title": "1st & 10 \u00b7 ARI 41"
+       },
+       {
+        "id": "172",
+        "playDescription": "Timeout #2 by ARI.",
+        "timeOfPlay": "0:51",
+        "title": "Timeout"
+       },
+       {
+        "id": "173",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 47
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray pass deep middle complete. Catch made by M.Wilson for 24 yards. Tackled by C.Bryant at SEA 29.",
+        "timeOfPlay": "0:51",
+        "title": "2nd & 4 \u00b7 ARI 47"
+       },
+       {
+        "id": "174",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": null,
+            "yardStart": 71
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Murray steps back to pass. Pass incomplete deep middle intended for M.Wilson.",
+        "timeOfPlay": "0:26",
+        "title": "1st & 10 \u00b7 SEA 29"
+       },
+       {
+        "id": "175",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - NO GOOD",
+            "yardEnd": null,
+            "yardStart": 71
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Ryland 47 yard field goal attempt is no good, Center-A.Brewer, Holder-B.Gillikin.",
+        "timeOfPlay": "0:15",
+        "title": "2nd & 10 \u00b7 SEA 29"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "16",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "8 plays \u00b7 51 yards \u00b7 1:45",
+      "title": "MISSED FG"
+     },
+     {
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "id": "6232",
+      "plays": [
+       {
+        "id": "176",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 63
+           }
+          ]
+         }
+        },
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith kneels at the SEA 36.",
+        "timeOfPlay": "0:11",
+        "title": "1st & 10 \u00b7 SEA 37"
+       },
+       {
+        "id": "177",
+        "playDescription": "End Game",
+        "timeOfPlay": "0:00",
+        "title": "Game End"
+       }
+      ],
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "ARI"
+       },
+       {
+        "changed": false,
+        "score": "16",
+        "title": "SEA"
+       }
+      ],
+      "subtitle": "1 plays \u00b7 -1 yard \u00b7 0:11",
+      "title": "END OF GAME"
+     }
+    ],
+    "title": "4TH QUARTER"
+   }
+  ]
+ }
+}

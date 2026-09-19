@@ -1,0 +1,14 @@
+{
+ "away_espn_team_id": "28",
+ "espn_event_id": "401872944",
+ "fox_event_id": "11192",
+ "home_espn_team_id": "6",
+ "kickoff_utc": "2026-09-20T20:25Z",
+ "league": "nfl",
+ "n_plays": 0,
+ "neutral_site": false,
+ "resolved_by": "scores_segment:2026-2-1",
+ "season": 2026,
+ "season_type": 2,
+ "week": 2
+}
