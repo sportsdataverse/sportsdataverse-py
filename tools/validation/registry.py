@@ -7,14 +7,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import polars as pl
-import yaml
 
-import sportsdataverse.validation
+from sportsdataverse.validation import thresholds as _thresholds
 from sportsdataverse.validation.findings import CheckContext
 from tools.validation.oracles import ORACLES
 
 #: Packaged alongside the rules (``tools/`` does not ship in the wheel).
-_THRESHOLDS_PATH = Path(sportsdataverse.validation.__file__).resolve().parent / "thresholds.yaml"
+_THRESHOLDS_PATH = _thresholds.PATH
 _SCHEMAS_DIR = Path(__file__).parent / "schemas"
 
 
@@ -74,8 +73,9 @@ LINT_TARGETS["cfb_data_r"] = LintTarget(
 def load_thresholds(domain: str) -> dict[str, float]:
     """Load merged validation thresholds for a domain.
 
-    Reads ``thresholds.yaml`` and overlays the domain-specific section on the
-    ``default`` section.
+    Thin delegate to :func:`sportsdataverse.validation.thresholds.for_league`, so
+    the harness and the wheel's consumers read ``thresholds.yaml`` through ONE
+    parser (and the harness no longer needs PyYAML for it).
 
     Args:
         domain: Domain key (e.g. "nfl", "cfb").
@@ -83,12 +83,7 @@ def load_thresholds(domain: str) -> dict[str, float]:
     Returns:
         A dict of threshold name -> float, domain values overriding defaults.
     """
-    data = yaml.safe_load(_THRESHOLDS_PATH.read_text()) or {}
-    if not isinstance(data, dict):
-        raise ValueError(f"thresholds.yaml must be a YAML mapping at the top level; got {type(data).__name__!r}")
-    merged = dict(data.get("default", {}))
-    merged.update(data.get(domain, {}) or {})
-    return merged
+    return _thresholds.for_league(domain)
 
 
 def load_schema(name: str) -> dict[str, str]:
