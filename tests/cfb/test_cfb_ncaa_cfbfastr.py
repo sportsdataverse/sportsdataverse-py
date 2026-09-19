@@ -759,3 +759,108 @@ def test_quarter_marker_row_opens_the_period_it_names() -> None:
     )
     back = clocked.filter((pl.col("period") == pl.col("period").shift(1)) & (pl.col("__s") > pl.col("__s").shift(1)))
     assert back.height == 0, back.select("game_play_number", "period", "play_text").rows()
+
+
+
+
+
+# --- NC12-NC15: quarter markers, the score walk, OT flags, overturned calls -----------
+#
+# These run on the producer's own PARSED bundles (``mfb_parsed_<contest>.json.gz``,
+# vendored from ``ncaa-mfb-football-raw/mfb/json``) rather than on a page: that store is
+# what ``ncaa-mfb-football-data`` compiles, its rows were parsed by whichever
+# ``sportsdataverse`` the sweep ran, and the mapper is the one stage every republish
+# re-runs. The HTML fixtures cannot reach this path -- today's parser already cuts the
+# reprinted call.
+
+
+def _parsed_bundle(cid: str) -> "dict":
+    import gzip
+
+    with gzip.open(FIX / f"mfb_parsed_{cid}.json.gz", "rt", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _parsed_frame(cid: str) -> "pl.DataFrame":
+    """The mapped frame of a vendored parsed bundle, built as the producer builds it."""
+    from sportsdataverse.cfb.cfb_ncaa_box import DRIVES_SCHEMA, LINESCORE_SCHEMA, SCORING_SUMMARY_SCHEMA
+    from sportsdataverse.cfb.cfb_ncaa_pbp import DRIVE_TITLES_SCHEMA, PBP_SCHEMA
+
+    def frame(rows: list, schema: dict) -> "pl.DataFrame":
+        if not rows:
+            return pl.DataFrame(schema=schema)
+        df = pl.DataFrame(rows, infer_schema_length=None)
+        return df.cast({k: v for k, v in schema.items() if k in df.columns}).select(
+            [k for k in schema if k in df.columns]
+        )
+
+    p = _parsed_bundle(cid)
+    df = to_cfbfastr(
+        frame(p["pbp"], PBP_SCHEMA),
+        season=p["season"],
+        drives=frame(p["drives"], DRIVES_SCHEMA),
+        linescore=frame(p["linescore"], LINESCORE_SCHEMA),
+        drive_titles=frame(p["drive_titles"], DRIVE_TITLES_SCHEMA),
+        ot_drives=frame(p["drives"], DRIVES_SCHEMA),
+        scoring_summary=frame(p["scoring_summary"], SCORING_SUMMARY_SCHEMA),
+    )
+    assert isinstance(df, pl.DataFrame)
+    return df
+
+
+def _running_scores(df: "pl.DataFrame") -> "list[tuple[int, int]]":
+    """(home, away) after every row."""
+    return (
+        df.with_columns(
+            __h=pl.when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.col("pos_team_score"))
+            .otherwise(pl.col("def_pos_team_score")),
+            __a=pl.when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.col("def_pos_team_score"))
+            .otherwise(pl.col("pos_team_score")),
+        )
+        .select("__h", "__a")
+        .rows()
+    )
+
+
+def test_the_running_score_never_walks_backwards() -> None:
+    """NC13: 5361987 (Boise St. 34 at Oregon 37) counted the kickoff return twice.
+
+    The page books the points of a return touchdown into the title of the drive BEFORE
+    the kickoff it happened on, so snapping to that checkpoint and then walking the
+    return row put Oregon on 40 -- six ahead of a 37 final -- until the next checkpoint
+    pulled it back down.
+    """
+    df = _parsed_frame("5361987")
+    scores = _running_scores(df)
+    for (ph, pa), (h, a) in zip(scores, scores[1:]):
+        assert h >= ph and a >= pa, f"score walked back: {(ph, pa)} -> {(h, a)}"
+    assert max(h for h, _ in scores) == 37 and max(a for _, a in scores) == 34
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"Oregon": 37, "Boise St.": 34}
+
+
+def test_a_kick_the_page_walked_back_does_not_score() -> None:
+    """NC13: 5366625 prints the nullified try AND the re-kick that replaced it."""
+    df = _parsed_frame("5366625")
+    nullified = df.filter(pl.col("game_play_number") == 6).row(0, named=True)
+    assert nullified["play_text"].endswith("NO PLAY.") and nullified["penalty_no_play"]
+    assert (nullified["score_pts"], nullified["pos_team_score"]) == (0, 6)
+    rekick = df.filter(pl.col("game_play_number") == 7).row(0, named=True)
+    assert "kick attempt failed" in rekick["play_text"]
+    assert (rekick["score_pts"], rekick["pos_team_score"]) == (0, 6)
+
+
+def test_kick_result_is_read_from_the_attempt_not_a_tackler_name() -> None:
+    """NC13: a bare "good" also reads out of "Gooden,Darius" (5366306, play 192)."""
+    from sportsdataverse.cfb.cfb_ncaa_cfbfastr import _KICK_GOOD_RE
+
+    blocked = (
+        "Groff,Ty kick attempt failed ( blocked by Yeoman,Corey) (H: Walter,Devin, "
+        "LS: Crisanti,Donato) recovered by URI Groff,Ty at Groff,Ty return 0 yards to "
+        "the HAMP03 (Gooden,Darius)."
+    )
+    assert _KICK_GOOD_RE.search(blocked) is None
+    assert _KICK_GOOD_RE.search("Massick,Sam kick attempt good (H: Clark,Brady).") is not None
+    assert _KICK_GOOD_RE.search("Massick,Sam kick attempt NO GOOD.") is None

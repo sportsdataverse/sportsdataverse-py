@@ -59,8 +59,10 @@ _PENALTY_SPOT_RE = re.compile(rf"\d+ yards? from {_YL_TOKEN} to ({_YL_TOKEN})(?!
 _QTR_MARKER_RE = re.compile(r"start of (\d)(?:st|nd|rd|th) quarter", re.I)
 _INT_BY_RE = re.compile(rf"intercepted by ({_NAME})")
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
-# XP/FG result: "good" appears in both cases and "NO GOOD"/"no good" must not match.
-_KICK_GOOD_RE = re.compile(r"(?<!no )good", re.I)
+# XP result. Anchored on the attempt (NC13): a bare "good" also reads out of a
+# tackler's name -- "kick attempt failed ( blocked by Yeoman,Corey) ... (Gooden,Darius)"
+# scored the missed kick. Both cases appear; "NO GOOD"/"no good" must not match.
+_KICK_GOOD_RE = re.compile(r"attempt\s+good", re.I)
 # the try printed on the touchdown's own row (2019-era pages): "..., HARRIS, Clayton kick attempt good."
 _SAME_ROW_TRY_RE = re.compile(r"kick attempt good|(?:pass|run|rush) attempt successful", re.I)
 
@@ -702,10 +704,44 @@ def to_cfbfastr(
             == cand
         )
 
-    def _snap(drive: "Optional[int]") -> None:
-        """Snap the running score to the checkpoint of a finished drive."""
-        if snap_first not in score or snap_second not in score:
+    # NC13: a checkpoint that runs AHEAD of the plays walked so far counts a score twice
+    # -- the page books the points a return touchdown scores on the ensuing kickoff into
+    # the title of the drive BEFORE it, so snapping to it and then walking the return row
+    # overshot, and the next checkpoint pulled the score back down. A checkpoint ahead of
+    # the walk is therefore held as a target: the next drive's rows fill it (capped, so
+    # they cannot pass it) and whatever they leave is applied at the next boundary. A
+    # checkpoint behind the walk only ever raises -- the stated final, arbitrated below,
+    # is the one checkpoint allowed to set the score outright.
+    pending: "Optional[tuple[int, int]]" = None
+    snapped: "set[Optional[int]]" = set()
+
+    def _cap(team: "Optional[str]") -> "Optional[int]":
+        """The outstanding checkpoint's level for ``team``, past which the walk may not go."""
+        if pending is None or team is None:
+            return None
+        return pending[0] if team == snap_first else pending[1] if team == snap_second else None
+
+    def _award(team: "Optional[str]", pts: int) -> None:
+        if not team or not pts:
             return
+        cap = _cap(team)
+        walked = score.get(team, 0) + pts
+        score[team] = walked if cap is None else min(walked, cap)
+
+    def _raise_to(cp: "tuple[int, int]") -> None:
+        score[snap_first] = max(score[snap_first], cp[0])
+        score[snap_second] = max(score[snap_second], cp[1])
+
+    def _snap(drive: "Optional[int]") -> None:
+        """Settle the running score against the checkpoint of a finished drive."""
+        nonlocal pending
+        if snap_first not in score or snap_second not in score or drive in snapped:
+            return
+        snapped.add(drive)
+        if pending is not None:
+            # the previous drive's checkpoint is due: the plays had their chance to reach it
+            _raise_to(pending)
+            pending = None
         if drive == last_drive_number and last_reg_summary is not None:
             cp = checkpoint.get(drive) if drive is not None else None
             # candidates: title checkpoint vs summary final. The official
@@ -718,9 +754,35 @@ def to_cfbfastr(
                 score[snap_first], score[snap_second] = last_reg_summary
                 return
         if drive in checkpoint:
-            score[snap_first], score[snap_second] = checkpoint[drive]
+            cp = checkpoint[drive]
+            if cp[0] > score[snap_first] or cp[1] > score[snap_second]:
+                pending = cp
+            else:
+                _raise_to(cp)
 
     all_rows = pbp.to_dicts()
+    # NC13: which team a kicker kicks for. A page can print both teams' tries in one
+    # block after a touchdown ("Dalmas,Jonah kick attempt good." then "Sappington,Atticus
+    # kick attempt good.", 5361987), and only the name says whose try is whose -- crediting
+    # both to the drive's offense put Boise St. one point past its own final. The
+    # unambiguous rows vote: a kickoff is kicked from the kicking team's own side, and a
+    # field goal by the drive's offense.
+    kicker_votes: "dict[str, dict[str, int]]" = {}
+    for r in all_rows:
+        who = r["kicker"]
+        if not who:
+            continue
+        if r["play_type"] == "kickoff":
+            team = next((t for t, sd in own_side.items() if sd == r["yard_line_side"]), None)
+        elif r["play_type"] == "field_goal":
+            team = title_team.get(r["drive_number"]) or r["offense"]
+        else:
+            continue
+        if team in teams:
+            kicker_votes.setdefault(who, {})[team] = kicker_votes.setdefault(who, {}).get(team, 0) + 1
+    kicker_team = {
+        who: max(votes, key=lambda t: (votes[t], t)) for who, votes in kicker_votes.items() if len(votes) == 1
+    }
     # the checkpoint is the score AFTER a drive, so the drive's LAST play must
     # emit exactly it (event-sourcing can't see OT-shootout scoring rules).
     last_play_of_drive: "dict[int, int]" = {
@@ -760,7 +822,9 @@ def to_cfbfastr(
             # a kickoff's return TD is the RECEIVING team's
             return_td = (defense if def_td else offense) != kicker
         pts_off = pts_def = 0
-        if r["play_type"] not in (
+        # a play walked back by a penalty ("... NO PLAY.") never scored -- the page
+        # reprints the attempt that replaces it on its own row (NC13)
+        if not r["no_play"] and r["play_type"] not in (
             "timeout",
             "period_marker",
             "drive_start",
@@ -786,7 +850,12 @@ def to_cfbfastr(
             # XP/2pt belong to whoever scored the preceding TD (a defensive TD's
             # try is kicked by the drive's DEFENSE, so drive offense is wrong).
             if r["play_type"] == "extra_point" and _KICK_GOOD_RE.search(text):
-                if (last_td_team or offense) == defense:
+                # the kicker names the team when the page knows him; the touchdown he is
+                # kicking for otherwise (a defensive TD's try is the drive DEFENSE's)
+                kicked_for = kicker_team.get(r["kicker"] or "")
+                if kicked_for not in (offense, defense):
+                    kicked_for = last_td_team or offense
+                if kicked_for == defense:
                     pts_def += 1
                 else:
                     pts_off += 1
@@ -797,10 +866,8 @@ def to_cfbfastr(
                     pts_off += 2
             if r["is_safety"]:
                 pts_def += 2
-        if offense and pts_off:
-            score[offense] = score.get(offense, 0) + pts_off
-        if defense and pts_def:
-            score[defense] = score.get(defense, 0) + pts_def
+        _award(offense, pts_off)
+        _award(defense, pts_def)
         if last_play_of_drive.get(r["drive_number"]) == i:
             _snap(r["drive_number"])
 

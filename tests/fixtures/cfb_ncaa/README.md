@@ -7,6 +7,7 @@
   - [cfbfastR-mapper pbp fixtures (vendored from `ncaa-mfb-football-raw`)](#cfbfastr-mapper-pbp-fixtures-vendored-from-ncaa-mfb-football-raw)
   - [2025-season page variants (captured 2026-08-19)](#2025-season-page-variants-captured-2026-08-19)
   - [2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)](#2019-season-and-2025-textside-code-variants-bundles-captured-2026-08-19--2026-08-21)
+  - [Parsed bundles (NC12-NC15, vendored 2026-09-19)](#parsed-bundles-nc12-nc15-vendored-2026-09-19)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -94,3 +95,21 @@ Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` and `test_cfb_ncaa_cfbfastr.py`.
 | `mfb_play_by_play_6386300.html` | 6386300 | New Haven @ Saginaw Valley (2025-11-22) | own-side vote determinism (NC9): the game whose `yards_to_goal` flipped with `PYTHONHASHSEED` between two identical season builds on main | <https://stats.ncaa.org/contests/6386300/play_by_play> |
 | `mfb_play_by_play_1736435.html` | 1736435 | SFA @ Lamar University (2019-09-28, 24-17) | side code ending in a digit: `"SFA225"` is `SFA2` + 25 | <https://stats.ncaa.org/contests/1736435/play_by_play> |
 | `mfb_play_by_play_1735539.html` | 1735539 | Shorter @ ETSU (2019-09-07, 10-48) | hyphenated side code `SU-ETSU` (drive titles + yard lines) | <https://stats.ncaa.org/contests/1735539/play_by_play> |
+
+## Parsed bundles (NC12-NC15, vendored 2026-09-19)
+
+`mfb_parsed_{contest_id}.json.gz` are the producer's own PARSED bundles, copied from
+`ncaa-mfb-football-raw/mfb/json/{id}.json.gz` and trimmed to the five frames
+`to_cfbfastr` reads (`pbp`, `drive_titles`, `drives`, `linescore`, `scoring_summary`;
+`player_stats` / `team_stats` / `officials` dropped). That store — not a page — is what
+`ncaa-mfb-football-data` compiles, its rows carry whichever `sportsdataverse` parsed them
+on the sweep, and the mapper is the one stage every republish re-runs. The HTML fixtures
+cannot reach these paths: today's parser already cuts the reprinted call, so only a bundle
+parsed before it shows the mapper reading one.
+
+| file | contest_id | game | defect pinned |
+|---|---|---|---|
+| `mfb_parsed_5361987.json.gz` | 5361987 | Boise St. @ Oregon (2024-09-07, 34-37) | NC13 — the title of the drive BEFORE a kickoff already counts the return touchdown scored on it, so the walk overshot to 40 and the next checkpoint pulled it back; both teams' tries printed in one block |
+| `mfb_parsed_5366625.json.gz` | 5366625 | Princeton @ Brown (2024, 6-…) | NC13 — `"kick attempt good ... NO PLAY."` scored, then the re-kick that replaced it failed |
+| `mfb_parsed_5367688.json.gz` | 5367688 | Robert Morris @ Central Conn. St. (2024, 2OT) | NC14 — a synthesized OT `Interception Return` row set `int` without `pass` |
+| `mfb_parsed_5361980.json.gz` | 5361980 | Eastern Ill. @ Illinois (2024) | NC15 — `PLAY OVERTURNED. (Original Play: ... TOUCHDOWN ...)` kept the pre-review touchdown and its yardage |
