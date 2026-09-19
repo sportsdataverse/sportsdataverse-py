@@ -23,13 +23,10 @@ per ESPN franchise id is listed in :data:`CBS_SCOREBOARD_ABBRS`.
 from __future__ import annotations
 
 import re
-from datetime import datetime, timezone
-from typing import Any, Callable, Dict, List, Optional, Tuple
-from zoneinfo import ZoneInfo
+from typing import Any, Callable, Dict, Optional, Tuple
 
 from sportsdataverse.dl_utils import download
-
-_ET = ZoneInfo("America/New_York")
+from sportsdataverse.football.cbs_common import _et_date, _resolve_from_scoreboard
 
 #: One scoreboard card: the CBS game id, whether CBS says it will carry enhanced (play-level)
 #: data, and the ``NFL_{date}_{away}@{home}`` abbreviation. ``data-enhanced`` is set days
@@ -80,21 +77,6 @@ CBS_SCOREBOARD_ABBRS: Dict[str, Tuple[str, ...]] = {
     "34": ("HOU",),
 }
 
-#: Parsed scoreboard pages, keyed by ``(season, season_type, cbs_week)``. Cached for the
-#: life of the process: the page is ~1-5 MB and one NFL week is read once per worker.
-_PAGE_CACHE: Dict[Tuple[int, int, int], List[Dict[str, Any]]] = {}
-
-#: Weeks whose page came back with no cards, same key. A miss is remembered too, because the
-#: alternative is worse: ``dl_utils.download`` retries a 403 or a 5xx 15 times, and a
-#: postseason lookup tries three weeks, so one unreachable page re-billed per game is ~45
-#: requests and minutes of wall clock **per game** on Game on Paper's request path. A worker
-#: that has already failed this week hands over to the next source immediately instead.
-_PAGE_MISSES: set = set()
-
-#: Retries for the scoreboard page. The default 15 is sized for an asset a whole job depends
-#: on; this one is a best-effort lookup with a fall-through behind it, so it fails fast.
-_SCOREBOARD_RETRIES = 2
-
 
 def _regular_season_weeks(season: int) -> int:
     """18 regular-season weeks from 2021, 17 before (the 17-game schedule moved the playoffs)."""
@@ -119,92 +101,6 @@ def _scoreboard_url(season: int, season_type: int, cbs_week: int) -> str:
     if segment is None:
         raise ValueError(f"season_type must be one of {sorted(_SEGMENT)}, got {season_type!r}")
     return f"https://www.cbssports.com/nfl/scoreboard/{int(season)}/{segment}/{int(cbs_week)}/"
-
-
-def _parse_scoreboard(html: str) -> List[Dict[str, Any]]:
-    """Every game card on a week scoreboard page, in page order."""
-    return [
-        {
-            "cbs_game_id": m.group("id"),
-            "enhanced": m.group("enhanced") == "true",
-            "date": m.group("date"),
-            "away": m.group("away"),
-            "home": m.group("home"),
-        }
-        for m in _CARD_RE.finditer(html or "")
-    ]
-
-
-def _week_cards(
-    season: int,
-    season_type: int,
-    cbs_week: int,
-    *,
-    transport: Callable[..., Any] = download,
-    **kwargs: Any,
-) -> List[Dict[str, Any]]:
-    """Cards for one CBS week, read at most once per process. Any failure is an empty week."""
-    key = (int(season), int(season_type), int(cbs_week))
-    if key in _PAGE_CACHE:
-        return _PAGE_CACHE[key]
-    if key in _PAGE_MISSES:
-        return []
-    kwargs.setdefault("num_retries", _SCOREBOARD_RETRIES)
-    try:
-        resp = transport(url=_scoreboard_url(season, season_type, cbs_week), **kwargs)
-    except Exception:  # noqa: BLE001 -- an unreachable page is a miss, never a raise
-        _PAGE_MISSES.add(key)
-        return []
-    cards = _parse_scoreboard(getattr(resp, "text", "") or "")
-    if cards:
-        _PAGE_CACHE[key] = cards
-    else:
-        _PAGE_MISSES.add(key)
-    return cards
-
-
-def _et_date(kickoff_utc: Optional[str]) -> Optional[str]:
-    """``"2026-09-14T00:15Z"`` -> ``"20260913"`` -- CBS stamps the card with the Eastern date."""
-    if not kickoff_utc:
-        return None
-    text = str(kickoff_utc).strip().replace("Z", "+00:00")
-    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
-        # a bare calendar date is already local (the nflverse schedule's ``gameday``);
-        # re-zoning it from UTC midnight would roll it back a day
-        return text.replace("-", "")
-    for fmt in ("%Y-%m-%dT%H:%M%z", "%Y-%m-%dT%H:%M:%S%z"):
-        try:
-            parsed = datetime.strptime(text, fmt)
-        except ValueError:
-            continue
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=timezone.utc)
-        return f"{parsed.astimezone(_ET):%Y%m%d}"
-    return None
-
-
-def _match_card(
-    cards: List[Dict[str, Any]],
-    home_espn_team_id: str,
-    away_espn_team_id: str,
-    et_date: Optional[str],
-) -> Optional[Dict[str, Any]]:
-    """The card for one matchup: both clubs must match, and the date too when one is known."""
-    home = CBS_SCOREBOARD_ABBRS.get(str(home_espn_team_id), ())
-    away = CBS_SCOREBOARD_ABBRS.get(str(away_espn_team_id), ())
-    if not home or not away:
-        return None
-    hits = [c for c in cards if c["home"] in home and c["away"] in away]
-    if et_date:
-        dated = [c for c in hits if c["date"] == et_date]
-        # A date miss is not a reason to drop the matchup: CBS stamps the card from its own
-        # schedule, which is right about who plays whom even when a game is rescheduled.
-        # Two teams meet at most once per week, so the pair alone is already unique.
-        hits = dated or hits
-    # A page can render the same matchup twice (the grid card plus a "game of the week"
-    # module), both carrying the same ``id="game-{id}"``; that is still one game, so the
-    # uniqueness test counts distinct ids, not cards.
-    return hits[0] if len({c["cbs_game_id"] for c in hits}) == 1 else None
 
 
 def _resolve_cbs_game_id(
@@ -242,22 +138,16 @@ def _resolve_cbs_game_id(
     # CBS's postseason numbering has moved with the schedule (a 17th regular-season week was
     # added in 2021, the Pro Bowl week has come and gone), so a neighbouring week is tried
     # before giving up. Regular-season weeks match on the first try and never reach this.
-    candidates = [primary] if int(season_type) != 3 else [primary, primary + 1, primary - 1]
-    tried: List[int] = []
-    for cbs_week in candidates:
-        if cbs_week < 1:
-            continue
-        tried.append(cbs_week)
-        card = _match_card(
-            _week_cards(season, season_type, cbs_week, transport=transport, **kwargs),
-            home_espn_team_id,
-            away_espn_team_id,
-            _et_date(kickoff_utc),
-        )
-        if card:
-            return card["cbs_game_id"], {
-                "how": _scoreboard_url(season, season_type, cbs_week),
-                "enhanced": card["enhanced"],
-                "weeks_tried": tried,
-            }
-    return None, {"how": "unresolved", "enhanced": None, "weeks_tried": tried}
+    candidates = [w for w in ([primary] if int(season_type) != 3 else [primary, primary + 1, primary - 1]) if w >= 1]
+    if int(season_type) not in _SEGMENT:
+        # no such scoreboard page exists, so every candidate week is a miss
+        return None, {"how": "unresolved", "enhanced": None, "weeks_tried": candidates}
+    return _resolve_from_scoreboard(
+        [(w, _scoreboard_url(season, season_type, w)) for w in candidates],
+        _CARD_RE,
+        CBS_SCOREBOARD_ABBRS.get(str(home_espn_team_id), ()),
+        CBS_SCOREBOARD_ABBRS.get(str(away_espn_team_id), ()),
+        _et_date(kickoff_utc),
+        transport=transport,
+        **kwargs,
+    )

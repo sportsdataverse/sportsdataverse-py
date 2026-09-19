@@ -18,8 +18,13 @@ import pytest
 from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.football.sources.dispatch import SourceUnavailable, _adapter_for, _process_game
 from sportsdataverse.football.sources.parity import _compare_plays
-from sportsdataverse.nfl.cbs_pbp.game_id import _parse_scoreboard, _resolve_cbs_game_id
-from sportsdataverse.nfl.cbs_pbp.to_espn_summary import _cbs_nfl_to_espn_summary, _norm_text
+from sportsdataverse.football.cbs_common import _parse_scoreboard
+from sportsdataverse.nfl.cbs_pbp.game_id import _CARD_RE, _resolve_cbs_game_id
+from sportsdataverse.nfl.cbs_pbp.to_espn_summary import (
+    _TEXT_ABBR_FIXES,
+    _cbs_nfl_to_espn_summary,
+    _norm_text,
+)
 
 CBS_FIX = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_cbs"
 ESPN_FIX = Path(__file__).resolve().parents[1] / "fixtures"
@@ -180,9 +185,13 @@ def test_reversed_text_keeps_only_the_ruling(cle_jax_summary):
     assert not any("FUMBLES" in p["text"] or "REVERSED" in p["text"] for p in reversed_plays)
     assert "D.Watson scrambles left end to JAX 22 for 7 yards" in reversed_plays[0]["text"]
     # the rule itself, in isolation: the ruling that stands is the tail
-    assert _norm_text("A FUMBLES. B RECOVERED. the play was REVERSED. 4-D.Watson scrambles.") == "D.Watson scrambles."
+    text = "A FUMBLES. B RECOVERED. the play was REVERSED. 4-D.Watson scrambles."
+    assert _norm_text(text, _TEXT_ABBR_FIXES) == "D.Watson scrambles."
     # idempotent on text with no reversal, and jersey-prefix stripping does not eat a score
-    assert _norm_text("39-C.Little kicks 62 yards from JAC 35.") == "C.Little kicks 62 yards from JAX 35."
+    assert (
+        _norm_text("39-C.Little kicks 62 yards from JAC 35.", _TEXT_ABBR_FIXES)
+        == "C.Little kicks 62 yards from JAX 35."
+    )
 
 
 def test_pat_is_folded_into_its_touchdown(cle_jax_summary):
@@ -356,7 +365,7 @@ def test_the_open_drive_carries_no_invented_outcome(cle_jax_payload):
 @pytest.fixture(autouse=True)
 def _clear_scoreboard_cache():
     """The page cache is per process and would leak between tests (and across a stub)."""
-    from sportsdataverse.nfl.cbs_pbp.game_id import _PAGE_CACHE, _PAGE_MISSES
+    from sportsdataverse.football.cbs_common import _PAGE_CACHE, _PAGE_MISSES
 
     _PAGE_CACHE.clear()
     _PAGE_MISSES.clear()
@@ -379,7 +388,7 @@ def _stub_transport(html: str):
 
 def test_the_cbs_game_id_comes_from_the_week_scoreboard():
     html = (CBS_FIX / "scoreboard_2019_regular_1_cards.html").read_text(encoding="utf-8")
-    assert len(_parse_scoreboard(html)) == 16
+    assert len(_parse_scoreboard(html, _CARD_RE)) == 16
     transport = _stub_transport(html)
     # HOU (34) at NO (18), 2019 week 1
     cbs_id, provenance = _resolve_cbs_game_id(
