@@ -67,9 +67,11 @@ class Rule:
         if self.severity is Severity.INFO or self.era_scope is None:
             return self.severity
         window = self.era_scope.get(league)
-        if window is None or season is None or not (window[0] <= season <= window[1]):
+        if window is None:  # the league was measured as out of scope entirely
             return Severity.WARN
-        return self.severity
+        if season is None:  # an unresolvable season must not silently open the gate
+            return self.severity
+        return self.severity if window[0] <= season <= window[1] else Severity.WARN
 
 
 def _scope(*rules: Rule) -> dict[str, Rule]:
@@ -119,8 +121,9 @@ RULE_SCOPE: dict[str, Rule] = _scope(
     Rule(
         "down.scrimmage_distance_ge_1",
         era_scope={"nfl": (2002, _OPEN)},
-        sources=("espn",),
-        note="run3 O13: the CFB residual (0.32%) is ESPN's own down-distance, triaged as source",
+        note="run3 O13: the CFB residual (0.32%) is ESPN's own down-distance, triaged as source. "
+        "Not source-scoped: the rule reads only start.distance, so a sub-1 distance from an "
+        "adapted source is the adapter's defect and must still fail",
     ),
     Rule(
         "flags.rush_pass_not_scrimmage",
@@ -163,6 +166,14 @@ RULE_SCOPE: dict[str, Rule] = _scope(
         "type.null_id",
         era_scope={"nfl": (2010, _OPEN), "cfb": (2010, _OPEN)},
         note="the stored 2002-09 summaries carry rows with no type at all (run3 O5)",
+    ),
+    Rule(
+        "period.monotone",
+        Severity.WARN,
+        note="the ESPN feed itself carries out-of-order period rows: cfb 401628439's raw "
+        "drives.previous has a period-2 row after period 6, and 401752913's interception "
+        "return sorts by play id into the next drive's block -- 2/105 games on the V1 sweep, "
+        "both feed order, neither a processor defect",
     ),
     Rule(
         "plays.unexplained_drop",
@@ -347,6 +358,9 @@ def validate_game(
 
     Returns:
         GameReport: ``ok`` is True when no rule fired at ``error`` severity.
+
+    Raises:
+        ValueError: If ``league`` is neither ``"nfl"`` nor ``"cfb"``.
 
     Example:
         Validate a processed NFL game::

@@ -175,6 +175,30 @@ def test_every_scoped_rule_id_exists_in_the_rule_table():
     }, sorted(frame_only)
 
 
+def test_feed_order_rules_are_warnings_not_errors():
+    """``period.monotone`` measures ESPN's own row order, so it must not fail a build."""
+    assert RULE_SCOPE["period.monotone"].severity is Severity.WARN
+    out_of_order = _frame(**{"period.number": [1, 2, 1]})
+    report = validate_game(out_of_order, "cfb")
+    assert report.ok and [f.rule_id for f in report.warnings] == ["period.monotone"]
+    assert report.counts_by_rule["period.monotone"] == 1
+
+
+def test_unresolvable_season_fails_closed():
+    """An era-scoped error rule keeps its severity when the season cannot be resolved."""
+    frame = _frame(**{"type.id": ["5", None, "5"]}).drop("season")
+    report = validate_game(frame, "nfl")
+    assert not report.ok and [f.rule_id for f in report.errors] == ["type.null_id"]
+    assert report.season is None
+
+
+def test_adapter_defects_are_not_excused_by_source_scope():
+    """``down.scrimmage_distance_ge_1`` reads only ``start.distance`` -- every source is judged."""
+    rule = RULE_SCOPE["down.scrimmage_distance_ge_1"]
+    assert rule.applies("nfl", "cbs") and rule.applies("cfb", "shield")
+    assert rule.severity_for("nfl", 2024) is Severity.ERROR
+
+
 def test_default_rule_keeps_the_tables_severity():
     rule = Rule("made.up")
     assert rule.severity_for("nfl", 2002) is Severity.ERROR
