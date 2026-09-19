@@ -35,6 +35,7 @@ from sportsdataverse.cfb.cfb_ncaa_pbp import (
     _NAME,
     _RECOVERED_BY_RE,
     _REVIEW_RE,
+    _YL_TOKEN,
     _match_code,
     _norm_code,
     _own_side_codes,
@@ -51,6 +52,10 @@ __all__ = [
 ]
 
 _TRAILING_CLOCK_RE = re.compile(r"clock (\d{1,2}:\d{2})")
+# the spot a penalty is enforced TO, on pages that state the walk-off ("PENALTY IND
+# Holding 10 yards from FIU49 to IND41"). Older pages write "10 yards to the VU32",
+# which the parser's own end-yard-line rule already reads.
+_PENALTY_SPOT_RE = re.compile(rf"\d+ yards? from {_YL_TOKEN} to ({_YL_TOKEN})(?!\w)", re.I)
 _QTR_MARKER_RE = re.compile(r"start of (\d)(?:st|nd|rd|th) quarter", re.I)
 _INT_BY_RE = re.compile(rf"intercepted by ({_NAME})")
 _RET_YDS_RE = re.compile(r"return (\d+) yards", re.I)
@@ -349,6 +354,36 @@ def _split_end_yard_line(
         return exact
     alias = next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
     return alias or _split_yard_line(token, codes)
+
+
+def _penalty_end_ytg(
+    text: "Optional[str]",
+    offense: "Optional[str]",
+    own_side: "dict[str, str]",
+    codes: "list[str]",
+    aliases: "dict[str, str]",
+) -> "Optional[int]":
+    """``yards_to_goal`` of the spot a penalty enforced on this row walks the ball to.
+
+    Measured in the CURRENT offense's frame, exactly like the row's own ``end_ytg``, so
+    the end-state loop's change-of-possession arm still flips it for the next offense.
+    ``None`` when the row states no walk-off (declined/offsetting penalties, and the
+    older pages that write the enforcement spot as a plain "to the VU32" -- there the
+    parser's own end yard line is already the post-enforcement spot).
+
+    The reprinted "(Original Play: ...)" of an overturned call is cut first (NC5): the
+    enforcement that stands is the one before the review note.
+    """
+    if not text or offense not in own_side:
+        return None
+    spots = _PENALTY_SPOT_RE.findall(_REVIEW_RE.split(text, 1)[0])
+    if not spots:
+        return None
+    end = _split_end_yard_line(spots[-1], codes, aliases)
+    if end is None:
+        return None
+    end_side, end_num = end
+    return 100 - end_num if end_side is not None and own_side[offense] == end_side else end_num
 
 
 def _recovering_team(text: str, own_side: "dict[str, str]", aliases: "dict[str, str]") -> "Optional[str]":
@@ -915,22 +950,35 @@ def to_cfbfastr(
     # cfbfastR end state: yards_to_goal_end is measured for the team holding the ball
     # AFTER the play -- 0 on a touchdown; flipped to the new offense when possession
     # changes (kickoff, punt, turnover, downs); a touchback puts it at the receiver's 25
-    # (kickoff) or 20; an unknown end spot takes the next snap's yards_to_goal.
+    # (kickoff) or 20; an unknown end spot takes the next snap's yards_to_goal. A penalty
+    # enforced on the row's own play beats the play's end spot AND the touchback default,
+    # since the page states where the ball was actually walked to; a touchdown still wins.
     chain = [x for x in rows if x["orig_play_type"] not in ("timeout", "period_marker")]
     for cur, nxt in zip(chain, [*chain[1:], None]):
+        # a penalty enforced on the play's OWN row moves the ball after the play, so the
+        # play's end yard line is the PRE-enforcement spot and the next snap disagrees
+        # with it. Measured in this offense's frame, so the change-of-possession arm
+        # below still flips it.
+        pen_end = (
+            _penalty_end_ytg(cur["play_text"], cur["pos_team"], own_side, side_codes, end_aliases)
+            if cur["penalty_flag"]
+            else None
+        )
+        if pen_end is not None:
+            cur["yards_to_goal_end"] = pen_end
         if cur["touchdown"]:
             cur["yards_to_goal_end"] = 0
         elif cur["orig_play_type"] == "kickoff":
             # the row already sits with the receiving team, so a returned kickoff's end
             # spot needs no flip; only a touchback leaves no spot in the text
-            if "touchback" in (cur["play_text"] or "").lower():
+            if pen_end is None and "touchback" in (cur["play_text"] or "").lower():
                 cur["yards_to_goal_end"] = 75
             elif cur["yards_to_goal_end"] is None and nxt is not None and nxt["half"] == cur["half"]:
                 cur["yards_to_goal_end"] = nxt["yards_to_goal"]
         elif nxt is not None and nxt["half"] == cur["half"] and None not in (cur["pos_team"], nxt["pos_team"]):
             if nxt["pos_team"] == cur["pos_team"]:
                 continue
-            if "touchback" in (cur["play_text"] or "").lower():
+            if pen_end is None and "touchback" in (cur["play_text"] or "").lower():
                 cur["yards_to_goal_end"] = 75 if cur["orig_play_type"] == "kickoff" else 80
             elif cur["yards_to_goal_end"] is not None:
                 # a SAFETY hands over the ball but its end spot is already the old
