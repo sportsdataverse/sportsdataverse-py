@@ -176,14 +176,28 @@ RULE_SCOPE: dict[str, Rule] = _scope(
         "both feed order, neither a processor defect",
     ),
     Rule(
+        "box.usage_shares_sum_to_one",
+        Severity.WARN,
+        note="usage_box._team_totals takes each share's denominator from EVERY standing "
+        "scrimmage play, so an unattributed target leaves a team's shares summing to LESS "
+        "than one: the shortfall is attribution coverage (attr.* measures it), not a box "
+        "defect. The rule still fails closed on a share that is not its own count over the "
+        "team's, and on a team whose shares sum above one",
+    ),
+    Rule(
         "plays.unexplained_drop",
         era_scope={"nfl": (2010, _OPEN), "cfb": (2010, _OPEN)},
         note="FINDINGS N5: the constant yardsToEndzone=0 of 2002-09 makes consecutive snaps look identical",
     ),
 )
 
-#: Attribution coverage (``attr.*``) and box parity (``box.*``) are INFO / WARN in the
-#: rule table itself and stay there: 2002-09 text is null or a stub (run3 O5) and the
+#: The V1b ``advBoxScore`` reconciliations (``box.team_totals_match_plays``,
+#: ``box.player_sums_match_team``, ``box.rates_recompute_from_counts``,
+#: ``box.sections_mirror_off_def``, ``box.turnovers_match_flags``,
+#: ``box.drives_match_drive_rows``, ``box.team_ids_in_game``) keep the table's ``error``:
+#: they fired on 0 of the 80-game V1b gate slice (nfl + cfb, 2012-2025), so there is no
+#: measurement that would justify a demotion. Attribution coverage (``attr.*``) and the
+#: ESPN box parity rules (``box.*_vs_espn``) are INFO / WARN in the rule table itself and stay there: 2002-09 text is null or a stub (run3 O5) and the
 #: pre-2015 stored summaries are incomplete against ESPN's own box (run3 O11).
 
 

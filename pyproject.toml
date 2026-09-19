@@ -315,9 +315,11 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/validation/box_reconcile.py",
     "sportsdataverse/validation/findings.py",
     "sportsdataverse/validation/pbp_invariants.py",
     "sportsdataverse/validation/report.py",
+    "sportsdataverse/validation/thresholds.py",
     "sportsdataverse/_rds.py",
     "sportsdataverse/release.py",
     "sportsdataverse/espn_snapshots.py",
