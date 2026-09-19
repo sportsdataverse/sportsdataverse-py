@@ -5,7 +5,7 @@ from pathlib import Path
 import polars as pl
 
 from tools.validation.checks import schema_contract
-from tools.validation.findings import Severity
+from sportsdataverse.validation.findings import Severity
 from tools.validation.registry import (
     DATASETS,
     DatasetSpec,

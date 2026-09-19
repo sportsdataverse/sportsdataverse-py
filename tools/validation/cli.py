@@ -20,7 +20,7 @@ from tools.validation.checks import (
     schema_contract,
     sweep,
 )
-from tools.validation.findings import Finding, Severity
+from sportsdataverse.validation.findings import Finding, Severity
 from tools.validation.lint import leakage_python, leakage_r
 
 # NOTE: `tools.validation.registry` is imported lazily, inside the two functions

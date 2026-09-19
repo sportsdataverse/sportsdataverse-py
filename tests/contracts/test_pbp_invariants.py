@@ -1,4 +1,4 @@
-"""Processor-invariant checks (``tools/validation/checks/pbp_invariants.py``).
+"""Processor-invariant checks (``sportsdataverse/validation/pbp_invariants.py``).
 
 Synthetic frames validate the CHECK logic: each rule is shown clean on a
 well-formed game and firing on a single mutated value. One smoke test runs the
@@ -13,8 +13,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from tools.validation.checks import pbp_invariants as inv
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation import pbp_invariants as inv
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 FIX = Path(__file__).resolve().parents[1] / "nfl" / "fixtures" / "summary_401872922.json"
 HOME, AWAY = 1, 2

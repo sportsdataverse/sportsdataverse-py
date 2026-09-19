@@ -18,7 +18,7 @@ failed.
 :func:`evaluate` returns one :class:`RuleResult` per applicable rule, carrying
 its denominator (``n_checked``) as well as its violation count, so a sweep can
 report *rates* by league and era. :func:`run` is the harness-shaped wrapper
-that turns fired rules into :class:`~tools.validation.findings.Finding` records.
+that turns fired rules into :class:`~sportsdataverse.validation.findings.Finding` records.
 
 The invariants are grouped by number (``invariant`` on each result):
 
@@ -34,7 +34,7 @@ from typing import Any
 
 import polars as pl
 
-from tools.validation.findings import CheckContext, Finding, Severity
+from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 _SAMPLE_N = 5
 _TEXT_CHARS = 140
@@ -1094,7 +1094,7 @@ def _plays(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
     seen_text: dict[str, int] = {}
     for p in raw:
         try:
-            pid = int(p.get("id"))
+            pid = int(p.get("id"))  # type: ignore[arg-type]
         except (TypeError, ValueError):
             continue
         raw_ids.append(pid)
@@ -1150,7 +1150,7 @@ def espn_team_stats(summary: dict[str, Any] | None) -> dict[int, dict[str, int |
     out: dict[int, dict[str, int | None]] = {}
     for team in ((summary or {}).get("boxscore") or {}).get("teams") or []:
         try:
-            tid = int((team.get("team") or {}).get("id"))
+            tid = int((team.get("team") or {}).get("id"))  # type: ignore[arg-type]
         except (TypeError, ValueError):
             continue
         stats = {s.get("name"): s.get("displayValue") for s in team.get("statistics") or []}

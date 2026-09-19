@@ -23,7 +23,7 @@ def test_dataset_spec_has_leakage_fields_with_safe_defaults():
 
 
 def test_checkcontext_carries_leakage_fields():
-    from tools.validation.findings import CheckContext
+    from sportsdataverse.validation.findings import CheckContext
 
     ctx = CheckContext(
         domain="nfl",
@@ -82,7 +82,7 @@ def test_cfb_data_r_lint_target_registered():
 
 
 def test_expected_constant_columns_defaults_and_threads() -> None:
-    from tools.validation.findings import CheckContext
+    from sportsdataverse.validation.findings import CheckContext
     from tools.validation.registry import DatasetSpec
 
     # default is empty

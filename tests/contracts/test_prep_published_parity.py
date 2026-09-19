@@ -1,7 +1,7 @@
 import polars as pl
 
 from tools.validation.checks import prep_published_parity
-from tools.validation.findings import Severity
+from sportsdataverse.validation.findings import Severity
 
 
 def test_matching_frames_yield_no_findings():

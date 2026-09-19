@@ -3,7 +3,7 @@ from __future__ import annotations
 import polars as pl
 
 from tools.validation.checks import e2e
-from tools.validation.findings import Severity
+from sportsdataverse.validation.findings import Severity
 
 
 def test_join_key_dtype_disagreement_is_error():

@@ -4,7 +4,7 @@ Samples completed games per season from the local raw libraries, runs
 ``NFLPlayProcess`` / ``CFBPlayProcess`` on each stored summary with the
 network disabled (``summary=`` injection, ``join_participants=False``, every
 ``download`` patched to raise), evaluates
-:mod:`tools.validation.checks.pbp_invariants` on the processed plays, and
+:mod:`sportsdataverse.validation.pbp_invariants` on the processed plays, and
 aggregates violation rates by league, era and season.
 
 Layout under ``--out``::
@@ -87,7 +87,7 @@ def read_summary(league: str, root: Path, season: int, game_id: int) -> dict[str
 
 def summary_facts(summary: dict[str, Any]) -> dict[str, Any]:
     """Completion, OT, text presence, play count and home group of a stored summary."""
-    from tools.validation.checks.pbp_invariants import raw_plays
+    from sportsdataverse.validation.pbp_invariants import raw_plays
 
     try:
         comp = summary["header"]["competitions"][0]
@@ -241,7 +241,7 @@ def process_game(task: dict[str, Any]) -> dict[str, Any]:
     import sportsdataverse.dl_utils as dl_utils
 
     dl_utils.download = _no_network
-    from tools.validation.checks import pbp_invariants
+    from sportsdataverse.validation import pbp_invariants
 
     league, season, gid = task["league"], int(task["season"]), int(task["game_id"])
     out_dir, raw_root = Path(task["out"]), Path(task["raw_root"])
@@ -299,7 +299,7 @@ def rescore_game(args: tuple[str, str, str]) -> bool:
     """Worker: re-evaluate one saved game in place; False when it has no saved frame."""
     import polars as pl
 
-    from tools.validation.checks import pbp_invariants
+    from sportsdataverse.validation import pbp_invariants
 
     game_file, out_dir, raw_root = args
     game_path, out = Path(game_file), Path(out_dir)

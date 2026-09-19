@@ -3,7 +3,7 @@ from pathlib import Path
 import polars as pl
 
 from tools.validation.checks import boundary_leakage
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 _FIX = Path(__file__).parent / "fixtures"
 

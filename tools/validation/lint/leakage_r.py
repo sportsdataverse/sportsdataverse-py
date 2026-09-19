@@ -9,7 +9,7 @@ import subprocess
 from collections.abc import Iterator
 from pathlib import Path
 
-from tools.validation.findings import Finding, Severity
+from sportsdataverse.validation.findings import Finding, Severity
 from tools.validation.lint import EXCLUDE_DIRS as _BASE_EXCLUDE_DIRS
 
 _HELPER = Path(__file__).parent / "getparsedata.R"

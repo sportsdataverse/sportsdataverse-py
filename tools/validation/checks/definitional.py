@@ -26,7 +26,7 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from tools.validation.findings import CheckContext, Finding, Severity
+from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 _SAMPLE_N = 3
 _EPS = 1e-6

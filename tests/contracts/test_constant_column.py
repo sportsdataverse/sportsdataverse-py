@@ -3,7 +3,7 @@ from __future__ import annotations
 import polars as pl
 
 from tools.validation.checks import constant_column
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 
 def _ctx(**kw) -> CheckContext:

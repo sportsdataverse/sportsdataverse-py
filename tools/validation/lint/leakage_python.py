@@ -5,7 +5,7 @@ import os
 from collections.abc import Iterator
 from pathlib import Path
 
-from tools.validation.findings import Finding, Severity
+from sportsdataverse.validation.findings import Finding, Severity
 from tools.validation.lint import EXCLUDE_DIRS as _EXCLUDE_DIRS
 
 _LAG_CALLS = frozenset(

@@ -9,10 +9,12 @@ from pathlib import Path
 import polars as pl
 import yaml
 
-from tools.validation.findings import CheckContext
+import sportsdataverse.validation
+from sportsdataverse.validation.findings import CheckContext
 from tools.validation.oracles import ORACLES
 
-_THRESHOLDS_PATH = Path(__file__).parent / "thresholds.yaml"
+#: Packaged alongside the rules (``tools/`` does not ship in the wheel).
+_THRESHOLDS_PATH = Path(sportsdataverse.validation.__file__).resolve().parent / "thresholds.yaml"
 _SCHEMAS_DIR = Path(__file__).parent / "schemas"
 
 

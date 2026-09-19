@@ -24,7 +24,7 @@ from pathlib import Path
 
 import polars as pl
 
-from tools.validation.findings import CheckContext, Finding, Severity
+from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 _SNAPSHOT_DIR = Path(__file__).parent / "combos"
 _SAMPLE_N = 5

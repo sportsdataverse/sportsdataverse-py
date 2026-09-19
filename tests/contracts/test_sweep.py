@@ -3,7 +3,7 @@ from __future__ import annotations
 import polars as pl
 
 from tools.validation.checks import sweep
-from tools.validation.findings import CheckContext, Severity
+from sportsdataverse.validation.findings import CheckContext, Severity
 
 
 def test_duplicate_join_keys_is_error():

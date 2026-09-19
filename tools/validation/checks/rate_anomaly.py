@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import polars as pl
 
-from tools.validation.findings import CheckContext, Finding, Severity
+from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 
 #: dataset -> (season column, per-season denominator key, flag columns)
 RATE_SPECS: dict[str, tuple[str, str, tuple[str, ...]]] = {

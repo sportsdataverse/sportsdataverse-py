@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import polars as pl
 
-from tools.validation.findings import Finding, Severity
+from sportsdataverse.validation.findings import Finding, Severity
 
 #: Default columns excluded from value comparison — empty ON PURPOSE. Stamp
 #: column names vary by repo and dataset (``built_at``, ``last_updated``, …), so
