@@ -18,11 +18,22 @@ from __future__ import annotations
 
 from sportsdataverse.validation import thresholds
 from sportsdataverse.validation.report import (
+    NOT_APPLICABLE,
     RULE_SCOPE,
+    SOURCE_COLUMNS,
     Finding,
     GameReport,
     Rule,
     validate_game,
 )
 
-__all__ = ["RULE_SCOPE", "Finding", "GameReport", "Rule", "thresholds", "validate_game"]
+__all__ = [
+    "NOT_APPLICABLE",
+    "RULE_SCOPE",
+    "SOURCE_COLUMNS",
+    "Finding",
+    "GameReport",
+    "Rule",
+    "thresholds",
+    "validate_game",
+]

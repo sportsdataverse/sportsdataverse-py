@@ -6003,6 +6003,12 @@ Pure and offline: nothing is fetched, nothing is written, the frame is not
 mutated. A rule whose columns the frame lacks is skipped rather than failed,
 so a slim frame validates the rules it can support.
 
+For a source whose producer names the same quantities differently,
+`SOURCE_COLUMNS` supplies the ESPN-shaped aliases on a view of the
+frame, and `NOT_APPLICABLE` names the rules that source cannot
+support at all -- those are reported in `not_applicable` rather than
+skipped silently.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |

@@ -14,7 +14,15 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.validation import RULE_SCOPE, Finding, GameReport, Rule, validate_game
+from sportsdataverse.validation import (
+    NOT_APPLICABLE,
+    RULE_SCOPE,
+    SOURCE_COLUMNS,
+    Finding,
+    GameReport,
+    Rule,
+    validate_game,
+)
 from sportsdataverse.validation import pbp_invariants as inv
 from sportsdataverse.validation.findings import Severity
 
@@ -90,9 +98,11 @@ def test_report_is_json_serialisable_and_stable():
         "ok",
         "n_errors",
         "n_warnings",
+        "n_not_applicable",
         "errors",
         "warnings",
         "counts_by_rule",
+        "not_applicable",
     ]
     assert payload["counts_by_rule"]["type.null_id"] == 1
     assert not payload["ok"] and payload["n_errors"] == 1
@@ -241,3 +251,144 @@ def test_validate_is_opt_in():
     proc = mod.CFBPlayProcess(gameId=game_id, join_participants=False)
     proc.espn_cfb_pbp(summary=_load(rel))
     assert "validation" not in proc.run_processing_pipeline()
+
+
+# --- adapted sources: column aliases + not-applicable rules ------------------
+
+
+def _ncaa_frame() -> pl.DataFrame:
+    """A real stats.ncaa.org game mapped to cfbfastR names, from a committed page. 0 network."""
+    from sportsdataverse.cfb import to_cfbfastr
+    from sportsdataverse.cfb.cfb_ncaa_box import (
+        parse_cfb_ncaa_drives,
+        parse_cfb_ncaa_linescore,
+        parse_cfb_ncaa_scoring_summary,
+    )
+    from sportsdataverse.cfb.cfb_ncaa_pbp import parse_cfb_ncaa_drive_titles, parse_cfb_ncaa_pbp
+
+    fix = FIXTURES / "fixtures" / "cfb_ncaa"
+    pbp_html = (fix / "mfb_play_by_play_6386512.html").read_text(encoding="utf-8")
+    box_html = (fix / "mfb_box_score_6386512.html").read_text(encoding="utf-8")
+    drives = parse_cfb_ncaa_drives((fix / "mfb_drives_6386512.html").read_text(encoding="utf-8"), contest_id="6386512")
+    return to_cfbfastr(
+        parse_cfb_ncaa_pbp(pbp_html, contest_id="6386512"),
+        season=2025,
+        drives=drives,
+        linescore=parse_cfb_ncaa_linescore(box_html, contest_id="6386512"),
+        drive_titles=parse_cfb_ncaa_drive_titles(pbp_html),
+        ot_drives=drives,
+        scoring_summary=parse_cfb_ncaa_scoring_summary(box_html, contest_id="6386512"),
+    )
+
+
+def test_ncaa_aliases_carry_the_mappers_own_values():
+    """``SOURCE_COLUMNS["ncaa"]`` is renames and arithmetic identities, nothing invented."""
+    from sportsdataverse.validation.report import _as_source
+
+    frame = _ncaa_frame()
+    view = _as_source(frame, "ncaa")
+    assert set(SOURCE_COLUMNS["ncaa"]) <= set(view.columns)
+    for espn, native in (
+        ("start.yardsToEndzone", "yards_to_goal"),
+        ("end.yardsToEndzone", "yards_to_goal_end"),
+        ("start.down", "down"),
+        ("start.distance", "distance"),
+        ("period.number", "period"),
+        ("type.text", "play_type"),
+        ("text", "play_text"),
+        ("id", "id_play"),
+        ("drive.id", "drive_id"),
+        ("scoringPlay", "scoring_play"),
+        ("fg_attempt", "fg_inds"),
+    ):
+        assert view.get_column(espn).to_list() == frame.get_column(native).to_list(), espn
+    # the source's own orig_play_type is the raw NCAA structural type, so the alias
+    # must WIN over it -- otherwise the field-goal rules read "field_goal" and never scope
+    assert frame.get_column("orig_play_type").to_list() != frame.get_column("play_type").to_list()
+    assert view.get_column("orig_play_type").to_list() == frame.get_column("play_type").to_list()
+    # "M:SS" -- the shape clock.monotone_within_period parses
+    clock = view.filter(pl.col("clock.seconds") < 10).get_column("clock.displayValue").drop_nulls()
+    assert clock.len() and all(len(v.split(":")[1]) == 2 for v in clock)
+    # the score aliases resolve the offense/defense pair onto home/away, and start is
+    # the previous row's end (0-0 before the first row)
+    home_end = view.get_column("end.homeScore")
+    assert view.get_column("start.homeScore").to_list() == [0, *home_end.to_list()[:-1]]
+    resolved = view.select(
+        (
+            pl.when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.col("pos_team_score"))
+            .otherwise(pl.col("def_pos_team_score"))
+            == pl.col("end.homeScore")
+        ).all()
+    ).item()
+    assert resolved
+    assert frame.columns == _ncaa_frame().columns  # the caller's frame is not mutated
+
+
+def test_ncaa_alias_is_skipped_when_its_inputs_are_missing():
+    """A slim frame keeps validating: an alias whose source columns are absent is dropped."""
+    from sportsdataverse.validation.report import _as_source
+
+    slim = pl.DataFrame({"yards_to_goal": [40, 30], "play_text": ["a", "b"]})
+    view = _as_source(slim, "ncaa")
+    assert view.get_column("start.yardsToEndzone").to_list() == [40, 30]
+    assert "end.homeScore" not in view.columns and "type.text" not in view.columns
+
+
+def test_every_ncaa_rule_is_evaluated_or_explicitly_not_applicable():
+    """The gate's whole point: no rule silently disappears on the NCAA mapper path."""
+    from sportsdataverse.validation.report import _as_source
+
+    proc, game = _process("cfb", 401856682, "cfb/fixtures/summary_401856682.json")
+    catalog = {
+        r.rule for r in inv.evaluate(proc.plays_frame, summary=game, box=game.get("advBoxScore"), league="cfb")
+    } | {
+        # NFL-only box comparisons: ESPN charges sacks to passing, NCAA to rushing,
+        # so _box never emits these three for a cfb game
+        "box.plays_rush_yards_vs_espn",
+        "box.plays_sacks_vs_espn",
+        "box.adv_rush_yards_vs_espn",
+    }
+    unsupported = set(NOT_APPLICABLE["ncaa"])
+    assert unsupported <= catalog, sorted(unsupported - catalog)  # no typo'd rule id
+    results = inv.evaluate(_as_source(_ncaa_frame(), "ncaa"), league="cfb")
+    evaluated = {r.rule for r in results} - unsupported
+    assert evaluated | unsupported == catalog, sorted(catalog - evaluated - unsupported)
+    # an evaluated rule with an empty denominator is a silent skip wearing a hat,
+    # unless its scope waits on an event this one game did not produce
+    empty = {r.rule for r in results if r.rule in evaluated and not r.n_checked}
+    assert empty <= {"flags.offense_td_flag_on_return_td"}, sorted(empty)
+
+
+def test_not_applicable_is_reported_and_suppresses_the_rule():
+    """A not-applicable rule is counted, listed, and never contributes a finding."""
+    report = validate_game(_ncaa_frame(), "cfb", source="ncaa")
+    assert report.not_applicable == sorted(NOT_APPLICABLE["ncaa"])
+    assert report.to_dict()["n_not_applicable"] == len(NOT_APPLICABLE["ncaa"])
+    assert report.to_row()["n_not_applicable"] == len(NOT_APPLICABLE["ncaa"])
+    assert not set(report.counts_by_rule) & set(NOT_APPLICABLE["ncaa"])
+    # ytg.continuity_next_snap DOES evaluate once the aliases land -- being
+    # not-applicable is what keeps its (double-flipped) verdict out of the report
+    from sportsdataverse.validation.report import _as_source
+
+    fired = {r.rule for r in inv.evaluate(_as_source(_ncaa_frame(), "ncaa"), league="cfb") if r.n_violations}
+    assert "ytg.continuity_next_snap" in fired
+    assert "ytg.continuity_next_snap" not in report.counts_by_rule
+    # an ESPN game is untouched by the ncaa map
+    assert validate_game(_frame(), "cfb").not_applicable == []
+
+
+def test_a_challenge_quote_is_not_an_incomplete_pass():
+    """``flags.completion_on_incomplete_text`` read the text of the *challenge*, not the play."""
+    frame = _frame(
+        completion=[True, True, True],
+        text=[
+            "pass complete to Olson for 26 yards. FST is challenging the ruling on the field - "
+            '"Incomplete pass". PLAY STANDS.',
+            "pass incomplete deep left to Brown",
+            "pass complete short right to Hester",
+        ],
+    )
+    (result,) = [r for r in inv.evaluate(frame, league="cfb") if r.rule == "flags.completion_on_incomplete_text"]
+    assert (result.n_checked, result.n_violations) == (3, 1)
+    assert result.samples[0]["id"] == 2

@@ -201,6 +201,183 @@ RULE_SCOPE: dict[str, Rule] = _scope(
 #: pre-2015 stored summaries are incomplete against ESPN's own box (run3 O11).
 
 
+# ---------------------------------------------------------------------------
+# per-source column maps and not-applicable rules
+# ---------------------------------------------------------------------------
+
+#: ESPN-shaped column -> expression over an adapted source's own columns.
+#:
+#: The rule table is written against the ESPN processor vocabulary
+#: (``start.yardsToEndzone``, ``type.text``, ``end.homeScore`` ...). A source
+#: whose producer emits the same quantity under a different name was silently
+#: skipping every rule that read it. :func:`validate_game` materialises these
+#: as extra columns on a *view* of the frame before evaluating -- the caller's
+#: frame is not mutated and nothing is published from it, so the published
+#: schema of an adapted source stays exactly what its producer defines.
+#:
+#: Only genuine renames and arithmetic identities belong here. Where the
+#: source cannot supply the quantity, the rule is named in
+#: :data:`NOT_APPLICABLE` instead -- never faked into passing.
+SOURCE_COLUMNS: dict[str, dict[str, pl.Expr]] = {
+    # stats.ncaa.org -> cfbfastR (``sportsdataverse.cfb.to_cfbfastr``).
+    "ncaa": {
+        "id": pl.col("id_play"),
+        "text": pl.col("play_text"),
+        # the mapper's ``play_type`` IS the cfbfastR/ESPN label vocabulary
+        # ("Pass Reception", "Sack", "Field Goal Good", ...), which is what the
+        # play-type rules match against.
+        "type.text": pl.col("play_type"),
+        # ``orig_play_type`` on this path is the raw stats.ncaa.org structural
+        # type ("field_goal", "rush"), NOT ESPN's pre-processor type, so the
+        # rules that read it are pointed at the cfbfastR label instead.
+        "orig_play_type": pl.col("play_type"),
+        "period.number": pl.col("period"),
+        # "M:SS" -- the shape ``clock.monotone_within_period`` parses
+        "clock.displayValue": pl.format(
+            "{}:{}", pl.col("clock.minutes"), pl.col("clock.seconds").cast(pl.Utf8).str.pad_start(2, "0")
+        ),
+        "start.down": pl.col("down"),
+        "start.distance": pl.col("distance"),
+        "start.yardsToEndzone": pl.col("yards_to_goal"),
+        "end.yardsToEndzone": pl.col("yards_to_goal_end"),
+        "drive.id": pl.col("drive_id"),
+        "scoringPlay": pl.col("scoring_play"),
+        "fg_attempt": pl.col("fg_inds"),
+        "kickoff_return_player_name": pl.col("kickoff_returner_player_name"),
+        "punt_return_player_name": pl.col("punt_returner_player_name"),
+        # cfbfastR carries ONE possession per row; the ESPN frame carries a
+        # start and an end. The end alias is the same value, which is why
+        # ``poss.end_team_flips_without_change`` is not applicable below.
+        "start.pos_team.id": pl.col("pos_team"),
+        "end.pos_team.id": pl.col("pos_team"),
+        # cfbfastR's scores are the offense/defense pair AFTER the play; the
+        # rules read home/away before and after. ``pos_team`` resolves to
+        # ``home`` or ``away`` on 7,501/7,501 rows of the 40-game ay2025 probe.
+        # The *start* score is the previous row's end score (0-0 before the
+        # first row) -- the assumption that no points are scored between two
+        # consecutive rows is exactly what ``score.change_on_non_scoring_play``
+        # and ``score.delta_value`` are there to test.
+        "end.homeScore": pl.when(pl.col("pos_team") == pl.col("home"))
+        .then(pl.col("pos_team_score"))
+        .otherwise(pl.col("def_pos_team_score")),
+        "end.awayScore": pl.when(pl.col("pos_team") == pl.col("away"))
+        .then(pl.col("pos_team_score"))
+        .otherwise(pl.col("def_pos_team_score")),
+    },
+}
+# the start scores are the end scores shifted, so they are built from the end
+# aliases rather than restating the home/away resolution twice
+SOURCE_COLUMNS["ncaa"]["start.homeScore"] = SOURCE_COLUMNS["ncaa"]["end.homeScore"].shift(1).fill_null(0)
+SOURCE_COLUMNS["ncaa"]["start.awayScore"] = SOURCE_COLUMNS["ncaa"]["end.awayScore"].shift(1).fill_null(0)
+
+
+#: ``{source: {rule_id: why}}`` -- rules whose quantity does not exist for a
+#: source. They are skipped *with a reason*: the report counts them in
+#: ``n_not_applicable`` and lists them in ``not_applicable``, which is what
+#: separates "we looked and there is nothing to look at" from a silent skip.
+#:
+#: The companion to :data:`RULE_SCOPE`, kept as its own table rather than folded
+#: into it: most of these rules are not scoped at all today, and a placeholder
+#: :class:`Rule` for them would override the severity the rule table itself
+#: assigns (the ``box.*`` family is WARN there and would have become ERROR).
+NOT_APPLICABLE: dict[str, dict[str, str]] = {
+    "ncaa": {
+        # --- no timeout state on the source at all -------------------------
+        # stats.ncaa.org pbp pages print a "Timeout TEAM" row but never a
+        # timeouts-remaining count, and ``to_cfbfastr`` emits no timeout
+        # column. Deriving counters (3 per half, decrement per timeout row)
+        # would make all seven rules pass by construction.
+        "timeouts.range": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.range_overtime": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.increase_within_half": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.second_half_reset": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.timeout_row_not_charged": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.timeout_row_charged_both": "stats.ncaa.org carries no timeouts-remaining counters",
+        "timeouts.charged_on_non_timeout_row": "stats.ncaa.org carries no timeouts-remaining counters",
+        # --- no EP / WP model on this path ---------------------------------
+        # ``to_cfbfastr`` maps raw text to cfbfastR names and runs no model
+        # ("Model outputs (EPA/WP/...) are out of scope by design"), so there
+        # is no EP_start / EP_end / EPA / wp_* column to judge.
+        "ep.start_range": "no EP model runs on the stats.ncaa.org mapper path",
+        "ep.end_range_non_scoring": "no EP model runs on the stats.ncaa.org mapper path",
+        "ep.epa_identity": "no EP model runs on the stats.ncaa.org mapper path",
+        "ep.offense_td_end_not_realized": "no EP model runs on the stats.ncaa.org mapper path",
+        "ep.offense_td_pat_in_text_unresolved": "no EP model runs on the stats.ncaa.org mapper path",
+        "ep.offense_td_failed_try_scored_as_made": "no EP model runs on the stats.ncaa.org mapper path",
+        "wp.wp_before_range": "no WP model runs on the stats.ncaa.org mapper path",
+        "wp.wp_after_range": "no WP model runs on the stats.ncaa.org mapper path",
+        "wp.home_wp_continuity": "no WP model runs on the stats.ncaa.org mapper path",
+        "wp.home_wp_after_complemented": "no WP model runs on the stats.ncaa.org mapper path",
+        "wp.final_home_wp_matches_result": "no WP model runs on the stats.ncaa.org mapper path",
+        "wp.wpa_sums_to_result": "no WP model runs on the stats.ncaa.org mapper path",
+        "epa.team_sum_matches_box": "no EP model runs on the stats.ncaa.org mapper path",
+        # --- needs the ESPN summary / box, which this path never has --------
+        "score.final_matches_header": "no ESPN summary header; the NCAA producer checks the final "
+        "against the official linescore in its own qa_pbp_vs_linescore artefact",
+        "plays.unexplained_drop": "no ESPN summary to diff the processed rows against",
+        "plays.rows_not_in_raw": "no ESPN summary to diff the processed rows against",
+        "drive.count_matches_feed": "no ESPN summary drive groups to count against",
+        "box.plays_pass_yards_vs_espn": "no ESPN summary boxscore to reconcile against",
+        "box.plays_completions_vs_espn": "no ESPN summary boxscore to reconcile against",
+        "box.plays_pass_attempts_vs_espn": "no ESPN summary boxscore to reconcile against",
+        "box.plays_rush_attempts_vs_espn": "no ESPN summary boxscore to reconcile against",
+        "box.adv_pass_yards_vs_espn": "no ESPN summary boxscore to reconcile against",
+        "box.adv_pass_yards_vs_live_plays": "no advBoxScore is built on the mapper path",
+        "box.adv_rush_yards_vs_live_plays": "no advBoxScore is built on the mapper path",
+        "box.plays_rush_yards_vs_espn": "NFL-only box comparison (NCAA charges sacks to rushing)",
+        "box.plays_sacks_vs_espn": "NFL-only box comparison (NCAA charges sacks to rushing)",
+        "box.adv_rush_yards_vs_espn": "NFL-only box comparison (NCAA charges sacks to rushing)",
+        # --- ESPN-only fields the source has no counterpart for -------------
+        "type.null_id": "stats.ncaa.org has no ESPN play-type ids",
+        "type.null_abbreviation": "stats.ncaa.org has no ESPN play-type abbreviations",
+        "ytg.td_start_eq_stat_yardage": "statYardage is an ESPN field with no NCAA counterpart",
+        "ytg.start_matches_down_distance_text": "stats.ncaa.org prints no down-and-distance text to "
+        "cross-check the spot against",
+        "down.goal_to_go_distance_eq_ytg": "no down-and-distance text; the mapper's Goal_To_Go is itself "
+        "derived from distance vs yards_to_goal, so a rule fed from it could not fail",
+        # --- the alias exists but would make the rule vacuous ---------------
+        "poss.end_team_flips_without_change": "cfbfastR carries one possession per row, so end.pos_team "
+        "is the start alias and the rule could never fire",
+        "poss.offense_matches_drive_team": "the mapper has no drive-team label independent of pos_team "
+        "(it derives pos_team from the drive title), so the rule would be tautological",
+        "ytg.continuity_next_snap": "yards_to_goal_end is already expressed in the post-play offense's "
+        "frame and, where the end spot is unknown at a change of possession, back-filled from the next "
+        "snap's yards_to_goal -- the cross-possession arm would be double-flipped or tautological",
+        "flags.rush_pass_not_scrimmage": "the mapper emits no scrimmage_play column; deriving it from "
+        "rush/pass is the rule's own left-hand side",
+        "flags.fg_relabeled_extra_point": "the mapper keeps no pre-relabel play type, so orig and type "
+        "are the same column and the rule could never fire",
+        "attr.sacker": "the mapper emits tacklers, not a sack_player_name",
+        "attr.kickoff_returner": "the mapper emits no kickoff touchback / out-of-bounds / onside "
+        "sub-flags, so the rule cannot scope out the kicks with no returner",
+        "attr.punt_returner": "the mapper emits no punt touchback / out-of-bounds / downed sub-flags, "
+        "so the rule cannot scope out the punts with no returner",
+    },
+}
+
+
+def _as_source(frame: pl.DataFrame, source: str) -> pl.DataFrame:
+    """A view of ``frame`` carrying the ESPN-shaped aliases :data:`SOURCE_COLUMNS` defines.
+
+    An alias whose inputs the frame lacks is dropped rather than raising. An
+    alias always wins over a same-named column already on the frame: the map
+    describes *this* source's frame, and ``ncaa``'s ``orig_play_type`` is the
+    raw stats.ncaa.org structural type rather than the ESPN quantity of that
+    name.
+    """
+    exprs = SOURCE_COLUMNS.get(source)
+    if not exprs:
+        return frame
+    add = []
+    for name, expr in exprs.items():
+        try:
+            frame.lazy().select(expr.alias(name)).collect_schema()
+        except Exception:  # noqa: BLE001 -- a source frame missing the inputs just skips the alias
+            continue
+        add.append(expr.alias(name))
+    return frame.with_columns(add) if add else frame
+
+
 @dataclass(frozen=True)
 class Finding:
     """One rule that fired on one game.
@@ -255,6 +432,7 @@ class GameReport:
         | errors | list[Finding] | findings at ``error`` severity |
         | warnings | list[Finding] | findings at ``warn`` severity (``info`` findings are counted, not listed) |
         | counts_by_rule | dict[str, int] | violation count per fired rule, whatever its severity |
+        | not_applicable | list[str] | rules the source cannot support, skipped with a reason in :data:`NOT_APPLICABLE` -- a declared skip, not a silent one |
     """
 
     game_id: int | None
@@ -267,6 +445,7 @@ class GameReport:
     errors: list[Finding] = field(default_factory=list)
     warnings: list[Finding] = field(default_factory=list)
     counts_by_rule: dict[str, int] = field(default_factory=dict)
+    not_applicable: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         """A stable, JSON-serialisable dict (key order is part of the contract)."""
@@ -280,9 +459,11 @@ class GameReport:
             "ok": self.ok,
             "n_errors": len(self.errors),
             "n_warnings": len(self.warnings),
+            "n_not_applicable": len(self.not_applicable),
             "errors": [f.to_dict() for f in self.errors],
             "warnings": [f.to_dict() for f in self.warnings],
             "counts_by_rule": dict(sorted(self.counts_by_rule.items())),
+            "not_applicable": list(self.not_applicable),
         }
 
     def to_row(self) -> dict[str, Any]:
@@ -297,6 +478,7 @@ class GameReport:
             "ok": self.ok,
             "n_errors": len(self.errors),
             "n_warnings": len(self.warnings),
+            "n_not_applicable": len(self.not_applicable),
             "failed_rule_ids": sorted(f.rule_id for f in self.errors),
             "warned_rule_ids": sorted(f.rule_id for f in self.warnings),
         }
@@ -356,6 +538,12 @@ def validate_game(
     mutated. A rule whose columns the frame lacks is skipped rather than failed,
     so a slim frame validates the rules it can support.
 
+    For a source whose producer names the same quantities differently,
+    :data:`SOURCE_COLUMNS` supplies the ESPN-shaped aliases on a view of the
+    frame, and :data:`NOT_APPLICABLE` names the rules that source cannot
+    support at all -- those are reported in ``not_applicable`` rather than
+    skipped silently.
+
     Args:
         frame: one game's processed plays, in processor row order -- the
             ``plays_frame`` attribute of ``NFLPlayProcess`` / ``CFBPlayProcess``.
@@ -399,8 +587,12 @@ def validate_game(
     errors: list[Finding] = []
     warnings: list[Finding] = []
     counts: dict[str, int] = {}
-    for result in evaluate(frame, summary=summary, box=box, league=league):
+    unsupported = NOT_APPLICABLE.get(source, {})
+    not_applicable = sorted(unsupported)
+    for result in evaluate(_as_source(frame, source), summary=summary, box=box, league=league):
         if not result.n_violations:
+            continue
+        if result.rule in unsupported:
             continue
         rule = RULE_SCOPE.get(result.rule) or Rule(result.rule, result.severity)
         if not rule.applies(league, source):
@@ -429,4 +621,5 @@ def validate_game(
         errors=errors,
         warnings=warnings,
         counts_by_rule=counts,
+        not_applicable=not_applicable,
     )

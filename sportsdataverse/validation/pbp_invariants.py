@@ -49,6 +49,12 @@ c = pl.col
 #: Raw ESPN rows the processors drop on purpose (``__add_downs_data``).
 DOCUMENTED_DROP_RE = r"(?i)end of|coin toss|end period|wins toss"
 
+#: A replay-review clause quotes the ruling it is challenging ("... is challenging the
+#: ruling on the field - \"Incomplete pass\". PLAY STANDS."), so the text after it
+#: describes the *challenge*, not the play, and a rule that reads the text for the
+#: play's own outcome strips it first.
+REVIEW_TAIL_RE = r"(?i)(is challenging|under review|the previous play is under|\(original play:).*$"
+
 #: ESPN play types that are a try (PAT / two-point / defensive conversion), not a scrimmage down.
 TRY_RE = r"(?i)two.?point|extra point|conversion|\bPAT\b"
 
@@ -962,7 +968,7 @@ def _flags(df: pl.DataFrame) -> list[RuleResult | None]:
             7,
             "a completion's text does not say the pass fell incomplete",
             _t("completion"),
-            text.str.contains(r"(?i)pass incomplete|incomplete pass"),
+            text.str.replace(REVIEW_TAIL_RE, "").str.contains(r"(?i)pass incomplete|incomplete pass"),
             ("completion", "type.text"),
         ),
         _row_rule(
