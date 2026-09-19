@@ -25,3 +25,15 @@ Shield revises a play's `playDescription` / `stats` / yardage after the snap, up
 plays back, so the invariant can only be asserted for plays whose **raw payload object**
 is unchanged between the two snapshots; `test_prefix_invariant_across_two_snapshots`
 selects exactly those.
+
+## Phase 5 — player/team box fixtures
+
+| file | what | source |
+|---|---|---|
+| `2026_01_TB_CIN_playerstats.json.gz` | Shield `GET /football/v2/stats/live/player-statistics/a8fc106b-…` for the same 2026 wk1 TB @ CIN final | fetched with the anonymous device token; **trimmed** by dropping every stat key whose value is `0` for that player (`box._n` defaults a missing key to 0, so the trim is lossless) |
+| `2026_01_TB_CIN_teamstats.json.gz` | Shield `GET /football/v2/stats/live/team-statistics/a8fc106b-…`, same game | same fetch, untrimmed (5 KB) |
+| `players_crosswalk_slice.json.gz` | `gsis_id -> [espn_id, full_name]` for the 63 players in that game | the slice of `nfl_players_crosswalk()` (nflverse players master) this fixture needs, so `test_box.py` exercises the real id join with **no network read** and without the circularity of taking the ids from ESPN's own box |
+| `../../nfl/fixtures/box_401872925_espn_trimmed.json.gz` | ESPN's own `boxscore` for the same game | `nfl-raw` `nfl/espn/raw/2026/401872925.json.gz`, trimmed to `{"boxscore": …}` |
+
+`2026_01_CLE_JAX` is deliberately **not** the Phase 5 fixture: its Shield player-statistics
+route 404s (the one game of 41 probed that does), which is why the box is fail-open per route.

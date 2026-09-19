@@ -25,8 +25,11 @@ Documented divergences from a real ESPN summary (measured, see the Stage 2 Phase
   own play list) and ~0.04 for 2002-2004 (ESPN used its own sequence there). A pre-2014 game
   therefore gets a note saying so: the ids stay stable and unique for Game on Paper, they just
   cannot be joined to an ESPN-sourced frame.
-* ``boxscore`` is empty: ESPN's box is the only source of ESPN athlete ids, and the Shield
-  path carries gsis ids instead. ``__attach_player_ids`` therefore fills nothing.
+* ``boxscore`` is filled from Shield's own player/team statistics endpoints when the caller
+  supplies them (``player_stats=`` / ``team_stats=``; see :mod:`...shield_pbp.box`), and is
+  empty otherwise. ESPN athlete ids come from the ``gsis_id -> espn_id`` players crosswalk; a
+  gsis id the crosswalk does not carry keeps a **null** athlete id, so
+  ``__attach_player_ids`` skips it rather than resolving it to the wrong player.
 """
 
 from __future__ import annotations
@@ -512,6 +515,8 @@ def shield_to_espn_summary(
     *,
     parsed: Optional[pl.DataFrame] = None,
     odds: Optional[Mapping[str, Any]] = None,
+    player_stats: Optional[Mapping[str, Any]] = None,
+    team_stats: Optional[Mapping[str, Any]] = None,
 ) -> Tuple[Dict[str, Any], List[str]]:
     """Project one Shield game (any phase) onto an ESPN-summary-shaped dict.
 
@@ -528,13 +533,20 @@ def shield_to_espn_summary(
         odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` (the stored
             closing line, :func:`sportsdataverse.football.sources.idmap._odds_override_from_row`).
             Becomes the summary's one-provider ``pickcenter``.
+        player_stats: A Shield ``/football/v2/stats/live/player-statistics/{gameId}`` body.
+            Becomes ``boxscore.players`` in ESPN's exact shape (ten categories, athletes
+            carrying ESPN ids from the players crosswalk). Omitted -> the box stays empty
+            and no ESPN athlete id is attached to any play.
+        team_stats: A Shield ``/football/v2/stats/live/team-statistics/{gameId}`` body.
+            Becomes ``boxscore.teams`` -- the authoritative countable team totals
+            ``NFLPlayProcess.create_box_score`` prefers over its play-by-play derivation.
 
     Returns:
         ``(summary, notes)``.
 
         | item | type | description |
         |---|---|---|
-        | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, and empty `boxscore` / passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. |
+        | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, `boxscore` (filled when `player_stats`/`team_stats` are given) and passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. |
         | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
 
     Raises:
@@ -745,8 +757,9 @@ def shield_to_espn_summary(
         notes.append(f"{sum(len(grouped[k]) for k in orphans)} plays fell outside the drive chart")
     current = previous.pop() if (previous and not is_final(game) and phase is not None and phase != "PREGAME") else None
 
+    header = _header(game, summary_block, phase, event_id, home_id, away_id, abbrs, previous, current)
     summary = {
-        "boxscore": {"teams": [], "players": []},
+        "boxscore": _boxscore(header, player_stats, team_stats, previous + ([current] if current else []), notes),
         "format": {},
         "gameInfo": {"venue": _venue(game), "attendance": summary_block.get("attendance")},
         "drives": {"previous": previous, **({"current": current} if current else {})},
@@ -757,12 +770,45 @@ def shield_to_espn_summary(
         "againstTheSpread": [],
         "odds": [],
         "winprobability": [],
-        "header": _header(game, summary_block, phase, event_id, home_id, away_id, abbrs, previous, current),
+        "header": header,
         "scoringPlays": [],
         "videos": [],
         "standings": {},
     }
     return summary, notes
+
+
+def _boxscore(
+    header: Mapping[str, Any],
+    player_stats: Optional[Mapping[str, Any]],
+    team_stats: Optional[Mapping[str, Any]],
+    drives: Sequence[Mapping[str, Any]],
+    notes: List[str],
+) -> Dict[str, List[Dict[str, Any]]]:
+    """``summary.boxscore`` from Shield's player/team statistics, or ESPN's empty shape.
+
+    The ESPN team blocks are taken straight off the header's competitors, so the box and
+    the header can never disagree about a club's id, abbreviation or colours.
+    """
+    if not (player_stats or team_stats):
+        return {"teams": [], "players": []}
+    competitors = ((header.get("competitions") or [{}])[0]).get("competitors") or []
+    teams = {f"{c.get('homeAway')}Team": (c.get("team") or {}) for c in competitors}
+    drive_counts: Dict[str, int] = {}
+    for drive in drives:
+        tid = (drive.get("team") or {}).get("id")
+        if tid:
+            drive_counts[str(tid)] = drive_counts.get(str(tid), 0) + 1
+    try:
+        from sportsdataverse.nfl.shield_pbp.box import shield_boxscore
+
+        box = shield_boxscore(player_stats, team_stats, teams, drive_counts)
+    except Exception as exc:  # noqa: BLE001 -- the box is an enrichment, never the game
+        notes.append(f"shield box projection failed ({type(exc).__name__}): boxscore left empty")
+        return {"teams": [], "players": []}
+    if player_stats and not box["players"]:
+        notes.append("shield player-statistics carried no team side: boxscore.players left empty")
+    return box
 
 
 #: Shield ``scoringPlayType`` -> ESPN ``scoringType`` (``displayName`` is the only field read:
@@ -1058,6 +1104,7 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
                     row[key] = value
     shield_game_id = row.get("shield_game_id")
     payload = ctx.payload
+    fetch_box = payload is None
     if payload is None:
         if not shield_game_id:
             raise SourceUnavailable(f"nfl {espn_id}: no shield_game_id in the id map")
@@ -1074,7 +1121,27 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if parsed.is_empty():
         raise SourceUnavailable(f"nfl {espn_id}: shield payload has no drive chart (not started, or cancelled)")
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row) or _odds_override_from_row(row)
-    summary, notes = shield_to_espn_summary(payload, row, parsed=parsed, odds=odds)
+    # The player/team box is a SECOND and THIRD Shield call, so it rides the same condition
+    # as the gamedetails fetch: an offline caller that injected ``ctx.payload`` gets no
+    # surprise network, and passes ``player_stats=``/``team_stats=`` to
+    # :func:`shield_to_espn_summary` itself when it has them. Fail-open inside
+    # :func:`fetch_shield_box`: no box is the pre-Phase-5 behaviour, never an error.
+    player_stats = team_stats = None
+    if fetch_box and shield_game_id:
+        from sportsdataverse.nfl.shield_pbp.box import fetch_shield_box
+
+        player_stats, team_stats = fetch_shield_box(shield_game_id)
+        if player_stats is None:
+            notes_box = "shield player-statistics unavailable: no ESPN athlete ids on this game"
+        else:
+            notes_box = None
+    else:
+        notes_box = None
+    summary, notes = shield_to_espn_summary(
+        payload, row, parsed=parsed, odds=odds, player_stats=player_stats, team_stats=team_stats
+    )
+    if notes_box:
+        notes.append(notes_box)
     # ``drives.current`` holds the OPEN drive, which ``shield_to_espn_summary`` pops out of
     # ``previous``. Checking ``previous`` alone therefore refuses a live game for the whole of
     # its opening drive: measured on the 223-snapshot TNF capture, 14 snapshots carrying 1-13

@@ -17,6 +17,7 @@ Modules (build order):
     series      -- series / series_result / series_success
     playstats   -- long-format play-stats table (nflverse ``play_stats``)
     build       -- build_pbp / build_pbp_from_file / build_season / shield_nfl_pbp
+    box         -- Shield player/team statistics -> ESPN ``summary["boxscore"]`` (Phase 5)
     to_espn_summary -- the ESPN-summary projection of the same parsed rows, for NFLPlayProcess
 """
 
