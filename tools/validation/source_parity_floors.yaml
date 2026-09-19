@@ -61,9 +61,24 @@ sources:
 
   cfb.ncaa:
     join: state
-    accepted: {EPA: 0.9406, EP_start: 0.9988, wp_before: 0.9942}  # PR #544 G1, 2,985 paired
+    accepted: {EPA: 0.9443, EP_start: 0.9988, wp_before: 0.9942}  # PR #544 G1, 2,985 paired; .9406 -> .9443 after NC11 (#550)
     floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.98}
     join_rate: 0.85
 
-  nfl.fox: {}   # PR open; measured with the defaults, no floor, cannot alert
-  cfb.fox: {}
+  # Fox (PR #548, merged 2026-09-18): last in every failover order. The review's reproduced G1 --
+  # NFL 7 finals 2024-26 EPA .9788 (min .9309), EP_start 1.0000, wp_before .9695, 99.1% paired;
+  # CFB 6 finals EPA .9537 (min .9167), EP_start .9997, wp_before .9569, 97.9% paired. Per-season
+  # NFL EPA tracks ESPN's own end-state coherence (2024 .949 -> 2026 .999), so the EPA floor is
+  # set from the worst season, not the pool. The FINDINGS' No-Play r-claim did not reproduce;
+  # when the harness grows a mean-abs-diff / divergence-count metric, seed Fox's floors from it.
+  nfl.fox:
+    join: state
+    accepted: {EPA: 0.9788, EP_start: 1.0, wp_before: 0.9695}
+    floors: {EPA: 0.92, EP_start: 0.99, wp_before: 0.93}
+    join_rate: 0.90
+
+  cfb.fox:
+    join: state
+    accepted: {EPA: 0.9537, EP_start: 0.9997, wp_before: 0.9569}
+    floors: {EPA: 0.90, EP_start: 0.99, wp_before: 0.92}
+    join_rate: 0.90
