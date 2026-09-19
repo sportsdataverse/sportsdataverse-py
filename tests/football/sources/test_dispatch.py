@@ -157,10 +157,21 @@ def test_processor_exception_falls_through(nfl_summary, alternates_unavailable, 
     assert len(errs) == 5
 
 
-def test_no_fallthrough_raises_with_one_attempt():
+def test_no_fallthrough_raises_with_one_attempt(monkeypatch):
+    """``fallthrough=False`` tries exactly one source and stops.
+
+    Every CFB slot is registered now, so this can no longer lean on an unimplemented one: it
+    picks ``fox`` and makes it fail on its own terms. The crosswalk leg is stubbed because it
+    is a **release-asset download** -- left live, this test reaches github.com from the suite
+    and fails on a runner with no network.
+    """
+    import sportsdataverse.cfb.fox_pbp.to_espn_summary as fox_cfb
+
+    monkeypatch.setattr(fox_cfb, "_crosswalk_fox_id", lambda espn_id, seasons: None)
     with pytest.raises(AllSourcesFailed) as ei:
-        _process_game("cfb", CFB_GAME_ID, source="fox", fallthrough=False)
-    assert [(a.source, a.error) for a in ei.value.attempts] == [("fox", "not implemented")]
+        _process_game("cfb", CFB_GAME_ID, source="fox", fallthrough=False, idmap_row={"season": 2026})
+    assert [a.source for a in ei.value.attempts] == ["fox"]
+    assert "not computable" in ei.value.attempts[0].error
 
 
 def test_a_registered_source_with_no_id_fails_on_its_own_terms():
