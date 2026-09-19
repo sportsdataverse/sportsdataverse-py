@@ -864,3 +864,13 @@ def test_kick_result_is_read_from_the_attempt_not_a_tackler_name() -> None:
     assert _KICK_GOOD_RE.search(blocked) is None
     assert _KICK_GOOD_RE.search("Massick,Sam kick attempt good (H: Clark,Brady).") is not None
     assert _KICK_GOOD_RE.search("Massick,Sam kick attempt NO GOOD.") is None
+
+
+def test_a_synthesized_overtime_interception_is_a_pass_play() -> None:
+    """NC14: 5367688's OT "Interception Return" row set ``int`` with ``pass`` False."""
+    df = _parsed_frame("5367688")
+    ot = df.filter(pl.col("ot_synthesized") & (pl.col("play_type") == "Interception Return")).row(0, named=True)
+    assert (ot["int"], ot["pass"], ot["period"]) == (True, True, 5)
+    # an overtime possession starts 1st & 10 at the 25, so the one-play drive has a down
+    assert (ot["down"], ot["distance"]) == (1, 10)
+    assert df.filter(pl.col("int") & ~pl.col("pass")).height == 0

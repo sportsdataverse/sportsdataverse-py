@@ -1108,6 +1108,10 @@ def to_cfbfastr(
             half_play_number += 1
             pos_s = score.get(offense) if offense else None
             def_s = score.get(defense) if defense else None
+            # an overtime possession starts 1st & 10 at the 25, so a ONE-play drive's
+            # summary row IS that snap and its down/distance are known (a 3OT+ two-point
+            # try starts at the 3 and is not a down, which the yard-line check excludes).
+            opening_snap = od["n_plays"] == 1 and str(od["start_yard_line"] or "").endswith("25")
             row = dict(template)
             row.update(
                 {
@@ -1137,6 +1141,8 @@ def to_cfbfastr(
                     "scoring_play": scoring,
                     "scoring": scoring,
                     "yard_line": od["start_yard_line"],
+                    "down": 1 if opening_snap else None,
+                    "distance": 10 if opening_snap else None,
                     "play_type": _OT_END_HOW_LABEL.get(od["end_how"], "Unknown"),
                     "orig_play_type": "ot_drive",
                     "play_text": summary_text
@@ -1151,6 +1157,10 @@ def to_cfbfastr(
                     "fg_made": od["end_how"] == "FG" if od["end_how"] in ("FG", "FGA") else None,
                     "punt": od["end_how"] == "PUNT",
                     "punt_play": od["end_how"] == "PUNT",
+                    # NC14: the drive ended on an intercepted pass, so the synthesized
+                    # row is a pass play -- cfbfastR's "Interception Return" label and
+                    # ``int`` never stand without it.
+                    "pass": od["end_how"] == "INT",
                     "int": od["end_how"] == "INT",
                     "turnover_vec": od["end_how"] in ("INT", "FUMB", "DOWNS"),
                     "downs_turnover": od["end_how"] == "DOWNS",
