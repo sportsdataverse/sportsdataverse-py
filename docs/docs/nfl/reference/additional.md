@@ -2703,20 +2703,41 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_player_stats}
+### `load_nfl_player_stats(seasons: 'List[int] | None' = None, kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_player_stats}
 
 Load NFL player stats data
 
-One combined week-level parquet (all seasons, offense) mirroring nflverse's
-`player_stats`.
+Week-level player stats. For the default `source="nflverse"` this reads the
+live `stats_player` release (`stats_player_week_{season}.parquet`, one
+asset per season, 1999-2026) -- **not** the combined `player_stats.parquet`,
+which nflverse froze in 2025-05 and which therefore ends at season 2024.
+
+The weekly release is a 150-column superset of the old combined file. To keep
+every downstream consumer working, the output is reconciled to ONE stable
+schema -- the legacy column set, in the legacy order, at the legacy dtypes:
+
+* **Renamed back:** `team` -> `recent_team`, `passing_interceptions` ->
+  `interceptions`, `sacks_suffered` -> `sacks`.
+* **Sign-flipped:** `sack_yards_lost` (negative upstream) is negated into
+  `sack_yards` (positive yards lost), matching the legacy frame.
+* **Kept null:** `dakota` is no longer published upstream; the column
+  remains, all-null, so the column set does not move.
+* **Dropped:** the ~100 added columns (`def_*`, `pt_*`, punt/kickoff
+  returns, yardage buckets, `game_id`, `passing_cpoe`, ...) are not
+  emitted. `kicking=True` returns the legacy kicking contract, which the
+  weekly release still carries in full (44/44 columns).
+* **Rows:** a row is kept when at least one contracted stat is non-zero, so
+  the weekly release's defensive / offensive-line rows -- which have no
+  column to land in under this contract -- do not arrive as all-null noise.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
+| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads every season from 1999 through the current one, matching the old whole-file behavior. |
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `stats_player` weekly release, reconciled to the legacy schema described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST) with its own columns, season-filtered but otherwise untouched. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -2792,12 +2813,11 @@ stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
 
 # Kicking-only stats (nflverse source only)
 
-kicking = load_nfl_player_stats(kicking=True)
+kicking = load_nfl_player_stats(seasons=[2025], kicking=True)
 
-# Filter to a single season after load
+# A single season (2025 and 2026 live only in the weekly release)
 
-import polars as pl
-stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
+stats_2025 = load_nfl_player_stats(seasons=[2025])
 ```
 
 ### `load_nfl_players(return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_players}
@@ -3415,20 +3435,41 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_player_stats}
+### `load_player_stats(seasons: 'List[int] | None' = None, kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_player_stats}
 
 Load NFL player stats data
 
-One combined week-level parquet (all seasons, offense) mirroring nflverse's
-`player_stats`.
+Week-level player stats. For the default `source="nflverse"` this reads the
+live `stats_player` release (`stats_player_week_{season}.parquet`, one
+asset per season, 1999-2026) -- **not** the combined `player_stats.parquet`,
+which nflverse froze in 2025-05 and which therefore ends at season 2024.
+
+The weekly release is a 150-column superset of the old combined file. To keep
+every downstream consumer working, the output is reconciled to ONE stable
+schema -- the legacy column set, in the legacy order, at the legacy dtypes:
+
+* **Renamed back:** `team` -> `recent_team`, `passing_interceptions` ->
+  `interceptions`, `sacks_suffered` -> `sacks`.
+* **Sign-flipped:** `sack_yards_lost` (negative upstream) is negated into
+  `sack_yards` (positive yards lost), matching the legacy frame.
+* **Kept null:** `dakota` is no longer published upstream; the column
+  remains, all-null, so the column set does not move.
+* **Dropped:** the ~100 added columns (`def_*`, `pt_*`, punt/kickoff
+  returns, yardage buckets, `game_id`, `passing_cpoe`, ...) are not
+  emitted. `kicking=True` returns the legacy kicking contract, which the
+  weekly release still carries in full (44/44 columns).
+* **Rows:** a row is kept when at least one contracted stat is non-zero, so
+  the weekly release's defensive / offensive-line rows -- which have no
+  column to land in under this contract -- do not arrive as all-null noise.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
+| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads every season from 1999 through the current one, matching the old whole-file behavior. |
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `stats_player` weekly release, reconciled to the legacy schema described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST) with its own columns, season-filtered but otherwise untouched. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3504,12 +3545,11 @@ stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
 
 # Kicking-only stats (nflverse source only)
 
-kicking = load_nfl_player_stats(kicking=True)
+kicking = load_nfl_player_stats(seasons=[2025], kicking=True)
 
-# Filter to a single season after load
+# A single season (2025 and 2026 live only in the weekly release)
 
-import polars as pl
-stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
+stats_2025 = load_nfl_player_stats(seasons=[2025])
 ```
 
 ### `load_players(return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_players}
