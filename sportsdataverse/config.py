@@ -68,9 +68,14 @@ NFL_BASE_URL = NFLVERSEGITHUB + "pbp/play_by_play_{season}.parquet"  # done
 NFL_MODEL_PBP_URL = SDVRELEASES + "nfl_model_pbp/model_pbp_{season}.parquet"
 NFL_PLAYER_URL = f"{NFLVERSEGITHUB}players/players.parquet"
 NFL_SDV_PLAYER_URL = SDVRELEASES + "nfl_players/players.parquet"
+# The live weekly player-stats release. nflverse FROZE the `player_stats` tag in
+# 2025-05 and publishes here instead -- one asset per season, 1999-2026.
+NFL_PLAYER_STATS_WEEK_URL = NFLVERSEGITHUB + "stats_player/stats_player_week_{season}.parquet"
+# FROZEN 2025-05 (1999-2024 only) and no longer read by `load_nfl_player_stats`.
+# Kept because they are importable public constants.
 NFL_PLAYER_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats.parquet"
-NFL_SDV_PLAYER_STATS_URL = SDVRELEASES + "nfl_player_stats/player_stats.parquet"
 NFL_PLAYER_KICKING_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats_kicking.parquet"
+NFL_SDV_PLAYER_STATS_URL = SDVRELEASES + "nfl_player_stats/player_stats.parquet"
 NFL_PFR_SEASON_DEF_URL = f"{NFLVERSEGITHUB}pfr_advstats/advstats_season_def.parquet"
 NFL_PFR_WEEK_DEF_URL = NFLVERSEGITHUB + "pfr_advstats/advstats_week_def_{season}.parquet"
 NFL_PFR_SEASON_PASS_URL = f"{NFLVERSEGITHUB}pfr_advstats/advstats_season_pass.parquet"

@@ -37,7 +37,7 @@ Example:
 
 from __future__ import annotations
 
-from sportsdataverse._xgb import xgb_threads
+from sportsdataverse._xgb import xgb_threads as _xgb_threads
 
 import json
 import os
@@ -307,7 +307,7 @@ def _load_booster_from(path: Path) -> "Booster":
     _check_model_card(path)
     from xgboost import Booster
 
-    b = Booster({"nthread": xgb_threads()})
+    b = Booster({"nthread": _xgb_threads()})
     b.load_model(str(path))
     return b
 
