@@ -514,7 +514,6 @@ from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  
 from sportsdataverse.cfb import to_cfbfastr as to_cfbfastr  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
-from sportsdataverse.cfb import xgb_threads as xgb_threads  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
@@ -957,7 +956,6 @@ __all__ = [
     "to_cfbfastr",
     "underscore",
     "win_prob_from_margin",
-    "xgb_threads",
     "yahoo_cfb_boxscore",
     "yahoo_cfb_player_season_stats",
     "yahoo_cfb_player_season_stats_legacy",
