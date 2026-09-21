@@ -364,6 +364,7 @@ from sportsdataverse.nfl import team_pressure_rates as team_pressure_rates  # no
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 from sportsdataverse.nfl import win_prob_from_margin as win_prob_from_margin  # noqa: F401
+from sportsdataverse.nfl import xgb_threads as xgb_threads  # noqa: F401
 
 __all__ = [
     "NFLPlayProcess",
@@ -707,6 +708,7 @@ __all__ = [
     "underscore",
     "update_config",
     "win_prob_from_margin",
+    "xgb_threads",
 ]
 
 

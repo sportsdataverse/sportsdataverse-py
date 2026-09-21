@@ -202,7 +202,7 @@ def test_build_player_stats_parity_2023():
     import sportsdataverse.nfl as nfl
 
     wk = build_nfl_player_stats([2023], summary_level="week", season_type="REG")
-    ref = nfl.load_nfl_player_stats().filter((pl.col("season") == 2023) & (pl.col("season_type") == "REG"))
+    ref = nfl.load_nfl_player_stats(seasons=[2023]).filter(pl.col("season_type") == "REG")
 
     joined = wk.join(ref, on=["player_id", "week"], how="inner", suffix="_ref")
     # Row overlap should be effectively complete.

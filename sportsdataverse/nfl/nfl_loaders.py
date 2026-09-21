@@ -39,8 +39,7 @@ from sportsdataverse.config import (
     NFL_PFR_WEEK_PASS_URL,
     NFL_PFR_WEEK_REC_URL,
     NFL_PFR_WEEK_RUSH_URL,
-    NFL_PLAYER_KICKING_STATS_URL,
-    NFL_PLAYER_STATS_URL,
+    NFL_PLAYER_STATS_WEEK_URL,
     NFL_PLAYER_URL,
     NFL_RATINGS_WEEKLY_URL,
     NFL_ROSTER_URL,
@@ -57,8 +56,10 @@ from sportsdataverse.config import (
     NFL_TRADES_URL,
     NFL_WEEKLY_ROSTER_URL,
 )
+from sportsdataverse.errors import NoDataError as _NoDataError
 from sportsdataverse.errors import season_not_found_error
 from sportsdataverse.nfl.cache import cached_loader
+from sportsdataverse.nfl.utils_date import get_current_nfl_season
 
 
 @cached_loader
@@ -261,28 +262,236 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-@cached_loader
-def load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
-    """Load NFL player stats data
+# --- nflverse `stats_player` weekly release -> legacy `player_stats` contract ---
+#
+# nflverse FROZE the combined `player_stats.parquet` (last published 2025-05,
+# 1999-2024) and now publishes `stats_player/stats_player_week_{season}.parquet`
+# -- one asset per season, 1999-2026 (28 assets, verified 2026-09-20). Because
+# that covers the frozen file's whole range there is no fallback branch: the
+# frozen asset is never read.
+#
+# The weekly frame is a 150-column superset of the legacy 53. Reconciliation back
+# to the legacy contract (four renames, one SIGN FLIP, one dropped column) keeps
+# every downstream consumer working -- sdv-db's `nfl.player_stats` table and Game
+# on Paper's player routes both select legacy names off it.
+_PLAYER_STATS_RENAMES = {
+    "team": "recent_team",
+    "passing_interceptions": "interceptions",
+    "sacks_suffered": "sacks",
+}
+# `sack_yards_lost` is the NEGATION of legacy `sack_yards` (legacy: 0..82 yards
+# lost as a positive; weekly: -82..0). Renaming it would silently flip the sign
+# on every sacked-QB row, so it is negated here instead.
+_PLAYER_STATS_NEGATED = {"sack_yards": "sack_yards_lost"}
+# Identity / context columns. Everything else in the contract is a STAT column,
+# and a row is kept only when at least one stat is non-zero -- without that, the
+# weekly release's defensive and offensive-line rows (~13k/season) arrive as
+# all-null noise under a contract that has no column to hold their stats.
+_PLAYER_STATS_IDENT = frozenset(
+    {
+        "player_id",
+        "player_name",
+        "player_display_name",
+        "position",
+        "position_group",
+        "headshot_url",
+        "recent_team",
+        "team",
+        "season",
+        "week",
+        "season_type",
+        "opponent_team",
+        "dakota",
+    }
+)
 
-    One combined week-level parquet (all seasons, offense) mirroring nflverse's
-    ``player_stats``.
+_PLAYER_STATS_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.String,
+    "player_name": pl.String,
+    "player_display_name": pl.String,
+    "position": pl.String,
+    "position_group": pl.String,
+    "headshot_url": pl.String,
+    "recent_team": pl.String,
+    "season": pl.Int32,
+    "week": pl.Int32,
+    "season_type": pl.String,
+    "opponent_team": pl.String,
+    "completions": pl.Int32,
+    "attempts": pl.Int32,
+    "passing_yards": pl.Float64,
+    "passing_tds": pl.Int32,
+    "interceptions": pl.Float64,
+    "sacks": pl.Float64,
+    "sack_yards": pl.Float64,
+    "sack_fumbles": pl.Int32,
+    "sack_fumbles_lost": pl.Int32,
+    "passing_air_yards": pl.Float64,
+    "passing_yards_after_catch": pl.Float64,
+    "passing_first_downs": pl.Float64,
+    "passing_epa": pl.Float64,
+    "passing_2pt_conversions": pl.Int32,
+    "pacr": pl.Float64,
+    "dakota": pl.Float64,
+    "carries": pl.Int32,
+    "rushing_yards": pl.Float64,
+    "rushing_tds": pl.Int32,
+    "rushing_fumbles": pl.Float64,
+    "rushing_fumbles_lost": pl.Float64,
+    "rushing_first_downs": pl.Float64,
+    "rushing_epa": pl.Float64,
+    "rushing_2pt_conversions": pl.Int32,
+    "receptions": pl.Int32,
+    "targets": pl.Int32,
+    "receiving_yards": pl.Float64,
+    "receiving_tds": pl.Int32,
+    "receiving_fumbles": pl.Float64,
+    "receiving_fumbles_lost": pl.Float64,
+    "receiving_air_yards": pl.Float64,
+    "receiving_yards_after_catch": pl.Float64,
+    "receiving_first_downs": pl.Float64,
+    "receiving_epa": pl.Float64,
+    "receiving_2pt_conversions": pl.Int32,
+    "racr": pl.Float64,
+    "target_share": pl.Float64,
+    "air_yards_share": pl.Float64,
+    "wopr": pl.Float64,
+    "special_teams_tds": pl.Float64,
+    "fantasy_points": pl.Float64,
+    "fantasy_points_ppr": pl.Float64,
+}
+
+_PLAYER_STATS_KICKING_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int32,
+    "week": pl.Int32,
+    "season_type": pl.String,
+    "player_id": pl.String,
+    "team": pl.String,
+    "player_name": pl.String,
+    "player_display_name": pl.String,
+    "position": pl.String,
+    "position_group": pl.String,
+    "headshot_url": pl.String,
+    "fg_made": pl.Int32,
+    "fg_att": pl.Float64,
+    "fg_missed": pl.Int32,
+    "fg_blocked": pl.Int32,
+    "fg_long": pl.Float64,
+    "fg_pct": pl.Float64,
+    "fg_made_0_19": pl.Int32,
+    "fg_made_20_29": pl.Int32,
+    "fg_made_30_39": pl.Int32,
+    "fg_made_40_49": pl.Int32,
+    "fg_made_50_59": pl.Int32,
+    "fg_made_60_": pl.Int32,
+    "fg_missed_0_19": pl.Int32,
+    "fg_missed_20_29": pl.Int32,
+    "fg_missed_30_39": pl.Int32,
+    "fg_missed_40_49": pl.Int32,
+    "fg_missed_50_59": pl.Int32,
+    "fg_missed_60_": pl.Int32,
+    "fg_made_list": pl.String,
+    "fg_missed_list": pl.String,
+    "fg_blocked_list": pl.String,
+    "fg_made_distance": pl.Float64,
+    "fg_missed_distance": pl.Float64,
+    "fg_blocked_distance": pl.Float64,
+    "pat_made": pl.Int32,
+    "pat_att": pl.Float64,
+    "pat_missed": pl.Int32,
+    "pat_blocked": pl.Int32,
+    "pat_pct": pl.Float64,
+    "gwfg_att": pl.Int32,
+    "gwfg_distance": pl.Float64,
+    "gwfg_made": pl.Int32,
+    "gwfg_missed": pl.Int32,
+    "gwfg_blocked": pl.Int32,
+}
+
+
+def _player_stats_to_legacy(data: pl.DataFrame, *, kicking: bool) -> pl.DataFrame:
+    """Reconcile one ``stats_player_week`` season to the legacy ``player_stats`` contract.
 
     Args:
+        data: One season's frame as published under the ``stats_player`` tag.
+        kicking: ``True`` for the legacy kicking contract, ``False`` for offense.
+
+    Returns:
+        pl.DataFrame: The contracted columns, in the legacy order, at the legacy
+        dtypes, filtered to rows carrying at least one non-zero contracted stat.
+    """
+    schema = _PLAYER_STATS_KICKING_SCHEMA if kicking else _PLAYER_STATS_SCHEMA
+    if not kicking:
+        data = data.rename({old: new for old, new in _PLAYER_STATS_RENAMES.items() if old in data.columns})
+        data = data.with_columns(
+            [(-pl.col(src)).alias(dest) for dest, src in _PLAYER_STATS_NEGATED.items() if src in data.columns]
+        )
+    # A column the weekly release no longer publishes (`dakota`) is emitted as
+    # all-null rather than dropped, so the output column set never moves.
+    data = data.with_columns(
+        [pl.lit(None, dtype=dtype).alias(col) for col, dtype in schema.items() if col not in data.columns]
+    )
+    stats = [col for col in schema if col not in _PLAYER_STATS_IDENT]
+    return (
+        data.filter(pl.any_horizontal([pl.col(col).cast(pl.Float64, strict=False).fill_null(0) != 0 for col in stats]))
+        .select(list(schema))
+        .cast(schema)  # type: ignore[arg-type]
+    )
+
+
+@cached_loader
+def load_nfl_player_stats(
+    seasons: List[int] | None = None, kicking=False, return_as_pandas=False, *, source: str = "nflverse"
+) -> pl.DataFrame:
+    """Load NFL player stats data
+
+    Week-level player stats. For the default ``source="nflverse"`` this reads the
+    live ``stats_player`` release (``stats_player_week_{season}.parquet``, one
+    asset per season, 1999-2026) -- **not** the combined ``player_stats.parquet``,
+    which nflverse froze in 2025-05 and which therefore ends at season 2024.
+
+    The weekly release is a 150-column superset of the old combined file. To keep
+    every downstream consumer working, the output is reconciled to ONE stable
+    schema -- the legacy column set, in the legacy order, at the legacy dtypes:
+
+    * **Renamed back:** ``team`` -> ``recent_team``, ``passing_interceptions`` ->
+      ``interceptions``, ``sacks_suffered`` -> ``sacks``.
+    * **Sign-flipped:** ``sack_yards_lost`` (negative upstream) is negated into
+      ``sack_yards`` (positive yards lost), matching the legacy frame.
+    * **Kept null:** ``dakota`` is no longer published upstream; the column
+      remains, all-null, so the column set does not move.
+    * **Dropped:** the ~100 added columns (``def_*``, ``pt_*``, punt/kickoff
+      returns, yardage buckets, ``game_id``, ``passing_cpoe``, ...) are not
+      emitted. ``kicking=True`` returns the legacy kicking contract, which the
+      weekly release still carries in full (44/44 columns).
+    * **Rows:** a row is kept when at least one contracted stat is non-zero, so
+      the weekly release's defensive / offensive-line rows -- which have no
+      column to land in under this contract -- do not arrive as all-null noise.
+
+    Args:
+        seasons (list): Seasons to load. 1999 is the earliest available season.
+            ``None`` (the default) loads every season from 1999 through the
+            current one, matching the old whole-file behavior.
         kicking (bool): If True, load kicking stats. If False, load all other stats.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
         source (str): Which player-stats release to read.
             ``"nflverse"`` (the default, also accepts ``None``) returns the
-            nflverse published ``player_stats.parquet``. ``"sportsdataverse"`` /
-            ``"sdv"`` returns the SDV-native ``nfl_player_stats`` release built by
+            nflverse published ``stats_player`` weekly release, reconciled to the
+            legacy schema described above. ``"sportsdataverse"`` / ``"sdv"``
+            returns the SDV-native ``nfl_player_stats`` release built by
             :func:`sportsdataverse.nfl.build_nfl_player_stats` from SDV-native
-            play-by-play (1999-present, week-level, REG+POST). Any other value
+            play-by-play (1999-present, week-level, REG+POST) with its own
+            columns, season-filtered but otherwise untouched. Any other value
             raises ``ValueError``.
 
     Returns:
         pl.DataFrame: Polars dataframe containing player stats.
 
     Raises:
+        SeasonNotFoundError: If any requested season is less than 1999.
+        TypeError: If ``seasons`` is a bool -- the first positional argument used
+            to be ``kicking``, so ``load_nfl_player_stats(True)`` is rejected
+            loudly rather than read as "seasons=True".
         ValueError: If ``source`` is not one of ``"nflverse"``, ``None``,
             ``"sportsdataverse"``, or ``"sdv"``; or if ``kicking=True`` is
             combined with the SDV source (the SDV play-by-play surface lacks a
@@ -308,12 +517,11 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: str 
 
         Kicking-only stats (nflverse source only)::
 
-            kicking = load_nfl_player_stats(kicking=True)
+            kicking = load_nfl_player_stats(seasons=[2025], kicking=True)
 
-        Filter to a single season after load::
+        A single season (2025 and 2026 live only in the weekly release)::
 
-            import polars as pl
-            stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
+            stats_2025 = load_nfl_player_stats(seasons=[2025])
 
         See Also:
             * `nflverse`_ -- full data ecosystem (R + Python)
@@ -322,23 +530,49 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: str 
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    if source in ("nflverse", None):
-        if kicking is False:
-            url = NFL_PLAYER_STATS_URL
-        else:
-            url = NFL_PLAYER_KICKING_STATS_URL
-    elif source in ("sportsdataverse", "sdv"):
+    if isinstance(seasons, bool):
+        raise TypeError(
+            "load_nfl_player_stats() takes `seasons` first; `kicking` is no longer positional. "
+            "Call load_nfl_player_stats(kicking=True) instead."
+        )
+    if isinstance(seasons, int):
+        seasons = [seasons]
+    season_list = [int(s) for s in seasons] if seasons is not None else list(range(1999, get_current_nfl_season() + 1))
+    for season in season_list:
+        season_not_found_error(season, 1999)
+
+    if source in ("sportsdataverse", "sdv"):
         if kicking is True:
             raise ValueError(
                 "kicking=True is not available for source='sdv': the SDV-native "
                 "play-by-play lacks kicker_player_id, so kicking stats cannot be "
                 "rebuilt. Use the default source='nflverse' for kicking stats."
             )
-        url = NFL_SDV_PLAYER_STATS_URL
-    else:
+        # One combined parquet with its own (non-legacy) columns -- post-filter.
+        data = _fetch_release_parquet(NFL_SDV_PLAYER_STATS_URL)
+        if "season" in data.columns and seasons is not None:
+            data = data.filter(pl.col("season").is_in(season_list))
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+    if source not in ("nflverse", None):
         raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
 
-    data = _fetch_release_parquet(url)
+    frames = []
+    for season in tqdm(season_list):
+        try:
+            raw = _fetch_release_parquet(NFL_PLAYER_STATS_WEEK_URL.format(season=season))
+        except _NoDataError:
+            # An explicitly requested season that has no asset is an error; the
+            # implicit 1999..current range is "everything published", and the
+            # newest season's asset does not exist until nflverse first builds
+            # it, so a gap there is skipped rather than raised.
+            if seasons is not None:
+                raise
+            continue
+        frames.append(_player_stats_to_legacy(raw, kicking=kicking))
+    schema = _PLAYER_STATS_KICKING_SCHEMA if kicking else _PLAYER_STATS_SCHEMA
+    # Every frame is already at the one contracted schema, so a plain concat is
+    # enough -- no diagonal union that could reintroduce an upstream column.
+    data = pl.concat(frames) if frames else pl.DataFrame(schema=schema)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
