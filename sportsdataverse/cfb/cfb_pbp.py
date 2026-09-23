@@ -1783,11 +1783,29 @@ class CFBPlayProcess(object):
 
         # Drop true duplicates only: the next row carries the same play id (a live
         # feed repeating the drive in progress) or is an identical copy -- same text,
-        # clock, period and start state. The former loose test
+        # period and start state. The former loose test
         # ``text.is_in(lead_text.implode())`` holds for every row after the first, so
         # any play whose start state matched the next row's was deleted: 1,529 real
         # plays over 1,328 games 2004-26, 969 of them in 2004, whose feed repeats the
         # start state on every row (completions, rushes, penalties, extra points).
+        #
+        # The clock is deliberately NOT compared: ESPN's re-entered duplicate records
+        # carry a clock seconds (or minutes) apart from the copy they duplicate -- the
+        # canonical pair is 401411109 (FSU-Louisville 2022), "Jordan Travis pass
+        # intercepted" at 9:59 and 9:51 and "Malik Cunningham pass incomplete to Tyler
+        # Hudson" (4th-and-2) at 5:18 and 4:42. Both are physically impossible as
+        # consecutive real plays: an interception and a 4th-down incompletion each
+        # change possession, so the same team cannot line up on the same down at the
+        # same spot next. Measured over a 920-game sample stratified by season (150
+        # games each from 2004, 2005, 2014, 2019, 2022, 2024, 2025; 168k plays):
+        # dropping the clock clause removes 302 further rows in 19 games -- 241 in 4
+        # games whose feed files the same drive twice under two drive ids (clocks 1-23s
+        # apart) and 61 whose duplicate sits in the same drive (up to 244s apart, the
+        # feed re-entering the row with a neighbouring play's clock). Every one of the
+        # 302 carries the same text, start state AND end.yardsToEndzone as the row it
+        # duplicates; none is a real replayed down (per-season A -> new: 2004 1 -> 1,
+        # 2005 5 -> 9, 2014 11 -> 12, 2019 60 -> 60, 2022 100 -> 155, 2024 30 -> 158,
+        # 2025 59 -> 173).
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1810,7 +1828,6 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text") == pl.col("lead_text"))
-                    .and_(pl.col("clock.displayValue") == pl.col("clock.displayValue").shift(-1))
                     .and_(pl.col("period.number") == pl.col("period.number").shift(-1))
                     .and_(pl.col("type.text") != "Timeout"),
                 )
@@ -1821,8 +1838,8 @@ class CFBPlayProcess(object):
         # The dupe rows are removed HERE, so the text_dupe column that reaches
         # the output is always False by construction -- it is the residue of a
         # filter that already ran, not a marker consumers can use to dedupe.
-        # Rows with identical text but a different start state or clock are
-        # deliberately kept: they are distinct plays with bad text, not duplicates.
+        # Rows with identical text but a different start state (or a period apart)
+        # are deliberately kept: they are distinct plays with bad text, not duplicates.
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
         home_match = _timeout_team_match_len(
