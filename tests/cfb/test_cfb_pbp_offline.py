@@ -1,6 +1,9 @@
+import gzip
 import json
+from collections import Counter
 from pathlib import Path
 
+import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
@@ -140,3 +143,96 @@ def test_missing_team_name_does_not_keyerror(monkeypatch):
         game.run_processing_pipeline()
     except KeyError as exc:  # pragma: no cover - the regression we are pinning
         pytest.fail(f"missing team key should not raise KeyError: {exc}")
+
+
+# --- ESPN duplicate records whose clocks differ (C39 follow-up) -------------------------------
+
+
+def _trimmed(game_id: int) -> dict:
+    """Load a stored ESPN summary trimmed to the keys the processor reads.
+
+    Provenance: copied from ``cfbfastR-cfb-raw/cfb/json/raw/{game_id}.json`` and
+    reduced to ``boxscore``, ``drives``, ``gameInfo``, ``header``, ``pickcenter``
+    and ``scoringPlays`` (the whole game is kept -- the processor short-circuits
+    before the dedupe on a completed game with fewer than 50 plays, so a slice of
+    a handful of plays would never reach the code under test).
+
+    * ``summary_401411109_trimmed.json.gz`` -- Florida State @ Louisville, 2022 week 3.
+      ESPN re-entered ten play records with a clock seconds apart from the copy they
+      duplicate, including the two canonical pairs: "Jordan Travis pass intercepted"
+      (3rd-and-9, 74 to go) at 9:59 and 9:51 and "Malik Cunningham pass incomplete to
+      Tyler Hudson" (4th-and-2, 45 to go) at 5:18 and 4:42.
+    * ``summary_242972641_trimmed.json.gz`` -- Texas @ Texas Tech, 2004 week 9. The
+      2004 feed repeats the start state on the next row 49 times; none of those rows
+      is a duplicate, and all of them must survive.
+    """
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _offline_plays(game_id: int) -> pl.DataFrame:
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=_trimmed(game_id))
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def _feed_plays(summary: dict) -> list[dict]:
+    return [play for drive in summary["drives"]["previous"] for play in drive["plays"]]
+
+
+def test_espn_duplicate_records_with_differing_clocks_collapse():
+    """401411109: the duplicate records ESPN logged with a different clock dedupe to one row."""
+    plays = _offline_plays(401411109)
+    for text, down, distance, yards_to_endzone in (
+        ("Jordan Travis pass intercepted Rance Conner return for no gain to the FlaSt 45", 3, 9, 74),
+        ("Malik Cunningham pass incomplete to Tyler Hudson", 4, 2, 45),
+    ):
+        hits = plays.filter(
+            (pl.col("text") == text)
+            & (pl.col("start.down") == down)
+            & (pl.col("start.distance") == distance)
+            & (pl.col("start.yardsToEndzone") == yards_to_endzone),
+        )
+        assert hits.height == 1, (text, hits.height)
+    # a punt whose text is unique keeps its single row (the pre-C39 rule deleted rows like it)
+    assert (
+        plays.filter(
+            pl.col("text") == "Alex Mastromanno punt for 52 yds , Braden Smith returns for no gain to the Lvile 37",
+        ).height
+        == 1
+    )
+    # the feed's 198 rows less the 4 quarter-end markers the pipeline drops and 10 duplicates
+    lost = Counter(p["text"] for p in _feed_plays(_trimmed(401411109))) - Counter(plays["text"].to_list())
+    markers = {text: n for text, n in lost.items() if text.startswith("End of")}
+    dupes = {text: n for text, n in lost.items() if text not in markers}
+    assert sum(markers.values()) == 4
+    assert sum(dupes.values()) == 10
+    # only the extra copy went: the feed's other rows carrying that text all survive
+    # ("Malik Cunningham pass incomplete to Tyler Hudson" is 6 feed rows, 5 of them real)
+    feed_counts = Counter(p["text"] for p in _feed_plays(_trimmed(401411109)))
+    assert all(plays.filter(pl.col("text") == text).height == feed_counts[text] - n for text, n in dupes.items())
+    assert plays.height == 184
+
+
+def test_repeated_start_state_rows_all_survive():
+    """242972641: the 2004 feed repeats the start state on the next row 49 times, none a duplicate."""
+    summary = _trimmed(242972641)
+    feed = _feed_plays(summary)
+
+    def start_state(play: dict) -> tuple:
+        start = play.get("start", {})
+        return (
+            start.get("team", {}).get("id"),
+            start.get("down"),
+            start.get("distance"),
+            start.get("yardsToEndzone"),
+        )
+
+    assert sum(start_state(a) == start_state(b) for a, b in zip(feed, feed[1:])) == 49
+
+    plays = _offline_plays(242972641)
+    lost = Counter(p["text"] for p in feed) - Counter(plays["text"].to_list())
+    # only the quarter-end markers the pipeline drops downstream -- no real play
+    assert all(text.startswith("End of the") for text in lost), lost
+    assert plays.height == 217
