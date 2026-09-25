@@ -516,16 +516,23 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             # |WPA| above 0.5 -- wp 0.020 -> 0.982 on an unsportsmanlike-conduct flag --
             # and the subset's mean WPA sat at +0.145 where WPA should centre on zero.
             # Taking lead_wp_before unflipped leaves 6 above 0.5 and a mean of +0.011.
+            #
+            # Scoring plays follow the same rule (the NFL twin in nfl/ep_wp.py already
+            # does). They used to take lead_wp_before unflipped, which only holds when
+            # the next row is the start team's: the kickoff after a defensive touchdown.
+            # After a defensive two-point conversion the TD team kicks off, so the next
+            # row is the returner's; in 401858228 that published wp 0.999 -> 0.003 on a
+            # 24 -> 22 point lead. A safety's free kick and a defensive score's own try
+            # row are the same case: on a 311-game sample the 23 such rows (12 of them
+            # safeties) went from mean |WPA| 0.72, 16 above 0.5, to 0.05 and none.
             .when(
-                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
-                .and_(pl.col("scoringPlay") == False)
-                .and_(pl.col("lead_pos_team") == pl.col("start.pos_team.id")),
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
+                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                ),
             )
             .then(pl.col(lwb))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
+            .when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
             .then(1 - pl.col(lwb))
-            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
-            .then(pl.col(lwb))
             .otherwise(pl.col(wa))
             .alias(wa),
         )
@@ -6319,6 +6326,10 @@ class CFBPlayProcess(object):
                             "Two Point Pass",
                             "Two Point Rush",
                             "Blocked PAT",
+                            # the defence returning the try for two is still a try: without
+                            # this the model scored the kicking team's snap from the 3 as
+                            # first-and-goal (EP ~5.7) and the -2 below made it EPA ~-7.7
+                            "Defensive 2pt Conversion",
                         ],
                     ),
                 )
