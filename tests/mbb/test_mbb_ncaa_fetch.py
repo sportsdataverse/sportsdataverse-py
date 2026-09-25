@@ -343,12 +343,15 @@ def test_solved_session_does_not_re_solve_on_every_fetch() -> None:
 # --- the stats.ncaa.org Terms gate (2026-09-22) is accepted, never kept -----
 
 # ~19 KB live; padded past _MIN_CONTENT_BYTES so it reads as "solved" like the real one.
+# The form controls are the live markup (stats.ncaa.org gate page, captured
+# 2026-09-25) and the fake page counts selectors against it, so _raw_fetch's
+# selectors are checked against the real ids rather than a list in the test.
 _GATE = (
-    '<html><body><form action="/stats_terms" method="post">'
-    '<input type="hidden" name="nonce" value="n1" />'
-    '<input type="checkbox" name="terms_accepted" value="t1" /></form>'
-    + "<p>Continue to NCAA Statistics?</p>" * 60
-    + "</body></html>"
+    '<html><body><form action="/stats_terms" accept-charset="UTF-8" method="post">'
+    '<input type="hidden" name="nonce" id="nonce" value="n1" />'
+    '<input type="checkbox" name="terms_accepted" id="terms_accepted" value="t1" class="stats-terms-checkbox" />'
+    '<button type="submit" class="stats-access-button" id="stats-access-button" disabled>'
+    "Continue to Statistics</button></form>" + "<p>Continue to NCAA Statistics?</p>" * 60 + "</body></html>"
 )
 
 
@@ -375,8 +378,10 @@ class _GatedPage(_FakePage):
         self.ui: "list[str]" = []
         self.landing = landing
 
+    gate = _GATE
+
     def content(self) -> str:
-        return _GATE  # navigation lands on /stats_terms
+        return self.gate  # navigation lands on /stats_terms
 
     def wait_for_timeout(self, ms: int) -> None:
         self.ui.append(f"wait {ms}")
@@ -387,10 +392,9 @@ class _GatedPage(_FakePage):
     def click(self, selector: str) -> None:
         self.ui.append(selector)
 
-    form = ("#terms_accepted", "#stats-access-button")
-
     def locator(self, selector: str) -> "_Count":
-        return _Count(1 if selector in self.form else 0)
+        # count id matches in the markup, as the browser would
+        return _Count(self.gate.count(f'id="{selector.removeprefix("#")}"'))
 
     @contextlib.contextmanager
     def expect_navigation(self, **kw: object) -> "Iterator[_NavInfo]":
@@ -432,7 +436,7 @@ def test_terms_gate_surviving_acceptance_raises() -> None:
 
 def test_changed_terms_form_is_a_terms_gate_error_not_a_transport_timeout() -> None:
     class _ChangedForm(_GatedPage):
-        form = ("#stats-access-button",)  # the checkbox is gone
+        gate = _GATE.replace('id="terms_accepted"', 'id="terms_agreed"')  # the checkbox id changed
 
     page = _ChangedForm([_GATE], _ACCEPTED)
     with pytest.raises(_TermsGateError, match="terms gate form changed"):
