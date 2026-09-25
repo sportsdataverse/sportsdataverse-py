@@ -154,6 +154,19 @@ def plan_season(
             yield endpoint, variant, kwargs
 
 
+def _read_payload(path: Path) -> Any:
+    """The persisted payload at ``path``, or None when it is missing or unreadable."""
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def _row_count(payload: Any) -> int:
+    """Total rows across every result table in ``payload`` (0 for v3 payloads)."""
+    return sum(len(t.get("rowSet") or []) for t in _result_tables(payload))
+
+
 def capture_season(
     season: int,
     root: str | Path,
@@ -163,6 +176,7 @@ def capture_season(
     league_id: str,
     log: Callable[[str], None] = lambda _m: None,
     skip_endpoints: frozenset[str] | set[str] = frozenset(),
+    refresh: bool = False,
 ) -> tuple[int, int, int]:
     """Fetch every season-level payload for ``season``. Returns (written, skipped, failed).
 
@@ -172,6 +186,14 @@ def capture_season(
 
     ``skip_endpoints`` names season-level endpoints to omit entirely -- parked
     endpoints, and anything below its season floor.
+
+    ``refresh`` re-fetches payloads that already exist. Resume is presence on disk,
+    which is right for a finished season and wrong for the current one: its
+    ``leaguegamelog`` (the game index the per-game passes read), the leaguedash
+    aggregates and the rosters all change daily, and without ``refresh`` they freeze
+    on first write -- a daily run then indexes the same games forever and still
+    exits 0. A refresh that fails, or that answers with no rows where the previous
+    capture had some, keeps the previous capture.
     """
     written = skipped = failed = 0
     team_source: Any = None
@@ -194,56 +216,51 @@ def capture_season(
             )
         )
 
+    def _capture(path: Path, endpoint: str, kwargs: dict[str, Any], label: str) -> Any:
+        """Fetch and persist one payload. Returns it when written, else None."""
+        nonlocal written, skipped, failed
+        existed = path.exists()
+        if existed and not refresh:
+            skipped += 1
+            return None
+        try:
+            payload = fetch(endpoint, kwargs)
+        except Exception as exc:  # noqa: BLE001 - one endpoint gap must not kill the season
+            log(f"season {season} {label}: {exc}")
+            failed += 1
+            return None
+        if existed and not is_contentless(payload) and _row_count(payload) == 0 < _row_count(_read_payload(path)):
+            # A throttled or mid-rebuild answer must not replace real rows. ({} is a
+            # failed fetch, not an answer -- write_payload refuses it below.)
+            log(f"season {season} {label}: refresh returned no rows, kept previous capture")
+            skipped += 1
+            return None
+        if not write_payload(path, payload):
+            # Counted as a failure, not a write: leaving no file is what lets the
+            # next sweep retry it.
+            log(f"season {season} {label}: empty payload, not persisted")
+            failed += 1
+            return None
+        written += 1
+        return payload
+
     for endpoint, variant, kwargs in plan_season(season, module, prefix, league_id):
         if endpoint in skip_endpoints:  # parked, or below its season floor
             continue
         path = payload_path(root, endpoint, season, variant)
-        is_team_source = _is_team_source(endpoint, kwargs)
-        if path.exists():
-            skipped += 1
-            if is_team_source:
-                try:
-                    team_source = json.loads(path.read_text(encoding="utf-8"))
-                except json.JSONDecodeError:
-                    team_source = None
-            continue
-        try:
-            payload = fetch(endpoint, kwargs)
-        except Exception as exc:  # noqa: BLE001 - one endpoint gap must not kill the season
-            log(f"season {season} {endpoint}[{variant}]: {exc}")
-            failed += 1
-            continue
-        if not write_payload(path, payload):
-            # Counted as a failure, not a write: leaving no file is what lets the
-            # next sweep retry it.
-            log(f"season {season} {endpoint}[{variant}]: empty payload, not persisted")
-            failed += 1
-            continue
-        written += 1
-        if is_team_source:
-            team_source = payload
+        fresh = _capture(path, endpoint, kwargs, f"{endpoint}[{variant}]")
+        if _is_team_source(endpoint, kwargs):
+            team_source = fresh if fresh is not None else _read_payload(path)
 
     # commonteamroster is per (season, team); team ids come from the team-stats
     # capture above rather than a second index call.
     if hasattr(module, f"{prefix}_commonteamroster"):
         for team_id in _ids_from(team_source, "TEAM_ID"):
-            path = payload_path(root, "commonteamroster", season, team_id)
-            if path.exists():
-                skipped += 1
-                continue
-            try:
-                payload = fetch(
-                    "commonteamroster",
-                    {"season": str(season), "team_id": team_id, "league_id": league_id},
-                )
-            except Exception as exc:  # noqa: BLE001
-                log(f"season {season} commonteamroster[{team_id}]: {exc}")
-                failed += 1
-                continue
-            if not write_payload(path, payload):
-                log(f"season {season} commonteamroster[{team_id}]: empty payload, not persisted")
-                failed += 1
-                continue
-            written += 1
+            _capture(
+                payload_path(root, "commonteamroster", season, team_id),
+                "commonteamroster",
+                {"season": str(season), "team_id": team_id, "league_id": league_id},
+                f"commonteamroster[{team_id}]",
+            )
 
     return written, skipped, failed
