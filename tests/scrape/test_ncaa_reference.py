@@ -61,6 +61,16 @@ def test_team_schedule_older_layout_2016() -> None:
     assert df.get_column("team_name")[0] == "Coastal Carolina Chanticleers"
 
 
+def test_team_schedule_without_a_header_row_keeps_its_first_game() -> None:
+    # headers are skipped by structure (<th>-only rows), not by position
+    html = (
+        "<table><tr><td>03/01/2016</td><td><a href='/teams/1'>Foo</a></td>"
+        "<td><a href='/contests/9/box_score'>W 3 - 1</a></td></tr></table>"
+    )
+    df = parse_ncaa_team_schedule(html, team_id="2")
+    assert df.select("date", "outcome", "contest_id").rows() == [("03/01/2016", "W", "9")]
+
+
 def test_team_roster_header_keyed() -> None:
     df = parse_ncaa_team_roster(_rd("mba_roster_614839"), team_id="614839")
     assert df.columns == list(TEAM_ROSTER_SCHEMA.keys())
