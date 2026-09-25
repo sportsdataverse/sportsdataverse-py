@@ -9,15 +9,17 @@ see :func:`test_no_proxy_configured_raises` and
 
 from __future__ import annotations
 
+import contextlib
 import importlib.util
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Iterator, Optional
 
 import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     NcaaFetchConfig,
+    _TermsGateError,
     NcaaFetcher,
     cached_path,
     get_config,
@@ -336,6 +338,138 @@ def test_solved_session_does_not_re_solve_on_every_fetch() -> None:
     t("https://stats.ncaa.org/contests/2/play_by_play", {"http": _POOL[0]}, {})
 
     assert page.gotos == 1  # solved once, reused
+
+
+# --- the stats.ncaa.org Terms gate (2026-09-22) is accepted, never kept -----
+
+# ~19 KB live; padded past _MIN_CONTENT_BYTES so it reads as "solved" like the real one.
+_GATE = (
+    '<html><body><form action="/stats_terms" method="post">'
+    '<input type="hidden" name="nonce" value="n1" />'
+    '<input type="checkbox" name="terms_accepted" value="t1" /></form>'
+    + "<p>Continue to NCAA Statistics?</p>" * 60
+    + "</body></html>"
+)
+
+
+_TERMS_COOKIE = {"name": "stats_terms_accepted", "value": "1", "domain": "stats.ncaa.org", "path": "/"}
+
+
+class _GatedContext:
+    def __init__(self) -> None:
+        self.added: "list[dict]" = []
+
+    def cookies(self) -> "list[dict]":
+        return [{"name": "_stats_session", "value": "s"}, _TERMS_COOKIE]
+
+    def add_cookies(self, cookies: "list[dict]") -> None:
+        self.added.extend(cookies)
+
+
+class _GatedPage(_FakePage):
+    """A _FakePage whose Terms gate clears only through the UI: dwell, tick, click."""
+
+    def __init__(self, bodies: "list[str]") -> None:
+        super().__init__(bodies)
+        self.ui: "list[str]" = []
+        self.context = _GatedContext()
+
+    def content(self) -> str:
+        return _GATE  # navigation lands on /stats_terms
+
+    def wait_for_timeout(self, ms: int) -> None:
+        self.ui.append(f"wait {ms}")
+
+    def check(self, selector: str) -> None:
+        self.ui.append(selector)
+
+    def click(self, selector: str) -> None:
+        self.ui.append(selector)
+
+    @contextlib.contextmanager
+    def expect_navigation(self, **kw: object) -> "Iterator[None]":
+        yield
+
+
+@pytest.fixture(autouse=True)
+def _fresh_terms_cookies(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch._terms_cookies", [])
+
+
+def test_terms_gate_is_accepted_after_the_dwell_then_refetched() -> None:
+    page = _GatedPage([_GATE, _CLEAN])
+    t = _transport_with(page)
+
+    status, text = t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
+
+    assert (status, text) == (200, _CLEAN)
+    # dwell first (an immediate submit is rejected live), then tick, then Continue
+    assert page.ui[-3:] == ["wait 10000", "#terms_accepted", "#stats-access-button"]
+
+
+def test_accepted_cookie_is_reused_by_the_next_browser_context() -> None:
+    first = _GatedPage([_GATE, _CLEAN])
+    _transport_with(first)("https://stats.ncaa.org/teams/1", {"http": _POOL[0]}, {})
+
+    second = _GatedPage([_GATE, _CLEAN])  # a rotation: fresh context, still gated
+    status, text = _transport_with(second)("https://stats.ncaa.org/teams/2", {"http": _POOL[0]}, {})
+
+    assert text == _CLEAN
+    assert second.context.added == [_TERMS_COOKIE]
+    assert "#stats-access-button" not in second.ui  # no second acceptance
+
+
+def test_terms_gate_surviving_acceptance_raises() -> None:
+    page = _GatedPage([_GATE, _GATE])
+    t = _transport_with(page)
+
+    with pytest.raises(RuntimeError, match="terms gate not accepted"):
+        t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
+
+
+def test_changed_terms_form_is_a_terms_gate_error_not_a_transport_timeout() -> None:
+    class _ChangedForm(_GatedPage):
+        def check(self, selector: str) -> None:
+            raise TimeoutError(f"waiting for locator({selector!r})")
+
+    t = _transport_with(_ChangedForm([_GATE]))
+    with pytest.raises(_TermsGateError, match="terms gate form not usable"):
+        t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
+
+
+def test_terms_gate_fails_fast_instead_of_rotating_the_pool(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies.get("http"))
+        page = _GatedPage([_GATE, _GATE])
+        return _transport_with(page)(url, proxies, headers)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(RuntimeError, match="terms gate not accepted"):
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
+    assert len(calls) == 1  # one proxy tried, not the whole pool
+
+
+def test_terms_gate_from_a_non_browser_transport_is_never_cached(tmp_path: Path) -> None:
+    transport = FakeTransport([(200, _GATE)])
+    fetcher = NcaaFetcher(_cfg(tmp_path, transport))
+
+    with pytest.raises(RuntimeError, match="terms gate needs the browser transport"):
+        fetcher.fetch_html("teams/614563")
+    assert not cached_path("teams/614563", cache_dir=tmp_path).exists()
+    assert len(transport.calls) == 1
+
+
+def test_cached_terms_gate_is_a_miss(tmp_path: Path) -> None:
+    cache_file = cached_path("teams/614563", cache_dir=tmp_path)
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
+    cache_file.write_text(_GATE, encoding="utf-8")
+    transport = FakeTransport([(200, _CLEAN)])
+
+    assert NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("teams/614563") == _CLEAN
+    assert len(transport.calls) == 1
+    assert cache_file.read_text(encoding="utf-8") == _CLEAN  # healed in place
 
 
 # --- the browser transport must honor a rotation (it is pinned at launch) ---
