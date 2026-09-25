@@ -165,6 +165,9 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_242972641_trimmed.json.gz`` -- Texas @ Texas Tech, 2004 week 9. The
       2004 feed repeats the start state on the next row 49 times; none of those rows
       is a duplicate, and all of them must survive.
+    * ``summary_401858228_trimmed.json.gz`` -- Mercer @ Georgia Tech, 2026 week 3. GT
+      leads 30-6 in the third when Mercer returns a blocked kick try for a defensive
+      two-point conversion.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -236,3 +239,29 @@ def test_repeated_start_state_rows_all_survive():
     # only the quarter-end markers the pipeline drops downstream -- no real play
     assert all(text.startswith("End of the") for text in lost), lost
     assert plays.height == 217
+
+
+def test_defensive_two_point_conversion_is_scored_as_a_try():
+    """401858228: Mercer returns a blocked GT kick try for two, GT up 30-6 at 8:20 of Q3.
+
+    The kicking team goes from a try's expected value to -2, so EPA is about -2.9, and
+    a 24 -> 22 point lead cannot swing win probability. It published EPA -7.70 (the
+    model scored the try as first-and-goal from the 3) and WPA -0.996 (wp_after took
+    the kickoff row's wp_before -- Mercer's -- without flipping it into GT's frame).
+    """
+    plays = _offline_plays(401858228).with_row_index("i")
+    d2p = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")
+    assert d2p.height == 1
+    r = d2p.row(0, named=True)
+    assert -4 <= r["EPA"] <= -2, r["EPA"]
+    assert abs(r["wpa"]) < 0.05, r["wpa"]
+
+    td, _, kickoff = plays.filter(pl.col("i").is_between(r["i"] - 1, r["i"] + 1)).iter_rows(named=True)
+    assert (td["type.text"], kickoff["type.text"]) == ("Rushing Touchdown", "Kickoff")
+    # GT (59) scores and tries; Mercer (2382) receives the kickoff GT then makes
+    assert [td["pos_team"], r["pos_team"], kickoff["pos_team"]] == [59, 59, 2382]
+    # WP hands over across the three rows: the try starts where the TD ended, and ends
+    # where the kickoff starts, restated from the receiver's frame into GT's
+    assert abs(td["wp_after"] - r["wp_before"]) < 0.01
+    assert r["wp_after"] == pytest.approx(1 - kickoff["wp_before"])
+    assert r["home_wp_after"] == pytest.approx(kickoff["home_wp_before"])
