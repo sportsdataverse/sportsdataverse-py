@@ -199,6 +199,11 @@ class NcaaFetchConfig:
     # before degrading; spreading a season (~11.7k requests) over a 50-proxy
     # pool at 200/proxy keeps every IP an order of magnitude under that.
     rotate_every: int = 200
+    # stats.ncaa.org Terms-gate refusals come in windows (2026-09-25: ~10 min after
+    # a burst of acceptances). On one, wait this many seconds and retry the fetch,
+    # up to terms_retries times, instead of failing a long run on the first one.
+    terms_backoff: float = 300.0
+    terms_retries: int = 3
     # Injection point for tests / alternate transports. ``None`` -> the real
     # curl_cffi-backed transport built lazily by NcaaFetcher.
     transport: Optional[FetchTransport] = None
@@ -219,6 +224,7 @@ class NcaaFetchConfig:
             f"max_retries={self.max_retries}, "
             f"rotation_backoff={self.rotation_backoff}, "
             f"rotate_every={self.rotate_every}, "
+            f"terms_backoff={self.terms_backoff}, terms_retries={self.terms_retries}, "
             f"transport={'<custom>' if self.transport else None})"
         )
 
@@ -269,6 +275,18 @@ def _from_env() -> NcaaFetchConfig:
     if (v := os.environ.get("SDV_PY_NCAA_ROTATE_EVERY")) is not None:
         try:
             cfg.rotate_every = int(v)
+        except ValueError:
+            pass
+    if (v := os.environ.get("SDV_PY_NCAA_TERMS_BACKOFF")) is not None:
+        try:
+            backoff = float(v)
+        except ValueError:
+            backoff = None
+        if backoff is not None and math.isfinite(backoff):
+            cfg.terms_backoff = backoff
+    if (v := os.environ.get("SDV_PY_NCAA_TERMS_RETRIES")) is not None:
+        try:
+            cfg.terms_retries = int(v)
         except ValueError:
             pass
     return cfg
@@ -512,15 +530,16 @@ _STATS_TERMS_MARKER = 'action="/stats_terms"'
 # Measured live 2026-09-25 (one fresh proxy per try): 0 s -> 0/7 accepted,
 # ~3 s -> 2/8, 10 s -> 7/7.
 _TERMS_DWELL_MS = 10_000
-# The accepted ``stats_terms_accepted`` cookie (30-day expiry, and it worked on
-# 3/3 other IPs in fresh contexts), reused by every later browser context in this
-# process so a rotation does not pay for a second acceptance.
-_terms_cookies: "list[dict[str, Any]]" = []
 
 
 class _TermsGateError(RuntimeError):
-    """stats.ncaa.org served its Terms gate. A fresh proxy/browser does not get
-    past it, so the fetch layer re-raises this instead of rotating the pool."""
+    """stats.ncaa.org served its Terms gate and it could not be passed. A fresh
+    proxy/browser does not get past it, so the fetch layer never rotates on it."""
+
+
+class _TermsRefusedError(_TermsGateError):
+    """The server refused a well-formed acceptance -- the one recoverable case
+    (refusals come in windows), which ``fetch_html`` backs off and retries."""
 
 
 def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
@@ -531,35 +550,36 @@ def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
 def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     """In-page ``fetch(url)`` for the browser transports.
 
-    When stats.ncaa.org answers with its Terms gate (since 2026-09-22), reuse
-    this process's accepted cookie if there is one; otherwise accept through the
-    UI -- navigation redirects to /stats_terms; wait :data:`_TERMS_DWELL_MS`,
-    tick the box, click Continue -- and keep the resulting cookie. A gate that
-    survives raises :class:`_TermsGateError` so the run fails loudly instead of
-    keeping the form as content or cycling the whole pool.
+    When stats.ncaa.org answers with its Terms gate (since 2026-09-22), accept it
+    through the UI -- navigation redirects to /stats_terms; wait
+    :data:`_TERMS_DWELL_MS`, tick the box, click Continue, which redirects back to
+    *url*. Each acceptance covers 3 page views, spent server-side against the
+    acceptance cookie (measured live 2026-09-25: a fresh session re-using the
+    cookie is gated as well), and that redirect is one of the 3 -- so its body is
+    returned instead of fetching the page again. A gate that survives raises
+    :class:`_TermsGateError`.
     """
     status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER not in text:
         return status, text
-    if _terms_cookies:
-        page.context.add_cookies(_terms_cookies)
-        status, text = _fetch_in_page(page, url)
-        if _STATS_TERMS_MARKER not in text:
-            return status, text
     logger.info("stats.ncaa.org terms gate -- accepting (one %d ms dwell)", _TERMS_DWELL_MS)
     page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
+    landed = None
     if _STATS_TERMS_MARKER in page.content():
         try:
             page.wait_for_timeout(_TERMS_DWELL_MS)
             page.check("#terms_accepted")
-            with page.expect_navigation(timeout=nav_timeout_ms):
+            with page.expect_navigation(timeout=nav_timeout_ms) as nav:
                 page.click("#stats-access-button")
+            landed = nav.value
         except Exception as exc:  # noqa: BLE001 - a changed form must fail fast, not time out per proxy
             raise _TermsGateError(f"stats.ncaa.org terms gate form not usable: {url}: {exc}") from exc
-    status, text = _fetch_in_page(page, url)
+    if landed is not None and landed.url == url:
+        status, text = landed.status, landed.text()
+    else:
+        status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER in text:
-        raise _TermsGateError(f"stats.ncaa.org terms gate not accepted: {url}")
-    _terms_cookies[:] = [c for c in page.context.cookies() if c["name"] == "stats_terms_accepted"]
+        raise _TermsRefusedError(f"stats.ncaa.org terms gate not accepted: {url}")
     return status, text
 
 
@@ -1068,7 +1088,16 @@ class NcaaFetcher:
                 "which manages its own network and needs no proxy pool."
             )
         url = f"{NCAA_HOST_URL}/{_normalize_path(path)}"
-        text = self._get_with_rotation(url)
+        retries, backoff = max(0, self.config.terms_retries), max(0.0, self.config.terms_backoff)
+        for attempt in range(retries + 1):
+            try:
+                text = self._get_with_rotation(url)
+                break
+            except _TermsRefusedError as exc:
+                if attempt == retries:
+                    raise
+                logger.warning("%s -- backing off %.0f s (%d/%d)", exc, backoff, attempt + 1, retries)
+                time.sleep(backoff)
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         cache_file.write_text(text, encoding="utf-8")
         return text
