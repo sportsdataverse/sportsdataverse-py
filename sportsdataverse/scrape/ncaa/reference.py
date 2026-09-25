@@ -34,7 +34,7 @@ __all__ = [
     "parse_ncaa_team_schedule",
 ]
 
-_RESULT_RE = re.compile(r"^([WLT])\s+(\d+)-(\d+)")
+_RESULT_RE = re.compile(r"^([WLT])\s+(\d+)\s*-\s*(\d+)")  # older seasons print "W 17 - 2"
 _TEAM_HREF_RE = re.compile(r"/teams/(\d+)")
 _CONTEST_HREF_RE = re.compile(r"/contests/(\d+)/")
 _PLAYER_HREF_RE = re.compile(r"/players/(\d+)")
@@ -182,7 +182,13 @@ def parse_ncaa_team_schedule(
     table = soup.find("table")
     rows: "list[dict]" = []
     if table is not None:
-        for tr in table.find_all("tr")[1:]:
+        for tr in table.find_all("tr"):
+            # Header rows are <th>-only, and there can be more than one: older
+            # seasons' pages (e.g. 2016) put a "Schedule/Results" title row
+            # before the Date/Opponent/Result <th> row, which a skip-the-first-row
+            # rule parsed as a game (one "Date" row per team).
+            if tr.find("td") is None:
+                continue
             cells = tr.find_all(["th", "td"])
             if len(cells) < 3 or not cells[0].get_text(strip=True):
                 continue
