@@ -549,10 +549,13 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     logger.info("stats.ncaa.org terms gate -- accepting (one %d ms dwell)", _TERMS_DWELL_MS)
     page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
     if _STATS_TERMS_MARKER in page.content():
-        page.wait_for_timeout(_TERMS_DWELL_MS)
-        page.check("#terms_accepted")
-        with page.expect_navigation(timeout=nav_timeout_ms):
-            page.click("#stats-access-button")
+        try:
+            page.wait_for_timeout(_TERMS_DWELL_MS)
+            page.check("#terms_accepted")
+            with page.expect_navigation(timeout=nav_timeout_ms):
+                page.click("#stats-access-button")
+        except Exception as exc:  # noqa: BLE001 - a changed form must fail fast, not time out per proxy
+            raise _TermsGateError(f"stats.ncaa.org terms gate form not usable: {url}: {exc}") from exc
     status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER in text:
         raise _TermsGateError(f"stats.ncaa.org terms gate not accepted: {url}")
@@ -970,7 +973,7 @@ class NcaaFetcher:
                 last_err = str(exc)
                 self._rotate("transport error")
                 continue
-            if status == 200 and _STATS_TERMS_MARKER in text:
+            if _STATS_TERMS_MARKER in text:
                 # Only a browser transport can try the Terms gate (_raw_fetch).
                 # From any other transport the form is neither content nor a ban,
                 # and no proxy rotation gets past it.

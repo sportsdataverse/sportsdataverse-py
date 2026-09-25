@@ -19,6 +19,7 @@ import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     NcaaFetchConfig,
+    _TermsGateError,
     NcaaFetcher,
     cached_path,
     get_config,
@@ -423,6 +424,16 @@ def test_terms_gate_surviving_acceptance_raises() -> None:
     t = _transport_with(page)
 
     with pytest.raises(RuntimeError, match="terms gate not accepted"):
+        t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
+
+
+def test_changed_terms_form_is_a_terms_gate_error_not_a_transport_timeout() -> None:
+    class _ChangedForm(_GatedPage):
+        def check(self, selector: str) -> None:
+            raise TimeoutError(f"waiting for locator({selector!r})")
+
+    t = _transport_with(_ChangedForm([_GATE]))
+    with pytest.raises(_TermsGateError, match="terms gate form not usable"):
         t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
 
 
