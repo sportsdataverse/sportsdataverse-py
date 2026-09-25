@@ -45,12 +45,12 @@ from urllib.parse import urlsplit
 
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     _MIN_CONTENT_BYTES,
-    _RAW_FETCH_JS,
     NcaaFetchConfig,
     NcaaFetcher,
     _ban_check,
     _browser_response_unsolved,
     _is_challenge,
+    _raw_fetch,
 )
 
 # Known-good captured MBB contests (present in mbb/json/) -- valid games, so any
@@ -237,8 +237,7 @@ class _PatchrightTransport:
         status, text = 0, ""
         for _ in range(self.solve_attempts):
             self._page.wait_for_timeout(self.challenge_wait_ms)
-            result = self._page.evaluate(_RAW_FETCH_JS, url)
-            status, text = int(result["status"]), str(result["text"])
+            status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
             if not _browser_response_unsolved(text):
                 return status, text
         # Retire the (likely aged-out) session so the caller's retry relaunches
@@ -304,8 +303,7 @@ class _ManagedCdpTransport:
         for _ in range(self.solve_attempts):
             self._page.goto(url, wait_until="domcontentloaded", timeout=self.nav_timeout_ms)
             self._page.wait_for_timeout(self.challenge_wait_ms)
-            result = self._page.evaluate(_RAW_FETCH_JS, url)
-            status, text = int(result["status"]), str(result["text"])
+            status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
             if not _browser_response_unsolved(text):
                 return status, text
         raise RuntimeError(

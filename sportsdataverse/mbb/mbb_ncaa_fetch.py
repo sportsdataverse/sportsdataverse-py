@@ -502,6 +502,47 @@ _RAW_FETCH_JS = (
     "return {status: r.status, text: await r.text()}; }"
 )
 
+# Since 2026-09-22 stats.ncaa.org answers every stats page with a Terms and
+# Conditions form until the session accepts it (POST /stats_terms: Rails
+# authenticity_token + a per-page nonce + the checkbox's token value). The form
+# page is ~19 KB, so it clears _MIN_CONTENT_BYTES and reads as content unless
+# caught -- it silently emptied every schedule master from 2026-09-22 on.
+_STATS_TERMS_MARKER = 'action="/stats_terms"'
+
+
+class _TermsGateError(RuntimeError):
+    """stats.ncaa.org served its Terms gate. A fresh proxy/browser does not get
+    past it, so the fetch layer re-raises this instead of rotating the pool."""
+
+
+def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
+    """In-page ``fetch(url)`` for the browser transports.
+
+    When stats.ncaa.org answers with its Terms gate, try once to accept it for
+    this browser context through the UI (navigation redirects to /stats_terms;
+    tick the box, click Continue; success sets a ``stats_terms_accepted``
+    cookie and redirects back), then fetch again. Measured live 2026-09-25 the
+    acceptance POST is scored server-side: 1 of ~40 attempts (JS POST and real
+    clicks, across proxy IPs) was accepted. A gate that survives the attempt
+    raises :class:`_TermsGateError` so the run fails loudly instead of keeping
+    the form as content or cycling the whole pool.
+    """
+    result = page.evaluate(_RAW_FETCH_JS, url)
+    status, text = int(result["status"]), str(result["text"])
+    if _STATS_TERMS_MARKER not in text:
+        return status, text
+    logger.info("stats.ncaa.org terms gate -- accepting for this browser session")
+    page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
+    if _STATS_TERMS_MARKER in page.content():
+        page.check("#terms_accepted")
+        with page.expect_navigation(timeout=nav_timeout_ms):
+            page.click("#stats-access-button")
+    result = page.evaluate(_RAW_FETCH_JS, url)
+    status, text = int(result["status"]), str(result["text"])
+    if _STATS_TERMS_MARKER in text:
+        raise _TermsGateError(f"stats.ncaa.org terms gate not accepted: {url}")
+    return status, text
+
 
 class _PlaywrightTransport:
     """Stateful `FetchTransport` that drives an anti-detect Chromium (patchright)
@@ -683,8 +724,7 @@ class _PlaywrightTransport:
             if not self._challenge_solved:
                 self._solve_challenge(url)
                 self._challenge_solved = True
-            result = self._page.evaluate(_RAW_FETCH_JS, url)
-            status, text = int(result["status"]), str(result["text"])
+            status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
             if not _browser_response_unsolved(text):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
@@ -908,10 +948,17 @@ class NcaaFetcher:
                 # reader hunting for an IP problem that does not exist. Re-raise so
                 # the install instruction from _ensure_page is the error.
                 raise
+            except _TermsGateError:
+                raise  # same reasoning: no proxy rotation gets past the Terms gate
             except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
                 last_err = str(exc)
                 self._rotate("transport error")
                 continue
+            if status == 200 and _STATS_TERMS_MARKER in text:
+                # Only a browser transport can try the Terms gate (_raw_fetch).
+                # From any other transport the form is neither content nor a ban,
+                # and no proxy rotation gets past it.
+                raise _TermsGateError(f"stats.ncaa.org terms gate needs the browser transport: {url}")
             if status == 200 and _is_challenge(text):
                 # Third response class: a 200 with no ban marker that is still an
                 # unsolved bm-verify shell. The browser transport already tried a
@@ -988,7 +1035,9 @@ class NcaaFetcher:
         """
         cache_file = cached_path(path, cache_dir=self.config.cache_dir)
         if cache_file.exists() and not force:
-            return cache_file.read_text(encoding="utf-8")
+            text = cache_file.read_text(encoding="utf-8")
+            if _STATS_TERMS_MARKER not in text:  # a cached Terms gate is a miss
+                return text
         if self.config.transport is None and not self._pool:
             raise RuntimeError(
                 "NcaaFetcher has no proxy configured. The default curl_cffi transport "
