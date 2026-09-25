@@ -474,13 +474,29 @@ def test_terms_backoff_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
     assert (_from_env().terms_backoff, _from_env().terms_retries) == (300.0, 3)  # invalid -> default
 
 
-def test_terms_gate_from_a_non_browser_transport_is_never_cached(tmp_path: Path) -> None:
+def test_terms_gate_from_a_non_browser_transport_is_never_cached_or_retried(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    sleeps: "list[float]" = []
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch.time.sleep", sleeps.append)
     transport = FakeTransport([(200, _GATE)])
-    cfg = NcaaFetchConfig(cache_dir=tmp_path, proxy_url="http://u:p@1.1.1.1:1", transport=transport, terms_retries=0)
+    fetcher = NcaaFetcher(_cfg(tmp_path, transport))  # default terms_retries / terms_backoff
+
     with pytest.raises(RuntimeError, match="terms gate needs the browser transport"):
-        NcaaFetcher(cfg).fetch_html("teams/614563")
+        fetcher.fetch_html("teams/614563")
     assert not cached_path("teams/614563", cache_dir=tmp_path).exists()
     assert len(transport.calls) == 1
+    assert sleeps == []  # unrecoverable: no backoff
+
+
+def test_negative_terms_settings_are_clamped(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+    cfg = NcaaFetchConfig(
+        cache_dir=tmp_path, transport=_refusing_transport(calls), terms_backoff=-5.0, terms_retries=-1
+    )
+    with pytest.raises(RuntimeError, match="terms gate not accepted"):  # not ValueError / UnboundLocalError
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
+    assert len(calls) == 1
 
 
 def test_cached_terms_gate_is_a_miss(tmp_path: Path) -> None:

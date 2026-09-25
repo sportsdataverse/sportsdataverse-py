@@ -533,9 +533,13 @@ _TERMS_DWELL_MS = 10_000
 
 
 class _TermsGateError(RuntimeError):
-    """stats.ncaa.org served its Terms gate and refused an acceptance (or its form
-    was unusable). A fresh proxy/browser does not get past it, so the fetch layer
-    backs off (``NcaaFetchConfig.terms_backoff``) instead of rotating the pool."""
+    """stats.ncaa.org served its Terms gate and it could not be passed. A fresh
+    proxy/browser does not get past it, so the fetch layer never rotates on it."""
+
+
+class _TermsRefusedError(_TermsGateError):
+    """The server refused a well-formed acceptance -- the one recoverable case
+    (refusals come in windows), which ``fetch_html`` backs off and retries."""
 
 
 def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
@@ -575,7 +579,7 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     else:
         status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER in text:
-        raise _TermsGateError(f"stats.ncaa.org terms gate not accepted: {url}")
+        raise _TermsRefusedError(f"stats.ncaa.org terms gate not accepted: {url}")
     return status, text
 
 
@@ -1084,21 +1088,16 @@ class NcaaFetcher:
                 "which manages its own network and needs no proxy pool."
             )
         url = f"{NCAA_HOST_URL}/{_normalize_path(path)}"
-        for attempt in range(self.config.terms_retries + 1):
+        retries, backoff = max(0, self.config.terms_retries), max(0.0, self.config.terms_backoff)
+        for attempt in range(retries + 1):
             try:
                 text = self._get_with_rotation(url)
                 break
-            except _TermsGateError as exc:
-                if attempt == self.config.terms_retries:
+            except _TermsRefusedError as exc:
+                if attempt == retries:
                     raise
-                logger.warning(
-                    "%s -- backing off %.0f s (%d/%d)",
-                    exc,
-                    self.config.terms_backoff,
-                    attempt + 1,
-                    self.config.terms_retries,
-                )
-                time.sleep(self.config.terms_backoff)
+                logger.warning("%s -- backing off %.0f s (%d/%d)", exc, backoff, attempt + 1, retries)
+                time.sleep(backoff)
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         cache_file.write_text(text, encoding="utf-8")
         return text
