@@ -43,6 +43,32 @@ def test_team_schedule_doubleheaders_and_results() -> None:
     played = df.filter(pl.col("outcome").is_not_null())
     assert (played.get_column("team_score") >= 0).all()
     assert played.get_column("contest_id").str.contains(r"^\d+$").all()
+    # the record in the page header (A&M-Corpus Christi, 23-28)
+    assert dict(df.group_by("outcome").len().rows()) == {"W": 23, "L": 28}
+
+
+def test_team_schedule_older_layout_2016() -> None:
+    """2016 pages put a title row before the <th> header row (a skip-the-first-row
+    rule parsed it as a game dated "Date") and print results as "W 17 - 2"."""
+    df = parse_ncaa_team_schedule(_rd("mba_team_page_2016_85309"), team_id="85309")
+    assert df.columns == list(TEAM_SCHEDULE_SCHEMA.keys())
+    assert df.height == 73
+    assert df.get_column("date").str.contains(r"^\d{2}/\d{2}/\d{4}").all()  # no "Date" header row
+    # Coastal Carolina went 55-18 and won the 2016 College World Series
+    assert dict(df.group_by("outcome").len().rows()) == {"W": 55, "L": 18}
+    assert df.get_column("team_score").null_count() == 0
+    assert df.get_column("contest_id").drop_nulls().len() == 72
+    assert df.get_column("team_name")[0] == "Coastal Carolina Chanticleers"
+
+
+def test_team_schedule_without_a_header_row_keeps_its_first_game() -> None:
+    # headers are skipped by structure (<th>-only rows), not by position
+    html = (
+        "<table><tr><td>03/01/2016</td><td><a href='/teams/1'>Foo</a></td>"
+        "<td><a href='/contests/9/box_score'>W 3 - 1</a></td></tr></table>"
+    )
+    df = parse_ncaa_team_schedule(html, team_id="2")
+    assert df.select("date", "outcome", "contest_id").rows() == [("03/01/2016", "W", "9")]
 
 
 def test_team_roster_header_keyed() -> None:
