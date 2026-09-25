@@ -508,6 +508,14 @@ _RAW_FETCH_JS = (
 # page is ~19 KB, so it clears _MIN_CONTENT_BYTES and reads as content unless
 # caught -- it silently emptied every schedule master from 2026-09-22 on.
 _STATS_TERMS_MARKER = 'action="/stats_terms"'
+# The server rejects an acceptance submitted too soon after the gate renders.
+# Measured live 2026-09-25 (one fresh proxy per try): 0 s -> 0/7 accepted,
+# ~3 s -> 2/8, 10 s -> 7/7.
+_TERMS_DWELL_MS = 10_000
+# The accepted ``stats_terms_accepted`` cookie (30-day expiry, and it worked on
+# 3/3 other IPs in fresh contexts), reused by every later browser context in this
+# process so a rotation does not pay for a second acceptance.
+_terms_cookies: "list[dict[str, Any]]" = []
 
 
 class _TermsGateError(RuntimeError):
@@ -515,32 +523,40 @@ class _TermsGateError(RuntimeError):
     past it, so the fetch layer re-raises this instead of rotating the pool."""
 
 
+def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
+    result = page.evaluate(_RAW_FETCH_JS, url)
+    return int(result["status"]), str(result["text"])
+
+
 def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     """In-page ``fetch(url)`` for the browser transports.
 
-    When stats.ncaa.org answers with its Terms gate, try once to accept it for
-    this browser context through the UI (navigation redirects to /stats_terms;
-    tick the box, click Continue; success sets a ``stats_terms_accepted``
-    cookie and redirects back), then fetch again. Measured live 2026-09-25 the
-    acceptance POST is scored server-side: 1 of ~40 attempts (JS POST and real
-    clicks, across proxy IPs) was accepted. A gate that survives the attempt
-    raises :class:`_TermsGateError` so the run fails loudly instead of keeping
-    the form as content or cycling the whole pool.
+    When stats.ncaa.org answers with its Terms gate (since 2026-09-22), reuse
+    this process's accepted cookie if there is one; otherwise accept through the
+    UI -- navigation redirects to /stats_terms; wait :data:`_TERMS_DWELL_MS`,
+    tick the box, click Continue -- and keep the resulting cookie. A gate that
+    survives raises :class:`_TermsGateError` so the run fails loudly instead of
+    keeping the form as content or cycling the whole pool.
     """
-    result = page.evaluate(_RAW_FETCH_JS, url)
-    status, text = int(result["status"]), str(result["text"])
+    status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER not in text:
         return status, text
-    logger.info("stats.ncaa.org terms gate -- accepting for this browser session")
+    if _terms_cookies:
+        page.context.add_cookies(_terms_cookies)
+        status, text = _fetch_in_page(page, url)
+        if _STATS_TERMS_MARKER not in text:
+            return status, text
+    logger.info("stats.ncaa.org terms gate -- accepting (one %d ms dwell)", _TERMS_DWELL_MS)
     page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
     if _STATS_TERMS_MARKER in page.content():
+        page.wait_for_timeout(_TERMS_DWELL_MS)
         page.check("#terms_accepted")
         with page.expect_navigation(timeout=nav_timeout_ms):
             page.click("#stats-access-button")
-    result = page.evaluate(_RAW_FETCH_JS, url)
-    status, text = int(result["status"]), str(result["text"])
+    status, text = _fetch_in_page(page, url)
     if _STATS_TERMS_MARKER in text:
         raise _TermsGateError(f"stats.ncaa.org terms gate not accepted: {url}")
+    _terms_cookies[:] = [c for c in page.context.cookies() if c["name"] == "stats_terms_accepted"]
     return status, text
 
 

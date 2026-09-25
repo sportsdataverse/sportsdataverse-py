@@ -351,15 +351,33 @@ _GATE = (
 )
 
 
+_TERMS_COOKIE = {"name": "stats_terms_accepted", "value": "1", "domain": "stats.ncaa.org", "path": "/"}
+
+
+class _GatedContext:
+    def __init__(self) -> None:
+        self.added: "list[dict]" = []
+
+    def cookies(self) -> "list[dict]":
+        return [{"name": "_stats_session", "value": "s"}, _TERMS_COOKIE]
+
+    def add_cookies(self, cookies: "list[dict]") -> None:
+        self.added.extend(cookies)
+
+
 class _GatedPage(_FakePage):
-    """A _FakePage whose Terms gate clears only through the UI: tick, then click."""
+    """A _FakePage whose Terms gate clears only through the UI: dwell, tick, click."""
 
     def __init__(self, bodies: "list[str]") -> None:
         super().__init__(bodies)
         self.ui: "list[str]" = []
+        self.context = _GatedContext()
 
     def content(self) -> str:
         return _GATE  # navigation lands on /stats_terms
+
+    def wait_for_timeout(self, ms: int) -> None:
+        self.ui.append(f"wait {ms}")
 
     def check(self, selector: str) -> None:
         self.ui.append(selector)
@@ -372,14 +390,32 @@ class _GatedPage(_FakePage):
         yield
 
 
-def test_terms_gate_is_accepted_then_refetched() -> None:
+@pytest.fixture(autouse=True)
+def _fresh_terms_cookies(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch._terms_cookies", [])
+
+
+def test_terms_gate_is_accepted_after_the_dwell_then_refetched() -> None:
     page = _GatedPage([_GATE, _CLEAN])
     t = _transport_with(page)
 
     status, text = t("https://stats.ncaa.org/teams/614563", {"http": _POOL[0]}, {})
 
     assert (status, text) == (200, _CLEAN)
-    assert page.ui == ["#terms_accepted", "#stats-access-button"]  # ticked, then Continue
+    # dwell first (an immediate submit is rejected live), then tick, then Continue
+    assert page.ui[-3:] == ["wait 10000", "#terms_accepted", "#stats-access-button"]
+
+
+def test_accepted_cookie_is_reused_by_the_next_browser_context() -> None:
+    first = _GatedPage([_GATE, _CLEAN])
+    _transport_with(first)("https://stats.ncaa.org/teams/1", {"http": _POOL[0]}, {})
+
+    second = _GatedPage([_GATE, _CLEAN])  # a rotation: fresh context, still gated
+    status, text = _transport_with(second)("https://stats.ncaa.org/teams/2", {"http": _POOL[0]}, {})
+
+    assert text == _CLEAN
+    assert second.context.added == [_TERMS_COOKIE]
+    assert "#stats-access-button" not in second.ui  # no second acceptance
 
 
 def test_terms_gate_surviving_acceptance_raises() -> None:
