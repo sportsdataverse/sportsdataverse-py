@@ -56,3 +56,16 @@ def test_refresh_never_downgrades_a_populated_capture(tmp_path, plan, answer, co
     _run(tmp_path, _gamelog("1", "2"), refresh=False)
     assert _run(tmp_path, answer, refresh=True) == counts
     assert len(json.loads(path.read_text())["resultSets"][0]["rowSet"]) == 2
+
+
+def test_refresh_keeps_populated_v3_capture_and_survives_bad_bytes(tmp_path, plan):
+    """v3 payloads carry no result tables; an empty entity list must not replace rows."""
+    path = sc.payload_path(tmp_path, "leaguegamelog", 2026, "regular-season")
+    full = {"meta": {"version": 1}, "games": {"list": [{"gameId": "1"}, {"gameId": "2"}]}}
+    empty = {"meta": {"version": 1}, "games": {"list": []}}
+    _run(tmp_path, full, refresh=False)
+    assert _run(tmp_path, empty, refresh=True) == (0, 1, 0)
+    assert json.loads(path.read_text()) == full
+
+    path.write_bytes(b"\xff\xfe not utf-8")  # an unreadable capture is replaced, never fatal
+    assert _run(tmp_path, _gamelog(), refresh=True) == (1, 0, 0)  # zero rows forces the read

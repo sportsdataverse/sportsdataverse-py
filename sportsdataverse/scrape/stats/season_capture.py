@@ -158,13 +158,29 @@ def _read_payload(path: Path) -> Any:
     """The persisted payload at ``path``, or None when it is missing or unreadable."""
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except (OSError, ValueError):  # ValueError covers JSONDecodeError and UnicodeDecodeError
         return None
 
 
 def _row_count(payload: Any) -> int:
-    """Total rows across every result table in ``payload`` (0 for v3 payloads)."""
-    return sum(len(t.get("rowSet") or []) for t in _result_tables(payload))
+    """Rows in ``payload``: result-table rows, or for a v3 ``{<entity>, meta}``
+    payload (no result tables) the list entries under its entity.
+
+    Only compared against zero, so the v3 count need not be exact -- it only has
+    to be 0 exactly when every entity list is empty.
+    """
+    tables = _result_tables(payload)
+    if tables:
+        return sum(len(t.get("rowSet") or []) for t in tables)
+
+    def _items(node: Any) -> int:
+        if isinstance(node, list):
+            return len(node) + sum(_items(v) for v in node)
+        if isinstance(node, dict):
+            return sum(_items(v) for k, v in node.items() if k != "meta")
+        return 0
+
+    return _items(payload)
 
 
 def capture_season(
