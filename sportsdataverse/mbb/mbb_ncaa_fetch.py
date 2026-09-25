@@ -566,14 +566,17 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
     landed = None
     if _STATS_TERMS_MARKER in page.content():
-        try:
-            page.wait_for_timeout(_TERMS_DWELL_MS)
-            page.check("#terms_accepted")
-            with page.expect_navigation(timeout=nav_timeout_ms) as nav:
-                page.click("#stats-access-button")
-            landed = nav.value
-        except Exception as exc:  # noqa: BLE001 - a changed form must fail fast, not time out per proxy
-            raise _TermsGateError(f"stats.ncaa.org terms gate form not usable: {url}: {exc}") from exc
+        # A changed form fails fast here. Anything that goes wrong below is left
+        # to propagate as an ordinary transport error, so the fetch layer rotates:
+        # a blanket except once turned a proxy tunnel failure
+        # (net::ERR_TUNNEL_CONNECTION_FAILED) into a fatal gate error mid-backfill.
+        if not all(page.locator(sel).count() for sel in ("#terms_accepted", "#stats-access-button")):
+            raise _TermsGateError(f"stats.ncaa.org terms gate form changed: {url}")
+        page.wait_for_timeout(_TERMS_DWELL_MS)
+        page.check("#terms_accepted")
+        with page.expect_navigation(timeout=nav_timeout_ms) as nav:
+            page.click("#stats-access-button")
+        landed = nav.value
     if landed is not None and landed.url == url:
         status, text = landed.status, landed.text()
     else:

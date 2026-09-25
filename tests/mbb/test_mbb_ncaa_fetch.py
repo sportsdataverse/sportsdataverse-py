@@ -387,9 +387,22 @@ class _GatedPage(_FakePage):
     def click(self, selector: str) -> None:
         self.ui.append(selector)
 
+    form = ("#terms_accepted", "#stats-access-button")
+
+    def locator(self, selector: str) -> "_Count":
+        return _Count(1 if selector in self.form else 0)
+
     @contextlib.contextmanager
     def expect_navigation(self, **kw: object) -> "Iterator[_NavInfo]":
         yield _NavInfo(self.landing)
+
+
+class _Count:
+    def __init__(self, n: int) -> None:
+        self.n = n
+
+    def count(self) -> int:
+        return self.n
 
 
 _URL = "https://stats.ncaa.org/teams/614563"
@@ -419,11 +432,38 @@ def test_terms_gate_surviving_acceptance_raises() -> None:
 
 def test_changed_terms_form_is_a_terms_gate_error_not_a_transport_timeout() -> None:
     class _ChangedForm(_GatedPage):
-        def check(self, selector: str) -> None:
-            raise TimeoutError(f"waiting for locator({selector!r})")
+        form = ("#stats-access-button",)  # the checkbox is gone
 
-    with pytest.raises(_TermsGateError, match="terms gate form not usable"):
-        _transport_with(_ChangedForm([_GATE], _ACCEPTED))(_URL, {"http": _POOL[0]}, {})
+    page = _ChangedForm([_GATE], _ACCEPTED)
+    with pytest.raises(_TermsGateError, match="terms gate form changed"):
+        _transport_with(page)(_URL, {"http": _POOL[0]}, {})
+    assert "#stats-access-button" not in page.ui  # failed before touching the form
+
+
+class _TunnelFailure(_GatedPage):
+    def click(self, selector: str) -> None:
+        raise RuntimeError("Page.click: net::ERR_TUNNEL_CONNECTION_FAILED")
+
+
+def test_network_error_during_acceptance_is_a_transport_error_not_a_gate_error() -> None:
+    with pytest.raises(RuntimeError, match="ERR_TUNNEL_CONNECTION_FAILED") as exc:
+        _transport_with(_TunnelFailure([_GATE], _ACCEPTED))(_URL, {"http": _POOL[0]}, {})
+    assert not isinstance(exc.value, _TermsGateError)
+
+
+def test_network_error_during_acceptance_rotates_to_the_next_proxy(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies.get("http"))
+        page = _TunnelFailure([_GATE], _ACCEPTED) if len(calls) == 1 else _GatedPage([_GATE], _ACCEPTED)
+        t = _transport_with(page)
+        t._current_proxy = proxies.get("http")  # pin the fake page to this proxy: no real relaunch
+        return t(url, proxies, headers)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    assert NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563") == _CLEAN
+    assert len(calls) == 2  # rotated past the failing proxy instead of dying
 
 
 def _refusing_transport(calls: "list[str]", clean_after: int = 10**9) -> "Callable[..., tuple[int, str]]":
