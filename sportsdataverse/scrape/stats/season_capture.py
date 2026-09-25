@@ -174,6 +174,7 @@ def _row_count(payload: Any) -> int:
         return sum(len(t.get("rowSet") or []) for t in tables)
 
     def _items(node: Any) -> int:
+        """List entries anywhere under ``node``, skipping ``meta``."""
         if isinstance(node, list):
             return len(node) + sum(_items(v) for v in node)
         if isinstance(node, dict):
