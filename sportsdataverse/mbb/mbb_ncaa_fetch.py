@@ -525,11 +525,21 @@ _RAW_FETCH_JS = (
 # authenticity_token + a per-page nonce + the checkbox's token value). The form
 # page is ~19 KB, so it clears _MIN_CONTENT_BYTES and reads as content unless
 # caught -- it silently emptied every schedule master from 2026-09-22 on.
-_STATS_TERMS_MARKER = 'action="/stats_terms"'
+# Two independent markers, so a changed form action (absolute URL, a sub-path)
+# cannot turn the gate back into "content" the way it first did on 2026-09-22.
+_STATS_TERMS_MARKERS = ("/stats_terms", 'id="terms_accepted"')
+
+
+def _is_terms_gate(text: str) -> bool:
+    return any(marker in text for marker in _STATS_TERMS_MARKERS)
+
+
 # The server rejects an acceptance submitted too soon after the gate renders.
 # Measured live 2026-09-25 (one fresh proxy per try): 0 s -> 0/7 accepted,
 # ~3 s -> 2/8, 10 s -> 7/7.
 _TERMS_DWELL_MS = 10_000
+_ACCEPT_FAILURES_MAX = 3
+_accept_failures = 0  # consecutive acceptance-path failures in this process, across proxies
 
 
 class _TermsGateError(RuntimeError):
@@ -556,32 +566,45 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     *url*. Each acceptance covers 3 page views, spent server-side against the
     acceptance cookie (measured live 2026-09-25: a fresh session re-using the
     cookie is gated as well), and that redirect is one of the 3 -- so its body is
-    returned instead of fetching the page again. A gate that survives raises
-    :class:`_TermsGateError`.
+    returned instead of fetching the page again. A refused acceptance raises
+    :class:`_TermsRefusedError`; a click-through that fails (proxy error, missing
+    or unusable form) rotates like any transport error, and raises
+    :class:`_TermsGateError` after :data:`_ACCEPT_FAILURES_MAX` proxies in a row.
     """
     status, text = _fetch_in_page(page, url)
-    if _STATS_TERMS_MARKER not in text:
+    if not _is_terms_gate(text):
         return status, text
     logger.info("stats.ncaa.org terms gate -- accepting (one %d ms dwell)", _TERMS_DWELL_MS)
-    page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
-    landed = None
-    if _STATS_TERMS_MARKER in page.content():
-        # A changed form fails fast here. Anything that goes wrong below is left
-        # to propagate as an ordinary transport error, so the fetch layer rotates:
-        # a blanket except once turned a proxy tunnel failure
-        # (net::ERR_TUNNEL_CONNECTION_FAILED) into a fatal gate error mid-backfill.
-        if not all(page.locator(sel).count() for sel in ("#terms_accepted", "#stats-access-button")):
-            raise _TermsGateError(f"stats.ncaa.org terms gate form changed: {url}")
-        page.wait_for_timeout(_TERMS_DWELL_MS)
-        page.check("#terms_accepted")
-        with page.expect_navigation(timeout=nav_timeout_ms) as nav:
-            page.click("#stats-access-button")
-        landed = nav.value
+    global _accept_failures
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
+        landed = None
+        if _is_terms_gate(page.content()):
+            if not all(page.locator(sel).count() for sel in ("#terms_accepted", "#stats-access-button")):
+                raise RuntimeError(f"stats.ncaa.org terms gate form changed or truncated: {url}")
+            page.wait_for_timeout(_TERMS_DWELL_MS)
+            page.check("#terms_accepted")
+            with page.expect_navigation(timeout=nav_timeout_ms) as nav:
+                page.click("#stats-access-button")
+            landed = nav.value
+    except Exception as exc:
+        # One failure is usually the proxy (a tunnel error, a truncated page):
+        # re-raise as a transport error so the fetch layer rotates. The same
+        # failure on _ACCEPT_FAILURES_MAX proxies in a row is the form itself, so
+        # stop instead of sweeping the whole pool (~1 h per URL at 50 proxies).
+        _accept_failures += 1
+        if _accept_failures >= _ACCEPT_FAILURES_MAX:
+            _accept_failures = 0
+            raise _TermsGateError(
+                f"stats.ncaa.org terms acceptance failed on {_ACCEPT_FAILURES_MAX} proxies in a row: {url}: {exc}"
+            ) from exc
+        raise
+    _accept_failures = 0
     if landed is not None and landed.url == url:
         status, text = landed.status, landed.text()
     else:
         status, text = _fetch_in_page(page, url)
-    if _STATS_TERMS_MARKER in text:
+    if _is_terms_gate(text):
         raise _TermsRefusedError(f"stats.ncaa.org terms gate not accepted: {url}")
     return status, text
 
@@ -766,7 +789,13 @@ class _PlaywrightTransport:
             if not self._challenge_solved:
                 self._solve_challenge(url)
                 self._challenge_solved = True
-            status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
+            try:
+                status, text = _raw_fetch(self._page, url, self.nav_timeout_ms)
+            except Exception:
+                # The page may be left on an error page (chrome-error://); with a
+                # single proxy the retry reuses it, so force a real navigation.
+                self._challenge_solved = False
+                raise
             if not _browser_response_unsolved(text):
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
@@ -996,7 +1025,7 @@ class NcaaFetcher:
                 last_err = str(exc)
                 self._rotate("transport error")
                 continue
-            if _STATS_TERMS_MARKER in text:
+            if _is_terms_gate(text):
                 # Only a browser transport can try the Terms gate (_raw_fetch).
                 # From any other transport the form is neither content nor a ban,
                 # and no proxy rotation gets past it.
@@ -1078,7 +1107,7 @@ class NcaaFetcher:
         cache_file = cached_path(path, cache_dir=self.config.cache_dir)
         if cache_file.exists() and not force:
             text = cache_file.read_text(encoding="utf-8")
-            if _STATS_TERMS_MARKER not in text:  # a cached Terms gate is a miss
+            if not _is_terms_gate(text):  # a cached Terms gate is a miss
                 return text
         if self.config.transport is None and not self._pool:
             raise RuntimeError(

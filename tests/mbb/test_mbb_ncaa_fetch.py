@@ -434,14 +434,50 @@ def test_terms_gate_surviving_acceptance_raises() -> None:
         _transport_with(page)(_URL, {"http": _POOL[0]}, {})
 
 
-def test_changed_terms_form_is_a_terms_gate_error_not_a_transport_timeout() -> None:
-    class _ChangedForm(_GatedPage):
-        gate = _GATE.replace('id="terms_accepted"', 'id="terms_agreed"')  # the checkbox id changed
+@pytest.fixture(autouse=True)
+def _fresh_accept_failures(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch._accept_failures", 0)
 
-    page = _ChangedForm([_GATE], _ACCEPTED)
-    with pytest.raises(_TermsGateError, match="terms gate form changed"):
-        _transport_with(page)(_URL, {"http": _POOL[0]}, {})
-    assert "#stats-access-button" not in page.ui  # failed before touching the form
+
+class _NoForm(_GatedPage):
+    """The gate with its controls gone -- a changed form, or a proxy-truncated page."""
+
+    gate = _GATE.replace('id="terms_accepted"', 'id="terms_agreed"')
+
+
+def _pinned(page: _GatedPage, proxies: dict) -> object:
+    t = _transport_with(page)
+    t._current_proxy = proxies.get("http")  # pin the fake page to this proxy: no real relaunch
+    return t
+
+
+def test_changed_terms_form_fails_after_three_proxies_not_the_whole_pool(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+    pages: "list[_GatedPage]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies.get("http"))
+        pages.append(_NoForm([_GATE], _ACCEPTED))
+        return _pinned(pages[-1], proxies)(url, proxies, headers)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(_TermsGateError, match="failed on 3 proxies in a row"):
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
+    assert len(calls) == 3  # not len(_POOL) + 2
+    assert not any("#stats-access-button" in p.ui for p in pages)  # never touched the form
+
+
+def test_truncated_gate_on_one_proxy_rotates(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies.get("http"))
+        page = _NoForm([_GATE], _ACCEPTED) if len(calls) == 1 else _GatedPage([_GATE], _ACCEPTED)
+        return _pinned(page, proxies)(url, proxies, headers)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    assert NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563") == _CLEAN
+    assert len(calls) == 2
 
 
 class _TunnelFailure(_GatedPage):
@@ -461,13 +497,48 @@ def test_network_error_during_acceptance_rotates_to_the_next_proxy(tmp_path: Pat
     def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
         calls.append(proxies.get("http"))
         page = _TunnelFailure([_GATE], _ACCEPTED) if len(calls) == 1 else _GatedPage([_GATE], _ACCEPTED)
-        t = _transport_with(page)
-        t._current_proxy = proxies.get("http")  # pin the fake page to this proxy: no real relaunch
-        return t(url, proxies, headers)
+        return _pinned(page, proxies)(url, proxies, headers)
 
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
     assert NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563") == _CLEAN
     assert len(calls) == 2  # rotated past the failing proxy instead of dying
+
+
+def test_a_successful_acceptance_resets_the_failure_count(tmp_path: Path) -> None:
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies.get("http"))
+        page = _NoForm([_GATE], _ACCEPTED) if len(calls) % 2 == 1 else _GatedPage([_GATE], _ACCEPTED)
+        return _pinned(page, proxies)(url, proxies, headers)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+    for _ in range(3):  # 3 failures in total, never 3 in a row
+        assert fetcher.fetch_html("teams/614563", force=True) == _CLEAN
+    assert len(calls) == 6
+
+
+def test_failed_call_forces_a_fresh_navigation_next_time() -> None:
+    # single-proxy pools reuse the page: after a failure it may sit on chrome-error://
+    t = _transport_with(_TunnelFailure([_GATE], _ACCEPTED))
+    with pytest.raises(RuntimeError, match="ERR_TUNNEL_CONNECTION_FAILED"):
+        t(_URL, {"http": _POOL[0]}, {})
+    assert t._challenge_solved is False
+
+
+@pytest.mark.parametrize(
+    "gate",
+    [
+        _GATE.replace('action="/stats_terms"', 'action="https://stats.ncaa.org/stats_terms/accept"'),
+        _GATE.replace('action="/stats_terms"', 'action="/terms"'),  # only the checkbox id is left
+    ],
+)
+def test_a_gate_with_a_changed_action_is_still_never_cached(tmp_path: Path, gate: str) -> None:
+    transport = FakeTransport([(200, gate)])
+    with pytest.raises(RuntimeError, match="terms gate needs the browser transport"):
+        NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("teams/614563")
+    assert not cached_path("teams/614563", cache_dir=tmp_path).exists()
 
 
 def _refusing_transport(calls: "list[str]", clean_after: int = 10**9) -> "Callable[..., tuple[int, str]]":
