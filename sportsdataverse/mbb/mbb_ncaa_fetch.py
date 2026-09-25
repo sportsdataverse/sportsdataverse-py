@@ -538,13 +538,20 @@ def _is_terms_gate(text: str) -> bool:
 # Measured live 2026-09-25 (one fresh proxy per try): 0 s -> 0/7 accepted,
 # ~3 s -> 2/8, 10 s -> 7/7.
 _TERMS_DWELL_MS = 10_000
+# Failed click-throughs tolerated per fetch before the form, not the proxy, is
+# the likely cause (see _get_with_rotation).
 _ACCEPT_FAILURES_MAX = 3
-_accept_failures = 0  # consecutive acceptance-path failures in this process, across proxies
 
 
 class _TermsGateError(RuntimeError):
     """stats.ncaa.org served its Terms gate and it could not be passed. A fresh
     proxy/browser does not get past it, so the fetch layer never rotates on it."""
+
+
+class _TermsAcceptError(RuntimeError):
+    """A Terms click-through failed on this proxy (a tunnel error, a truncated or
+    changed form). An ordinary transport error -- the fetch layer rotates -- but
+    counted per fetch, so a form that fails on every proxy stops early."""
 
 
 class _TermsRefusedError(_TermsGateError):
@@ -569,13 +576,12 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     returned instead of fetching the page again. A refused acceptance raises
     :class:`_TermsRefusedError`; a click-through that fails (proxy error, missing
     or unusable form) rotates like any transport error, and raises
-    :class:`_TermsGateError` after :data:`_ACCEPT_FAILURES_MAX` proxies in a row.
+    :class:`_TermsGateError` after :data:`_ACCEPT_FAILURES_MAX` of them in one fetch.
     """
     status, text = _fetch_in_page(page, url)
     if not _is_terms_gate(text):
         return status, text
     logger.info("stats.ncaa.org terms gate -- accepting (one %d ms dwell)", _TERMS_DWELL_MS)
-    global _accept_failures
     try:
         page.goto(url, wait_until="domcontentloaded", timeout=nav_timeout_ms)
         landed = None
@@ -588,18 +594,7 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
                 page.click("#stats-access-button")
             landed = nav.value
     except Exception as exc:
-        # One failure is usually the proxy (a tunnel error, a truncated page):
-        # re-raise as a transport error so the fetch layer rotates. The same
-        # failure on _ACCEPT_FAILURES_MAX proxies in a row is the form itself, so
-        # stop instead of sweeping the whole pool (~1 h per URL at 50 proxies).
-        _accept_failures += 1
-        if _accept_failures >= _ACCEPT_FAILURES_MAX:
-            _accept_failures = 0
-            raise _TermsGateError(
-                f"stats.ncaa.org terms acceptance failed on {_ACCEPT_FAILURES_MAX} proxies in a row: {url}: {exc}"
-            ) from exc
-        raise
-    _accept_failures = 0
+        raise _TermsAcceptError(f"stats.ncaa.org terms acceptance failed: {url}: {exc}") from exc
     if landed is not None and landed.url == url:
         status, text = landed.status, landed.text()
     else:
@@ -998,6 +993,7 @@ class NcaaFetcher:
         pool = self._pool or [""]
         attempts = len(pool) + self.config.max_retries
         last_err = "no proxies in pool"
+        accept_failures = 0
         for i in range(attempts):
             if i and self.config.rotation_backoff > 0:
                 time.sleep(self.config.rotation_backoff)
@@ -1023,6 +1019,13 @@ class NcaaFetcher:
                 raise  # same reasoning: no proxy rotation gets past the Terms gate
             except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
                 last_err = str(exc)
+                if isinstance(exc, _TermsAcceptError):
+                    # One is usually the proxy; the same failure on several proxies
+                    # is the form itself -- stop instead of sweeping the whole pool
+                    # (~1 h per URL at 50 proxies).
+                    accept_failures += 1
+                    if accept_failures >= _ACCEPT_FAILURES_MAX:
+                        raise _TermsGateError(f"{exc} (on {accept_failures} proxies)") from exc
                 self._rotate("transport error")
                 continue
             if _is_terms_gate(text):

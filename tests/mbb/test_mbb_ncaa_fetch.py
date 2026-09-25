@@ -434,11 +434,6 @@ def test_terms_gate_surviving_acceptance_raises() -> None:
         _transport_with(page)(_URL, {"http": _POOL[0]}, {})
 
 
-@pytest.fixture(autouse=True)
-def _fresh_accept_failures(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch._accept_failures", 0)
-
-
 class _NoForm(_GatedPage):
     """The gate with its controls gone -- a changed form, or a proxy-truncated page."""
 
@@ -461,7 +456,7 @@ def test_changed_terms_form_fails_after_three_proxies_not_the_whole_pool(tmp_pat
         return _pinned(pages[-1], proxies)(url, proxies, headers)
 
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
-    with pytest.raises(_TermsGateError, match="failed on 3 proxies in a row"):
+    with pytest.raises(_TermsGateError, match=r"terms acceptance failed.*\(on 3 proxies\)"):
         NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
     assert len(calls) == 3  # not len(_POOL) + 2
     assert not any("#stats-access-button" in p.ui for p in pages)  # never touched the form
@@ -504,19 +499,19 @@ def test_network_error_during_acceptance_rotates_to_the_next_proxy(tmp_path: Pat
     assert len(calls) == 2  # rotated past the failing proxy instead of dying
 
 
-def test_a_successful_acceptance_resets_the_failure_count(tmp_path: Path) -> None:
+def test_acceptance_failures_are_counted_per_fetch_not_per_process(tmp_path: Path) -> None:
     calls: "list[str]" = []
 
     def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
         calls.append(proxies.get("http"))
-        page = _NoForm([_GATE], _ACCEPTED) if len(calls) % 2 == 1 else _GatedPage([_GATE], _ACCEPTED)
+        page = _GatedPage([_GATE], _ACCEPTED) if len(calls) % 3 == 0 else _NoForm([_GATE], _ACCEPTED)
         return _pinned(page, proxies)(url, proxies, headers)
 
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
     fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
-    for _ in range(3):  # 3 failures in total, never 3 in a row
+    for _ in range(3):  # 2 failures per fetch -- 6 in all, never 3 within one fetch
         assert fetcher.fetch_html("teams/614563", force=True) == _CLEAN
-    assert len(calls) == 6
+    assert len(calls) == 9
 
 
 def test_failed_call_forces_a_fresh_navigation_next_time() -> None:
