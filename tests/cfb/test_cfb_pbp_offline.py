@@ -207,6 +207,12 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_302450154_trimmed.json.gz`` -- Presbyterian @ Wake Forest, 2010. Wake Forest
       returns Presbyterian's blocked extra point for two; ESPN folds it into the touchdown
       row and files no try row.
+    * ``summary_282432641_trimmed.json.gz`` -- Eastern Washington @ Texas Tech, 2008 week 1.
+      A touchdown row that folds its good two, then the two again as its own row.
+    * ``summary_293182305_trimmed.json.gz`` -- Nebraska @ Kansas, 2009 week 11. A good two,
+      then an empty "2pt Conversion" row at the same clock.
+    * ``summary_292542649_trimmed.json.gz`` -- Colorado @ Toledo, 2009 week 2. "Two-point
+      conversion attempt, Aaron Opelt pass failed." typed "2pt Conversion" and scored.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -523,6 +529,38 @@ def test_a_defensive_two_folded_into_the_touchdown_row_nets_on_it() -> None:
     flagged = plays.filter(pl.col("defensive_two_point_conv"))
     assert flagged["type.text"].to_list() == ["Defensive 2pt Conversion"]
     assert flagged["defensive_two_point_attempt"].to_list() == [True]
+
+
+def test_a_try_row_repeating_a_realised_try_realises_nothing() -> None:
+    """2007-13 rows that count one try twice.
+
+    * 282432641: "Graham Harrell pass complete to Michael Crabtree for 4 yards for a
+      TOUCHDOWN. Graham Harrell pass to Detron Lewis two-point conversion GOOD." (EP_end 8),
+      then "Graham Harrell pass to Detron Lewis two-point conversion GOOD." as its own row,
+      which added +1.08 on top.
+    * 293182305: a good two, then an empty "2pt Conversion" row (typed Missed, -0.92).
+    * 292542649: "Two-point conversion attempt, Aaron Opelt pass failed." ESPN flags as a
+      scoring play (the score stays 6-0); the text wins, so it is a missed two, not a made one.
+    """
+    plays = _offline_plays(282432641).with_row_index("i")
+    r = plays.filter(pl.col("text") == "Graham Harrell pass to Detron Lewis two-point conversion GOOD.").row(
+        0, named=True
+    )
+    td = plays.row(r["i"] - 1, named=True)
+    assert (td["type.text"], td["EP_end"]) == ("Passing Touchdown", 8)
+    assert r["type.text"] == "Two-Point Conversion Good" and r["EPA"] == pytest.approx(0)
+
+    plays = _offline_plays(293182305)
+    tries = plays.filter(pl.col("orig_play_type") == "2pt Conversion")
+    assert tries["text"].fill_null("").str.strip_chars().to_list() == [
+        "Two-point conversion attempt, Zac Lee pass to Niles Paul GOOD.",
+        "",
+    ]
+    assert tries["EPA"].to_list() == pytest.approx([1.08, 0])
+
+    plays = _offline_plays(292542649)
+    r = plays.filter(pl.col("text").str.contains("Aaron Opelt pass failed")).row(0, named=True)
+    assert (r["type.text"], r["EP_end"]) == ("Two-Point Conversion Missed", 0)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

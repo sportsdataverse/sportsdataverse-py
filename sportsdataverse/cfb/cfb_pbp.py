@@ -3527,7 +3527,13 @@ class CFBPlayProcess(object):
             # (failed ones are already "Two-Point Conversion Missed"). Resolve good/missed
             # via scoringPlay so the play routes through the two-point EPA/scoring path
             # instead of being treated as a generic scrimmage play.
-            pl.when((pl.col("type.text") == "2pt Conversion").and_(pl.col("scoringPlay") == True))
+            pl.when(
+                (pl.col("type.text") == "2pt Conversion")
+                .and_(pl.col("scoringPlay") == True)
+                # the text wins over scoringPlay: "Two-point conversion attempt, Aaron Opelt
+                # pass failed." is scored in 292542649 (the score does not move)
+                .and_(pl.col("text").str.contains(r"(?i)failed|no good").fill_null(False).not_())
+            )
             .then(pl.lit("Two-Point Conversion Good"))
             .when(pl.col("type.text") == "2pt Conversion")
             .then(pl.lit("Two-Point Conversion Missed"))
@@ -6559,6 +6565,16 @@ class CFBPlayProcess(object):
             == True
         )
 
+        def _prev_play(col: str) -> pl.Expr:
+            # ``col`` on the last row before this one that is not a clock stoppage
+            return (
+                pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
+                .then(None)
+                .otherwise(pl.col(col))
+                .forward_fill()
+                .shift(1)
+            )
+
         # The two-point try folded into a touchdown row: ESPN's structured result
         # (``two_point_conv_result``, from pointAfterAttempt) where the text names none --
         # "LJ Martin run for 9 yds for a TD (Jake Retzlaff intercepted)", "Dylan McDuffie 1 Yd
@@ -6731,6 +6747,31 @@ class CFBPlayProcess(object):
                 # Onside kicks
                 .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
                 .then(pl.col("EP_end") * -1)
+                .otherwise(pl.col("EP_end")),
+            )
+            .with_columns(
+                # A try row that repeats a try already realised realises nothing (EPA 0):
+                # the row right after a touchdown whose EP_end already carries its try
+                # (2007-13: "... for a TOUCHDOWN. Two-point conversion attempt, Ben Olson
+                # pass FAILED." then the same text again as its own row, 272720204; or a
+                # two ruled good twice, 282432641), and a try row with no text at all (a
+                # 2007-13 phantom: 293182305's second "2pt Conversion" after the real one,
+                # ~200 "Extra Point Good/Missed" rows ESPN scored 0). Not a defensive two:
+                # that is its own event after a folded "(X PAT BLOCKED)". Not an overtime
+                # shootout attempt ("Two Point Pass|Rush", 2019-26) either: in play order
+                # the first one follows the last overtime touchdown, but it is a new try.
+                EP_end=pl.when(
+                    pl.col("type.text").is_in(_TRY_TYPES)
+                    & ~pl.col("type.text").is_in(["Defensive 2pt Conversion", "Two Point Pass", "Two Point Rush"])
+                    & (
+                        (
+                            (_prev_play("td_play") == True)  # noqa: E712
+                            & _prev_play("EP_end").abs().is_in([6.0, 7.0, 8.0])
+                        )
+                        | (pl.col("text").str.strip_chars().str.len_chars() == 0).fill_null(True)
+                    ),
+                )
+                .then(pl.col("EP_start"))
                 .otherwise(pl.col("EP_end")),
             )
             .with_columns(
