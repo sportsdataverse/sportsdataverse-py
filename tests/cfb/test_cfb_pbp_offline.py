@@ -191,6 +191,8 @@ def _trimmed(game_id: int) -> dict:
       touchdowns whose appended two-point tries carry a no-play penalty.
     * ``summary_322430041_trimmed.json.gz`` -- UMass @ UConn, 2012 week 1. A pick-six ESPN
       typed "Pass Interception".
+    * ``summary_282430151_trimmed.json.gz`` -- East Carolina @ Virginia Tech, 2008. Virginia
+      Tech returns a blocked ECU extra point "for 2 defensive point conversion".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -374,13 +376,34 @@ def test_a_try_the_defence_returned_is_typed_a_defensive_two() -> None:
         "defensive two-point conversion.",
         "KEENUM, Case pass attempt failed (intercepted), returned by FERGUSON, Josh for defensive PAT.",
         "Cole Way rush attempt failed  (fumbled), returned  for defensive PAT..",
+        "Ben Ryan extra point BLOCKED returned for 2 defensive point conversion by Stephan Virgil.",
+        "Blocked PAT returned by Brandon Flowers for a TWO-POINT CONVERSION.",
+        "Two-point conversion attempt, Ricky Dobbs pass FAILED.  Pass intercepted by Brian Rolle and returned for "
+        "two-points.",
     ],
 )
 def test_defensive_try_return_text_shapes(text: str) -> None:
-    """Every 2004-13 shape of a returned try (the corpus has these five)."""
+    """Every 2007-13 shape of a returned try (the corpus has these eight)."""
     from sportsdataverse.cfb.cfb_pbp import _DEFENSIVE_TRY_RETURN
 
     assert pl.Series([text]).str.contains(_DEFENSIVE_TRY_RETURN).item()
+
+
+def test_a_blocked_kick_returned_for_2_defensive_point_conversion_is_a_defensive_two() -> None:
+    """282430151: "Ben Ryan extra point BLOCKED returned for 2 defensive point conversion by
+    Stephan Virgil." (ECU 20 -> VT +2), typed "Extra Point Missed".
+
+    The 2008 wording ("2 defensive point") and two others ("Blocked PAT returned by X for a
+    TWO-POINT CONVERSION", "... returned for two-points.") missed the retype: the row realised
+    0 for ECU (EPA -0.92) while Virginia Tech's score rose by 2.
+    """
+    plays = _offline_plays(282430151).with_row_index("i")
+    r = plays.filter(pl.col("text").str.contains("defensive point conversion")).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Extra Point Missed", "Defensive 2pt Conversion")
+    assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), -2)
+    td = plays.row(r["i"] - 1, named=True)
+    assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Passing Touchdown"
+    assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

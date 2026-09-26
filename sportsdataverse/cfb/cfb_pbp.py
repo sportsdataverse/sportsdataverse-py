@@ -403,8 +403,16 @@ _TRY_TYPES = (
 #: Regulation", "Coin Toss") are dropped in __add_downs_data; "End Period" survives as the
 #: relabelled 2004 "Unknown" quarter marker. The EP chain treats the same two as stoppages.
 _CLOCK_STOPPAGES = ("Timeout", "End Period")
-#: The text of a try the defence returned for two, whatever ESPN typed the row.
-_DEFENSIVE_TRY_RETURN = r"(?i)for (?:a )?(?:2-point |two-point )?defensive (?:pat|two-point conversion|conversion)"
+#: The text of a try the defence returned for two, whatever ESPN typed the row. Shapes,
+#: all 2007-13 (2014+ ESPN types the row "Defensive 2pt Conversion" itself): "... returned
+#: for 2-point defensive conversion by X", "... returned by X for defensive PAT", "...
+#: returned for 2 defensive point conversion by X" (2008), "Blocked PAT returned by X for a
+#: TWO-POINT CONVERSION" (2007), "Pass intercepted by X and returned for two-points." (2009).
+#: Over every raw try row 2004-26 it matches the 44 returns and nothing else.
+_DEFENSIVE_TRY_RETURN = (
+    r"(?i)for (?:a )?(?:2-point |two-point |2 )?defensive (?:pat|two-point conversion|(?:point )?conversion)"
+    r"|returned\b.{0,60}\bfor (?:a )?(?:two|2)[- ]?point(?:s\b| conversion)"
+)
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
