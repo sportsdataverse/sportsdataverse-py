@@ -325,6 +325,15 @@ documents itself as LEGACY, as do their runtime module and reference page. `pars
 `parse_pff_player_detail` now look past the `restricted` block the Developer API may place beside
 a report envelope. Previously such a body came back as a dict or an empty frame.
 
+Every `pff_api` return table now documents its columns (2,734 descriptions). Report metrics that
+`/v1` already shipped reuse the legacy `native/pff` text; the `/v2`-only metrics (over-expected
+rates, positive/negative graded-play rates, pass-rush side splits, true-pass-set rates) and the
+team tables are described from PFF's own column labels and captured bodies. Each team-stats rank
+states which end ranks first, read from PFF's captured rows (1 = highest EPA, 1 = fewest
+turnovers). `native/pff_api` is off the deferred list, so the residual-description gate now covers
+it. `team_roster.height` is shared with the ESPN roster tables and now names both encodings: ESPN
+gives inches, PFF gives feet x 100 + inches.
+
 Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still

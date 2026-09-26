@@ -570,7 +570,7 @@ ESPN endpoint.
 | `jersey` | character | Athlete's jersey number as a string. |
 | `age` | integer | Athlete age in years. |
 | `date_of_birth` | character | Athlete date of birth (ISO 8601). |
-| `height` | double | Athlete height in inches. |
+| `height` | double | Athlete height. ESPN rosters give total inches (e.g. 74); the PFF Developer API roster packs feet and inches as feet x 100 + inches (e.g. 604 = 6 ft 4 in). |
 | `display_height` | character | Athlete height, formatted for display. |
 | `weight` | double | Athlete weight in pounds. |
 | `display_weight` | character | Athlete weight, formatted for display. |

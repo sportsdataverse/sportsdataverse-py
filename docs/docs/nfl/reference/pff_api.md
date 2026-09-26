@@ -241,30 +241,30 @@ Per-game team report for one franchise, one row per game
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `away` | logical | Away team name. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `grades_coverage_defense` | numeric |  |
-| `grades_defense` | numeric |  |
-| `grades_misc_st` | numeric |  |
-| `grades_offense` | numeric |  |
-| `grades_overall` | numeric |  |
-| `grades_pass` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `grades_pass_route` | numeric |  |
-| `grades_pass_rush_defense` | numeric |  |
-| `grades_run` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `grades_run_defense` | numeric |  |
-| `grades_tackle` | numeric |  |
-| `home` | logical | Home team name. |
-| `lock_status` | character |  |
-| `opponent` | character | Opposing team of player |
-| `opponent_franchise_id` | integer |  |
-| `points_allowed` | integer | Points for the opponent. |
-| `points_scored` | integer |  |
-| `start` | character | Start. |
-| `week` | integer | Season week. |
+| `away` | logical | True when the team was the away side in the game. |
+| `franchise_id` | integer | PFF franchise (team) id of the team the row belongs to (the franchise_id requested). |
+| `game_id` | integer | PFF game id of the game (the value the game_id query parameter takes). |
+| `grades_coverage_defense` | numeric | PFF team coverage grade for the game (0-100). |
+| `grades_defense` | numeric | PFF team defense grade for the game (0-100). |
+| `grades_misc_st` | numeric | PFF team miscellaneous special-teams grade for the game (0-100). |
+| `grades_offense` | numeric | PFF team offense grade for the game (0-100). |
+| `grades_overall` | numeric | PFF overall team grade for the game (0-100). |
+| `grades_pass` | numeric | PFF team passing grade for the game (0-100). |
+| `grades_pass_block` | numeric | PFF team pass-blocking grade for the game (0-100). |
+| `grades_pass_route` | numeric | PFF team receiving (route-running) grade for the game (0-100). |
+| `grades_pass_rush_defense` | numeric | PFF team pass-rush grade for the game (0-100). |
+| `grades_run` | numeric | PFF team rushing grade for the game (0-100). |
+| `grades_run_block` | numeric | PFF team run-blocking grade for the game (0-100). |
+| `grades_run_defense` | numeric | PFF team run-defense grade for the game (0-100). |
+| `grades_tackle` | numeric | PFF team tackling grade for the game (0-100). |
+| `home` | logical | True when the team was the home side in the game. |
+| `lock_status` | character | Charting state of the game: "processed" means PFF has fully charted it. |
+| `opponent` | character | Opponent's team abbreviation (e.g. "PIT"). |
+| `opponent_franchise_id` | integer | PFF franchise id of the opponent. |
+| `points_allowed` | integer | Points the team allowed in the game. |
+| `points_scored` | integer | Points the team scored in the game. |
+| `start` | character | Kickoff timestamp of the game in UTC (e.g. "2022-09-11T17:00:00Z"). |
+| `week` | integer | Week id of the game, as PFF numbers weeks. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -6971,1645 +6971,1645 @@ One of nineteen player reports for the whole league, one row per player
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_hands_fumble` | numeric |  |
-| `grades_offense` | numeric |  |
-| `grades_offense_penalty` | numeric |  |
-| `grades_pass` | numeric |  |
-| `grades_pass_route` | numeric |  |
-| `grades_run` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `snap_counts_pass` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `snap_counts_pass_route` | integer |  |
-| `snap_counts_run` | integer |  |
-| `snap_counts_run_block` | integer |  |
-| `snap_counts_total` | integer |  |
-| `snap_counts_total_pass` | integer |  |
-| `snap_counts_total_run` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `grades_pass_block` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `snap_counts_pass` | integer | Pass-play snaps spent as the passer, rather than blocking or running a route. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `snap_counts_pass_route` | integer | Snaps spent running a pass route. |
+| `snap_counts_run` | integer | Run-play snaps: on the offense report, run plays on which the player was the runner rather than a run blocker; on the run-defense report, run-defense snaps played. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `snap_counts_total` | integer | Total offensive snaps played. |
+| `snap_counts_total_pass` | integer | Total pass-play snaps across passing, pass blocking, and route running. |
+| `snap_counts_total_run` | integer | Total run-play snaps across rushing and run blocking. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
 
 **passing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `grades_offense` | numeric |  |
-| `twp_rate` | numeric |  |
-| `btt_rate` | numeric |  |
-| `spikes` | integer | Spikes |
-| `dropbacks` | integer |  |
-| `thrown_aways` | integer |  |
-| `draft_season` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `grades_pass` | numeric |  |
-| `hit_as_threw` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `sack_percent` | numeric |  |
-| `bats` | integer |  |
-| `sacks` | integer | The Number of times sacked. |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `completions` | integer | The number of completed passes. |
-| `yards` | integer | The number of receiving yards |
-| `accuracy_percent` | numeric |  |
-| `scrambles` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `drop_rate` | numeric |  |
-| `grades_run` | numeric |  |
-| `qb_rating` | numeric |  |
-| `completion_percent` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `passing_snaps` | integer |  |
-| `pressure_to_sack_rate` | numeric |  |
-| `ypa` | numeric |  |
-| `drops` | integer | Throws dropped |
-| `grades_hands_fumble` | numeric |  |
-| `avg_time_to_throw` | numeric | Average time elapsed from the time of snap to throw on every pass attempt for a passer (sacks excluded). |
-| `big_time_throws` | integer |  |
-| `positive_epa_percent` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `avg_depth_of_target` | numeric |  |
-| `turnover_worthy_plays` | integer |  |
-| `epa` | numeric | Expected points added (EPA) by the posteam for the given play. |
-| `aimed_passes` | integer |  |
-| `touchdowns` | integer |  |
-| `def_gen_pressures` | integer |  |
-| `npa_epa` | numeric |  |
-| `npa_positive_epa_percent` | numeric |  |
-| `no_screen_epa` | numeric |  |
-| `no_screen_positive_epa_percent` | numeric |  |
-| `pass_rate_oe` | numeric |  |
-| `completion_oe` | numeric |  |
-| `accuracy_oe` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `twp_rate` | numeric | Turnover-worthy-play rate. |
+| `btt_rate` | numeric | Big-time-throw rate. |
+| `spikes` | integer | Clock-stopping spike plays. |
+| `dropbacks` | integer | Total quarterback dropbacks. |
+| `thrown_aways` | integer | Passes intentionally thrown away. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `hit_as_threw` | integer | Plays where the quarterback was hit as he threw. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `sack_percent` | numeric | Sack rate (sacks per dropback). |
+| `bats` | integer | Passes batted at the line. |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `completions` | integer | Completed passes by the passer. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `accuracy_percent` | numeric | Charted accuracy percentage. |
+| `scrambles` | integer | Quarterback scrambles (pass plays on which the passer ran with the ball). |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `drop_rate` | numeric | Drop rate, in percent: share of catchable passes dropped by the passer's receivers (passing report) or by the player (receiving report). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `qb_rating` | numeric | NFL passer rating. |
+| `completion_percent` | numeric | Completion percentage. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `passing_snaps` | integer | Number of passing snaps played. |
+| `pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack. |
+| `ypa` | numeric | Yards per attempt: passing yards per pass attempt on the passing report, rushing yards per carry on the rushing report. |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `avg_time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the passer's attempts. |
+| `big_time_throws` | integer | Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `turnover_worthy_plays` | integer | Number of turnover-worthy plays, plays PFF charts as deserving of a turnover. |
+| `epa` | numeric | Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.04, not a season total). |
+| `aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks, as charted by PFF. |
+| `npa_epa` | numeric | Expected points added per play on the passer's non-play-action dropbacks, as computed by PFF (npa_ = non-play-action). |
+| `npa_positive_epa_percent` | numeric | Percentage of the passer's non-play-action dropbacks with positive expected points added. |
+| `no_screen_epa` | numeric | Expected points added per play on the passer's non-screen dropbacks, as computed by PFF. |
+| `no_screen_positive_epa_percent` | numeric | Percentage of the passer's non-screen dropbacks with positive expected points added. |
+| `pass_rate_oe` | numeric | Pass rate over expectation on the passer's plays, in percentage points (actual minus PFF-expected pass rate). |
+| `completion_oe` | numeric | Completion percentage over expectation, in percentage points (actual minus PFF-expected completion rate). |
+| `accuracy_oe` | numeric | Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value). |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **passing-depth**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `left_behind_los_accuracy_percent` | numeric |  |
-| `left_short_scrambles` | integer |  |
-| `center_short_first_downs` | integer |  |
-| `right_short_bats` | integer |  |
-| `right_behind_los_positive_epa_percent` | numeric |  |
-| `left_behind_los_completions` | integer |  |
-| `left_medium_dropbacks` | integer |  |
-| `right_medium_grades_pass` | numeric |  |
-| `right_medium_hit_as_threw` | integer |  |
-| `behind_los_attempts_percent` | numeric |  |
-| `right_short_turnover_worthy_plays` | integer |  |
-| `right_medium_qb_rating` | numeric |  |
-| `deep_twp_rate` | numeric |  |
-| `center_medium_sacks` | integer |  |
-| `medium_interceptions` | integer |  |
-| `left_deep_completions` | integer |  |
-| `behind_los_spikes` | integer |  |
-| `medium_aimed_passes` | integer |  |
-| `center_behind_los_drops` | integer |  |
-| `center_behind_los_interceptions` | integer |  |
-| `behind_los_dropbacks` | integer |  |
-| `left_behind_los_interceptions` | integer |  |
-| `left_deep_first_downs` | integer |  |
-| `deep_passing_snaps` | integer |  |
-| `center_short_btt_rate` | numeric |  |
-| `center_medium_thrown_aways` | integer |  |
-| `center_deep_avg_depth_of_target` | numeric |  |
-| `center_short_drops` | integer |  |
-| `center_deep_first_downs` | integer |  |
-| `left_medium_completion_percent` | numeric |  |
-| `center_deep_attempts` | integer |  |
-| `center_behind_los_attempts` | integer |  |
-| `right_short_positive_epa_percent` | numeric |  |
-| `center_deep_aimed_passes` | integer |  |
-| `right_deep_grades_pass` | numeric |  |
-| `right_medium_big_time_throws` | integer |  |
-| `deep_sack_percent` | integer |  |
-| `center_medium_pressure_to_sack_rate` | integer |  |
-| `deep_sacks` | integer |  |
-| `right_medium_ypa` | numeric |  |
-| `left_deep_drop_rate` | numeric |  |
-| `right_medium_attempts_percent` | numeric |  |
-| `right_deep_btt_rate` | numeric |  |
-| `center_short_attempts_percent` | numeric |  |
-| `deep_drops` | integer |  |
-| `center_behind_los_big_time_throws` | integer |  |
-| `center_behind_los_touchdowns` | integer |  |
-| `right_behind_los_twp_rate` | numeric |  |
-| `center_deep_completions` | integer |  |
-| `center_short_attempts` | integer |  |
-| `left_behind_los_sack_percent` | integer |  |
-| `center_short_pressure_to_sack_rate` | integer |  |
-| `deep_touchdowns` | integer |  |
-| `center_behind_los_accuracy_percent` | numeric |  |
-| `center_deep_drop_rate` | numeric |  |
-| `right_short_first_downs` | integer |  |
-| `right_behind_los_first_downs` | integer |  |
-| `short_interceptions` | integer |  |
-| `center_medium_scrambles` | integer |  |
-| `left_behind_los_sacks` | integer |  |
-| `left_short_ypa` | numeric |  |
-| `left_short_qb_rating` | numeric |  |
-| `right_behind_los_qb_rating` | numeric |  |
-| `draft_season` | integer |  |
-| `right_behind_los_dropbacks` | integer |  |
-| `behind_los_def_gen_pressures` | integer |  |
-| `right_short_thrown_aways` | integer |  |
-| `deep_def_gen_pressures` | integer |  |
-| `right_short_btt_rate` | numeric |  |
-| `center_behind_los_positive_epa_percent` | numeric |  |
-| `left_behind_los_grades_pass` | numeric |  |
-| `deep_grades_pass` | numeric |  |
-| `center_short_turnover_worthy_plays` | integer |  |
-| `center_behind_los_scrambles` | integer |  |
-| `right_short_aimed_passes` | integer |  |
-| `center_short_dropbacks` | integer |  |
-| `medium_epa` | numeric |  |
-| `right_short_ypa` | numeric |  |
-| `center_medium_ypa` | numeric |  |
-| `medium_attempts` | integer |  |
-| `right_deep_accuracy_percent` | numeric |  |
-| `behind_los_scrambles` | integer |  |
-| `center_behind_los_completion_percent` | numeric |  |
-| `left_behind_los_btt_rate` | integer |  |
-| `right_behind_los_btt_rate` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `short_touchdowns` | integer |  |
-| `center_medium_drops` | integer |  |
-| `left_behind_los_aimed_passes` | integer |  |
-| `deep_attempts` | integer |  |
-| `right_behind_los_sack_percent` | integer |  |
-| `center_short_positive_epa_percent` | numeric |  |
-| `deep_avg_depth_of_target` | numeric |  |
-| `left_deep_btt_rate` | numeric |  |
-| `medium_scrambles` | integer |  |
-| `center_behind_los_avg_depth_of_target` | numeric |  |
-| `short_attempts_percent` | numeric |  |
-| `right_behind_los_sacks` | integer |  |
-| `center_medium_avg_time_to_throw` | numeric |  |
-| `left_short_pressure_to_sack_rate` | integer |  |
-| `center_deep_sack_percent` | integer |  |
-| `center_deep_ypa` | numeric |  |
-| `left_behind_los_hit_as_threw` | integer |  |
-| `medium_big_time_throws` | integer |  |
-| `deep_thrown_aways` | integer |  |
-| `right_short_accuracy_percent` | numeric |  |
-| `left_deep_turnover_worthy_plays` | integer |  |
-| `center_medium_bats` | integer |  |
-| `right_short_grades_pass` | numeric |  |
-| `right_deep_spikes` | integer |  |
-| `left_deep_passing_snaps` | integer |  |
-| `center_medium_twp_rate` | numeric |  |
-| `right_behind_los_passing_snaps` | integer |  |
-| `left_deep_qb_rating` | numeric |  |
-| `right_deep_drop_rate` | numeric |  |
-| `left_behind_los_drop_rate` | numeric |  |
-| `left_medium_drop_rate` | numeric |  |
-| `right_deep_attempts` | integer |  |
-| `left_deep_spikes` | integer |  |
-| `center_behind_los_dropbacks` | integer |  |
-| `right_deep_big_time_throws` | integer |  |
-| `medium_hit_as_threw` | integer |  |
-| `right_short_dropbacks` | integer |  |
-| `medium_def_gen_pressures` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `left_short_positive_epa_percent` | numeric |  |
-| `left_short_attempts` | integer |  |
-| `center_deep_twp_rate` | numeric |  |
-| `right_medium_avg_time_to_throw` | numeric |  |
-| `left_behind_los_qb_rating` | numeric |  |
-| `left_behind_los_dropbacks` | integer |  |
-| `deep_dropbacks` | integer |  |
-| `right_behind_los_scrambles` | integer |  |
-| `behind_los_interceptions` | integer |  |
-| `right_deep_drops` | integer |  |
-| `right_deep_yards` | integer |  |
-| `right_short_hit_as_threw` | integer |  |
-| `right_short_avg_depth_of_target` | numeric |  |
-| `short_bats` | integer |  |
-| `right_deep_twp_rate` | numeric |  |
-| `right_behind_los_pressure_to_sack_rate` | integer |  |
-| `deep_spikes` | integer |  |
-| `center_medium_spikes` | integer |  |
-| `behind_los_aimed_passes` | integer |  |
-| `right_behind_los_touchdowns` | integer |  |
-| `right_medium_pressure_to_sack_rate` | integer |  |
-| `medium_thrown_aways` | integer |  |
-| `short_sacks` | integer |  |
-| `center_behind_los_twp_rate` | numeric |  |
-| `left_behind_los_attempts` | integer |  |
-| `short_aimed_passes` | integer |  |
-| `short_completions` | integer |  |
-| `right_short_pressure_to_sack_rate` | integer |  |
-| `medium_avg_depth_of_target` | numeric |  |
-| `left_behind_los_positive_epa_percent` | numeric |  |
-| `center_medium_attempts_percent` | numeric |  |
-| `left_medium_touchdowns` | integer |  |
-| `center_short_bats` | integer |  |
-| `left_deep_avg_time_to_throw` | numeric |  |
-| `center_behind_los_passing_snaps` | integer |  |
-| `center_short_yards` | integer |  |
-| `right_medium_btt_rate` | numeric |  |
-| `right_medium_scrambles` | integer |  |
-| `medium_btt_rate` | numeric |  |
-| `center_behind_los_btt_rate` | integer |  |
-| `center_short_avg_depth_of_target` | numeric |  |
-| `left_medium_sacks` | integer |  |
-| `right_short_yards` | integer |  |
-| `left_medium_first_downs` | integer |  |
-| `right_medium_positive_epa_percent` | numeric |  |
-| `left_short_big_time_throws` | integer |  |
-| `deep_turnover_worthy_plays` | integer |  |
-| `left_deep_bats` | integer |  |
-| `left_medium_turnover_worthy_plays` | integer |  |
-| `base_dropbacks` | integer |  |
-| `center_deep_drops` | integer |  |
-| `center_medium_avg_depth_of_target` | numeric |  |
-| `center_behind_los_ypa` | numeric |  |
-| `right_short_attempts` | integer |  |
-| `center_medium_completion_percent` | numeric |  |
-| `right_short_sack_percent` | integer |  |
-| `left_behind_los_avg_depth_of_target` | numeric |  |
-| `center_medium_epa` | numeric |  |
-| `center_behind_los_sack_percent` | integer |  |
-| `medium_completions` | integer |  |
-| `medium_sack_percent` | integer |  |
-| `left_short_grades_pass` | numeric |  |
-| `deep_btt_rate` | numeric |  |
-| `left_short_accuracy_percent` | numeric |  |
-| `short_twp_rate` | numeric |  |
-| `short_passing_snaps` | integer |  |
-| `left_deep_sacks` | integer |  |
-| `short_scrambles` | integer |  |
-| `center_medium_turnover_worthy_plays` | integer |  |
-| `behind_los_drop_rate` | numeric |  |
-| `right_behind_los_epa` | numeric |  |
-| `right_medium_aimed_passes` | integer |  |
-| `short_accuracy_percent` | numeric |  |
-| `player_game_count` | integer |  |
-| `short_btt_rate` | numeric |  |
-| `right_short_touchdowns` | integer |  |
-| `center_short_completions` | integer |  |
-| `right_short_spikes` | integer |  |
-| `behind_los_first_downs` | integer |  |
-| `right_medium_def_gen_pressures` | integer |  |
-| `deep_pressure_to_sack_rate` | integer |  |
-| `medium_qb_rating` | numeric |  |
-| `short_completion_percent` | numeric |  |
-| `right_deep_attempts_percent` | numeric |  |
-| `eligible_season` | integer |  |
-| `short_big_time_throws` | integer |  |
-| `behind_los_attempts` | integer |  |
-| `center_behind_los_yards` | integer |  |
-| `center_behind_los_bats` | integer |  |
-| `center_behind_los_qb_rating` | numeric |  |
-| `right_deep_pressure_to_sack_rate` | integer |  |
-| `center_short_accuracy_percent` | numeric |  |
-| `left_behind_los_bats` | integer |  |
-| `center_deep_passing_snaps` | integer |  |
-| `right_behind_los_hit_as_threw` | integer |  |
-| `medium_bats` | integer |  |
-| `right_medium_first_downs` | integer |  |
-| `medium_spikes` | integer |  |
-| `left_deep_thrown_aways` | integer |  |
-| `right_deep_epa` | numeric |  |
-| `center_medium_hit_as_threw` | integer |  |
-| `left_behind_los_completion_percent` | numeric |  |
-| `center_short_ypa` | numeric |  |
-| `right_short_drop_rate` | numeric |  |
-| `right_behind_los_accuracy_percent` | numeric |  |
-| `left_short_yards` | integer |  |
-| `deep_accuracy_percent` | numeric |  |
-| `right_behind_los_avg_depth_of_target` | numeric |  |
-| `center_behind_los_thrown_aways` | integer |  |
-| `center_behind_los_attempts_percent` | numeric |  |
-| `right_deep_first_downs` | integer |  |
-| `left_short_completions` | integer |  |
-| `deep_completion_percent` | numeric |  |
-| `left_deep_positive_epa_percent` | numeric |  |
-| `right_deep_sack_percent` | integer |  |
-| `behind_los_pressure_to_sack_rate` | integer |  |
-| `right_deep_touchdowns` | integer |  |
-| `left_behind_los_def_gen_pressures` | integer |  |
-| `left_behind_los_drops` | integer |  |
-| `deep_epa` | numeric |  |
-| `left_deep_ypa` | numeric |  |
-| `medium_touchdowns` | integer |  |
-| `left_medium_grades_pass` | numeric |  |
-| `right_behind_los_spikes` | integer |  |
-| `medium_grades_pass` | numeric |  |
-| `behind_los_passing_snaps` | integer |  |
-| `left_short_first_downs` | integer |  |
-| `center_short_passing_snaps` | integer |  |
-| `center_deep_accuracy_percent` | numeric |  |
-| `right_deep_positive_epa_percent` | numeric |  |
-| `right_medium_sack_percent` | integer |  |
-| `right_deep_qb_rating` | numeric |  |
-| `right_short_completion_percent` | numeric |  |
-| `right_behind_los_interceptions` | integer |  |
-| `behind_los_yards` | integer |  |
-| `center_behind_los_grades_pass` | numeric |  |
-| `left_deep_dropbacks` | integer |  |
-| `center_behind_los_spikes` | integer |  |
-| `right_behind_los_aimed_passes` | integer |  |
-| `left_short_interceptions` | integer |  |
-| `right_medium_interceptions` | integer |  |
-| `left_behind_los_yards` | integer |  |
-| `center_deep_btt_rate` | numeric |  |
-| `medium_first_downs` | integer |  |
-| `left_short_avg_depth_of_target` | numeric |  |
-| `left_behind_los_ypa` | numeric |  |
-| `short_attempts` | integer |  |
-| `right_medium_bats` | integer |  |
-| `left_behind_los_touchdowns` | integer |  |
-| `right_medium_dropbacks` | integer |  |
-| `short_turnover_worthy_plays` | integer |  |
-| `right_deep_thrown_aways` | integer |  |
-| `right_behind_los_drop_rate` | numeric |  |
-| `right_short_qb_rating` | numeric |  |
-| `medium_sacks` | integer |  |
-| `center_deep_attempts_percent` | numeric |  |
-| `left_short_dropbacks` | integer |  |
-| `behind_los_drops` | integer |  |
-| `short_sack_percent` | integer |  |
-| `left_medium_spikes` | integer |  |
-| `left_medium_accuracy_percent` | numeric |  |
-| `behind_los_completions` | integer |  |
-| `behind_los_sack_percent` | integer |  |
-| `left_deep_yards` | integer |  |
-| `left_short_aimed_passes` | integer |  |
-| `center_behind_los_completions` | integer |  |
-| `left_short_thrown_aways` | integer |  |
-| `left_short_sack_percent` | integer |  |
-| `center_short_thrown_aways` | integer |  |
-| `center_short_interceptions` | integer |  |
-| `short_avg_depth_of_target` | numeric |  |
-| `left_deep_touchdowns` | integer |  |
-| `deep_yards` | integer |  |
-| `center_behind_los_turnover_worthy_plays` | integer |  |
-| `medium_ypa` | numeric |  |
-| `left_medium_epa` | numeric |  |
-| `left_deep_avg_depth_of_target` | numeric |  |
-| `deep_first_downs` | integer |  |
-| `short_drop_rate` | numeric |  |
-| `left_medium_bats` | integer |  |
-| `center_deep_spikes` | integer |  |
-| `center_short_hit_as_threw` | integer |  |
-| `left_medium_positive_epa_percent` | numeric |  |
-| `center_deep_touchdowns` | integer |  |
-| `right_deep_ypa` | numeric |  |
-| `right_short_big_time_throws` | integer |  |
-| `center_short_big_time_throws` | integer |  |
-| `short_positive_epa_percent` | numeric |  |
-| `left_behind_los_avg_time_to_throw` | numeric |  |
-| `right_deep_passing_snaps` | integer |  |
-| `right_short_twp_rate` | numeric |  |
-| `center_medium_attempts` | integer |  |
-| `right_deep_avg_time_to_throw` | numeric |  |
-| `center_deep_def_gen_pressures` | integer |  |
-| `behind_los_epa` | numeric |  |
-| `right_medium_twp_rate` | numeric |  |
-| `right_deep_aimed_passes` | integer |  |
-| `right_deep_scrambles` | integer |  |
-| `deep_big_time_throws` | integer |  |
-| `left_short_turnover_worthy_plays` | integer |  |
-| `center_short_touchdowns` | integer |  |
-| `right_medium_drops` | integer |  |
-| `left_deep_epa` | numeric |  |
-| `short_ypa` | numeric |  |
-| `medium_pressure_to_sack_rate` | integer |  |
-| `left_medium_thrown_aways` | integer |  |
-| `right_behind_los_avg_time_to_throw` | numeric |  |
-| `behind_los_btt_rate` | integer |  |
-| `medium_avg_time_to_throw` | numeric |  |
-| `center_deep_completion_percent` | numeric |  |
-| `behind_los_avg_time_to_throw` | numeric |  |
-| `right_medium_touchdowns` | integer |  |
-| `center_short_avg_time_to_throw` | numeric |  |
-| `left_deep_aimed_passes` | integer |  |
-| `left_medium_yards` | integer |  |
-| `center_medium_touchdowns` | integer |  |
-| `center_short_drop_rate` | numeric |  |
-| `left_short_twp_rate` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `right_behind_los_attempts_percent` | numeric |  |
-| `right_deep_avg_depth_of_target` | numeric |  |
-| `behind_los_sacks` | integer |  |
-| `center_deep_yards` | integer |  |
-| `short_dropbacks` | integer |  |
-| `left_deep_sack_percent` | integer |  |
-| `center_behind_los_avg_time_to_throw` | numeric |  |
-| `behind_los_avg_depth_of_target` | numeric |  |
-| `left_behind_los_epa` | numeric |  |
-| `medium_twp_rate` | numeric |  |
-| `left_short_def_gen_pressures` | integer |  |
-| `medium_turnover_worthy_plays` | integer |  |
-| `behind_los_twp_rate` | numeric |  |
-| `left_behind_los_thrown_aways` | integer |  |
-| `left_short_bats` | integer |  |
-| `center_medium_drop_rate` | numeric |  |
-| `right_deep_bats` | integer |  |
-| `medium_yards` | integer |  |
-| `center_deep_grades_pass` | numeric |  |
-| `center_medium_passing_snaps` | integer |  |
-| `center_behind_los_first_downs` | integer |  |
-| `center_medium_interceptions` | integer |  |
-| `behind_los_grades_pass` | numeric |  |
-| `left_short_hit_as_threw` | integer |  |
-| `deep_qb_rating` | numeric |  |
-| `center_deep_bats` | integer |  |
-| `behind_los_ypa` | numeric |  |
-| `right_short_interceptions` | integer |  |
-| `left_deep_interceptions` | integer |  |
-| `right_medium_sacks` | integer |  |
-| `right_behind_los_turnover_worthy_plays` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `right_medium_spikes` | integer |  |
-| `behind_los_hit_as_threw` | integer |  |
-| `left_medium_pressure_to_sack_rate` | integer |  |
-| `medium_dropbacks` | integer |  |
-| `deep_hit_as_threw` | integer |  |
-| `right_medium_completion_percent` | numeric |  |
-| `short_epa` | numeric |  |
-| `deep_drop_rate` | numeric |  |
-| `declined_penalties` | integer |  |
-| `deep_scrambles` | integer |  |
-| `left_deep_completion_percent` | numeric |  |
-| `right_short_epa` | numeric |  |
-| `medium_attempts_percent` | numeric |  |
-| `right_behind_los_completion_percent` | numeric |  |
-| `left_medium_hit_as_threw` | integer |  |
-| `left_behind_los_pressure_to_sack_rate` | integer |  |
-| `right_short_def_gen_pressures` | integer |  |
-| `right_short_attempts_percent` | numeric |  |
-| `center_short_aimed_passes` | integer |  |
-| `short_hit_as_threw` | integer |  |
-| `right_medium_turnover_worthy_plays` | integer |  |
-| `left_short_epa` | numeric |  |
-| `center_behind_los_pressure_to_sack_rate` | integer |  |
-| `right_behind_los_ypa` | numeric |  |
-| `deep_interceptions` | integer |  |
-| `left_medium_twp_rate` | numeric |  |
-| `right_behind_los_big_time_throws` | integer |  |
-| `center_medium_sack_percent` | integer |  |
-| `center_deep_thrown_aways` | integer |  |
-| `short_thrown_aways` | integer |  |
-| `left_short_btt_rate` | numeric |  |
-| `right_medium_accuracy_percent` | numeric |  |
-| `short_def_gen_pressures` | integer |  |
-| `center_deep_dropbacks` | integer |  |
-| `center_medium_accuracy_percent` | numeric |  |
-| `right_behind_los_yards` | integer |  |
-| `right_medium_attempts` | integer |  |
-| `left_medium_attempts` | integer |  |
-| `medium_accuracy_percent` | numeric |  |
-| `left_medium_drops` | integer |  |
-| `left_short_avg_time_to_throw` | numeric |  |
-| `medium_passing_snaps` | integer |  |
-| `center_short_epa` | numeric |  |
-| `left_behind_los_passing_snaps` | integer |  |
-| `left_deep_pressure_to_sack_rate` | integer |  |
-| `deep_bats` | integer |  |
-| `left_medium_passing_snaps` | integer |  |
-| `left_medium_scrambles` | integer |  |
-| `right_deep_completion_percent` | numeric |  |
-| `left_short_drops` | integer |  |
-| `left_deep_accuracy_percent` | numeric |  |
-| `medium_positive_epa_percent` | numeric |  |
-| `behind_los_turnover_worthy_plays` | integer |  |
-| `right_medium_epa` | numeric |  |
-| `right_deep_dropbacks` | integer |  |
-| `deep_ypa` | numeric |  |
-| `center_medium_completions` | integer |  |
-| `left_medium_avg_time_to_throw` | numeric |  |
-| `left_short_sacks` | integer |  |
-| `left_behind_los_spikes` | integer |  |
-| `left_deep_def_gen_pressures` | integer |  |
-| `center_short_qb_rating` | numeric |  |
-| `center_deep_interceptions` | integer |  |
-| `right_deep_completions` | integer |  |
-| `center_behind_los_sacks` | integer |  |
-| `deep_completions` | integer |  |
-| `left_medium_attempts_percent` | numeric |  |
-| `short_yards` | integer |  |
-| `behind_los_qb_rating` | numeric |  |
-| `right_short_sacks` | integer |  |
-| `right_behind_los_thrown_aways` | integer |  |
-| `base_attempts` | integer |  |
-| `center_short_spikes` | integer |  |
-| `center_behind_los_hit_as_threw` | integer |  |
-| `center_deep_turnover_worthy_plays` | integer |  |
-| `left_medium_sack_percent` | integer |  |
-| `behind_los_completion_percent` | numeric |  |
-| `left_deep_attempts_percent` | numeric |  |
-| `center_deep_big_time_throws` | integer |  |
-| `left_medium_avg_depth_of_target` | numeric |  |
-| `behind_los_thrown_aways` | integer |  |
-| `center_medium_def_gen_pressures` | integer |  |
-| `short_avg_time_to_throw` | numeric |  |
-| `left_deep_twp_rate` | numeric |  |
-| `center_behind_los_epa` | numeric |  |
-| `left_behind_los_big_time_throws` | integer |  |
-| `right_medium_yards` | integer |  |
-| `right_medium_drop_rate` | numeric |  |
-| `center_medium_big_time_throws` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `left_short_completion_percent` | numeric |  |
-| `left_short_drop_rate` | numeric |  |
-| `left_behind_los_scrambles` | integer |  |
-| `left_medium_btt_rate` | numeric |  |
-| `right_deep_hit_as_threw` | integer |  |
-| `behind_los_bats` | integer |  |
-| `short_first_downs` | integer |  |
-| `left_deep_attempts` | integer |  |
-| `right_behind_los_attempts` | integer |  |
-| `right_deep_sacks` | integer |  |
-| `left_behind_los_attempts_percent` | numeric |  |
-| `behind_los_big_time_throws` | integer |  |
-| `center_deep_pressure_to_sack_rate` | integer |  |
-| `left_medium_big_time_throws` | integer |  |
-| `right_behind_los_bats` | integer |  |
-| `left_medium_def_gen_pressures` | integer |  |
-| `right_deep_turnover_worthy_plays` | integer |  |
-| `left_short_spikes` | integer |  |
-| `left_medium_aimed_passes` | integer |  |
-| `left_behind_los_twp_rate` | numeric |  |
-| `short_grades_pass` | numeric |  |
-| `right_short_drops` | integer |  |
-| `right_short_avg_time_to_throw` | numeric |  |
-| `right_medium_thrown_aways` | integer |  |
-| `center_short_sack_percent` | integer |  |
-| `right_short_passing_snaps` | integer |  |
-| `center_short_def_gen_pressures` | integer |  |
-| `center_medium_positive_epa_percent` | numeric |  |
-| `medium_drops` | integer |  |
-| `center_medium_aimed_passes` | integer |  |
-| `center_short_sacks` | integer |  |
-| `deep_attempts_percent` | numeric |  |
-| `center_behind_los_def_gen_pressures` | integer |  |
-| `left_short_passing_snaps` | integer |  |
-| `center_medium_grades_pass` | numeric |  |
-| `center_deep_avg_time_to_throw` | numeric |  |
-| `behind_los_positive_epa_percent` | numeric |  |
-| `center_short_completion_percent` | numeric |  |
-| `left_deep_hit_as_threw` | integer |  |
-| `center_short_grades_pass` | numeric |  |
-| `left_short_attempts_percent` | numeric |  |
-| `left_deep_scrambles` | integer |  |
-| `right_short_completions` | integer |  |
-| `center_behind_los_aimed_passes` | integer |  |
-| `right_short_scrambles` | integer |  |
-| `center_medium_qb_rating` | numeric |  |
-| `deep_avg_time_to_throw` | numeric |  |
-| `left_deep_drops` | integer |  |
-| `right_behind_los_def_gen_pressures` | integer |  |
-| `center_deep_positive_epa_percent` | numeric |  |
-| `center_deep_hit_as_threw` | integer |  |
-| `short_spikes` | integer |  |
-| `right_behind_los_completions` | integer |  |
-| `center_behind_los_drop_rate` | numeric |  |
-| `short_drops` | integer |  |
-| `deep_aimed_passes` | integer |  |
-| `right_medium_avg_depth_of_target` | numeric |  |
-| `short_pressure_to_sack_rate` | integer |  |
-| `center_deep_qb_rating` | numeric |  |
-| `left_medium_completions` | integer |  |
-| `center_deep_sacks` | integer |  |
-| `left_deep_big_time_throws` | integer |  |
-| `center_medium_first_downs` | integer |  |
-| `center_medium_dropbacks` | integer |  |
-| `right_deep_def_gen_pressures` | integer |  |
-| `left_short_touchdowns` | integer |  |
-| `medium_drop_rate` | numeric |  |
-| `left_medium_ypa` | numeric |  |
-| `right_medium_passing_snaps` | integer |  |
-| `center_short_scrambles` | integer |  |
-| `left_behind_los_turnover_worthy_plays` | integer |  |
-| `center_medium_yards` | integer |  |
-| `center_deep_epa` | numeric |  |
-| `left_medium_interceptions` | integer |  |
-| `right_deep_interceptions` | integer |  |
-| `medium_completion_percent` | numeric |  |
-| `right_behind_los_grades_pass` | numeric |  |
-| `deep_positive_epa_percent` | numeric |  |
-| `behind_los_accuracy_percent` | numeric |  |
-| `center_deep_scrambles` | integer |  |
-| `center_short_twp_rate` | numeric |  |
-| `behind_los_touchdowns` | integer |  |
-| `left_medium_qb_rating` | numeric |  |
-| `right_medium_completions` | integer |  |
-| `right_behind_los_drops` | integer |  |
-| `left_behind_los_first_downs` | integer |  |
-| `short_qb_rating` | numeric |  |
-| `center_medium_btt_rate` | numeric |  |
-| `left_deep_grades_pass` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `left_behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the center of the field. |
+| `right_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the right side of the field. |
+| `left_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the right side of the field. |
+| `right_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage, expressed as a percentage. |
+| `right_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `right_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the right side of the field. |
+| `deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws, per PFF charting. |
+| `center_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the center of the field. |
+| `medium_interceptions` | integer | Interceptions on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `left_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the left side of the field. |
+| `behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage. |
+| `medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws, as charted by PFF. |
+| `center_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the center of the field. |
+| `behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage. |
+| `left_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the left side of the field. |
+| `deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws. |
+| `center_short_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the center of the field, per PFF charting. |
+| `center_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_avg_depth_of_target` | numeric | Average depth of target in air yards on deep (20+ air yards) throws to the center of the field. |
+| `center_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the center of the field. |
+| `center_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the center of the field. |
+| `right_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the right side of the field. |
+| `center_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `right_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the right side of the field. |
+| `right_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws. |
+| `center_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the center of the field. |
+| `deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws. |
+| `right_medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field. |
+| `left_deep_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the left side of the field. |
+| `right_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the right side of the field, expressed as a percentage. |
+| `right_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the right side of the field, per PFF charting. |
+| `center_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the center of the field, expressed as a percentage. |
+| `deep_drops` | integer | Catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `center_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the right side of the field, per PFF charting. |
+| `center_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the center of the field. |
+| `center_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the left side of the field. |
+| `center_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the center of the field. |
+| `deep_touchdowns` | integer | Touchdowns on deep (20+ air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `center_behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the center of the field. |
+| `center_deep_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the center of the field. |
+| `right_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the right side of the field. |
+| `short_interceptions` | integer | Interceptions on short (0-9 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `center_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the center of the field. |
+| `left_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws to the left side of the field. |
+| `right_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the right side of the field. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `right_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage, as charted by PFF. |
+| `right_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the right side of the field. |
+| `deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws, as charted by PFF. |
+| `right_short_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the right side of the field, per PFF charting. |
+| `center_behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the left side of the field. |
+| `deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws. |
+| `center_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `center_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the center of the field. |
+| `right_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `center_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the center of the field. |
+| `medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws. |
+| `right_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field. |
+| `medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws. |
+| `right_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage. |
+| `center_behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the left side of the field, per PFF charting. |
+| `right_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the right side of the field, per PFF charting. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `short_touchdowns` | integer | Touchdowns on short (0-9 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `center_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the center of the field. |
+| `left_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws. |
+| `right_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
+| `center_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the center of the field. |
+| `deep_avg_depth_of_target` | numeric | Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the left side of the field, per PFF charting. |
+| `medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws. |
+| `center_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the center of the field. |
+| `short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as a percentage. |
+| `right_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the right side of the field. |
+| `center_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the center of the field. |
+| `left_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
+| `center_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the center of the field. |
+| `center_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field. |
+| `left_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws. |
+| `right_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the right side of the field. |
+| `left_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the center of the field. |
+| `right_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the right side of the field. |
+| `right_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the right side of the field. |
+| `left_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the left side of the field. |
+| `center_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the center of the field, per PFF charting. |
+| `right_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the right side of the field. |
+| `left_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the right side of the field. |
+| `left_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the center of the field. |
+| `right_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws, as charted by PFF. |
+| `right_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the right side of the field. |
+| `medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws, as charted by PFF. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `left_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the left side of the field. |
+| `center_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the center of the field, per PFF charting. |
+| `right_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the left side of the field. |
+| `left_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the left side of the field. |
+| `deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws. |
+| `right_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_interceptions` | integer | Interceptions on throws behind the line of scrimmage: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `right_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the right side of the field. |
+| `right_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_short_avg_depth_of_target` | numeric | Average depth of target in air yards on short (0-9 air yards) throws to the right side of the field. |
+| `short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws. |
+| `right_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the right side of the field, per PFF charting. |
+| `right_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
+| `deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws. |
+| `center_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the center of the field. |
+| `behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage, as charted by PFF. |
+| `right_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws. |
+| `short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws. |
+| `center_behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the center of the field, per PFF charting. |
+| `left_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the left side of the field. |
+| `short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as charted by PFF. |
+| `short_completions` | integer | Number of completed passes on short (0-9 air yards) throws. |
+| `right_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the right side of the field. |
+| `medium_avg_depth_of_target` | numeric | Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the left side of the field. |
+| `center_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the center of the field, expressed as a percentage. |
+| `left_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the left side of the field. |
+| `center_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the center of the field. |
+| `center_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the center of the field. |
+| `right_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
+| `right_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws, per PFF charting. |
+| `center_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the center of the field, per PFF charting. |
+| `center_short_avg_depth_of_target` | numeric | Average depth of target in air yards on short (0-9 air yards) throws to the center of the field. |
+| `left_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the left side of the field. |
+| `right_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the right side of the field. |
+| `left_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the right side of the field. |
+| `left_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws, plays PFF charts as deserving of a turnover. |
+| `left_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left side of the field. |
+| `left_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `base_dropbacks` | integer | Number of dropbacks across all splits, the baseline total for this facet. |
+| `center_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field. |
+| `right_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the center of the field. |
+| `right_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the right side of the field. |
+| `left_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the left side of the field. |
+| `center_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the center of the field. |
+| `medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws. |
+| `medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws. |
+| `left_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the left side of the field. |
+| `deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws, per PFF charting. |
+| `left_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the left side of the field. |
+| `short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting. |
+| `short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws. |
+| `left_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the left side of the field. |
+| `short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws. |
+| `center_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `behind_los_drop_rate` | numeric | Percentage of catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `right_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `short_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting. |
+| `right_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the right side of the field. |
+| `center_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the center of the field. |
+| `right_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the right side of the field. |
+| `behind_los_first_downs` | integer | First downs on throws behind the line of scrimmage: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `right_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws. |
+| `medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws. |
+| `short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws. |
+| `right_deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right side of the field, expressed as a percentage. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage. |
+| `center_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the center of the field. |
+| `right_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the right side of the field. |
+| `center_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the left side of the field. |
+| `center_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the center of the field. |
+| `right_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws. |
+| `right_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws. |
+| `left_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the right side of the field. |
+| `center_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `left_behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage to the left side of the field. |
+| `center_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the center of the field. |
+| `right_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the right side of the field. |
+| `left_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the left side of the field. |
+| `deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws. |
+| `right_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the right side of the field. |
+| `center_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the center of the field, expressed as a percentage. |
+| `right_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the right side of the field. |
+| `left_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the left side of the field. |
+| `deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws. |
+| `left_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage. |
+| `right_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `left_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the left side of the field. |
+| `deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws. |
+| `left_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field. |
+| `medium_touchdowns` | integer | Touchdowns on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `left_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the left side of the field. |
+| `right_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the right side of the field. |
+| `medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws. |
+| `behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage. |
+| `left_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the right side of the field. |
+| `right_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the right side of the field. |
+| `right_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_yards` | integer | Yards on throws behind the line of scrimmage: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the center of the field. |
+| `left_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `left_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the left side of the field. |
+| `right_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the left side of the field. |
+| `center_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the center of the field, per PFF charting. |
+| `medium_first_downs` | integer | First downs on medium (10-19 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `left_short_avg_depth_of_target` | numeric | Average depth of target in air yards on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field. |
+| `short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws. |
+| `right_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the left side of the field. |
+| `right_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the right side of the field. |
+| `short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws, plays PFF charts as deserving of a turnover. |
+| `right_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the right side of the field. |
+| `right_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the right side of the field. |
+| `right_short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws to the right side of the field. |
+| `medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws. |
+| `center_deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the center of the field, expressed as a percentage. |
+| `left_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the left side of the field. |
+| `behind_los_drops` | integer | Catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws. |
+| `left_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the left side of the field. |
+| `left_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage. |
+| `behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage. |
+| `left_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the left side of the field. |
+| `left_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `center_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the center of the field. |
+| `left_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the center of the field. |
+| `center_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the center of the field. |
+| `short_avg_depth_of_target` | numeric | Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the left side of the field. |
+| `deep_yards` | integer | Yards on deep (20+ air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the center of the field, plays PFF charts as deserving of a turnover. |
+| `medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws. |
+| `left_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the left side of the field. |
+| `left_deep_avg_depth_of_target` | numeric | Average depth of target in air yards on deep (20+ air yards) throws to the left side of the field. |
+| `deep_first_downs` | integer | First downs on deep (20+ air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `short_drop_rate` | numeric | Percentage of catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `left_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the center of the field. |
+| `center_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `left_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws. |
+| `left_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the left side of the field. |
+| `right_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the right side of the field, per PFF charting. |
+| `center_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the right side of the field. |
+| `center_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage. |
+| `right_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
+| `right_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `right_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the right side of the field. |
+| `deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `left_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the center of the field. |
+| `right_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the right side of the field. |
+| `left_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the left side of the field. |
+| `short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws. |
+| `medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws. |
+| `left_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the left side of the field. |
+| `right_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage, per PFF charting. |
+| `medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws. |
+| `center_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage. |
+| `right_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `left_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the left side of the field. |
+| `center_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the center of the field. |
+| `center_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the center of the field. |
+| `left_short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the left side of the field, per PFF charting. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `right_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the right side of the field, expressed as a percentage. |
+| `right_deep_avg_depth_of_target` | numeric | Average depth of target in air yards on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage. |
+| `center_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the center of the field. |
+| `short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws. |
+| `left_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the center of the field. |
+| `behind_los_avg_depth_of_target` | numeric | Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the left side of the field. |
+| `medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws, per PFF charting. |
+| `left_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws, plays PFF charts as deserving of a turnover. |
+| `behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage, per PFF charting. |
+| `left_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left side of the field. |
+| `center_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right side of the field. |
+| `medium_yards` | integer | Yards on medium (10-19 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the center of the field. |
+| `center_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the center of the field. |
+| `behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage. |
+| `left_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws. |
+| `center_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage. |
+| `right_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the right side of the field. |
+| `left_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the left side of the field. |
+| `right_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the right side of the field. |
+| `right_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `right_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the right side of the field. |
+| `behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage, as charted by PFF. |
+| `left_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the left side of the field. |
+| `medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws. |
+| `deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws, as charted by PFF. |
+| `right_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the right side of the field. |
+| `short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws. |
+| `deep_drop_rate` | numeric | Percentage of catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws. |
+| `left_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the left side of the field. |
+| `right_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the right side of the field. |
+| `medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed as a percentage. |
+| `right_behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage to the right side of the field. |
+| `left_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the left side of the field. |
+| `right_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the right side of the field, expressed as a percentage. |
+| `center_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws, as charted by PFF. |
+| `right_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `left_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the left side of the field. |
+| `center_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field. |
+| `deep_interceptions` | integer | Interceptions on deep (20+ air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `left_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the left side of the field, per PFF charting. |
+| `right_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the center of the field. |
+| `short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws. |
+| `left_short_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the left side of the field, per PFF charting. |
+| `right_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the right side of the field. |
+| `short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws, as charted by PFF. |
+| `center_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the center of the field. |
+| `right_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the right side of the field. |
+| `left_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the left side of the field. |
+| `medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws. |
+| `left_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the left side of the field. |
+| `left_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the left side of the field. |
+| `medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws. |
+| `center_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the left side of the field. |
+| `deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws. |
+| `left_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the left side of the field. |
+| `left_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the right side of the field. |
+| `left_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the left side of the field. |
+| `left_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the left side of the field. |
+| `medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws. |
+| `behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage, plays PFF charts as deserving of a turnover. |
+| `right_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the right side of the field. |
+| `right_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the right side of the field. |
+| `deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws. |
+| `center_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the center of the field. |
+| `left_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the left side of the field. |
+| `left_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `center_short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the right side of the field. |
+| `center_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the center of the field. |
+| `deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws. |
+| `left_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the left side of the field, expressed as a percentage. |
+| `short_yards` | integer | Yards on short (0-9 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage. |
+| `right_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the right side of the field. |
+| `base_attempts` | integer | Number of pass attempts across all splits, the baseline total for this facet. |
+| `center_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the center of the field. |
+| `center_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `center_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `left_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage. |
+| `left_deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left side of the field, expressed as a percentage. |
+| `center_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `left_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage. |
+| `center_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws. |
+| `left_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the left side of the field, per PFF charting. |
+| `center_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `right_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the right side of the field. |
+| `right_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the right side of the field. |
+| `center_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `left_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the left side of the field, per PFF charting. |
+| `right_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage. |
+| `short_first_downs` | integer | First downs on short (0-9 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `left_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the left side of the field. |
+| `right_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the right side of the field. |
+| `right_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the left side of the field, expressed as a percentage. |
+| `behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `right_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the right side of the field. |
+| `left_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `right_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `left_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the left side of the field. |
+| `left_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the left side of the field, per PFF charting. |
+| `short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws. |
+| `right_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the right side of the field. |
+| `right_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the right side of the field. |
+| `right_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the center of the field. |
+| `right_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the right side of the field. |
+| `center_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `center_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the center of the field. |
+| `medium_drops` | integer | Catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `center_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `center_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the center of the field. |
+| `deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as a percentage. |
+| `center_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `left_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the left side of the field. |
+| `center_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage. |
+| `center_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `center_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the center of the field. |
+| `left_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the left side of the field, expressed as a percentage. |
+| `left_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the left side of the field. |
+| `right_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the right side of the field. |
+| `center_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `right_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the center of the field. |
+| `deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws. |
+| `left_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the left side of the field. |
+| `right_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `center_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the center of the field. |
+| `center_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws. |
+| `right_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the right side of the field. |
+| `center_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
+| `short_drops` | integer | Catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as charted by PFF. |
+| `right_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the right side of the field. |
+| `short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws. |
+| `center_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the center of the field. |
+| `left_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the center of the field. |
+| `center_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `left_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the left side of the field. |
+| `medium_drop_rate` | numeric | Percentage of catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `left_medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the right side of the field. |
+| `medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws. |
+| `right_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the right side of the field. |
+| `deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws. |
+| `behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage. |
+| `center_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the center of the field. |
+| `center_short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the center of the field, per PFF charting. |
+| `behind_los_touchdowns` | integer | Touchdowns on throws behind the line of scrimmage: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `left_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the right side of the field. |
+| `right_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the right side of the field. |
+| `left_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the left side of the field. |
+| `short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws. |
+| `center_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the center of the field, per PFF charting. |
+| `left_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the left side of the field. |
 
 **passing-pressure**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `no_blitz_completion_percent` | numeric |  |
-| `grades_offense` | numeric |  |
-| `no_pressure_scrambles` | integer |  |
-| `blitz_touchdowns` | integer |  |
-| `pressure_yards` | integer |  |
-| `no_pressure_spikes` | integer |  |
-| `blitz_ypa` | numeric |  |
-| `no_blitz_grades_run` | numeric |  |
-| `blitz_qb_rating` | numeric |  |
-| `no_pressure_thrown_aways` | integer |  |
-| `no_blitz_bats` | integer |  |
-| `no_blitz_drops` | integer |  |
-| `no_pressure_completion_percent` | numeric |  |
-| `blitz_aimed_passes` | integer |  |
-| `pressure_grades_run` | numeric |  |
-| `no_blitz_sack_percent` | numeric |  |
-| `no_pressure_bats` | integer |  |
-| `pressure_completions` | integer |  |
-| `blitz_big_time_throws` | integer |  |
-| `no_blitz_drop_rate` | numeric |  |
-| `blitz_spikes` | integer |  |
-| `no_pressure_completions` | integer |  |
-| `draft_season` | integer |  |
-| `no_pressure_passing_snaps` | integer |  |
-| `no_blitz_first_downs` | integer |  |
-| `blitz_avg_time_to_throw` | numeric |  |
-| `no_pressure_grades_hands_fumble` | numeric |  |
-| `pressure_aimed_passes` | integer |  |
-| `blitz_sacks` | integer |  |
-| `no_pressure_interceptions` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `pressure_epa` | numeric |  |
-| `blitz_completions` | integer |  |
-| `blitz_attempts` | integer |  |
-| `pressure_twp_rate` | numeric |  |
-| `pressure_sacks` | integer |  |
-| `no_blitz_pressure_to_sack_rate` | numeric |  |
-| `no_pressure_ypa` | numeric |  |
-| `pressure_passing_snaps` | integer |  |
-| `grades_pass` | numeric |  |
-| `pressure_bats` | integer |  |
-| `blitz_thrown_aways` | integer |  |
-| `no_pressure_drops` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `pressure_grades_offense_penalty` | numeric |  |
-| `pressure_scrambles` | integer |  |
-| `blitz_drop_rate` | numeric |  |
-| `blitz_completion_percent` | numeric |  |
-| `no_pressure_first_downs` | integer |  |
-| `blitz_grades_offense_penalty` | numeric |  |
-| `no_blitz_epa` | numeric |  |
-| `blitz_interceptions` | integer |  |
-| `no_blitz_dropbacks` | integer |  |
-| `no_blitz_grades_pass` | numeric |  |
-| `no_blitz_scrambles` | integer |  |
-| `pressure_drop_rate` | numeric |  |
-| `no_blitz_yards` | integer |  |
-| `base_dropbacks` | integer |  |
-| `pressure_pressure_to_sack_rate` | numeric |  |
-| `no_blitz_grades_hands_fumble` | numeric |  |
-| `no_pressure_grades_offense` | numeric |  |
-| `no_pressure_avg_time_to_throw` | numeric |  |
-| `pressure_dropbacks` | integer |  |
-| `no_blitz_grades_offense_penalty` | numeric |  |
-| `no_pressure_grades_run` | numeric |  |
-| `player_game_count` | integer |  |
-| `blitz_turnover_worthy_plays` | integer |  |
-| `no_blitz_touchdowns` | integer |  |
-| `no_blitz_avg_depth_of_target` | numeric |  |
-| `no_pressure_dropbacks_percent` | numeric |  |
-| `blitz_grades_pass` | numeric |  |
-| `eligible_season` | integer |  |
-| `blitz_avg_depth_of_target` | numeric |  |
-| `no_blitz_spikes` | integer |  |
-| `no_pressure_dropbacks` | integer |  |
-| `blitz_btt_rate` | numeric |  |
-| `blitz_positive_epa_percent` | numeric |  |
-| `no_pressure_btt_rate` | numeric |  |
-| `no_pressure_drop_rate` | numeric |  |
-| `no_blitz_turnover_worthy_plays` | integer |  |
-| `pressure_positive_epa_percent` | numeric |  |
-| `blitz_first_downs` | integer |  |
-| `no_blitz_dropbacks_percent` | numeric |  |
-| `pressure_turnover_worthy_plays` | integer |  |
-| `no_pressure_epa` | numeric |  |
-| `no_blitz_avg_time_to_throw` | numeric |  |
-| `no_blitz_positive_epa_percent` | numeric |  |
-| `pressure_btt_rate` | numeric |  |
-| `no_pressure_aimed_passes` | integer |  |
-| `pressure_dropbacks_percent` | numeric |  |
-| `grades_run` | numeric |  |
-| `no_pressure_def_gen_pressures` | integer |  |
-| `pressure_grades_offense` | numeric |  |
-| `pressure_completion_percent` | numeric |  |
-| `pressure_avg_depth_of_target` | numeric |  |
-| `blitz_epa` | numeric |  |
-| `pressure_drops` | integer |  |
-| `no_blitz_def_gen_pressures` | integer |  |
-| `pressure_attempts` | integer |  |
-| `pressure_big_time_throws` | integer |  |
-| `no_blitz_thrown_aways` | integer |  |
-| `blitz_drops` | integer |  |
-| `no_pressure_touchdowns` | integer |  |
-| `no_pressure_sacks` | integer |  |
-| `blitz_sack_percent` | numeric |  |
-| `pressure_sack_percent` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `no_pressure_attempts` | integer |  |
-| `no_blitz_grades_offense` | numeric |  |
-| `blitz_scrambles` | integer |  |
-| `blitz_dropbacks_percent` | numeric |  |
-| `no_pressure_qb_rating` | numeric |  |
-| `no_blitz_passing_snaps` | integer |  |
-| `no_blitz_aimed_passes` | integer |  |
-| `blitz_yards` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `no_blitz_attempts` | integer |  |
-| `pressure_accuracy_percent` | numeric |  |
-| `no_blitz_hit_as_threw` | integer |  |
-| `pressure_hit_as_threw` | integer |  |
-| `blitz_pressure_to_sack_rate` | numeric |  |
-| `declined_penalties` | integer |  |
-| `no_blitz_btt_rate` | numeric |  |
-| `no_blitz_ypa` | numeric |  |
-| `blitz_grades_run` | numeric |  |
-| `pressure_interceptions` | integer |  |
-| `blitz_grades_hands_fumble` | numeric |  |
-| `no_pressure_grades_offense_penalty` | numeric |  |
-| `blitz_grades_offense` | numeric |  |
-| `grades_hands_fumble` | numeric |  |
-| `pressure_def_gen_pressures` | integer |  |
-| `pressure_grades_pass` | numeric |  |
-| `no_blitz_qb_rating` | numeric |  |
-| `blitz_hit_as_threw` | integer |  |
-| `pressure_ypa` | numeric |  |
-| `pressure_avg_time_to_throw` | numeric |  |
-| `no_blitz_completions` | integer |  |
-| `no_pressure_sack_percent` | numeric |  |
-| `no_blitz_accuracy_percent` | numeric |  |
-| `no_pressure_pressure_to_sack_rate` | character |  |
-| `no_pressure_turnover_worthy_plays` | integer |  |
-| `pressure_first_downs` | integer |  |
-| `blitz_passing_snaps` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `no_pressure_twp_rate` | numeric |  |
-| `no_blitz_sacks` | integer |  |
-| `no_pressure_accuracy_percent` | numeric |  |
-| `no_blitz_twp_rate` | numeric |  |
-| `no_pressure_hit_as_threw` | integer |  |
-| `no_pressure_grades_pass` | numeric |  |
-| `no_pressure_positive_epa_percent` | numeric |  |
-| `pressure_spikes` | integer |  |
-| `pressure_grades_hands_fumble` | numeric |  |
-| `pressure_qb_rating` | numeric |  |
-| `blitz_bats` | integer |  |
-| `pressure_touchdowns` | integer |  |
-| `pressure_thrown_aways` | integer |  |
-| `no_blitz_interceptions` | integer |  |
-| `blitz_dropbacks` | integer |  |
-| `blitz_def_gen_pressures` | integer |  |
-| `no_blitz_big_time_throws` | integer |  |
-| `no_pressure_avg_depth_of_target` | numeric |  |
-| `no_pressure_yards` | integer |  |
-| `blitz_twp_rate` | numeric |  |
-| `blitz_accuracy_percent` | numeric |  |
-| `no_pressure_big_time_throws` | integer |  |
-| `pressure_grades_pass_route` | numeric |  |
-| `blitz_grades_pass_route` | numeric |  |
-| `no_pressure_grades_pass_route` | numeric |  |
-| `no_blitz_grades_pass_route` | numeric |  |
-| `no_pressure_grades_hands_drop` | numeric |  |
-| `blitz_grades_hands_drop` | numeric |  |
-| `pressure_grades_hands_drop` | numeric |  |
-| `no_blitz_grades_hands_drop` | numeric |  |
-| `no_blitz_grades_pass_block` | numeric |  |
-| `blitz_grades_pass_block` | numeric |  |
-| `no_pressure_grades_pass_block` | numeric |  |
-| `pressure_grades_pass_block` | numeric |  |
-| `pressure_grades_defense` | character |  |
-| `pressure_grades_pass_rush_defense` | character |  |
-| `no_blitz_grades_defense` | integer |  |
-| `blitz_grades_run_block` | numeric |  |
-| `blitz_grades_pass_rush_defense` | character |  |
-| `no_pressure_grades_run_block` | numeric |  |
-| `no_blitz_grades_defense_penalty` | numeric |  |
-| `no_blitz_grades_run_block` | numeric |  |
-| `blitz_grades_screen_block` | numeric |  |
-| `no_pressure_grades_defense` | integer |  |
-| `no_pressure_grades_pass_rush_defense` | integer |  |
-| `no_pressure_grades_defense_penalty` | numeric |  |
-| `pressure_grades_screen_block` | numeric |  |
-| `no_blitz_grades_screen_block` | numeric |  |
-| `blitz_grades_defense` | character |  |
-| `blitz_grades_defense_penalty` | character |  |
-| `pressure_grades_run_block` | numeric |  |
-| `pressure_grades_defense_penalty` | character |  |
-| `no_pressure_grades_screen_block` | numeric |  |
-| `no_blitz_grades_pass_rush_defense` | integer |  |
-| `pressure_grades_coverage_defense` | character |  |
-| `blitz_grades_coverage_defense` | character |  |
-| `no_blitz_grades_coverage_defense` | integer |  |
-| `no_pressure_grades_coverage_defense` | integer |  |
-| `no_pressure_grades_tackle` | numeric |  |
-| `blitz_grades_tackle` | numeric |  |
-| `blitz_grades_overall_tackle` | numeric |  |
-| `pressure_grades_overall_tackle` | numeric |  |
-| `no_blitz_grades_overall_tackle` | numeric |  |
-| `pressure_grades_tackle` | numeric |  |
-| `no_pressure_grades_overall_tackle` | numeric |  |
-| `no_blitz_grades_tackle` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `no_blitz_completion_percent` | numeric | Percentage of pass attempts completed when not blitzed. |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `no_pressure_scrambles` | integer | Number of scrambles from a clean pocket (no pressure). |
+| `blitz_touchdowns` | integer | Number of passing touchdowns thrown when blitzed. |
+| `pressure_yards` | integer | Passing yards gained when under pressure. |
+| `no_pressure_spikes` | integer | Number of clock-stopping spikes from a clean pocket (no pressure). |
+| `blitz_ypa` | numeric | Yards gained per pass attempt when blitzed. |
+| `no_blitz_grades_run` | numeric | PFF rushing grade for the player (0-100) when not blitzed. |
+| `blitz_qb_rating` | numeric | Traditional NFL passer rating when blitzed. |
+| `no_pressure_thrown_aways` | integer | Number of intentional throwaways from a clean pocket (no pressure). |
+| `no_blitz_bats` | integer | Number of pass attempts batted down at the line of scrimmage when not blitzed. |
+| `no_blitz_drops` | integer | Number of catchable passes dropped by receivers when not blitzed. |
+| `no_pressure_completion_percent` | numeric | Percentage of pass attempts completed from a clean pocket (no pressure). |
+| `blitz_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF. |
+| `pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) when under pressure. |
+| `no_blitz_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when not blitzed. |
+| `no_pressure_bats` | integer | Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure). |
+| `pressure_completions` | integer | Number of completed passes when under pressure. |
+| `blitz_big_time_throws` | integer | Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_blitz_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when not blitzed. |
+| `blitz_spikes` | integer | Number of clock-stopping spikes when blitzed. |
+| `no_pressure_completions` | integer | Number of completed passes from a clean pocket (no pressure). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `no_pressure_passing_snaps` | integer | Number of passing snaps played from a clean pocket (no pressure). |
+| `no_blitz_first_downs` | integer | Number of passing first downs gained when not blitzed. |
+| `blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when blitzed. |
+| `no_pressure_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) from a clean pocket (no pressure). |
+| `pressure_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted by PFF. |
+| `blitz_sacks` | integer | Number of sacks taken when blitzed. |
+| `no_pressure_interceptions` | integer | Number of passes intercepted from a clean pocket (no pressure). |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `pressure_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when under pressure. |
+| `blitz_completions` | integer | Number of completed passes when blitzed. |
+| `blitz_attempts` | integer | Number of pass attempts when blitzed. |
+| `pressure_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when under pressure, per PFF charting. |
+| `pressure_sacks` | integer | Number of sacks taken when under pressure. |
+| `no_blitz_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack when not blitzed. |
+| `no_pressure_ypa` | numeric | Yards gained per pass attempt from a clean pocket (no pressure). |
+| `pressure_passing_snaps` | integer | Number of passing snaps played when under pressure. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `pressure_bats` | integer | Number of pass attempts batted down at the line of scrimmage when under pressure. |
+| `blitz_thrown_aways` | integer | Number of intentional throwaways when blitzed. |
+| `no_pressure_drops` | integer | Number of catchable passes dropped by receivers from a clean pocket (no pressure). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `pressure_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when under pressure. |
+| `pressure_scrambles` | integer | Number of scrambles when under pressure. |
+| `blitz_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when blitzed. |
+| `blitz_completion_percent` | numeric | Percentage of pass attempts completed when blitzed. |
+| `no_pressure_first_downs` | integer | Number of passing first downs gained from a clean pocket (no pressure). |
+| `blitz_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when blitzed. |
+| `no_blitz_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when not blitzed. |
+| `blitz_interceptions` | integer | Number of passes intercepted when blitzed. |
+| `no_blitz_dropbacks` | integer | Number of dropbacks when not blitzed. |
+| `no_blitz_grades_pass` | numeric | PFF passing grade (0-100) when not blitzed. |
+| `no_blitz_scrambles` | integer | Number of scrambles when not blitzed. |
+| `pressure_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when under pressure. |
+| `no_blitz_yards` | integer | Passing yards gained when not blitzed. |
+| `base_dropbacks` | integer | Number of dropbacks across all splits, the baseline total for this facet. |
+| `pressure_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack, reported within the pressure split. |
+| `no_blitz_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when not blitzed. |
+| `no_pressure_grades_offense` | numeric | PFF overall offense grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds from a clean pocket (no pressure). |
+| `pressure_dropbacks` | integer | Number of dropbacks when under pressure. |
+| `no_blitz_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when not blitzed. |
+| `no_pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) from a clean pocket (no pressure). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `blitz_turnover_worthy_plays` | integer | Number of turnover-worthy plays when blitzed, plays PFF charts as deserving of a turnover. |
+| `no_blitz_touchdowns` | integer | Number of passing touchdowns thrown when not blitzed. |
+| `no_blitz_avg_depth_of_target` | numeric | Average depth of target in air yards when not blitzed. |
+| `no_pressure_dropbacks_percent` | numeric | Share of the player's total dropbacks that came from a clean pocket (no pressure), expressed as a percentage. |
+| `blitz_grades_pass` | numeric | PFF passing grade (0-100) when blitzed. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `blitz_avg_depth_of_target` | numeric | Average depth of target in air yards when blitzed. |
+| `no_blitz_spikes` | integer | Number of clock-stopping spikes when not blitzed. |
+| `no_pressure_dropbacks` | integer | Number of dropbacks from a clean pocket (no pressure). |
+| `blitz_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting. |
+| `blitz_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when blitzed. |
+| `no_pressure_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts from a clean pocket (no pressure), per PFF charting. |
+| `no_pressure_drop_rate` | numeric | Percentage of catchable passes dropped by receivers from a clean pocket (no pressure). |
+| `no_blitz_turnover_worthy_plays` | integer | Number of turnover-worthy plays when not blitzed, plays PFF charts as deserving of a turnover. |
+| `pressure_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when under pressure. |
+| `blitz_first_downs` | integer | Number of passing first downs gained when blitzed. |
+| `no_blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when not blitzed, expressed as a percentage. |
+| `pressure_turnover_worthy_plays` | integer | Number of turnover-worthy plays when under pressure, plays PFF charts as deserving of a turnover. |
+| `no_pressure_epa` | numeric | Total expected points added (EPA) on the player's dropbacks from a clean pocket (no pressure). |
+| `no_blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when not blitzed. |
+| `no_blitz_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when not blitzed. |
+| `pressure_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when under pressure, per PFF charting. |
+| `no_pressure_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure), as charted by PFF. |
+| `pressure_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when under pressure, expressed as a percentage. |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `no_pressure_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks from a clean pocket (no pressure), as charted by PFF. |
+| `pressure_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when under pressure. |
+| `pressure_completion_percent` | numeric | Percentage of pass attempts completed when under pressure. |
+| `pressure_avg_depth_of_target` | numeric | Average depth of target in air yards when under pressure. |
+| `blitz_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when blitzed. |
+| `pressure_drops` | integer | Number of catchable passes dropped by receivers when under pressure. |
+| `no_blitz_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when not blitzed, as charted by PFF. |
+| `pressure_attempts` | integer | Number of pass attempts when under pressure. |
+| `pressure_big_time_throws` | integer | Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_blitz_thrown_aways` | integer | Number of intentional throwaways when not blitzed. |
+| `blitz_drops` | integer | Number of catchable passes dropped by receivers when blitzed. |
+| `no_pressure_touchdowns` | integer | Number of passing touchdowns thrown from a clean pocket (no pressure). |
+| `no_pressure_sacks` | integer | Number of sacks taken from a clean pocket (no pressure). |
+| `blitz_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when blitzed. |
+| `pressure_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when under pressure. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `no_pressure_attempts` | integer | Number of pass attempts from a clean pocket (no pressure). |
+| `no_blitz_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when not blitzed. |
+| `blitz_scrambles` | integer | Number of scrambles when blitzed. |
+| `blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when blitzed, expressed as a percentage. |
+| `no_pressure_qb_rating` | numeric | Traditional NFL passer rating from a clean pocket (no pressure). |
+| `no_blitz_passing_snaps` | integer | Number of passing snaps played when not blitzed. |
+| `no_blitz_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by PFF. |
+| `blitz_yards` | integer | Passing yards gained when blitzed. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `no_blitz_attempts` | integer | Number of pass attempts when not blitzed. |
+| `pressure_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF when under pressure. |
+| `no_blitz_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when not blitzed, as charted by PFF. |
+| `pressure_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when under pressure, as charted by PFF. |
+| `blitz_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack when blitzed. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `no_blitz_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when not blitzed, per PFF charting. |
+| `no_blitz_ypa` | numeric | Yards gained per pass attempt when not blitzed. |
+| `blitz_grades_run` | numeric | PFF rushing grade for the player (0-100) when blitzed. |
+| `pressure_interceptions` | integer | Number of passes intercepted when under pressure. |
+| `blitz_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when blitzed. |
+| `no_pressure_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when blitzed. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `pressure_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when under pressure, as charted by PFF. |
+| `pressure_grades_pass` | numeric | PFF passing grade (0-100) when under pressure. |
+| `no_blitz_qb_rating` | numeric | Traditional NFL passer rating when not blitzed. |
+| `blitz_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when blitzed, as charted by PFF. |
+| `pressure_ypa` | numeric | Yards gained per pass attempt when under pressure. |
+| `pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds when under pressure. |
+| `no_blitz_completions` | integer | Number of completed passes when not blitzed. |
+| `no_pressure_sack_percent` | numeric | Percentage of dropbacks that ended in a sack from a clean pocket (no pressure). |
+| `no_blitz_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF when not blitzed. |
+| `no_pressure_pressure_to_sack_rate` | character | Pressure-to-sack rate as reported within the no-pressure split of the PFF passing-pressure facet. |
+| `no_pressure_turnover_worthy_plays` | integer | Number of turnover-worthy plays from a clean pocket (no pressure), plays PFF charts as deserving of a turnover. |
+| `pressure_first_downs` | integer | Number of passing first downs gained when under pressure. |
+| `blitz_passing_snaps` | integer | Number of passing snaps played when blitzed. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `no_pressure_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts from a clean pocket (no pressure), per PFF charting. |
+| `no_blitz_sacks` | integer | Number of sacks taken when not blitzed. |
+| `no_pressure_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure). |
+| `no_blitz_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when not blitzed, per PFF charting. |
+| `no_pressure_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw from a clean pocket (no pressure), as charted by PFF. |
+| `no_pressure_grades_pass` | numeric | PFF passing grade (0-100) from a clean pocket (no pressure). |
+| `no_pressure_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added from a clean pocket (no pressure). |
+| `pressure_spikes` | integer | Number of clock-stopping spikes when under pressure. |
+| `pressure_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when under pressure. |
+| `pressure_qb_rating` | numeric | Traditional NFL passer rating when under pressure. |
+| `blitz_bats` | integer | Number of pass attempts batted down at the line of scrimmage when blitzed. |
+| `pressure_touchdowns` | integer | Number of passing touchdowns thrown when under pressure. |
+| `pressure_thrown_aways` | integer | Number of intentional throwaways when under pressure. |
+| `no_blitz_interceptions` | integer | Number of passes intercepted when not blitzed. |
+| `blitz_dropbacks` | integer | Number of dropbacks when blitzed. |
+| `blitz_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when blitzed, as charted by PFF. |
+| `no_blitz_big_time_throws` | integer | Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_pressure_avg_depth_of_target` | numeric | Average depth of target in air yards from a clean pocket (no pressure). |
+| `no_pressure_yards` | integer | Passing yards gained from a clean pocket (no pressure). |
+| `blitz_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when blitzed, per PFF charting. |
+| `blitz_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF when blitzed. |
+| `no_pressure_big_time_throws` | integer | Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty throw designation. |
+| `pressure_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when under pressure. |
+| `blitz_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_blitz_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when not blitzed. |
+| `no_pressure_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when blitzed. |
+| `pressure_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when not blitzed. |
+| `no_blitz_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) when not blitzed. |
+| `blitz_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `pressure_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) when under pressure. |
+| `pressure_grades_defense` | character | PFF overall defense grade for the player (0-100) when under pressure. |
+| `pressure_grades_pass_rush_defense` | character | PFF pass-rush grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_defense` | integer | PFF overall defense grade for the player (0-100) when not blitzed. |
+| `blitz_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) when blitzed. |
+| `blitz_grades_pass_rush_defense` | character | PFF pass-rush grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_blitz_grades_defense_penalty` | numeric | PFF defensive penalty grade for the player (0-100) when not blitzed. |
+| `no_blitz_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) when not blitzed. |
+| `blitz_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_defense` | integer | PFF overall defense grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_grades_pass_rush_defense` | integer | PFF pass-rush grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_grades_defense_penalty` | numeric | PFF defensive penalty grade for the player (0-100) from a clean pocket (no pressure). |
+| `pressure_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when not blitzed. |
+| `blitz_grades_defense` | character | PFF overall defense grade for the player (0-100) when blitzed. |
+| `blitz_grades_defense_penalty` | character | PFF defensive penalty grade for the player (0-100) when blitzed. |
+| `pressure_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) when under pressure. |
+| `pressure_grades_defense_penalty` | character | PFF defensive penalty grade for the player (0-100) when under pressure. |
+| `no_pressure_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_blitz_grades_pass_rush_defense` | integer | PFF pass-rush grade for the player (0-100) when not blitzed. |
+| `pressure_grades_coverage_defense` | character | PFF coverage grade for the player (0-100) when under pressure. |
+| `blitz_grades_coverage_defense` | character | PFF coverage grade for the player (0-100) when blitzed. |
+| `no_blitz_grades_coverage_defense` | integer | PFF coverage grade for the player (0-100) when not blitzed. |
+| `no_pressure_grades_coverage_defense` | integer | PFF coverage grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_grades_tackle` | numeric | PFF tackling grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_tackle` | numeric | PFF tackling grade for the player (0-100) when blitzed. |
+| `blitz_grades_overall_tackle` | numeric | PFF overall tackling grade for the player (0-100) when blitzed. |
+| `pressure_grades_overall_tackle` | numeric | PFF overall tackling grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_overall_tackle` | numeric | PFF overall tackling grade for the player (0-100) when not blitzed. |
+| `pressure_grades_tackle` | numeric | PFF tackling grade for the player (0-100) when under pressure. |
+| `no_pressure_grades_overall_tackle` | numeric | PFF overall tackling grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_blitz_grades_tackle` | numeric | PFF tackling grade for the player (0-100) when not blitzed. |
 
 **receiving**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `team_targets_percent` | numeric |  |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `caught_percent` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `yards_per_reception` | numeric |  |
-| `touchdowns` | integer |  |
-| `grades_offense` | numeric |  |
-| `grades_pass_route` | numeric |  |
-| `grades_hands_drop` | numeric |  |
-| `grades_hands_fumble` | numeric |  |
-| `pass_plays` | integer |  |
-| `routes` | integer |  |
-| `route_rate` | numeric |  |
-| `pass_blocks` | integer |  |
-| `pass_block_rate` | numeric |  |
-| `slot_snaps` | integer |  |
-| `slot_rate` | numeric |  |
-| `wide_snaps` | integer |  |
-| `wide_rate` | numeric |  |
-| `inline_snaps` | integer |  |
-| `inline_rate` | numeric |  |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `yards_after_catch_per_reception` | numeric |  |
-| `yprr` | numeric |  |
-| `avg_depth_of_target` | numeric |  |
-| `longest` | integer |  |
-| `drops` | integer | Throws dropped |
-| `drop_rate` | numeric |  |
-| `contested_targets` | integer |  |
-| `contested_receptions` | integer |  |
-| `contested_catch_rate` | numeric |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `fumbles` | integer |  |
-| `avoided_tackles` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `targeted_qb_rating` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `receptions_oe` | numeric |  |
-| `receptions_oe_total` | numeric |  |
-| `lined_up_vs_cb` | numeric |  |
-| `lined_up_vs_s` | numeric |  |
-| `lined_up_vs_lb` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `team_targets_percent` | numeric | Percentage of the team's targets that went to the player (target share). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `caught_percent` | numeric | Percentage of targets caught. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `grades_hands_drop` | numeric | PFF hands/drop grade (0-100). |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `pass_plays` | integer | Pass-play snaps. |
+| `routes` | integer | Pass routes run by the player. |
+| `route_rate` | numeric | Share of pass-play snaps on which the player ran a route. |
+| `pass_blocks` | integer | Pass-play snaps spent pass blocking. |
+| `pass_block_rate` | numeric | Share of pass-play snaps spent pass blocking. |
+| `slot_snaps` | integer | Receiving snaps aligned in the slot. |
+| `slot_rate` | numeric | Share of receiving snaps aligned in the slot. |
+| `wide_snaps` | integer | Receiving snaps aligned out wide. |
+| `wide_rate` | numeric | Share of receiving snaps aligned out wide. |
+| `inline_snaps` | integer | Receiving snaps aligned inline, tight to the formation. |
+| `inline_rate` | numeric | Share of receiving snaps aligned inline, tight to the formation. |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `yards_after_catch_per_reception` | numeric | Average yards after the catch per reception. |
+| `yprr` | numeric | Yards per route run. |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `drop_rate` | numeric | Drop rate, in percent: share of catchable passes dropped by the passer's receivers (passing report) or by the player (receiving report). |
+| `contested_targets` | integer | Contested targets. |
+| `contested_receptions` | integer | Contested catches made. |
+| `contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught. |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `fumbles` | integer | Fumbles by the player: after the catch on the receiving report, as a ball carrier on the rushing report. |
+| `avoided_tackles` | integer | Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner on rushing. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `receptions_oe` | numeric | Catch rate over expectation, in percentage points (receptions per target minus PFF's expected rate). |
+| `receptions_oe_total` | numeric | Receptions over expectation in total: receptions minus PFF-expected receptions on the player's targets. |
+| `lined_up_vs_cb` | numeric | Percentage of the player's charted matchups in which he lined up across from a cornerback; with lined_up_vs_lb and lined_up_vs_s it sums to 100 where populated (null for many players). |
+| `lined_up_vs_s` | numeric | Percentage of the player's charted matchups in which he lined up across from a safety; with lined_up_vs_cb and lined_up_vs_lb it sums to 100 where populated (null for many players). |
+| `lined_up_vs_lb` | numeric | Percentage of the player's charted matchups in which he lined up across from a linebacker; with lined_up_vs_cb and lined_up_vs_s it sums to 100 where populated (null for many players). |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **receiving-depth**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `base_targets` | integer |  |
-| `deep_targets_percent` | numeric |  |
-| `deep_targets` | integer |  |
-| `deep_receptions` | integer |  |
-| `deep_caught_percent` | numeric |  |
-| `deep_yards` | integer |  |
-| `deep_yards_per_reception` | numeric |  |
-| `deep_touchdowns` | integer |  |
-| `deep_grades_pass_route` | numeric |  |
-| `deep_grades_hands_drop` | numeric |  |
-| `deep_yards_after_catch` | integer |  |
-| `deep_yards_after_catch_per_reception` | numeric |  |
-| `deep_yprr` | numeric |  |
-| `deep_avg_depth_of_target` | numeric |  |
-| `deep_drops` | integer |  |
-| `deep_drop_rate` | numeric |  |
-| `deep_contested_targets` | integer |  |
-| `deep_contested_receptions` | integer |  |
-| `deep_contested_catch_rate` | numeric |  |
-| `deep_interceptions` | integer |  |
-| `deep_fumbles` | integer |  |
-| `deep_avoided_tackles` | integer |  |
-| `deep_first_downs` | integer |  |
-| `deep_targeted_qb_rating` | numeric |  |
-| `medium_targets_percent` | numeric |  |
-| `medium_targets` | integer |  |
-| `medium_receptions` | integer |  |
-| `medium_caught_percent` | numeric |  |
-| `medium_yards` | integer |  |
-| `medium_yards_per_reception` | numeric |  |
-| `medium_touchdowns` | integer |  |
-| `medium_grades_pass_route` | numeric |  |
-| `medium_grades_hands_drop` | numeric |  |
-| `medium_yards_after_catch` | integer |  |
-| `medium_yards_after_catch_per_reception` | numeric |  |
-| `medium_yprr` | numeric |  |
-| `medium_avg_depth_of_target` | numeric |  |
-| `medium_drops` | integer |  |
-| `medium_drop_rate` | numeric |  |
-| `medium_contested_targets` | integer |  |
-| `medium_contested_receptions` | integer |  |
-| `medium_contested_catch_rate` | numeric |  |
-| `medium_interceptions` | integer |  |
-| `medium_fumbles` | integer |  |
-| `medium_avoided_tackles` | integer |  |
-| `medium_first_downs` | integer |  |
-| `medium_targeted_qb_rating` | numeric |  |
-| `short_targets_percent` | numeric |  |
-| `short_targets` | integer |  |
-| `short_receptions` | integer |  |
-| `short_caught_percent` | numeric |  |
-| `short_yards` | integer |  |
-| `short_yards_per_reception` | numeric |  |
-| `short_touchdowns` | integer |  |
-| `short_grades_pass_route` | numeric |  |
-| `short_grades_hands_drop` | numeric |  |
-| `short_yards_after_catch` | integer |  |
-| `short_yards_after_catch_per_reception` | numeric |  |
-| `short_yprr` | numeric |  |
-| `short_avg_depth_of_target` | numeric |  |
-| `short_drops` | integer |  |
-| `short_drop_rate` | numeric |  |
-| `short_contested_targets` | integer |  |
-| `short_contested_receptions` | integer |  |
-| `short_contested_catch_rate` | numeric |  |
-| `short_interceptions` | integer |  |
-| `short_fumbles` | integer |  |
-| `short_avoided_tackles` | integer |  |
-| `short_first_downs` | integer |  |
-| `short_targeted_qb_rating` | numeric |  |
-| `behind_los_targets_percent` | numeric |  |
-| `behind_los_targets` | integer |  |
-| `behind_los_receptions` | integer |  |
-| `behind_los_caught_percent` | numeric |  |
-| `behind_los_yards` | integer |  |
-| `behind_los_yards_per_reception` | numeric |  |
-| `behind_los_touchdowns` | integer |  |
-| `behind_los_grades_pass_route` | numeric |  |
-| `behind_los_grades_hands_drop` | numeric |  |
-| `behind_los_yards_after_catch` | integer |  |
-| `behind_los_yards_after_catch_per_reception` | numeric |  |
-| `behind_los_yprr` | numeric |  |
-| `behind_los_avg_depth_of_target` | numeric |  |
-| `behind_los_drops` | integer |  |
-| `behind_los_drop_rate` | numeric |  |
-| `behind_los_contested_targets` | integer |  |
-| `behind_los_contested_receptions` | integer |  |
-| `behind_los_contested_catch_rate` | integer |  |
-| `behind_los_interceptions` | integer |  |
-| `behind_los_fumbles` | integer |  |
-| `behind_los_avoided_tackles` | integer |  |
-| `behind_los_first_downs` | integer |  |
-| `behind_los_targeted_qb_rating` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `base_targets` | integer | Total targets from the facet's unsplit base row, across all depths and directions. |
+| `deep_targets_percent` | numeric | Share of the team's targets thrown to the player on deep passes (20 or more yards downfield). |
+| `deep_targets` | integer | Pass targets to the player on deep passes (20 or more yards downfield). |
+| `deep_receptions` | integer | Receptions made on deep passes (20 or more yards downfield). |
+| `deep_caught_percent` | numeric | Percentage of targets caught on deep passes (20 or more yards downfield). |
+| `deep_yards` | integer | Yards on deep (20+ air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `deep_yards_per_reception` | numeric | Average yards per reception on deep passes (20 or more yards downfield). |
+| `deep_touchdowns` | integer | Touchdowns on deep (20+ air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `deep_grades_pass_route` | numeric | PFF route-running (receiving) grade on deep passes (20 or more yards downfield), 0-100. |
+| `deep_grades_hands_drop` | numeric | PFF hands/drop grade on deep passes (20 or more yards downfield), 0-100. |
+| `deep_yards_after_catch` | integer | Yards gained after the catch on deep passes (20 or more yards downfield). |
+| `deep_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on deep passes (20 or more yards downfield). |
+| `deep_yprr` | numeric | Yards per route run on deep passes (20 or more yards downfield). |
+| `deep_avg_depth_of_target` | numeric | Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `deep_drops` | integer | Catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_drop_rate` | numeric | Percentage of catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_contested_targets` | integer | PFF-charted contested targets on deep passes (20 or more yards downfield). |
+| `deep_contested_receptions` | integer | Catches made on PFF-charted contested targets on deep passes (20 or more yards downfield). |
+| `deep_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on deep passes (20 or more yards downfield). |
+| `deep_interceptions` | integer | Interceptions on deep (20+ air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `deep_fumbles` | integer | Fumbles by the player after the catch on deep passes (20 or more yards downfield). |
+| `deep_avoided_tackles` | integer | Tackles avoided after the catch on deep passes (20 or more yards downfield). |
+| `deep_first_downs` | integer | First downs on deep (20+ air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `deep_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on deep passes (20 or more yards downfield). |
+| `medium_targets_percent` | numeric | Share of the team's targets thrown to the player on medium passes (10-19 yards downfield). |
+| `medium_targets` | integer | Pass targets to the player on medium passes (10-19 yards downfield). |
+| `medium_receptions` | integer | Receptions made on medium passes (10-19 yards downfield). |
+| `medium_caught_percent` | numeric | Percentage of targets caught on medium passes (10-19 yards downfield). |
+| `medium_yards` | integer | Yards on medium (10-19 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `medium_yards_per_reception` | numeric | Average yards per reception on medium passes (10-19 yards downfield). |
+| `medium_touchdowns` | integer | Touchdowns on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `medium_grades_pass_route` | numeric | PFF route-running (receiving) grade on medium passes (10-19 yards downfield), 0-100. |
+| `medium_grades_hands_drop` | numeric | PFF hands/drop grade on medium passes (10-19 yards downfield), 0-100. |
+| `medium_yards_after_catch` | integer | Yards gained after the catch on medium passes (10-19 yards downfield). |
+| `medium_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on medium passes (10-19 yards downfield). |
+| `medium_yprr` | numeric | Yards per route run on medium passes (10-19 yards downfield). |
+| `medium_avg_depth_of_target` | numeric | Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `medium_drops` | integer | Catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `medium_drop_rate` | numeric | Percentage of catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `medium_contested_targets` | integer | PFF-charted contested targets on medium passes (10-19 yards downfield). |
+| `medium_contested_receptions` | integer | Catches made on PFF-charted contested targets on medium passes (10-19 yards downfield). |
+| `medium_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on medium passes (10-19 yards downfield). |
+| `medium_interceptions` | integer | Interceptions on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `medium_fumbles` | integer | Fumbles by the player after the catch on medium passes (10-19 yards downfield). |
+| `medium_avoided_tackles` | integer | Tackles avoided after the catch on medium passes (10-19 yards downfield). |
+| `medium_first_downs` | integer | First downs on medium (10-19 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `medium_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on medium passes (10-19 yards downfield). |
+| `short_targets_percent` | numeric | Share of the team's targets thrown to the player on short passes (0-9 yards downfield). |
+| `short_targets` | integer | Pass targets to the player on short passes (0-9 yards downfield). |
+| `short_receptions` | integer | Receptions made on short passes (0-9 yards downfield). |
+| `short_caught_percent` | numeric | Percentage of targets caught on short passes (0-9 yards downfield). |
+| `short_yards` | integer | Yards on short (0-9 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `short_yards_per_reception` | numeric | Average yards per reception on short passes (0-9 yards downfield). |
+| `short_touchdowns` | integer | Touchdowns on short (0-9 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `short_grades_pass_route` | numeric | PFF route-running (receiving) grade on short passes (0-9 yards downfield), 0-100. |
+| `short_grades_hands_drop` | numeric | PFF hands/drop grade on short passes (0-9 yards downfield), 0-100. |
+| `short_yards_after_catch` | integer | Yards gained after the catch on short passes (0-9 yards downfield). |
+| `short_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on short passes (0-9 yards downfield). |
+| `short_yprr` | numeric | Yards per route run on short passes (0-9 yards downfield). |
+| `short_avg_depth_of_target` | numeric | Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `short_drops` | integer | Catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_drop_rate` | numeric | Percentage of catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_contested_targets` | integer | PFF-charted contested targets on short passes (0-9 yards downfield). |
+| `short_contested_receptions` | integer | Catches made on PFF-charted contested targets on short passes (0-9 yards downfield). |
+| `short_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on short passes (0-9 yards downfield). |
+| `short_interceptions` | integer | Interceptions on short (0-9 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `short_fumbles` | integer | Fumbles by the player after the catch on short passes (0-9 yards downfield). |
+| `short_avoided_tackles` | integer | Tackles avoided after the catch on short passes (0-9 yards downfield). |
+| `short_first_downs` | integer | First downs on short (0-9 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `short_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on short passes (0-9 yards downfield). |
+| `behind_los_targets_percent` | numeric | Share of the team's targets thrown to the player on passes thrown behind the line of scrimmage. |
+| `behind_los_targets` | integer | Pass targets to the player on passes thrown behind the line of scrimmage. |
+| `behind_los_receptions` | integer | Receptions made on passes thrown behind the line of scrimmage. |
+| `behind_los_caught_percent` | numeric | Percentage of targets caught on passes thrown behind the line of scrimmage. |
+| `behind_los_yards` | integer | Yards on throws behind the line of scrimmage: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `behind_los_yards_per_reception` | numeric | Average yards per reception on passes thrown behind the line of scrimmage. |
+| `behind_los_touchdowns` | integer | Touchdowns on throws behind the line of scrimmage: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `behind_los_grades_pass_route` | numeric | PFF route-running (receiving) grade on passes thrown behind the line of scrimmage, 0-100. |
+| `behind_los_grades_hands_drop` | numeric | PFF hands/drop grade on passes thrown behind the line of scrimmage, 0-100. |
+| `behind_los_yards_after_catch` | integer | Yards gained after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on passes thrown behind the line of scrimmage. |
+| `behind_los_yprr` | numeric | Yards per route run on passes thrown behind the line of scrimmage. |
+| `behind_los_avg_depth_of_target` | numeric | Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `behind_los_drops` | integer | Catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `behind_los_drop_rate` | numeric | Percentage of catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `behind_los_contested_targets` | integer | PFF-charted contested targets on passes thrown behind the line of scrimmage. |
+| `behind_los_contested_receptions` | integer | Catches made on PFF-charted contested targets on passes thrown behind the line of scrimmage. |
+| `behind_los_contested_catch_rate` | integer | Percentage of PFF-charted contested targets caught on passes thrown behind the line of scrimmage. |
+| `behind_los_interceptions` | integer | Interceptions on throws behind the line of scrimmage: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `behind_los_fumbles` | integer | Fumbles by the player after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_avoided_tackles` | integer | Tackles avoided after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_first_downs` | integer | First downs on throws behind the line of scrimmage: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `behind_los_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on passes thrown behind the line of scrimmage. |
 
 **rushing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `grades_pass_block` | numeric |  |
-| `grades_offense` | numeric |  |
-| `yards_after_contact` | integer |  |
-| `explosive` | integer |  |
-| `grades_pass_route` | numeric |  |
-| `draft_season` | integer |  |
-| `elu_rush_mtf` | integer |  |
-| `breakaway_attempts` | integer |  |
-| `designed_yards` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `yprr` | numeric |  |
-| `breakaway_percent` | numeric |  |
-| `grades_pass` | numeric |  |
-| `fumbles` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `elusive_rating` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `breakaway_yards` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `total_touches` | integer |  |
-| `scramble_yards` | integer |  |
-| `yco_attempt` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `grades_run_block` | numeric |  |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `zone_attempts` | integer |  |
-| `scrambles` | integer |  |
-| `grades_run` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `elu_yco` | integer |  |
-| `elu_recv_mtf` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `ypa` | numeric |  |
-| `drops` | integer | Throws dropped |
-| `grades_hands_fumble` | numeric |  |
-| `longest` | integer |  |
-| `routes` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `rec_yards` | integer | Career receiving yards |
-| `gap_attempts` | integer |  |
-| `run_plays` | integer |  |
-| `avoided_tackles` | integer |  |
-| `grades_offense_penalty` | numeric |  |
-| `touchdowns` | integer |  |
-| `carry_share` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `yards_after_contact` | integer | Yards after contact. |
+| `explosive` | integer | Runs PFF designates as explosive. |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `elu_rush_mtf` | integer | Missed tackles forced as a rusher, an input to PFF's elusive rating. |
+| `breakaway_attempts` | integer | Runs of 15 or more yards, PFF's breakaway designation. |
+| `designed_yards` | integer | Rushing yards gained on designed runs, excluding scrambles. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `yprr` | numeric | Yards per route run. |
+| `breakaway_percent` | numeric | Share of rushing yards gained on breakaway runs of 15 or more yards. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `fumbles` | integer | Fumbles by the player: after the catch on the receiving report, as a ball carrier on the rushing report. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `elusive_rating` | numeric | PFF elusive rating. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `breakaway_yards` | integer | Breakaway (long-run) yards. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `total_touches` | integer | Combined carries and receptions. |
+| `scramble_yards` | integer | Rushing yards gained on scrambles. |
+| `yco_attempt` | numeric | Average yards after contact per rushing attempt. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `zone_attempts` | integer | Rushing attempts on zone-scheme runs. |
+| `scrambles` | integer | Quarterback scrambles (pass plays on which the passer ran with the ball). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `elu_yco` | integer | Yards-after-contact component used in PFF's elusive rating. |
+| `elu_recv_mtf` | integer | Missed tackles forced as a receiver, an input to PFF's elusive rating. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `ypa` | numeric | Yards per attempt: passing yards per pass attempt on the passing report, rushing yards per carry on the rushing report. |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `routes` | integer | Pass routes run by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `rec_yards` | integer | Receiving yards gained by the player (the rushing report also carries the ball carrier's receiving line). |
+| `gap_attempts` | integer | Rushing attempts on gap-scheme runs. |
+| `run_plays` | integer | Run-play snaps. |
+| `avoided_tackles` | integer | Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner on rushing. |
+| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `carry_share` | numeric | Percentage of the team's carries taken by the player. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_offense` | integer |  |
-| `snap_counts_block` | integer |  |
-| `block_percent` | numeric |  |
-| `snap_counts_run_block` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `pass_block_percent` | numeric |  |
-| `grades_offense` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `non_spike_pass_block` | integer |  |
-| `non_spike_pass_block_percentage` | numeric |  |
-| `sacks_allowed` | integer | Opponent sacks. |
-| `hits_allowed` | integer |  |
-| `hurries_allowed` | integer |  |
-| `pressures_allowed` | integer |  |
-| `pbe` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_offense` | integer | Offensive snaps played. |
+| `snap_counts_block` | integer | Total blocking snaps played. |
+| `block_percent` | numeric | Share of offensive snaps spent blocking. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking. |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays. |
+| `non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking. |
+| `sacks_allowed` | integer | Sacks allowed by the player in pass protection. |
+| `hits_allowed` | integer | Quarterback hits allowed. |
+| `hurries_allowed` | integer | Quarterback hurries allowed. |
+| `pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries). |
+| `pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
 
 **pass-blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
-| `snap_counts_pass_play` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `pass_block_percent` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `non_spike_pass_block` | integer |  |
-| `non_spike_pass_block_percentage` | numeric |  |
-| `sacks_allowed` | integer | Opponent sacks. |
-| `hits_allowed` | integer |  |
-| `hurries_allowed` | integer |  |
-| `pressures_allowed` | integer |  |
-| `pressure_rate_allowed` | numeric |  |
-| `sack_rate_allowed` | numeric |  |
-| `pbe` | numeric |  |
-| `true_pass_set_snap_counts_pass_play` | integer |  |
-| `true_pass_set_snap_counts_pass_block` | integer |  |
-| `true_pass_set_pass_block_percent` | numeric |  |
-| `true_pass_set_grades_pass_block` | numeric |  |
-| `true_pass_set_non_spike_pass_block` | integer |  |
-| `true_pass_set_non_spike_pass_block_percentage` | numeric |  |
-| `true_pass_set_sacks_allowed` | integer |  |
-| `true_pass_set_hits_allowed` | integer |  |
-| `true_pass_set_hurries_allowed` | integer |  |
-| `true_pass_set_pressures_allowed` | integer |  |
-| `true_pass_set_pressure_rate_allowed` | numeric |  |
-| `true_pass_set_sack_rate_allowed` | numeric |  |
-| `true_pass_set_pbe` | numeric |  |
-| `pbwr` | numeric |  |
-| `true_pass_set_pbwr` | numeric |  |
-| `pass_block_grade_oe_percentile` | numeric |  |
-| `island_rate` | numeric |  |
-| `island_pass_block_win_rate` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking. |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays. |
+| `non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking. |
+| `sacks_allowed` | integer | Sacks allowed by the player in pass protection. |
+| `hits_allowed` | integer | Quarterback hits allowed. |
+| `hurries_allowed` | integer | Quarterback hurries allowed. |
+| `pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries). |
+| `pressure_rate_allowed` | numeric | Percentage of the player's pass-blocking snaps on which he allowed a pressure. |
+| `sack_rate_allowed` | numeric | Percentage of the player's pass-blocking snaps on which he allowed a sack. |
+| `pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
+| `true_pass_set_snap_counts_pass_play` | integer | Pass-play snaps on PFF-designated true pass sets. |
+| `true_pass_set_snap_counts_pass_block` | integer | Pass-blocking snaps played on PFF-designated true pass sets. |
+| `true_pass_set_pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking on PFF-designated true pass sets. |
+| `true_pass_set_grades_pass_block` | numeric | PFF pass-blocking grade on PFF-designated true pass sets, 0-100. |
+| `true_pass_set_non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays on PFF-designated true pass sets. |
+| `true_pass_set_non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking on PFF-designated true pass sets. |
+| `true_pass_set_sacks_allowed` | integer | Sacks allowed on PFF-designated true pass sets. |
+| `true_pass_set_hits_allowed` | integer | Quarterback hits allowed on PFF-designated true pass sets. |
+| `true_pass_set_hurries_allowed` | integer | Quarterback hurries allowed on PFF-designated true pass sets. |
+| `true_pass_set_pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries) on PFF-designated true pass sets. |
+| `true_pass_set_pressure_rate_allowed` | numeric | Percentage of the player's true-pass-set pass-blocking snaps on which he allowed a pressure. |
+| `true_pass_set_sack_rate_allowed` | numeric | Percentage of the player's true-pass-set pass-blocking snaps on which he allowed a sack. |
+| `true_pass_set_pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks on PFF-designated true pass sets. |
+| `pbwr` | numeric | Pass-block win rate, in percent: share of the player's pass-blocking snaps PFF charted as won. |
+| `true_pass_set_pbwr` | numeric | Pass-block win rate, in percent, on PFF-designated true pass sets. |
+| `pass_block_grade_oe_percentile` | numeric | Percentile (0-100) of the player's pass-blocking grade over expectation, as reported by PFF; null for many players. |
+| `island_rate` | numeric | Percentage of the player's pass-blocking snaps PFF charted as island (isolated, one-on-one) blocks. |
+| `island_pass_block_win_rate` | numeric | Pass-block win rate, in percent, on the player's island (isolated, one-on-one) pass-blocking snaps. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **run-blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
-| `snap_counts_run_play` | integer |  |
-| `snap_counts_run_block` | integer |  |
-| `run_block_percent` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `zone_snap_counts_run_play` | integer |  |
-| `zone_snap_counts_run_block` | integer |  |
-| `zone_snap_counts_run_block_percent` | numeric |  |
-| `zone_run_block_percent` | numeric |  |
-| `zone_grades_run_block` | numeric |  |
-| `gap_snap_counts_run_play` | integer |  |
-| `gap_snap_counts_run_block` | integer |  |
-| `gap_snap_counts_run_block_percent` | numeric |  |
-| `gap_run_block_percent` | numeric |  |
-| `gap_grades_run_block` | numeric |  |
-| `pos_graded_rate` | numeric |  |
-| `neg_graded_rate` | numeric |  |
-| `zone_pos_graded_rate` | numeric |  |
-| `zone_neg_graded_rate` | numeric |  |
-| `gap_pos_graded_rate` | numeric |  |
-| `gap_neg_graded_rate` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
+| `snap_counts_run_play` | integer | Run-play snaps. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `run_block_percent` | numeric | Share of run-play snaps spent run blocking. |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `zone_snap_counts_run_play` | integer | Run-play snaps on zone-scheme runs. |
+| `zone_snap_counts_run_block` | integer | Run-blocking snaps played on zone-scheme runs. |
+| `zone_snap_counts_run_block_percent` | numeric | Share of the player's run-blocking snaps on zone-scheme runs. |
+| `zone_run_block_percent` | numeric | Share of run-play snaps spent run blocking on zone-scheme runs. |
+| `zone_grades_run_block` | numeric | PFF run-blocking grade on zone-scheme runs, 0-100. |
+| `gap_snap_counts_run_play` | integer | Run-play snaps on gap-scheme runs. |
+| `gap_snap_counts_run_block` | integer | Run-blocking snaps played on gap-scheme runs. |
+| `gap_snap_counts_run_block_percent` | numeric | Share of the player's run-blocking snaps on gap-scheme runs. |
+| `gap_run_block_percent` | numeric | Share of run-play snaps spent run blocking on gap-scheme runs. |
+| `gap_grades_run_block` | numeric | PFF run-blocking grade on gap-scheme runs, 0-100. |
+| `pos_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded positively. |
+| `neg_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively. |
+| `zone_pos_graded_rate` | numeric | Percentage of the player's zone-scheme run-blocking plays that PFF graded positively. |
+| `zone_neg_graded_rate` | numeric | Percentage of the player's zone-scheme run-blocking plays that PFF graded negatively. |
+| `gap_pos_graded_rate` | numeric | Percentage of the player's gap-scheme run-blocking plays that PFF graded positively. |
+| `gap_neg_graded_rate` | numeric | Percentage of the player's gap-scheme run-blocking plays that PFF graded negatively. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **defense**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `interception_touchdowns` | integer |  |
-| `draft_season` | integer |  |
-| `forced_fumbles` | integer |  |
-| `missed_tackles` | integer |  |
-| `catch_rate` | numeric |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `tackles` | integer | Team tackles. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `snap_counts_offball` | integer |  |
-| `snap_counts_box` | integer |  |
-| `sacks` | integer | The Number of times sacked. |
-| `snap_counts_pass_rush` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_dl` | integer |  |
-| `grades_tackle` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `grades_coverage_defense` | numeric |  |
-| `hurries` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `snap_counts_coverage` | integer |  |
-| `snap_counts_dl_over_t` | integer |  |
-| `snap_counts_dl_a_gap` | integer |  |
-| `fumble_recoveries` | integer |  |
-| `grades_run_defense` | numeric |  |
-| `snap_counts_corner` | integer |  |
-| `hits` | integer | Hits. |
-| `penalties` | integer | Total number of penalties. |
-| `batted_passes` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `stops` | integer |  |
-| `declined_penalties` | integer |  |
-| `total_pressures` | integer |  |
-| `fumble_recovery_touchdowns` | integer |  |
-| `longest` | integer |  |
-| `snap_counts_slot` | integer |  |
-| `missed_tackle_rate` | numeric |  |
-| `grades_defense` | numeric |  |
-| `yards_per_reception` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `safeties` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `snap_counts_defense` | integer |  |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `snap_counts_dl_b_gap` | integer |  |
-| `pass_break_ups` | integer |  |
-| `qb_rating_against` | numeric |  |
-| `snap_counts_run_defense` | integer |  |
-| `tackles_for_loss` | integer | Team tackles for a loss. |
-| `assists` | integer | Total assists. |
-| `grades_pass_rush_defense` | numeric |  |
-| `snap_counts_fs` | integer |  |
-| `touchdowns` | integer |  |
-| `snap_counts_dl_outside_t` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `interception_touchdowns` | integer | Touchdowns scored on interception returns. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `forced_fumbles` | integer | Fumbles forced by the player. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `snap_counts_offball` | integer | Snaps aligned as an off-ball linebacker. |
+| `snap_counts_box` | integer | Snaps aligned in the box. |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `snap_counts_pass_rush` | integer | Pass-rush snaps played. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_dl` | integer | Snaps aligned on the defensive line. |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `hurries` | integer | Quarterback hurries recorded. |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `snap_counts_coverage` | integer | Coverage snaps played. |
+| `snap_counts_dl_over_t` | integer | Defensive-line snaps aligned head-up over the offensive tackle. |
+| `snap_counts_dl_a_gap` | integer | Defensive-line snaps aligned in the A gap. |
+| `fumble_recoveries` | integer | Opponent fumbles recovered by the player. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `snap_counts_corner` | integer | Snaps aligned at outside cornerback. |
+| `hits` | integer | Quarterback hits recorded by the player, as charted by PFF. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `batted_passes` | integer | Passes batted down at the line of scrimmage. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `total_pressures` | integer | Total quarterback pressures generated (sacks, hits, and hurries). |
+| `fumble_recovery_touchdowns` | integer | Touchdowns scored on fumble recoveries. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `snap_counts_slot` | integer | Snaps aligned in the slot. |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `safeties` | integer | Safeties recorded by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `snap_counts_defense` | integer | Total defensive snaps played. |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `snap_counts_dl_b_gap` | integer | Defensive-line snaps aligned in the B gap. |
+| `pass_break_ups` | integer | Passes broken up. |
+| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
+| `snap_counts_run_defense` | integer | Run-defense snaps played. |
+| `tackles_for_loss` | integer | Tackles for loss made by the player. |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `snap_counts_fs` | integer | Snaps aligned at free safety. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `snap_counts_dl_outside_t` | integer | Defensive-line snaps aligned outside the offensive tackle. |
 
 **run-defense**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `assists` | integer | Total assists. |
-| `avg_depth_of_tackle` | numeric |  |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `forced_fumbles` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_coverage_defense` | numeric |  |
-| `grades_defense` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `grades_pass_rush_defense` | numeric |  |
-| `grades_run_defense` | numeric |  |
-| `grades_tackle` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `missed_tackle_rate` | numeric |  |
-| `missed_tackles` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `run_stop_opp` | integer |  |
-| `snap_counts_run` | integer |  |
-| `stop_percent` | numeric |  |
-| `stops` | integer |  |
-| `tackles` | integer | Team tackles. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `pos_graded_rate` | numeric |  |
-| `neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `avg_depth_of_tackle` | numeric | Average depth downfield, in yards, at which the player made his tackles on run plays. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `forced_fumbles` | integer | Fumbles forced by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `run_stop_opp` | integer | Run-defense snaps PFF counts as run-stop opportunities. |
+| `snap_counts_run` | integer | Run-play snaps: on the offense report, run plays on which the player was the runner rather than a run blocker; on the run-defense report, run-defense snaps played. |
+| `stop_percent` | numeric | Percentage of run-stop opportunities converted into stops. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `pos_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded positively. |
+| `neg_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively. |
 
 **pass-rush**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `true_pass_set_total_pressures` | integer |  |
-| `draft_season` | integer |  |
-| `true_pass_set_prp` | numeric |  |
-| `true_pass_set_hurries` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `prp` | numeric |  |
-| `true_pass_set_sacks` | integer |  |
-| `pass_rush_win_rate` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `sacks` | integer | The Number of times sacked. |
-| `snap_counts_pass_rush` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `true_pass_set_snap_counts_pass_play` | integer |  |
-| `pass_rush_wins` | integer |  |
-| `hurries` | integer |  |
-| `pass_rush_opp` | integer |  |
-| `snap_counts_pass_play` | integer |  |
-| `hits` | integer | Hits. |
-| `true_pass_set_pass_rush_win_rate` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `batted_passes` | integer |  |
-| `true_pass_set_hits` | integer |  |
-| `true_pass_set_snap_counts_pass_rush` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `true_pass_set_pass_rush_wins` | integer |  |
-| `total_pressures` | integer |  |
-| `true_pass_set_grades_pass_rush_defense` | numeric |  |
-| `true_pass_set_batted_passes` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `pass_rush_percent` | numeric |  |
-| `true_pass_set_pass_rush_opp` | integer |  |
-| `true_pass_set_pass_rush_percent` | numeric |  |
-| `grades_pass_rush_defense` | numeric |  |
-| `knockdowns` | integer |  |
-| `knockdown_rate` | numeric |  |
-| `pressure_rate` | numeric |  |
-| `sack_rate` | numeric |  |
-| `true_pass_set_knockdowns` | integer |  |
-| `true_pass_set_knockdown_rate` | numeric |  |
-| `true_pass_set_pressure_rate` | numeric |  |
-| `true_pass_set_sack_rate` | numeric |  |
-| `lhs_pass_rush_snaps` | integer |  |
-| `lhs_pass_rush_percent` | numeric |  |
-| `lhs_sacks` | integer |  |
-| `lhs_hits` | integer |  |
-| `lhs_hurries` | integer |  |
-| `lhs_pressures` | integer |  |
-| `lhs_prp` | numeric |  |
-| `lhs_stops` | integer |  |
-| `lhs_tackles` | integer |  |
-| `lhs_assists` | integer |  |
-| `lhs_misses` | integer |  |
-| `rhs_pass_rush_snaps` | integer |  |
-| `rhs_pass_rush_percent` | numeric |  |
-| `rhs_sacks` | integer |  |
-| `rhs_hits` | integer |  |
-| `rhs_hurries` | integer |  |
-| `rhs_pressures` | integer |  |
-| `rhs_prp` | numeric |  |
-| `rhs_stops` | integer |  |
-| `rhs_tackles` | integer |  |
-| `rhs_assists` | integer |  |
-| `rhs_misses` | integer |  |
-| `pass_rush_grade_oe_percentile` | numeric |  |
-| `double_team_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `true_pass_set_total_pressures` | integer | Total pressures generated (sacks, hits, and hurries) on PFF-designated true pass sets. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `true_pass_set_prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks on PFF-designated true pass sets. |
+| `true_pass_set_hurries` | integer | Quarterback hurries recorded on PFF-designated true pass sets. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks. |
+| `true_pass_set_sacks` | integer | Sacks recorded on PFF-designated true pass sets. |
+| `pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `snap_counts_pass_rush` | integer | Pass-rush snaps played. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `true_pass_set_snap_counts_pass_play` | integer | Pass-play snaps on PFF-designated true pass sets. |
+| `pass_rush_wins` | integer | PFF-charted pass-rush wins. |
+| `hurries` | integer | Quarterback hurries recorded. |
+| `pass_rush_opp` | integer | Pass-rush snaps PFF counts as pressure opportunities. |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `hits` | integer | Quarterback hits recorded by the player, as charted by PFF. |
+| `true_pass_set_pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win on PFF-designated true pass sets. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `batted_passes` | integer | Passes batted down at the line of scrimmage. |
+| `true_pass_set_hits` | integer | Quarterback hits recorded on PFF-designated true pass sets. |
+| `true_pass_set_snap_counts_pass_rush` | integer | Pass-rush snaps played on PFF-designated true pass sets. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `true_pass_set_pass_rush_wins` | integer | PFF-charted pass-rush wins on PFF-designated true pass sets. |
+| `total_pressures` | integer | Total quarterback pressures generated (sacks, hits, and hurries). |
+| `true_pass_set_grades_pass_rush_defense` | numeric | PFF pass-rush grade on PFF-designated true pass sets, 0-100. |
+| `true_pass_set_batted_passes` | integer | Passes batted down at the line of scrimmage on PFF-designated true pass sets. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer. |
+| `true_pass_set_pass_rush_opp` | integer | Pass-rush snaps PFF counts as pressure opportunities on PFF-designated true pass sets. |
+| `true_pass_set_pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer on PFF-designated true pass sets. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `knockdowns` | integer | Quarterback knockdowns credited to the pass rusher, as charted by PFF. |
+| `knockdown_rate` | numeric | Knockdowns as a percentage of the player's pass-rush snaps. |
+| `pressure_rate` | numeric | Percentage of the player's pass-rush snaps that produced a pressure. |
+| `sack_rate` | numeric | Percentage of the player's pass-rush snaps that produced a sack. |
+| `true_pass_set_knockdowns` | integer | Quarterback knockdowns credited to the pass rusher on PFF-designated true pass sets. |
+| `true_pass_set_knockdown_rate` | numeric | Knockdowns as a percentage of the player's true-pass-set pass-rush snaps. |
+| `true_pass_set_pressure_rate` | numeric | Percentage of the player's true-pass-set pass-rush snaps that produced a pressure. |
+| `true_pass_set_sack_rate` | numeric | Percentage of the player's true-pass-set pass-rush snaps that produced a sack. |
+| `lhs_pass_rush_snaps` | integer | Pass-rush snaps the player took from the left-hand side (LHS), as PFF charts the rusher's alignment. |
+| `lhs_pass_rush_percent` | numeric | Percentage of the player's side-charted pass-rush snaps taken from the left-hand side (LHS); lhs_pass_rush_percent and rhs_pass_rush_percent sum to 100. |
+| `lhs_sacks` | integer | Sacks recorded while rushing from the left-hand side (LHS). |
+| `lhs_hits` | integer | Quarterback hits recorded while rushing from the left-hand side (LHS). |
+| `lhs_hurries` | integer | Quarterback hurries recorded while rushing from the left-hand side (LHS). |
+| `lhs_pressures` | integer | Total pressures (sacks, hits, and hurries) generated while rushing from the left-hand side (LHS). |
+| `lhs_prp` | numeric | PFF Pass Rush Productivity rating on rushes from the left-hand side (LHS), pressure generated per pass-rush snap weighted toward sacks. |
+| `lhs_stops` | integer | Stops (tackles that constitute a failed play for the offense) made on snaps rushing from the left-hand side (LHS). |
+| `lhs_tackles` | integer | Tackles made on snaps rushing from the left-hand side (LHS). |
+| `lhs_assists` | integer | Assisted tackles on snaps rushing from the left-hand side (LHS). |
+| `lhs_misses` | integer | Missed tackles on snaps rushing from the left-hand side (LHS). |
+| `rhs_pass_rush_snaps` | integer | Pass-rush snaps the player took from the right-hand side (RHS), as PFF charts the rusher's alignment. |
+| `rhs_pass_rush_percent` | numeric | Percentage of the player's side-charted pass-rush snaps taken from the right-hand side (RHS); lhs_pass_rush_percent and rhs_pass_rush_percent sum to 100. |
+| `rhs_sacks` | integer | Sacks recorded while rushing from the right-hand side (RHS). |
+| `rhs_hits` | integer | Quarterback hits recorded while rushing from the right-hand side (RHS). |
+| `rhs_hurries` | integer | Quarterback hurries recorded while rushing from the right-hand side (RHS). |
+| `rhs_pressures` | integer | Total pressures (sacks, hits, and hurries) generated while rushing from the right-hand side (RHS). |
+| `rhs_prp` | numeric | PFF Pass Rush Productivity rating on rushes from the right-hand side (RHS), pressure generated per pass-rush snap weighted toward sacks. |
+| `rhs_stops` | integer | Stops (tackles that constitute a failed play for the offense) made on snaps rushing from the right-hand side (RHS). |
+| `rhs_tackles` | integer | Tackles made on snaps rushing from the right-hand side (RHS). |
+| `rhs_assists` | integer | Assisted tackles on snaps rushing from the right-hand side (RHS). |
+| `rhs_misses` | integer | Missed tackles on snaps rushing from the right-hand side (RHS). |
+| `pass_rush_grade_oe_percentile` | numeric | Percentile (0-100) of the player's pass-rush grade over expectation, as reported by PFF. |
+| `double_team_rate` | numeric | Percentage of the player's pass-rush snaps on which he was double-teamed. |
 
 **coverage**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `yards_per_coverage_snap` | numeric |  |
-| `draft_season` | integer |  |
-| `missed_tackles` | integer |  |
-| `catch_rate` | numeric |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `tackles` | integer | Team tackles. |
-| `coverage_percent` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `dropped_ints` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `grades_tackle` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `forced_incompletion_rate` | numeric |  |
-| `grades_coverage_defense` | numeric |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `snap_counts_coverage` | integer |  |
-| `grades_run_defense` | numeric |  |
-| `snap_counts_pass_play` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `forced_incompletes` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `coverage_snaps_per_target` | numeric |  |
-| `stops` | integer |  |
-| `declined_penalties` | integer |  |
-| `longest` | integer |  |
-| `missed_tackle_rate` | numeric |  |
-| `grades_defense` | numeric |  |
-| `yards_per_reception` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `avg_depth_of_target` | numeric |  |
-| `pass_break_ups` | integer |  |
-| `qb_rating_against` | numeric |  |
-| `coverage_snaps_per_reception` | numeric |  |
-| `assists` | integer | Total assists. |
-| `grades_pass_rush_defense` | numeric |  |
-| `touchdowns` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `yards_per_coverage_snap` | numeric | Receiving yards allowed per coverage snap. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `coverage_percent` | numeric | Share of pass-play snaps spent in coverage. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `dropped_ints` | integer | Interception chances PFF charted as dropped. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `forced_incompletion_rate` | numeric | Share of targets into the player's coverage with a PFF-charted forced incompletion. |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `snap_counts_coverage` | integer | Coverage snaps played. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `forced_incompletes` | integer | Incompletions forced by the player's coverage, per PFF charting. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `coverage_snaps_per_target` | numeric | Coverage snaps played per target into the player's coverage. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `pass_break_ups` | integer | Passes broken up. |
+| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
+| `coverage_snaps_per_reception` | numeric | Coverage snaps played per reception allowed. |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
 
 **special-teams**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `assists` | integer | Total assists. |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_misc_st` | numeric |  |
-| `grades_special_teams_penalty` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `missed_tackles` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `snap_counts_field_goal` | integer |  |
-| `snap_counts_field_goal_blocking` | integer |  |
-| `snap_counts_kickoff` | integer |  |
-| `snap_counts_kickoff_return` | integer |  |
-| `snap_counts_punt_coverage` | integer |  |
-| `snap_counts_punt_return` | integer |  |
-| `tackles` | integer | Team tackles. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_snaps` | integer |  |
-| `grades_fgep_offense` | numeric |  |
-| `grades_punter` | numeric |  |
-| `grades_fgep_kicker` | numeric |  |
-| `grades_kickoff_kicker` | numeric |  |
-| `grades_long_snap` | numeric |  |
-| `grades_fgep_defense` | numeric |  |
-| `grades_kick_return` | numeric |  |
-| `grades_punt_return` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_misc_st` | numeric | PFF miscellaneous special-teams grade, 0-100. |
+| `grades_special_teams_penalty` | numeric | PFF special-teams penalty grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `snap_counts_field_goal` | integer | Snaps on the field-goal and extra-point unit. |
+| `snap_counts_field_goal_blocking` | integer | Snaps on the field-goal and extra-point block unit. |
+| `snap_counts_kickoff` | integer | Snaps on the kickoff coverage unit. |
+| `snap_counts_kickoff_return` | integer | Snaps on the kickoff return unit. |
+| `snap_counts_punt_coverage` | integer | Snaps on the punt coverage unit. |
+| `snap_counts_punt_return` | integer | Snaps on the punt return unit. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_snaps` | integer | Total special-teams snaps the player played across all kicking-game units. |
+| `grades_fgep_offense` | numeric | PFF grade on the field-goal and extra-point protection unit, 0-100. |
+| `grades_punter` | numeric | PFF punting grade, 0-100. |
+| `grades_fgep_kicker` | numeric | PFF field-goal and extra-point kicking grade, 0-100. |
+| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
+| `grades_long_snap` | numeric | PFF long-snapping grade, 0-100. |
+| `grades_fgep_defense` | numeric | PFF grade on field-goal and extra-point defense, 0-100. |
+| `grades_kick_return` | numeric | PFF kickoff-return grade, 0-100. |
+| `grades_punt_return` | numeric | PFF punt-return grade, 0-100. |
 
 **kick-returns**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_kick_return` | numeric |  |
-| `grades_punt_return` | numeric |  |
-| `grades_return` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `kickoff_attempts` | integer |  |
-| `kickoff_fair_catches` | integer |  |
-| `kickoff_long` | integer |  |
-| `kickoff_muffed_returns` | integer |  |
-| `kickoff_touchdowns` | integer |  |
-| `kickoff_yards` | integer |  |
-| `kickoff_ypa` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `punt_attempts` | integer |  |
-| `punt_fair_catches` | integer |  |
-| `punt_long` | integer |  |
-| `punt_muffed_returns` | integer |  |
-| `punt_touchdowns` | integer |  |
-| `punt_yards` | integer |  |
-| `punt_ypa` | numeric |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_attempts` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_kick_return` | numeric | PFF kickoff-return grade, 0-100. |
+| `grades_punt_return` | numeric | PFF punt-return grade, 0-100. |
+| `grades_return` | numeric | PFF overall return grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `kickoff_attempts` | integer | Kickoff returns attempted. |
+| `kickoff_fair_catches` | integer | Kickoffs fair-caught by the player. |
+| `kickoff_long` | integer | Longest kickoff return in yards. |
+| `kickoff_muffed_returns` | integer | Kickoff returns the player muffed. |
+| `kickoff_touchdowns` | integer | Kickoff returns scoring a touchdown. |
+| `kickoff_yards` | integer | Total kickoff-return yards. |
+| `kickoff_ypa` | numeric | Average yards per kickoff return. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `punt_attempts` | integer | Punt returns attempted. |
+| `punt_fair_catches` | integer | Punts fair-caught by the player. |
+| `punt_long` | integer | Longest punt return in yards. |
+| `punt_muffed_returns` | integer | Punt returns the player muffed. |
+| `punt_touchdowns` | integer | Punt returns scoring a touchdown. |
+| `punt_yards` | integer | Total punt-return yards. |
+| `punt_ypa` | numeric | Average yards per punt return. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_attempts` | integer | Total attempts: field goals attempted across all distances on the field-goals report, kick and punt returns combined on the kick-returns report. |
 
 **field-goals**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `twenty_attempts` | integer |  |
-| `pat_percent` | numeric |  |
-| `draft_season` | integer |  |
-| `forty_made` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `fifty_percent` | numeric |  |
-| `total_made` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `one_made` | integer |  |
-| `fifty_attempts` | integer |  |
-| `forty_attempts` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `thirty_percent` | numeric |  |
-| `total_attempts` | integer |  |
-| `pat_attempts` | integer |  |
-| `twenty_made` | integer |  |
-| `one_attempts` | integer |  |
-| `grades_fgep_kicker` | numeric |  |
-| `thirty_attempts` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `pat_made` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `one_percent` | integer |  |
-| `total_percent` | numeric |  |
-| `twenty_percent` | numeric |  |
-| `forty_percent` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `fifty_made` | integer |  |
-| `thirty_made` | integer |  |
-| `field_goal_oe` | numeric |  |
-| `field_goal_oe_total` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `twenty_attempts` | integer | Field goals attempted from 20-29 yards. |
+| `pat_percent` | numeric | Extra-point percentage. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `forty_made` | integer | Field goals made from 40-49 yards. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `fifty_percent` | numeric | Field-goal percentage from 50 or more yards. |
+| `total_made` | integer | Total field goals made across all distances. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `one_made` | integer | Field goals made from 1-19 yards. |
+| `fifty_attempts` | integer | Field goals attempted from 50 or more yards. |
+| `forty_attempts` | integer | Field goals attempted from 40-49 yards. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `thirty_percent` | numeric | Field-goal percentage from 30-39 yards. |
+| `total_attempts` | integer | Total attempts: field goals attempted across all distances on the field-goals report, kick and punt returns combined on the kick-returns report. |
+| `pat_attempts` | integer | Extra points attempted. |
+| `twenty_made` | integer | Field goals made from 20-29 yards. |
+| `one_attempts` | integer | Field goals attempted from 1-19 yards. |
+| `grades_fgep_kicker` | numeric | PFF field-goal and extra-point kicking grade, 0-100. |
+| `thirty_attempts` | integer | Field goals attempted from 30-39 yards. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `pat_made` | integer | Extra points made. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `one_percent` | integer | Field-goal percentage from 1-19 yards. |
+| `total_percent` | numeric | Overall field-goal percentage. |
+| `twenty_percent` | numeric | Field-goal percentage from 20-29 yards. |
+| `forty_percent` | numeric | Field-goal percentage from 40-49 yards. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `fifty_made` | integer | Field goals made from 50 or more yards. |
+| `thirty_made` | integer | Field goals made from 30-39 yards. |
+| `field_goal_oe` | numeric | Field-goal percentage over expectation, in percentage points (made rate minus PFF's expected make rate). |
+| `field_goal_oe_total` | numeric | Field goals made over expectation in total (makes minus PFF-expected makes). |
 
 **punting**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `touchbacks` | integer |  |
-| `attempts_with_hangtime` | integer |  |
-| `draft_season` | integer |  |
-| `percent_returned` | numeric |  |
-| `fair_catches` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `average_net_yards` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `average_hangtime` | numeric |  |
-| `total_net_yards` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `inside_twenties` | integer |  |
-| `out_of_bounds` | integer | 1 if play description contains ran ob, pushed ob, or sacked ob; 0 otherwise. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `average_yards_per_return` | numeric |  |
-| `total_hangtime` | numeric |  |
-| `declined_penalties` | integer |  |
-| `returns` | integer |  |
-| `long` | integer |  |
-| `blocks` | integer | Total blocks. |
-| `average_yards_per_attempt` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_punter` | numeric |  |
-| `return_yards` | integer | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `downeds` | integer |  |
-| `snaps` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `touchbacks` | integer | Kicks resulting in touchbacks: kickoffs on the kickoffs report, punts on the punting report. |
+| `attempts_with_hangtime` | integer | Kicks with a PFF-recorded hangtime: kickoffs on the kickoffs report, punts on the punting report. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `percent_returned` | numeric | Percentage of the player's kicks that were returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `fair_catches` | integer | Kicks fair-caught by the return team: kickoffs on the kickoffs report, punts on the punting report. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `average_net_yards` | numeric | Average net punting yards per attempt. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `average_hangtime` | numeric | Average hangtime in seconds of the player's kickoffs (kickoffs report) or punts (punting report). |
+| `total_net_yards` | integer | Total net punting yards. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `inside_twenties` | integer | Punts downed inside the opponent 20-yard line. |
+| `out_of_bounds` | integer | Punts that went out of bounds. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `average_yards_per_return` | numeric | Average return yards allowed per kick returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `total_hangtime` | numeric | Total hangtime in seconds summed over the player's kickoffs (kickoffs report) or punts (punting report). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `returns` | integer | Punts returned by the opponent. |
+| `long` | integer | Longest punt in yards. |
+| `blocks` | integer | Punts that were blocked. |
+| `average_yards_per_attempt` | numeric | Average gross punting yards per attempt. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_punter` | numeric | PFF punting grade, 0-100. |
+| `return_yards` | integer | Return yards gained by the return team on the player's kicks: kickoffs on the kickoffs report, punts on the punting report. |
+| `downeds` | integer | Punts downed by the coverage unit. |
+| `snaps` | integer | Punting snaps played. |
 
 **kickoffs**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `attempts_with_hangtime` | integer |  |
-| `average_distance` | numeric |  |
-| `average_hangtime` | numeric |  |
-| `average_starting_field_position` | numeric |  |
-| `average_yards_per_return` | numeric |  |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `fair_catches` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_kickoff_kicker` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `kicked_yards` | integer |  |
-| `kicks_returned` | integer |  |
-| `onside_kicks` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `percent_returned` | numeric |  |
-| `player_game_count` | integer |  |
-| `return_yards` | integer | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_hangtime` | numeric |  |
-| `touchbacks` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `attempts_with_hangtime` | integer | Kicks with a PFF-recorded hangtime: kickoffs on the kickoffs report, punts on the punting report. |
+| `average_distance` | numeric | Average kickoff distance in yards. |
+| `average_hangtime` | numeric | Average hangtime in seconds of the player's kickoffs (kickoffs report) or punts (punting report). |
+| `average_starting_field_position` | numeric | Average opponent starting field position following the player's kickoffs. |
+| `average_yards_per_return` | numeric | Average return yards allowed per kick returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `fair_catches` | integer | Kicks fair-caught by the return team: kickoffs on the kickoffs report, punts on the punting report. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `kicked_yards` | integer | Total kickoff yards. |
+| `kicks_returned` | integer | Kickoffs returned by the opponent. |
+| `onside_kicks` | integer | Onside kicks attempted. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `percent_returned` | numeric | Percentage of the player's kicks that were returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `return_yards` | integer | Return yards gained by the return team on the player's kicks: kickoffs on the kickoffs report, punts on the punting report. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_hangtime` | numeric | Total hangtime in seconds summed over the player's kickoffs (kickoffs report) or punts (punting report). |
+| `touchbacks` | integer | Kicks resulting in touchbacks: kickoffs on the kickoffs report, punts on the punting report. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -8639,15 +8639,15 @@ The league's teams for a season, with ids, slugs, colours and groups
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `slug` | character | URL slug for the team. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `city` | character | Venue city. |
-| `nickname` | character | Team nickname / location label. |
-| `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
-| `group_ids` | character |  |
+| `franchise_id` | integer | PFF franchise (team) id, stable across seasons; the value franchise_id / teamId carry everywhere else. |
+| `slug` | character | URL slug PFF uses for the team in /v2 team routes (e.g. "arizona-cardinals"); pass it as the team path parameter. |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `city` | character | City or place name PFF lists for the team (e.g. "Arizona"); null when PFF has none. |
+| `nickname` | character | Team nickname (e.g. "Cardinals"); null when PFF has none. |
+| `abbreviation` | character | Short display code for the team (e.g. "ARZ"): the directory's short code when it has one, else PFF's abbreviation; null when neither exists. |
+| `primary_color` | character | Team primary colour as a hex string (e.g. "#97233f"); null when PFF has no colours for the team. |
+| `secondary_color` | character | Team secondary colour as a hex string (e.g. "#ffffff"); null when PFF has no colours for the team. |
+| `group_ids` | character | Ids of the conference, division or tier groups the team belongs to, joined with ";" (e.g. "6;10"); they resolve against the groups list in the raw response. Empty string for none. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -8683,263 +8683,263 @@ Team stats table for one category, every value ranked against the scope
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_play` | numeric |  |
-| `epa_per_play_rank` | integer |  |
-| `success_rate` | numeric |  |
-| `success_rate_rank` | integer |  |
-| `explosive_play_rate` | numeric |  |
-| `explosive_play_rate_rank` | integer |  |
-| `points_per_drive` | numeric |  |
-| `points_per_drive_rank` | integer |  |
-| `third_down_conversion_rate` | numeric |  |
-| `third_down_conversion_rate_rank` | integer |  |
-| `red_zone_conversion_rate` | numeric |  |
-| `red_zone_conversion_rate_rank` | integer |  |
-| `offensive_turnovers` | integer | The number of times a player loses possession to the other team. |
-| `offensive_turnovers_rank` | integer |  |
-| `wepa` | numeric | Opponent-adjusted weighted EPA (passing predicted points added). |
-| `wepa_rank` | integer |  |
-| `conversion_after4` | numeric |  |
-| `conversion_after4_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_play` | numeric | Expected points added per offensive play (EPA / play). |
+| `epa_per_play_rank` | integer | Rank of the team's EPA per play among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `success_rate` | numeric | Share of the offense's plays that were successful, as a fraction (0-1). |
+| `success_rate_rank` | integer | Rank of the team's success rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `explosive_play_rate` | numeric | Share of the offense's plays that were explosive plays, as a fraction (0-1). |
+| `explosive_play_rate_rank` | integer | Rank of the team's explosive-play rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `points_per_drive` | numeric | Points scored per offensive drive. |
+| `points_per_drive_rank` | integer | Rank of the team's points per drive among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `third_down_conversion_rate` | numeric | Share of third downs the offense converted, as a fraction (0-1). |
+| `third_down_conversion_rate_rank` | integer | Rank of the team's third-down conversion rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `red_zone_conversion_rate` | numeric | Red-zone conversion rate of the offense, as a fraction (0-1). |
+| `red_zone_conversion_rate_rank` | integer | Rank of the team's red-zone conversion rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `offensive_turnovers` | integer | Turnovers committed by the offense. |
+| `offensive_turnovers_rank` | integer | Rank of the team's offensive turnovers among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `wepa` | numeric | Weighted EPA per offensive play, PFF's 'Weighted EPA / play'. |
+| `wepa_rank` | integer | Rank of the team's weighted EPA per play among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `conversion_after4` | numeric | Series conversion rate: share of the offense's series that produced a new first down or a touchdown, as a fraction (0-1). |
+| `conversion_after4_rank` | integer | Rank of the team's series conversion rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **offense-passing**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_pass_play` | numeric |  |
-| `epa_per_pass_play_rank` | integer |  |
-| `pass_success_rate` | numeric |  |
-| `pass_success_rate_rank` | integer |  |
-| `yards_per_attempt` | numeric |  |
-| `yards_per_attempt_rank` | integer |  |
-| `completion_percentage` | numeric | Percentage of completed passes |
-| `completion_percentage_rank` | integer |  |
-| `explosive_pass_rate` | numeric |  |
-| `explosive_pass_rate_rank` | integer |  |
-| `passer_rating` | numeric | Overall NFL passer rating |
-| `passer_rating_rank` | integer |  |
-| `pressure_rate_against` | numeric |  |
-| `pressure_rate_against_rank` | integer |  |
-| `pressure_oe_allowed` | numeric |  |
-| `pressure_oe_allowed_rank` | integer |  |
-| `sack_rate_against` | numeric |  |
-| `sack_rate_against_rank` | integer |  |
-| `man_coverage_pct_against` | numeric |  |
-| `man_coverage_pct_against_rank` | integer |  |
-| `zone_coverage_pct_against` | numeric |  |
-| `zone_coverage_pct_against_rank` | integer |  |
-| `scramble_rushing_yards` | integer |  |
-| `scramble_rushing_yards_rank` | integer |  |
-| `scramble_rushing_touchdowns` | integer |  |
-| `scramble_rushing_touchdowns_rank` | integer |  |
-| `scramble_yards_per_carry` | numeric |  |
-| `scramble_yards_per_carry_rank` | integer |  |
-| `pass_play_pct` | numeric |  |
-| `pass_play_pct_rank` | integer |  |
-| `is_pass_oe` | numeric |  |
-| `is_pass_oe_rank` | integer |  |
-| `play_action_rate` | numeric |  |
-| `play_action_rate_rank` | integer |  |
-| `adot` | numeric |  |
-| `adot_rank` | integer |  |
-| `screen_rate` | numeric |  |
-| `screen_rate_rank` | integer |  |
-| `time_to_throw` | numeric | Duration (in seconds) between the time of the ball being snapped and the time of release of a pass attempt |
-| `time_to_throw_rank` | integer |  |
-| `passes_behind_los_pct` | numeric |  |
-| `passes_behind_los_pct_rank` | integer |  |
-| `passes_short_pct` | numeric |  |
-| `passes_short_pct_rank` | integer |  |
-| `passes_intermediate_pct` | numeric |  |
-| `passes_intermediate_pct_rank` | integer |  |
-| `passes_deep_pct` | numeric |  |
-| `passes_deep_pct_rank` | integer |  |
-| `target_share_wr` | numeric |  |
-| `target_share_wr_rank` | integer |  |
-| `target_share_te` | numeric |  |
-| `target_share_te_rank` | integer |  |
-| `target_share_rb` | numeric |  |
-| `target_share_rb_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_pass_play` | numeric | Expected points added per pass play. |
+| `epa_per_pass_play_rank` | integer | Rank of the team's EPA per pass play among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pass_success_rate` | numeric | Share of the offense's pass plays that were successful, as a fraction (0-1). |
+| `pass_success_rate_rank` | integer | Rank of the team's passing success rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `yards_per_attempt` | numeric | Passing yards per pass attempt. |
+| `yards_per_attempt_rank` | integer | Rank of the team's yards per pass attempt among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `completion_percentage` | numeric | Completion percentage of the offense's passes, as a fraction (0-1). |
+| `completion_percentage_rank` | integer | Rank of the team's completion percentage among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `explosive_pass_rate` | numeric | Share of the offense's pass plays that were explosive, as a fraction (0-1). |
+| `explosive_pass_rate_rank` | integer | Rank of the team's explosive-pass rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `passer_rating` | numeric | Passer rating on the offense's pass attempts (NFL passer-rating scale). |
+| `passer_rating_rank` | integer | Rank of the team's passer rating among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pressure_rate_against` | numeric | Share of the offense's dropbacks on which the passer was pressured, as a fraction (0-1). |
+| `pressure_rate_against_rank` | integer | Rank of the team's pressure rate against among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `pressure_oe_allowed` | numeric | Pressure rate allowed over expectation: the offense's pressure rate against minus PFF's expected rate, as a fraction (negative = fewer pressures than expected). |
+| `pressure_oe_allowed_rank` | integer | Rank of the team's pressure rate over expectation against among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `sack_rate_against` | numeric | Share of the offense's dropbacks that ended in a sack, as a fraction (0-1). |
+| `sack_rate_against_rank` | integer | Rank of the team's sack rate against among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `man_coverage_pct_against` | numeric | Share of the offense's pass plays that faced man coverage, as a fraction (0-1). |
+| `man_coverage_pct_against_rank` | integer | Rank of the team's share of pass plays facing man coverage among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `zone_coverage_pct_against` | numeric | Share of the offense's pass plays that faced zone coverage, as a fraction (0-1). |
+| `zone_coverage_pct_against_rank` | integer | Rank of the team's share of pass plays facing zone coverage among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `scramble_rushing_yards` | integer | Rushing yards gained on quarterback scrambles. |
+| `scramble_rushing_yards_rank` | integer | Rank of the team's scramble rushing yards among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `scramble_rushing_touchdowns` | integer | Rushing touchdowns scored on quarterback scrambles. |
+| `scramble_rushing_touchdowns_rank` | integer | Rank of the team's scramble rushing touchdowns among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `scramble_yards_per_carry` | numeric | Rushing yards per quarterback scramble. |
+| `scramble_yards_per_carry_rank` | integer | Rank of the team's yards per scramble among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pass_play_pct` | numeric | Share of the offense's plays that were pass plays, as a fraction (0-1). |
+| `pass_play_pct_rank` | integer | Rank of the team's pass-play share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `is_pass_oe` | numeric | Pass rate over expectation: the offense's pass rate minus PFF's expected pass rate, as a fraction (positive = passed more than expected). |
+| `is_pass_oe_rank` | integer | Rank of the team's pass rate over expectation among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `play_action_rate` | numeric | Share of the offense's pass plays that used play action, as a fraction (0-1). |
+| `play_action_rate_rank` | integer | Rank of the team's play-action rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `adot` | numeric | Average depth of target, in air yards, of the offense's targeted passes. |
+| `adot_rank` | integer | Rank of the team's average depth of target among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `screen_rate` | numeric | Share of the offense's pass plays that were screens, as a fraction (0-1). |
+| `screen_rate_rank` | integer | Rank of the team's screen rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the offense's passes. |
+| `time_to_throw_rank` | integer | Rank of the team's average time to throw among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `passes_behind_los_pct` | numeric | Share of the offense's passes thrown behind the line of scrimmage, as a fraction (0-1). |
+| `passes_behind_los_pct_rank` | integer | Rank of the team's share of passes thrown behind the line of scrimmage among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `passes_short_pct` | numeric | Share of the offense's passes thrown short (0-9 air yards), as a fraction (0-1). |
+| `passes_short_pct_rank` | integer | Rank of the team's share of short passes among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `passes_intermediate_pct` | numeric | Share of the offense's passes thrown to intermediate depth (10-19 air yards), as a fraction (0-1). |
+| `passes_intermediate_pct_rank` | integer | Rank of the team's share of intermediate passes among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `passes_deep_pct` | numeric | Share of the offense's passes thrown deep (20+ air yards), as a fraction (0-1). |
+| `passes_deep_pct_rank` | integer | Rank of the team's share of deep passes among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `target_share_wr` | numeric | Share of the team's targets that went to wide receivers, as a fraction (0-1). |
+| `target_share_wr_rank` | integer | Rank of the team's wide-receiver target share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `target_share_te` | numeric | Share of the team's targets that went to tight ends, as a fraction (0-1). |
+| `target_share_te_rank` | integer | Rank of the team's tight-end target share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `target_share_rb` | numeric | Share of the team's targets that went to running backs, as a fraction (0-1). |
+| `target_share_rb_rank` | integer | Rank of the team's running-back target share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **offense-rushing**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_run_play` | numeric |  |
-| `epa_per_run_play_rank` | integer |  |
-| `rush_success_rate` | numeric |  |
-| `rush_success_rate_rank` | integer |  |
-| `explosive_run_rate` | numeric |  |
-| `explosive_run_rate_rank` | integer |  |
-| `designed_rushing_yards` | integer |  |
-| `designed_rushing_yards_rank` | integer |  |
-| `designed_rushing_touchdowns` | integer |  |
-| `designed_rushing_touchdowns_rank` | integer |  |
-| `designed_yards_per_carry` | numeric |  |
-| `designed_yards_per_carry_rank` | integer |  |
-| `yards_after_contact_per_carry` | numeric |  |
-| `yards_after_contact_per_carry_rank` | integer |  |
-| `yards_before_contact_per_carry` | numeric |  |
-| `yards_before_contact_per_carry_rank` | integer |  |
-| `run_stuff_rate` | numeric |  |
-| `run_stuff_rate_rank` | integer |  |
-| `run_play_pct` | numeric |  |
-| `run_play_pct_rank` | integer |  |
-| `run_rate_oe` | numeric |  |
-| `run_rate_oe_rank` | integer |  |
-| `zone_run_pct` | numeric |  |
-| `zone_run_pct_rank` | integer |  |
-| `gap_run_pct` | numeric |  |
-| `gap_run_pct_rank` | integer |  |
-| `inside_zone_rate` | numeric |  |
-| `inside_zone_rate_rank` | integer |  |
-| `outside_zone_rate` | numeric |  |
-| `outside_zone_rate_rank` | integer |  |
-| `man_duo_rate` | numeric |  |
-| `man_duo_rate_rank` | integer |  |
-| `power_rate` | numeric |  |
-| `power_rate_rank` | integer |  |
-| `counter_rate` | numeric |  |
-| `counter_rate_rank` | integer |  |
-| `pull_lead_rate` | numeric |  |
-| `pull_lead_rate_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_run_play` | numeric | Expected points added per run play. |
+| `epa_per_run_play_rank` | integer | Rank of the team's EPA per run play among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `rush_success_rate` | numeric | Share of the offense's run plays that were successful, as a fraction (0-1). |
+| `rush_success_rate_rank` | integer | Rank of the team's rushing success rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `explosive_run_rate` | numeric | Share of the offense's run plays that were explosive, as a fraction (0-1). |
+| `explosive_run_rate_rank` | integer | Rank of the team's explosive-run rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `designed_rushing_yards` | integer | Rushing yards on designed runs (quarterback scrambles excluded). |
+| `designed_rushing_yards_rank` | integer | Rank of the team's designed rushing yards among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `designed_rushing_touchdowns` | integer | Rushing touchdowns on designed runs. |
+| `designed_rushing_touchdowns_rank` | integer | Rank of the team's designed rushing touchdowns among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `designed_yards_per_carry` | numeric | Rushing yards per carry on designed runs. |
+| `designed_yards_per_carry_rank` | integer | Rank of the team's designed-run yards per carry among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `yards_after_contact_per_carry` | numeric | Rushing yards gained after first contact, per carry. |
+| `yards_after_contact_per_carry_rank` | integer | Rank of the team's yards after contact per carry among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `yards_before_contact_per_carry` | numeric | Rushing yards gained before first contact, per carry. |
+| `yards_before_contact_per_carry_rank` | integer | Rank of the team's yards before contact per carry among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `run_stuff_rate` | numeric | Share of the offense's runs that were stuffed (tackled for a loss or no gain), as a fraction (0-1). |
+| `run_stuff_rate_rank` | integer | Rank of the team's run stuff rate among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `run_play_pct` | numeric | Share of the offense's plays that were runs, as a fraction (0-1). |
+| `run_play_pct_rank` | integer | Rank of the team's run-play share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `run_rate_oe` | numeric | Run rate over expectation: the offense's run rate minus PFF's expected run rate, as a fraction (positive = ran more than expected). |
+| `run_rate_oe_rank` | integer | Rank of the team's run rate over expectation among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `zone_run_pct` | numeric | Share of the offense's runs using a zone blocking scheme, as a fraction (0-1). |
+| `zone_run_pct_rank` | integer | Rank of the team's zone-run share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `gap_run_pct` | numeric | Share of the offense's runs using a gap blocking scheme, as a fraction (0-1). |
+| `gap_run_pct_rank` | integer | Rank of the team's gap-run share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `inside_zone_rate` | numeric | Share of the offense's runs using the inside-zone concept, as a fraction (0-1). |
+| `inside_zone_rate_rank` | integer | Rank of the team's inside-zone rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `outside_zone_rate` | numeric | Share of the offense's runs using the outside-zone concept, as a fraction (0-1). |
+| `outside_zone_rate_rank` | integer | Rank of the team's outside-zone rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `man_duo_rate` | numeric | Share of the offense's runs using the man (duo) concept, as a fraction (0-1). |
+| `man_duo_rate_rank` | integer | Rank of the team's man (duo) rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `power_rate` | numeric | Share of the offense's runs using the power concept, as a fraction (0-1). |
+| `power_rate_rank` | integer | Rank of the team's power rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `counter_rate` | numeric | Share of the offense's runs using the counter concept, as a fraction (0-1). |
+| `counter_rate_rank` | integer | Rank of the team's counter rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pull_lead_rate` | numeric | Share of the offense's runs using the pull-lead (pin-pull) concept, as a fraction (0-1). |
+| `pull_lead_rate_rank` | integer | Rank of the team's pull-lead (pin-pull) rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **defense-overall-success**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_play_allowed` | numeric |  |
-| `epa_per_play_allowed_rank` | integer |  |
-| `success_rate_allowed` | numeric |  |
-| `success_rate_allowed_rank` | integer |  |
-| `explosive_play_rate_allowed` | numeric |  |
-| `explosive_play_rate_allowed_rank` | integer |  |
-| `red_zone_conversion_rate_allowed` | numeric |  |
-| `red_zone_conversion_rate_allowed_rank` | integer |  |
-| `third_down_conversion_rate_allowed` | numeric |  |
-| `third_down_conversion_rate_allowed_rank` | integer |  |
-| `defensive_turnovers` | integer |  |
-| `defensive_turnovers_rank` | integer |  |
-| `points_per_drive_allowed` | numeric |  |
-| `points_per_drive_allowed_rank` | integer |  |
-| `missed_tackle_rate` | numeric |  |
-| `missed_tackle_rate_rank` | integer |  |
-| `wepa_allowed` | numeric |  |
-| `wepa_allowed_rank` | integer |  |
-| `conversion_after4_allowed` | numeric |  |
-| `conversion_after4_allowed_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_play_allowed` | numeric | Expected points added per play allowed by the defense. |
+| `epa_per_play_allowed_rank` | integer | Rank of the team's EPA per play allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `success_rate_allowed` | numeric | Share of opponent plays that were successful, as a fraction (0-1). |
+| `success_rate_allowed_rank` | integer | Rank of the team's success rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `explosive_play_rate_allowed` | numeric | Share of opponent plays that were explosive plays, as a fraction (0-1). |
+| `explosive_play_rate_allowed_rank` | integer | Rank of the team's explosive-play rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `red_zone_conversion_rate_allowed` | numeric | Red-zone conversion rate allowed to opponents, as a fraction (0-1). |
+| `red_zone_conversion_rate_allowed_rank` | integer | Rank of the team's red-zone conversion rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `third_down_conversion_rate_allowed` | numeric | Share of opponent third downs converted, as a fraction (0-1). |
+| `third_down_conversion_rate_allowed_rank` | integer | Rank of the team's third-down conversion rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `defensive_turnovers` | integer | Turnovers forced by the defense. |
+| `defensive_turnovers_rank` | integer | Rank of the team's defensive turnovers among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `points_per_drive_allowed` | numeric | Points allowed per opponent drive. |
+| `points_per_drive_allowed_rank` | integer | Rank of the team's points per drive allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `missed_tackle_rate` | numeric | Missed-tackle rate of the defense, as a fraction (0-1). |
+| `missed_tackle_rate_rank` | integer | Rank of the team's missed-tackle rate among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `wepa_allowed` | numeric | Weighted EPA per play allowed, PFF's 'Weighted EPA / play allowed'. |
+| `wepa_allowed_rank` | integer | Rank of the team's weighted EPA per play allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `conversion_after4_allowed` | numeric | Series conversion rate allowed: share of opponent series that produced a new first down or a touchdown, as a fraction (0-1). |
+| `conversion_after4_allowed_rank` | integer | Rank of the team's series conversion rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
 
 **defense-passing**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_pass_play_allowed` | numeric |  |
-| `epa_per_pass_play_allowed_rank` | integer |  |
-| `pass_success_rate_allowed` | numeric |  |
-| `pass_success_rate_allowed_rank` | integer |  |
-| `explosive_pass_rate_allowed` | numeric |  |
-| `explosive_pass_rate_allowed_rank` | integer |  |
-| `yards_per_attempt_allowed` | numeric |  |
-| `yards_per_attempt_allowed_rank` | integer |  |
-| `completion_percentage_allowed` | numeric |  |
-| `completion_percentage_allowed_rank` | integer |  |
-| `passer_rating_allowed` | numeric |  |
-| `passer_rating_allowed_rank` | integer |  |
-| `passing_touchdowns_allowed` | integer |  |
-| `passing_touchdowns_allowed_rank` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `interceptions_rank` | integer |  |
-| `air_yard_pct_allowed` | numeric |  |
-| `air_yard_pct_allowed_rank` | integer |  |
-| `yac_pct_allowed` | numeric |  |
-| `yac_pct_allowed_rank` | integer |  |
-| `yac_per_reception_allowed` | numeric |  |
-| `yac_per_reception_allowed_rank` | integer |  |
-| `pressure_rate` | numeric |  |
-| `pressure_rate_rank` | integer |  |
-| `pressure_oe` | numeric |  |
-| `pressure_oe_rank` | integer |  |
-| `total_pressures` | integer |  |
-| `total_pressures_rank` | integer |  |
-| `sack_rate` | numeric |  |
-| `sack_rate_rank` | integer |  |
-| `sacks` | integer | The Number of times sacked. |
-| `sacks_rank` | integer |  |
-| `scramble_rushing_yards_allowed` | integer |  |
-| `scramble_rushing_yards_allowed_rank` | integer |  |
-| `scramble_rushing_touchdowns_allowed` | integer |  |
-| `scramble_rushing_touchdowns_allowed_rank` | integer |  |
-| `scramble_yards_per_carry_allowed` | numeric |  |
-| `scramble_yards_per_carry_allowed_rank` | integer |  |
-| `man_coverage_pct` | numeric |  |
-| `man_coverage_pct_rank` | integer |  |
-| `zone_coverage_pct` | numeric |  |
-| `zone_coverage_pct_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_pass_play_allowed` | numeric | Expected points added per opponent pass play. |
+| `epa_per_pass_play_allowed_rank` | integer | Rank of the team's EPA per pass play allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `pass_success_rate_allowed` | numeric | Share of opponent pass plays that were successful, as a fraction (0-1). |
+| `pass_success_rate_allowed_rank` | integer | Rank of the team's passing success rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `explosive_pass_rate_allowed` | numeric | Share of opponent pass plays that were explosive, as a fraction (0-1). |
+| `explosive_pass_rate_allowed_rank` | integer | Rank of the team's explosive-pass rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `yards_per_attempt_allowed` | numeric | Passing yards allowed per opponent pass attempt. |
+| `yards_per_attempt_allowed_rank` | integer | Rank of the team's yards per pass attempt allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `completion_percentage_allowed` | numeric | Completion percentage allowed to opposing passers, as a fraction (0-1). |
+| `completion_percentage_allowed_rank` | integer | Rank of the team's completion percentage allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `passer_rating_allowed` | numeric | Passer rating allowed to opposing passers (NFL passer-rating scale). |
+| `passer_rating_allowed_rank` | integer | Rank of the team's passer rating allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `passing_touchdowns_allowed` | integer | Passing touchdowns allowed. |
+| `passing_touchdowns_allowed_rank` | integer | Rank of the team's passing touchdowns allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `interceptions` | integer | Interceptions made by the defense. |
+| `interceptions_rank` | integer | Rank of the team's interceptions among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `air_yard_pct_allowed` | numeric | Share of passing yards allowed that came through the air rather than after the catch, as a fraction (0-1); complements yac_pct_allowed. |
+| `air_yard_pct_allowed_rank` | integer | Rank of the team's air-yard share of passing yards allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `yac_pct_allowed` | numeric | Share of passing yards allowed that came after the catch, as a fraction (0-1); complements air_yard_pct_allowed. |
+| `yac_pct_allowed_rank` | integer | Rank of the team's yards-after-catch share of passing yards allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `yac_per_reception_allowed` | numeric | Yards after the catch allowed per reception. |
+| `yac_per_reception_allowed_rank` | integer | Rank of the team's yards after catch allowed per reception among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `pressure_rate` | numeric | Share of opponent dropbacks on which the defense generated pressure, as a fraction (0-1). |
+| `pressure_rate_rank` | integer | Rank of the team's pressure rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pressure_oe` | numeric | Pressure rate over expectation: the defense's pressure rate minus PFF's expected rate, as a fraction (positive = more pressure than expected). |
+| `pressure_oe_rank` | integer | Rank of the team's pressure rate over expectation among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `total_pressures` | integer | Total quarterback pressures generated by the defense. |
+| `total_pressures_rank` | integer | Rank of the team's total pressures among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `sack_rate` | numeric | Share of opponent dropbacks that ended in a sack, as a fraction (0-1). |
+| `sack_rate_rank` | integer | Rank of the team's sack rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `sacks` | integer | Sacks recorded by the defense. |
+| `sacks_rank` | integer | Rank of the team's sacks among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `scramble_rushing_yards_allowed` | integer | Rushing yards allowed on opponent quarterback scrambles. |
+| `scramble_rushing_yards_allowed_rank` | integer | Rank of the team's scramble rushing yards allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `scramble_rushing_touchdowns_allowed` | integer | Rushing touchdowns allowed on opponent quarterback scrambles. |
+| `scramble_rushing_touchdowns_allowed_rank` | integer | Rank of the team's scramble rushing touchdowns allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `scramble_yards_per_carry_allowed` | numeric | Rushing yards allowed per opponent quarterback scramble. |
+| `scramble_yards_per_carry_allowed_rank` | integer | Rank of the team's yards per scramble allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `man_coverage_pct` | numeric | Share of opponent pass plays on which the defense played man coverage, as a fraction (0-1). |
+| `man_coverage_pct_rank` | integer | Rank of the team's man-coverage share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `zone_coverage_pct` | numeric | Share of opponent pass plays on which the defense played zone coverage, as a fraction (0-1). |
+| `zone_coverage_pct_rank` | integer | Rank of the team's zone-coverage share among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **defense-rushing**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `epa_per_run_play_allowed` | numeric |  |
-| `epa_per_run_play_allowed_rank` | integer |  |
-| `rush_success_rate_allowed` | numeric |  |
-| `rush_success_rate_allowed_rank` | integer |  |
-| `explosive_run_rate_allowed` | numeric |  |
-| `explosive_run_rate_allowed_rank` | integer |  |
-| `designed_rushing_yards_allowed` | integer |  |
-| `designed_rushing_yards_allowed_rank` | integer |  |
-| `designed_rushing_touchdowns_allowed` | integer |  |
-| `designed_rushing_touchdowns_allowed_rank` | integer |  |
-| `designed_yards_per_carry_allowed` | numeric |  |
-| `designed_yards_per_carry_allowed_rank` | integer |  |
-| `yards_after_contact_per_carry_allowed` | numeric |  |
-| `yards_after_contact_per_carry_allowed_rank` | integer |  |
-| `yards_before_contact_per_carry_allowed` | numeric |  |
-| `yards_before_contact_per_carry_allowed_rank` | integer |  |
-| `stuff_rate` | numeric |  |
-| `stuff_rate_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `epa_per_run_play_allowed` | numeric | Expected points added per opponent run play. |
+| `epa_per_run_play_allowed_rank` | integer | Rank of the team's EPA per run play allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `rush_success_rate_allowed` | numeric | Share of opponent run plays that were successful, as a fraction (0-1). |
+| `rush_success_rate_allowed_rank` | integer | Rank of the team's rushing success rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `explosive_run_rate_allowed` | numeric | Share of opponent run plays that were explosive, as a fraction (0-1). |
+| `explosive_run_rate_allowed_rank` | integer | Rank of the team's explosive-run rate allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `designed_rushing_yards_allowed` | integer | Rushing yards allowed on opponent designed runs. |
+| `designed_rushing_yards_allowed_rank` | integer | Rank of the team's designed rushing yards allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `designed_rushing_touchdowns_allowed` | integer | Rushing touchdowns allowed on opponent designed runs. |
+| `designed_rushing_touchdowns_allowed_rank` | integer | Rank of the team's designed rushing touchdowns allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `designed_yards_per_carry_allowed` | numeric | Rushing yards allowed per carry on opponent designed runs. |
+| `designed_yards_per_carry_allowed_rank` | integer | Rank of the team's designed-run yards per carry allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `yards_after_contact_per_carry_allowed` | numeric | Rushing yards allowed after first contact, per opponent carry. |
+| `yards_after_contact_per_carry_allowed_rank` | integer | Rank of the team's yards after contact per carry allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `yards_before_contact_per_carry_allowed` | numeric | Rushing yards allowed before first contact, per opponent carry. |
+| `yards_before_contact_per_carry_allowed_rank` | integer | Rank of the team's yards before contact per carry allowed among the teams in the requested scope (league, conference or division); 1 = lowest, tied teams share a rank. |
+| `stuff_rate` | numeric | Share of opponent runs the defense stuffed (tackle for loss or no gain), as a fraction (0-1). |
+| `stuff_rate_rank` | integer | Rank of the team's stuff rate among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **defense-opponent-tendencies**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `play_action_rate_against` | numeric |  |
-| `play_action_rate_against_rank` | integer |  |
-| `screen_rate_against` | numeric |  |
-| `screen_rate_against_rank` | integer |  |
-| `adot_against` | numeric |  |
-| `adot_against_rank` | integer |  |
-| `time_to_throw_against` | numeric |  |
-| `time_to_throw_against_rank` | integer |  |
-| `zone_run_pct_against` | numeric |  |
-| `zone_run_pct_against_rank` | integer |  |
-| `gap_run_pct_against` | numeric |  |
-| `gap_run_pct_against_rank` | integer |  |
-| `pass_rate_against` | numeric |  |
-| `pass_rate_against_rank` | integer |  |
-| `run_rate_against` | numeric |  |
-| `run_rate_against_rank` | integer |  |
+| `team_id` | integer | PFF franchise (team) id, stable across seasons; the franchise_id used across the PFF Developer API. |
+| `abbreviation` | character | Short team code, as the scoreboard prints it (e.g. "ARI"). |
+| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
+| `play_action_rate_against` | numeric | Share of opponent pass plays against this defense that used play action, as a fraction (0-1). |
+| `play_action_rate_against_rank` | integer | Rank of the team's play-action rate against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `screen_rate_against` | numeric | Share of opponent pass plays against this defense that were screens, as a fraction (0-1). |
+| `screen_rate_against_rank` | integer | Rank of the team's screen rate against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `adot_against` | numeric | Average depth of target, in air yards, of opponent passes against this defense. |
+| `adot_against_rank` | integer | Rank of the team's average depth of target against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `time_to_throw_against` | numeric | Average time to throw, in seconds, of opposing passers against this defense. |
+| `time_to_throw_against_rank` | integer | Rank of the team's average time to throw against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `zone_run_pct_against` | numeric | Share of opponent runs against this defense using a zone blocking scheme, as a fraction (0-1). |
+| `zone_run_pct_against_rank` | integer | Rank of the team's zone-run share against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `gap_run_pct_against` | numeric | Share of opponent runs against this defense using a gap blocking scheme, as a fraction (0-1). |
+| `gap_run_pct_against_rank` | integer | Rank of the team's gap-run share against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `pass_rate_against` | numeric | Share of opponent plays against this defense that were passes, as a fraction (0-1). |
+| `pass_rate_against_rank` | integer | Rank of the team's pass rate against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
+| `run_rate_against` | numeric | Share of opponent plays against this defense that were runs, as a fraction (0-1). |
+| `run_rate_against_rank` | integer | Rank of the team's run rate against among the teams in the requested scope (league, conference or division); 1 = highest, tied teams share a rank. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -8970,23 +8970,23 @@ A team's depth-chart roster with grades, ranks and snap counts
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `name` | character | Player's display name as PFF lists it (e.g. "Joe Burrow"). |
 | `jersey` | character | Athlete's jersey number as a string. |
 | `position` | character | Position abbreviation. |
-| `alignment` | character |  |
-| `unit` | character |  |
-| `depth_order` | integer |  |
-| `grade` | numeric | ESPN recruit grade (0-100; `0` = not rated). |
-| `grade_rank` | integer |  |
-| `grade_rank_of` | integer |  |
-| `height` | integer | Athlete height in inches. |
+| `alignment` | character | Depth-chart alignment PFF lists the player at (e.g. "QB", "HB"); rows come in depth-chart order. |
+| `unit` | character | Depth-chart unit of the row: offense, defense or special-teams. |
+| `depth_order` | integer | Player's order on the depth chart at his alignment (1 = first on the depth chart). |
+| `grade` | numeric | Player's PFF season grade (0-100) for the requested season; null when he has no graded snaps. |
+| `grade_rank` | integer | Rank of the player's PFF grade within the pool PFF ranks him in (1 = highest grade; pool size in grade_rank_of). |
+| `grade_rank_of` | integer | Size of the ranked pool behind grade_rank (PFF's 'Grade rank of'); null when the player is unranked. |
+| `height` | integer | Athlete height. ESPN rosters give total inches (e.g. 74); the PFF Developer API roster packs feet and inches as feet x 100 + inches (e.g. 604 = 6 ft 4 in). |
 | `weight` | integer | Athlete weight in pounds. |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `eligibility_year` | integer |  |
+| `birth_date` | character | Player's date of birth (YYYY-MM-DD). |
+| `eligibility_year` | integer | Eligibility year PFF lists for the player; on the NFL rows captured it is the season the player became draft-eligible (e.g. 2020). |
 | `status` | character | Roster status (e.g. Active). |
-| `snap_counts` | integer |  |
-| `snap_pct` | numeric |  |
+| `snap_counts` | integer | Snaps the player played for the team in the requested season; null when he played none. |
+| `snap_pct` | numeric | Player's snap share in percent (e.g. 98.8), PFF's 'Snap %'; null when he played no snaps. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -9017,24 +9017,24 @@ A team's season schedule, with results and strength of schedule
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `week` | integer | Season week. |
-| `week_label` | character |  |
-| `is_bye` | logical |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `kickoff` | character |  |
-| `home_away` | character | `home` or `away`. |
-| `opponent_franchise_id` | integer |  |
-| `opponent_abbr` | character | Opponent abbreviation. |
-| `opponent_name` | character | Opponent display name. |
-| `opponent_division` | character |  |
-| `opponent_wins` | integer |  |
-| `opponent_losses` | integer |  |
-| `result` | character | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `team_score` | integer | Offense team score at the time of the play. |
-| `opponent_score` | integer | Defense / opponent team score at the time of the play. |
-| `sos_score` | numeric |  |
-| `opponent_elo` | integer |  |
-| `opponent_elo_rank` | integer |  |
+| `week` | integer | Week number of the row within the season, as PFF numbers weeks (see week_label for the display label). |
+| `week_label` | character | Display label PFF shows for the week (e.g. "1"). |
+| `is_bye` | logical | True when the week is the team's bye; a bye row carries null in every game field. |
+| `game_id` | integer | PFF game id (the value the game_id query parameter takes); null on a bye. |
+| `kickoff` | character | Scheduled kickoff in UTC, ISO 8601 (e.g. "2022-09-11T17:00:00.000Z"); null on a bye. |
+| `home_away` | character | Whether the team was home or away: "home" or "away"; null on a bye. |
+| `opponent_franchise_id` | integer | PFF franchise id of the opponent; null on a bye. |
+| `opponent_abbr` | character | Opponent's short team code (e.g. "PIT"). |
+| `opponent_name` | character | Opponent's full team name (e.g. "Pittsburgh Steelers"). |
+| `opponent_division` | character | Division or conference the opponent belongs to (e.g. "AFC North"). |
+| `opponent_wins` | integer | Opponent's wins entering the game (its record before kickoff). |
+| `opponent_losses` | integer | Opponent's losses entering the game (its record before kickoff). |
+| `result` | character | Game result for the team: W, L or T; null for a bye or a game not yet played. |
+| `team_score` | integer | Points the team scored in the game; null for a bye or a game not yet played. |
+| `opponent_score` | integer | Points the opponent scored in the game; null for a bye or a game not yet played. |
+| `sos_score` | numeric | PFF strength-of-schedule score for this game ('SOS score'); in the captured rows it rises with opponent_elo (higher = tougher game). The season summary sits in the response's sos block. |
+| `opponent_elo` | integer | Opponent's PFF Elo rating (e.g. 1486). |
+| `opponent_elo_rank` | integer | Opponent's rank by PFF Elo within the league (1 = highest Elo). |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -9069,229 +9069,229 @@ A team's leaders for one position group, with rank and percentile
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey` | character | Jersey number. |
-| `games` | integer | Games played in career |
-| `games_rank` | integer |  |
-| `games_rank_of` | integer |  |
-| `games_percentile` | integer |  |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `targets_rank` | integer |  |
-| `targets_rank_of` | integer |  |
-| `targets_percentile` | integer |  |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `receptions_rank` | integer |  |
-| `receptions_rank_of` | integer |  |
-| `receptions_percentile` | integer |  |
-| `reception_pct` | numeric |  |
-| `reception_pct_rank` | integer |  |
-| `reception_pct_rank_of` | integer |  |
-| `reception_pct_percentile` | integer |  |
-| `receiving_yards` | integer | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `receiving_yards_rank` | integer |  |
-| `receiving_yards_rank_of` | integer |  |
-| `receiving_yards_percentile` | integer |  |
-| `yards_per_reception` | numeric |  |
-| `yards_per_reception_rank` | integer |  |
-| `yards_per_reception_rank_of` | integer |  |
-| `yards_per_reception_percentile` | integer |  |
-| `receiving_td` | integer | Receiving - passing reception touchdowns. |
-| `receiving_td_rank` | integer |  |
-| `receiving_td_rank_of` | integer |  |
-| `receiving_td_percentile` | integer |  |
-| `grade_offense` | numeric |  |
-| `grade_offense_rank` | integer |  |
-| `grade_offense_rank_of` | integer |  |
-| `grade_offense_percentile` | integer |  |
-| `grade_receiving` | numeric |  |
-| `grade_receiving_rank` | integer |  |
-| `grade_receiving_rank_of` | integer |  |
-| `grade_receiving_percentile` | integer |  |
-| `grade_drop` | numeric |  |
-| `grade_drop_rank` | integer |  |
-| `grade_drop_rank_of` | integer |  |
-| `grade_drop_percentile` | integer |  |
-| `grade_fumble` | numeric |  |
-| `grade_fumble_rank` | integer |  |
-| `grade_fumble_rank_of` | integer |  |
-| `grade_fumble_percentile` | integer |  |
-| `grade_pass_block` | numeric |  |
-| `grade_pass_block_rank` | integer |  |
-| `grade_pass_block_rank_of` | integer |  |
-| `grade_pass_block_percentile` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `name` | character | Player's display name as PFF lists it. |
+| `position` | character | PFF position code (e.g. QB, HB, WR, TE, ED, DI, LB, CB, S); qualification floors and ranking pools are per position. |
+| `jersey` | character | Jersey number as a string; leading zeros are meaningful (e.g. "01"). |
+| `games` | integer | Games played in the requested season part (PFF column '#G'). |
+| `games_rank` | integer | Player's rank on games played among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `games_rank_of` | integer | Number of qualified players at his position league-wide ranked on games played, the pool games_rank is out of; null when the player is below his position's qualifying volume. |
+| `games_percentile` | integer | Player's percentile (0-100, higher = better) on games played among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `targets` | integer | Passes thrown to the player (targets) over the requested season part. |
+| `targets_rank` | integer | Player's rank on targets among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `targets_rank_of` | integer | Number of qualified players at his position league-wide ranked on targets, the pool targets_rank is out of; null when the player is below his position's qualifying volume. |
+| `targets_percentile` | integer | Player's percentile (0-100, higher = better) on targets among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `receptions` | integer | Passes caught by the player over the requested season part. |
+| `receptions_rank` | integer | Player's rank on receptions among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `receptions_rank_of` | integer | Number of qualified players at his position league-wide ranked on receptions, the pool receptions_rank is out of; null when the player is below his position's qualifying volume. |
+| `receptions_percentile` | integer | Player's percentile (0-100, higher = better) on receptions among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `reception_pct` | numeric | Receptions per target (catch rate), as a fraction (0-1). |
+| `reception_pct_rank` | integer | Player's rank on catch rate among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `reception_pct_rank_of` | integer | Number of qualified players at his position league-wide ranked on catch rate, the pool reception_pct_rank is out of; null when the player is below his position's qualifying volume. |
+| `reception_pct_percentile` | integer | Player's percentile (0-100, higher = better) on catch rate among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `receiving_yards` | integer | Receiving yards gained by the player. |
+| `receiving_yards_rank` | integer | Player's rank on receiving yards among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `receiving_yards_rank_of` | integer | Number of qualified players at his position league-wide ranked on receiving yards, the pool receiving_yards_rank is out of; null when the player is below his position's qualifying volume. |
+| `receiving_yards_percentile` | integer | Player's percentile (0-100, higher = better) on receiving yards among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `yards_per_reception` | numeric | Receiving yards per reception (receiving_yards / receptions). |
+| `yards_per_reception_rank` | integer | Player's rank on yards per reception among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `yards_per_reception_rank_of` | integer | Number of qualified players at his position league-wide ranked on yards per reception, the pool yards_per_reception_rank is out of; null when the player is below his position's qualifying volume. |
+| `yards_per_reception_percentile` | integer | Player's percentile (0-100, higher = better) on yards per reception among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `receiving_td` | integer | Receiving touchdowns scored by the player. |
+| `receiving_td_rank` | integer | Player's rank on receiving touchdowns among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `receiving_td_rank_of` | integer | Number of qualified players at his position league-wide ranked on receiving touchdowns, the pool receiving_td_rank is out of; null when the player is below his position's qualifying volume. |
+| `receiving_td_percentile` | integer | Player's percentile (0-100, higher = better) on receiving touchdowns among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_offense` | numeric | PFF overall offense grade (0-100). |
+| `grade_offense_rank` | integer | Player's rank on PFF offense grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_offense_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF offense grade, the pool grade_offense_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_offense_percentile` | integer | Player's percentile (0-100, higher = better) on PFF offense grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_receiving` | numeric | PFF receiving grade (0-100). |
+| `grade_receiving_rank` | integer | Player's rank on PFF receiving grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_receiving_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF receiving grade, the pool grade_receiving_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_receiving_percentile` | integer | Player's percentile (0-100, higher = better) on PFF receiving grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_drop` | numeric | PFF hands/drop grade (0-100). |
+| `grade_drop_rank` | integer | Player's rank on PFF hands/drop grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_drop_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF hands/drop grade, the pool grade_drop_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_drop_percentile` | integer | Player's percentile (0-100, higher = better) on PFF hands/drop grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_fumble` | numeric | PFF ball-security (hands/fumble) grade (0-100). |
+| `grade_fumble_rank` | integer | Player's rank on PFF ball-security grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_fumble_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF ball-security grade, the pool grade_fumble_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_fumble_percentile` | integer | Player's percentile (0-100, higher = better) on PFF ball-security grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_pass_block` | numeric | PFF pass-blocking grade (0-100); null when the player has no graded pass-blocking snaps. |
+| `grade_pass_block_rank` | integer | Player's rank on PFF pass-blocking grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_pass_block_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF pass-blocking grade, the pool grade_pass_block_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_pass_block_percentile` | integer | Player's percentile (0-100, higher = better) on PFF pass-blocking grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
 
 **passing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey` | character | Jersey number. |
-| `games` | integer | Games played in career |
-| `games_rank` | integer |  |
-| `games_rank_of` | integer |  |
-| `games_percentile` | integer |  |
-| `pass_attempts` | integer | Career pass attempts |
-| `pass_attempts_rank` | integer |  |
-| `pass_attempts_rank_of` | integer |  |
-| `pass_attempts_percentile` | integer |  |
-| `completions` | integer | The number of completed passes. |
-| `completions_rank` | integer |  |
-| `completions_rank_of` | integer |  |
-| `completions_percentile` | integer |  |
-| `completion_pct` | numeric | Passing completion percentage. |
-| `completion_pct_rank` | integer |  |
-| `completion_pct_rank_of` | integer |  |
-| `completion_pct_percentile` | integer |  |
-| `passing_yards` | integer | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `passing_yards_rank` | integer |  |
-| `passing_yards_rank_of` | integer |  |
-| `passing_yards_percentile` | integer |  |
-| `yards_per_attempt` | numeric |  |
-| `yards_per_attempt_rank` | integer |  |
-| `yards_per_attempt_rank_of` | integer |  |
-| `yards_per_attempt_percentile` | integer |  |
-| `passing_td` | integer | Passing touchdowns thrown. |
-| `passing_td_rank` | integer |  |
-| `passing_td_rank_of` | integer |  |
-| `passing_td_percentile` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `interceptions_rank` | integer |  |
-| `interceptions_rank_of` | integer |  |
-| `interceptions_percentile` | integer |  |
-| `grade_offense` | numeric |  |
-| `grade_offense_rank` | integer |  |
-| `grade_offense_rank_of` | integer |  |
-| `grade_offense_percentile` | integer |  |
-| `grade_pass` | numeric |  |
-| `grade_pass_rank` | integer |  |
-| `grade_pass_rank_of` | integer |  |
-| `grade_pass_percentile` | integer |  |
-| `grade_run` | numeric |  |
-| `grade_run_rank` | integer |  |
-| `grade_run_rank_of` | integer |  |
-| `grade_run_percentile` | integer |  |
-| `grade_fumble` | numeric |  |
-| `grade_fumble_rank` | integer |  |
-| `grade_fumble_rank_of` | integer |  |
-| `grade_fumble_percentile` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `name` | character | Player's display name as PFF lists it. |
+| `position` | character | PFF position code (e.g. QB, HB, WR, TE, ED, DI, LB, CB, S); qualification floors and ranking pools are per position. |
+| `jersey` | character | Jersey number as a string; leading zeros are meaningful (e.g. "01"). |
+| `games` | integer | Games played in the requested season part (PFF column '#G'). |
+| `games_rank` | integer | Player's rank on games played among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `games_rank_of` | integer | Number of qualified players at his position league-wide ranked on games played, the pool games_rank is out of; null when the player is below his position's qualifying volume. |
+| `games_percentile` | integer | Player's percentile (0-100, higher = better) on games played among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `pass_attempts` | integer | Pass attempts thrown by the player. |
+| `pass_attempts_rank` | integer | Player's rank on pass attempts among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `pass_attempts_rank_of` | integer | Number of qualified players at his position league-wide ranked on pass attempts, the pool pass_attempts_rank is out of; null when the player is below his position's qualifying volume. |
+| `pass_attempts_percentile` | integer | Player's percentile (0-100, higher = better) on pass attempts among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `completions` | integer | Passes the player completed. |
+| `completions_rank` | integer | Player's rank on completions among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `completions_rank_of` | integer | Number of qualified players at his position league-wide ranked on completions, the pool completions_rank is out of; null when the player is below his position's qualifying volume. |
+| `completions_percentile` | integer | Player's percentile (0-100, higher = better) on completions among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `completion_pct` | numeric | Completion percentage as a fraction (0-1). |
+| `completion_pct_rank` | integer | Player's rank on completion percentage among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `completion_pct_rank_of` | integer | Number of qualified players at his position league-wide ranked on completion percentage, the pool completion_pct_rank is out of; null when the player is below his position's qualifying volume. |
+| `completion_pct_percentile` | integer | Player's percentile (0-100, higher = better) on completion percentage among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `passing_yards` | integer | Passing yards gained by the player. |
+| `passing_yards_rank` | integer | Player's rank on passing yards among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `passing_yards_rank_of` | integer | Number of qualified players at his position league-wide ranked on passing yards, the pool passing_yards_rank is out of; null when the player is below his position's qualifying volume. |
+| `passing_yards_percentile` | integer | Player's percentile (0-100, higher = better) on passing yards among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `yards_per_attempt` | numeric | Passing yards per pass attempt (passing_yards / pass_attempts). |
+| `yards_per_attempt_rank` | integer | Player's rank on yards per pass attempt among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `yards_per_attempt_rank_of` | integer | Number of qualified players at his position league-wide ranked on yards per pass attempt, the pool yards_per_attempt_rank is out of; null when the player is below his position's qualifying volume. |
+| `yards_per_attempt_percentile` | integer | Player's percentile (0-100, higher = better) on yards per pass attempt among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `passing_td` | integer | Passing touchdowns thrown by the player. |
+| `passing_td_rank` | integer | Player's rank on passing touchdowns among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `passing_td_rank_of` | integer | Number of qualified players at his position league-wide ranked on passing touchdowns, the pool passing_td_rank is out of; null when the player is below his position's qualifying volume. |
+| `passing_td_percentile` | integer | Player's percentile (0-100, higher = better) on passing touchdowns among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `interceptions` | integer | Interceptions: thrown by the passer in the passing group, made by the defender in the defense group. |
+| `interceptions_rank` | integer | Player's rank on interceptions among qualified players at his position league-wide (1 = best: fewest thrown in the passing group, most made in the defense group; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `interceptions_rank_of` | integer | Number of qualified players at his position league-wide ranked on interceptions, the pool interceptions_rank is out of; null when the player is below his position's qualifying volume. |
+| `interceptions_percentile` | integer | Player's percentile (0-100, higher = better) on interceptions among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_offense` | numeric | PFF overall offense grade (0-100). |
+| `grade_offense_rank` | integer | Player's rank on PFF offense grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_offense_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF offense grade, the pool grade_offense_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_offense_percentile` | integer | Player's percentile (0-100, higher = better) on PFF offense grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_pass` | numeric | PFF passing grade (0-100). |
+| `grade_pass_rank` | integer | Player's rank on PFF passing grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_pass_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF passing grade, the pool grade_pass_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_pass_percentile` | integer | Player's percentile (0-100, higher = better) on PFF passing grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_run` | numeric | PFF rushing grade (0-100). |
+| `grade_run_rank` | integer | Player's rank on PFF rushing grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_run_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF rushing grade, the pool grade_run_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_run_percentile` | integer | Player's percentile (0-100, higher = better) on PFF rushing grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_fumble` | numeric | PFF ball-security (hands/fumble) grade (0-100). |
+| `grade_fumble_rank` | integer | Player's rank on PFF ball-security grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_fumble_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF ball-security grade, the pool grade_fumble_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_fumble_percentile` | integer | Player's percentile (0-100, higher = better) on PFF ball-security grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
 
 **rushing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey` | character | Jersey number. |
-| `games` | integer | Games played in career |
-| `games_rank` | integer |  |
-| `games_rank_of` | integer |  |
-| `games_percentile` | integer |  |
-| `rush_attempts` | integer | The number of rushing attempts |
-| `rush_attempts_rank` | integer |  |
-| `rush_attempts_rank_of` | integer |  |
-| `rush_attempts_percentile` | integer |  |
-| `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `rushing_yards_rank` | integer |  |
-| `rushing_yards_rank_of` | integer |  |
-| `rushing_yards_percentile` | integer |  |
-| `yards_per_carry` | numeric |  |
-| `yards_per_carry_rank` | integer |  |
-| `yards_per_carry_rank_of` | integer |  |
-| `yards_per_carry_percentile` | integer |  |
-| `yards_after_contact_per_attempt` | numeric |  |
-| `yards_after_contact_per_attempt_rank` | integer |  |
-| `yards_after_contact_per_attempt_rank_of` | integer |  |
-| `yards_after_contact_per_attempt_percentile` | integer |  |
-| `rushing_td` | integer | Rushing touchdowns. |
-| `rushing_td_rank` | integer |  |
-| `rushing_td_rank_of` | integer |  |
-| `rushing_td_percentile` | integer |  |
-| `fumbles` | integer |  |
-| `fumbles_rank` | integer |  |
-| `fumbles_rank_of` | integer |  |
-| `fumbles_percentile` | integer |  |
-| `grade_offense` | numeric |  |
-| `grade_offense_rank` | integer |  |
-| `grade_offense_rank_of` | integer |  |
-| `grade_offense_percentile` | integer |  |
-| `grade_run` | numeric |  |
-| `grade_run_rank` | integer |  |
-| `grade_run_rank_of` | integer |  |
-| `grade_run_percentile` | integer |  |
-| `grade_fumble` | numeric |  |
-| `grade_fumble_rank` | integer |  |
-| `grade_fumble_rank_of` | integer |  |
-| `grade_fumble_percentile` | integer |  |
-| `grade_receiving` | numeric |  |
-| `grade_receiving_rank` | integer |  |
-| `grade_receiving_rank_of` | integer |  |
-| `grade_receiving_percentile` | integer |  |
-| `grade_pass_block` | numeric |  |
-| `grade_pass_block_rank` | integer |  |
-| `grade_pass_block_rank_of` | integer |  |
-| `grade_pass_block_percentile` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `name` | character | Player's display name as PFF lists it. |
+| `position` | character | PFF position code (e.g. QB, HB, WR, TE, ED, DI, LB, CB, S); qualification floors and ranking pools are per position. |
+| `jersey` | character | Jersey number as a string; leading zeros are meaningful (e.g. "01"). |
+| `games` | integer | Games played in the requested season part (PFF column '#G'). |
+| `games_rank` | integer | Player's rank on games played among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `games_rank_of` | integer | Number of qualified players at his position league-wide ranked on games played, the pool games_rank is out of; null when the player is below his position's qualifying volume. |
+| `games_percentile` | integer | Player's percentile (0-100, higher = better) on games played among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `rush_attempts` | integer | Rushing attempts (carries) by the player. |
+| `rush_attempts_rank` | integer | Player's rank on rushing attempts among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `rush_attempts_rank_of` | integer | Number of qualified players at his position league-wide ranked on rushing attempts, the pool rush_attempts_rank is out of; null when the player is below his position's qualifying volume. |
+| `rush_attempts_percentile` | integer | Player's percentile (0-100, higher = better) on rushing attempts among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `rushing_yards` | integer | Rushing yards gained by the player. |
+| `rushing_yards_rank` | integer | Player's rank on rushing yards among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `rushing_yards_rank_of` | integer | Number of qualified players at his position league-wide ranked on rushing yards, the pool rushing_yards_rank is out of; null when the player is below his position's qualifying volume. |
+| `rushing_yards_percentile` | integer | Player's percentile (0-100, higher = better) on rushing yards among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `yards_per_carry` | numeric | Rushing yards per carry (rushing_yards / rush_attempts). |
+| `yards_per_carry_rank` | integer | Player's rank on yards per carry among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `yards_per_carry_rank_of` | integer | Number of qualified players at his position league-wide ranked on yards per carry, the pool yards_per_carry_rank is out of; null when the player is below his position's qualifying volume. |
+| `yards_per_carry_percentile` | integer | Player's percentile (0-100, higher = better) on yards per carry among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `yards_after_contact_per_attempt` | numeric | Rushing yards after contact per attempt (PFF column 'YAC/ATT'). |
+| `yards_after_contact_per_attempt_rank` | integer | Player's rank on yards after contact per attempt among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `yards_after_contact_per_attempt_rank_of` | integer | Number of qualified players at his position league-wide ranked on yards after contact per attempt, the pool yards_after_contact_per_attempt_rank is out of; null when the player is below his position's qualifying volume. |
+| `yards_after_contact_per_attempt_percentile` | integer | Player's percentile (0-100, higher = better) on yards after contact per attempt among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `rushing_td` | integer | Rushing touchdowns scored by the player. |
+| `rushing_td_rank` | integer | Player's rank on rushing touchdowns among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `rushing_td_rank_of` | integer | Number of qualified players at his position league-wide ranked on rushing touchdowns, the pool rushing_td_rank is out of; null when the player is below his position's qualifying volume. |
+| `rushing_td_percentile` | integer | Player's percentile (0-100, higher = better) on rushing touchdowns among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `fumbles` | integer | Fumbles by the player (rushing group). |
+| `fumbles_rank` | integer | Player's rank on fumbles among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `fumbles_rank_of` | integer | Number of qualified players at his position league-wide ranked on fumbles, the pool fumbles_rank is out of; null when the player is below his position's qualifying volume. |
+| `fumbles_percentile` | integer | Player's percentile (0-100, higher = better) on fumbles among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_offense` | numeric | PFF overall offense grade (0-100). |
+| `grade_offense_rank` | integer | Player's rank on PFF offense grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_offense_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF offense grade, the pool grade_offense_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_offense_percentile` | integer | Player's percentile (0-100, higher = better) on PFF offense grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_run` | numeric | PFF rushing grade (0-100). |
+| `grade_run_rank` | integer | Player's rank on PFF rushing grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_run_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF rushing grade, the pool grade_run_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_run_percentile` | integer | Player's percentile (0-100, higher = better) on PFF rushing grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_fumble` | numeric | PFF ball-security (hands/fumble) grade (0-100). |
+| `grade_fumble_rank` | integer | Player's rank on PFF ball-security grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_fumble_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF ball-security grade, the pool grade_fumble_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_fumble_percentile` | integer | Player's percentile (0-100, higher = better) on PFF ball-security grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_receiving` | numeric | PFF receiving grade (0-100). |
+| `grade_receiving_rank` | integer | Player's rank on PFF receiving grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_receiving_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF receiving grade, the pool grade_receiving_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_receiving_percentile` | integer | Player's percentile (0-100, higher = better) on PFF receiving grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_pass_block` | numeric | PFF pass-blocking grade (0-100); null when the player has no graded pass-blocking snaps. |
+| `grade_pass_block_rank` | integer | Player's rank on PFF pass-blocking grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_pass_block_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF pass-blocking grade, the pool grade_pass_block_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_pass_block_percentile` | integer | Player's percentile (0-100, higher = better) on PFF pass-blocking grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
 
 **defense**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey` | character | Jersey number. |
-| `games` | integer | Games played in career |
-| `games_rank` | integer |  |
-| `games_rank_of` | integer |  |
-| `games_percentile` | integer |  |
-| `tackles` | integer | Team tackles. |
-| `tackles_rank` | integer |  |
-| `tackles_rank_of` | integer |  |
-| `tackles_percentile` | integer |  |
-| `assists` | integer | Total assists. |
-| `assists_rank` | integer |  |
-| `assists_rank_of` | integer |  |
-| `assists_percentile` | integer |  |
-| `sacks` | numeric | The Number of times sacked. |
-| `sacks_rank` | integer |  |
-| `sacks_rank_of` | integer |  |
-| `sacks_percentile` | integer |  |
-| `qb_hurries` | integer | Team QB hurries. |
-| `qb_hurries_rank` | integer |  |
-| `qb_hurries_rank_of` | integer |  |
-| `qb_hurries_percentile` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `interceptions_rank` | integer |  |
-| `interceptions_rank_of` | integer |  |
-| `interceptions_percentile` | integer |  |
-| `passes_defended` | integer |  |
-| `passes_defended_rank` | integer |  |
-| `passes_defended_rank_of` | integer |  |
-| `passes_defended_percentile` | integer |  |
-| `grade_defense` | numeric |  |
-| `grade_defense_rank` | integer |  |
-| `grade_defense_rank_of` | integer |  |
-| `grade_defense_percentile` | integer |  |
-| `grade_run_defense` | numeric |  |
-| `grade_run_defense_rank` | integer |  |
-| `grade_run_defense_rank_of` | integer |  |
-| `grade_run_defense_percentile` | integer |  |
-| `grade_tackle` | numeric |  |
-| `grade_tackle_rank` | integer |  |
-| `grade_tackle_rank_of` | integer |  |
-| `grade_tackle_percentile` | integer |  |
-| `grade_pass_rush` | numeric |  |
-| `grade_pass_rush_rank` | integer |  |
-| `grade_pass_rush_rank_of` | integer |  |
-| `grade_pass_rush_percentile` | integer |  |
-| `grade_coverage` | numeric |  |
-| `grade_coverage_rank` | integer |  |
-| `grade_coverage_rank_of` | integer |  |
-| `grade_coverage_percentile` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `name` | character | Player's display name as PFF lists it. |
+| `position` | character | PFF position code (e.g. QB, HB, WR, TE, ED, DI, LB, CB, S); qualification floors and ranking pools are per position. |
+| `jersey` | character | Jersey number as a string; leading zeros are meaningful (e.g. "01"). |
+| `games` | integer | Games played in the requested season part (PFF column '#G'). |
+| `games_rank` | integer | Player's rank on games played among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `games_rank_of` | integer | Number of qualified players at his position league-wide ranked on games played, the pool games_rank is out of; null when the player is below his position's qualifying volume. |
+| `games_percentile` | integer | Player's percentile (0-100, higher = better) on games played among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `tackles_rank` | integer | Player's rank on tackles among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `tackles_rank_of` | integer | Number of qualified players at his position league-wide ranked on tackles, the pool tackles_rank is out of; null when the player is below his position's qualifying volume. |
+| `tackles_percentile` | integer | Player's percentile (0-100, higher = better) on tackles among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `assists_rank` | integer | Player's rank on assisted tackles among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `assists_rank_of` | integer | Number of qualified players at his position league-wide ranked on assisted tackles, the pool assists_rank is out of; null when the player is below his position's qualifying volume. |
+| `assists_percentile` | integer | Player's percentile (0-100, higher = better) on assisted tackles among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `sacks` | numeric | Sacks recorded by the defender. |
+| `sacks_rank` | integer | Player's rank on sacks among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `sacks_rank_of` | integer | Number of qualified players at his position league-wide ranked on sacks, the pool sacks_rank is out of; null when the player is below his position's qualifying volume. |
+| `sacks_percentile` | integer | Player's percentile (0-100, higher = better) on sacks among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `qb_hurries` | integer | Quarterback hurries recorded by the defender. |
+| `qb_hurries_rank` | integer | Player's rank on quarterback hurries among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `qb_hurries_rank_of` | integer | Number of qualified players at his position league-wide ranked on quarterback hurries, the pool qb_hurries_rank is out of; null when the player is below his position's qualifying volume. |
+| `qb_hurries_percentile` | integer | Player's percentile (0-100, higher = better) on quarterback hurries among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `interceptions` | integer | Interceptions: thrown by the passer in the passing group, made by the defender in the defense group. |
+| `interceptions_rank` | integer | Player's rank on interceptions among qualified players at his position league-wide (1 = best: fewest thrown in the passing group, most made in the defense group; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `interceptions_rank_of` | integer | Number of qualified players at his position league-wide ranked on interceptions, the pool interceptions_rank is out of; null when the player is below his position's qualifying volume. |
+| `interceptions_percentile` | integer | Player's percentile (0-100, higher = better) on interceptions among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `passes_defended` | integer | Passes defended credited to the defender (PFF column 'PD'). |
+| `passes_defended_rank` | integer | Player's rank on passes defended among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `passes_defended_rank_of` | integer | Number of qualified players at his position league-wide ranked on passes defended, the pool passes_defended_rank is out of; null when the player is below his position's qualifying volume. |
+| `passes_defended_percentile` | integer | Player's percentile (0-100, higher = better) on passes defended among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_defense` | numeric | PFF overall defense grade (0-100). |
+| `grade_defense_rank` | integer | Player's rank on PFF defense grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_defense_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF defense grade, the pool grade_defense_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_defense_percentile` | integer | Player's percentile (0-100, higher = better) on PFF defense grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `grade_run_defense_rank` | integer | Player's rank on PFF run-defense grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_run_defense_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF run-defense grade, the pool grade_run_defense_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_run_defense_percentile` | integer | Player's percentile (0-100, higher = better) on PFF run-defense grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_tackle` | numeric | PFF tackling grade (0-100). |
+| `grade_tackle_rank` | integer | Player's rank on PFF tackling grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_tackle_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF tackling grade, the pool grade_tackle_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_tackle_percentile` | integer | Player's percentile (0-100, higher = better) on PFF tackling grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_pass_rush` | numeric | PFF pass-rush grade (0-100). |
+| `grade_pass_rush_rank` | integer | Player's rank on PFF pass-rush grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_pass_rush_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF pass-rush grade, the pool grade_pass_rush_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_pass_rush_percentile` | integer | Player's percentile (0-100, higher = better) on PFF pass-rush grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `grade_coverage` | numeric | PFF coverage grade (0-100). |
+| `grade_coverage_rank` | integer | Player's rank on PFF coverage grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
+| `grade_coverage_rank_of` | integer | Number of qualified players at his position league-wide ranked on PFF coverage grade, the pool grade_coverage_rank is out of; null when the player is below his position's qualifying volume. |
+| `grade_coverage_percentile` | integer | Player's percentile (0-100, higher = better) on PFF coverage grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -9323,21 +9323,21 @@ A team's rushing by direction, one row per rusher and gap, plus totals
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `direction` | character |  |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `yards` | integer | The number of receiving yards |
-| `ypa` | numeric |  |
-| `touchdowns` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `explosive` | integer |  |
-| `yards_after_contact` | integer |  |
-| `yco_attempt` | numeric |  |
-| `longest` | integer |  |
-| `avoided_tackles` | integer |  |
-| `fumbles` | integer |  |
+| `player_id` | integer | PFF player id of the rusher (integer; matches the /players id and every player_id join key). |
+| `player` | character | Rusher's display name as PFF lists it. |
+| `position` | character | PFF position code of the rusher (e.g. HB, QB, WR). |
+| `direction` | character | Run direction as PFF charts it, i.e. the gap or edge the carry went to (e.g. LE = left end, LT = left tackle, LG = left guard); one row per rusher per direction. |
+| `attempts` | integer | Carries in this direction (PFF column 'ATT'). |
+| `yards` | integer | Rushing yards on carries in this direction. |
+| `ypa` | numeric | Rushing yards per carry in this direction (PFF column 'YPA'). |
+| `touchdowns` | integer | Rushing touchdowns on carries in this direction. |
+| `first_downs` | integer | Rushing first downs gained on carries in this direction. |
+| `explosive` | integer | Carries in this direction that gained 10 or more yards (PFF column '10+'). |
+| `yards_after_contact` | integer | Rushing yards gained after first contact on carries in this direction (PFF column 'YCO'). |
+| `yco_attempt` | numeric | Yards after contact per carry in this direction (PFF column 'YCO/A'). |
+| `longest` | integer | Longest carry in this direction, in yards. |
+| `avoided_tackles` | integer | Missed tackles forced on carries in this direction (PFF column 'MTF'). |
+| `fumbles` | integer | Fumbles on carries in this direction. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -9374,1622 +9374,1622 @@ One of nineteen player reports for a team, one row per player
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_offense` | numeric |  |
-| `grades_offense_penalty` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `snap_counts_pass` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `snap_counts_pass_route` | integer |  |
-| `snap_counts_run` | integer |  |
-| `snap_counts_run_block` | integer |  |
-| `snap_counts_total` | integer |  |
-| `snap_counts_total_pass` | integer |  |
-| `snap_counts_total_run` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `grades_hands_fumble` | numeric |  |
-| `grades_pass` | numeric |  |
-| `grades_pass_route` | numeric |  |
-| `grades_run` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `snap_counts_pass` | integer | Pass-play snaps spent as the passer, rather than blocking or running a route. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `snap_counts_pass_route` | integer | Snaps spent running a pass route. |
+| `snap_counts_run` | integer | Run-play snaps: on the offense report, run plays on which the player was the runner rather than a run blocker; on the run-defense report, run-defense snaps played. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `snap_counts_total` | integer | Total offensive snaps played. |
+| `snap_counts_total_pass` | integer | Total pass-play snaps across passing, pass blocking, and route running. |
+| `snap_counts_total_run` | integer | Total run-play snaps across rushing and run blocking. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
 
 **passing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `grades_offense` | numeric |  |
-| `twp_rate` | numeric |  |
-| `btt_rate` | numeric |  |
-| `spikes` | integer | Spikes |
-| `dropbacks` | integer |  |
-| `thrown_aways` | integer |  |
-| `draft_season` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `grades_pass` | numeric |  |
-| `hit_as_threw` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `sack_percent` | numeric |  |
-| `bats` | integer |  |
-| `sacks` | integer | The Number of times sacked. |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `completions` | integer | The number of completed passes. |
-| `yards` | integer | The number of receiving yards |
-| `accuracy_percent` | numeric |  |
-| `scrambles` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `drop_rate` | numeric |  |
-| `grades_run` | numeric |  |
-| `qb_rating` | numeric |  |
-| `completion_percent` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `passing_snaps` | integer |  |
-| `pressure_to_sack_rate` | numeric |  |
-| `ypa` | numeric |  |
-| `drops` | integer | Throws dropped |
-| `grades_hands_fumble` | numeric |  |
-| `avg_time_to_throw` | numeric | Average time elapsed from the time of snap to throw on every pass attempt for a passer (sacks excluded). |
-| `big_time_throws` | integer |  |
-| `positive_epa_percent` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `avg_depth_of_target` | numeric |  |
-| `turnover_worthy_plays` | integer |  |
-| `epa` | numeric | Expected points added (EPA) by the posteam for the given play. |
-| `aimed_passes` | integer |  |
-| `touchdowns` | integer |  |
-| `def_gen_pressures` | integer |  |
-| `npa_epa` | numeric |  |
-| `npa_positive_epa_percent` | numeric |  |
-| `no_screen_epa` | numeric |  |
-| `no_screen_positive_epa_percent` | numeric |  |
-| `pass_rate_oe` | numeric |  |
-| `completion_oe` | numeric |  |
-| `accuracy_oe` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `twp_rate` | numeric | Turnover-worthy-play rate. |
+| `btt_rate` | numeric | Big-time-throw rate. |
+| `spikes` | integer | Clock-stopping spike plays. |
+| `dropbacks` | integer | Total quarterback dropbacks. |
+| `thrown_aways` | integer | Passes intentionally thrown away. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `hit_as_threw` | integer | Plays where the quarterback was hit as he threw. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `sack_percent` | numeric | Sack rate (sacks per dropback). |
+| `bats` | integer | Passes batted at the line. |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `completions` | integer | Completed passes by the passer. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `accuracy_percent` | numeric | Charted accuracy percentage. |
+| `scrambles` | integer | Quarterback scrambles (pass plays on which the passer ran with the ball). |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `drop_rate` | numeric | Drop rate, in percent: share of catchable passes dropped by the passer's receivers (passing report) or by the player (receiving report). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `qb_rating` | numeric | NFL passer rating. |
+| `completion_percent` | integer | Completion percentage. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `passing_snaps` | integer | Number of passing snaps played. |
+| `pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack. |
+| `ypa` | numeric | Yards per attempt: passing yards per pass attempt on the passing report, rushing yards per carry on the rushing report. |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `avg_time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the passer's attempts. |
+| `big_time_throws` | integer | Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `turnover_worthy_plays` | integer | Number of turnover-worthy plays, plays PFF charts as deserving of a turnover. |
+| `epa` | numeric | Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.04, not a season total). |
+| `aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks, as charted by PFF. |
+| `npa_epa` | numeric | Expected points added per play on the passer's non-play-action dropbacks, as computed by PFF (npa_ = non-play-action). |
+| `npa_positive_epa_percent` | numeric | Percentage of the passer's non-play-action dropbacks with positive expected points added. |
+| `no_screen_epa` | numeric | Expected points added per play on the passer's non-screen dropbacks, as computed by PFF. |
+| `no_screen_positive_epa_percent` | numeric | Percentage of the passer's non-screen dropbacks with positive expected points added. |
+| `pass_rate_oe` | numeric | Pass rate over expectation on the passer's plays, in percentage points (actual minus PFF-expected pass rate). |
+| `completion_oe` | numeric | Completion percentage over expectation, in percentage points (actual minus PFF-expected completion rate). |
+| `accuracy_oe` | numeric | Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value). |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **passing-depth**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `left_behind_los_accuracy_percent` | integer |  |
-| `left_short_scrambles` | integer |  |
-| `center_short_first_downs` | integer |  |
-| `right_short_bats` | integer |  |
-| `right_behind_los_positive_epa_percent` | numeric |  |
-| `left_behind_los_completions` | integer |  |
-| `left_medium_dropbacks` | integer |  |
-| `right_medium_grades_pass` | numeric |  |
-| `right_medium_hit_as_threw` | integer |  |
-| `behind_los_attempts_percent` | numeric |  |
-| `right_short_turnover_worthy_plays` | integer |  |
-| `right_medium_qb_rating` | numeric |  |
-| `deep_twp_rate` | numeric |  |
-| `center_medium_sacks` | integer |  |
-| `medium_interceptions` | integer |  |
-| `left_deep_completions` | integer |  |
-| `behind_los_spikes` | integer |  |
-| `medium_aimed_passes` | integer |  |
-| `center_behind_los_drops` | integer |  |
-| `center_behind_los_interceptions` | integer |  |
-| `behind_los_dropbacks` | integer |  |
-| `left_behind_los_interceptions` | integer |  |
-| `left_deep_first_downs` | integer |  |
-| `deep_passing_snaps` | integer |  |
-| `center_short_btt_rate` | integer |  |
-| `center_medium_thrown_aways` | integer |  |
-| `center_deep_avg_depth_of_target` | integer |  |
-| `center_short_drops` | integer |  |
-| `center_deep_first_downs` | integer |  |
-| `left_medium_completion_percent` | numeric |  |
-| `center_deep_attempts` | integer |  |
-| `center_behind_los_attempts` | integer |  |
-| `right_short_positive_epa_percent` | numeric |  |
-| `center_deep_aimed_passes` | integer |  |
-| `right_deep_grades_pass` | numeric |  |
-| `right_medium_big_time_throws` | integer |  |
-| `deep_sack_percent` | integer |  |
-| `center_medium_pressure_to_sack_rate` | integer |  |
-| `deep_sacks` | integer |  |
-| `right_medium_ypa` | numeric |  |
-| `left_deep_drop_rate` | integer |  |
-| `right_medium_attempts_percent` | numeric |  |
-| `right_deep_btt_rate` | numeric |  |
-| `center_short_attempts_percent` | numeric |  |
-| `deep_drops` | integer |  |
-| `center_behind_los_big_time_throws` | integer |  |
-| `center_behind_los_touchdowns` | integer |  |
-| `right_behind_los_twp_rate` | integer |  |
-| `center_deep_completions` | integer |  |
-| `center_short_attempts` | integer |  |
-| `left_behind_los_sack_percent` | integer |  |
-| `center_short_pressure_to_sack_rate` | integer |  |
-| `deep_touchdowns` | integer |  |
-| `center_behind_los_accuracy_percent` | integer |  |
-| `center_deep_drop_rate` | integer |  |
-| `right_short_first_downs` | integer |  |
-| `right_behind_los_first_downs` | integer |  |
-| `short_interceptions` | integer |  |
-| `center_medium_scrambles` | integer |  |
-| `left_behind_los_sacks` | integer |  |
-| `left_short_ypa` | numeric |  |
-| `left_short_qb_rating` | numeric |  |
-| `right_behind_los_qb_rating` | numeric |  |
-| `draft_season` | integer |  |
-| `right_behind_los_dropbacks` | integer |  |
-| `behind_los_def_gen_pressures` | integer |  |
-| `right_short_thrown_aways` | integer |  |
-| `deep_def_gen_pressures` | integer |  |
-| `right_short_btt_rate` | integer |  |
-| `center_behind_los_positive_epa_percent` | integer |  |
-| `left_behind_los_grades_pass` | numeric |  |
-| `deep_grades_pass` | numeric |  |
-| `center_short_turnover_worthy_plays` | integer |  |
-| `center_behind_los_scrambles` | integer |  |
-| `right_short_aimed_passes` | integer |  |
-| `center_short_dropbacks` | integer |  |
-| `medium_epa` | numeric |  |
-| `right_short_ypa` | numeric |  |
-| `center_medium_ypa` | numeric |  |
-| `medium_attempts` | integer |  |
-| `right_deep_accuracy_percent` | numeric |  |
-| `behind_los_scrambles` | integer |  |
-| `center_behind_los_completion_percent` | integer |  |
-| `left_behind_los_btt_rate` | integer |  |
-| `right_behind_los_btt_rate` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `short_touchdowns` | integer |  |
-| `center_medium_drops` | integer |  |
-| `left_behind_los_aimed_passes` | integer |  |
-| `deep_attempts` | integer |  |
-| `right_behind_los_sack_percent` | integer |  |
-| `center_short_positive_epa_percent` | numeric |  |
-| `deep_avg_depth_of_target` | numeric |  |
-| `left_deep_btt_rate` | numeric |  |
-| `medium_scrambles` | integer |  |
-| `center_behind_los_avg_depth_of_target` | numeric |  |
-| `short_attempts_percent` | numeric |  |
-| `right_behind_los_sacks` | integer |  |
-| `center_medium_avg_time_to_throw` | numeric |  |
-| `left_short_pressure_to_sack_rate` | integer |  |
-| `center_deep_sack_percent` | integer |  |
-| `center_deep_ypa` | numeric |  |
-| `left_behind_los_hit_as_threw` | integer |  |
-| `medium_big_time_throws` | integer |  |
-| `deep_thrown_aways` | integer |  |
-| `right_short_accuracy_percent` | numeric |  |
-| `left_deep_turnover_worthy_plays` | integer |  |
-| `center_medium_bats` | integer |  |
-| `right_short_grades_pass` | numeric |  |
-| `right_deep_spikes` | integer |  |
-| `left_deep_passing_snaps` | integer |  |
-| `center_medium_twp_rate` | numeric |  |
-| `right_behind_los_passing_snaps` | integer |  |
-| `left_deep_qb_rating` | numeric |  |
-| `right_deep_drop_rate` | numeric |  |
-| `left_behind_los_drop_rate` | numeric |  |
-| `left_medium_drop_rate` | numeric |  |
-| `right_deep_attempts` | integer |  |
-| `left_deep_spikes` | integer |  |
-| `center_behind_los_dropbacks` | integer |  |
-| `right_deep_big_time_throws` | integer |  |
-| `medium_hit_as_threw` | integer |  |
-| `right_short_dropbacks` | integer |  |
-| `medium_def_gen_pressures` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `left_short_positive_epa_percent` | numeric |  |
-| `left_short_attempts` | integer |  |
-| `center_deep_twp_rate` | numeric |  |
-| `right_medium_avg_time_to_throw` | numeric |  |
-| `left_behind_los_qb_rating` | numeric |  |
-| `left_behind_los_dropbacks` | integer |  |
-| `deep_dropbacks` | integer |  |
-| `right_behind_los_scrambles` | integer |  |
-| `behind_los_interceptions` | integer |  |
-| `right_deep_drops` | integer |  |
-| `right_deep_yards` | integer |  |
-| `right_short_hit_as_threw` | integer |  |
-| `right_short_avg_depth_of_target` | numeric |  |
-| `short_bats` | integer |  |
-| `right_deep_twp_rate` | numeric |  |
-| `right_behind_los_pressure_to_sack_rate` | integer |  |
-| `deep_spikes` | integer |  |
-| `center_medium_spikes` | integer |  |
-| `behind_los_aimed_passes` | integer |  |
-| `right_behind_los_touchdowns` | integer |  |
-| `right_medium_pressure_to_sack_rate` | integer |  |
-| `medium_thrown_aways` | integer |  |
-| `short_sacks` | integer |  |
-| `center_behind_los_twp_rate` | integer |  |
-| `left_behind_los_attempts` | integer |  |
-| `short_aimed_passes` | integer |  |
-| `short_completions` | integer |  |
-| `right_short_pressure_to_sack_rate` | integer |  |
-| `medium_avg_depth_of_target` | numeric |  |
-| `left_behind_los_positive_epa_percent` | numeric |  |
-| `center_medium_attempts_percent` | numeric |  |
-| `left_medium_touchdowns` | integer |  |
-| `center_short_bats` | integer |  |
-| `left_deep_avg_time_to_throw` | numeric |  |
-| `center_behind_los_passing_snaps` | integer |  |
-| `center_short_yards` | integer |  |
-| `right_medium_btt_rate` | numeric |  |
-| `right_medium_scrambles` | integer |  |
-| `medium_btt_rate` | numeric |  |
-| `center_behind_los_btt_rate` | integer |  |
-| `center_short_avg_depth_of_target` | numeric |  |
-| `left_medium_sacks` | integer |  |
-| `right_short_yards` | integer |  |
-| `left_medium_first_downs` | integer |  |
-| `right_medium_positive_epa_percent` | numeric |  |
-| `left_short_big_time_throws` | integer |  |
-| `deep_turnover_worthy_plays` | integer |  |
-| `left_deep_bats` | integer |  |
-| `left_medium_turnover_worthy_plays` | integer |  |
-| `base_dropbacks` | integer |  |
-| `center_deep_drops` | integer |  |
-| `center_medium_avg_depth_of_target` | numeric |  |
-| `center_behind_los_ypa` | numeric |  |
-| `right_short_attempts` | integer |  |
-| `center_medium_completion_percent` | numeric |  |
-| `right_short_sack_percent` | integer |  |
-| `left_behind_los_avg_depth_of_target` | numeric |  |
-| `center_medium_epa` | numeric |  |
-| `center_behind_los_sack_percent` | integer |  |
-| `medium_completions` | integer |  |
-| `medium_sack_percent` | integer |  |
-| `left_short_grades_pass` | numeric |  |
-| `deep_btt_rate` | numeric |  |
-| `left_short_accuracy_percent` | numeric |  |
-| `short_twp_rate` | numeric |  |
-| `short_passing_snaps` | integer |  |
-| `left_deep_sacks` | integer |  |
-| `short_scrambles` | integer |  |
-| `center_medium_turnover_worthy_plays` | integer |  |
-| `behind_los_drop_rate` | numeric |  |
-| `right_behind_los_epa` | numeric |  |
-| `right_medium_aimed_passes` | integer |  |
-| `short_accuracy_percent` | numeric |  |
-| `player_game_count` | integer |  |
-| `short_btt_rate` | integer |  |
-| `right_short_touchdowns` | integer |  |
-| `center_short_completions` | integer |  |
-| `right_short_spikes` | integer |  |
-| `behind_los_first_downs` | integer |  |
-| `right_medium_def_gen_pressures` | integer |  |
-| `deep_pressure_to_sack_rate` | integer |  |
-| `medium_qb_rating` | numeric |  |
-| `short_completion_percent` | numeric |  |
-| `right_deep_attempts_percent` | numeric |  |
-| `eligible_season` | integer |  |
-| `short_big_time_throws` | integer |  |
-| `behind_los_attempts` | integer |  |
-| `center_behind_los_yards` | integer |  |
-| `center_behind_los_bats` | integer |  |
-| `center_behind_los_qb_rating` | numeric |  |
-| `right_deep_pressure_to_sack_rate` | integer |  |
-| `center_short_accuracy_percent` | numeric |  |
-| `left_behind_los_bats` | integer |  |
-| `center_deep_passing_snaps` | integer |  |
-| `right_behind_los_hit_as_threw` | integer |  |
-| `medium_bats` | integer |  |
-| `right_medium_first_downs` | integer |  |
-| `medium_spikes` | integer |  |
-| `left_deep_thrown_aways` | integer |  |
-| `right_deep_epa` | numeric |  |
-| `center_medium_hit_as_threw` | integer |  |
-| `left_behind_los_completion_percent` | numeric |  |
-| `center_short_ypa` | numeric |  |
-| `right_short_drop_rate` | numeric |  |
-| `right_behind_los_accuracy_percent` | numeric |  |
-| `left_short_yards` | integer |  |
-| `deep_accuracy_percent` | numeric |  |
-| `right_behind_los_avg_depth_of_target` | numeric |  |
-| `center_behind_los_thrown_aways` | integer |  |
-| `center_behind_los_attempts_percent` | numeric |  |
-| `right_deep_first_downs` | integer |  |
-| `left_short_completions` | integer |  |
-| `deep_completion_percent` | numeric |  |
-| `left_deep_positive_epa_percent` | numeric |  |
-| `right_deep_sack_percent` | integer |  |
-| `behind_los_pressure_to_sack_rate` | integer |  |
-| `right_deep_touchdowns` | integer |  |
-| `left_behind_los_def_gen_pressures` | integer |  |
-| `left_behind_los_drops` | integer |  |
-| `deep_epa` | numeric |  |
-| `left_deep_ypa` | numeric |  |
-| `medium_touchdowns` | integer |  |
-| `left_medium_grades_pass` | numeric |  |
-| `right_behind_los_spikes` | integer |  |
-| `medium_grades_pass` | numeric |  |
-| `behind_los_passing_snaps` | integer |  |
-| `left_short_first_downs` | integer |  |
-| `center_short_passing_snaps` | integer |  |
-| `center_deep_accuracy_percent` | numeric |  |
-| `right_deep_positive_epa_percent` | numeric |  |
-| `right_medium_sack_percent` | integer |  |
-| `right_deep_qb_rating` | numeric |  |
-| `right_short_completion_percent` | numeric |  |
-| `right_behind_los_interceptions` | integer |  |
-| `behind_los_yards` | integer |  |
-| `center_behind_los_grades_pass` | numeric |  |
-| `left_deep_dropbacks` | integer |  |
-| `center_behind_los_spikes` | integer |  |
-| `right_behind_los_aimed_passes` | integer |  |
-| `left_short_interceptions` | integer |  |
-| `right_medium_interceptions` | integer |  |
-| `left_behind_los_yards` | integer |  |
-| `center_deep_btt_rate` | numeric |  |
-| `medium_first_downs` | integer |  |
-| `left_short_avg_depth_of_target` | integer |  |
-| `left_behind_los_ypa` | integer |  |
-| `short_attempts` | integer |  |
-| `right_medium_bats` | integer |  |
-| `left_behind_los_touchdowns` | integer |  |
-| `right_medium_dropbacks` | integer |  |
-| `short_turnover_worthy_plays` | integer |  |
-| `right_deep_thrown_aways` | integer |  |
-| `right_behind_los_drop_rate` | numeric |  |
-| `right_short_qb_rating` | integer |  |
-| `medium_sacks` | integer |  |
-| `center_deep_attempts_percent` | integer |  |
-| `left_short_dropbacks` | integer |  |
-| `behind_los_drops` | integer |  |
-| `short_sack_percent` | integer |  |
-| `left_medium_spikes` | integer |  |
-| `left_medium_accuracy_percent` | numeric |  |
-| `behind_los_completions` | integer |  |
-| `behind_los_sack_percent` | integer |  |
-| `left_deep_yards` | integer |  |
-| `left_short_aimed_passes` | integer |  |
-| `center_behind_los_completions` | integer |  |
-| `left_short_thrown_aways` | integer |  |
-| `left_short_sack_percent` | integer |  |
-| `center_short_thrown_aways` | integer |  |
-| `center_short_interceptions` | integer |  |
-| `short_avg_depth_of_target` | numeric |  |
-| `left_deep_touchdowns` | integer |  |
-| `deep_yards` | integer |  |
-| `center_behind_los_turnover_worthy_plays` | integer |  |
-| `medium_ypa` | numeric |  |
-| `left_medium_epa` | numeric |  |
-| `left_deep_avg_depth_of_target` | integer |  |
-| `deep_first_downs` | integer |  |
-| `short_drop_rate` | integer |  |
-| `left_medium_bats` | integer |  |
-| `center_deep_spikes` | integer |  |
-| `center_short_hit_as_threw` | integer |  |
-| `left_medium_positive_epa_percent` | numeric |  |
-| `center_deep_touchdowns` | integer |  |
-| `right_deep_ypa` | numeric |  |
-| `right_short_big_time_throws` | integer |  |
-| `center_short_big_time_throws` | integer |  |
-| `short_positive_epa_percent` | numeric |  |
-| `left_behind_los_avg_time_to_throw` | numeric |  |
-| `right_deep_passing_snaps` | integer |  |
-| `right_short_twp_rate` | numeric |  |
-| `center_medium_attempts` | integer |  |
-| `right_deep_avg_time_to_throw` | numeric |  |
-| `center_deep_def_gen_pressures` | integer |  |
-| `behind_los_epa` | numeric |  |
-| `right_medium_twp_rate` | numeric |  |
-| `right_deep_aimed_passes` | integer |  |
-| `right_deep_scrambles` | integer |  |
-| `deep_big_time_throws` | integer |  |
-| `left_short_turnover_worthy_plays` | integer |  |
-| `center_short_touchdowns` | integer |  |
-| `right_medium_drops` | integer |  |
-| `left_deep_epa` | numeric |  |
-| `short_ypa` | numeric |  |
-| `medium_pressure_to_sack_rate` | integer |  |
-| `left_medium_thrown_aways` | integer |  |
-| `right_behind_los_avg_time_to_throw` | numeric |  |
-| `behind_los_btt_rate` | integer |  |
-| `medium_avg_time_to_throw` | numeric |  |
-| `center_deep_completion_percent` | numeric |  |
-| `behind_los_avg_time_to_throw` | numeric |  |
-| `right_medium_touchdowns` | integer |  |
-| `center_short_avg_time_to_throw` | numeric |  |
-| `left_deep_aimed_passes` | integer |  |
-| `left_medium_yards` | integer |  |
-| `center_medium_touchdowns` | integer |  |
-| `center_short_drop_rate` | numeric |  |
-| `left_short_twp_rate` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `right_behind_los_attempts_percent` | numeric |  |
-| `right_deep_avg_depth_of_target` | numeric |  |
-| `behind_los_sacks` | integer |  |
-| `center_deep_yards` | integer |  |
-| `short_dropbacks` | integer |  |
-| `left_deep_sack_percent` | integer |  |
-| `center_behind_los_avg_time_to_throw` | numeric |  |
-| `behind_los_avg_depth_of_target` | numeric |  |
-| `left_behind_los_epa` | numeric |  |
-| `medium_twp_rate` | numeric |  |
-| `left_short_def_gen_pressures` | integer |  |
-| `medium_turnover_worthy_plays` | integer |  |
-| `behind_los_twp_rate` | integer |  |
-| `left_behind_los_thrown_aways` | integer |  |
-| `left_short_bats` | integer |  |
-| `center_medium_drop_rate` | numeric |  |
-| `right_deep_bats` | integer |  |
-| `medium_yards` | integer |  |
-| `center_deep_grades_pass` | numeric |  |
-| `center_medium_passing_snaps` | integer |  |
-| `center_behind_los_first_downs` | integer |  |
-| `center_medium_interceptions` | integer |  |
-| `behind_los_grades_pass` | numeric |  |
-| `left_short_hit_as_threw` | integer |  |
-| `deep_qb_rating` | numeric |  |
-| `center_deep_bats` | integer |  |
-| `behind_los_ypa` | integer |  |
-| `right_short_interceptions` | integer |  |
-| `left_deep_interceptions` | integer |  |
-| `right_medium_sacks` | integer |  |
-| `right_behind_los_turnover_worthy_plays` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `right_medium_spikes` | integer |  |
-| `behind_los_hit_as_threw` | integer |  |
-| `left_medium_pressure_to_sack_rate` | integer |  |
-| `medium_dropbacks` | integer |  |
-| `deep_hit_as_threw` | integer |  |
-| `right_medium_completion_percent` | numeric |  |
-| `short_epa` | numeric |  |
-| `deep_drop_rate` | numeric |  |
-| `declined_penalties` | integer |  |
-| `deep_scrambles` | integer |  |
-| `left_deep_completion_percent` | numeric |  |
-| `right_short_epa` | numeric |  |
-| `medium_attempts_percent` | numeric |  |
-| `right_behind_los_completion_percent` | numeric |  |
-| `left_medium_hit_as_threw` | integer |  |
-| `left_behind_los_pressure_to_sack_rate` | integer |  |
-| `right_short_def_gen_pressures` | integer |  |
-| `right_short_attempts_percent` | numeric |  |
-| `center_short_aimed_passes` | integer |  |
-| `short_hit_as_threw` | integer |  |
-| `right_medium_turnover_worthy_plays` | integer |  |
-| `left_short_epa` | numeric |  |
-| `center_behind_los_pressure_to_sack_rate` | integer |  |
-| `right_behind_los_ypa` | numeric |  |
-| `deep_interceptions` | integer |  |
-| `left_medium_twp_rate` | numeric |  |
-| `right_behind_los_big_time_throws` | integer |  |
-| `center_medium_sack_percent` | integer |  |
-| `center_deep_thrown_aways` | integer |  |
-| `short_thrown_aways` | integer |  |
-| `left_short_btt_rate` | integer |  |
-| `right_medium_accuracy_percent` | numeric |  |
-| `short_def_gen_pressures` | integer |  |
-| `center_deep_dropbacks` | integer |  |
-| `center_medium_accuracy_percent` | numeric |  |
-| `right_behind_los_yards` | integer |  |
-| `right_medium_attempts` | integer |  |
-| `left_medium_attempts` | integer |  |
-| `medium_accuracy_percent` | numeric |  |
-| `left_medium_drops` | integer |  |
-| `left_short_avg_time_to_throw` | numeric |  |
-| `medium_passing_snaps` | integer |  |
-| `center_short_epa` | numeric |  |
-| `left_behind_los_passing_snaps` | integer |  |
-| `left_deep_pressure_to_sack_rate` | integer |  |
-| `deep_bats` | integer |  |
-| `left_medium_passing_snaps` | integer |  |
-| `left_medium_scrambles` | integer |  |
-| `right_deep_completion_percent` | numeric |  |
-| `left_short_drops` | integer |  |
-| `left_deep_accuracy_percent` | numeric |  |
-| `medium_positive_epa_percent` | numeric |  |
-| `behind_los_turnover_worthy_plays` | integer |  |
-| `right_medium_epa` | numeric |  |
-| `right_deep_dropbacks` | integer |  |
-| `deep_ypa` | numeric |  |
-| `center_medium_completions` | integer |  |
-| `left_medium_avg_time_to_throw` | numeric |  |
-| `left_short_sacks` | integer |  |
-| `left_behind_los_spikes` | integer |  |
-| `left_deep_def_gen_pressures` | integer |  |
-| `center_short_qb_rating` | numeric |  |
-| `center_deep_interceptions` | integer |  |
-| `right_deep_completions` | integer |  |
-| `center_behind_los_sacks` | integer |  |
-| `deep_completions` | integer |  |
-| `left_medium_attempts_percent` | numeric |  |
-| `short_yards` | integer |  |
-| `behind_los_qb_rating` | numeric |  |
-| `right_short_sacks` | integer |  |
-| `right_behind_los_thrown_aways` | integer |  |
-| `base_attempts` | integer |  |
-| `center_short_spikes` | integer |  |
-| `center_behind_los_hit_as_threw` | integer |  |
-| `center_deep_turnover_worthy_plays` | integer |  |
-| `left_medium_sack_percent` | integer |  |
-| `behind_los_completion_percent` | numeric |  |
-| `left_deep_attempts_percent` | numeric |  |
-| `center_deep_big_time_throws` | integer |  |
-| `left_medium_avg_depth_of_target` | numeric |  |
-| `behind_los_thrown_aways` | integer |  |
-| `center_medium_def_gen_pressures` | integer |  |
-| `short_avg_time_to_throw` | numeric |  |
-| `left_deep_twp_rate` | integer |  |
-| `center_behind_los_epa` | numeric |  |
-| `left_behind_los_big_time_throws` | integer |  |
-| `right_medium_yards` | integer |  |
-| `right_medium_drop_rate` | numeric |  |
-| `center_medium_big_time_throws` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `left_short_completion_percent` | numeric |  |
-| `left_short_drop_rate` | integer |  |
-| `left_behind_los_scrambles` | integer |  |
-| `left_medium_btt_rate` | numeric |  |
-| `right_deep_hit_as_threw` | integer |  |
-| `behind_los_bats` | integer |  |
-| `short_first_downs` | integer |  |
-| `left_deep_attempts` | integer |  |
-| `right_behind_los_attempts` | integer |  |
-| `right_deep_sacks` | integer |  |
-| `left_behind_los_attempts_percent` | numeric |  |
-| `behind_los_big_time_throws` | integer |  |
-| `center_deep_pressure_to_sack_rate` | integer |  |
-| `left_medium_big_time_throws` | integer |  |
-| `right_behind_los_bats` | integer |  |
-| `left_medium_def_gen_pressures` | integer |  |
-| `right_deep_turnover_worthy_plays` | integer |  |
-| `left_short_spikes` | integer |  |
-| `left_medium_aimed_passes` | integer |  |
-| `left_behind_los_twp_rate` | integer |  |
-| `short_grades_pass` | numeric |  |
-| `right_short_drops` | integer |  |
-| `right_short_avg_time_to_throw` | numeric |  |
-| `right_medium_thrown_aways` | integer |  |
-| `center_short_sack_percent` | integer |  |
-| `right_short_passing_snaps` | integer |  |
-| `center_short_def_gen_pressures` | integer |  |
-| `center_medium_positive_epa_percent` | integer |  |
-| `medium_drops` | integer |  |
-| `center_medium_aimed_passes` | integer |  |
-| `center_short_sacks` | integer |  |
-| `deep_attempts_percent` | integer |  |
-| `center_behind_los_def_gen_pressures` | integer |  |
-| `left_short_passing_snaps` | integer |  |
-| `center_medium_grades_pass` | numeric |  |
-| `center_deep_avg_time_to_throw` | numeric |  |
-| `behind_los_positive_epa_percent` | numeric |  |
-| `center_short_completion_percent` | numeric |  |
-| `left_deep_hit_as_threw` | integer |  |
-| `center_short_grades_pass` | numeric |  |
-| `left_short_attempts_percent` | numeric |  |
-| `left_deep_scrambles` | integer |  |
-| `right_short_completions` | integer |  |
-| `center_behind_los_aimed_passes` | integer |  |
-| `right_short_scrambles` | integer |  |
-| `center_medium_qb_rating` | numeric |  |
-| `deep_avg_time_to_throw` | numeric |  |
-| `left_deep_drops` | integer |  |
-| `right_behind_los_def_gen_pressures` | integer |  |
-| `center_deep_positive_epa_percent` | numeric |  |
-| `center_deep_hit_as_threw` | integer |  |
-| `short_spikes` | integer |  |
-| `right_behind_los_completions` | integer |  |
-| `center_behind_los_drop_rate` | numeric |  |
-| `short_drops` | integer |  |
-| `deep_aimed_passes` | integer |  |
-| `right_medium_avg_depth_of_target` | numeric |  |
-| `short_pressure_to_sack_rate` | integer |  |
-| `center_deep_qb_rating` | numeric |  |
-| `left_medium_completions` | integer |  |
-| `center_deep_sacks` | integer |  |
-| `left_deep_big_time_throws` | integer |  |
-| `center_medium_first_downs` | integer |  |
-| `center_medium_dropbacks` | integer |  |
-| `right_deep_def_gen_pressures` | integer |  |
-| `left_short_touchdowns` | integer |  |
-| `medium_drop_rate` | numeric |  |
-| `left_medium_ypa` | integer |  |
-| `right_medium_passing_snaps` | integer |  |
-| `center_short_scrambles` | integer |  |
-| `left_behind_los_turnover_worthy_plays` | integer |  |
-| `center_medium_yards` | integer |  |
-| `center_deep_epa` | numeric |  |
-| `left_medium_interceptions` | integer |  |
-| `right_deep_interceptions` | integer |  |
-| `medium_completion_percent` | numeric |  |
-| `right_behind_los_grades_pass` | numeric |  |
-| `deep_positive_epa_percent` | numeric |  |
-| `behind_los_accuracy_percent` | numeric |  |
-| `center_deep_scrambles` | integer |  |
-| `center_short_twp_rate` | integer |  |
-| `behind_los_touchdowns` | integer |  |
-| `left_medium_qb_rating` | numeric |  |
-| `right_medium_completions` | integer |  |
-| `right_behind_los_drops` | integer |  |
-| `left_behind_los_first_downs` | integer |  |
-| `short_qb_rating` | numeric |  |
-| `center_medium_btt_rate` | numeric |  |
-| `left_deep_grades_pass` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `left_behind_los_accuracy_percent` | integer | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the center of the field. |
+| `right_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the right side of the field. |
+| `left_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the right side of the field. |
+| `right_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage, expressed as a percentage. |
+| `right_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `right_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the right side of the field. |
+| `deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws, per PFF charting. |
+| `center_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the center of the field. |
+| `medium_interceptions` | integer | Interceptions on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `left_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the left side of the field. |
+| `behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage. |
+| `medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws, as charted by PFF. |
+| `center_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the center of the field. |
+| `behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage. |
+| `left_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the left side of the field. |
+| `deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws. |
+| `center_short_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the center of the field, per PFF charting. |
+| `center_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_avg_depth_of_target` | integer | Average depth of target in air yards on deep (20+ air yards) throws to the center of the field. |
+| `center_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the center of the field. |
+| `center_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the center of the field. |
+| `right_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the right side of the field. |
+| `center_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `right_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the right side of the field. |
+| `right_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws. |
+| `center_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the center of the field. |
+| `deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws. |
+| `right_medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field. |
+| `left_deep_drop_rate` | integer | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the left side of the field. |
+| `right_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the right side of the field, expressed as a percentage. |
+| `right_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the right side of the field, per PFF charting. |
+| `center_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the center of the field, expressed as a percentage. |
+| `deep_drops` | integer | Catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `center_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the right side of the field, per PFF charting. |
+| `center_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the center of the field. |
+| `center_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the left side of the field. |
+| `center_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the center of the field. |
+| `deep_touchdowns` | integer | Touchdowns on deep (20+ air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `center_behind_los_accuracy_percent` | integer | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the center of the field. |
+| `center_deep_drop_rate` | integer | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the center of the field. |
+| `right_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the right side of the field. |
+| `short_interceptions` | integer | Interceptions on short (0-9 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `center_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the center of the field. |
+| `left_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws to the left side of the field. |
+| `right_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the right side of the field. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `right_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage, as charted by PFF. |
+| `right_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the right side of the field. |
+| `deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws, as charted by PFF. |
+| `right_short_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the right side of the field, per PFF charting. |
+| `center_behind_los_positive_epa_percent` | integer | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the left side of the field. |
+| `deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws. |
+| `center_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `center_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the center of the field. |
+| `right_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `center_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the center of the field. |
+| `medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws. |
+| `right_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field. |
+| `medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws. |
+| `right_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage. |
+| `center_behind_los_completion_percent` | integer | Percentage of pass attempts completed on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the left side of the field, per PFF charting. |
+| `right_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the right side of the field, per PFF charting. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `short_touchdowns` | integer | Touchdowns on short (0-9 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `center_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the center of the field. |
+| `left_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws. |
+| `right_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
+| `center_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the center of the field. |
+| `deep_avg_depth_of_target` | numeric | Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the left side of the field, per PFF charting. |
+| `medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws. |
+| `center_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the center of the field. |
+| `short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as a percentage. |
+| `right_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the right side of the field. |
+| `center_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the center of the field. |
+| `left_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
+| `center_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the center of the field. |
+| `center_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field. |
+| `left_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws. |
+| `right_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the right side of the field. |
+| `left_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the center of the field. |
+| `right_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the right side of the field. |
+| `right_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the right side of the field. |
+| `left_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the left side of the field. |
+| `center_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the center of the field, per PFF charting. |
+| `right_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the right side of the field. |
+| `left_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the right side of the field. |
+| `left_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the center of the field. |
+| `right_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws, as charted by PFF. |
+| `right_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the right side of the field. |
+| `medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws, as charted by PFF. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `left_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the left side of the field. |
+| `center_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the center of the field, per PFF charting. |
+| `right_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the left side of the field. |
+| `left_behind_los_dropbacks` | integer | Number of dropbacks on throws behind the line of scrimmage to the left side of the field. |
+| `deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws. |
+| `right_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_interceptions` | integer | Interceptions on throws behind the line of scrimmage: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `right_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the right side of the field. |
+| `right_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_short_avg_depth_of_target` | numeric | Average depth of target in air yards on short (0-9 air yards) throws to the right side of the field. |
+| `short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws. |
+| `right_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the right side of the field, per PFF charting. |
+| `right_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
+| `deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws. |
+| `center_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the center of the field. |
+| `behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage, as charted by PFF. |
+| `right_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws. |
+| `short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws. |
+| `center_behind_los_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the center of the field, per PFF charting. |
+| `left_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the left side of the field. |
+| `short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as charted by PFF. |
+| `short_completions` | integer | Number of completed passes on short (0-9 air yards) throws. |
+| `right_short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the right side of the field. |
+| `medium_avg_depth_of_target` | numeric | Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage to the left side of the field. |
+| `center_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the center of the field, expressed as a percentage. |
+| `left_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the left side of the field. |
+| `center_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the center of the field. |
+| `center_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the center of the field. |
+| `right_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
+| `right_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws, per PFF charting. |
+| `center_behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage to the center of the field, per PFF charting. |
+| `center_short_avg_depth_of_target` | numeric | Average depth of target in air yards on short (0-9 air yards) throws to the center of the field. |
+| `left_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the left side of the field. |
+| `right_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the right side of the field. |
+| `left_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the right side of the field. |
+| `left_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws, plays PFF charts as deserving of a turnover. |
+| `left_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left side of the field. |
+| `left_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `base_dropbacks` | integer | Number of dropbacks across all splits, the baseline total for this facet. |
+| `center_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field. |
+| `right_short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the center of the field. |
+| `right_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the right side of the field. |
+| `left_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the left side of the field. |
+| `center_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the center of the field. |
+| `medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws. |
+| `medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws. |
+| `left_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the left side of the field. |
+| `deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws, per PFF charting. |
+| `left_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the left side of the field. |
+| `short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting. |
+| `short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws. |
+| `left_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the left side of the field. |
+| `short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws. |
+| `center_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `behind_los_drop_rate` | numeric | Percentage of catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `right_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `short_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting. |
+| `right_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the right side of the field. |
+| `center_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the center of the field. |
+| `right_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the right side of the field. |
+| `behind_los_first_downs` | integer | First downs on throws behind the line of scrimmage: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `right_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws. |
+| `medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws. |
+| `short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws. |
+| `right_deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right side of the field, expressed as a percentage. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage. |
+| `center_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the center of the field. |
+| `right_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the right side of the field. |
+| `center_short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the left side of the field. |
+| `center_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the center of the field. |
+| `right_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws. |
+| `right_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the right side of the field. |
+| `medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws. |
+| `left_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the right side of the field. |
+| `center_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `left_behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage to the left side of the field. |
+| `center_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the center of the field. |
+| `right_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage to the right side of the field. |
+| `left_short_yards` | integer | Passing yards gained on short (0-9 air yards) throws to the left side of the field. |
+| `deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws. |
+| `right_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the right side of the field. |
+| `center_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the center of the field, expressed as a percentage. |
+| `right_deep_first_downs` | integer | Number of passing first downs gained on deep (20+ air yards) throws to the right side of the field. |
+| `left_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the left side of the field. |
+| `deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws. |
+| `left_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the left side of the field. |
+| `right_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage. |
+| `right_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `left_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the left side of the field. |
+| `deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws. |
+| `left_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field. |
+| `medium_touchdowns` | integer | Touchdowns on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `left_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the left side of the field. |
+| `right_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the right side of the field. |
+| `medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws. |
+| `behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage. |
+| `left_short_first_downs` | integer | Number of passing first downs gained on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the right side of the field. |
+| `right_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the right side of the field. |
+| `right_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_interceptions` | integer | Number of passes intercepted on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_yards` | integer | Yards on throws behind the line of scrimmage: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the center of the field. |
+| `left_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `left_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the left side of the field. |
+| `right_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the left side of the field. |
+| `center_deep_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on deep (20+ air yards) throws to the center of the field, per PFF charting. |
+| `medium_first_downs` | integer | First downs on medium (10-19 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `left_short_avg_depth_of_target` | integer | Average depth of target in air yards on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_ypa` | integer | Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field. |
+| `short_attempts` | integer | Number of pass attempts on short (0-9 air yards) throws. |
+| `right_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the right side of the field. |
+| `left_behind_los_touchdowns` | integer | Number of passing touchdowns thrown on throws behind the line of scrimmage to the left side of the field. |
+| `right_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the right side of the field. |
+| `short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws, plays PFF charts as deserving of a turnover. |
+| `right_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the right side of the field. |
+| `right_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the right side of the field. |
+| `right_short_qb_rating` | integer | Traditional NFL passer rating on short (0-9 air yards) throws to the right side of the field. |
+| `medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws. |
+| `center_deep_attempts_percent` | integer | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the center of the field, expressed as a percentage. |
+| `left_short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws to the left side of the field. |
+| `behind_los_drops` | integer | Catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws. |
+| `left_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the left side of the field. |
+| `left_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage. |
+| `behind_los_sack_percent` | integer | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage. |
+| `left_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the left side of the field. |
+| `left_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `center_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the center of the field. |
+| `left_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
+| `center_short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws to the center of the field. |
+| `center_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the center of the field. |
+| `short_avg_depth_of_target` | numeric | Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the left side of the field. |
+| `deep_yards` | integer | Yards on deep (20+ air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the center of the field, plays PFF charts as deserving of a turnover. |
+| `medium_ypa` | numeric | Yards gained per pass attempt on medium (10-19 air yards) throws. |
+| `left_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the left side of the field. |
+| `left_deep_avg_depth_of_target` | integer | Average depth of target in air yards on deep (20+ air yards) throws to the left side of the field. |
+| `deep_first_downs` | integer | First downs on deep (20+ air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `short_drop_rate` | integer | Percentage of catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `left_medium_bats` | integer | Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_spikes` | integer | Number of clock-stopping spikes on deep (20+ air yards) throws to the center of the field. |
+| `center_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `left_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_touchdowns` | integer | Number of passing touchdowns thrown on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_short_big_time_throws` | integer | Number of big-time throws on short (0-9 air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws. |
+| `left_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the left side of the field. |
+| `right_deep_passing_snaps` | integer | Number of passing snaps played on deep (20+ air yards) throws to the right side of the field. |
+| `right_short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the right side of the field, per PFF charting. |
+| `center_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the right side of the field. |
+| `center_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage. |
+| `right_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
+| `right_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `right_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the right side of the field. |
+| `deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
+| `left_short_turnover_worthy_plays` | integer | Number of turnover-worthy plays on short (0-9 air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the center of the field. |
+| `right_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the right side of the field. |
+| `left_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the left side of the field. |
+| `short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws. |
+| `medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws. |
+| `left_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the left side of the field. |
+| `right_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the right side of the field. |
+| `behind_los_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage, per PFF charting. |
+| `medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws. |
+| `center_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage. |
+| `right_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `left_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the left side of the field. |
+| `center_medium_touchdowns` | integer | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the center of the field. |
+| `center_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the center of the field. |
+| `left_short_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the left side of the field, per PFF charting. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `right_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the right side of the field, expressed as a percentage. |
+| `right_deep_avg_depth_of_target` | numeric | Average depth of target in air yards on deep (20+ air yards) throws to the right side of the field. |
+| `behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage. |
+| `center_deep_yards` | integer | Passing yards gained on deep (20+ air yards) throws to the center of the field. |
+| `short_dropbacks` | integer | Number of dropbacks on short (0-9 air yards) throws. |
+| `left_deep_sack_percent` | integer | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the left side of the field. |
+| `center_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the center of the field. |
+| `behind_los_avg_depth_of_target` | numeric | Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `left_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the left side of the field. |
+| `medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws, per PFF charting. |
+| `left_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws, plays PFF charts as deserving of a turnover. |
+| `behind_los_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage, per PFF charting. |
+| `left_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the left side of the field. |
+| `left_short_bats` | integer | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left side of the field. |
+| `center_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right side of the field. |
+| `medium_yards` | integer | Yards on medium (10-19 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `center_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the center of the field. |
+| `center_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the center of the field. |
+| `center_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the center of the field. |
+| `behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage. |
+| `left_short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws. |
+| `center_deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_ypa` | integer | Yards gained per pass attempt on throws behind the line of scrimmage. |
+| `right_short_interceptions` | integer | Number of passes intercepted on short (0-9 air yards) throws to the right side of the field. |
+| `left_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the left side of the field. |
+| `right_medium_sacks` | integer | Number of sacks taken on medium (10-19 air yards) throws to the right side of the field. |
+| `right_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `right_medium_spikes` | integer | Number of clock-stopping spikes on medium (10-19 air yards) throws to the right side of the field. |
+| `behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage, as charted by PFF. |
+| `left_medium_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the left side of the field. |
+| `medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws. |
+| `deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws, as charted by PFF. |
+| `right_medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws to the right side of the field. |
+| `short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws. |
+| `deep_drop_rate` | numeric | Percentage of catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws. |
+| `left_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the left side of the field. |
+| `right_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the right side of the field. |
+| `medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed as a percentage. |
+| `right_behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage to the right side of the field. |
+| `left_medium_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the left side of the field. |
+| `right_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the right side of the field, expressed as a percentage. |
+| `center_short_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `short_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws, as charted by PFF. |
+| `right_medium_turnover_worthy_plays` | integer | Number of turnover-worthy plays on medium (10-19 air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `left_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the left side of the field. |
+| `center_behind_los_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the center of the field. |
+| `right_behind_los_ypa` | numeric | Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field. |
+| `deep_interceptions` | integer | Interceptions on deep (20+ air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `left_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the left side of the field, per PFF charting. |
+| `right_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_thrown_aways` | integer | Number of intentional throwaways on deep (20+ air yards) throws to the center of the field. |
+| `short_thrown_aways` | integer | Number of intentional throwaways on short (0-9 air yards) throws. |
+| `left_short_btt_rate` | integer | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws to the left side of the field, per PFF charting. |
+| `right_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the right side of the field. |
+| `short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws, as charted by PFF. |
+| `center_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the center of the field. |
+| `center_medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to the center of the field. |
+| `right_behind_los_yards` | integer | Passing yards gained on throws behind the line of scrimmage to the right side of the field. |
+| `right_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the right side of the field. |
+| `left_medium_attempts` | integer | Number of pass attempts on medium (10-19 air yards) throws to the left side of the field. |
+| `medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws. |
+| `left_medium_drops` | integer | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the left side of the field. |
+| `left_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the left side of the field. |
+| `medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws. |
+| `center_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_passing_snaps` | integer | Number of passing snaps played on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the left side of the field. |
+| `deep_bats` | integer | Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws. |
+| `left_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the left side of the field. |
+| `left_medium_scrambles` | integer | Number of scrambles on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the right side of the field. |
+| `left_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the left side of the field. |
+| `left_deep_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the left side of the field. |
+| `medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws. |
+| `behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage, plays PFF charts as deserving of a turnover. |
+| `right_medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws to the right side of the field. |
+| `right_deep_dropbacks` | integer | Number of dropbacks on deep (20+ air yards) throws to the right side of the field. |
+| `deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws. |
+| `center_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the center of the field. |
+| `left_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the left side of the field. |
+| `left_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_spikes` | integer | Number of clock-stopping spikes on throws behind the line of scrimmage to the left side of the field. |
+| `left_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `center_short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws to the center of the field. |
+| `center_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the center of the field. |
+| `right_deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws to the right side of the field. |
+| `center_behind_los_sacks` | integer | Number of sacks taken on throws behind the line of scrimmage to the center of the field. |
+| `deep_completions` | integer | Number of completed passes on deep (20+ air yards) throws. |
+| `left_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the left side of the field, expressed as a percentage. |
+| `short_yards` | integer | Yards on short (0-9 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage. |
+| `right_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the right side of the field. |
+| `right_behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage to the right side of the field. |
+| `base_attempts` | integer | Number of pass attempts across all splits, the baseline total for this facet. |
+| `center_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the center of the field. |
+| `center_behind_los_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `center_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
+| `left_medium_sack_percent` | integer | Percentage of dropbacks that ended in a sack on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_completion_percent` | numeric | Percentage of pass attempts completed on throws behind the line of scrimmage. |
+| `left_deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left side of the field, expressed as a percentage. |
+| `center_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `left_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the left side of the field. |
+| `behind_los_thrown_aways` | integer | Number of intentional throwaways on throws behind the line of scrimmage. |
+| `center_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws. |
+| `left_deep_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the left side of the field, per PFF charting. |
+| `center_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the center of the field. |
+| `left_behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `right_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the right side of the field. |
+| `right_medium_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on medium (10-19 air yards) throws to the right side of the field. |
+| `center_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `left_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_drop_rate` | integer | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the left side of the field. |
+| `left_behind_los_scrambles` | integer | Number of scrambles on throws behind the line of scrimmage to the left side of the field. |
+| `left_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the left side of the field, per PFF charting. |
+| `right_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage. |
+| `short_first_downs` | integer | First downs on short (0-9 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `left_deep_attempts` | integer | Number of pass attempts on deep (20+ air yards) throws to the left side of the field. |
+| `right_behind_los_attempts` | integer | Number of pass attempts on throws behind the line of scrimmage to the right side of the field. |
+| `right_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the right side of the field. |
+| `left_behind_los_attempts_percent` | numeric | Share of the player's total pass attempts that came on throws behind the line of scrimmage to the left side of the field, expressed as a percentage. |
+| `behind_los_big_time_throws` | integer | Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_deep_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_big_time_throws` | integer | Number of big-time throws on medium (10-19 air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `right_behind_los_bats` | integer | Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage to the right side of the field. |
+| `left_medium_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `right_deep_turnover_worthy_plays` | integer | Number of turnover-worthy plays on deep (20+ air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
+| `left_short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws to the left side of the field. |
+| `left_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_behind_los_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the left side of the field, per PFF charting. |
+| `short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws. |
+| `right_short_drops` | integer | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the right side of the field. |
+| `right_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the right side of the field. |
+| `right_medium_thrown_aways` | integer | Number of intentional throwaways on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_sack_percent` | integer | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the center of the field. |
+| `right_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the right side of the field. |
+| `center_short_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `center_medium_positive_epa_percent` | integer | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the center of the field. |
+| `medium_drops` | integer | Catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `center_medium_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `center_short_sacks` | integer | Number of sacks taken on short (0-9 air yards) throws to the center of the field. |
+| `deep_attempts_percent` | integer | Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as a percentage. |
+| `center_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `left_short_passing_snaps` | integer | Number of passing snaps played on short (0-9 air yards) throws to the left side of the field. |
+| `center_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the center of the field. |
+| `behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage. |
+| `center_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `center_short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws to the center of the field. |
+| `left_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the left side of the field, expressed as a percentage. |
+| `left_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the left side of the field. |
+| `right_short_completions` | integer | Number of completed passes on short (0-9 air yards) throws to the right side of the field. |
+| `center_behind_los_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `right_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the right side of the field. |
+| `center_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the center of the field. |
+| `deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws. |
+| `left_deep_drops` | integer | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the left side of the field. |
+| `right_behind_los_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `center_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the center of the field. |
+| `center_deep_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `short_spikes` | integer | Number of clock-stopping spikes on short (0-9 air yards) throws. |
+| `right_behind_los_completions` | integer | Number of completed passes on throws behind the line of scrimmage to the right side of the field. |
+| `center_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
+| `short_drops` | integer | Catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as charted by PFF. |
+| `right_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the right side of the field. |
+| `short_pressure_to_sack_rate` | integer | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws. |
+| `center_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the left side of the field. |
+| `center_deep_sacks` | integer | Number of sacks taken on deep (20+ air yards) throws to the center of the field. |
+| `left_deep_big_time_throws` | integer | Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
+| `center_medium_first_downs` | integer | Number of passing first downs gained on medium (10-19 air yards) throws to the center of the field. |
+| `center_medium_dropbacks` | integer | Number of dropbacks on medium (10-19 air yards) throws to the center of the field. |
+| `right_deep_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `left_short_touchdowns` | integer | Number of passing touchdowns thrown on short (0-9 air yards) throws to the left side of the field. |
+| `medium_drop_rate` | numeric | Percentage of catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `left_medium_ypa` | integer | Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_passing_snaps` | integer | Number of passing snaps played on medium (10-19 air yards) throws to the right side of the field. |
+| `center_short_scrambles` | integer | Number of scrambles on short (0-9 air yards) throws to the center of the field. |
+| `left_behind_los_turnover_worthy_plays` | integer | Number of turnover-worthy plays on throws behind the line of scrimmage to the left side of the field, plays PFF charts as deserving of a turnover. |
+| `center_medium_yards` | integer | Passing yards gained on medium (10-19 air yards) throws to the center of the field. |
+| `center_deep_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on deep (20+ air yards) throws to the center of the field. |
+| `left_medium_interceptions` | integer | Number of passes intercepted on medium (10-19 air yards) throws to the left side of the field. |
+| `right_deep_interceptions` | integer | Number of passes intercepted on deep (20+ air yards) throws to the right side of the field. |
+| `medium_completion_percent` | numeric | Percentage of pass attempts completed on medium (10-19 air yards) throws. |
+| `right_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the right side of the field. |
+| `deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws. |
+| `behind_los_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage. |
+| `center_deep_scrambles` | integer | Number of scrambles on deep (20+ air yards) throws to the center of the field. |
+| `center_short_twp_rate` | integer | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the center of the field, per PFF charting. |
+| `behind_los_touchdowns` | integer | Touchdowns on throws behind the line of scrimmage: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `left_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the left side of the field. |
+| `right_medium_completions` | integer | Number of completed passes on medium (10-19 air yards) throws to the right side of the field. |
+| `right_behind_los_drops` | integer | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the right side of the field. |
+| `left_behind_los_first_downs` | integer | Number of passing first downs gained on throws behind the line of scrimmage to the left side of the field. |
+| `short_qb_rating` | numeric | Traditional NFL passer rating on short (0-9 air yards) throws. |
+| `center_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the center of the field, per PFF charting. |
+| `left_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the left side of the field. |
 
 **passing-pressure**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `no_blitz_completion_percent` | numeric |  |
-| `grades_offense` | numeric |  |
-| `no_pressure_scrambles` | integer |  |
-| `blitz_touchdowns` | integer |  |
-| `pressure_yards` | integer |  |
-| `no_pressure_spikes` | integer |  |
-| `blitz_ypa` | numeric |  |
-| `no_blitz_grades_run` | numeric |  |
-| `blitz_qb_rating` | numeric |  |
-| `no_pressure_thrown_aways` | integer |  |
-| `no_blitz_bats` | integer |  |
-| `no_blitz_drops` | integer |  |
-| `no_pressure_completion_percent` | numeric |  |
-| `blitz_aimed_passes` | integer |  |
-| `pressure_grades_run` | numeric |  |
-| `no_blitz_sack_percent` | numeric |  |
-| `no_pressure_bats` | integer |  |
-| `pressure_completions` | integer |  |
-| `blitz_big_time_throws` | integer |  |
-| `no_blitz_drop_rate` | numeric |  |
-| `blitz_spikes` | integer |  |
-| `no_pressure_completions` | integer |  |
-| `draft_season` | integer |  |
-| `no_pressure_passing_snaps` | integer |  |
-| `no_blitz_first_downs` | integer |  |
-| `blitz_avg_time_to_throw` | numeric |  |
-| `no_pressure_grades_hands_fumble` | numeric |  |
-| `pressure_aimed_passes` | integer |  |
-| `blitz_sacks` | integer |  |
-| `no_pressure_interceptions` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `pressure_epa` | numeric |  |
-| `blitz_completions` | integer |  |
-| `blitz_attempts` | integer |  |
-| `pressure_twp_rate` | numeric |  |
-| `pressure_sacks` | integer |  |
-| `no_blitz_pressure_to_sack_rate` | numeric |  |
-| `no_pressure_ypa` | numeric |  |
-| `pressure_passing_snaps` | integer |  |
-| `grades_pass` | numeric |  |
-| `pressure_bats` | integer |  |
-| `blitz_thrown_aways` | integer |  |
-| `no_pressure_drops` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `pressure_grades_offense_penalty` | numeric |  |
-| `pressure_scrambles` | integer |  |
-| `blitz_drop_rate` | numeric |  |
-| `pressure_grades_pass_route` | numeric |  |
-| `blitz_completion_percent` | numeric |  |
-| `no_pressure_first_downs` | integer |  |
-| `blitz_grades_offense_penalty` | numeric |  |
-| `no_blitz_epa` | numeric |  |
-| `blitz_interceptions` | integer |  |
-| `no_blitz_dropbacks` | integer |  |
-| `no_blitz_grades_pass` | numeric |  |
-| `no_blitz_scrambles` | integer |  |
-| `pressure_drop_rate` | numeric |  |
-| `no_blitz_yards` | integer |  |
-| `base_dropbacks` | integer |  |
-| `pressure_pressure_to_sack_rate` | numeric |  |
-| `no_blitz_grades_hands_fumble` | numeric |  |
-| `no_pressure_grades_offense` | numeric |  |
-| `no_pressure_avg_time_to_throw` | numeric |  |
-| `pressure_dropbacks` | integer |  |
-| `no_blitz_grades_offense_penalty` | numeric |  |
-| `no_pressure_grades_run` | numeric |  |
-| `player_game_count` | integer |  |
-| `blitz_turnover_worthy_plays` | integer |  |
-| `no_blitz_touchdowns` | integer |  |
-| `no_blitz_avg_depth_of_target` | numeric |  |
-| `no_pressure_dropbacks_percent` | numeric |  |
-| `blitz_grades_pass` | numeric |  |
-| `eligible_season` | integer |  |
-| `blitz_avg_depth_of_target` | numeric |  |
-| `no_blitz_spikes` | integer |  |
-| `no_pressure_dropbacks` | integer |  |
-| `blitz_btt_rate` | numeric |  |
-| `blitz_positive_epa_percent` | numeric |  |
-| `no_pressure_btt_rate` | numeric |  |
-| `no_pressure_drop_rate` | numeric |  |
-| `no_blitz_turnover_worthy_plays` | integer |  |
-| `pressure_positive_epa_percent` | numeric |  |
-| `blitz_first_downs` | integer |  |
-| `no_blitz_dropbacks_percent` | numeric |  |
-| `pressure_turnover_worthy_plays` | integer |  |
-| `no_pressure_epa` | numeric |  |
-| `no_blitz_avg_time_to_throw` | numeric |  |
-| `no_blitz_positive_epa_percent` | numeric |  |
-| `pressure_btt_rate` | numeric |  |
-| `no_pressure_aimed_passes` | integer |  |
-| `pressure_dropbacks_percent` | numeric |  |
-| `grades_run` | numeric |  |
-| `no_pressure_def_gen_pressures` | integer |  |
-| `pressure_grades_offense` | numeric |  |
-| `pressure_completion_percent` | numeric |  |
-| `pressure_avg_depth_of_target` | integer |  |
-| `blitz_epa` | numeric |  |
-| `pressure_drops` | integer |  |
-| `no_blitz_def_gen_pressures` | integer |  |
-| `pressure_attempts` | integer |  |
-| `pressure_big_time_throws` | integer |  |
-| `no_blitz_thrown_aways` | integer |  |
-| `blitz_drops` | integer |  |
-| `no_pressure_touchdowns` | integer |  |
-| `no_pressure_sacks` | integer |  |
-| `blitz_sack_percent` | numeric |  |
-| `pressure_sack_percent` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `no_pressure_attempts` | integer |  |
-| `no_blitz_grades_offense` | numeric |  |
-| `blitz_scrambles` | integer |  |
-| `blitz_dropbacks_percent` | numeric |  |
-| `no_pressure_qb_rating` | numeric |  |
-| `no_blitz_passing_snaps` | integer |  |
-| `no_blitz_aimed_passes` | integer |  |
-| `blitz_yards` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `no_blitz_attempts` | integer |  |
-| `pressure_accuracy_percent` | numeric |  |
-| `no_blitz_hit_as_threw` | integer |  |
-| `pressure_hit_as_threw` | integer |  |
-| `blitz_pressure_to_sack_rate` | numeric |  |
-| `declined_penalties` | integer |  |
-| `no_blitz_btt_rate` | numeric |  |
-| `no_blitz_ypa` | numeric |  |
-| `blitz_grades_run` | numeric |  |
-| `pressure_interceptions` | integer |  |
-| `blitz_grades_hands_fumble` | numeric |  |
-| `no_pressure_grades_offense_penalty` | numeric |  |
-| `blitz_grades_offense` | numeric |  |
-| `grades_hands_fumble` | numeric |  |
-| `pressure_def_gen_pressures` | integer |  |
-| `pressure_grades_pass` | numeric |  |
-| `no_blitz_qb_rating` | numeric |  |
-| `blitz_hit_as_threw` | integer |  |
-| `pressure_ypa` | numeric |  |
-| `blitz_grades_pass_route` | numeric |  |
-| `pressure_avg_time_to_throw` | numeric |  |
-| `no_blitz_completions` | integer |  |
-| `no_pressure_grades_pass_route` | numeric |  |
-| `no_pressure_sack_percent` | integer |  |
-| `no_blitz_accuracy_percent` | integer |  |
-| `no_pressure_pressure_to_sack_rate` | character |  |
-| `no_pressure_turnover_worthy_plays` | integer |  |
-| `pressure_first_downs` | integer |  |
-| `blitz_passing_snaps` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `no_pressure_twp_rate` | numeric |  |
-| `no_blitz_sacks` | integer |  |
-| `no_blitz_grades_pass_route` | numeric |  |
-| `no_pressure_accuracy_percent` | numeric |  |
-| `no_blitz_twp_rate` | numeric |  |
-| `no_pressure_hit_as_threw` | integer |  |
-| `no_pressure_grades_pass` | numeric |  |
-| `no_pressure_positive_epa_percent` | numeric |  |
-| `pressure_spikes` | integer |  |
-| `pressure_grades_hands_fumble` | numeric |  |
-| `pressure_qb_rating` | numeric |  |
-| `blitz_bats` | integer |  |
-| `pressure_touchdowns` | integer |  |
-| `pressure_thrown_aways` | integer |  |
-| `no_blitz_interceptions` | integer |  |
-| `blitz_dropbacks` | integer |  |
-| `blitz_def_gen_pressures` | integer |  |
-| `no_blitz_big_time_throws` | integer |  |
-| `no_pressure_avg_depth_of_target` | numeric |  |
-| `no_pressure_yards` | integer |  |
-| `blitz_twp_rate` | numeric |  |
-| `blitz_accuracy_percent` | numeric |  |
-| `no_pressure_big_time_throws` | integer |  |
-| `no_blitz_grades_pass_block` | numeric |  |
-| `blitz_grades_run_block` | numeric |  |
-| `no_pressure_grades_run_block` | numeric |  |
-| `blitz_grades_pass_block` | numeric |  |
-| `no_pressure_grades_pass_block` | numeric |  |
-| `pressure_grades_pass_block` | character |  |
-| `no_blitz_grades_run_block` | numeric |  |
-| `blitz_grades_screen_block` | numeric |  |
-| `pressure_grades_screen_block` | numeric |  |
-| `no_blitz_grades_screen_block` | numeric |  |
-| `no_pressure_grades_hands_drop` | numeric |  |
-| `blitz_grades_hands_drop` | numeric |  |
-| `pressure_grades_run_block` | integer |  |
-| `no_pressure_grades_screen_block` | numeric |  |
-| `pressure_grades_hands_drop` | numeric |  |
-| `no_blitz_grades_hands_drop` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `no_blitz_completion_percent` | numeric | Percentage of pass attempts completed when not blitzed. |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `no_pressure_scrambles` | integer | Number of scrambles from a clean pocket (no pressure). |
+| `blitz_touchdowns` | integer | Number of passing touchdowns thrown when blitzed. |
+| `pressure_yards` | integer | Passing yards gained when under pressure. |
+| `no_pressure_spikes` | integer | Number of clock-stopping spikes from a clean pocket (no pressure). |
+| `blitz_ypa` | numeric | Yards gained per pass attempt when blitzed. |
+| `no_blitz_grades_run` | numeric | PFF rushing grade for the player (0-100) when not blitzed. |
+| `blitz_qb_rating` | numeric | Traditional NFL passer rating when blitzed. |
+| `no_pressure_thrown_aways` | integer | Number of intentional throwaways from a clean pocket (no pressure). |
+| `no_blitz_bats` | integer | Number of pass attempts batted down at the line of scrimmage when not blitzed. |
+| `no_blitz_drops` | integer | Number of catchable passes dropped by receivers when not blitzed. |
+| `no_pressure_completion_percent` | numeric | Percentage of pass attempts completed from a clean pocket (no pressure). |
+| `blitz_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF. |
+| `pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) when under pressure. |
+| `no_blitz_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when not blitzed. |
+| `no_pressure_bats` | integer | Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure). |
+| `pressure_completions` | integer | Number of completed passes when under pressure. |
+| `blitz_big_time_throws` | integer | Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_blitz_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when not blitzed. |
+| `blitz_spikes` | integer | Number of clock-stopping spikes when blitzed. |
+| `no_pressure_completions` | integer | Number of completed passes from a clean pocket (no pressure). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `no_pressure_passing_snaps` | integer | Number of passing snaps played from a clean pocket (no pressure). |
+| `no_blitz_first_downs` | integer | Number of passing first downs gained when not blitzed. |
+| `blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when blitzed. |
+| `no_pressure_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) from a clean pocket (no pressure). |
+| `pressure_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted by PFF. |
+| `blitz_sacks` | integer | Number of sacks taken when blitzed. |
+| `no_pressure_interceptions` | integer | Number of passes intercepted from a clean pocket (no pressure). |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `pressure_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when under pressure. |
+| `blitz_completions` | integer | Number of completed passes when blitzed. |
+| `blitz_attempts` | integer | Number of pass attempts when blitzed. |
+| `pressure_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when under pressure, per PFF charting. |
+| `pressure_sacks` | integer | Number of sacks taken when under pressure. |
+| `no_blitz_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack when not blitzed. |
+| `no_pressure_ypa` | numeric | Yards gained per pass attempt from a clean pocket (no pressure). |
+| `pressure_passing_snaps` | integer | Number of passing snaps played when under pressure. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `pressure_bats` | integer | Number of pass attempts batted down at the line of scrimmage when under pressure. |
+| `blitz_thrown_aways` | integer | Number of intentional throwaways when blitzed. |
+| `no_pressure_drops` | integer | Number of catchable passes dropped by receivers from a clean pocket (no pressure). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `pressure_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when under pressure. |
+| `pressure_scrambles` | integer | Number of scrambles when under pressure. |
+| `blitz_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when blitzed. |
+| `pressure_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when under pressure. |
+| `blitz_completion_percent` | numeric | Percentage of pass attempts completed when blitzed. |
+| `no_pressure_first_downs` | integer | Number of passing first downs gained from a clean pocket (no pressure). |
+| `blitz_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when blitzed. |
+| `no_blitz_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when not blitzed. |
+| `blitz_interceptions` | integer | Number of passes intercepted when blitzed. |
+| `no_blitz_dropbacks` | integer | Number of dropbacks when not blitzed. |
+| `no_blitz_grades_pass` | numeric | PFF passing grade (0-100) when not blitzed. |
+| `no_blitz_scrambles` | integer | Number of scrambles when not blitzed. |
+| `pressure_drop_rate` | numeric | Percentage of catchable passes dropped by receivers when under pressure. |
+| `no_blitz_yards` | integer | Passing yards gained when not blitzed. |
+| `base_dropbacks` | integer | Number of dropbacks across all splits, the baseline total for this facet. |
+| `pressure_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack, reported within the pressure split. |
+| `no_blitz_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when not blitzed. |
+| `no_pressure_grades_offense` | numeric | PFF overall offense grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds from a clean pocket (no pressure). |
+| `pressure_dropbacks` | integer | Number of dropbacks when under pressure. |
+| `no_blitz_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when not blitzed. |
+| `no_pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) from a clean pocket (no pressure). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `blitz_turnover_worthy_plays` | integer | Number of turnover-worthy plays when blitzed, plays PFF charts as deserving of a turnover. |
+| `no_blitz_touchdowns` | integer | Number of passing touchdowns thrown when not blitzed. |
+| `no_blitz_avg_depth_of_target` | numeric | Average depth of target in air yards when not blitzed. |
+| `no_pressure_dropbacks_percent` | numeric | Share of the player's total dropbacks that came from a clean pocket (no pressure), expressed as a percentage. |
+| `blitz_grades_pass` | numeric | PFF passing grade (0-100) when blitzed. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `blitz_avg_depth_of_target` | numeric | Average depth of target in air yards when blitzed. |
+| `no_blitz_spikes` | integer | Number of clock-stopping spikes when not blitzed. |
+| `no_pressure_dropbacks` | integer | Number of dropbacks from a clean pocket (no pressure). |
+| `blitz_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting. |
+| `blitz_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when blitzed. |
+| `no_pressure_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts from a clean pocket (no pressure), per PFF charting. |
+| `no_pressure_drop_rate` | numeric | Percentage of catchable passes dropped by receivers from a clean pocket (no pressure). |
+| `no_blitz_turnover_worthy_plays` | integer | Number of turnover-worthy plays when not blitzed, plays PFF charts as deserving of a turnover. |
+| `pressure_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when under pressure. |
+| `blitz_first_downs` | integer | Number of passing first downs gained when blitzed. |
+| `no_blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when not blitzed, expressed as a percentage. |
+| `pressure_turnover_worthy_plays` | integer | Number of turnover-worthy plays when under pressure, plays PFF charts as deserving of a turnover. |
+| `no_pressure_epa` | numeric | Total expected points added (EPA) on the player's dropbacks from a clean pocket (no pressure). |
+| `no_blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when not blitzed. |
+| `no_blitz_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when not blitzed. |
+| `pressure_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when under pressure, per PFF charting. |
+| `no_pressure_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure), as charted by PFF. |
+| `pressure_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when under pressure, expressed as a percentage. |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `no_pressure_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks from a clean pocket (no pressure), as charted by PFF. |
+| `pressure_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when under pressure. |
+| `pressure_completion_percent` | numeric | Percentage of pass attempts completed when under pressure. |
+| `pressure_avg_depth_of_target` | integer | Average depth of target in air yards when under pressure. |
+| `blitz_epa` | numeric | Total expected points added (EPA) on the player's dropbacks when blitzed. |
+| `pressure_drops` | integer | Number of catchable passes dropped by receivers when under pressure. |
+| `no_blitz_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when not blitzed, as charted by PFF. |
+| `pressure_attempts` | integer | Number of pass attempts when under pressure. |
+| `pressure_big_time_throws` | integer | Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_blitz_thrown_aways` | integer | Number of intentional throwaways when not blitzed. |
+| `blitz_drops` | integer | Number of catchable passes dropped by receivers when blitzed. |
+| `no_pressure_touchdowns` | integer | Number of passing touchdowns thrown from a clean pocket (no pressure). |
+| `no_pressure_sacks` | integer | Number of sacks taken from a clean pocket (no pressure). |
+| `blitz_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when blitzed. |
+| `pressure_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when under pressure. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `no_pressure_attempts` | integer | Number of pass attempts from a clean pocket (no pressure). |
+| `no_blitz_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when not blitzed. |
+| `blitz_scrambles` | integer | Number of scrambles when blitzed. |
+| `blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when blitzed, expressed as a percentage. |
+| `no_pressure_qb_rating` | numeric | Traditional NFL passer rating from a clean pocket (no pressure). |
+| `no_blitz_passing_snaps` | integer | Number of passing snaps played when not blitzed. |
+| `no_blitz_aimed_passes` | integer | Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by PFF. |
+| `blitz_yards` | integer | Passing yards gained when blitzed. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `no_blitz_attempts` | integer | Number of pass attempts when not blitzed. |
+| `pressure_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF when under pressure. |
+| `no_blitz_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when not blitzed, as charted by PFF. |
+| `pressure_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when under pressure, as charted by PFF. |
+| `blitz_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack when blitzed. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `no_blitz_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when not blitzed, per PFF charting. |
+| `no_blitz_ypa` | numeric | Yards gained per pass attempt when not blitzed. |
+| `blitz_grades_run` | numeric | PFF rushing grade for the player (0-100) when blitzed. |
+| `pressure_interceptions` | integer | Number of passes intercepted when under pressure. |
+| `blitz_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when blitzed. |
+| `no_pressure_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_offense` | numeric | PFF overall offense grade for the player (0-100) when blitzed. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `pressure_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when under pressure, as charted by PFF. |
+| `pressure_grades_pass` | numeric | PFF passing grade (0-100) when under pressure. |
+| `no_blitz_qb_rating` | numeric | Traditional NFL passer rating when not blitzed. |
+| `blitz_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw when blitzed, as charted by PFF. |
+| `pressure_ypa` | numeric | Yards gained per pass attempt when under pressure. |
+| `blitz_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when blitzed. |
+| `pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds when under pressure. |
+| `no_blitz_completions` | integer | Number of completed passes when not blitzed. |
+| `no_pressure_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) from a clean pocket (no pressure). |
+| `no_pressure_sack_percent` | integer | Percentage of dropbacks that ended in a sack from a clean pocket (no pressure). |
+| `no_blitz_accuracy_percent` | integer | Percentage of aimed passes charted as accurate by PFF when not blitzed. |
+| `no_pressure_pressure_to_sack_rate` | character | Pressure-to-sack rate as reported within the no-pressure split of the PFF passing-pressure facet. |
+| `no_pressure_turnover_worthy_plays` | integer | Number of turnover-worthy plays from a clean pocket (no pressure), plays PFF charts as deserving of a turnover. |
+| `pressure_first_downs` | integer | Number of passing first downs gained when under pressure. |
+| `blitz_passing_snaps` | integer | Number of passing snaps played when blitzed. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `no_pressure_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts from a clean pocket (no pressure), per PFF charting. |
+| `no_blitz_sacks` | integer | Number of sacks taken when not blitzed. |
+| `no_blitz_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when not blitzed. |
+| `no_pressure_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure). |
+| `no_blitz_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when not blitzed, per PFF charting. |
+| `no_pressure_hit_as_threw` | integer | Number of attempts on which the passer was hit as he threw from a clean pocket (no pressure), as charted by PFF. |
+| `no_pressure_grades_pass` | numeric | PFF passing grade (0-100) from a clean pocket (no pressure). |
+| `no_pressure_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added from a clean pocket (no pressure). |
+| `pressure_spikes` | integer | Number of clock-stopping spikes when under pressure. |
+| `pressure_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when under pressure. |
+| `pressure_qb_rating` | numeric | Traditional NFL passer rating when under pressure. |
+| `blitz_bats` | integer | Number of pass attempts batted down at the line of scrimmage when blitzed. |
+| `pressure_touchdowns` | integer | Number of passing touchdowns thrown when under pressure. |
+| `pressure_thrown_aways` | integer | Number of intentional throwaways when under pressure. |
+| `no_blitz_interceptions` | integer | Number of passes intercepted when not blitzed. |
+| `blitz_dropbacks` | integer | Number of dropbacks when blitzed. |
+| `blitz_def_gen_pressures` | integer | Number of defense-generated pressures on the player's dropbacks when blitzed, as charted by PFF. |
+| `no_blitz_big_time_throws` | integer | Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw designation. |
+| `no_pressure_avg_depth_of_target` | numeric | Average depth of target in air yards from a clean pocket (no pressure). |
+| `no_pressure_yards` | integer | Passing yards gained from a clean pocket (no pressure). |
+| `blitz_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts when blitzed, per PFF charting. |
+| `blitz_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF when blitzed. |
+| `no_pressure_big_time_throws` | integer | Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty throw designation. |
+| `no_blitz_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) when not blitzed. |
+| `blitz_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) when blitzed. |
+| `no_pressure_grades_pass_block` | numeric | PFF pass-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `pressure_grades_pass_block` | character | PFF pass-blocking grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) when not blitzed. |
+| `blitz_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when blitzed. |
+| `pressure_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) when not blitzed. |
+| `no_pressure_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) from a clean pocket (no pressure). |
+| `blitz_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when blitzed. |
+| `pressure_grades_run_block` | integer | PFF run-blocking grade for the player (0-100) when under pressure. |
+| `no_pressure_grades_screen_block` | numeric | PFF screen-blocking grade for the player (0-100) from a clean pocket (no pressure). |
+| `pressure_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when under pressure. |
+| `no_blitz_grades_hands_drop` | numeric | PFF hands (drop) grade for the player (0-100) when not blitzed. |
 
 **receiving**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
 | `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `team_targets_percent` | numeric |  |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `caught_percent` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `yards_per_reception` | numeric |  |
-| `touchdowns` | integer |  |
-| `grades_offense` | numeric |  |
-| `grades_pass_route` | numeric |  |
-| `grades_hands_drop` | numeric |  |
-| `grades_hands_fumble` | numeric |  |
-| `pass_plays` | integer |  |
-| `routes` | integer |  |
-| `route_rate` | numeric |  |
-| `pass_blocks` | integer |  |
-| `pass_block_rate` | numeric |  |
-| `slot_snaps` | integer |  |
-| `slot_rate` | numeric |  |
-| `wide_snaps` | integer |  |
-| `wide_rate` | numeric |  |
-| `inline_snaps` | integer |  |
-| `inline_rate` | numeric |  |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `yards_after_catch_per_reception` | numeric |  |
-| `yprr` | numeric |  |
-| `avg_depth_of_target` | numeric |  |
-| `longest` | integer |  |
-| `drops` | integer | Throws dropped |
-| `drop_rate` | numeric |  |
-| `contested_targets` | integer |  |
-| `contested_receptions` | integer |  |
-| `contested_catch_rate` | numeric |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `fumbles` | integer |  |
-| `avoided_tackles` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `targeted_qb_rating` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `receptions_oe` | numeric |  |
-| `receptions_oe_total` | numeric |  |
-| `lined_up_vs_cb` | numeric |  |
-| `lined_up_vs_s` | numeric |  |
-| `lined_up_vs_lb` | numeric |  |
-| `position_target_share` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `team_targets_percent` | numeric | Percentage of the team's targets that went to the player (target share). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `caught_percent` | numeric | Percentage of targets caught. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `grades_hands_drop` | numeric | PFF hands/drop grade (0-100). |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `pass_plays` | integer | Pass-play snaps. |
+| `routes` | integer | Pass routes run by the player. |
+| `route_rate` | numeric | Share of pass-play snaps on which the player ran a route. |
+| `pass_blocks` | integer | Pass-play snaps spent pass blocking. |
+| `pass_block_rate` | numeric | Share of pass-play snaps spent pass blocking. |
+| `slot_snaps` | integer | Receiving snaps aligned in the slot. |
+| `slot_rate` | numeric | Share of receiving snaps aligned in the slot. |
+| `wide_snaps` | integer | Receiving snaps aligned out wide. |
+| `wide_rate` | numeric | Share of receiving snaps aligned out wide. |
+| `inline_snaps` | integer | Receiving snaps aligned inline, tight to the formation. |
+| `inline_rate` | numeric | Share of receiving snaps aligned inline, tight to the formation. |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `yards_after_catch_per_reception` | numeric | Average yards after the catch per reception. |
+| `yprr` | numeric | Yards per route run. |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `drop_rate` | numeric | Drop rate, in percent: share of catchable passes dropped by the passer's receivers (passing report) or by the player (receiving report). |
+| `contested_targets` | integer | Contested targets. |
+| `contested_receptions` | integer | Contested catches made. |
+| `contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught. |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `fumbles` | integer | Fumbles by the player: after the catch on the receiving report, as a ball carrier on the rushing report. |
+| `avoided_tackles` | integer | Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner on rushing. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `receptions_oe` | numeric | Catch rate over expectation, in percentage points (receptions per target minus PFF's expected rate). |
+| `receptions_oe_total` | numeric | Receptions over expectation in total: receptions minus PFF-expected receptions on the player's targets. |
+| `lined_up_vs_cb` | numeric | Percentage of the player's charted matchups in which he lined up across from a cornerback; with lined_up_vs_lb and lined_up_vs_s it sums to 100 where populated (null for many players). |
+| `lined_up_vs_s` | numeric | Percentage of the player's charted matchups in which he lined up across from a safety; with lined_up_vs_cb and lined_up_vs_lb it sums to 100 where populated (null for many players). |
+| `lined_up_vs_lb` | numeric | Percentage of the player's charted matchups in which he lined up across from a linebacker; with lined_up_vs_cb and lined_up_vs_s it sums to 100 where populated (null for many players). |
+| `position_target_share` | numeric | Percentage of the team's targets that went to players at the player's position; the same value repeats on every row at that position (e.g. the whole WR group's share). |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **receiving-depth**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
 | `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `base_targets` | integer |  |
-| `deep_targets_percent` | numeric |  |
-| `deep_targets` | integer |  |
-| `deep_receptions` | integer |  |
-| `deep_caught_percent` | numeric |  |
-| `deep_yards` | integer |  |
-| `deep_yards_per_reception` | numeric |  |
-| `deep_touchdowns` | integer |  |
-| `deep_grades_pass_route` | numeric |  |
-| `deep_grades_hands_drop` | numeric |  |
-| `deep_yards_after_catch` | integer |  |
-| `deep_yards_after_catch_per_reception` | numeric |  |
-| `deep_yprr` | numeric |  |
-| `deep_avg_depth_of_target` | numeric |  |
-| `deep_drops` | integer |  |
-| `deep_drop_rate` | numeric |  |
-| `deep_contested_targets` | integer |  |
-| `deep_contested_receptions` | integer |  |
-| `deep_contested_catch_rate` | integer |  |
-| `deep_interceptions` | integer |  |
-| `deep_fumbles` | integer |  |
-| `deep_avoided_tackles` | integer |  |
-| `deep_first_downs` | integer |  |
-| `deep_targeted_qb_rating` | numeric |  |
-| `medium_targets_percent` | numeric |  |
-| `medium_targets` | integer |  |
-| `medium_receptions` | integer |  |
-| `medium_caught_percent` | numeric |  |
-| `medium_yards` | integer |  |
-| `medium_yards_per_reception` | numeric |  |
-| `medium_touchdowns` | integer |  |
-| `medium_grades_pass_route` | numeric |  |
-| `medium_grades_hands_drop` | numeric |  |
-| `medium_yards_after_catch` | integer |  |
-| `medium_yards_after_catch_per_reception` | numeric |  |
-| `medium_yprr` | numeric |  |
-| `medium_avg_depth_of_target` | numeric |  |
-| `medium_drops` | integer |  |
-| `medium_drop_rate` | numeric |  |
-| `medium_contested_targets` | integer |  |
-| `medium_contested_receptions` | integer |  |
-| `medium_contested_catch_rate` | numeric |  |
-| `medium_interceptions` | integer |  |
-| `medium_fumbles` | integer |  |
-| `medium_avoided_tackles` | integer |  |
-| `medium_first_downs` | integer |  |
-| `medium_targeted_qb_rating` | numeric |  |
-| `short_targets_percent` | numeric |  |
-| `short_targets` | integer |  |
-| `short_receptions` | integer |  |
-| `short_caught_percent` | numeric |  |
-| `short_yards` | integer |  |
-| `short_yards_per_reception` | numeric |  |
-| `short_touchdowns` | integer |  |
-| `short_grades_pass_route` | numeric |  |
-| `short_grades_hands_drop` | numeric |  |
-| `short_yards_after_catch` | integer |  |
-| `short_yards_after_catch_per_reception` | numeric |  |
-| `short_yprr` | numeric |  |
-| `short_avg_depth_of_target` | numeric |  |
-| `short_drops` | integer |  |
-| `short_drop_rate` | numeric |  |
-| `short_contested_targets` | integer |  |
-| `short_contested_receptions` | integer |  |
-| `short_contested_catch_rate` | numeric |  |
-| `short_interceptions` | integer |  |
-| `short_fumbles` | integer |  |
-| `short_avoided_tackles` | integer |  |
-| `short_first_downs` | integer |  |
-| `short_targeted_qb_rating` | numeric |  |
-| `behind_los_targets_percent` | numeric |  |
-| `behind_los_targets` | integer |  |
-| `behind_los_receptions` | integer |  |
-| `behind_los_caught_percent` | numeric |  |
-| `behind_los_yards` | integer |  |
-| `behind_los_yards_per_reception` | numeric |  |
-| `behind_los_touchdowns` | integer |  |
-| `behind_los_grades_pass_route` | numeric |  |
-| `behind_los_grades_hands_drop` | numeric |  |
-| `behind_los_yards_after_catch` | integer |  |
-| `behind_los_yards_after_catch_per_reception` | numeric |  |
-| `behind_los_yprr` | numeric |  |
-| `behind_los_avg_depth_of_target` | numeric |  |
-| `behind_los_drops` | integer |  |
-| `behind_los_drop_rate` | numeric |  |
-| `behind_los_contested_targets` | integer |  |
-| `behind_los_contested_receptions` | integer |  |
-| `behind_los_contested_catch_rate` | integer |  |
-| `behind_los_interceptions` | integer |  |
-| `behind_los_fumbles` | integer |  |
-| `behind_los_avoided_tackles` | integer |  |
-| `behind_los_first_downs` | integer |  |
-| `behind_los_targeted_qb_rating` | numeric |  |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `base_targets` | integer | Total targets from the facet's unsplit base row, across all depths and directions. |
+| `deep_targets_percent` | numeric | Share of the team's targets thrown to the player on deep passes (20 or more yards downfield). |
+| `deep_targets` | integer | Pass targets to the player on deep passes (20 or more yards downfield). |
+| `deep_receptions` | integer | Receptions made on deep passes (20 or more yards downfield). |
+| `deep_caught_percent` | numeric | Percentage of targets caught on deep passes (20 or more yards downfield). |
+| `deep_yards` | integer | Yards on deep (20+ air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `deep_yards_per_reception` | numeric | Average yards per reception on deep passes (20 or more yards downfield). |
+| `deep_touchdowns` | integer | Touchdowns on deep (20+ air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `deep_grades_pass_route` | numeric | PFF route-running (receiving) grade on deep passes (20 or more yards downfield), 0-100. |
+| `deep_grades_hands_drop` | numeric | PFF hands/drop grade on deep passes (20 or more yards downfield), 0-100. |
+| `deep_yards_after_catch` | integer | Yards gained after the catch on deep passes (20 or more yards downfield). |
+| `deep_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on deep passes (20 or more yards downfield). |
+| `deep_yprr` | numeric | Yards per route run on deep passes (20 or more yards downfield). |
+| `deep_avg_depth_of_target` | numeric | Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `deep_drops` | integer | Catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_drop_rate` | numeric | Percentage of catchable passes dropped on deep (20+ air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `deep_contested_targets` | integer | PFF-charted contested targets on deep passes (20 or more yards downfield). |
+| `deep_contested_receptions` | integer | Catches made on PFF-charted contested targets on deep passes (20 or more yards downfield). |
+| `deep_contested_catch_rate` | integer | Percentage of PFF-charted contested targets caught on deep passes (20 or more yards downfield). |
+| `deep_interceptions` | integer | Interceptions on deep (20+ air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `deep_fumbles` | integer | Fumbles by the player after the catch on deep passes (20 or more yards downfield). |
+| `deep_avoided_tackles` | integer | Tackles avoided after the catch on deep passes (20 or more yards downfield). |
+| `deep_first_downs` | integer | First downs on deep (20+ air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `deep_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on deep passes (20 or more yards downfield). |
+| `medium_targets_percent` | numeric | Share of the team's targets thrown to the player on medium passes (10-19 yards downfield). |
+| `medium_targets` | integer | Pass targets to the player on medium passes (10-19 yards downfield). |
+| `medium_receptions` | integer | Receptions made on medium passes (10-19 yards downfield). |
+| `medium_caught_percent` | numeric | Percentage of targets caught on medium passes (10-19 yards downfield). |
+| `medium_yards` | integer | Yards on medium (10-19 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `medium_yards_per_reception` | numeric | Average yards per reception on medium passes (10-19 yards downfield). |
+| `medium_touchdowns` | integer | Touchdowns on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `medium_grades_pass_route` | numeric | PFF route-running (receiving) grade on medium passes (10-19 yards downfield), 0-100. |
+| `medium_grades_hands_drop` | numeric | PFF hands/drop grade on medium passes (10-19 yards downfield), 0-100. |
+| `medium_yards_after_catch` | integer | Yards gained after the catch on medium passes (10-19 yards downfield). |
+| `medium_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on medium passes (10-19 yards downfield). |
+| `medium_yprr` | numeric | Yards per route run on medium passes (10-19 yards downfield). |
+| `medium_avg_depth_of_target` | numeric | Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `medium_drops` | integer | Catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `medium_drop_rate` | numeric | Percentage of catchable passes dropped on medium (10-19 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `medium_contested_targets` | integer | PFF-charted contested targets on medium passes (10-19 yards downfield). |
+| `medium_contested_receptions` | integer | Catches made on PFF-charted contested targets on medium passes (10-19 yards downfield). |
+| `medium_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on medium passes (10-19 yards downfield). |
+| `medium_interceptions` | integer | Interceptions on medium (10-19 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `medium_fumbles` | integer | Fumbles by the player after the catch on medium passes (10-19 yards downfield). |
+| `medium_avoided_tackles` | integer | Tackles avoided after the catch on medium passes (10-19 yards downfield). |
+| `medium_first_downs` | integer | First downs on medium (10-19 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `medium_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on medium passes (10-19 yards downfield). |
+| `short_targets_percent` | numeric | Share of the team's targets thrown to the player on short passes (0-9 yards downfield). |
+| `short_targets` | integer | Pass targets to the player on short passes (0-9 yards downfield). |
+| `short_receptions` | integer | Receptions made on short passes (0-9 yards downfield). |
+| `short_caught_percent` | numeric | Percentage of targets caught on short passes (0-9 yards downfield). |
+| `short_yards` | integer | Yards on short (0-9 air yards) throws: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `short_yards_per_reception` | numeric | Average yards per reception on short passes (0-9 yards downfield). |
+| `short_touchdowns` | integer | Touchdowns on short (0-9 air yards) throws: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `short_grades_pass_route` | numeric | PFF route-running (receiving) grade on short passes (0-9 yards downfield), 0-100. |
+| `short_grades_hands_drop` | numeric | PFF hands/drop grade on short passes (0-9 yards downfield), 0-100. |
+| `short_yards_after_catch` | integer | Yards gained after the catch on short passes (0-9 yards downfield). |
+| `short_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on short passes (0-9 yards downfield). |
+| `short_yprr` | numeric | Yards per route run on short passes (0-9 yards downfield). |
+| `short_avg_depth_of_target` | numeric | Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `short_drops` | integer | Catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_drop_rate` | numeric | Percentage of catchable passes dropped on short (0-9 air yards) throws: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `short_contested_targets` | integer | PFF-charted contested targets on short passes (0-9 yards downfield). |
+| `short_contested_receptions` | integer | Catches made on PFF-charted contested targets on short passes (0-9 yards downfield). |
+| `short_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on short passes (0-9 yards downfield). |
+| `short_interceptions` | integer | Interceptions on short (0-9 air yards) throws: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `short_fumbles` | integer | Fumbles by the player after the catch on short passes (0-9 yards downfield). |
+| `short_avoided_tackles` | integer | Tackles avoided after the catch on short passes (0-9 yards downfield). |
+| `short_first_downs` | integer | First downs on short (0-9 air yards) throws: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `short_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on short passes (0-9 yards downfield). |
+| `behind_los_targets_percent` | numeric | Share of the team's targets thrown to the player on passes thrown behind the line of scrimmage. |
+| `behind_los_targets` | integer | Pass targets to the player on passes thrown behind the line of scrimmage. |
+| `behind_los_receptions` | integer | Receptions made on passes thrown behind the line of scrimmage. |
+| `behind_los_caught_percent` | numeric | Percentage of targets caught on passes thrown behind the line of scrimmage. |
+| `behind_los_yards` | integer | Yards on throws behind the line of scrimmage: passing yards (passing-depth) or the player's receiving yards (receiving-depth). |
+| `behind_los_yards_per_reception` | numeric | Average yards per reception on passes thrown behind the line of scrimmage. |
+| `behind_los_touchdowns` | integer | Touchdowns on throws behind the line of scrimmage: thrown by the passer (passing-depth) or scored by the player (receiving-depth). |
+| `behind_los_grades_pass_route` | numeric | PFF route-running (receiving) grade on passes thrown behind the line of scrimmage, 0-100. |
+| `behind_los_grades_hands_drop` | numeric | PFF hands/drop grade on passes thrown behind the line of scrimmage, 0-100. |
+| `behind_los_yards_after_catch` | integer | Yards gained after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on passes thrown behind the line of scrimmage. |
+| `behind_los_yprr` | numeric | Yards per route run on passes thrown behind the line of scrimmage. |
+| `behind_los_avg_depth_of_target` | numeric | Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer's throws (passing-depth) or the player's targets (receiving-depth). |
+| `behind_los_drops` | integer | Catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `behind_los_drop_rate` | numeric | Percentage of catchable passes dropped on throws behind the line of scrimmage: by the passer's receivers (passing-depth) or by the player (receiving-depth). |
+| `behind_los_contested_targets` | integer | PFF-charted contested targets on passes thrown behind the line of scrimmage. |
+| `behind_los_contested_receptions` | integer | Catches made on PFF-charted contested targets on passes thrown behind the line of scrimmage. |
+| `behind_los_contested_catch_rate` | integer | Percentage of PFF-charted contested targets caught on passes thrown behind the line of scrimmage. |
+| `behind_los_interceptions` | integer | Interceptions on throws behind the line of scrimmage: thrown by the passer (passing-depth) or on passes targeting the player (receiving-depth). |
+| `behind_los_fumbles` | integer | Fumbles by the player after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_avoided_tackles` | integer | Tackles avoided after the catch on passes thrown behind the line of scrimmage. |
+| `behind_los_first_downs` | integer | First downs on throws behind the line of scrimmage: passing first downs (passing-depth) or first-down receptions by the player (receiving-depth). |
+| `behind_los_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on passes thrown behind the line of scrimmage. |
 
 **rushing**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `grades_pass_block` | numeric |  |
-| `grades_offense` | numeric |  |
-| `yards_after_contact` | integer |  |
-| `explosive` | integer |  |
-| `grades_pass_route` | numeric |  |
-| `draft_season` | integer |  |
-| `elu_rush_mtf` | integer |  |
-| `breakaway_attempts` | integer |  |
-| `designed_yards` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `yprr` | numeric |  |
-| `breakaway_percent` | numeric |  |
-| `fumbles` | integer |  |
-| `first_downs` | integer | First downs earned by the team. |
-| `elusive_rating` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `breakaway_yards` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `total_touches` | integer |  |
-| `scramble_yards` | integer |  |
-| `yco_attempt` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `grades_run_block` | numeric |  |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `zone_attempts` | integer |  |
-| `scrambles` | integer |  |
-| `grades_run` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `elu_yco` | integer |  |
-| `elu_recv_mtf` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `ypa` | numeric |  |
-| `drops` | integer | Throws dropped |
-| `grades_hands_fumble` | numeric |  |
-| `longest` | integer |  |
-| `routes` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `rec_yards` | integer | Career receiving yards |
-| `gap_attempts` | integer |  |
-| `run_plays` | integer |  |
-| `avoided_tackles` | integer |  |
-| `grades_offense_penalty` | numeric |  |
-| `touchdowns` | integer |  |
-| `carry_share` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
-| `grades_pass` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `yards_after_contact` | integer | Yards after contact. |
+| `explosive` | integer | Runs PFF designates as explosive. |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `elu_rush_mtf` | integer | Missed tackles forced as a rusher, an input to PFF's elusive rating. |
+| `breakaway_attempts` | integer | Runs of 15 or more yards, PFF's breakaway designation. |
+| `designed_yards` | integer | Rushing yards gained on designed runs, excluding scrambles. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `yprr` | numeric | Yards per route run. |
+| `breakaway_percent` | numeric | Share of rushing yards gained on breakaway runs of 15 or more yards. |
+| `fumbles` | integer | Fumbles by the player: after the catch on the receiving report, as a ball carrier on the rushing report. |
+| `first_downs` | integer | First downs gained: passing first downs on the passing report, first-down receptions on receiving, rushing first downs on rushing. |
+| `elusive_rating` | numeric | PFF elusive rating. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `breakaway_yards` | integer | Breakaway (long-run) yards. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `total_touches` | integer | Combined carries and receptions. |
+| `scramble_yards` | integer | Rushing yards gained on scrambles. |
+| `yco_attempt` | numeric | Average yards after contact per rushing attempt. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `zone_attempts` | integer | Rushing attempts on zone-scheme runs. |
+| `scrambles` | integer | Quarterback scrambles (pass plays on which the passer ran with the ball). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `elu_yco` | integer | Yards-after-contact component used in PFF's elusive rating. |
+| `elu_recv_mtf` | integer | Missed tackles forced as a receiver, an input to PFF's elusive rating. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `ypa` | numeric | Yards per attempt: passing yards per pass attempt on the passing report, rushing yards per carry on the rushing report. |
+| `drops` | integer | Dropped passes: drops by the passer's receivers on the passing report, drops by the player on the receiving and rushing reports. |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `routes` | integer | Pass routes run by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `rec_yards` | integer | Receiving yards gained by the player (the rushing report also carries the ball carrier's receiving line). |
+| `gap_attempts` | integer | Rushing attempts on gap-scheme runs. |
+| `run_plays` | integer | Run-play snaps. |
+| `avoided_tackles` | integer | Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner on rushing. |
+| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `carry_share` | numeric | Percentage of the team's carries taken by the player. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
 
 **blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
 | `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_offense` | integer |  |
-| `snap_counts_block` | integer |  |
-| `block_percent` | numeric |  |
-| `snap_counts_run_block` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `pass_block_percent` | numeric |  |
-| `grades_offense` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `non_spike_pass_block` | integer |  |
-| `non_spike_pass_block_percentage` | numeric |  |
-| `sacks_allowed` | integer | Opponent sacks. |
-| `hits_allowed` | integer |  |
-| `hurries_allowed` | integer |  |
-| `pressures_allowed` | integer |  |
-| `pbe` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_offense` | integer | Offensive snaps played. |
+| `snap_counts_block` | integer | Total blocking snaps played. |
+| `block_percent` | numeric | Share of offensive snaps spent blocking. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking. |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays. |
+| `non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking. |
+| `sacks_allowed` | integer | Sacks allowed by the player in pass protection. |
+| `hits_allowed` | integer | Quarterback hits allowed. |
+| `hurries_allowed` | integer | Quarterback hurries allowed. |
+| `pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries). |
+| `pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
 
 **pass-blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
 | `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
-| `snap_counts_pass_play` | integer |  |
-| `snap_counts_pass_block` | integer |  |
-| `pass_block_percent` | numeric |  |
-| `grades_pass_block` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `non_spike_pass_block` | integer |  |
-| `non_spike_pass_block_percentage` | numeric |  |
-| `sacks_allowed` | integer | Opponent sacks. |
-| `hits_allowed` | integer |  |
-| `hurries_allowed` | integer |  |
-| `pressures_allowed` | integer |  |
-| `pressure_rate_allowed` | numeric |  |
-| `sack_rate_allowed` | numeric |  |
-| `pbe` | numeric |  |
-| `true_pass_set_snap_counts_pass_play` | integer |  |
-| `true_pass_set_snap_counts_pass_block` | integer |  |
-| `true_pass_set_pass_block_percent` | numeric |  |
-| `true_pass_set_grades_pass_block` | numeric |  |
-| `true_pass_set_non_spike_pass_block` | integer |  |
-| `true_pass_set_non_spike_pass_block_percentage` | numeric |  |
-| `true_pass_set_sacks_allowed` | integer |  |
-| `true_pass_set_hits_allowed` | integer |  |
-| `true_pass_set_hurries_allowed` | integer |  |
-| `true_pass_set_pressures_allowed` | integer |  |
-| `true_pass_set_pressure_rate_allowed` | numeric |  |
-| `true_pass_set_sack_rate_allowed` | numeric |  |
-| `true_pass_set_pbe` | numeric |  |
-| `pbwr` | numeric |  |
-| `true_pass_set_pbwr` | numeric |  |
-| `pass_block_grade_oe_percentile` | numeric |  |
-| `island_rate` | numeric |  |
-| `island_pass_block_win_rate` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `snap_counts_pass_block` | integer | Pass-blocking snaps played. |
+| `pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking. |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays. |
+| `non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking. |
+| `sacks_allowed` | integer | Sacks allowed by the player in pass protection. |
+| `hits_allowed` | integer | Quarterback hits allowed. |
+| `hurries_allowed` | integer | Quarterback hurries allowed. |
+| `pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries). |
+| `pressure_rate_allowed` | numeric | Percentage of the player's pass-blocking snaps on which he allowed a pressure. |
+| `sack_rate_allowed` | numeric | Percentage of the player's pass-blocking snaps on which he allowed a sack. |
+| `pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
+| `true_pass_set_snap_counts_pass_play` | integer | Pass-play snaps on PFF-designated true pass sets. |
+| `true_pass_set_snap_counts_pass_block` | integer | Pass-blocking snaps played on PFF-designated true pass sets. |
+| `true_pass_set_pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking on PFF-designated true pass sets. |
+| `true_pass_set_grades_pass_block` | numeric | PFF pass-blocking grade on PFF-designated true pass sets, 0-100. |
+| `true_pass_set_non_spike_pass_block` | integer | Pass-blocking snaps excluding spike plays on PFF-designated true pass sets. |
+| `true_pass_set_non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking on PFF-designated true pass sets. |
+| `true_pass_set_sacks_allowed` | integer | Sacks allowed on PFF-designated true pass sets. |
+| `true_pass_set_hits_allowed` | integer | Quarterback hits allowed on PFF-designated true pass sets. |
+| `true_pass_set_hurries_allowed` | integer | Quarterback hurries allowed on PFF-designated true pass sets. |
+| `true_pass_set_pressures_allowed` | integer | Total pressures allowed (sacks, hits, and hurries) on PFF-designated true pass sets. |
+| `true_pass_set_pressure_rate_allowed` | numeric | Percentage of the player's true-pass-set pass-blocking snaps on which he allowed a pressure. |
+| `true_pass_set_sack_rate_allowed` | numeric | Percentage of the player's true-pass-set pass-blocking snaps on which he allowed a sack. |
+| `true_pass_set_pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks on PFF-designated true pass sets. |
+| `pbwr` | numeric | Pass-block win rate, in percent: share of the player's pass-blocking snaps PFF charted as won. |
+| `true_pass_set_pbwr` | numeric | Pass-block win rate, in percent, on PFF-designated true pass sets. |
+| `pass_block_grade_oe_percentile` | numeric | Percentile (0-100) of the player's pass-blocking grade over expectation, as reported by PFF; null for many players. |
+| `island_rate` | numeric | Percentage of the player's pass-blocking snaps PFF charted as island (isolated, one-on-one) blocks. |
+| `island_pass_block_win_rate` | numeric | Pass-block win rate, in percent, on the player's island (isolated, one-on-one) pass-blocking snaps. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **run-blocking**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
 | `games_played` | integer | Games played. |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_lt` | integer |  |
-| `snap_counts_lg` | integer |  |
-| `snap_counts_ce` | integer |  |
-| `snap_counts_rg` | integer |  |
-| `snap_counts_rt` | integer |  |
-| `snap_counts_te` | integer |  |
-| `snap_counts_run_play` | integer |  |
-| `snap_counts_run_block` | integer |  |
-| `run_block_percent` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `declined_penalties` | integer |  |
-| `zone_snap_counts_run_play` | integer |  |
-| `zone_snap_counts_run_block` | integer |  |
-| `zone_snap_counts_run_block_percent` | numeric |  |
-| `zone_run_block_percent` | numeric |  |
-| `zone_grades_run_block` | numeric |  |
-| `gap_snap_counts_run_play` | integer |  |
-| `gap_snap_counts_run_block` | integer |  |
-| `gap_snap_counts_run_block_percent` | numeric |  |
-| `gap_run_block_percent` | numeric |  |
-| `gap_grades_run_block` | numeric |  |
-| `pos_graded_rate` | numeric |  |
-| `neg_graded_rate` | numeric |  |
-| `zone_pos_graded_rate` | numeric |  |
-| `zone_neg_graded_rate` | numeric |  |
-| `gap_pos_graded_rate` | numeric |  |
-| `gap_neg_graded_rate` | numeric |  |
-| `offense_pos_graded_rate` | numeric |  |
-| `offense_neg_graded_rate` | numeric |  |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_lt` | integer | Snaps aligned at left tackle. |
+| `snap_counts_lg` | integer | Snaps aligned at left guard. |
+| `snap_counts_ce` | integer | Snaps aligned at center. |
+| `snap_counts_rg` | integer | Snaps aligned at right guard. |
+| `snap_counts_rt` | integer | Snaps aligned at right tackle. |
+| `snap_counts_te` | integer | Snaps aligned at tight end. |
+| `snap_counts_run_play` | integer | Run-play snaps. |
+| `snap_counts_run_block` | integer | Run-blocking snaps played. |
+| `run_block_percent` | numeric | Share of run-play snaps spent run blocking. |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `zone_snap_counts_run_play` | integer | Run-play snaps on zone-scheme runs. |
+| `zone_snap_counts_run_block` | integer | Run-blocking snaps played on zone-scheme runs. |
+| `zone_snap_counts_run_block_percent` | numeric | Share of the player's run-blocking snaps on zone-scheme runs. |
+| `zone_run_block_percent` | numeric | Share of run-play snaps spent run blocking on zone-scheme runs. |
+| `zone_grades_run_block` | numeric | PFF run-blocking grade on zone-scheme runs, 0-100. |
+| `gap_snap_counts_run_play` | integer | Run-play snaps on gap-scheme runs. |
+| `gap_snap_counts_run_block` | integer | Run-blocking snaps played on gap-scheme runs. |
+| `gap_snap_counts_run_block_percent` | numeric | Share of the player's run-blocking snaps on gap-scheme runs. |
+| `gap_run_block_percent` | numeric | Share of run-play snaps spent run blocking on gap-scheme runs. |
+| `gap_grades_run_block` | numeric | PFF run-blocking grade on gap-scheme runs, 0-100. |
+| `pos_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded positively. |
+| `neg_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively. |
+| `zone_pos_graded_rate` | numeric | Percentage of the player's zone-scheme run-blocking plays that PFF graded positively. |
+| `zone_neg_graded_rate` | numeric | Percentage of the player's zone-scheme run-blocking plays that PFF graded negatively. |
+| `gap_pos_graded_rate` | numeric | Percentage of the player's gap-scheme run-blocking plays that PFF graded positively. |
+| `gap_neg_graded_rate` | numeric | Percentage of the player's gap-scheme run-blocking plays that PFF graded negatively. |
+| `offense_pos_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded positively. |
+| `offense_neg_graded_rate` | numeric | Percentage of the player's offensive plays that PFF graded negatively. |
 
 **defense**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `interception_touchdowns` | integer |  |
-| `draft_season` | integer |  |
-| `forced_fumbles` | integer |  |
-| `missed_tackles` | integer |  |
-| `catch_rate` | numeric |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `tackles` | integer | Team tackles. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `snap_counts_offball` | integer |  |
-| `snap_counts_box` | integer |  |
-| `sacks` | integer | The Number of times sacked. |
-| `snap_counts_pass_rush` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `snap_counts_dl` | integer |  |
-| `grades_tackle` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `grades_coverage_defense` | numeric |  |
-| `hurries` | integer |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `snap_counts_coverage` | integer |  |
-| `snap_counts_dl_over_t` | integer |  |
-| `snap_counts_dl_a_gap` | integer |  |
-| `fumble_recoveries` | integer |  |
-| `grades_run_defense` | numeric |  |
-| `snap_counts_corner` | integer |  |
-| `hits` | integer | Hits. |
-| `penalties` | integer | Total number of penalties. |
-| `batted_passes` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `stops` | integer |  |
-| `declined_penalties` | integer |  |
-| `total_pressures` | integer |  |
-| `fumble_recovery_touchdowns` | integer |  |
-| `longest` | integer |  |
-| `snap_counts_slot` | integer |  |
-| `missed_tackle_rate` | numeric |  |
-| `grades_defense` | numeric |  |
-| `yards_per_reception` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `safeties` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `snap_counts_defense` | integer |  |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `snap_counts_dl_b_gap` | integer |  |
-| `pass_break_ups` | integer |  |
-| `qb_rating_against` | numeric |  |
-| `snap_counts_run_defense` | integer |  |
-| `tackles_for_loss` | integer | Team tackles for a loss. |
-| `assists` | integer | Total assists. |
-| `grades_pass_rush_defense` | numeric |  |
-| `snap_counts_fs` | integer |  |
-| `touchdowns` | integer |  |
-| `snap_counts_dl_outside_t` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `interception_touchdowns` | integer | Touchdowns scored on interception returns. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `forced_fumbles` | integer | Fumbles forced by the player. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `snap_counts_offball` | integer | Snaps aligned as an off-ball linebacker. |
+| `snap_counts_box` | integer | Snaps aligned in the box. |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `snap_counts_pass_rush` | integer | Pass-rush snaps played. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_dl` | integer | Snaps aligned on the defensive line. |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `hurries` | integer | Quarterback hurries recorded. |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `snap_counts_coverage` | integer | Coverage snaps played. |
+| `snap_counts_dl_over_t` | integer | Defensive-line snaps aligned head-up over the offensive tackle. |
+| `snap_counts_dl_a_gap` | integer | Defensive-line snaps aligned in the A gap. |
+| `fumble_recoveries` | integer | Opponent fumbles recovered by the player. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `snap_counts_corner` | integer | Snaps aligned at outside cornerback. |
+| `hits` | integer | Quarterback hits recorded by the player, as charted by PFF. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `batted_passes` | integer | Passes batted down at the line of scrimmage. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `total_pressures` | integer | Total quarterback pressures generated (sacks, hits, and hurries). |
+| `fumble_recovery_touchdowns` | integer | Touchdowns scored on fumble recoveries. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `snap_counts_slot` | integer | Snaps aligned in the slot. |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `safeties` | integer | Safeties recorded by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `snap_counts_defense` | integer | Total defensive snaps played. |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `snap_counts_dl_b_gap` | integer | Defensive-line snaps aligned in the B gap. |
+| `pass_break_ups` | integer | Passes broken up. |
+| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
+| `snap_counts_run_defense` | integer | Run-defense snaps played. |
+| `tackles_for_loss` | integer | Tackles for loss made by the player. |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `snap_counts_fs` | integer | Snaps aligned at free safety. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `snap_counts_dl_outside_t` | integer | Defensive-line snaps aligned outside the offensive tackle. |
 
 **run-defense**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `assists` | integer | Total assists. |
-| `avg_depth_of_tackle` | numeric |  |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `forced_fumbles` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_coverage_defense` | numeric |  |
-| `grades_defense` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `grades_pass_rush_defense` | numeric |  |
-| `grades_run_defense` | numeric |  |
-| `grades_tackle` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `missed_tackle_rate` | numeric |  |
-| `missed_tackles` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `run_stop_opp` | integer |  |
-| `snap_counts_run` | integer |  |
-| `stop_percent` | numeric |  |
-| `stops` | integer |  |
-| `tackles` | integer | Team tackles. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `pos_graded_rate` | numeric |  |
-| `neg_graded_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `avg_depth_of_tackle` | numeric | Average depth downfield, in yards, at which the player made his tackles on run plays. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `forced_fumbles` | integer | Fumbles forced by the player. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `run_stop_opp` | integer | Run-defense snaps PFF counts as run-stop opportunities. |
+| `snap_counts_run` | integer | Run-play snaps: on the offense report, run plays on which the player was the runner rather than a run blocker; on the run-defense report, run-defense snaps played. |
+| `stop_percent` | numeric | Percentage of run-stop opportunities converted into stops. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `pos_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded positively. |
+| `neg_graded_rate` | numeric | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively. |
 
 **pass-rush**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `true_pass_set_total_pressures` | integer |  |
-| `draft_season` | integer |  |
-| `true_pass_set_prp` | numeric |  |
-| `true_pass_set_hurries` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `prp` | numeric |  |
-| `true_pass_set_sacks` | integer |  |
-| `pass_rush_win_rate` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `sacks` | integer | The Number of times sacked. |
-| `snap_counts_pass_rush` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `true_pass_set_snap_counts_pass_play` | integer |  |
-| `pass_rush_wins` | integer |  |
-| `hurries` | integer |  |
-| `pass_rush_opp` | integer |  |
-| `snap_counts_pass_play` | integer |  |
-| `hits` | integer | Hits. |
-| `true_pass_set_pass_rush_win_rate` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `batted_passes` | integer |  |
-| `true_pass_set_hits` | integer |  |
-| `true_pass_set_snap_counts_pass_rush` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `true_pass_set_pass_rush_wins` | integer |  |
-| `total_pressures` | integer |  |
-| `true_pass_set_grades_pass_rush_defense` | numeric |  |
-| `true_pass_set_batted_passes` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `pass_rush_percent` | numeric |  |
-| `true_pass_set_pass_rush_opp` | integer |  |
-| `true_pass_set_pass_rush_percent` | numeric |  |
-| `grades_pass_rush_defense` | numeric |  |
-| `knockdowns` | integer |  |
-| `knockdown_rate` | numeric |  |
-| `pressure_rate` | numeric |  |
-| `sack_rate` | numeric |  |
-| `true_pass_set_knockdowns` | integer |  |
-| `true_pass_set_knockdown_rate` | numeric |  |
-| `true_pass_set_pressure_rate` | numeric |  |
-| `true_pass_set_sack_rate` | numeric |  |
-| `lhs_pass_rush_snaps` | integer |  |
-| `lhs_pass_rush_percent` | numeric |  |
-| `lhs_sacks` | integer |  |
-| `lhs_hits` | integer |  |
-| `lhs_hurries` | integer |  |
-| `lhs_pressures` | integer |  |
-| `lhs_prp` | numeric |  |
-| `lhs_stops` | integer |  |
-| `lhs_tackles` | integer |  |
-| `lhs_assists` | integer |  |
-| `lhs_misses` | integer |  |
-| `rhs_pass_rush_snaps` | integer |  |
-| `rhs_pass_rush_percent` | numeric |  |
-| `rhs_sacks` | integer |  |
-| `rhs_hits` | integer |  |
-| `rhs_hurries` | integer |  |
-| `rhs_pressures` | integer |  |
-| `rhs_prp` | numeric |  |
-| `rhs_stops` | integer |  |
-| `rhs_tackles` | integer |  |
-| `rhs_assists` | integer |  |
-| `rhs_misses` | integer |  |
-| `pass_rush_grade_oe_percentile` | numeric |  |
-| `double_team_rate` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `true_pass_set_total_pressures` | integer | Total pressures generated (sacks, hits, and hurries) on PFF-designated true pass sets. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `true_pass_set_prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks on PFF-designated true pass sets. |
+| `true_pass_set_hurries` | integer | Quarterback hurries recorded on PFF-designated true pass sets. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks. |
+| `true_pass_set_sacks` | integer | Sacks recorded on PFF-designated true pass sets. |
+| `pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `sacks` | integer | Sacks: recorded by the player on the defense and pass-rush reports; times the passer was sacked on the passing report. |
+| `snap_counts_pass_rush` | integer | Pass-rush snaps played. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `true_pass_set_snap_counts_pass_play` | integer | Pass-play snaps on PFF-designated true pass sets. |
+| `pass_rush_wins` | integer | PFF-charted pass-rush wins. |
+| `hurries` | integer | Quarterback hurries recorded. |
+| `pass_rush_opp` | integer | Pass-rush snaps PFF counts as pressure opportunities. |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `hits` | integer | Quarterback hits recorded by the player, as charted by PFF. |
+| `true_pass_set_pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win on PFF-designated true pass sets. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `batted_passes` | integer | Passes batted down at the line of scrimmage. |
+| `true_pass_set_hits` | integer | Quarterback hits recorded on PFF-designated true pass sets. |
+| `true_pass_set_snap_counts_pass_rush` | integer | Pass-rush snaps played on PFF-designated true pass sets. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `true_pass_set_pass_rush_wins` | integer | PFF-charted pass-rush wins on PFF-designated true pass sets. |
+| `total_pressures` | integer | Total quarterback pressures generated (sacks, hits, and hurries). |
+| `true_pass_set_grades_pass_rush_defense` | numeric | PFF pass-rush grade on PFF-designated true pass sets, 0-100. |
+| `true_pass_set_batted_passes` | integer | Passes batted down at the line of scrimmage on PFF-designated true pass sets. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer. |
+| `true_pass_set_pass_rush_opp` | integer | Pass-rush snaps PFF counts as pressure opportunities on PFF-designated true pass sets. |
+| `true_pass_set_pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer on PFF-designated true pass sets. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `knockdowns` | integer | Quarterback knockdowns credited to the pass rusher, as charted by PFF. |
+| `knockdown_rate` | numeric | Knockdowns as a percentage of the player's pass-rush snaps. |
+| `pressure_rate` | numeric | Percentage of the player's pass-rush snaps that produced a pressure. |
+| `sack_rate` | numeric | Percentage of the player's pass-rush snaps that produced a sack. |
+| `true_pass_set_knockdowns` | integer | Quarterback knockdowns credited to the pass rusher on PFF-designated true pass sets. |
+| `true_pass_set_knockdown_rate` | numeric | Knockdowns as a percentage of the player's true-pass-set pass-rush snaps. |
+| `true_pass_set_pressure_rate` | numeric | Percentage of the player's true-pass-set pass-rush snaps that produced a pressure. |
+| `true_pass_set_sack_rate` | numeric | Percentage of the player's true-pass-set pass-rush snaps that produced a sack. |
+| `lhs_pass_rush_snaps` | integer | Pass-rush snaps the player took from the left-hand side (LHS), as PFF charts the rusher's alignment. |
+| `lhs_pass_rush_percent` | numeric | Percentage of the player's side-charted pass-rush snaps taken from the left-hand side (LHS); lhs_pass_rush_percent and rhs_pass_rush_percent sum to 100. |
+| `lhs_sacks` | integer | Sacks recorded while rushing from the left-hand side (LHS). |
+| `lhs_hits` | integer | Quarterback hits recorded while rushing from the left-hand side (LHS). |
+| `lhs_hurries` | integer | Quarterback hurries recorded while rushing from the left-hand side (LHS). |
+| `lhs_pressures` | integer | Total pressures (sacks, hits, and hurries) generated while rushing from the left-hand side (LHS). |
+| `lhs_prp` | numeric | PFF Pass Rush Productivity rating on rushes from the left-hand side (LHS), pressure generated per pass-rush snap weighted toward sacks. |
+| `lhs_stops` | integer | Stops (tackles that constitute a failed play for the offense) made on snaps rushing from the left-hand side (LHS). |
+| `lhs_tackles` | integer | Tackles made on snaps rushing from the left-hand side (LHS). |
+| `lhs_assists` | integer | Assisted tackles on snaps rushing from the left-hand side (LHS). |
+| `lhs_misses` | integer | Missed tackles on snaps rushing from the left-hand side (LHS). |
+| `rhs_pass_rush_snaps` | integer | Pass-rush snaps the player took from the right-hand side (RHS), as PFF charts the rusher's alignment. |
+| `rhs_pass_rush_percent` | numeric | Percentage of the player's side-charted pass-rush snaps taken from the right-hand side (RHS); lhs_pass_rush_percent and rhs_pass_rush_percent sum to 100. |
+| `rhs_sacks` | integer | Sacks recorded while rushing from the right-hand side (RHS). |
+| `rhs_hits` | integer | Quarterback hits recorded while rushing from the right-hand side (RHS). |
+| `rhs_hurries` | integer | Quarterback hurries recorded while rushing from the right-hand side (RHS). |
+| `rhs_pressures` | integer | Total pressures (sacks, hits, and hurries) generated while rushing from the right-hand side (RHS). |
+| `rhs_prp` | numeric | PFF Pass Rush Productivity rating on rushes from the right-hand side (RHS), pressure generated per pass-rush snap weighted toward sacks. |
+| `rhs_stops` | integer | Stops (tackles that constitute a failed play for the offense) made on snaps rushing from the right-hand side (RHS). |
+| `rhs_tackles` | integer | Tackles made on snaps rushing from the right-hand side (RHS). |
+| `rhs_assists` | integer | Assisted tackles on snaps rushing from the right-hand side (RHS). |
+| `rhs_misses` | integer | Missed tackles on snaps rushing from the right-hand side (RHS). |
+| `pass_rush_grade_oe_percentile` | numeric | Percentile (0-100) of the player's pass-rush grade over expectation, as reported by PFF. |
+| `double_team_rate` | numeric | Percentage of the player's pass-rush snaps on which he was double-teamed. |
 
 **coverage**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `yards_per_coverage_snap` | numeric |  |
-| `draft_season` | integer |  |
-| `missed_tackles` | integer |  |
-| `catch_rate` | numeric |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `tackles` | integer | Team tackles. |
-| `coverage_percent` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `dropped_ints` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `grades_tackle` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `forced_incompletion_rate` | numeric |  |
-| `grades_coverage_defense` | numeric |  |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `snap_counts_coverage` | integer |  |
-| `grades_run_defense` | numeric |  |
-| `snap_counts_pass_play` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `forced_incompletes` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `coverage_snaps_per_target` | numeric |  |
-| `stops` | integer |  |
-| `declined_penalties` | integer |  |
-| `longest` | integer |  |
-| `missed_tackle_rate` | numeric |  |
-| `grades_defense` | numeric |  |
-| `yards_per_reception` | numeric |  |
-| `grades_defense_penalty` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `yards_after_catch` | integer | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `avg_depth_of_target` | numeric |  |
-| `pass_break_ups` | integer |  |
-| `qb_rating_against` | numeric |  |
-| `coverage_snaps_per_reception` | numeric |  |
-| `assists` | integer | Total assists. |
-| `grades_pass_rush_defense` | numeric |  |
-| `touchdowns` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
+| `yards_per_coverage_snap` | numeric | Receiving yards allowed per coverage snap. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `coverage_percent` | numeric | Share of pass-play snaps spent in coverage. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `dropped_ints` | integer | Interception chances PFF charted as dropped. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `receptions` | integer | Receptions: passes caught by the player (receiving, rushing reports) or completions allowed into the player's coverage (coverage, defense reports). |
+| `forced_incompletion_rate` | numeric | Share of targets into the player's coverage with a PFF-charted forced incompletion. |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
+| `interceptions` | integer | Interceptions: thrown by the passer on the passing report, made by the player on the coverage and defense reports, and on passes targeting the player on the receiving report. |
+| `snap_counts_coverage` | integer | Coverage snaps played. |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
+| `snap_counts_pass_play` | integer | Pass-play snaps. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `forced_incompletes` | integer | Incompletions forced by the player's coverage, per PFF charting. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `coverage_snaps_per_target` | numeric | Coverage snaps played per target into the player's coverage. |
+| `stops` | integer | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `longest` | integer | Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in coverage (coverage, defense). |
+| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
+| `yards_per_reception` | numeric | Average yards per reception: the player's own on the receiving report, allowed per reception in the player's coverage on the coverage and defense reports. |
+| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `yards_after_catch` | integer | Yards after the catch: gained by the player on the receiving report, allowed after the catch in the player's coverage on the coverage and defense reports. |
+| `avg_depth_of_target` | numeric | Average depth of target, in yards downfield: of the passer's throws (passing), of passes to the player (receiving), or of targets into the player's coverage (coverage). |
+| `pass_break_ups` | integer | Passes broken up. |
+| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
+| `coverage_snaps_per_reception` | numeric | Coverage snaps played per reception allowed. |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
+| `touchdowns` | integer | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
 
 **special-teams**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `assists` | integer | Total assists. |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_fgep_offense` | numeric |  |
-| `grades_long_snap` | numeric |  |
-| `grades_misc_st` | numeric |  |
-| `grades_special_teams_penalty` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `missed_tackles` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `snap_counts_field_goal` | integer |  |
-| `snap_counts_field_goal_blocking` | integer |  |
-| `snap_counts_kickoff` | integer |  |
-| `snap_counts_kickoff_return` | integer |  |
-| `snap_counts_punt_coverage` | integer |  |
-| `snap_counts_punt_return` | integer |  |
-| `tackles` | integer | Team tackles. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_snaps` | integer |  |
-| `grades_punter` | numeric |  |
-| `grades_fgep_defense` | numeric |  |
-| `grades_kick_return` | numeric |  |
-| `grades_punt_return` | numeric |  |
-| `grades_fgep_kicker` | numeric |  |
-| `grades_kickoff_kicker` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `assists` | integer | Assisted tackles credited to the player. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_fgep_offense` | numeric | PFF grade on the field-goal and extra-point protection unit, 0-100. |
+| `grades_long_snap` | numeric | PFF long-snapping grade, 0-100. |
+| `grades_misc_st` | numeric | PFF miscellaneous special-teams grade, 0-100. |
+| `grades_special_teams_penalty` | numeric | PFF special-teams penalty grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `missed_tackles` | integer | Missed tackles by the player (on special-teams plays in the special-teams report). |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `snap_counts_field_goal` | integer | Snaps on the field-goal and extra-point unit. |
+| `snap_counts_field_goal_blocking` | integer | Snaps on the field-goal and extra-point block unit. |
+| `snap_counts_kickoff` | integer | Snaps on the kickoff coverage unit. |
+| `snap_counts_kickoff_return` | integer | Snaps on the kickoff return unit. |
+| `snap_counts_punt_coverage` | integer | Snaps on the punt coverage unit. |
+| `snap_counts_punt_return` | integer | Snaps on the punt return unit. |
+| `tackles` | integer | Tackles made by the player, as charted by PFF (assisted tackles are reported in assists). |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_snaps` | integer | Total special-teams snaps the player played across all kicking-game units. |
+| `grades_punter` | numeric | PFF punting grade, 0-100. |
+| `grades_fgep_defense` | numeric | PFF grade on field-goal and extra-point defense, 0-100. |
+| `grades_kick_return` | numeric | PFF kickoff-return grade, 0-100. |
+| `grades_punt_return` | numeric | PFF punt-return grade, 0-100. |
+| `grades_fgep_kicker` | numeric | PFF field-goal and extra-point kicking grade, 0-100. |
+| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
 
 **kick-returns**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_kick_return` | numeric |  |
-| `grades_return` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `kickoff_attempts` | integer |  |
-| `kickoff_fair_catches` | integer |  |
-| `kickoff_long` | integer |  |
-| `kickoff_muffed_returns` | integer |  |
-| `kickoff_touchdowns` | integer |  |
-| `kickoff_yards` | integer |  |
-| `kickoff_ypa` | numeric |  |
-| `penalties` | integer | Total number of penalties. |
-| `player_game_count` | integer |  |
-| `punt_attempts` | integer |  |
-| `punt_fair_catches` | integer |  |
-| `punt_long` | integer |  |
-| `punt_muffed_returns` | integer |  |
-| `punt_touchdowns` | integer |  |
-| `punt_yards` | integer |  |
-| `punt_ypa` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_attempts` | integer |  |
-| `grades_punt_return` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_kick_return` | numeric | PFF kickoff-return grade, 0-100. |
+| `grades_return` | numeric | PFF overall return grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `kickoff_attempts` | integer | Kickoff returns attempted. |
+| `kickoff_fair_catches` | integer | Kickoffs fair-caught by the player. |
+| `kickoff_long` | integer | Longest kickoff return in yards. |
+| `kickoff_muffed_returns` | integer | Kickoff returns the player muffed. |
+| `kickoff_touchdowns` | integer | Kickoff returns scoring a touchdown. |
+| `kickoff_yards` | integer | Total kickoff-return yards. |
+| `kickoff_ypa` | numeric | Average yards per kickoff return. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `punt_attempts` | integer | Punt returns attempted. |
+| `punt_fair_catches` | integer | Punts fair-caught by the player. |
+| `punt_long` | integer | Longest punt return in yards. |
+| `punt_muffed_returns` | integer | Punt returns the player muffed. |
+| `punt_touchdowns` | integer | Punt returns scoring a touchdown. |
+| `punt_yards` | integer | Total punt-return yards. |
+| `punt_ypa` | integer | Average yards per punt return. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_attempts` | integer | Total attempts: field goals attempted across all distances on the field-goals report, kick and punt returns combined on the kick-returns report. |
+| `grades_punt_return` | numeric | PFF punt-return grade, 0-100. |
 
 **field-goals**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `twenty_attempts` | integer |  |
-| `pat_percent` | numeric |  |
-| `draft_season` | integer |  |
-| `forty_made` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `fifty_percent` | integer |  |
-| `total_made` | integer |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `one_made` | integer |  |
-| `fifty_attempts` | integer |  |
-| `forty_attempts` | integer |  |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `thirty_percent` | integer |  |
-| `total_attempts` | integer |  |
-| `pat_attempts` | integer |  |
-| `twenty_made` | integer |  |
-| `one_attempts` | integer |  |
-| `grades_fgep_kicker` | numeric |  |
-| `thirty_attempts` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `pat_made` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | integer |  |
-| `one_percent` | integer |  |
-| `total_percent` | numeric |  |
-| `twenty_percent` | numeric |  |
-| `forty_percent` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `fifty_made` | integer |  |
-| `thirty_made` | integer |  |
-| `field_goal_oe` | numeric |  |
-| `field_goal_oe_total` | numeric |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `twenty_attempts` | integer | Field goals attempted from 20-29 yards. |
+| `pat_percent` | numeric | Extra-point percentage. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `forty_made` | integer | Field goals made from 40-49 yards. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `fifty_percent` | integer | Field-goal percentage from 50 or more yards. |
+| `total_made` | integer | Total field goals made across all distances. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `one_made` | integer | Field goals made from 1-19 yards. |
+| `fifty_attempts` | integer | Field goals attempted from 50 or more yards. |
+| `forty_attempts` | integer | Field goals attempted from 40-49 yards. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `thirty_percent` | integer | Field-goal percentage from 30-39 yards. |
+| `total_attempts` | integer | Total attempts: field goals attempted across all distances on the field-goals report, kick and punt returns combined on the kick-returns report. |
+| `pat_attempts` | integer | Extra points attempted. |
+| `twenty_made` | integer | Field goals made from 20-29 yards. |
+| `one_attempts` | integer | Field goals attempted from 1-19 yards. |
+| `grades_fgep_kicker` | numeric | PFF field-goal and extra-point kicking grade, 0-100. |
+| `thirty_attempts` | integer | Field goals attempted from 30-39 yards. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `pat_made` | integer | Extra points made. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `one_percent` | integer | Field-goal percentage from 1-19 yards. |
+| `total_percent` | numeric | Overall field-goal percentage. |
+| `twenty_percent` | numeric | Field-goal percentage from 20-29 yards. |
+| `forty_percent` | numeric | Field-goal percentage from 40-49 yards. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `fifty_made` | integer | Field goals made from 50 or more yards. |
+| `thirty_made` | integer | Field goals made from 30-39 yards. |
+| `field_goal_oe` | numeric | Field-goal percentage over expectation, in percentage points (made rate minus PFF's expected make rate). |
+| `field_goal_oe_total` | numeric | Field goals made over expectation in total (makes minus PFF-expected makes). |
 
 **punting**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `touchbacks` | integer |  |
-| `attempts_with_hangtime` | integer |  |
-| `draft_season` | integer |  |
-| `percent_returned` | numeric |  |
-| `fair_catches` | integer |  |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `player_game_count` | integer |  |
-| `eligible_season` | integer |  |
-| `average_net_yards` | numeric |  |
-| `yards` | integer | The number of receiving yards |
-| `average_hangtime` | numeric |  |
-| `total_net_yards` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `inside_twenties` | integer |  |
-| `out_of_bounds` | integer | 1 if play description contains ran ob, pushed ob, or sacked ob; 0 otherwise. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `average_yards_per_return` | numeric |  |
-| `total_hangtime` | numeric |  |
-| `declined_penalties` | integer |  |
-| `returns` | integer |  |
-| `long` | integer |  |
-| `blocks` | integer | Total blocks. |
-| `average_yards_per_attempt` | numeric |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_punter` | numeric |  |
-| `return_yards` | integer | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `downeds` | integer |  |
-| `snaps` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `touchbacks` | integer | Kicks resulting in touchbacks: kickoffs on the kickoffs report, punts on the punting report. |
+| `attempts_with_hangtime` | integer | Kicks with a PFF-recorded hangtime: kickoffs on the kickoffs report, punts on the punting report. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `percent_returned` | numeric | Percentage of the player's kicks that were returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `fair_catches` | integer | Kicks fair-caught by the return team: kickoffs on the kickoffs report, punts on the punting report. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `average_net_yards` | numeric | Average net punting yards per attempt. |
+| `yards` | integer | Yards in the report's play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing), gross punt yards (punting), and receiving yards allowed into the player's coverage (coverage, defense). |
+| `average_hangtime` | numeric | Average hangtime in seconds of the player's kickoffs (kickoffs report) or punts (punting report). |
+| `total_net_yards` | integer | Total net punting yards. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `inside_twenties` | integer | Punts downed inside the opponent 20-yard line. |
+| `out_of_bounds` | integer | Punts that went out of bounds. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `average_yards_per_return` | numeric | Average return yards allowed per kick returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `total_hangtime` | numeric | Total hangtime in seconds summed over the player's kickoffs (kickoffs report) or punts (punting report). |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `returns` | integer | Punts returned by the opponent. |
+| `long` | integer | Longest punt in yards. |
+| `blocks` | integer | Punts that were blocked. |
+| `average_yards_per_attempt` | numeric | Average gross punting yards per attempt. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_punter` | numeric | PFF punting grade, 0-100. |
+| `return_yards` | integer | Return yards gained by the return team on the player's kicks: kickoffs on the kickoffs report, punts on the punting report. |
+| `downeds` | integer | Punts downed by the coverage unit. |
+| `snaps` | integer | Punting snaps played. |
 
 **kickoffs**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player` | character | Player name |
-| `position` | character | Primary position as reported by NFL.com |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `attempts_with_hangtime` | integer |  |
-| `average_distance` | numeric |  |
-| `average_hangtime` | numeric |  |
-| `average_starting_field_position` | numeric |  |
-| `average_yards_per_return` | numeric |  |
-| `declined_penalties` | integer |  |
-| `draft_season` | integer |  |
-| `eligible_season` | integer |  |
-| `fair_catches` | integer |  |
-| `franchise_id` | integer | ESPN franchise id (parsed from `franchise_ref`). |
-| `grades_kickoff_kicker` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `kicked_yards` | integer |  |
-| `kicks_returned` | integer |  |
-| `onside_kicks` | integer |  |
-| `penalties` | integer | Total number of penalties. |
-| `percent_returned` | numeric |  |
-| `player_game_count` | integer |  |
-| `return_yards` | integer | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `total_hangtime` | numeric |  |
-| `touchbacks` | integer |  |
+| `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
+| `player` | character | Player's display name as PFF lists it (e.g. "Tom Brady"). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS). |
+| `attempts` | integer | Attempts in the report's play family: pass attempts on the passing report, carries on rushing, punts on punting and kickoffs on the kickoffs report. |
+| `attempts_with_hangtime` | integer | Kicks with a PFF-recorded hangtime: kickoffs on the kickoffs report, punts on the punting report. |
+| `average_distance` | numeric | Average kickoff distance in yards. |
+| `average_hangtime` | numeric | Average hangtime in seconds of the player's kickoffs (kickoffs report) or punts (punting report). |
+| `average_starting_field_position` | numeric | Average opponent starting field position following the player's kickoffs. |
+| `average_yards_per_return` | numeric | Average return yards allowed per kick returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
+| `fair_catches` | integer | Kicks fair-caught by the return team: kickoffs on the kickoffs report, punts on the punting report. |
+| `franchise_id` | integer | PFF franchise (team) id (integer join key). |
+| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `kicked_yards` | integer | Total kickoff yards. |
+| `kicks_returned` | integer | Kickoffs returned by the opponent. |
+| `onside_kicks` | integer | Onside kicks attempted. |
+| `penalties` | integer | Penalties charged to the player over the covered span (see declined_penalties for the ones that were declined). |
+| `percent_returned` | numeric | Percentage of the player's kicks that were returned: kickoffs on the kickoffs report, punts on the punting report. |
+| `player_game_count` | integer | Number of games the player appeared in over the covered span. |
+| `return_yards` | integer | Return yards gained by the return team on the player's kicks: kickoffs on the kickoffs report, punts on the punting report. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `total_hangtime` | numeric | Total hangtime in seconds summed over the player's kickoffs (kickoffs report) or punts (punting report). |
+| `touchbacks` | integer | Kicks resulting in touchbacks: kickoffs on the kickoffs report, punts on the punting report. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
