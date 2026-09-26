@@ -357,8 +357,18 @@ one row per event x metric (`epa`, `success_rate`), `EVENT_SCHEMA`.
 
 ```python
 import polars as pl
-from sportsdataverse.rolling_windows import football_events
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
 
+pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+sched = load_cfb_schedule(2024)
+game_dates = sched.select(
+    pl.col("game_id").cast(pl.Int64),
+    game_date=pl.col("start_date")
+    .str.to_datetime(time_zone="UTC")
+    .dt.convert_time_zone("America/New_York")
+    .dt.date(),
+)
 ev = football_events(pbp, game_dates)
 ev.filter(pl.col("window_unit") == "dropback").head()
 
@@ -5988,21 +5998,33 @@ Rolling-window form for every entity with an event in `season`.
 
 **Returns**
 
-one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. `prev` / `season_start` need a FULL window and `career_baseline` at least one window of history, else null; `delta_prev_rank` (1 = biggest riser, ties share the lowest rank) is null unless `n == window_n` and `prev` exists.
+one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN event values are dropped before any window is computed. Columns: * `cur`: the mean of the entity's last `window_n` events through `season`. * `prev`: the mean of the `window_n` events immediately before `cur`'s window; null unless a full window of earlier history exists. * `season_start`: the mean of the `window_n` events immediately before season `season` started -- i.e. the entity's form entering the season, not counting any event actually played in `season`. * `career_baseline`: the mean of every event before `cur`'s window, including earlier events within `season` itself; null unless at least one full window of history precedes it. * `qualified`: `True` iff `n == window_n` -- the window is fully populated (not padded by a short career). Consumers building a "hottest" list should filter on this first. * `team_id` / `entity_name`: taken from the entity's single latest event through `season`, so a player who changed teams mid-season is labelled with their current team. * `delta_prev_rank`: 1 = biggest riser, ties share the lowest rank; null unless `qualified` and `prev` exists.
 
 **Example**
 
 ```python
 import polars as pl
-from sportsdataverse.rolling_windows import football_events, rolling_windows
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
 
+pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+sched = load_cfb_schedule(2024)
+game_dates = sched.select(
+    pl.col("game_id").cast(pl.Int64),
+    game_date=pl.col("start_date")
+    .str.to_datetime(time_zone="UTC")
+    .dt.convert_time_zone("America/New_York")
+    .dt.date(),
+)
 ev = football_events(pbp, game_dates)
 rw = rolling_windows(ev, 2024)
 rw.filter(pl.col("window_unit") == "dropback").head()
 
 # Pipeline next step (one line)
 
-rw.filter(pl.col("delta_prev_rank") == 1).select("entity_name", "window_unit", "window_n")
+rw.filter(pl.col("qualified") & (pl.col("delta_prev_rank") == 1)).select(
+    "entity_name", "window_unit", "window_n"
+)
 ```
 
 ### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}
