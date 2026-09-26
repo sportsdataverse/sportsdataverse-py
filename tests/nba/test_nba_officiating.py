@@ -332,3 +332,31 @@ def test_non_numeric_game_id_is_kept_raw_not_raised():
     out = parse_nba_l2m(p)
     assert out["game"]["game_id"][0] == "ABC123"
     assert out["calls"]["game_id"][0] == "ABC123"
+
+
+@pytest.mark.parametrize("gid", ["X", "AB"])
+def test_short_non_numeric_game_id_gives_null_season_type_not_index_error(gid):
+    p = _payload()
+    p["game"][0]["GameId"] = gid
+    out = parse_nba_l2m(p)
+    assert out["game"]["game_id"][0] == gid
+    assert out["game"]["season_type"][0] is None
+
+
+def test_malformed_game_date_is_null_not_raised():
+    p = _payload()
+    p["game"][0]["GameDate"] = "not-a-date"
+    out = parse_nba_l2m(p)
+    assert out["game"].height == 1
+    assert out["game"]["game_date"][0] is None
+
+
+@pytest.mark.parametrize("body", ["null", "[]", '"error"', "42"])
+def test_non_object_json_200_is_asset_fetch_error(monkeypatch, body):
+    # Valid JSON that is not an object must not reach .get() (AttributeError) or be
+    # handed back from raw=True as a non-dict.
+    _patch(monkeypatch, _Resp(200, body, "application/json"))
+    with pytest.raises(AssetFetchError):
+        nba_l2m("0042500405", raw=True)
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13")

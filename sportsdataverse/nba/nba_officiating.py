@@ -104,12 +104,16 @@ def _official_json(resp: requests.Response, url: str) -> dict:
         The decoded JSON payload (dict).
 
     Raises:
-        AssetFetchError: The body is not valid JSON.
+        AssetFetchError: The body is not valid JSON, or is JSON but not an object
+            (``null``, a list, a bare string) -- every official.nba.com payload is one.
     """
     try:
-        return resp.json()
+        data = resp.json()
     except ValueError as exc:
         raise AssetFetchError(f"official.nba.com returned a non-JSON 200 body for {url}") from exc
+    if not isinstance(data, dict):
+        raise AssetFetchError(f"official.nba.com returned a JSON {type(data).__name__}, not an object, for {url}")
+    return data
 
 
 L2M_CALLS_SCHEMA = pl.Schema(
@@ -326,8 +330,9 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
         [
             {
                 "game_id": gid,
-                "game_date": _dt.date.fromisoformat(g["GameDate"][:10]) if g.get("GameDate") else None,
-                "season_type": _SEASON_TYPES.get(gid[2]) if gid else None,
+                "game_date": _iso_date(g.get("GameDate")),
+                # _l2m_gid keeps a non-numeric id verbatim, so it can be shorter than 3.
+                "season_type": _SEASON_TYPES.get(gid[2]) if gid and len(gid) > 2 else None,
                 "home_team_id": g.get("HomeTeamId"),
                 "away_team_id": g.get("AwayTeamId"),
                 "home_team_abbr": g.get("Home_team_abbr"),
@@ -545,8 +550,19 @@ def nba_l2m_games(
 
 
 def _mdy(s: str | None) -> _dt.date | None:
-    """Parse a date string in MM/DD/YYYY format."""
-    return _dt.datetime.strptime(s, "%m/%d/%Y").date() if s else None
+    """Parse a date string in MM/DD/YYYY format; ``None`` when missing or malformed (the parser contract)."""
+    try:
+        return _dt.datetime.strptime(s, "%m/%d/%Y").date() if s else None
+    except ValueError:
+        return None
+
+
+def _iso_date(s: Any) -> _dt.date | None:
+    """Parse the date part of an ISO date/datetime string; ``None`` when missing or malformed."""
+    try:
+        return _dt.date.fromisoformat(str(s)[:10]) if s else None
+    except ValueError:
+        return None
 
 
 def _season_end_year(s: str, league: str) -> int | None:
