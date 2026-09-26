@@ -193,6 +193,8 @@ def _trimmed(game_id: int) -> dict:
       typed "Pass Interception".
     * ``summary_282430151_trimmed.json.gz`` -- East Carolina @ Virginia Tech, 2008. Virginia
       Tech returns a blocked ECU extra point "for 2 defensive point conversion".
+    * ``summary_243392572_trimmed.json.gz`` -- California @ Southern Miss, 2004. Cal returns
+      Southern Miss's missed extra point for two (16-17 -> 16-19); the row has no type.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -380,10 +382,11 @@ def test_a_try_the_defence_returned_is_typed_a_defensive_two() -> None:
         "Blocked PAT returned by Brandon Flowers for a TWO-POINT CONVERSION.",
         "Two-point conversion attempt, Ricky Dobbs pass FAILED.  Pass intercepted by Brian Rolle and returned for "
         "two-points.",
+        "Kelvin Hayden (MSU), missed PAT returned.",
     ],
 )
 def test_defensive_try_return_text_shapes(text: str) -> None:
-    """Every 2007-13 shape of a returned try (the corpus has these eight)."""
+    """Every 2004-13 shape of a returned try (the corpus has these nine)."""
     from sportsdataverse.cfb.cfb_pbp import _DEFENSIVE_TRY_RETURN
 
     assert pl.Series([text]).str.contains(_DEFENSIVE_TRY_RETURN).item()
@@ -403,6 +406,23 @@ def test_a_blocked_kick_returned_for_2_defensive_point_conversion_is_a_defensive
     assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), -2)
     td = plays.row(r["i"] - 1, named=True)
     assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Passing Touchdown"
+    assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
+def test_a_2004_missed_pat_returned_is_a_defensive_two() -> None:
+    """243392572: "Wendell Hunter (USM), missed PAT returned." (Southern Miss 16-17 -> 16-19).
+
+    2004 files the three returned tries it has with no type. The row became "Unknown" before
+    the defensive-return retype ran, which only looked at try types, so the model scored it
+    as a scrimmage snap (EP_start 2.01 here) and its placeholder win probability cost Southern
+    Miss 0.29, where the two points are worth 0.13.
+    """
+    plays = _offline_plays(243392572).with_row_index("i")
+    r = plays.filter(pl.col("text").str.contains("missed PAT returned")).row(0, named=True)
+    assert r["type.text"] == "Defensive 2pt Conversion"
+    assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), -2)
+    td = plays.row(r["i"] - 1, named=True)
+    assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Rushing Touchdown"
     assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
 
 

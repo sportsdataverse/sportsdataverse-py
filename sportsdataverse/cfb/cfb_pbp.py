@@ -408,10 +408,12 @@ _CLOCK_STOPPAGES = ("Timeout", "End Period")
 #: for 2-point defensive conversion by X", "... returned by X for defensive PAT", "...
 #: returned for 2 defensive point conversion by X" (2008), "Blocked PAT returned by X for a
 #: TWO-POINT CONVERSION" (2007), "Pass intercepted by X and returned for two-points." (2009).
-#: Over every raw try row 2004-26 it matches the 44 returns and nothing else.
+#: 2004's "Kelvin Hayden (MSU), missed PAT returned." comes with no type at all (see the
+#: retype). Over every raw try row 2004-26 it matches the 44 returns and nothing else.
 _DEFENSIVE_TRY_RETURN = (
     r"(?i)for (?:a )?(?:2-point |two-point |2 )?defensive (?:pat|two-point conversion|(?:point )?conversion)"
     r"|returned\b.{0,60}\bfor (?:a )?(?:two|2)[- ]?point(?:s\b| conversion)"
+    r"|missed pat returned"
 )
 
 
@@ -2722,8 +2724,12 @@ class CFBPlayProcess(object):
                 # McFadden." (Extra Point Missed), "pass attempt failed (intercepted), returned
                 # by Hamlin, M for defensive PAT." (Extra Point Good). It scored 0 or +1 for the
                 # kicking team instead of the -2 a "Defensive 2pt Conversion" row carries.
+                # 2004 files its three ("X (T), missed PAT returned.") with no type, "Unknown"
+                # by now, and the model scored them as scrimmage snaps (EPA -1.4 to -2.9).
                 pl.when(
-                    pl.col("type.text").is_in(_TRY_TYPES).and_(pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)),
+                    (pl.col("type.text").is_in(_TRY_TYPES) | (pl.col("type.text") == "Unknown")).and_(
+                        pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)
+                    ),
                 )
                 .then(pl.lit("Defensive 2pt Conversion"))
                 .otherwise(pl.col("type.text"))
