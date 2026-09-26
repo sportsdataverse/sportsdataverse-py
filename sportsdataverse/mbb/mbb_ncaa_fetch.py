@@ -229,6 +229,10 @@ class NcaaFetchConfig:
         )
 
 
+# ``://login:password@`` anywhere in free text (an exception message, say).
+_CREDS_RE = re.compile(r"://[^/\s:@]+:[^@\s]+@")
+
+
 def _redact_proxy_url(url: Optional[str]) -> str:
     """Mask ``login:password`` in a ``http://login:password@host:port`` URL."""
     if not url:
@@ -1019,6 +1023,14 @@ class NcaaFetcher:
                 raise  # same reasoning: no proxy rotation gets past the Terms gate
             except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
                 last_err = str(exc)
+                # Which error rotated (and relaunched the browser) is otherwise
+                # invisible until the pool is exhausted. Scrub any user:pass@.
+                logger.debug(
+                    "transport error on %s: %s: %s",
+                    _redact_proxy_url(proxy),
+                    type(exc).__name__,
+                    _CREDS_RE.sub("://***@", str(exc))[:300],
+                )
                 if isinstance(exc, _TermsAcceptError):
                     # One is usually the proxy; the same failure on several proxies
                     # is the form itself -- stop instead of sweeping the whole pool

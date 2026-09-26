@@ -329,6 +329,22 @@ def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> N
     assert fetcher._dead == set()  # unsolved != banned -- the IP is not retired
 
 
+def test_rotation_logs_the_transport_error_without_credentials(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        if proxies.get("http") == _POOL[0]:
+            raise RuntimeError("net::ERR_TUNNEL_CONNECTION_FAILED via http://u:secret@10.0.0.1:1")
+        return (200, _CLEAN)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with caplog.at_level("DEBUG", logger="sportsdataverse.mbb.mbb_ncaa_fetch"):
+        assert NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/1/play_by_play") == _CLEAN
+    logged = [r.getMessage() for r in caplog.records if "transport error on" in r.getMessage()]
+    assert len(logged) == 1 and "RuntimeError: net::ERR_TUNNEL_CONNECTION_FAILED" in logged[0]
+    assert "secret" not in caplog.text  # neither the proxy nor the message leaks credentials
+
+
 def test_solved_session_does_not_re_solve_on_every_fetch() -> None:
     """Once genuinely solved, the token is reused -- no needless navigation."""
     page = _FakePage([_CLEAN, _CLEAN])
