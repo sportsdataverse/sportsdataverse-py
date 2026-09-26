@@ -112,6 +112,12 @@ def _require_dates(df: pl.DataFrame) -> None:
         raise ValueError(f"{missing.len()} game(s) have no game_date: {missing.head(5).to_list()}")
 
 
+def _require_unique_game_ids(game_dates: pl.DataFrame) -> None:
+    dup = game_dates.filter(pl.col("game_id").is_duplicated())["game_id"].unique()
+    if dup.len():
+        raise ValueError(f"{dup.len()} game_id(s) appear more than once in game_dates: {dup.head(5).to_list()}")
+
+
 def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
     """Dropback / target / carry / team-play events from released ``espn_{cfb,nfl}_pbp`` plays.
 
@@ -129,7 +135,8 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
 
     Raises:
         TypeError: an id column is float.
-        ValueError: a play's game has no ``game_date``.
+        ValueError: a play's game has no ``game_date``, or ``game_dates`` has a
+            duplicate ``game_id``.
 
     Example:
         Quick start::
@@ -151,6 +158,7 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
         .. _nflfastR: https://www.nflfastr.com
         .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
+    _require_unique_game_ids(game_dates)
     if pbp.height == 0:
         return pl.DataFrame(schema=EVENT_SCHEMA)
     dates = game_dates.select(pl.col("game_id").cast(pl.Int64), pl.col("game_date").cast(pl.Date))
@@ -281,7 +289,7 @@ def rolling_windows(
             rw.filter(pl.col("delta_prev_rank") == 1).select("entity_name", "window_unit", "window_n")
     """
     windows = WINDOWS if windows is None else windows
-    ev = events.filter((pl.col("season") <= season) & pl.col("value").is_not_null())
+    ev = events.filter((pl.col("season") <= season) & pl.col("value").is_not_null() & pl.col("value").is_not_nan())
     current = ev.filter(pl.col("season") == season)
     if current.height == 0:
         return pl.DataFrame(schema=OUTPUT_SCHEMA)

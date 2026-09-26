@@ -7,6 +7,7 @@ from pathlib import Path
 
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.rolling_windows import EVENT_SCHEMA, OUTPUT_SCHEMA, football_events, rolling_windows
 
@@ -184,6 +185,100 @@ def test_tied_deltas_split_by_float_noise_share_the_lowest_rank():
     assert a["delta_prev"] == pytest.approx(0.2, abs=1e-12)
     assert b["delta_prev"] == pytest.approx(0.2, abs=1e-12)
     assert a["delta_prev_rank"] == b["delta_prev_rank"] == 1
+
+
+def test_nan_events_are_dropped_and_never_rank_first():
+    ev = _synthetic_events(
+        [
+            # C1's latest event is NaN: dropped entirely, so its window falls back
+            # to the two real events behind it (cur=0.1, prev=0.2, delta=-0.1).
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id="C1",
+                entity_name="Entity C",
+                team_id="1",
+                window_unit="dropback",
+                metric="epa",
+                game_id="g1",
+                event_date=date(2024, 1, 1),
+                seq=1,
+                value=0.2,
+            ),
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id="C1",
+                entity_name="Entity C",
+                team_id="1",
+                window_unit="dropback",
+                metric="epa",
+                game_id="g2",
+                event_date=date(2024, 1, 8),
+                seq=1,
+                value=0.1,
+            ),
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id="C1",
+                entity_name="Entity C",
+                team_id="1",
+                window_unit="dropback",
+                metric="epa",
+                game_id="g3",
+                event_date=date(2024, 1, 15),
+                seq=1,
+                value=float("nan"),
+            ),
+            # D1 has the biggest real riser and should take rank 1 instead.
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id="D1",
+                entity_name="Entity D",
+                team_id="2",
+                window_unit="dropback",
+                metric="epa",
+                game_id="g1",
+                event_date=date(2024, 1, 1),
+                seq=1,
+                value=0.1,
+            ),
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id="D1",
+                entity_name="Entity D",
+                team_id="2",
+                window_unit="dropback",
+                metric="epa",
+                game_id="g2",
+                event_date=date(2024, 1, 8),
+                seq=1,
+                value=0.9,
+            ),
+        ]
+    )
+    rw = rolling_windows(ev, 2024, windows={"dropback": (1,)})
+    c = _row(rw, entity_id="C1", window_unit="dropback", metric="epa", window_n=1)
+    d = _row(rw, entity_id="D1", window_unit="dropback", metric="epa", window_n=1)
+    assert c["cur"] == pytest.approx(0.1) and c["prev"] == pytest.approx(0.2)  # the NaN event never entered a window
+    assert c["delta_prev_rank"] != 1
+    assert d["delta_prev_rank"] == 1
+
+
+def test_no_leakage_from_future_seasons(cfb_events):
+    key = ["window_unit", "window_n", "metric", "entity_type", "entity_id"]
+    full = rolling_windows(cfb_events, 2023).sort(key)
+    pre_only = rolling_windows(cfb_events.filter(pl.col("season") <= 2023), 2023).sort(key)
+    assert_frame_equal(full, pre_only)
+
+
+def test_duplicate_game_dates_raises(cfb_pbp, cfb_dates):
+    dup_dates = pl.concat([cfb_dates, cfb_dates.head(1)])
+    with pytest.raises(ValueError, match="game_id"):
+        football_events(cfb_pbp, dup_dates)
 
 
 def test_rows_only_for_entities_with_a_2024_event(cfb_events, rw2024):
