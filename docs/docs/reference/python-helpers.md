@@ -333,6 +333,40 @@ df = decompose_college_baseball_plays(
 print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
 ```
 
+### `football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_events}
+
+Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays.
+
+Population: plays from scrimmage on a numbered down (`EPA_scrimmage` not null,
+`down` 1-4) in the regular season or postseason -- the population sdv-db's
+player routes aggregate. `pass` includes sacks (a sack is a dropback); CFB has no
+scramble flag, so a scramble is a carry.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | released pbp plays, any number of seasons (project to `FOOTBALL_PBP_COLUMNS`). |
+| `game_dates` | `DataFrame` |  | `game_id` (int) and `game_date` (date) for every game in `pbp`. |
+
+**Returns**
+
+one row per event x metric (`epa`, `success_rate`), `EVENT_SCHEMA`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.rolling_windows import football_events
+
+ev = football_events(pbp, game_dates)
+ev.filter(pl.col("window_unit") == "dropback").head()
+
+# Pipeline next step (one line)
+
+ev.group_by("entity_id", "season").agg(pl.col("value").mean())
+```
+
 ### `get_cache_mode() -> 'str'` {#get_cache_mode}
 
 Return the current cache mode.
@@ -5938,6 +5972,37 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 pff_teams_overview()
+```
+
+### `rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'` {#rolling_windows}
+
+Rolling-window form for every entity with an event in `season`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | an `EVENT_SCHEMA` frame covering every season up to `season` (the career history the baselines read). |
+| `season` | `int` |  | the season the rows describe; later seasons in `events` are ignored. |
+| `windows` | `dict[str, tuple[int, ...]] \| None` | `None` | `{window_unit: (sizes...)}`; defaults to `WINDOWS`. |
+
+**Returns**
+
+one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. `prev` / `season_start` need a FULL window and `career_baseline` at least one window of history, else null; `delta_prev_rank` (1 = biggest riser, ties share the lowest rank) is null unless `n == window_n` and `prev` exists.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.rolling_windows import football_events, rolling_windows
+
+ev = football_events(pbp, game_dates)
+rw = rolling_windows(ev, 2024)
+rw.filter(pl.col("window_unit") == "dropback").head()
+
+# Pipeline next step (one line)
+
+rw.filter(pl.col("delta_prev_rank") == 1).select("entity_name", "window_unit", "window_n")
 ```
 
 ### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}

@@ -147,3 +147,12 @@ def test_windows_override_and_empty_season(cfb_events):
     assert set(only["window_unit"].unique()) == {"dropback"} and set(only["window_n"].unique()) == {10}
     none = rolling_windows(cfb_events, 2030)
     assert none.height == 0 and none.schema == pl.Schema(OUTPUT_SCHEMA)
+
+
+def test_package_level_export_and_reference_docs():
+    import sportsdataverse
+
+    assert sportsdataverse.rolling_windows is rolling_windows
+    assert sportsdataverse.football_events is football_events
+    doc = (Path(__file__).parents[1] / "docs" / "docs" / "reference" / "python-helpers.md").read_text(encoding="utf-8")
+    assert "{#rolling_windows}" in doc and "{#football_events}" in doc
