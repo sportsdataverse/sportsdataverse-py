@@ -1,9 +1,11 @@
+import json
 from pathlib import Path
 
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_officiating as mod
+from sportsdataverse.nba.nba_officiating import L2M_CALLS_SCHEMA, nba_l2m, parse_nba_l2m
 
 FIX = Path(__file__).parent / "fixtures" / "official_nba"
 
@@ -14,8 +16,6 @@ class _Resp:
         self.content = body.encode()
 
     def json(self):
-        import json
-
         return json.loads(self.text)
 
 
@@ -54,3 +54,54 @@ def test_akamai_html_403_is_fetch_error(monkeypatch):
 def test_errors_are_disjoint():
     assert not issubclass(NoDataError, AssetFetchError)
     assert not issubclass(AssetFetchError, NoDataError)
+
+
+def _payload():
+    return json.loads((FIX / "l2m_json_0042500405.json").read_text(encoding="utf-8"))
+
+
+def test_parse_real_capture():
+    out = parse_nba_l2m(_payload())
+    calls, game, stats = out["calls"], out["game"], out["stats"]
+    assert calls.height == 21 and stats.height == 3 and game.height == 1
+    assert calls["decision"].value_counts(sort=True).rows() == [("CNC", 13), ("CC", 7), ("INC", 1)]
+    first = calls.row(0, named=True)
+    assert first["game_id"] == "0042500405"
+    assert first["period"] == 4 and first["pc_time"] == "01:54.0"
+    assert first["seconds_remaining"] == 114.0
+    assert (first["call"], first["type"]) == ("FOUL", "SHOOTING")
+    assert (first["committing"], first["disadvantaged"]) == ("Knicks", "Victor Wembanyama")
+    assert game.row(0, named=True)["season_type"] == "playoffs"
+    assert game["game_date"].to_list()[0].isoformat() == "2026-06-13"
+
+
+def test_schema_is_stable_on_empty():
+    out = parse_nba_l2m({})
+    assert out["calls"].height == 0
+    assert out["calls"].schema == L2M_CALLS_SCHEMA
+
+
+def test_decision_normalization():
+    p = _payload()
+    for row, raw in zip(p["l2m"][:5], ["NCC", "NCI", "Undetectable", "", "CC*"]):
+        row["CallRatingName"] = raw
+    got = parse_nba_l2m(p)["calls"]["decision"].to_list()[:5]
+    assert got == ["CNC", "INC", None, None, "CC"]
+
+
+def test_names_kept_verbatim():
+    p = _payload()
+    p["l2m"][0]["DP"] = "Nikola Jokić"
+    assert parse_nba_l2m(p)["calls"]["disadvantaged"][0] == "Nikola Jokić"
+
+
+def test_game_id_zero_padded_from_int(monkeypatch):
+    seen = {}
+
+    def fake_get(url, **kw):
+        seen["url"] = url
+        return _Resp(200, json.dumps(_payload()), "application/json")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    nba_l2m(42500405)
+    assert seen["url"].endswith("/l2m/json/0042500405.json")
