@@ -381,8 +381,8 @@ def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | 
 
     Retrieves and parses the L2M season index page from official.nba.com,
     returning a table of all games for which L2M reports exist. JSON reports
-    are available only from the 2018-19 season onward; earlier seasons' pages
-    list PDFs instead, which this function ignores.
+    exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
+    which this function ignores. For historical access, use :func:`load_nba_l2m`.
 
     Args:
         season: The NBA season (end year), e.g., 2026 for the 2025-26 season.
