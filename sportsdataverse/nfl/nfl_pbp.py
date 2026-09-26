@@ -5671,14 +5671,28 @@ class NFLPlayProcess(object):
         WP_start = _wp_model.predict(DMatrix(X_wp_start, feature_names=WP_SPREAD_FEATURES))
 
         # ---- wp_after ----
+        # The end view scores the play's end state for its END team (end.is_home, the end
+        # team's timeouts and spread), but end.pos_score_diff is the START team's margin.
+        # On a scoring play whose end.team ESPN flipped to the scorer -- a pick-six, a punt
+        # or fumble return -- that read as the scorer at its own 1 trailing by the lead it
+        # had just taken. State the margin for the end team there, so the touchdown ends
+        # where every other touchdown does: the scorer's board with the TD counted, about
+        # to try. calculate_wpa hands this value to the try row.
         X_wp_end = _espn_wp_features(
-            play_df,
+            play_df.with_columns(
+                pl.when(
+                    (pl.col("scoringPlay") == True).and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id")),
+                )
+                .then(-pl.col("end.pos_score_diff"))
+                .otherwise(pl.col("end.pos_score_diff"))
+                .alias("_end_team_score_diff"),
+            ),
             receive_ko_col="end.pos_team_receives_2H_kickoff",
             spread_time_col="end.spread_time",
             home_col="end.is_home",
             half_sec_col="end.TimeSecsRem",
             game_sec_col="end.adj_TimeSecsRem",
-            score_diff_col="end.pos_score_diff",
+            score_diff_col="_end_team_score_diff",
             down_col="end.down",
             ydstogo_col="end.distance",
             yardline_col="end.yardsToEndzone",
