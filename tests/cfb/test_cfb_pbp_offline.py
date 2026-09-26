@@ -223,6 +223,16 @@ def _trimmed(game_id: int) -> dict:
       overtime touchdown is a fumble recovered in the end zone, typed "Rush".
     * ``summary_292810142_trimmed.json.gz`` -- Nebraska @ Missouri, 2009 week 6. Missouri
       scores and kicks the extra point with no time left in the half.
+    * ``summary_293250145_trimmed.json.gz`` -- LSU @ Ole Miss, 2009. LSU returns a blocked field
+      goal for a touchdown; ESPN typed the row "Field Goal Good".
+    * ``summary_282570328_trimmed.json.gz`` -- Utah @ Utah State, 2008. Utah recovers its own
+      kickoff for a touchdown.
+    * ``summary_332852449_trimmed.json.gz`` -- Missouri State @ North Dakota State, 2013. A punt
+      return and a pick-six, each one old-NCAA row typed "Extra Point Good".
+    * ``summary_282410024_trimmed.json.gz`` -- Oregon State @ Stanford, 2008. A passing touchdown
+      and its good two in one row typed "2pt Conversion".
+    * ``summary_401525903_trimmed.json.gz`` -- Kansas @ Cincinnati, 2023. An untyped row repeats
+      a touchdown's folded failed two after the kickoff.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -353,7 +363,9 @@ def test_a_late_filed_defensive_two_follows_its_touchdown() -> None:
     assert [r["type.text"] for r in nxt] == ["Timeout"]
     assert td["period"] == d2p["period"] == 2
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
-    assert abs(d2p["wpa"]) < 0.05, d2p["wpa"]
+    # on its board (PSU 17-16, 0:19 left in the half) the two the defence takes back is a
+    # three-point swing at the break: a real loss for the kicking team, not the placeholder's
+    assert -0.25 < d2p["wpa"] < -0.03, d2p["wpa"]
 
 
 def test_a_two_point_touchdown_reads_espns_structured_result() -> None:
@@ -744,26 +756,16 @@ def test_a_return_touchdown_hands_over_the_scorers_board() -> None:
     end.ExpScoreDiff carries. The plain end view states the lead for the punting team, and
     the pre-2014 defensive-touchdown branch subtracts the try from the scorer's lead.
     """
-    from xgboost import DMatrix
-
-    from sportsdataverse.cfb.cfb_pbp import wp_model
-    from sportsdataverse.cfb.model_vars import wp_end_columns, wp_final_names
 
     plays = _offline_plays(243040265).with_row_index("i")
     (td, (tr,)), *_ = _rows_after_flipped_touchdowns(plays)
     lead = -td["end.pos_score_diff"]
     assert lead == 20
-    scorer = (
-        pl.DataFrame([td])
-        .select(wp_end_columns)
-        .with_columns(
-            pl.lit(lead).alias("end.pos_score_diff"),
-            pl.lit((lead + 0.92) / (td["end.adj_TimeSecsRem"] + 1)).alias("end.ExpScoreDiff_Time_Ratio"),
-        )
-    )
-    scorer.columns = wp_final_names
-    expected = float(wp_model.predict(DMatrix(scorer.to_pandas()))[0])
-    assert tr["wp_before"] == pytest.approx(expected, abs=1e-6)
+    # the scorer's board: the kickoff to come over the try's outcomes, the touchdown's own
+    # wp_after restated from the team that gave up the score to the scorer
+    assert tr["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
+    assert tr["wp_before"] > 0.8
+    assert -0.01 < tr["wpa"] < 0.06, tr["wpa"]
 
 
 def test_a_timeout_between_a_return_touchdown_and_its_try_keeps_the_board() -> None:
@@ -848,3 +850,240 @@ def test_an_interception_returned_for_a_touchdown_is_typed_one() -> None:
     assert r["int_td"]
     assert r["EP_end"] == pytest.approx(-6.92)
     assert r["EPA"] < -6
+
+
+# --- a try ends on the board the kickoff starts from ----------------------------------------
+
+
+_STANDALONE_TRIES = (
+    "Extra Point Good",
+    "Extra Point Missed",
+    "Two-Point Conversion Good",
+    "Two-Point Conversion Missed",
+)
+
+
+def _try_kickoff_pairs(plays: pl.DataFrame) -> list[tuple[dict, dict]]:
+    """Each regulation standalone try row with the kickoff that follows it (stoppages and a
+    walked-off penalty skipped), as (try, kickoff) rows."""
+    rows = plays.sort("game_play_number").to_dicts()
+    out = []
+    for i, r in enumerate(rows):
+        if r["type.text"] not in _STANDALONE_TRIES or (r["period.number"] or 0) > 4:
+            continue
+        j = i + 1
+        while j < len(rows) and rows[j]["type.text"] in ("Timeout", "End Period", "Penalty"):
+            j += 1
+        if j < len(rows) and "kickoff" in str(rows[j]["type.text"]).lower():
+            out.append((r, rows[j]))
+    return out
+
+
+def _restated(row: dict, other: dict) -> float:
+    """``other``'s wp_before in ``row``'s team frame."""
+    same = other["start.pos_team.id"] == row["start.pos_team.id"]
+    return other["wp_before"] if same else 1 - other["wp_before"]
+
+
+@pytest.mark.parametrize("game_id", [282432641, 292542649, 243040265])
+def test_a_try_ends_on_the_board_the_kickoff_starts_from(game_id: int) -> None:
+    """2004-13 standalone tries: row N's wp_after is row N+1's wp_before in the same frame.
+
+    The try's own end state was ESPN's placeholder (down -1, 70 yards out), which the model
+    scored as a live snap; the kickoff that follows starts from the touchback view of the
+    board with the try counted. The try's wp_after is now that value, restated for the
+    kicking team, and its WPA is its result: a made kick a little above the board, a miss
+    below it.
+    """
+    plays = _offline_plays(game_id)
+    pairs = _try_kickoff_pairs(plays)
+    assert len(pairs) >= 3, len(pairs)
+    made = []
+    for t, k in pairs:
+        assert t["wp_after"] == pytest.approx(_restated(t, k), abs=1e-6), (t["id"], t["wp_after"], k["wp_before"])
+        if t["type.text"] == "Extra Point Good":
+            made.append(t["wpa"])
+        elif t["type.text"] == "Extra Point Missed":
+            assert t["wpa"] < 0.005, (t["id"], t["wpa"])
+    # a made kick is a small gain on the board. Some 2004-13 kickoff rows carry the score
+    # of the play after them (282710130: 20-19 on a kickoff taken at 14-19), and that error
+    # is the kickoff's, inherited here rather than hidden; the tolerance is for it.
+    assert made and min(made) > -0.05, made
+    assert sorted(made)[len(made) // 2] >= 0, made
+
+
+def test_a_touchdown_before_a_standalone_try_ends_on_the_boards_expectation() -> None:
+    """292542649 (2009): the touchdown's end state before a standalone try is the kickoff to
+    come, weighted over the try's outcomes, so the try starts on its board and a made kick
+    gains only the 8% it was not already expected to.
+
+    ESPN ends a 2004-13 touchdown at down -1 on the scorer's own 1, which the model read as
+    the scorer pinned at its goal line: every try started below its board (made-XP WPA
+    median +0.016). Now touchdown -> try -> kickoff read one board.
+    """
+    plays = _offline_plays(292542649).sort("game_play_number")
+    rows = plays.to_dicts()
+    made = [
+        (rows[i - 1], r)
+        for i, r in enumerate(rows)
+        if r["type.text"] == "Extra Point Good"
+        and i > 0
+        and "touchdown" in str(rows[i - 1]["type.text"]).lower()
+        and rows[i - 1]["start.pos_team.id"] == r["start.pos_team.id"]
+    ]
+    assert len(made) >= 3, len(made)
+    for td, xp in made:
+        assert xp["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+        # the kick realises the 8% the board did not already count (a kickoff row whose
+        # score lags a play can pull it a little under, see the caveat above)
+        assert -0.05 < xp["wpa"] < 0.06, (xp["id"], xp["wpa"])
+
+
+def test_a_penalty_walked_off_before_the_kickoff_sits_on_the_kickoff_board() -> None:
+    """282432641: a try, a dead-ball penalty on the kickoff spot, the kickoff. The penalty row
+    reads the kickoff's board on both sides, so it moves nothing and the try still hands to
+    the kickoff through it.
+    """
+    rows = _offline_plays(282432641).to_dicts()
+    found = 0
+    for k, r in enumerate(rows[1:-1], start=1):
+        if r["type.text"] != "Penalty" or not str(rows[k - 1]["type.text"]).startswith("Extra Point"):
+            continue
+        ko = rows[k + 1]
+        if "kickoff" not in str(ko["type.text"]).lower():
+            continue
+        found += 1
+        board = ko["wp_before"] if ko["start.pos_team.id"] == r["start.pos_team.id"] else 1 - ko["wp_before"]
+        assert r["wp_before"] == pytest.approx(board, abs=1e-6)
+        assert r["wpa"] == pytest.approx(0.0, abs=1e-6)
+        assert rows[k - 1]["wp_after"] == pytest.approx(board, abs=1e-6)
+    assert found == 2
+
+
+def test_a_field_goal_returned_for_a_touchdown_is_the_defences() -> None:
+    """293250145: "Joshua Shene 45 yard field goal BLOCKED, returned by Patrick Peterson for 52
+    yards, to the Miss 0 for a TOUCHDOWN. Josh Jasper extra point GOOD." (Ole Miss 3-0 -> 3-7),
+    typed "Field Goal Good".
+
+    As the kick it realised Ole Miss's made field goal (EP_end 3, EPA +1.48). It is LSU's blocked
+    field-goal touchdown, with the extra point the row folds in.
+    """
+    plays = _offline_plays(293250145)
+    r = plays.filter(pl.col("id") == 293250145029).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Field Goal Good", "Blocked Field Goal Touchdown")
+    assert (r["xp_attempt"], r["xp_made"]) == (True, True)
+    assert r["EP_end"] == pytest.approx(-7)
+    assert r["EPA"] < -8
+
+
+def test_a_kickoff_the_kicking_team_recovers_for_a_touchdown_is_its_score() -> None:
+    """282570328: "Ben Vroman kickoff for 69 yards returned by Curtis Marsh, fumbled, recovered by
+    Utah Elijah Wesson at the UthSt 20, Elijah Wesson for 20 yards, to the UthSt 0 for a
+    TOUCHDOWN." Utah kicks off and scores (Utah State, the receiver, is the row's team).
+
+    Typed "Kickoff Return Touchdown", the row realised the receiver's touchdown (EP_end +6.92).
+    "Kickoff Team Fumble Recovery Touchdown" is the defence's score in the receiver's frame, as in
+    cfbfastR.
+    """
+    plays = _offline_plays(282570328)
+    r = plays.filter(pl.col("id") == 282570328051).row(0, named=True)
+    assert r["type.text"] == "Kickoff Team Fumble Recovery Touchdown"
+    assert (r["start.pos_team.id"], r["end.pos_team.id"]) == (328, 254)
+    assert r["EP_end"] == pytest.approx(-6.92)
+    assert r["EPA"] < -7
+
+
+def test_an_own_fumble_recovered_for_a_touchdown_is_a_touchdown() -> None:
+    """322802005: "Keenan Reynolds rush for no gain, fumbled, recovered by Navy Jake Zuzek in the
+    endzone for a TOUCHDOWN" (overtime, Navy 21-21 -> 27-21), typed "Rush".
+
+    The rush-touchdown rule leaves out every fumble, so the row stayed a rush and realised the
+    model's end state (EP_end 6.39) instead of the touchdown.
+    """
+    plays = _offline_plays(322802005)
+    r = plays.filter(pl.col("id") == 322802005186).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Rush", "Fumble Recovery (Own) Touchdown")
+    # the flag read off the feed's type is recomputed after the retype
+    assert r["touchdown"] is True
+    assert r["EP_end"] == pytest.approx(6.92)
+
+
+def test_a_return_touchdown_filed_as_its_kick_is_the_returns_touchdown() -> None:
+    """332852449: a punt return ("Chris Sullens punt 53 yards to the NDSU15, Ryan Smith return 85
+    yards to the MOST0, TOUCHDOWN, clock 08:32, ... kick attempt GOOD.") and a pick-six ("Brock
+    Jensen pass intercepted by Caleb Schaffitzel at the NDSU19, Caleb Schaffitzel return 19 yards
+    to the NDSU0, TOUCHDOWN, clock 13:23, Marcelo Bonani kick attempt GOOD."), each one old-NCAA
+    row typed "Extra Point Good" whose start team gave up the score.
+
+    The try pin scored each as a kick (EPA +0.08). They are the returns' touchdowns with their kicks.
+    """
+    plays = _offline_plays(332852449)
+    got = {
+        r["id"]: (r["type.text"], r["xp_made"], r["EP_end"])
+        for r in plays.filter(pl.col("id").is_in([332852449015, 332852449106])).iter_rows(named=True)
+    }
+    assert got == {
+        332852449015: ("Punt Return Touchdown", True, -7.0),
+        332852449106: ("Interception Return Touchdown", True, -7.0),
+    }
+
+
+def test_a_touchdown_filed_as_its_two_point_try_is_a_touchdown() -> None:
+    """282410024: "Lyle Moevao pass complete to Sammie Stroughter for 15 yards for a TOUCHDOWN.
+    Two-point conversion attempt, Lyle Moevao pass to Shane Morales GOOD." typed "2pt Conversion"
+    (Oregon State 28-28 -> 36-28): pinned as a made two (EPA +1.08).
+    """
+    plays = _offline_plays(282410024)
+    r = plays.filter(pl.col("id") == 282410024263).row(0, named=True)
+    assert (r["type.text"], r["start.yardsToEndzone"], r["EP_end"]) == ("Passing Touchdown", 15, 8)
+
+
+def test_an_untyped_repeat_of_a_folded_two_point_try_realises_nothing() -> None:
+    """401525903 (2023): "Dee Wiggins 7 Yd pass from Ryan Montgomery (Two-Point Run Conversion
+    Failed)", then the kickoff, then an untyped "fumbled, recovered by KU JONES, Emory two-point
+    conversion rushing attempt failed; conversion is no good ..." at the same clock.
+
+    The model scored the untyped row as a scrimmage snap after the kickoff. It is the try the
+    touchdown already realised: typed as such, it sits behind its touchdown and realises nothing.
+    """
+    plays = _offline_plays(401525903).with_row_index("i")
+    r = plays.filter(pl.col("id") == 401525903104867604).row(0, named=True)
+    td = plays.row(r["i"] - 1, named=True)
+    assert (r["type.text"], td["id"]) == ("Two-Point Conversion Missed", 401525903104867601)
+    assert r["EP_start"] == pytest.approx(0.92)
+    assert r["EP_end"] == pytest.approx(0.92)
+    assert r["EPA"] == 0
+
+
+def test_a_touchdown_started_by_the_wrong_team_is_the_scorers() -> None:
+    """322590228 (2012): "Tajh Boyd pass complete to Martavis Bryant for 46 yards for a
+    TOUCHDOWN." ESPN started the row as Florida State's and ended it as Clemson's, the scorer
+    its scoringPlays[] names. Started by the other side, the touchdown's seven and the
+    drive's EPA landed on Florida State. The snap is the scorer's.
+    """
+    plays = _offline_plays(322590228)
+    r = plays.filter(pl.col("id") == 322590228198).row(0, named=True)
+    assert r["start.pos_team.id"] == r["end.pos_team.id"] == 228
+    assert r["type.text"] == "Passing Touchdown"
+    assert r["EP_end"] >= 6.9
+    assert r["EPA"] > 0
+
+
+def test_a_2004_touchdown_started_by_the_wrong_team_is_the_scorers() -> None:
+    """243110264 (2004): "Shelton Sampson (UW) rushed left side for a 5 yard touchdown." started
+    as Notre Dame's (264) and ended as Washington's (12)."""
+    plays = _offline_plays(243110264)
+    r = plays.filter(pl.col("id") == 2431102640807).row(0, named=True)
+    assert r["start.pos_team.id"] == r["end.pos_team.id"] == 12
+    assert r["type.text"] == "Rushing Touchdown"
+    assert r["EPA"] > 0
+
+
+def test_a_game_whose_score_columns_are_reversed_reads_the_header_final():
+    # 2016 400876049: ESPN files the away team's points under homeScore for the whole game
+    # (the last play shows 35-52 against a 52-35 header final), so every margin read for
+    # the wrong side. The columns are swapped back from the header final.
+    df = _offline_plays(400876049)
+    assert (df["homeScore"].max(), df["awayScore"].max()) == (52, 35)
+    td = df.filter((pl.col("scoringPlay") == True) & (pl.col("start.pos_team.id").cast(pl.Utf8) == "2393"))  # noqa: E712
+    assert td.row(0, named=True)["end.pos_score_diff"] == 7

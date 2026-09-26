@@ -1,16 +1,16 @@
 ---
-title: NFL — PFF Premium Stats (premium.pff.com)
-sidebar_label: PFF Premium Stats (premium.pff.com)
-description: "NFL — PFF Premium Stats (premium.pff.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+title: NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)
+sidebar_label: PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)
+description: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
 ---
-# NFL — PFF Premium Stats (premium.pff.com)
+# NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)
 
 `sportsdataverse.nfl` — 46 endpoints.
 
 ## `pff_facet_run_defense_summary`
 
-Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/run`
 
@@ -71,7 +71,7 @@ _Last validated n/a._
 
 ## `pff_facet_field_goal_summary`
 
-Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/field_goal/summary`
 
@@ -138,7 +138,7 @@ _Last validated n/a._
 
 ## `pff_facet_coverage_summary`
 
-Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/coverage`
 
@@ -215,7 +215,7 @@ _Last validated n/a._
 
 ## `pff_facet_kicking_summary`
 
-Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/kickoff/summary`
 
@@ -275,7 +275,7 @@ _Last validated n/a._
 
 ## `pff_facet_blocking_summary`
 
-Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/offense/blocking`
 
@@ -343,7 +343,7 @@ _Last validated n/a._
 
 ## `pff_facet_defense_summary`
 
-Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/summary`
 
@@ -435,7 +435,7 @@ _Last validated n/a._
 
 ## `pff_facet_offense_summary`
 
-Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/offense/summary`
 
@@ -496,7 +496,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_allowed_pressure`
 
-Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/allowed_pressure`
 
@@ -565,7 +565,7 @@ _Last validated n/a._
 
 ## `pff_facet_pass_rush_summary`
 
-Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/pass_rush`
 
@@ -636,7 +636,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_concept`
 
-Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/concept`
 
@@ -884,7 +884,7 @@ _Last validated n/a._
 
 ## `pff_facet_coverage_scheme`
 
-Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/coverage_scheme`
 
@@ -986,7 +986,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_detail_stats`
 
-Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/detail`
 
@@ -1967,7 +1967,7 @@ _Last validated n/a._
 
 ## `pff_facet_run_blocking`
 
-Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/offense/run_blocking`
 
@@ -2026,7 +2026,7 @@ _Last validated n/a._
 
 ## `pff_facet_pass_blocking`
 
-Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/offense/pass_blocking`
 
@@ -2093,7 +2093,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_summary`
 
-Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/summary`
 
@@ -2174,7 +2174,7 @@ _Last validated n/a._
 
 ## `pff_facet_punting_summary`
 
-Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/punting/summary`
 
@@ -2240,7 +2240,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_depth`
 
-Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/depth`
 
@@ -2831,7 +2831,7 @@ _Last validated n/a._
 
 ## `pff_facet_passing_pressure`
 
-Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/passing/pressure`
 
@@ -3077,7 +3077,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_summary`
 
-Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/receiving/summary`
 
@@ -3161,7 +3161,7 @@ _Last validated n/a._
 
 ## `pff_facet_return_summary`
 
-Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/return/summary`
 
@@ -3224,7 +3224,7 @@ _Last validated n/a._
 
 ## `pff_facet_rushing_direction_stats`
 
-Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/rushing/direction`
 
@@ -3268,7 +3268,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_coverage_stats`
 
-Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/defense/coverage_matchup`
 
@@ -3298,7 +3298,7 @@ _Last validated n/a._
 
 ## `pff_facet_rushing_summary`
 
-Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/rushing/summary`
 
@@ -3382,7 +3382,7 @@ _Last validated n/a._
 
 ## `pff_facet_slot_coverages`
 
-Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
 
@@ -3436,7 +3436,7 @@ _Last validated n/a._
 
 ## `pff_facet_pbes`
 
-Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line`
 
@@ -3480,7 +3480,7 @@ _Last validated n/a._
 
 ## `pff_facet_prps`
 
-Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush`
 
@@ -3557,7 +3557,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_scheme`
 
-Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/receiving/scheme`
 
@@ -3665,7 +3665,7 @@ _Last validated n/a._
 
 ## `pff_facet_time_in_pockets`
 
-Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
 
@@ -3813,7 +3813,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_concept`
 
-Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/receiving/concept`
 
@@ -3921,7 +3921,7 @@ _Last validated n/a._
 
 ## `pff_facet_special_teams_summary`
 
-Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/special/summary`
 
@@ -3985,7 +3985,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_depth`
 
-Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/receiving/depth`
 
@@ -4527,7 +4527,7 @@ _Last validated n/a._
 
 ## `pff_facet_receiving_coverage`
 
-Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/facet/receiving/coverage`
 
@@ -4557,7 +4557,7 @@ _Last validated n/a._
 
 ## `pff_player_passing_summary`
 
-Player-detail report /passing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/passing/summary`
 
@@ -4586,7 +4586,7 @@ _Last validated n/a._
 
 ## `pff_player_rushing_summary`
 
-Player-detail report /rushing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/rushing/summary`
 
@@ -4615,7 +4615,7 @@ _Last validated n/a._
 
 ## `pff_player_receiving_summary`
 
-Player-detail report /receiving/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/receiving/summary`
 
@@ -4644,7 +4644,7 @@ _Last validated n/a._
 
 ## `pff_player_defense_summary`
 
-Player-detail report /defense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/defense/summary`
 
@@ -4673,7 +4673,7 @@ _Last validated n/a._
 
 ## `pff_player_offense_summary`
 
-Player-detail report /offense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/offense/summary`
 
@@ -4702,7 +4702,7 @@ _Last validated n/a._
 
 ## `pff_player_snaps_summary`
 
-Player-detail report /snaps/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/snaps/summary`
 
@@ -4731,7 +4731,7 @@ _Last validated n/a._
 
 ## `pff_player_offense_blocking`
 
-Player-detail report /offense/blocking (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/offense/blocking`
 
@@ -4760,7 +4760,7 @@ _Last validated n/a._
 
 ## `pff_leagues`
 
-Leagues + seasons + week groups (bootstrap)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/leagues`
 
@@ -4797,7 +4797,7 @@ _Last validated n/a._
 
 ## `pff_teams`
 
-Teams / franchise groups + games for a league-season
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/teams`
 
@@ -4830,7 +4830,7 @@ _Last validated n/a._
 
 ## `pff_teams_overview`
 
-Team overview table (By Team landing)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/teams/overview`
 
@@ -4881,7 +4881,7 @@ _Last validated n/a._
 
 ## `pff_games`
 
-Games list for league-season(-week)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/games`
 
@@ -4925,7 +4925,7 @@ _Last validated n/a._
 
 ## `pff_players`
 
-Player search (name=) or lookup (id=)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/players`
 
@@ -4969,7 +4969,7 @@ _Last validated n/a._
 
 ## `pff_player_seasons`
 
-Seasons a player has data for
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/seasons`
 
@@ -4995,7 +4995,7 @@ _Last validated n/a._
 
 ## `pff_player_position_pivot`
 
-Positional-pivot export (JSON; UI also uses this for CSV download)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
 **Endpoint URL:** `GET https://premium.pff.com/api/v1/player/position/pivot`
 

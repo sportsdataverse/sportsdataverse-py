@@ -3,9 +3,11 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
-  - [Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release](#fixed--fantasy-football-ids-are-strings-pinned-instead-of-inferred-from-each-dynastyprocess-release)
+  - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
+  - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
   - [Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`](#changed--cfb_returning_production-measures-defense-from-play-participants-and-weights-it-into-overall_returning)
+  - [Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release](#fixed--fantasy-football-ids-are-strings-pinned-instead-of-inferred-from-each-dynastyprocess-release)
   - [Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants](#fixed--the-usage-box-glued-shared-tackles-into-one-phantom-player-and-read-positions-only-from-participants)
   - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
   - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
@@ -14,6 +16,7 @@
   - [Added — NFL field-position EP curve (`nfl_field_position`)](#added--nfl-field-position-ep-curve-nfl_field_position)
   - [Added — offline processor inputs (#491)](#added--offline-processor-inputs-491)
   - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
+  - [Fixed — Statcast search runner ids are Int64, not Float64](#fixed--statcast-search-runner-ids-are-int64-not-float64)
   - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
@@ -291,6 +294,36 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
+
+PFF now publishes an official, API-key-authenticated Developer API. `pff_api_*` (68 generated
+wrappers in `sportsdataverse.nfl.pff_api`, also at top level) cover every read operation in PFF's
+own spec, named after PFF's `restish pff <command>` operations: the 60 `/v1` routes (the Premium
+Stats reports, byte-identical to `premium.pff.com`, plus 13 per-player reports, `teams/summary`
+per-game team grades and `whoami` that the legacy surface never had) and the 8 `/v2/{league}`
+tables (team stats with ranks, rosters with depth order and snap share, schedules with PFF Elo and
+SOS, qualified leaders with percentiles, 19 team and league-wide reports with ~110 new player
+metrics). Auth is one key — `api_key=`, or `PFF_API_KEY` / `SDV_PY_PFF_API_KEY` — sent as a bearer
+header by the new `pff_api_runtime`; a refused or failed fetch -- or a 200 whose body is not a
+JSON object -- raises `AssetFetchError`, never an empty frame. PFF responses bypass the package
+response cache (its key ignores the `Authorization` header, so one key could be served another's
+body). A view-only entitlement answers 200 with columns removed and a `restricted` list: the
+wrappers return that partial body with a `UserWarning` naming the columns, and raise instead with
+`strict=True` on any wrapper or `SDV_PY_PFF_STRICT=1` -- the setting for pipelines.
+`parse_pff_v2_table` types each `/v2` table from its own declared columns; id columns are `Int64`
+by name even where PFF declares them `string` (it types an all-null column, and every column of an
+empty answer, as `string`), and such typeless columns are `Null`, so a union across weeks keeps
+the real dtypes.
+
+The wire detail that matters: the new host **silently ignores** camelCase `franchiseId`/`gameId`
+(it returns the whole leaderboard). The new wrappers send `franchise_id`/`game_id`; the legacy
+`pff_*` / `pff_<league>_*` wrappers keep camelCase because `premium.pff.com` expects it.
+
+The cookie-auth `premium.pff.com` wrappers are unchanged and still work, but every one now
+documents itself as LEGACY, as do their runtime module and reference page. `parse_pff_report` and
+`parse_pff_player_detail` now look past the `restricted` block the Developer API may place beside
+a report envelope. Previously such a body came back as a dict or an empty frame.
 
 Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
 current/future days and ranges containing them bypass both cache reads and writes,

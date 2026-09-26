@@ -1,0 +1,4688 @@
+frames:
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: grades_pass_route
+    type: numeric
+  - description: ''
+    name: grades_run
+    type: numeric
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: snap_counts_pass
+    type: integer
+  - description: ''
+    name: snap_counts_pass_block
+    type: integer
+  - description: ''
+    name: snap_counts_pass_route
+    type: integer
+  - description: ''
+    name: snap_counts_run
+    type: integer
+  - description: ''
+    name: snap_counts_run_block
+    type: integer
+  - description: ''
+    name: snap_counts_total
+    type: integer
+  - description: ''
+    name: snap_counts_total_pass
+    type: integer
+  - description: ''
+    name: snap_counts_total_run
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  section: offense
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: twp_rate
+    type: numeric
+  - description: ''
+    name: btt_rate
+    type: numeric
+  - description: ''
+    name: spikes
+    type: integer
+  - description: ''
+    name: dropbacks
+    type: integer
+  - description: ''
+    name: thrown_aways
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: hit_as_threw
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: sack_percent
+    type: numeric
+  - description: ''
+    name: bats
+    type: integer
+  - description: ''
+    name: sacks
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: completions
+    type: integer
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: accuracy_percent
+    type: numeric
+  - description: ''
+    name: scrambles
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: drop_rate
+    type: numeric
+  - description: ''
+    name: grades_run
+    type: numeric
+  - description: ''
+    name: qb_rating
+    type: numeric
+  - description: ''
+    name: completion_percent
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: attempts
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: passing_snaps
+    type: integer
+  - description: ''
+    name: pressure_to_sack_rate
+    type: numeric
+  - description: ''
+    name: ypa
+    type: numeric
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: big_time_throws
+    type: integer
+  - description: ''
+    name: positive_epa_percent
+    type: numeric
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: epa
+    type: numeric
+  - description: ''
+    name: aimed_passes
+    type: integer
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: def_gen_pressures
+    type: integer
+  - description: ''
+    name: npa_epa
+    type: numeric
+  - description: ''
+    name: npa_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: no_screen_epa
+    type: numeric
+  - description: ''
+    name: no_screen_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: pass_rate_oe
+    type: numeric
+  - description: ''
+    name: completion_oe
+    type: numeric
+  - description: ''
+    name: accuracy_oe
+    type: numeric
+  - description: ''
+    name: offense_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_neg_graded_rate
+    type: numeric
+  section: passing
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: left_behind_los_accuracy_percent
+    type: numeric
+  - description: ''
+    name: left_short_scrambles
+    type: integer
+  - description: ''
+    name: center_short_first_downs
+    type: integer
+  - description: ''
+    name: right_short_bats
+    type: integer
+  - description: ''
+    name: right_behind_los_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: left_behind_los_completions
+    type: integer
+  - description: ''
+    name: left_medium_dropbacks
+    type: integer
+  - description: ''
+    name: right_medium_grades_pass
+    type: numeric
+  - description: ''
+    name: right_medium_hit_as_threw
+    type: integer
+  - description: ''
+    name: behind_los_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_short_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: right_medium_qb_rating
+    type: numeric
+  - description: ''
+    name: deep_twp_rate
+    type: numeric
+  - description: ''
+    name: center_medium_sacks
+    type: integer
+  - description: ''
+    name: medium_interceptions
+    type: integer
+  - description: ''
+    name: left_deep_completions
+    type: integer
+  - description: ''
+    name: behind_los_spikes
+    type: integer
+  - description: ''
+    name: medium_aimed_passes
+    type: integer
+  - description: ''
+    name: center_behind_los_drops
+    type: integer
+  - description: ''
+    name: center_behind_los_interceptions
+    type: integer
+  - description: ''
+    name: behind_los_dropbacks
+    type: integer
+  - description: ''
+    name: left_behind_los_interceptions
+    type: integer
+  - description: ''
+    name: left_deep_first_downs
+    type: integer
+  - description: ''
+    name: deep_passing_snaps
+    type: integer
+  - description: ''
+    name: center_short_btt_rate
+    type: numeric
+  - description: ''
+    name: center_medium_thrown_aways
+    type: integer
+  - description: ''
+    name: center_deep_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: center_short_drops
+    type: integer
+  - description: ''
+    name: center_deep_first_downs
+    type: integer
+  - description: ''
+    name: left_medium_completion_percent
+    type: numeric
+  - description: ''
+    name: center_deep_attempts
+    type: integer
+  - description: ''
+    name: center_behind_los_attempts
+    type: integer
+  - description: ''
+    name: right_short_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: center_deep_aimed_passes
+    type: integer
+  - description: ''
+    name: right_deep_grades_pass
+    type: numeric
+  - description: ''
+    name: right_medium_big_time_throws
+    type: integer
+  - description: ''
+    name: deep_sack_percent
+    type: integer
+  - description: ''
+    name: center_medium_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: deep_sacks
+    type: integer
+  - description: ''
+    name: right_medium_ypa
+    type: numeric
+  - description: ''
+    name: left_deep_drop_rate
+    type: numeric
+  - description: ''
+    name: right_medium_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_deep_btt_rate
+    type: numeric
+  - description: ''
+    name: center_short_attempts_percent
+    type: numeric
+  - description: ''
+    name: deep_drops
+    type: integer
+  - description: ''
+    name: center_behind_los_big_time_throws
+    type: integer
+  - description: ''
+    name: center_behind_los_touchdowns
+    type: integer
+  - description: ''
+    name: right_behind_los_twp_rate
+    type: numeric
+  - description: ''
+    name: center_deep_completions
+    type: integer
+  - description: ''
+    name: center_short_attempts
+    type: integer
+  - description: ''
+    name: left_behind_los_sack_percent
+    type: integer
+  - description: ''
+    name: center_short_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: deep_touchdowns
+    type: integer
+  - description: ''
+    name: center_behind_los_accuracy_percent
+    type: numeric
+  - description: ''
+    name: center_deep_drop_rate
+    type: numeric
+  - description: ''
+    name: right_short_first_downs
+    type: integer
+  - description: ''
+    name: right_behind_los_first_downs
+    type: integer
+  - description: ''
+    name: short_interceptions
+    type: integer
+  - description: ''
+    name: center_medium_scrambles
+    type: integer
+  - description: ''
+    name: left_behind_los_sacks
+    type: integer
+  - description: ''
+    name: left_short_ypa
+    type: numeric
+  - description: ''
+    name: left_short_qb_rating
+    type: numeric
+  - description: ''
+    name: right_behind_los_qb_rating
+    type: numeric
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: right_behind_los_dropbacks
+    type: integer
+  - description: ''
+    name: behind_los_def_gen_pressures
+    type: integer
+  - description: ''
+    name: right_short_thrown_aways
+    type: integer
+  - description: ''
+    name: deep_def_gen_pressures
+    type: integer
+  - description: ''
+    name: right_short_btt_rate
+    type: numeric
+  - description: ''
+    name: center_behind_los_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: left_behind_los_grades_pass
+    type: numeric
+  - description: ''
+    name: deep_grades_pass
+    type: numeric
+  - description: ''
+    name: center_short_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: center_behind_los_scrambles
+    type: integer
+  - description: ''
+    name: right_short_aimed_passes
+    type: integer
+  - description: ''
+    name: center_short_dropbacks
+    type: integer
+  - description: ''
+    name: medium_epa
+    type: numeric
+  - description: ''
+    name: right_short_ypa
+    type: numeric
+  - description: ''
+    name: center_medium_ypa
+    type: numeric
+  - description: ''
+    name: medium_attempts
+    type: integer
+  - description: ''
+    name: right_deep_accuracy_percent
+    type: numeric
+  - description: ''
+    name: behind_los_scrambles
+    type: integer
+  - description: ''
+    name: center_behind_los_completion_percent
+    type: numeric
+  - description: ''
+    name: left_behind_los_btt_rate
+    type: integer
+  - description: ''
+    name: right_behind_los_btt_rate
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: short_touchdowns
+    type: integer
+  - description: ''
+    name: center_medium_drops
+    type: integer
+  - description: ''
+    name: left_behind_los_aimed_passes
+    type: integer
+  - description: ''
+    name: deep_attempts
+    type: integer
+  - description: ''
+    name: right_behind_los_sack_percent
+    type: integer
+  - description: ''
+    name: center_short_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: deep_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_deep_btt_rate
+    type: numeric
+  - description: ''
+    name: medium_scrambles
+    type: integer
+  - description: ''
+    name: center_behind_los_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: short_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_sacks
+    type: integer
+  - description: ''
+    name: center_medium_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_short_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: center_deep_sack_percent
+    type: integer
+  - description: ''
+    name: center_deep_ypa
+    type: numeric
+  - description: ''
+    name: left_behind_los_hit_as_threw
+    type: integer
+  - description: ''
+    name: medium_big_time_throws
+    type: integer
+  - description: ''
+    name: deep_thrown_aways
+    type: integer
+  - description: ''
+    name: right_short_accuracy_percent
+    type: numeric
+  - description: ''
+    name: left_deep_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: center_medium_bats
+    type: integer
+  - description: ''
+    name: right_short_grades_pass
+    type: numeric
+  - description: ''
+    name: right_deep_spikes
+    type: integer
+  - description: ''
+    name: left_deep_passing_snaps
+    type: integer
+  - description: ''
+    name: center_medium_twp_rate
+    type: numeric
+  - description: ''
+    name: right_behind_los_passing_snaps
+    type: integer
+  - description: ''
+    name: left_deep_qb_rating
+    type: numeric
+  - description: ''
+    name: right_deep_drop_rate
+    type: numeric
+  - description: ''
+    name: left_behind_los_drop_rate
+    type: numeric
+  - description: ''
+    name: left_medium_drop_rate
+    type: numeric
+  - description: ''
+    name: right_deep_attempts
+    type: integer
+  - description: ''
+    name: left_deep_spikes
+    type: integer
+  - description: ''
+    name: center_behind_los_dropbacks
+    type: integer
+  - description: ''
+    name: right_deep_big_time_throws
+    type: integer
+  - description: ''
+    name: medium_hit_as_threw
+    type: integer
+  - description: ''
+    name: right_short_dropbacks
+    type: integer
+  - description: ''
+    name: medium_def_gen_pressures
+    type: integer
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: left_short_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: left_short_attempts
+    type: integer
+  - description: ''
+    name: center_deep_twp_rate
+    type: numeric
+  - description: ''
+    name: right_medium_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_behind_los_qb_rating
+    type: numeric
+  - description: ''
+    name: left_behind_los_dropbacks
+    type: integer
+  - description: ''
+    name: deep_dropbacks
+    type: integer
+  - description: ''
+    name: right_behind_los_scrambles
+    type: integer
+  - description: ''
+    name: behind_los_interceptions
+    type: integer
+  - description: ''
+    name: right_deep_drops
+    type: integer
+  - description: ''
+    name: right_deep_yards
+    type: integer
+  - description: ''
+    name: right_short_hit_as_threw
+    type: integer
+  - description: ''
+    name: right_short_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: short_bats
+    type: integer
+  - description: ''
+    name: right_deep_twp_rate
+    type: numeric
+  - description: ''
+    name: right_behind_los_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: deep_spikes
+    type: integer
+  - description: ''
+    name: center_medium_spikes
+    type: integer
+  - description: ''
+    name: behind_los_aimed_passes
+    type: integer
+  - description: ''
+    name: right_behind_los_touchdowns
+    type: integer
+  - description: ''
+    name: right_medium_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: medium_thrown_aways
+    type: integer
+  - description: ''
+    name: short_sacks
+    type: integer
+  - description: ''
+    name: center_behind_los_twp_rate
+    type: numeric
+  - description: ''
+    name: left_behind_los_attempts
+    type: integer
+  - description: ''
+    name: short_aimed_passes
+    type: integer
+  - description: ''
+    name: short_completions
+    type: integer
+  - description: ''
+    name: right_short_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: medium_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_behind_los_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: center_medium_attempts_percent
+    type: numeric
+  - description: ''
+    name: left_medium_touchdowns
+    type: integer
+  - description: ''
+    name: center_short_bats
+    type: integer
+  - description: ''
+    name: left_deep_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: center_behind_los_passing_snaps
+    type: integer
+  - description: ''
+    name: center_short_yards
+    type: integer
+  - description: ''
+    name: right_medium_btt_rate
+    type: numeric
+  - description: ''
+    name: right_medium_scrambles
+    type: integer
+  - description: ''
+    name: medium_btt_rate
+    type: numeric
+  - description: ''
+    name: center_behind_los_btt_rate
+    type: integer
+  - description: ''
+    name: center_short_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_medium_sacks
+    type: integer
+  - description: ''
+    name: right_short_yards
+    type: integer
+  - description: ''
+    name: left_medium_first_downs
+    type: integer
+  - description: ''
+    name: right_medium_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: left_short_big_time_throws
+    type: integer
+  - description: ''
+    name: deep_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: left_deep_bats
+    type: integer
+  - description: ''
+    name: left_medium_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: base_dropbacks
+    type: integer
+  - description: ''
+    name: center_deep_drops
+    type: integer
+  - description: ''
+    name: center_medium_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: center_behind_los_ypa
+    type: numeric
+  - description: ''
+    name: right_short_attempts
+    type: integer
+  - description: ''
+    name: center_medium_completion_percent
+    type: numeric
+  - description: ''
+    name: right_short_sack_percent
+    type: integer
+  - description: ''
+    name: left_behind_los_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: center_medium_epa
+    type: numeric
+  - description: ''
+    name: center_behind_los_sack_percent
+    type: integer
+  - description: ''
+    name: medium_completions
+    type: integer
+  - description: ''
+    name: medium_sack_percent
+    type: integer
+  - description: ''
+    name: left_short_grades_pass
+    type: numeric
+  - description: ''
+    name: deep_btt_rate
+    type: numeric
+  - description: ''
+    name: left_short_accuracy_percent
+    type: numeric
+  - description: ''
+    name: short_twp_rate
+    type: numeric
+  - description: ''
+    name: short_passing_snaps
+    type: integer
+  - description: ''
+    name: left_deep_sacks
+    type: integer
+  - description: ''
+    name: short_scrambles
+    type: integer
+  - description: ''
+    name: center_medium_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: behind_los_drop_rate
+    type: numeric
+  - description: ''
+    name: right_behind_los_epa
+    type: numeric
+  - description: ''
+    name: right_medium_aimed_passes
+    type: integer
+  - description: ''
+    name: short_accuracy_percent
+    type: numeric
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: short_btt_rate
+    type: numeric
+  - description: ''
+    name: right_short_touchdowns
+    type: integer
+  - description: ''
+    name: center_short_completions
+    type: integer
+  - description: ''
+    name: right_short_spikes
+    type: integer
+  - description: ''
+    name: behind_los_first_downs
+    type: integer
+  - description: ''
+    name: right_medium_def_gen_pressures
+    type: integer
+  - description: ''
+    name: deep_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: medium_qb_rating
+    type: numeric
+  - description: ''
+    name: short_completion_percent
+    type: numeric
+  - description: ''
+    name: right_deep_attempts_percent
+    type: numeric
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: short_big_time_throws
+    type: integer
+  - description: ''
+    name: behind_los_attempts
+    type: integer
+  - description: ''
+    name: center_behind_los_yards
+    type: integer
+  - description: ''
+    name: center_behind_los_bats
+    type: integer
+  - description: ''
+    name: center_behind_los_qb_rating
+    type: numeric
+  - description: ''
+    name: right_deep_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: center_short_accuracy_percent
+    type: numeric
+  - description: ''
+    name: left_behind_los_bats
+    type: integer
+  - description: ''
+    name: center_deep_passing_snaps
+    type: integer
+  - description: ''
+    name: right_behind_los_hit_as_threw
+    type: integer
+  - description: ''
+    name: medium_bats
+    type: integer
+  - description: ''
+    name: right_medium_first_downs
+    type: integer
+  - description: ''
+    name: medium_spikes
+    type: integer
+  - description: ''
+    name: left_deep_thrown_aways
+    type: integer
+  - description: ''
+    name: right_deep_epa
+    type: numeric
+  - description: ''
+    name: center_medium_hit_as_threw
+    type: integer
+  - description: ''
+    name: left_behind_los_completion_percent
+    type: numeric
+  - description: ''
+    name: center_short_ypa
+    type: numeric
+  - description: ''
+    name: right_short_drop_rate
+    type: numeric
+  - description: ''
+    name: right_behind_los_accuracy_percent
+    type: numeric
+  - description: ''
+    name: left_short_yards
+    type: integer
+  - description: ''
+    name: deep_accuracy_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: center_behind_los_thrown_aways
+    type: integer
+  - description: ''
+    name: center_behind_los_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_deep_first_downs
+    type: integer
+  - description: ''
+    name: left_short_completions
+    type: integer
+  - description: ''
+    name: deep_completion_percent
+    type: numeric
+  - description: ''
+    name: left_deep_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: right_deep_sack_percent
+    type: integer
+  - description: ''
+    name: behind_los_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: right_deep_touchdowns
+    type: integer
+  - description: ''
+    name: left_behind_los_def_gen_pressures
+    type: integer
+  - description: ''
+    name: left_behind_los_drops
+    type: integer
+  - description: ''
+    name: deep_epa
+    type: numeric
+  - description: ''
+    name: left_deep_ypa
+    type: numeric
+  - description: ''
+    name: medium_touchdowns
+    type: integer
+  - description: ''
+    name: left_medium_grades_pass
+    type: numeric
+  - description: ''
+    name: right_behind_los_spikes
+    type: integer
+  - description: ''
+    name: medium_grades_pass
+    type: numeric
+  - description: ''
+    name: behind_los_passing_snaps
+    type: integer
+  - description: ''
+    name: left_short_first_downs
+    type: integer
+  - description: ''
+    name: center_short_passing_snaps
+    type: integer
+  - description: ''
+    name: center_deep_accuracy_percent
+    type: numeric
+  - description: ''
+    name: right_deep_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: right_medium_sack_percent
+    type: integer
+  - description: ''
+    name: right_deep_qb_rating
+    type: numeric
+  - description: ''
+    name: right_short_completion_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_interceptions
+    type: integer
+  - description: ''
+    name: behind_los_yards
+    type: integer
+  - description: ''
+    name: center_behind_los_grades_pass
+    type: numeric
+  - description: ''
+    name: left_deep_dropbacks
+    type: integer
+  - description: ''
+    name: center_behind_los_spikes
+    type: integer
+  - description: ''
+    name: right_behind_los_aimed_passes
+    type: integer
+  - description: ''
+    name: left_short_interceptions
+    type: integer
+  - description: ''
+    name: right_medium_interceptions
+    type: integer
+  - description: ''
+    name: left_behind_los_yards
+    type: integer
+  - description: ''
+    name: center_deep_btt_rate
+    type: numeric
+  - description: ''
+    name: medium_first_downs
+    type: integer
+  - description: ''
+    name: left_short_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_behind_los_ypa
+    type: numeric
+  - description: ''
+    name: short_attempts
+    type: integer
+  - description: ''
+    name: right_medium_bats
+    type: integer
+  - description: ''
+    name: left_behind_los_touchdowns
+    type: integer
+  - description: ''
+    name: right_medium_dropbacks
+    type: integer
+  - description: ''
+    name: short_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: right_deep_thrown_aways
+    type: integer
+  - description: ''
+    name: right_behind_los_drop_rate
+    type: numeric
+  - description: ''
+    name: right_short_qb_rating
+    type: numeric
+  - description: ''
+    name: medium_sacks
+    type: integer
+  - description: ''
+    name: center_deep_attempts_percent
+    type: numeric
+  - description: ''
+    name: left_short_dropbacks
+    type: integer
+  - description: ''
+    name: behind_los_drops
+    type: integer
+  - description: ''
+    name: short_sack_percent
+    type: integer
+  - description: ''
+    name: left_medium_spikes
+    type: integer
+  - description: ''
+    name: left_medium_accuracy_percent
+    type: numeric
+  - description: ''
+    name: behind_los_completions
+    type: integer
+  - description: ''
+    name: behind_los_sack_percent
+    type: integer
+  - description: ''
+    name: left_deep_yards
+    type: integer
+  - description: ''
+    name: left_short_aimed_passes
+    type: integer
+  - description: ''
+    name: center_behind_los_completions
+    type: integer
+  - description: ''
+    name: left_short_thrown_aways
+    type: integer
+  - description: ''
+    name: left_short_sack_percent
+    type: integer
+  - description: ''
+    name: center_short_thrown_aways
+    type: integer
+  - description: ''
+    name: center_short_interceptions
+    type: integer
+  - description: ''
+    name: short_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_deep_touchdowns
+    type: integer
+  - description: ''
+    name: deep_yards
+    type: integer
+  - description: ''
+    name: center_behind_los_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: medium_ypa
+    type: numeric
+  - description: ''
+    name: left_medium_epa
+    type: numeric
+  - description: ''
+    name: left_deep_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: deep_first_downs
+    type: integer
+  - description: ''
+    name: short_drop_rate
+    type: numeric
+  - description: ''
+    name: left_medium_bats
+    type: integer
+  - description: ''
+    name: center_deep_spikes
+    type: integer
+  - description: ''
+    name: center_short_hit_as_threw
+    type: integer
+  - description: ''
+    name: left_medium_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: center_deep_touchdowns
+    type: integer
+  - description: ''
+    name: right_deep_ypa
+    type: numeric
+  - description: ''
+    name: right_short_big_time_throws
+    type: integer
+  - description: ''
+    name: center_short_big_time_throws
+    type: integer
+  - description: ''
+    name: short_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: left_behind_los_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: right_deep_passing_snaps
+    type: integer
+  - description: ''
+    name: right_short_twp_rate
+    type: numeric
+  - description: ''
+    name: center_medium_attempts
+    type: integer
+  - description: ''
+    name: right_deep_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: center_deep_def_gen_pressures
+    type: integer
+  - description: ''
+    name: behind_los_epa
+    type: numeric
+  - description: ''
+    name: right_medium_twp_rate
+    type: numeric
+  - description: ''
+    name: right_deep_aimed_passes
+    type: integer
+  - description: ''
+    name: right_deep_scrambles
+    type: integer
+  - description: ''
+    name: deep_big_time_throws
+    type: integer
+  - description: ''
+    name: left_short_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: center_short_touchdowns
+    type: integer
+  - description: ''
+    name: right_medium_drops
+    type: integer
+  - description: ''
+    name: left_deep_epa
+    type: numeric
+  - description: ''
+    name: short_ypa
+    type: numeric
+  - description: ''
+    name: medium_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: left_medium_thrown_aways
+    type: integer
+  - description: ''
+    name: right_behind_los_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: behind_los_btt_rate
+    type: integer
+  - description: ''
+    name: medium_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: center_deep_completion_percent
+    type: numeric
+  - description: ''
+    name: behind_los_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: right_medium_touchdowns
+    type: integer
+  - description: ''
+    name: center_short_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_deep_aimed_passes
+    type: integer
+  - description: ''
+    name: left_medium_yards
+    type: integer
+  - description: ''
+    name: center_medium_touchdowns
+    type: integer
+  - description: ''
+    name: center_short_drop_rate
+    type: numeric
+  - description: ''
+    name: left_short_twp_rate
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: right_behind_los_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_deep_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: behind_los_sacks
+    type: integer
+  - description: ''
+    name: center_deep_yards
+    type: integer
+  - description: ''
+    name: short_dropbacks
+    type: integer
+  - description: ''
+    name: left_deep_sack_percent
+    type: integer
+  - description: ''
+    name: center_behind_los_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: behind_los_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: left_behind_los_epa
+    type: numeric
+  - description: ''
+    name: medium_twp_rate
+    type: numeric
+  - description: ''
+    name: left_short_def_gen_pressures
+    type: integer
+  - description: ''
+    name: medium_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: behind_los_twp_rate
+    type: numeric
+  - description: ''
+    name: left_behind_los_thrown_aways
+    type: integer
+  - description: ''
+    name: left_short_bats
+    type: integer
+  - description: ''
+    name: center_medium_drop_rate
+    type: numeric
+  - description: ''
+    name: right_deep_bats
+    type: integer
+  - description: ''
+    name: medium_yards
+    type: integer
+  - description: ''
+    name: center_deep_grades_pass
+    type: numeric
+  - description: ''
+    name: center_medium_passing_snaps
+    type: integer
+  - description: ''
+    name: center_behind_los_first_downs
+    type: integer
+  - description: ''
+    name: center_medium_interceptions
+    type: integer
+  - description: ''
+    name: behind_los_grades_pass
+    type: numeric
+  - description: ''
+    name: left_short_hit_as_threw
+    type: integer
+  - description: ''
+    name: deep_qb_rating
+    type: numeric
+  - description: ''
+    name: center_deep_bats
+    type: integer
+  - description: ''
+    name: behind_los_ypa
+    type: numeric
+  - description: ''
+    name: right_short_interceptions
+    type: integer
+  - description: ''
+    name: left_deep_interceptions
+    type: integer
+  - description: ''
+    name: right_medium_sacks
+    type: integer
+  - description: ''
+    name: right_behind_los_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: right_medium_spikes
+    type: integer
+  - description: ''
+    name: behind_los_hit_as_threw
+    type: integer
+  - description: ''
+    name: left_medium_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: medium_dropbacks
+    type: integer
+  - description: ''
+    name: deep_hit_as_threw
+    type: integer
+  - description: ''
+    name: right_medium_completion_percent
+    type: numeric
+  - description: ''
+    name: short_epa
+    type: numeric
+  - description: ''
+    name: deep_drop_rate
+    type: numeric
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: deep_scrambles
+    type: integer
+  - description: ''
+    name: left_deep_completion_percent
+    type: numeric
+  - description: ''
+    name: right_short_epa
+    type: numeric
+  - description: ''
+    name: medium_attempts_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_completion_percent
+    type: numeric
+  - description: ''
+    name: left_medium_hit_as_threw
+    type: integer
+  - description: ''
+    name: left_behind_los_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: right_short_def_gen_pressures
+    type: integer
+  - description: ''
+    name: right_short_attempts_percent
+    type: numeric
+  - description: ''
+    name: center_short_aimed_passes
+    type: integer
+  - description: ''
+    name: short_hit_as_threw
+    type: integer
+  - description: ''
+    name: right_medium_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: left_short_epa
+    type: numeric
+  - description: ''
+    name: center_behind_los_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: right_behind_los_ypa
+    type: numeric
+  - description: ''
+    name: deep_interceptions
+    type: integer
+  - description: ''
+    name: left_medium_twp_rate
+    type: numeric
+  - description: ''
+    name: right_behind_los_big_time_throws
+    type: integer
+  - description: ''
+    name: center_medium_sack_percent
+    type: integer
+  - description: ''
+    name: center_deep_thrown_aways
+    type: integer
+  - description: ''
+    name: short_thrown_aways
+    type: integer
+  - description: ''
+    name: left_short_btt_rate
+    type: numeric
+  - description: ''
+    name: right_medium_accuracy_percent
+    type: numeric
+  - description: ''
+    name: short_def_gen_pressures
+    type: integer
+  - description: ''
+    name: center_deep_dropbacks
+    type: integer
+  - description: ''
+    name: center_medium_accuracy_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_yards
+    type: integer
+  - description: ''
+    name: right_medium_attempts
+    type: integer
+  - description: ''
+    name: left_medium_attempts
+    type: integer
+  - description: ''
+    name: medium_accuracy_percent
+    type: numeric
+  - description: ''
+    name: left_medium_drops
+    type: integer
+  - description: ''
+    name: left_short_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: medium_passing_snaps
+    type: integer
+  - description: ''
+    name: center_short_epa
+    type: numeric
+  - description: ''
+    name: left_behind_los_passing_snaps
+    type: integer
+  - description: ''
+    name: left_deep_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: deep_bats
+    type: integer
+  - description: ''
+    name: left_medium_passing_snaps
+    type: integer
+  - description: ''
+    name: left_medium_scrambles
+    type: integer
+  - description: ''
+    name: right_deep_completion_percent
+    type: numeric
+  - description: ''
+    name: left_short_drops
+    type: integer
+  - description: ''
+    name: left_deep_accuracy_percent
+    type: numeric
+  - description: ''
+    name: medium_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: behind_los_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: right_medium_epa
+    type: numeric
+  - description: ''
+    name: right_deep_dropbacks
+    type: integer
+  - description: ''
+    name: deep_ypa
+    type: numeric
+  - description: ''
+    name: center_medium_completions
+    type: integer
+  - description: ''
+    name: left_medium_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_short_sacks
+    type: integer
+  - description: ''
+    name: left_behind_los_spikes
+    type: integer
+  - description: ''
+    name: left_deep_def_gen_pressures
+    type: integer
+  - description: ''
+    name: center_short_qb_rating
+    type: numeric
+  - description: ''
+    name: center_deep_interceptions
+    type: integer
+  - description: ''
+    name: right_deep_completions
+    type: integer
+  - description: ''
+    name: center_behind_los_sacks
+    type: integer
+  - description: ''
+    name: deep_completions
+    type: integer
+  - description: ''
+    name: left_medium_attempts_percent
+    type: numeric
+  - description: ''
+    name: short_yards
+    type: integer
+  - description: ''
+    name: behind_los_qb_rating
+    type: numeric
+  - description: ''
+    name: right_short_sacks
+    type: integer
+  - description: ''
+    name: right_behind_los_thrown_aways
+    type: integer
+  - description: ''
+    name: base_attempts
+    type: integer
+  - description: ''
+    name: center_short_spikes
+    type: integer
+  - description: ''
+    name: center_behind_los_hit_as_threw
+    type: integer
+  - description: ''
+    name: center_deep_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: left_medium_sack_percent
+    type: integer
+  - description: ''
+    name: behind_los_completion_percent
+    type: numeric
+  - description: ''
+    name: left_deep_attempts_percent
+    type: numeric
+  - description: ''
+    name: center_deep_big_time_throws
+    type: integer
+  - description: ''
+    name: left_medium_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: behind_los_thrown_aways
+    type: integer
+  - description: ''
+    name: center_medium_def_gen_pressures
+    type: integer
+  - description: ''
+    name: short_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_deep_twp_rate
+    type: numeric
+  - description: ''
+    name: center_behind_los_epa
+    type: numeric
+  - description: ''
+    name: left_behind_los_big_time_throws
+    type: integer
+  - description: ''
+    name: right_medium_yards
+    type: integer
+  - description: ''
+    name: right_medium_drop_rate
+    type: numeric
+  - description: ''
+    name: center_medium_big_time_throws
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: left_short_completion_percent
+    type: numeric
+  - description: ''
+    name: left_short_drop_rate
+    type: numeric
+  - description: ''
+    name: left_behind_los_scrambles
+    type: integer
+  - description: ''
+    name: left_medium_btt_rate
+    type: numeric
+  - description: ''
+    name: right_deep_hit_as_threw
+    type: integer
+  - description: ''
+    name: behind_los_bats
+    type: integer
+  - description: ''
+    name: short_first_downs
+    type: integer
+  - description: ''
+    name: left_deep_attempts
+    type: integer
+  - description: ''
+    name: right_behind_los_attempts
+    type: integer
+  - description: ''
+    name: right_deep_sacks
+    type: integer
+  - description: ''
+    name: left_behind_los_attempts_percent
+    type: numeric
+  - description: ''
+    name: behind_los_big_time_throws
+    type: integer
+  - description: ''
+    name: center_deep_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: left_medium_big_time_throws
+    type: integer
+  - description: ''
+    name: right_behind_los_bats
+    type: integer
+  - description: ''
+    name: left_medium_def_gen_pressures
+    type: integer
+  - description: ''
+    name: right_deep_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: left_short_spikes
+    type: integer
+  - description: ''
+    name: left_medium_aimed_passes
+    type: integer
+  - description: ''
+    name: left_behind_los_twp_rate
+    type: numeric
+  - description: ''
+    name: short_grades_pass
+    type: numeric
+  - description: ''
+    name: right_short_drops
+    type: integer
+  - description: ''
+    name: right_short_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: right_medium_thrown_aways
+    type: integer
+  - description: ''
+    name: center_short_sack_percent
+    type: integer
+  - description: ''
+    name: right_short_passing_snaps
+    type: integer
+  - description: ''
+    name: center_short_def_gen_pressures
+    type: integer
+  - description: ''
+    name: center_medium_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: medium_drops
+    type: integer
+  - description: ''
+    name: center_medium_aimed_passes
+    type: integer
+  - description: ''
+    name: center_short_sacks
+    type: integer
+  - description: ''
+    name: deep_attempts_percent
+    type: numeric
+  - description: ''
+    name: center_behind_los_def_gen_pressures
+    type: integer
+  - description: ''
+    name: left_short_passing_snaps
+    type: integer
+  - description: ''
+    name: center_medium_grades_pass
+    type: numeric
+  - description: ''
+    name: center_deep_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: behind_los_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: center_short_completion_percent
+    type: numeric
+  - description: ''
+    name: left_deep_hit_as_threw
+    type: integer
+  - description: ''
+    name: center_short_grades_pass
+    type: numeric
+  - description: ''
+    name: left_short_attempts_percent
+    type: numeric
+  - description: ''
+    name: left_deep_scrambles
+    type: integer
+  - description: ''
+    name: right_short_completions
+    type: integer
+  - description: ''
+    name: center_behind_los_aimed_passes
+    type: integer
+  - description: ''
+    name: right_short_scrambles
+    type: integer
+  - description: ''
+    name: center_medium_qb_rating
+    type: numeric
+  - description: ''
+    name: deep_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: left_deep_drops
+    type: integer
+  - description: ''
+    name: right_behind_los_def_gen_pressures
+    type: integer
+  - description: ''
+    name: center_deep_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: center_deep_hit_as_threw
+    type: integer
+  - description: ''
+    name: short_spikes
+    type: integer
+  - description: ''
+    name: right_behind_los_completions
+    type: integer
+  - description: ''
+    name: center_behind_los_drop_rate
+    type: numeric
+  - description: ''
+    name: short_drops
+    type: integer
+  - description: ''
+    name: deep_aimed_passes
+    type: integer
+  - description: ''
+    name: right_medium_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: short_pressure_to_sack_rate
+    type: integer
+  - description: ''
+    name: center_deep_qb_rating
+    type: numeric
+  - description: ''
+    name: left_medium_completions
+    type: integer
+  - description: ''
+    name: center_deep_sacks
+    type: integer
+  - description: ''
+    name: left_deep_big_time_throws
+    type: integer
+  - description: ''
+    name: center_medium_first_downs
+    type: integer
+  - description: ''
+    name: center_medium_dropbacks
+    type: integer
+  - description: ''
+    name: right_deep_def_gen_pressures
+    type: integer
+  - description: ''
+    name: left_short_touchdowns
+    type: integer
+  - description: ''
+    name: medium_drop_rate
+    type: numeric
+  - description: ''
+    name: left_medium_ypa
+    type: numeric
+  - description: ''
+    name: right_medium_passing_snaps
+    type: integer
+  - description: ''
+    name: center_short_scrambles
+    type: integer
+  - description: ''
+    name: left_behind_los_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: center_medium_yards
+    type: integer
+  - description: ''
+    name: center_deep_epa
+    type: numeric
+  - description: ''
+    name: left_medium_interceptions
+    type: integer
+  - description: ''
+    name: right_deep_interceptions
+    type: integer
+  - description: ''
+    name: medium_completion_percent
+    type: numeric
+  - description: ''
+    name: right_behind_los_grades_pass
+    type: numeric
+  - description: ''
+    name: deep_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: behind_los_accuracy_percent
+    type: numeric
+  - description: ''
+    name: center_deep_scrambles
+    type: integer
+  - description: ''
+    name: center_short_twp_rate
+    type: numeric
+  - description: ''
+    name: behind_los_touchdowns
+    type: integer
+  - description: ''
+    name: left_medium_qb_rating
+    type: numeric
+  - description: ''
+    name: right_medium_completions
+    type: integer
+  - description: ''
+    name: right_behind_los_drops
+    type: integer
+  - description: ''
+    name: left_behind_los_first_downs
+    type: integer
+  - description: ''
+    name: short_qb_rating
+    type: numeric
+  - description: ''
+    name: center_medium_btt_rate
+    type: numeric
+  - description: ''
+    name: left_deep_grades_pass
+    type: numeric
+  section: passing-depth
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: no_blitz_completion_percent
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: no_pressure_scrambles
+    type: integer
+  - description: ''
+    name: blitz_touchdowns
+    type: integer
+  - description: ''
+    name: pressure_yards
+    type: integer
+  - description: ''
+    name: no_pressure_spikes
+    type: integer
+  - description: ''
+    name: blitz_ypa
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_run
+    type: numeric
+  - description: ''
+    name: blitz_qb_rating
+    type: numeric
+  - description: ''
+    name: no_pressure_thrown_aways
+    type: integer
+  - description: ''
+    name: no_blitz_bats
+    type: integer
+  - description: ''
+    name: no_blitz_drops
+    type: integer
+  - description: ''
+    name: no_pressure_completion_percent
+    type: numeric
+  - description: ''
+    name: blitz_aimed_passes
+    type: integer
+  - description: ''
+    name: pressure_grades_run
+    type: numeric
+  - description: ''
+    name: no_blitz_sack_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_bats
+    type: integer
+  - description: ''
+    name: pressure_completions
+    type: integer
+  - description: ''
+    name: blitz_big_time_throws
+    type: integer
+  - description: ''
+    name: no_blitz_drop_rate
+    type: numeric
+  - description: ''
+    name: blitz_spikes
+    type: integer
+  - description: ''
+    name: no_pressure_completions
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: no_pressure_passing_snaps
+    type: integer
+  - description: ''
+    name: no_blitz_first_downs
+    type: integer
+  - description: ''
+    name: blitz_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: pressure_aimed_passes
+    type: integer
+  - description: ''
+    name: blitz_sacks
+    type: integer
+  - description: ''
+    name: no_pressure_interceptions
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: pressure_epa
+    type: numeric
+  - description: ''
+    name: blitz_completions
+    type: integer
+  - description: ''
+    name: blitz_attempts
+    type: integer
+  - description: ''
+    name: pressure_twp_rate
+    type: numeric
+  - description: ''
+    name: pressure_sacks
+    type: integer
+  - description: ''
+    name: no_blitz_pressure_to_sack_rate
+    type: numeric
+  - description: ''
+    name: no_pressure_ypa
+    type: numeric
+  - description: ''
+    name: pressure_passing_snaps
+    type: integer
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: pressure_bats
+    type: integer
+  - description: ''
+    name: blitz_thrown_aways
+    type: integer
+  - description: ''
+    name: no_pressure_drops
+    type: integer
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: pressure_grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: pressure_scrambles
+    type: integer
+  - description: ''
+    name: blitz_drop_rate
+    type: numeric
+  - description: ''
+    name: blitz_completion_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_first_downs
+    type: integer
+  - description: ''
+    name: blitz_grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: no_blitz_epa
+    type: numeric
+  - description: ''
+    name: blitz_interceptions
+    type: integer
+  - description: ''
+    name: no_blitz_dropbacks
+    type: integer
+  - description: ''
+    name: no_blitz_grades_pass
+    type: numeric
+  - description: ''
+    name: no_blitz_scrambles
+    type: integer
+  - description: ''
+    name: pressure_drop_rate
+    type: numeric
+  - description: ''
+    name: no_blitz_yards
+    type: integer
+  - description: ''
+    name: base_dropbacks
+    type: integer
+  - description: ''
+    name: pressure_pressure_to_sack_rate
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_offense
+    type: numeric
+  - description: ''
+    name: no_pressure_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: pressure_dropbacks
+    type: integer
+  - description: ''
+    name: no_blitz_grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_run
+    type: numeric
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: blitz_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: no_blitz_touchdowns
+    type: integer
+  - description: ''
+    name: no_blitz_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: no_pressure_dropbacks_percent
+    type: numeric
+  - description: ''
+    name: blitz_grades_pass
+    type: numeric
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: blitz_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: no_blitz_spikes
+    type: integer
+  - description: ''
+    name: no_pressure_dropbacks
+    type: integer
+  - description: ''
+    name: blitz_btt_rate
+    type: numeric
+  - description: ''
+    name: blitz_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_btt_rate
+    type: numeric
+  - description: ''
+    name: no_pressure_drop_rate
+    type: numeric
+  - description: ''
+    name: no_blitz_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: pressure_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: blitz_first_downs
+    type: integer
+  - description: ''
+    name: no_blitz_dropbacks_percent
+    type: numeric
+  - description: ''
+    name: pressure_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: no_pressure_epa
+    type: numeric
+  - description: ''
+    name: no_blitz_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: no_blitz_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: pressure_btt_rate
+    type: numeric
+  - description: ''
+    name: no_pressure_aimed_passes
+    type: integer
+  - description: ''
+    name: pressure_dropbacks_percent
+    type: numeric
+  - description: ''
+    name: grades_run
+    type: numeric
+  - description: ''
+    name: no_pressure_def_gen_pressures
+    type: integer
+  - description: ''
+    name: pressure_grades_offense
+    type: numeric
+  - description: ''
+    name: pressure_completion_percent
+    type: numeric
+  - description: ''
+    name: pressure_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: blitz_epa
+    type: numeric
+  - description: ''
+    name: pressure_drops
+    type: integer
+  - description: ''
+    name: no_blitz_def_gen_pressures
+    type: integer
+  - description: ''
+    name: pressure_attempts
+    type: integer
+  - description: ''
+    name: pressure_big_time_throws
+    type: integer
+  - description: ''
+    name: no_blitz_thrown_aways
+    type: integer
+  - description: ''
+    name: blitz_drops
+    type: integer
+  - description: ''
+    name: no_pressure_touchdowns
+    type: integer
+  - description: ''
+    name: no_pressure_sacks
+    type: integer
+  - description: ''
+    name: blitz_sack_percent
+    type: numeric
+  - description: ''
+    name: pressure_sack_percent
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: no_pressure_attempts
+    type: integer
+  - description: ''
+    name: no_blitz_grades_offense
+    type: numeric
+  - description: ''
+    name: blitz_scrambles
+    type: integer
+  - description: ''
+    name: blitz_dropbacks_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_qb_rating
+    type: numeric
+  - description: ''
+    name: no_blitz_passing_snaps
+    type: integer
+  - description: ''
+    name: no_blitz_aimed_passes
+    type: integer
+  - description: ''
+    name: blitz_yards
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: no_blitz_attempts
+    type: integer
+  - description: ''
+    name: pressure_accuracy_percent
+    type: numeric
+  - description: ''
+    name: no_blitz_hit_as_threw
+    type: integer
+  - description: ''
+    name: pressure_hit_as_threw
+    type: integer
+  - description: ''
+    name: blitz_pressure_to_sack_rate
+    type: numeric
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: no_blitz_btt_rate
+    type: numeric
+  - description: ''
+    name: no_blitz_ypa
+    type: numeric
+  - description: ''
+    name: blitz_grades_run
+    type: numeric
+  - description: ''
+    name: pressure_interceptions
+    type: integer
+  - description: ''
+    name: blitz_grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: blitz_grades_offense
+    type: numeric
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: pressure_def_gen_pressures
+    type: integer
+  - description: ''
+    name: pressure_grades_pass
+    type: numeric
+  - description: ''
+    name: no_blitz_qb_rating
+    type: numeric
+  - description: ''
+    name: blitz_hit_as_threw
+    type: integer
+  - description: ''
+    name: pressure_ypa
+    type: numeric
+  - description: ''
+    name: pressure_avg_time_to_throw
+    type: numeric
+  - description: ''
+    name: no_blitz_completions
+    type: integer
+  - description: ''
+    name: no_pressure_sack_percent
+    type: numeric
+  - description: ''
+    name: no_blitz_accuracy_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_pressure_to_sack_rate
+    type: character
+  - description: ''
+    name: no_pressure_turnover_worthy_plays
+    type: integer
+  - description: ''
+    name: pressure_first_downs
+    type: integer
+  - description: ''
+    name: blitz_passing_snaps
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: no_pressure_twp_rate
+    type: numeric
+  - description: ''
+    name: no_blitz_sacks
+    type: integer
+  - description: ''
+    name: no_pressure_accuracy_percent
+    type: numeric
+  - description: ''
+    name: no_blitz_twp_rate
+    type: numeric
+  - description: ''
+    name: no_pressure_hit_as_threw
+    type: integer
+  - description: ''
+    name: no_pressure_grades_pass
+    type: numeric
+  - description: ''
+    name: no_pressure_positive_epa_percent
+    type: numeric
+  - description: ''
+    name: pressure_spikes
+    type: integer
+  - description: ''
+    name: pressure_grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: pressure_qb_rating
+    type: numeric
+  - description: ''
+    name: blitz_bats
+    type: integer
+  - description: ''
+    name: pressure_touchdowns
+    type: integer
+  - description: ''
+    name: pressure_thrown_aways
+    type: integer
+  - description: ''
+    name: no_blitz_interceptions
+    type: integer
+  - description: ''
+    name: blitz_dropbacks
+    type: integer
+  - description: ''
+    name: blitz_def_gen_pressures
+    type: integer
+  - description: ''
+    name: no_blitz_big_time_throws
+    type: integer
+  - description: ''
+    name: no_pressure_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: no_pressure_yards
+    type: integer
+  - description: ''
+    name: blitz_twp_rate
+    type: numeric
+  - description: ''
+    name: blitz_accuracy_percent
+    type: numeric
+  - description: ''
+    name: no_pressure_big_time_throws
+    type: integer
+  - description: ''
+    name: pressure_grades_pass_route
+    type: numeric
+  - description: ''
+    name: blitz_grades_pass_route
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_pass_route
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_pass_route
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: blitz_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: pressure_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_pass_block
+    type: numeric
+  - description: ''
+    name: blitz_grades_pass_block
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_pass_block
+    type: numeric
+  - description: ''
+    name: pressure_grades_pass_block
+    type: numeric
+  - description: ''
+    name: pressure_grades_defense
+    type: character
+  - description: ''
+    name: pressure_grades_pass_rush_defense
+    type: character
+  - description: ''
+    name: no_blitz_grades_defense
+    type: integer
+  - description: ''
+    name: blitz_grades_run_block
+    type: numeric
+  - description: ''
+    name: blitz_grades_pass_rush_defense
+    type: character
+  - description: ''
+    name: no_pressure_grades_run_block
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_run_block
+    type: numeric
+  - description: ''
+    name: blitz_grades_screen_block
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_defense
+    type: integer
+  - description: ''
+    name: no_pressure_grades_pass_rush_defense
+    type: integer
+  - description: ''
+    name: no_pressure_grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: pressure_grades_screen_block
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_screen_block
+    type: numeric
+  - description: ''
+    name: blitz_grades_defense
+    type: character
+  - description: ''
+    name: blitz_grades_defense_penalty
+    type: character
+  - description: ''
+    name: pressure_grades_run_block
+    type: numeric
+  - description: ''
+    name: pressure_grades_defense_penalty
+    type: character
+  - description: ''
+    name: no_pressure_grades_screen_block
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_pass_rush_defense
+    type: integer
+  - description: ''
+    name: pressure_grades_coverage_defense
+    type: character
+  - description: ''
+    name: blitz_grades_coverage_defense
+    type: character
+  - description: ''
+    name: no_blitz_grades_coverage_defense
+    type: integer
+  - description: ''
+    name: no_pressure_grades_coverage_defense
+    type: integer
+  - description: ''
+    name: no_pressure_grades_tackle
+    type: numeric
+  - description: ''
+    name: blitz_grades_tackle
+    type: numeric
+  - description: ''
+    name: blitz_grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: pressure_grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: pressure_grades_tackle
+    type: numeric
+  - description: ''
+    name: no_pressure_grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: no_blitz_grades_tackle
+    type: numeric
+  section: passing-pressure
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: games_played
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: team_targets_percent
+    type: numeric
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: caught_percent
+    type: numeric
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: grades_pass_route
+    type: numeric
+  - description: ''
+    name: grades_hands_drop
+    type: numeric
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: pass_plays
+    type: integer
+  - description: ''
+    name: routes
+    type: integer
+  - description: ''
+    name: route_rate
+    type: numeric
+  - description: ''
+    name: pass_blocks
+    type: integer
+  - description: ''
+    name: pass_block_rate
+    type: numeric
+  - description: ''
+    name: slot_snaps
+    type: integer
+  - description: ''
+    name: slot_rate
+    type: numeric
+  - description: ''
+    name: wide_snaps
+    type: integer
+  - description: ''
+    name: wide_rate
+    type: numeric
+  - description: ''
+    name: inline_snaps
+    type: integer
+  - description: ''
+    name: inline_rate
+    type: numeric
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: yards_after_catch_per_reception
+    type: numeric
+  - description: ''
+    name: yprr
+    type: numeric
+  - description: ''
+    name: avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: drop_rate
+    type: numeric
+  - description: ''
+    name: contested_targets
+    type: integer
+  - description: ''
+    name: contested_receptions
+    type: integer
+  - description: ''
+    name: contested_catch_rate
+    type: numeric
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: fumbles
+    type: integer
+  - description: ''
+    name: avoided_tackles
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: targeted_qb_rating
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: receptions_oe
+    type: numeric
+  - description: ''
+    name: receptions_oe_total
+    type: numeric
+  - description: ''
+    name: lined_up_vs_cb
+    type: numeric
+  - description: ''
+    name: lined_up_vs_s
+    type: numeric
+  - description: ''
+    name: lined_up_vs_lb
+    type: numeric
+  - description: ''
+    name: offense_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_neg_graded_rate
+    type: numeric
+  section: receiving
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: games_played
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: base_targets
+    type: integer
+  - description: ''
+    name: deep_targets_percent
+    type: numeric
+  - description: ''
+    name: deep_targets
+    type: integer
+  - description: ''
+    name: deep_receptions
+    type: integer
+  - description: ''
+    name: deep_caught_percent
+    type: numeric
+  - description: ''
+    name: deep_yards
+    type: integer
+  - description: ''
+    name: deep_yards_per_reception
+    type: numeric
+  - description: ''
+    name: deep_touchdowns
+    type: integer
+  - description: ''
+    name: deep_grades_pass_route
+    type: numeric
+  - description: ''
+    name: deep_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: deep_yards_after_catch
+    type: integer
+  - description: ''
+    name: deep_yards_after_catch_per_reception
+    type: numeric
+  - description: ''
+    name: deep_yprr
+    type: numeric
+  - description: ''
+    name: deep_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: deep_drops
+    type: integer
+  - description: ''
+    name: deep_drop_rate
+    type: numeric
+  - description: ''
+    name: deep_contested_targets
+    type: integer
+  - description: ''
+    name: deep_contested_receptions
+    type: integer
+  - description: ''
+    name: deep_contested_catch_rate
+    type: numeric
+  - description: ''
+    name: deep_interceptions
+    type: integer
+  - description: ''
+    name: deep_fumbles
+    type: integer
+  - description: ''
+    name: deep_avoided_tackles
+    type: integer
+  - description: ''
+    name: deep_first_downs
+    type: integer
+  - description: ''
+    name: deep_targeted_qb_rating
+    type: numeric
+  - description: ''
+    name: medium_targets_percent
+    type: numeric
+  - description: ''
+    name: medium_targets
+    type: integer
+  - description: ''
+    name: medium_receptions
+    type: integer
+  - description: ''
+    name: medium_caught_percent
+    type: numeric
+  - description: ''
+    name: medium_yards
+    type: integer
+  - description: ''
+    name: medium_yards_per_reception
+    type: numeric
+  - description: ''
+    name: medium_touchdowns
+    type: integer
+  - description: ''
+    name: medium_grades_pass_route
+    type: numeric
+  - description: ''
+    name: medium_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: medium_yards_after_catch
+    type: integer
+  - description: ''
+    name: medium_yards_after_catch_per_reception
+    type: numeric
+  - description: ''
+    name: medium_yprr
+    type: numeric
+  - description: ''
+    name: medium_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: medium_drops
+    type: integer
+  - description: ''
+    name: medium_drop_rate
+    type: numeric
+  - description: ''
+    name: medium_contested_targets
+    type: integer
+  - description: ''
+    name: medium_contested_receptions
+    type: integer
+  - description: ''
+    name: medium_contested_catch_rate
+    type: numeric
+  - description: ''
+    name: medium_interceptions
+    type: integer
+  - description: ''
+    name: medium_fumbles
+    type: integer
+  - description: ''
+    name: medium_avoided_tackles
+    type: integer
+  - description: ''
+    name: medium_first_downs
+    type: integer
+  - description: ''
+    name: medium_targeted_qb_rating
+    type: numeric
+  - description: ''
+    name: short_targets_percent
+    type: numeric
+  - description: ''
+    name: short_targets
+    type: integer
+  - description: ''
+    name: short_receptions
+    type: integer
+  - description: ''
+    name: short_caught_percent
+    type: numeric
+  - description: ''
+    name: short_yards
+    type: integer
+  - description: ''
+    name: short_yards_per_reception
+    type: numeric
+  - description: ''
+    name: short_touchdowns
+    type: integer
+  - description: ''
+    name: short_grades_pass_route
+    type: numeric
+  - description: ''
+    name: short_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: short_yards_after_catch
+    type: integer
+  - description: ''
+    name: short_yards_after_catch_per_reception
+    type: numeric
+  - description: ''
+    name: short_yprr
+    type: numeric
+  - description: ''
+    name: short_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: short_drops
+    type: integer
+  - description: ''
+    name: short_drop_rate
+    type: numeric
+  - description: ''
+    name: short_contested_targets
+    type: integer
+  - description: ''
+    name: short_contested_receptions
+    type: integer
+  - description: ''
+    name: short_contested_catch_rate
+    type: numeric
+  - description: ''
+    name: short_interceptions
+    type: integer
+  - description: ''
+    name: short_fumbles
+    type: integer
+  - description: ''
+    name: short_avoided_tackles
+    type: integer
+  - description: ''
+    name: short_first_downs
+    type: integer
+  - description: ''
+    name: short_targeted_qb_rating
+    type: numeric
+  - description: ''
+    name: behind_los_targets_percent
+    type: numeric
+  - description: ''
+    name: behind_los_targets
+    type: integer
+  - description: ''
+    name: behind_los_receptions
+    type: integer
+  - description: ''
+    name: behind_los_caught_percent
+    type: numeric
+  - description: ''
+    name: behind_los_yards
+    type: integer
+  - description: ''
+    name: behind_los_yards_per_reception
+    type: numeric
+  - description: ''
+    name: behind_los_touchdowns
+    type: integer
+  - description: ''
+    name: behind_los_grades_pass_route
+    type: numeric
+  - description: ''
+    name: behind_los_grades_hands_drop
+    type: numeric
+  - description: ''
+    name: behind_los_yards_after_catch
+    type: integer
+  - description: ''
+    name: behind_los_yards_after_catch_per_reception
+    type: numeric
+  - description: ''
+    name: behind_los_yprr
+    type: numeric
+  - description: ''
+    name: behind_los_avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: behind_los_drops
+    type: integer
+  - description: ''
+    name: behind_los_drop_rate
+    type: numeric
+  - description: ''
+    name: behind_los_contested_targets
+    type: integer
+  - description: ''
+    name: behind_los_contested_receptions
+    type: integer
+  - description: ''
+    name: behind_los_contested_catch_rate
+    type: integer
+  - description: ''
+    name: behind_los_interceptions
+    type: integer
+  - description: ''
+    name: behind_los_fumbles
+    type: integer
+  - description: ''
+    name: behind_los_avoided_tackles
+    type: integer
+  - description: ''
+    name: behind_los_first_downs
+    type: integer
+  - description: ''
+    name: behind_los_targeted_qb_rating
+    type: numeric
+  section: receiving-depth
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: yards_after_contact
+    type: integer
+  - description: ''
+    name: explosive
+    type: integer
+  - description: ''
+    name: grades_pass_route
+    type: numeric
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: elu_rush_mtf
+    type: integer
+  - description: ''
+    name: breakaway_attempts
+    type: integer
+  - description: ''
+    name: designed_yards
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: yprr
+    type: numeric
+  - description: ''
+    name: breakaway_percent
+    type: numeric
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: fumbles
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: elusive_rating
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: breakaway_yards
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: total_touches
+    type: integer
+  - description: ''
+    name: scramble_yards
+    type: integer
+  - description: ''
+    name: yco_attempt
+    type: numeric
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: zone_attempts
+    type: integer
+  - description: ''
+    name: scrambles
+    type: integer
+  - description: ''
+    name: grades_run
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: attempts
+    type: integer
+  - description: ''
+    name: elu_yco
+    type: integer
+  - description: ''
+    name: elu_recv_mtf
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: ypa
+    type: numeric
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: routes
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: rec_yards
+    type: integer
+  - description: ''
+    name: gap_attempts
+    type: integer
+  - description: ''
+    name: run_plays
+    type: integer
+  - description: ''
+    name: avoided_tackles
+    type: integer
+  - description: ''
+    name: grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: carry_share
+    type: numeric
+  - description: ''
+    name: offense_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_neg_graded_rate
+    type: numeric
+  section: rushing
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: games_played
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: snap_counts_offense
+    type: integer
+  - description: ''
+    name: snap_counts_block
+    type: integer
+  - description: ''
+    name: block_percent
+    type: numeric
+  - description: ''
+    name: snap_counts_run_block
+    type: integer
+  - description: ''
+    name: snap_counts_pass_block
+    type: integer
+  - description: ''
+    name: pass_block_percent
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  - description: ''
+    name: non_spike_pass_block
+    type: integer
+  - description: ''
+    name: non_spike_pass_block_percentage
+    type: numeric
+  - description: ''
+    name: sacks_allowed
+    type: integer
+  - description: ''
+    name: hits_allowed
+    type: integer
+  - description: ''
+    name: hurries_allowed
+    type: integer
+  - description: ''
+    name: pressures_allowed
+    type: integer
+  - description: ''
+    name: pbe
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: snap_counts_lt
+    type: integer
+  - description: ''
+    name: snap_counts_lg
+    type: integer
+  - description: ''
+    name: snap_counts_ce
+    type: integer
+  - description: ''
+    name: snap_counts_rg
+    type: integer
+  - description: ''
+    name: snap_counts_rt
+    type: integer
+  - description: ''
+    name: snap_counts_te
+    type: integer
+  section: blocking
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: games_played
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: snap_counts_lt
+    type: integer
+  - description: ''
+    name: snap_counts_lg
+    type: integer
+  - description: ''
+    name: snap_counts_ce
+    type: integer
+  - description: ''
+    name: snap_counts_rg
+    type: integer
+  - description: ''
+    name: snap_counts_rt
+    type: integer
+  - description: ''
+    name: snap_counts_te
+    type: integer
+  - description: ''
+    name: snap_counts_pass_play
+    type: integer
+  - description: ''
+    name: snap_counts_pass_block
+    type: integer
+  - description: ''
+    name: pass_block_percent
+    type: numeric
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: non_spike_pass_block
+    type: integer
+  - description: ''
+    name: non_spike_pass_block_percentage
+    type: numeric
+  - description: ''
+    name: sacks_allowed
+    type: integer
+  - description: ''
+    name: hits_allowed
+    type: integer
+  - description: ''
+    name: hurries_allowed
+    type: integer
+  - description: ''
+    name: pressures_allowed
+    type: integer
+  - description: ''
+    name: pressure_rate_allowed
+    type: numeric
+  - description: ''
+    name: sack_rate_allowed
+    type: numeric
+  - description: ''
+    name: pbe
+    type: numeric
+  - description: ''
+    name: true_pass_set_snap_counts_pass_play
+    type: integer
+  - description: ''
+    name: true_pass_set_snap_counts_pass_block
+    type: integer
+  - description: ''
+    name: true_pass_set_pass_block_percent
+    type: numeric
+  - description: ''
+    name: true_pass_set_grades_pass_block
+    type: numeric
+  - description: ''
+    name: true_pass_set_non_spike_pass_block
+    type: integer
+  - description: ''
+    name: true_pass_set_non_spike_pass_block_percentage
+    type: numeric
+  - description: ''
+    name: true_pass_set_sacks_allowed
+    type: integer
+  - description: ''
+    name: true_pass_set_hits_allowed
+    type: integer
+  - description: ''
+    name: true_pass_set_hurries_allowed
+    type: integer
+  - description: ''
+    name: true_pass_set_pressures_allowed
+    type: integer
+  - description: ''
+    name: true_pass_set_pressure_rate_allowed
+    type: numeric
+  - description: ''
+    name: true_pass_set_sack_rate_allowed
+    type: numeric
+  - description: ''
+    name: true_pass_set_pbe
+    type: numeric
+  - description: ''
+    name: pbwr
+    type: numeric
+  - description: ''
+    name: true_pass_set_pbwr
+    type: numeric
+  - description: ''
+    name: pass_block_grade_oe_percentile
+    type: numeric
+  - description: ''
+    name: island_rate
+    type: numeric
+  - description: ''
+    name: island_pass_block_win_rate
+    type: numeric
+  - description: ''
+    name: offense_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_neg_graded_rate
+    type: numeric
+  section: pass-blocking
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: games_played
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: snap_counts_lt
+    type: integer
+  - description: ''
+    name: snap_counts_lg
+    type: integer
+  - description: ''
+    name: snap_counts_ce
+    type: integer
+  - description: ''
+    name: snap_counts_rg
+    type: integer
+  - description: ''
+    name: snap_counts_rt
+    type: integer
+  - description: ''
+    name: snap_counts_te
+    type: integer
+  - description: ''
+    name: snap_counts_run_play
+    type: integer
+  - description: ''
+    name: snap_counts_run_block
+    type: integer
+  - description: ''
+    name: run_block_percent
+    type: numeric
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: zone_snap_counts_run_play
+    type: integer
+  - description: ''
+    name: zone_snap_counts_run_block
+    type: integer
+  - description: ''
+    name: zone_snap_counts_run_block_percent
+    type: numeric
+  - description: ''
+    name: zone_run_block_percent
+    type: numeric
+  - description: ''
+    name: zone_grades_run_block
+    type: numeric
+  - description: ''
+    name: gap_snap_counts_run_play
+    type: integer
+  - description: ''
+    name: gap_snap_counts_run_block
+    type: integer
+  - description: ''
+    name: gap_snap_counts_run_block_percent
+    type: numeric
+  - description: ''
+    name: gap_run_block_percent
+    type: numeric
+  - description: ''
+    name: gap_grades_run_block
+    type: numeric
+  - description: ''
+    name: pos_graded_rate
+    type: numeric
+  - description: ''
+    name: neg_graded_rate
+    type: numeric
+  - description: ''
+    name: zone_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: zone_neg_graded_rate
+    type: numeric
+  - description: ''
+    name: gap_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: gap_neg_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_pos_graded_rate
+    type: numeric
+  - description: ''
+    name: offense_neg_graded_rate
+    type: numeric
+  section: run-blocking
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: interception_touchdowns
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: forced_fumbles
+    type: integer
+  - description: ''
+    name: missed_tackles
+    type: integer
+  - description: ''
+    name: catch_rate
+    type: numeric
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: tackles
+    type: integer
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: snap_counts_offball
+    type: integer
+  - description: ''
+    name: snap_counts_box
+    type: integer
+  - description: ''
+    name: sacks
+    type: integer
+  - description: ''
+    name: snap_counts_pass_rush
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: snap_counts_dl
+    type: integer
+  - description: ''
+    name: grades_tackle
+    type: numeric
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: grades_coverage_defense
+    type: numeric
+  - description: ''
+    name: hurries
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: snap_counts_coverage
+    type: integer
+  - description: ''
+    name: snap_counts_dl_over_t
+    type: integer
+  - description: ''
+    name: snap_counts_dl_a_gap
+    type: integer
+  - description: ''
+    name: fumble_recoveries
+    type: integer
+  - description: ''
+    name: grades_run_defense
+    type: numeric
+  - description: ''
+    name: snap_counts_corner
+    type: integer
+  - description: ''
+    name: hits
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: batted_passes
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: stops
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: total_pressures
+    type: integer
+  - description: ''
+    name: fumble_recovery_touchdowns
+    type: integer
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: snap_counts_slot
+    type: integer
+  - description: ''
+    name: missed_tackle_rate
+    type: numeric
+  - description: ''
+    name: grades_defense
+    type: numeric
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: safeties
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: snap_counts_defense
+    type: integer
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: snap_counts_dl_b_gap
+    type: integer
+  - description: ''
+    name: pass_break_ups
+    type: integer
+  - description: ''
+    name: qb_rating_against
+    type: numeric
+  - description: ''
+    name: snap_counts_run_defense
+    type: integer
+  - description: ''
+    name: tackles_for_loss
+    type: integer
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: snap_counts_fs
+    type: integer
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: snap_counts_dl_outside_t
+    type: integer
+  section: defense
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: avg_depth_of_tackle
+    type: numeric
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: forced_fumbles
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_coverage_defense
+    type: numeric
+  - description: ''
+    name: grades_defense
+    type: numeric
+  - description: ''
+    name: grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: grades_run_defense
+    type: numeric
+  - description: ''
+    name: grades_tackle
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: missed_tackle_rate
+    type: numeric
+  - description: ''
+    name: missed_tackles
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: run_stop_opp
+    type: integer
+  - description: ''
+    name: snap_counts_run
+    type: integer
+  - description: ''
+    name: stop_percent
+    type: numeric
+  - description: ''
+    name: stops
+    type: integer
+  - description: ''
+    name: tackles
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: pos_graded_rate
+    type: numeric
+  - description: ''
+    name: neg_graded_rate
+    type: numeric
+  section: run-defense
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: true_pass_set_total_pressures
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: true_pass_set_prp
+    type: numeric
+  - description: ''
+    name: true_pass_set_hurries
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: prp
+    type: numeric
+  - description: ''
+    name: true_pass_set_sacks
+    type: integer
+  - description: ''
+    name: pass_rush_win_rate
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: sacks
+    type: integer
+  - description: ''
+    name: snap_counts_pass_rush
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: true_pass_set_snap_counts_pass_play
+    type: integer
+  - description: ''
+    name: pass_rush_wins
+    type: integer
+  - description: ''
+    name: hurries
+    type: integer
+  - description: ''
+    name: pass_rush_opp
+    type: integer
+  - description: ''
+    name: snap_counts_pass_play
+    type: integer
+  - description: ''
+    name: hits
+    type: integer
+  - description: ''
+    name: true_pass_set_pass_rush_win_rate
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: batted_passes
+    type: integer
+  - description: ''
+    name: true_pass_set_hits
+    type: integer
+  - description: ''
+    name: true_pass_set_snap_counts_pass_rush
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: true_pass_set_pass_rush_wins
+    type: integer
+  - description: ''
+    name: total_pressures
+    type: integer
+  - description: ''
+    name: true_pass_set_grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: true_pass_set_batted_passes
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: pass_rush_percent
+    type: numeric
+  - description: ''
+    name: true_pass_set_pass_rush_opp
+    type: integer
+  - description: ''
+    name: true_pass_set_pass_rush_percent
+    type: numeric
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: knockdowns
+    type: integer
+  - description: ''
+    name: knockdown_rate
+    type: numeric
+  - description: ''
+    name: pressure_rate
+    type: numeric
+  - description: ''
+    name: sack_rate
+    type: numeric
+  - description: ''
+    name: true_pass_set_knockdowns
+    type: integer
+  - description: ''
+    name: true_pass_set_knockdown_rate
+    type: numeric
+  - description: ''
+    name: true_pass_set_pressure_rate
+    type: numeric
+  - description: ''
+    name: true_pass_set_sack_rate
+    type: numeric
+  - description: ''
+    name: lhs_pass_rush_snaps
+    type: integer
+  - description: ''
+    name: lhs_pass_rush_percent
+    type: numeric
+  - description: ''
+    name: lhs_sacks
+    type: integer
+  - description: ''
+    name: lhs_hits
+    type: integer
+  - description: ''
+    name: lhs_hurries
+    type: integer
+  - description: ''
+    name: lhs_pressures
+    type: integer
+  - description: ''
+    name: lhs_prp
+    type: numeric
+  - description: ''
+    name: lhs_stops
+    type: integer
+  - description: ''
+    name: lhs_tackles
+    type: integer
+  - description: ''
+    name: lhs_assists
+    type: integer
+  - description: ''
+    name: lhs_misses
+    type: integer
+  - description: ''
+    name: rhs_pass_rush_snaps
+    type: integer
+  - description: ''
+    name: rhs_pass_rush_percent
+    type: numeric
+  - description: ''
+    name: rhs_sacks
+    type: integer
+  - description: ''
+    name: rhs_hits
+    type: integer
+  - description: ''
+    name: rhs_hurries
+    type: integer
+  - description: ''
+    name: rhs_pressures
+    type: integer
+  - description: ''
+    name: rhs_prp
+    type: numeric
+  - description: ''
+    name: rhs_stops
+    type: integer
+  - description: ''
+    name: rhs_tackles
+    type: integer
+  - description: ''
+    name: rhs_assists
+    type: integer
+  - description: ''
+    name: rhs_misses
+    type: integer
+  - description: ''
+    name: pass_rush_grade_oe_percentile
+    type: numeric
+  - description: ''
+    name: double_team_rate
+    type: numeric
+  section: pass-rush
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: yards_per_coverage_snap
+    type: numeric
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: missed_tackles
+    type: integer
+  - description: ''
+    name: catch_rate
+    type: numeric
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: tackles
+    type: integer
+  - description: ''
+    name: coverage_percent
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: dropped_ints
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: grades_tackle
+    type: numeric
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: forced_incompletion_rate
+    type: numeric
+  - description: ''
+    name: grades_coverage_defense
+    type: numeric
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: snap_counts_coverage
+    type: integer
+  - description: ''
+    name: grades_run_defense
+    type: numeric
+  - description: ''
+    name: snap_counts_pass_play
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: forced_incompletes
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: coverage_snaps_per_target
+    type: numeric
+  - description: ''
+    name: stops
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: missed_tackle_rate
+    type: numeric
+  - description: ''
+    name: grades_defense
+    type: numeric
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: avg_depth_of_target
+    type: numeric
+  - description: ''
+    name: pass_break_ups
+    type: integer
+  - description: ''
+    name: qb_rating_against
+    type: numeric
+  - description: ''
+    name: coverage_snaps_per_reception
+    type: numeric
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: touchdowns
+    type: integer
+  section: coverage
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_misc_st
+    type: numeric
+  - description: ''
+    name: grades_special_teams_penalty
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: missed_tackles
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: snap_counts_field_goal
+    type: integer
+  - description: ''
+    name: snap_counts_field_goal_blocking
+    type: integer
+  - description: ''
+    name: snap_counts_kickoff
+    type: integer
+  - description: ''
+    name: snap_counts_kickoff_return
+    type: integer
+  - description: ''
+    name: snap_counts_punt_coverage
+    type: integer
+  - description: ''
+    name: snap_counts_punt_return
+    type: integer
+  - description: ''
+    name: tackles
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: total_snaps
+    type: integer
+  - description: ''
+    name: grades_fgep_offense
+    type: numeric
+  - description: ''
+    name: grades_punter
+    type: numeric
+  - description: ''
+    name: grades_fgep_kicker
+    type: numeric
+  - description: ''
+    name: grades_kickoff_kicker
+    type: numeric
+  - description: ''
+    name: grades_long_snap
+    type: numeric
+  - description: ''
+    name: grades_fgep_defense
+    type: numeric
+  - description: ''
+    name: grades_kick_return
+    type: numeric
+  - description: ''
+    name: grades_punt_return
+    type: numeric
+  section: special-teams
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_kick_return
+    type: numeric
+  - description: ''
+    name: grades_punt_return
+    type: numeric
+  - description: ''
+    name: grades_return
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: kickoff_attempts
+    type: integer
+  - description: ''
+    name: kickoff_fair_catches
+    type: integer
+  - description: ''
+    name: kickoff_long
+    type: integer
+  - description: ''
+    name: kickoff_muffed_returns
+    type: integer
+  - description: ''
+    name: kickoff_touchdowns
+    type: integer
+  - description: ''
+    name: kickoff_yards
+    type: integer
+  - description: ''
+    name: kickoff_ypa
+    type: numeric
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: punt_attempts
+    type: integer
+  - description: ''
+    name: punt_fair_catches
+    type: integer
+  - description: ''
+    name: punt_long
+    type: integer
+  - description: ''
+    name: punt_muffed_returns
+    type: integer
+  - description: ''
+    name: punt_touchdowns
+    type: integer
+  - description: ''
+    name: punt_yards
+    type: integer
+  - description: ''
+    name: punt_ypa
+    type: numeric
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: total_attempts
+    type: integer
+  section: kick-returns
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: twenty_attempts
+    type: integer
+  - description: ''
+    name: pat_percent
+    type: numeric
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: forty_made
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: fifty_percent
+    type: numeric
+  - description: ''
+    name: total_made
+    type: integer
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: one_made
+    type: integer
+  - description: ''
+    name: fifty_attempts
+    type: integer
+  - description: ''
+    name: forty_attempts
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: thirty_percent
+    type: numeric
+  - description: ''
+    name: total_attempts
+    type: integer
+  - description: ''
+    name: pat_attempts
+    type: integer
+  - description: ''
+    name: twenty_made
+    type: integer
+  - description: ''
+    name: one_attempts
+    type: integer
+  - description: ''
+    name: grades_fgep_kicker
+    type: numeric
+  - description: ''
+    name: thirty_attempts
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: pat_made
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: one_percent
+    type: integer
+  - description: ''
+    name: total_percent
+    type: numeric
+  - description: ''
+    name: twenty_percent
+    type: numeric
+  - description: ''
+    name: forty_percent
+    type: numeric
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: fifty_made
+    type: integer
+  - description: ''
+    name: thirty_made
+    type: integer
+  - description: ''
+    name: field_goal_oe
+    type: numeric
+  - description: ''
+    name: field_goal_oe_total
+    type: numeric
+  section: field-goals
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: touchbacks
+    type: integer
+  - description: ''
+    name: attempts_with_hangtime
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: percent_returned
+    type: numeric
+  - description: ''
+    name: fair_catches
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: average_net_yards
+    type: numeric
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: average_hangtime
+    type: numeric
+  - description: ''
+    name: total_net_yards
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: attempts
+    type: integer
+  - description: ''
+    name: inside_twenties
+    type: integer
+  - description: ''
+    name: out_of_bounds
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: average_yards_per_return
+    type: numeric
+  - description: ''
+    name: total_hangtime
+    type: numeric
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: returns
+    type: integer
+  - description: ''
+    name: long
+    type: integer
+  - description: ''
+    name: blocks
+    type: integer
+  - description: ''
+    name: average_yards_per_attempt
+    type: numeric
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_punter
+    type: numeric
+  - description: ''
+    name: return_yards
+    type: integer
+  - description: ''
+    name: downeds
+    type: integer
+  - description: ''
+    name: snaps
+    type: integer
+  section: punting
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: attempts
+    type: integer
+  - description: ''
+    name: attempts_with_hangtime
+    type: integer
+  - description: ''
+    name: average_distance
+    type: numeric
+  - description: ''
+    name: average_hangtime
+    type: numeric
+  - description: ''
+    name: average_starting_field_position
+    type: numeric
+  - description: ''
+    name: average_yards_per_return
+    type: numeric
+  - description: ''
+    name: declined_penalties
+    type: integer
+  - description: ''
+    name: draft_season
+    type: integer
+  - description: ''
+    name: eligible_season
+    type: integer
+  - description: ''
+    name: fair_catches
+    type: integer
+  - description: ''
+    name: franchise_id
+    type: integer
+  - description: ''
+    name: grades_kickoff_kicker
+    type: numeric
+  - description: ''
+    name: jersey_number
+    type: character
+  - description: ''
+    name: kicked_yards
+    type: integer
+  - description: ''
+    name: kicks_returned
+    type: integer
+  - description: ''
+    name: onside_kicks
+    type: integer
+  - description: ''
+    name: penalties
+    type: integer
+  - description: ''
+    name: percent_returned
+    type: numeric
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: return_yards
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: total_hangtime
+    type: numeric
+  - description: ''
+    name: touchbacks
+    type: integer
+  section: kickoffs
+kind: frames
+schema: position_report

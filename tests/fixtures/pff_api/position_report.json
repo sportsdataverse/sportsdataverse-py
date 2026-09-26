@@ -1,0 +1,243 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "weekGroup": "REG",
+ "week": null,
+ "weekTo": null,
+ "report": "offense",
+ "section": "offense",
+ "columns": [
+  {
+   "key": "playerId",
+   "label": "Player id",
+   "type": "integer"
+  },
+  {
+   "key": "player",
+   "label": "Player",
+   "type": "string"
+  },
+  {
+   "key": "position",
+   "label": "Pos",
+   "type": "string"
+  },
+  {
+   "key": "declinedPenalties",
+   "label": "Declined penalties",
+   "type": "integer"
+  },
+  {
+   "key": "draftSeason",
+   "label": "Draft season",
+   "type": "integer"
+  },
+  {
+   "key": "eligibleSeason",
+   "label": "Eligible season",
+   "type": "integer"
+  },
+  {
+   "key": "franchiseId",
+   "label": "Franchise id",
+   "type": "integer"
+  },
+  {
+   "key": "gradesHandsFumble",
+   "label": "Grades hands fumble",
+   "type": "number"
+  },
+  {
+   "key": "gradesOffense",
+   "label": "Grades offense",
+   "type": "number"
+  },
+  {
+   "key": "gradesOffensePenalty",
+   "label": "Grades offense penalty",
+   "type": "number"
+  },
+  {
+   "key": "gradesPass",
+   "label": "Grades pass",
+   "type": "number"
+  },
+  {
+   "key": "gradesPassRoute",
+   "label": "Grades pass route",
+   "type": "number"
+  },
+  {
+   "key": "gradesRun",
+   "label": "Grades run",
+   "type": "number"
+  },
+  {
+   "key": "gradesRunBlock",
+   "label": "Grades run block",
+   "type": "number"
+  },
+  {
+   "key": "jerseyNumber",
+   "label": "Jersey number",
+   "type": "string"
+  },
+  {
+   "key": "penalties",
+   "label": "Penalties",
+   "type": "integer"
+  },
+  {
+   "key": "playerGameCount",
+   "label": "Player game count",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsPass",
+   "label": "Snap counts pass",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsPassBlock",
+   "label": "Snap counts pass block",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsPassRoute",
+   "label": "Snap counts pass route",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsRun",
+   "label": "Snap counts run",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsRunBlock",
+   "label": "Snap counts run block",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsTotal",
+   "label": "Snap counts total",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsTotalPass",
+   "label": "Snap counts total pass",
+   "type": "integer"
+  },
+  {
+   "key": "snapCountsTotalRun",
+   "label": "Snap counts total run",
+   "type": "integer"
+  },
+  {
+   "key": "team",
+   "label": "Team",
+   "type": "string"
+  },
+  {
+   "key": "teamName",
+   "label": "Team name",
+   "type": "string"
+  },
+  {
+   "key": "gradesPassBlock",
+   "label": "Grades pass block",
+   "type": "number"
+  }
+ ],
+ "rows": [
+  {
+   "playerId": 698,
+   "player": "Tom Brady",
+   "position": "QB",
+   "declinedPenalties": 0,
+   "draftSeason": 2000,
+   "eligibleSeason": 2000,
+   "franchiseId": 30,
+   "gradesHandsFumble": 78.8,
+   "gradesOffense": 79.7,
+   "gradesOffensePenalty": 71,
+   "gradesPass": 79.3,
+   "gradesPassRoute": 59.9,
+   "gradesRun": 44,
+   "gradesRunBlock": 60.1,
+   "jerseyNumber": "12",
+   "penalties": 3,
+   "playerGameCount": 17,
+   "snapCountsPass": 808,
+   "snapCountsPassBlock": 0,
+   "snapCountsPassRoute": 1,
+   "snapCountsRun": 25,
+   "snapCountsRunBlock": 359,
+   "snapCountsTotal": 1193,
+   "snapCountsTotalPass": 809,
+   "snapCountsTotalRun": 384,
+   "team": "TB",
+   "teamName": "TB",
+   "gradesPassBlock": null
+  },
+  {
+   "playerId": 1906,
+   "player": "Andy Lee",
+   "position": "P",
+   "declinedPenalties": 0,
+   "draftSeason": 2004,
+   "eligibleSeason": 2004,
+   "franchiseId": 1,
+   "gradesHandsFumble": 60.4,
+   "gradesOffense": 59.5,
+   "gradesOffensePenalty": 67.4,
+   "gradesPass": 60.3,
+   "gradesPassRoute": null,
+   "gradesRun": null,
+   "gradesRunBlock": 60,
+   "jerseyNumber": "14",
+   "penalties": 0,
+   "playerGameCount": 2,
+   "snapCountsPass": 1,
+   "snapCountsPassBlock": 0,
+   "snapCountsPassRoute": 0,
+   "snapCountsRun": 0,
+   "snapCountsRunBlock": 1,
+   "snapCountsTotal": 2,
+   "snapCountsTotalPass": 1,
+   "snapCountsTotalRun": 1,
+   "team": "ARZ",
+   "teamName": "ARZ",
+   "gradesPassBlock": null
+  },
+  {
+   "playerId": 2148,
+   "player": "Jason Peters",
+   "position": "T",
+   "declinedPenalties": 0,
+   "draftSeason": 2004,
+   "eligibleSeason": 2004,
+   "franchiseId": 9,
+   "gradesHandsFumble": null,
+   "gradesOffense": 70.3,
+   "gradesOffensePenalty": 84.4,
+   "gradesPass": null,
+   "gradesPassRoute": null,
+   "gradesRun": null,
+   "gradesRunBlock": 71.8,
+   "jerseyNumber": "71",
+   "penalties": 0,
+   "playerGameCount": 12,
+   "snapCountsPass": 0,
+   "snapCountsPassBlock": 135,
+   "snapCountsPassRoute": 0,
+   "snapCountsRun": 0,
+   "snapCountsRunBlock": 100,
+   "snapCountsTotal": 235,
+   "snapCountsTotalPass": 135,
+   "snapCountsTotalRun": 100,
+   "team": "DAL",
+   "teamName": "DAL",
+   "gradesPassBlock": 60.5
+  }
+ ]
+}

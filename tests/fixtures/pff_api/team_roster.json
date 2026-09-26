@@ -1,0 +1,156 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "team": {
+  "franchiseId": 7,
+  "slug": "cincinnati-bengals",
+  "abbreviation": "CIN",
+  "name": "Cincinnati Bengals"
+ },
+ "columns": [
+  {
+   "key": "playerId",
+   "label": "Player id",
+   "type": "integer"
+  },
+  {
+   "key": "name",
+   "label": "Player",
+   "type": "string"
+  },
+  {
+   "key": "jersey",
+   "label": "No.",
+   "type": "string"
+  },
+  {
+   "key": "position",
+   "label": "Pos",
+   "type": "string"
+  },
+  {
+   "key": "alignment",
+   "label": "Alignment",
+   "type": "string"
+  },
+  {
+   "key": "unit",
+   "label": "Unit",
+   "type": "string"
+  },
+  {
+   "key": "depthOrder",
+   "label": "Depth",
+   "type": "integer"
+  },
+  {
+   "key": "grade",
+   "label": "Grade",
+   "type": "number"
+  },
+  {
+   "key": "gradeRank",
+   "label": "Grade rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradeRankOf",
+   "label": "Grade rank of",
+   "type": "integer"
+  },
+  {
+   "key": "height",
+   "label": "Height",
+   "type": "integer"
+  },
+  {
+   "key": "weight",
+   "label": "Weight",
+   "type": "integer"
+  },
+  {
+   "key": "birthDate",
+   "label": "Birth date",
+   "type": "string"
+  },
+  {
+   "key": "eligibilityYear",
+   "label": "Eligibility year",
+   "type": "integer"
+  },
+  {
+   "key": "status",
+   "label": "Status",
+   "type": "string"
+  },
+  {
+   "key": "snapCounts",
+   "label": "Snaps",
+   "type": "integer"
+  },
+  {
+   "key": "snapPct",
+   "label": "Snap %",
+   "type": "number"
+  }
+ ],
+ "rows": [
+  {
+   "playerId": 28022,
+   "name": "Joe Burrow",
+   "jersey": "9",
+   "position": "QB",
+   "alignment": "QB",
+   "unit": "offense",
+   "depthOrder": 1,
+   "grade": 91.8,
+   "gradeRank": 2,
+   "gradeRankOf": 38,
+   "height": 604,
+   "weight": 215,
+   "birthDate": "1996-12-10",
+   "eligibilityYear": 2020,
+   "status": "active",
+   "snapCounts": 1289,
+   "snapPct": 98.8
+  },
+  {
+   "playerId": 4332,
+   "name": "Joe Flacco",
+   "jersey": "16",
+   "position": "QB",
+   "alignment": "QB",
+   "unit": "offense",
+   "depthOrder": 2,
+   "grade": 68,
+   "gradeRank": 27,
+   "gradeRankOf": 38,
+   "height": 606,
+   "weight": 245,
+   "birthDate": "1985-01-16",
+   "eligibilityYear": 2008,
+   "status": "active",
+   "snapCounts": null,
+   "snapPct": null
+  },
+  {
+   "playerId": 77787,
+   "name": "Chase Brown",
+   "jersey": "30",
+   "position": "HB",
+   "alignment": "HB",
+   "unit": "offense",
+   "depthOrder": 1,
+   "grade": 75.1,
+   "gradeRank": 24,
+   "gradeRankOf": 59,
+   "height": 509,
+   "weight": 215,
+   "birthDate": "2000-03-21",
+   "eligibilityYear": 2023,
+   "status": "active",
+   "snapCounts": null,
+   "snapPct": null
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "groups": [
+  {
+   "id": 1,
+   "slug": "afc",
+   "name": "AFC",
+   "parentIds": []
+  },
+  {
+   "id": 2,
+   "slug": "afc-east",
+   "name": "AFC East",
+   "parentIds": [
+    1
+   ]
+  },
+  {
+   "id": 3,
+   "slug": "afc-north",
+   "name": "AFC North",
+   "parentIds": [
+    1
+   ]
+  }
+ ],
+ "columns": [
+  {
+   "key": "franchiseId",
+   "label": "Franchise id",
+   "type": "integer"
+  },
+  {
+   "key": "slug",
+   "label": "Slug",
+   "type": "string"
+  },
+  {
+   "key": "name",
+   "label": "Name",
+   "type": "string"
+  },
+  {
+   "key": "city",
+   "label": "City",
+   "type": "string"
+  },
+  {
+   "key": "nickname",
+   "label": "Nickname",
+   "type": "string"
+  },
+  {
+   "key": "abbreviation",
+   "label": "Abbr",
+   "type": "string"
+  },
+  {
+   "key": "primaryColor",
+   "label": "Primary colour",
+   "type": "string"
+  },
+  {
+   "key": "secondaryColor",
+   "label": "Secondary colour",
+   "type": "string"
+  },
+  {
+   "key": "groupIds",
+   "label": "Group ids",
+   "type": "string"
+  }
+ ],
+ "rows": [
+  {
+   "franchiseId": 1,
+   "slug": "arizona-cardinals",
+   "name": "Arizona Cardinals",
+   "city": "Arizona",
+   "nickname": "Cardinals",
+   "abbreviation": "ARZ",
+   "primaryColor": "#97233f",
+   "secondaryColor": "#ffffff",
+   "groupIds": "6;10"
+  },
+  {
+   "franchiseId": 2,
+   "slug": "atlanta-falcons",
+   "name": "Atlanta Falcons",
+   "city": "Atlanta",
+   "nickname": "Falcons",
+   "abbreviation": "ATL",
+   "primaryColor": "#a71930",
+   "secondaryColor": "#000000",
+   "groupIds": "6;9"
+  },
+  {
+   "franchiseId": 3,
+   "slug": "baltimore-ravens",
+   "name": "Baltimore Ravens",
+   "city": "Baltimore",
+   "nickname": "Ravens",
+   "abbreviation": "BLT",
+   "primaryColor": "#1a195f",
+   "secondaryColor": "#000000",
+   "groupIds": "1;3"
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: franchise_id
+  type: integer
+- description: ''
+  name: slug
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: city
+  type: character
+- description: ''
+  name: nickname
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+- description: ''
+  name: primary_color
+  type: character
+- description: ''
+  name: secondary_color
+  type: character
+- description: ''
+  name: group_ids
+  type: character
+kind: dataframe
+schema: team_directory

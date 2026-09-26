@@ -31,8 +31,9 @@ endpoints:
   path: /api/v1/facet/defense/run
   returns_schema: native/pff/run_defense_summary
   short: facet_run_defense_summary
-  summary: Facet report /defense/run (By Position leaderboard; add franchiseId for
-    By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId
+    for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -63,7 +64,8 @@ endpoints:
   path: /api/v1/facet/field_goal/summary
   returns_schema: native/pff/field_goal_summary
   short: facet_field_goal_summary
-  summary: Facet report /field_goal/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -95,7 +97,8 @@ endpoints:
   path: /api/v1/facet/defense/coverage
   returns_schema: native/pff/coverage_summary
   short: facet_coverage_summary
-  summary: Facet report /defense/coverage (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -127,7 +130,8 @@ endpoints:
   path: /api/v1/facet/kickoff/summary
   returns_schema: native/pff/kicking_summary
   short: facet_kicking_summary
-  summary: Facet report /kickoff/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -159,7 +163,8 @@ endpoints:
   path: /api/v1/facet/offense/blocking
   returns_schema: native/pff/blocking_summary
   short: facet_blocking_summary
-  summary: Facet report /offense/blocking (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -191,7 +196,8 @@ endpoints:
   path: /api/v1/facet/defense/summary
   returns_schema: native/pff/defense_summary
   short: facet_defense_summary
-  summary: Facet report /defense/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -223,7 +229,8 @@ endpoints:
   path: /api/v1/facet/offense/summary
   returns_schema: native/pff/offense_summary
   short: facet_offense_summary
-  summary: Facet report /offense/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -255,8 +262,9 @@ endpoints:
   path: /api/v1/facet/passing/allowed_pressure
   returns_schema: native/pff/passing_allowed_pressure
   short: facet_passing_allowed_pressure
-  summary: Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId
-    for By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add
+    franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -287,7 +295,8 @@ endpoints:
   path: /api/v1/facet/defense/pass_rush
   returns_schema: native/pff/pass_rush_summary
   short: facet_pass_rush_summary
-  summary: Facet report /defense/pass_rush (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -319,7 +328,8 @@ endpoints:
   path: /api/v1/facet/passing/concept
   returns_schema: native/pff/passing_concept
   short: facet_passing_concept
-  summary: Facet report /passing/concept (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -351,8 +361,9 @@ endpoints:
   path: /api/v1/facet/defense/coverage_scheme
   returns_schema: native/pff/coverage_scheme
   short: facet_coverage_scheme
-  summary: Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId
-    for By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add
+    franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -383,7 +394,8 @@ endpoints:
   path: /api/v1/facet/passing/detail
   returns_schema: native/pff/passing_detail_stats
   short: facet_passing_detail_stats
-  summary: Facet report /passing/detail (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -415,7 +427,8 @@ endpoints:
   path: /api/v1/facet/offense/run_blocking
   returns_schema: native/pff/run_blocking
   short: facet_run_blocking
-  summary: Facet report /offense/run_blocking (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -447,7 +460,8 @@ endpoints:
   path: /api/v1/facet/offense/pass_blocking
   returns_schema: native/pff/pass_blocking
   short: facet_pass_blocking
-  summary: Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -479,7 +493,8 @@ endpoints:
   path: /api/v1/facet/passing/summary
   returns_schema: native/pff/passing_summary
   short: facet_passing_summary
-  summary: Facet report /passing/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -511,7 +526,8 @@ endpoints:
   path: /api/v1/facet/punting/summary
   returns_schema: native/pff/punting_summary
   short: facet_punting_summary
-  summary: Facet report /punting/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -543,8 +559,9 @@ endpoints:
   path: /api/v1/facet/passing/depth
   returns_schema: native/pff/passing_depth
   short: facet_passing_depth
-  summary: Facet report /passing/depth (By Position leaderboard; add franchiseId for
-    By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId
+    for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -575,7 +592,8 @@ endpoints:
   path: /api/v1/facet/passing/pressure
   returns_schema: native/pff/passing_pressure
   short: facet_passing_pressure
-  summary: Facet report /passing/pressure (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -607,7 +625,8 @@ endpoints:
   path: /api/v1/facet/receiving/summary
   returns_schema: native/pff/receiving_summary
   short: facet_receiving_summary
-  summary: Facet report /receiving/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -639,7 +658,8 @@ endpoints:
   path: /api/v1/facet/return/summary
   returns_schema: native/pff/return_summary
   short: facet_return_summary
-  summary: Facet report /return/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -671,7 +691,8 @@ endpoints:
   path: /api/v1/facet/rushing/direction
   returns_schema: native/pff/rushing_direction_stats
   short: facet_rushing_direction_stats
-  summary: Facet report /rushing/direction (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -703,8 +724,9 @@ endpoints:
   path: /api/v1/facet/defense/coverage_matchup
   returns_schema: native/pff/receiving_coverage_stats
   short: facet_receiving_coverage_stats
-  summary: Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId
-    for By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add
+    franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -735,7 +757,8 @@ endpoints:
   path: /api/v1/facet/rushing/summary
   returns_schema: native/pff/rushing_summary
   short: facet_rushing_summary
-  summary: Facet report /rushing/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -767,7 +790,8 @@ endpoints:
   path: /api/v1/facet/signature/defense/slot_coverage
   returns_schema: native/pff/slot_coverages
   short: facet_slot_coverages
-  summary: Facet report /signature/defense/slot_coverage (By Position leaderboard;
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard;
     add franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -799,8 +823,9 @@ endpoints:
   path: /api/v1/facet/signature/pass-blocking/efficiency/line
   returns_schema: native/pff/pbes
   short: facet_pbes
-  summary: Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard;
-    add franchiseId for By Team, gameId for By Game)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position
+    leaderboard; add franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -831,7 +856,8 @@ endpoints:
   path: /api/v1/facet/signature/defense/outside_pass_rush
   returns_schema: native/pff/prps
   short: facet_prps
-  summary: Facet report /signature/defense/outside_pass_rush (By Position leaderboard;
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard;
     add franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -863,7 +889,8 @@ endpoints:
   path: /api/v1/facet/receiving/scheme
   returns_schema: native/pff/receiving_scheme
   short: facet_receiving_scheme
-  summary: Facet report /receiving/scheme (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -895,7 +922,8 @@ endpoints:
   path: /api/v1/facet/signature/passing/time_in_pocket
   returns_schema: native/pff/time_in_pockets
   short: facet_time_in_pockets
-  summary: Facet report /signature/passing/time_in_pocket (By Position leaderboard;
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard;
     add franchiseId for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -927,7 +955,8 @@ endpoints:
   path: /api/v1/facet/receiving/concept
   returns_schema: native/pff/receiving_concept
   short: facet_receiving_concept
-  summary: Facet report /receiving/concept (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -959,7 +988,8 @@ endpoints:
   path: /api/v1/facet/special/summary
   returns_schema: native/pff/special_teams_summary
   short: facet_special_teams_summary
-  summary: Facet report /special/summary (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -991,7 +1021,8 @@ endpoints:
   path: /api/v1/facet/receiving/depth
   returns_schema: native/pff/receiving_depth
   short: facet_receiving_depth
-  summary: Facet report /receiving/depth (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -1023,7 +1054,8 @@ endpoints:
   path: /api/v1/facet/receiving/coverage
   returns_schema: native/pff/receiving_coverage_stats
   short: facet_receiving_coverage
-  summary: Facet report /receiving/coverage (By Position leaderboard; add franchiseId
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId
     for By Team, gameId for By Game)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
@@ -1051,7 +1083,8 @@ endpoints:
   path: /api/v1/player/passing/summary
   returns_schema: native/pff/player_passing_summary
   short: player_passing_summary
-  summary: Player-detail report /passing/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1078,7 +1111,8 @@ endpoints:
   path: /api/v1/player/rushing/summary
   returns_schema: native/pff/player_rushing_summary
   short: player_rushing_summary
-  summary: Player-detail report /rushing/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1105,7 +1139,9 @@ endpoints:
   path: /api/v1/player/receiving/summary
   returns_schema: native/pff/player_receiving_summary
   short: player_receiving_summary
-  summary: Player-detail report /receiving/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /receiving/summary (per-week + totals for one
+    player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1132,7 +1168,8 @@ endpoints:
   path: /api/v1/player/defense/summary
   returns_schema: native/pff/player_defense_summary
   short: player_defense_summary
-  summary: Player-detail report /defense/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1159,7 +1196,8 @@ endpoints:
   path: /api/v1/player/offense/summary
   returns_schema: native/pff/player_offense_summary
   short: player_offense_summary
-  summary: Player-detail report /offense/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1186,7 +1224,8 @@ endpoints:
   path: /api/v1/player/snaps/summary
   returns_schema: native/pff/player_snaps_summary
   short: player_snaps_summary
-  summary: Player-detail report /snaps/summary (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1213,13 +1252,15 @@ endpoints:
   path: /api/v1/player/offense/blocking
   returns_schema: native/pff/player_offense_blocking
   short: player_offense_blocking
-  summary: Player-detail report /offense/blocking (per-week + totals for one player)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 - extra_params: []
   parser: parse_pff_report
   path: /api/v1/leagues
   returns_schema: native/pff/leagues
   short: leagues
-  summary: Leagues + seasons + week groups (bootstrap)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Leagues + seasons + week groups (bootstrap)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1234,7 +1275,8 @@ endpoints:
   path: /api/v1/teams
   returns_schema: native/pff/franchise_groups
   short: teams
-  summary: Teams / franchise groups + games for a league-season
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Teams / franchise groups + games for a league-season
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1253,7 +1295,8 @@ endpoints:
   path: /api/v1/teams/overview
   returns_schema: native/pff/team_overview
   short: teams_overview
-  summary: Team overview table (By Team landing)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Team overview table (By Team landing)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1272,7 +1315,8 @@ endpoints:
   path: /api/v1/games
   returns_schema: native/pff/games
   short: games
-  summary: Games list for league-season(-week)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Games list for league-season(-week)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1291,7 +1335,8 @@ endpoints:
   path: /api/v1/players
   returns_schema: native/pff/players
   short: players
-  summary: Player search (name=) or lookup (id=)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Player search (name=) or lookup (id=)
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1306,7 +1351,8 @@ endpoints:
   path: /api/v1/player/seasons
   returns_schema: native/pff/player_seasons
   short: player_seasons
-  summary: Seasons a player has data for
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Seasons a player has data for
 - extra_params:
   - description: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim
       modules.
@@ -1329,7 +1375,8 @@ endpoints:
   path: /api/v1/player/position/pivot
   returns_schema: native/pff/player_position_pivot
   short: player_position_pivot
-  summary: Positional-pivot export (JSON; UI also uses this for CSV download)
+  summary: LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API
+    wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 getter_module: sportsdataverse.nfl.pff_runtime
 host: https://premium.pff.com
 module: pff_core

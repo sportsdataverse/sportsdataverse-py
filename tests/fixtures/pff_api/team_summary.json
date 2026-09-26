@@ -1,0 +1,30 @@
+{
+ "team_summary": [
+  {
+   "away": false,
+   "franchise_id": 7,
+   "game_id": 23108,
+   "grades_coverage_defense": 79.7,
+   "grades_defense": 81.4,
+   "grades_misc_st": 51.5,
+   "grades_offense": 62.1,
+   "grades_overall": 69.7,
+   "grades_pass": 52.6,
+   "grades_pass_block": 63.2,
+   "grades_pass_route": 65.6,
+   "grades_pass_rush_defense": 62.8,
+   "grades_run": 60.9,
+   "grades_run_block": 60.8,
+   "grades_run_defense": 82.3,
+   "grades_tackle": 65.5,
+   "home": true,
+   "lock_status": "processed",
+   "opponent": "PIT",
+   "opponent_franchise_id": 25,
+   "points_allowed": 23,
+   "points_scored": 20,
+   "start": "2022-09-11T17:00:00Z",
+   "week": 1
+  }
+ ]
+}

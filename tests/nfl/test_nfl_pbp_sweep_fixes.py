@@ -787,7 +787,9 @@ def test_a_try_after_a_return_touchdown_starts_where_the_touchdown_ended() -> No
         assert r["wp_before"] == pytest.approx(1 - r["td_wp_after"], abs=1e-6)
         # a made extra point gains the kicking team a little, as it does after any touchdown
         assert 0 < r["wpa"] < 0.05, r["wpa"]
-    assert xps["wp_before"].to_list() == pytest.approx([0.038, 0.112], abs=0.005)
+    # the board before the try is the kickoff to come over the try's outcomes (fix/try-wp-after),
+    # a hair under the scorer's end state #581 pinned (0.038, 0.112)
+    assert xps["wp_before"].to_list() == pytest.approx([0.033, 0.112], abs=0.005)
 
 
 def test_a_timeout_between_a_touchdown_and_its_try_is_stated_for_its_own_team() -> None:
@@ -813,5 +815,98 @@ def test_a_timeout_between_a_touchdown_and_its_try_is_stated_for_its_own_team() 
     assert timeout["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
     assert timeout["wp_after"] == pytest.approx(timeout["wp_before"], abs=1e-6)
     assert xp["wp_before"] == pytest.approx(timeout["wp_after"], abs=1e-6)
-    assert xp["wp_before"] == pytest.approx(0.298, abs=0.005)
+    # the board before the try (fix/try-wp-after), against the 0.298 end state #581 pinned
+    assert xp["wp_before"] == pytest.approx(0.319, abs=0.005)
     assert 0 < xp["wpa"] < 0.05, xp["wpa"]
+
+
+# --- a try ends on the board the kickoff starts from ----------------------------------------
+
+
+def _try_kickoff_pairs(plays: pl.DataFrame) -> list[tuple[dict, dict]]:
+    rows = plays.sort("game_play_number").to_dicts()
+    out = []
+    for i, r in enumerate(rows):
+        if r["type.text"] not in ("Extra Point Good", "Extra Point Missed") or (r["period.number"] or 0) > 4:
+            continue
+        j = i + 1
+        while j < len(rows) and rows[j]["type.text"] in (
+            "Timeout",
+            "End Period",
+            "Two-Minute Warning",
+            "Official Timeout",
+        ):
+            j += 1
+        if j < len(rows) and "kickoff" in str(rows[j]["type.text"]).lower():
+            out.append((r, rows[j]))
+    return out
+
+
+def test_a_try_ends_on_the_board_the_kickoff_starts_from() -> None:
+    """231221029 (DET @ CAR 2003): a try's wp_after is the next kickoff's wp_before restated
+    for the kicking team, so a made extra point's WPA is its own small gain, not the model's
+    reading of ESPN's placeholder end state (306 made XPs read negative before).
+    """
+    plays = _process(231221029)
+    pairs = _try_kickoff_pairs(plays)
+    assert len(pairs) >= 3, len(pairs)
+    for t, k in pairs:
+        same = k["start.pos_team.id"] == t["start.pos_team.id"]
+        expect = k["wp_before"] if same else 1 - k["wp_before"]
+        assert t["wp_after"] == pytest.approx(expect, abs=1e-6), (t["id"], t["wp_after"], k["wp_before"])
+        if t["type.text"] == "Extra Point Good":
+            assert t["wpa"] > -0.01, (t["id"], t["wpa"])
+
+
+def test_a_try_after_an_unflagged_return_touchdown_still_hands_over() -> None:
+    """261126002 (2006): a punt return touchdown ESPN never flagged as a scoringPlay, then
+    its extra point and the kickoff. The touchdown's type says what its flag does not, so
+    the try starts on the touchdown's board, and its WPA is a made kick's small gain
+    rather than the placeholder's swing.
+    """
+    plays = _process(261126002).sort("game_play_number")
+    rows = plays.to_dicts()
+    found = 0
+    for i, r in enumerate(rows):
+        if r["type.text"] not in ("Extra Point Good", "Extra Point Missed") or i == 0:
+            continue
+        td = rows[i - 1]
+        if (
+            td["start.pos_team.id"] != td["end.pos_team.id"]
+            and td["scoringPlay"] is not True
+            and "Touchdown" in str(td["type.text"])
+        ):
+            found += 1
+            assert td["end.pos_team.id"] == r["start.pos_team.id"]
+            assert r["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
+            # ESPN's score columns never move in this feed, so the board's level is not
+            # trustworthy; what the fix guarantees is the chain, asserted above and below
+            nxt = rows[i + 1]
+            if "kickoff" in str(nxt["type.text"]).lower():
+                same = nxt["start.pos_team.id"] == r["start.pos_team.id"]
+                assert r["wp_after"] == pytest.approx(nxt["wp_before"] if same else 1 - nxt["wp_before"], abs=1e-6)
+    assert found >= 1
+
+
+def test_a_try_hands_to_the_kickoff_through_every_penalty_walked_off_before_it() -> None:
+    """261022011 (2006): an extra point, two penalties walked off on the kickoff spot, then
+    the kickoff. Every penalty in the run is dead-ball on the kickoff's board: the try's
+    wp_after is the kickoff's wp_before restated for the kicking team, and neither penalty
+    row moves win probability. (With only the last penalty recognised, the try never
+    reached the kickoff's board.)
+    """
+    rows = _process(261022011).sort("game_play_number").to_dicts()
+    i = next(k for k, r in enumerate(rows) if str(r["id"]) == "2610220111662")
+    xp = rows[i]
+    assert xp["type.text"] == "Extra Point Good"
+    pens, j = [], i + 1
+    while rows[j]["type.text"] in ("Penalty", "Timeout", "End Period", "Two-Minute Warning", "Official Timeout"):
+        if rows[j]["type.text"] == "Penalty":
+            pens.append(rows[j])
+        j += 1
+    ko = rows[j]
+    assert len(pens) == 2 and "kickoff" in str(ko["type.text"]).lower()
+    ko_wb = ko["wp_before"] if ko["start.pos_team.id"] == xp["start.pos_team.id"] else 1 - ko["wp_before"]
+    assert xp["wp_after"] == pytest.approx(ko_wb, abs=1e-6)
+    for pen in pens:
+        assert pen["wpa"] == pytest.approx(0.0, abs=1e-6)

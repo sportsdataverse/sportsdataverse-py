@@ -1,0 +1,698 @@
+frames:
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_play
+    type: numeric
+  - description: ''
+    name: epa_per_play_rank
+    type: integer
+  - description: ''
+    name: success_rate
+    type: numeric
+  - description: ''
+    name: success_rate_rank
+    type: integer
+  - description: ''
+    name: explosive_play_rate
+    type: numeric
+  - description: ''
+    name: explosive_play_rate_rank
+    type: integer
+  - description: ''
+    name: points_per_drive
+    type: numeric
+  - description: ''
+    name: points_per_drive_rank
+    type: integer
+  - description: ''
+    name: third_down_conversion_rate
+    type: numeric
+  - description: ''
+    name: third_down_conversion_rate_rank
+    type: integer
+  - description: ''
+    name: red_zone_conversion_rate
+    type: numeric
+  - description: ''
+    name: red_zone_conversion_rate_rank
+    type: integer
+  - description: ''
+    name: offensive_turnovers
+    type: integer
+  - description: ''
+    name: offensive_turnovers_rank
+    type: integer
+  - description: ''
+    name: wepa
+    type: numeric
+  - description: ''
+    name: wepa_rank
+    type: integer
+  - description: ''
+    name: conversion_after4
+    type: numeric
+  - description: ''
+    name: conversion_after4_rank
+    type: integer
+  section: offense-overall-success
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_pass_play
+    type: numeric
+  - description: ''
+    name: epa_per_pass_play_rank
+    type: integer
+  - description: ''
+    name: pass_success_rate
+    type: numeric
+  - description: ''
+    name: pass_success_rate_rank
+    type: integer
+  - description: ''
+    name: yards_per_attempt
+    type: numeric
+  - description: ''
+    name: yards_per_attempt_rank
+    type: integer
+  - description: ''
+    name: completion_percentage
+    type: numeric
+  - description: ''
+    name: completion_percentage_rank
+    type: integer
+  - description: ''
+    name: explosive_pass_rate
+    type: numeric
+  - description: ''
+    name: explosive_pass_rate_rank
+    type: integer
+  - description: ''
+    name: passer_rating
+    type: numeric
+  - description: ''
+    name: passer_rating_rank
+    type: integer
+  - description: ''
+    name: pressure_rate_against
+    type: numeric
+  - description: ''
+    name: pressure_rate_against_rank
+    type: integer
+  - description: ''
+    name: pressure_oe_allowed
+    type: numeric
+  - description: ''
+    name: pressure_oe_allowed_rank
+    type: integer
+  - description: ''
+    name: sack_rate_against
+    type: numeric
+  - description: ''
+    name: sack_rate_against_rank
+    type: integer
+  - description: ''
+    name: man_coverage_pct_against
+    type: numeric
+  - description: ''
+    name: man_coverage_pct_against_rank
+    type: integer
+  - description: ''
+    name: zone_coverage_pct_against
+    type: numeric
+  - description: ''
+    name: zone_coverage_pct_against_rank
+    type: integer
+  - description: ''
+    name: scramble_rushing_yards
+    type: integer
+  - description: ''
+    name: scramble_rushing_yards_rank
+    type: integer
+  - description: ''
+    name: scramble_rushing_touchdowns
+    type: integer
+  - description: ''
+    name: scramble_rushing_touchdowns_rank
+    type: integer
+  - description: ''
+    name: scramble_yards_per_carry
+    type: numeric
+  - description: ''
+    name: scramble_yards_per_carry_rank
+    type: integer
+  - description: ''
+    name: pass_play_pct
+    type: numeric
+  - description: ''
+    name: pass_play_pct_rank
+    type: integer
+  - description: ''
+    name: is_pass_oe
+    type: numeric
+  - description: ''
+    name: is_pass_oe_rank
+    type: integer
+  - description: ''
+    name: play_action_rate
+    type: numeric
+  - description: ''
+    name: play_action_rate_rank
+    type: integer
+  - description: ''
+    name: adot
+    type: numeric
+  - description: ''
+    name: adot_rank
+    type: integer
+  - description: ''
+    name: screen_rate
+    type: numeric
+  - description: ''
+    name: screen_rate_rank
+    type: integer
+  - description: ''
+    name: time_to_throw
+    type: numeric
+  - description: ''
+    name: time_to_throw_rank
+    type: integer
+  - description: ''
+    name: passes_behind_los_pct
+    type: numeric
+  - description: ''
+    name: passes_behind_los_pct_rank
+    type: integer
+  - description: ''
+    name: passes_short_pct
+    type: numeric
+  - description: ''
+    name: passes_short_pct_rank
+    type: integer
+  - description: ''
+    name: passes_intermediate_pct
+    type: numeric
+  - description: ''
+    name: passes_intermediate_pct_rank
+    type: integer
+  - description: ''
+    name: passes_deep_pct
+    type: numeric
+  - description: ''
+    name: passes_deep_pct_rank
+    type: integer
+  - description: ''
+    name: target_share_wr
+    type: numeric
+  - description: ''
+    name: target_share_wr_rank
+    type: integer
+  - description: ''
+    name: target_share_te
+    type: numeric
+  - description: ''
+    name: target_share_te_rank
+    type: integer
+  - description: ''
+    name: target_share_rb
+    type: numeric
+  - description: ''
+    name: target_share_rb_rank
+    type: integer
+  section: offense-passing
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_run_play
+    type: numeric
+  - description: ''
+    name: epa_per_run_play_rank
+    type: integer
+  - description: ''
+    name: rush_success_rate
+    type: numeric
+  - description: ''
+    name: rush_success_rate_rank
+    type: integer
+  - description: ''
+    name: explosive_run_rate
+    type: numeric
+  - description: ''
+    name: explosive_run_rate_rank
+    type: integer
+  - description: ''
+    name: designed_rushing_yards
+    type: integer
+  - description: ''
+    name: designed_rushing_yards_rank
+    type: integer
+  - description: ''
+    name: designed_rushing_touchdowns
+    type: integer
+  - description: ''
+    name: designed_rushing_touchdowns_rank
+    type: integer
+  - description: ''
+    name: designed_yards_per_carry
+    type: numeric
+  - description: ''
+    name: designed_yards_per_carry_rank
+    type: integer
+  - description: ''
+    name: yards_after_contact_per_carry
+    type: numeric
+  - description: ''
+    name: yards_after_contact_per_carry_rank
+    type: integer
+  - description: ''
+    name: yards_before_contact_per_carry
+    type: numeric
+  - description: ''
+    name: yards_before_contact_per_carry_rank
+    type: integer
+  - description: ''
+    name: run_stuff_rate
+    type: numeric
+  - description: ''
+    name: run_stuff_rate_rank
+    type: integer
+  - description: ''
+    name: run_play_pct
+    type: numeric
+  - description: ''
+    name: run_play_pct_rank
+    type: integer
+  - description: ''
+    name: run_rate_oe
+    type: numeric
+  - description: ''
+    name: run_rate_oe_rank
+    type: integer
+  - description: ''
+    name: zone_run_pct
+    type: numeric
+  - description: ''
+    name: zone_run_pct_rank
+    type: integer
+  - description: ''
+    name: gap_run_pct
+    type: numeric
+  - description: ''
+    name: gap_run_pct_rank
+    type: integer
+  - description: ''
+    name: inside_zone_rate
+    type: numeric
+  - description: ''
+    name: inside_zone_rate_rank
+    type: integer
+  - description: ''
+    name: outside_zone_rate
+    type: numeric
+  - description: ''
+    name: outside_zone_rate_rank
+    type: integer
+  - description: ''
+    name: man_duo_rate
+    type: numeric
+  - description: ''
+    name: man_duo_rate_rank
+    type: integer
+  - description: ''
+    name: power_rate
+    type: numeric
+  - description: ''
+    name: power_rate_rank
+    type: integer
+  - description: ''
+    name: counter_rate
+    type: numeric
+  - description: ''
+    name: counter_rate_rank
+    type: integer
+  - description: ''
+    name: pull_lead_rate
+    type: numeric
+  - description: ''
+    name: pull_lead_rate_rank
+    type: integer
+  section: offense-rushing
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_play_allowed
+    type: numeric
+  - description: ''
+    name: epa_per_play_allowed_rank
+    type: integer
+  - description: ''
+    name: success_rate_allowed
+    type: numeric
+  - description: ''
+    name: success_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: explosive_play_rate_allowed
+    type: numeric
+  - description: ''
+    name: explosive_play_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: red_zone_conversion_rate_allowed
+    type: numeric
+  - description: ''
+    name: red_zone_conversion_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: third_down_conversion_rate_allowed
+    type: numeric
+  - description: ''
+    name: third_down_conversion_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: defensive_turnovers
+    type: integer
+  - description: ''
+    name: defensive_turnovers_rank
+    type: integer
+  - description: ''
+    name: points_per_drive_allowed
+    type: numeric
+  - description: ''
+    name: points_per_drive_allowed_rank
+    type: integer
+  - description: ''
+    name: missed_tackle_rate
+    type: numeric
+  - description: ''
+    name: missed_tackle_rate_rank
+    type: integer
+  - description: ''
+    name: wepa_allowed
+    type: numeric
+  - description: ''
+    name: wepa_allowed_rank
+    type: integer
+  - description: ''
+    name: conversion_after4_allowed
+    type: numeric
+  - description: ''
+    name: conversion_after4_allowed_rank
+    type: integer
+  section: defense-overall-success
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_pass_play_allowed
+    type: numeric
+  - description: ''
+    name: epa_per_pass_play_allowed_rank
+    type: integer
+  - description: ''
+    name: pass_success_rate_allowed
+    type: numeric
+  - description: ''
+    name: pass_success_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: explosive_pass_rate_allowed
+    type: numeric
+  - description: ''
+    name: explosive_pass_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: yards_per_attempt_allowed
+    type: numeric
+  - description: ''
+    name: yards_per_attempt_allowed_rank
+    type: integer
+  - description: ''
+    name: completion_percentage_allowed
+    type: numeric
+  - description: ''
+    name: completion_percentage_allowed_rank
+    type: integer
+  - description: ''
+    name: passer_rating_allowed
+    type: numeric
+  - description: ''
+    name: passer_rating_allowed_rank
+    type: integer
+  - description: ''
+    name: passing_touchdowns_allowed
+    type: integer
+  - description: ''
+    name: passing_touchdowns_allowed_rank
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: interceptions_rank
+    type: integer
+  - description: ''
+    name: air_yard_pct_allowed
+    type: numeric
+  - description: ''
+    name: air_yard_pct_allowed_rank
+    type: integer
+  - description: ''
+    name: yac_pct_allowed
+    type: numeric
+  - description: ''
+    name: yac_pct_allowed_rank
+    type: integer
+  - description: ''
+    name: yac_per_reception_allowed
+    type: numeric
+  - description: ''
+    name: yac_per_reception_allowed_rank
+    type: integer
+  - description: ''
+    name: pressure_rate
+    type: numeric
+  - description: ''
+    name: pressure_rate_rank
+    type: integer
+  - description: ''
+    name: pressure_oe
+    type: numeric
+  - description: ''
+    name: pressure_oe_rank
+    type: integer
+  - description: ''
+    name: total_pressures
+    type: integer
+  - description: ''
+    name: total_pressures_rank
+    type: integer
+  - description: ''
+    name: sack_rate
+    type: numeric
+  - description: ''
+    name: sack_rate_rank
+    type: integer
+  - description: ''
+    name: sacks
+    type: integer
+  - description: ''
+    name: sacks_rank
+    type: integer
+  - description: ''
+    name: scramble_rushing_yards_allowed
+    type: integer
+  - description: ''
+    name: scramble_rushing_yards_allowed_rank
+    type: integer
+  - description: ''
+    name: scramble_rushing_touchdowns_allowed
+    type: integer
+  - description: ''
+    name: scramble_rushing_touchdowns_allowed_rank
+    type: integer
+  - description: ''
+    name: scramble_yards_per_carry_allowed
+    type: numeric
+  - description: ''
+    name: scramble_yards_per_carry_allowed_rank
+    type: integer
+  - description: ''
+    name: man_coverage_pct
+    type: numeric
+  - description: ''
+    name: man_coverage_pct_rank
+    type: integer
+  - description: ''
+    name: zone_coverage_pct
+    type: numeric
+  - description: ''
+    name: zone_coverage_pct_rank
+    type: integer
+  section: defense-passing
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: epa_per_run_play_allowed
+    type: numeric
+  - description: ''
+    name: epa_per_run_play_allowed_rank
+    type: integer
+  - description: ''
+    name: rush_success_rate_allowed
+    type: numeric
+  - description: ''
+    name: rush_success_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: explosive_run_rate_allowed
+    type: numeric
+  - description: ''
+    name: explosive_run_rate_allowed_rank
+    type: integer
+  - description: ''
+    name: designed_rushing_yards_allowed
+    type: integer
+  - description: ''
+    name: designed_rushing_yards_allowed_rank
+    type: integer
+  - description: ''
+    name: designed_rushing_touchdowns_allowed
+    type: integer
+  - description: ''
+    name: designed_rushing_touchdowns_allowed_rank
+    type: integer
+  - description: ''
+    name: designed_yards_per_carry_allowed
+    type: numeric
+  - description: ''
+    name: designed_yards_per_carry_allowed_rank
+    type: integer
+  - description: ''
+    name: yards_after_contact_per_carry_allowed
+    type: numeric
+  - description: ''
+    name: yards_after_contact_per_carry_allowed_rank
+    type: integer
+  - description: ''
+    name: yards_before_contact_per_carry_allowed
+    type: numeric
+  - description: ''
+    name: yards_before_contact_per_carry_allowed_rank
+    type: integer
+  - description: ''
+    name: stuff_rate
+    type: numeric
+  - description: ''
+    name: stuff_rate_rank
+    type: integer
+  section: defense-rushing
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: play_action_rate_against
+    type: numeric
+  - description: ''
+    name: play_action_rate_against_rank
+    type: integer
+  - description: ''
+    name: screen_rate_against
+    type: numeric
+  - description: ''
+    name: screen_rate_against_rank
+    type: integer
+  - description: ''
+    name: adot_against
+    type: numeric
+  - description: ''
+    name: adot_against_rank
+    type: integer
+  - description: ''
+    name: time_to_throw_against
+    type: numeric
+  - description: ''
+    name: time_to_throw_against_rank
+    type: integer
+  - description: ''
+    name: zone_run_pct_against
+    type: numeric
+  - description: ''
+    name: zone_run_pct_against_rank
+    type: integer
+  - description: ''
+    name: gap_run_pct_against
+    type: numeric
+  - description: ''
+    name: gap_run_pct_against_rank
+    type: integer
+  - description: ''
+    name: pass_rate_against
+    type: numeric
+  - description: ''
+    name: pass_rate_against_rank
+    type: integer
+  - description: ''
+    name: run_rate_against
+    type: numeric
+  - description: ''
+    name: run_rate_against_rank
+    type: integer
+  section: defense-opponent-tendencies
+kind: frames
+schema: team_stats

@@ -1,0 +1,2251 @@
+api: pff_api
+auth: true
+docstring:
+  example_import: true
+  headers_doc: 'optional headers dict reused across calls; an ``Authorization: Bearer
+    <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and
+    the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere
+    the call raises RuntimeError -- there is no anonymous access.'
+  raises:
+  - 'RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).'
+  - 'NoDataError: PFF answered 404 (no such route, report or team).'
+  - 'AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer
+    is unknown, never an empty frame.'
+  - 'ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).'
+  raw_doc: 'The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug:
+    rows}``); /v2 routes return ``{..meta.., columns, rows}``.'
+  see_also:
+  - name: PFF Developer API
+    note: reference + CLI guide
+    url: https://developer.pff.com
+  - name: nflverse
+    note: NFL data ecosystem
+    url: https://nflverse.nflverse.com
+endpoints:
+- parser: parse_pff_report
+  path: /v1/leagues
+  returns_schema: native/pff/leagues
+  short: ref_leagues
+  summary: List the leagues you can read, with their seasons and weeks
+- example_args:
+    league: nfl
+    season: 2022
+    week: 1
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week, and the THIRD positional argument of games — the one command
+      that takes a single week number rather than a comma-separated list.
+    name: week
+    query_key: week
+    required: true
+    type: int
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  parser: parse_pff_report
+  path: /v1/games
+  returns_schema: native/pff/games
+  short: ref_games
+  summary: List game results for a league, season and week
+- example_args:
+    league: nfl
+    name: burrow
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Exact player-id lookup, ref-players only.
+    name: id
+    query_key: id
+    type: int
+  - description: Free-text player-name search, ref-players only.
+    name: name
+    query_key: name
+    type: str
+  parser: parse_pff_report
+  path: /v1/players
+  returns_schema: native/pff/players
+  short: ref_players
+  summary: Search the player directory by name or id
+- example_args:
+    league: nfl
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  parser: parse_pff_report
+  path: /v1/teams
+  returns_schema: native/pff/franchise_groups
+  short: team_list
+  summary: List a season's teams, franchise groups and schedule
+- example_args:
+    league: nfl
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  parser: parse_pff_report
+  path: /v1/teams/overview
+  returns_schema: native/pff/team_overview
+  short: team_overview
+  summary: Season-to-date team report, one row per team
+- example_args:
+    franchise_id: 7
+    league: nfl
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id, and the THIRD positional argument of team-summary
+      — the report is franchise-scoped, so there is no all-teams form of it.
+    name: franchise_id
+    query_key: franchise_id
+    required: true
+    type: int
+  parser: parse_pff_report
+  path: /v1/teams/summary
+  returns_schema: native/pff_api/team_summary
+  short: team_summary
+  summary: Per-game team report for one franchise, one row per game
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  parser: parse_pff_report
+  path: /v1/player/seasons
+  returns_schema: native/pff/player_seasons
+  short: player_seasons
+  summary: List the seasons a player has data for
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  parser: parse_pff_report
+  path: /v1/player/snaps/summary
+  returns_schema: native/pff/player_snaps_summary
+  short: player_snaps_summary
+  summary: Snap counts for a player, broken out by position
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  parser: parse_pff_report
+  path: /v1/player/position/pivot
+  returns_schema: native/pff/player_position_pivot
+  short: player_position_pivot
+  summary: Player snap counts pivoted by position
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/offense/summary
+  returns_schema: native/pff/player_offense_summary
+  short: player_offense_summary
+  summary: Offense summary for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/offense/blocking
+  returns_schema: native/pff/player_offense_blocking
+  short: player_offense_blocking
+  summary: Blocking report for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/offense/pass_blocking
+  returns_schema: native/pff_api/player_offense_pass_blocking
+  short: player_offense_pass_blocking
+  summary: Pass-blocking report for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/offense/run_blocking
+  returns_schema: native/pff_api/player_offense_run_blocking
+  short: player_offense_run_blocking
+  summary: Run-blocking report for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/passing/summary
+  returns_schema: native/pff/player_passing_summary
+  short: player_passing_summary
+  summary: Passing summary for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_report
+  path: /v1/player/passing/concept
+  returns_schema: native/pff/passing_concept
+  short: player_passing_concept
+  summary: Passing by play concept for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_report
+  path: /v1/player/passing/depth
+  returns_schema: native/pff/passing_depth
+  short: player_passing_depth
+  summary: Passing by target depth for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_report
+  path: /v1/player/passing/pressure
+  returns_schema: native/pff/passing_pressure
+  short: player_passing_pressure
+  summary: Passing under pressure for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_report
+  path: /v1/player/rushing/direction
+  returns_schema: native/pff_api/player_rushing_direction
+  short: player_rushing_direction
+  summary: Rushing by direction for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/rushing/summary
+  returns_schema: native/pff/player_rushing_summary
+  short: player_rushing_summary
+  summary: Rushing summary for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year, taken as a positional argument.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_report
+  path: /v1/player/receiving/depth
+  returns_schema: native/pff/receiving_depth
+  short: player_receiving_depth
+  summary: Receiving by target depth for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/receiving/summary
+  returns_schema: native/pff/player_receiving_summary
+  short: player_receiving_summary
+  summary: Receiving summary for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/defense/summary
+  returns_schema: native/pff/player_defense_summary
+  short: player_defense_summary
+  summary: Defense summary for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/field_goal/summary
+  returns_schema: native/pff_api/player_field_goal_summary
+  short: player_field_goal_summary
+  summary: Field-goal kicking for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/kickoff/summary
+  returns_schema: native/pff_api/player_kickoff_summary
+  short: player_kickoff_summary
+  summary: Kickoffs for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/punting/summary
+  returns_schema: native/pff_api/player_punting_summary
+  short: player_punting_summary
+  summary: Punting for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/return/summary
+  returns_schema: native/pff_api/player_return_summary
+  short: player_return_summary
+  summary: Kick and punt returns for one player
+- example_args:
+    league: nfl
+    player_id: 28022
+    season: 2022
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, as a four-digit year.
+    name: season
+    query_key: season
+    type: int
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Player id, taken as a positional argument.
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  - description: Career-aggregate toggle, on the player report operations only.
+    name: career
+    query_key: career
+    type: str
+  parser: parse_pff_player_detail
+  path: /v1/player/special/summary
+  returns_schema: native/pff_api/player_special_summary
+  short: player_special_summary
+  summary: Special-teams summary for one player
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/offense/summary
+  returns_schema: native/pff/offense_summary
+  short: facet_offense_summary
+  summary: League-wide offense summary leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/offense/blocking
+  returns_schema: native/pff/blocking_summary
+  short: facet_offense_blocking
+  summary: League-wide blocking leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/offense/pass_blocking
+  returns_schema: native/pff/pass_blocking
+  short: facet_offense_pass_blocking
+  summary: League-wide pass-blocking leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/offense/run_blocking
+  returns_schema: native/pff/run_blocking
+  short: facet_offense_run_blocking
+  summary: League-wide run-blocking leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/allowed_pressure
+  returns_schema: native/pff/passing_allowed_pressure
+  short: facet_passing_allowed_pressure
+  summary: League-wide pressure-allowed leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/concept
+  returns_schema: native/pff/passing_concept
+  short: facet_passing_concept
+  summary: League-wide passing-by-concept leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/depth
+  returns_schema: native/pff/passing_depth
+  short: facet_passing_depth
+  summary: League-wide passing-by-depth leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/detail
+  returns_schema: native/pff/passing_detail_stats
+  short: facet_passing_detail
+  summary: League-wide passing detail leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/pressure
+  returns_schema: native/pff/passing_pressure
+  short: facet_passing_pressure
+  summary: League-wide passing-under-pressure leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/passing/summary
+  returns_schema: native/pff/passing_summary
+  short: facet_passing_summary
+  summary: League-wide passing summary leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/receiving/concept
+  returns_schema: native/pff/receiving_concept
+  short: facet_receiving_concept
+  summary: League-wide receiving-by-concept leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/receiving/coverage
+  returns_schema: native/pff/receiving_coverage_stats
+  short: facet_receiving_coverage
+  summary: League-wide receiving-versus-coverage leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/receiving/depth
+  returns_schema: native/pff/receiving_depth
+  short: facet_receiving_depth
+  summary: League-wide receiving-by-depth leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/receiving/scheme
+  returns_schema: native/pff/receiving_scheme
+  short: facet_receiving_scheme
+  summary: League-wide receiving-by-scheme leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/receiving/summary
+  returns_schema: native/pff/receiving_summary
+  short: facet_receiving_summary
+  summary: League-wide receiving summary leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/rushing/direction
+  returns_schema: native/pff/rushing_direction_stats
+  short: facet_rushing_direction
+  summary: League-wide rushing-by-direction leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/rushing/summary
+  returns_schema: native/pff/rushing_summary
+  short: facet_rushing_summary
+  summary: League-wide rushing summary leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/coverage
+  returns_schema: native/pff/coverage_summary
+  short: facet_defense_coverage
+  summary: League-wide coverage leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/coverage_scheme
+  returns_schema: native/pff/coverage_scheme
+  short: facet_defense_coverage_scheme
+  summary: League-wide coverage-by-scheme leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/coverage_matchup
+  returns_schema: native/pff/receiving_coverage_stats
+  short: facet_defense_coverage_matchup
+  summary: League-wide coverage matchup leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/pass_rush
+  returns_schema: native/pff/pass_rush_summary
+  short: facet_defense_pass_rush
+  summary: League-wide pass-rush leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/run
+  returns_schema: native/pff/run_defense_summary
+  short: facet_defense_run
+  summary: League-wide run-defense leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/defense/summary
+  returns_schema: native/pff/defense_summary
+  short: facet_defense_summary
+  summary: League-wide defense summary leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/field_goal/summary
+  returns_schema: native/pff/field_goal_summary
+  short: facet_field_goal_summary
+  summary: League-wide field-goal kicking leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/kickoff/summary
+  returns_schema: native/pff/kicking_summary
+  short: facet_kickoff_summary
+  summary: League-wide kickoff leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/punting/summary
+  returns_schema: native/pff/punting_summary
+  short: facet_punting_summary
+  summary: League-wide punting leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/return/summary
+  returns_schema: native/pff/return_summary
+  short: facet_return_summary
+  summary: League-wide return leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+  extra_params:
+  - description: League slug for the leaderboard commands — exactly nfl, ncaa, hs,
+      aaf and ufl are recognised; anything else is rejected.
+    name: league
+    query_key: league
+    type: str
+  - description: Season for the leaderboard commands.
+    name: season
+    query_key: season
+    type: str
+  - description: Week filter.
+    name: week
+    query_key: week
+    type: str
+  - description: Franchise (team) id.
+    name: franchise_id
+    query_key: franchise_id
+    type: int
+  - description: Single-game filter, facet family only, forwarded uncoerced.
+    name: game_id
+    query_key: game_id
+    type: int
+  - description: NCAA division fan-out, facet family only, and **only honoured when
+      league=ncaa** — for any other league it is ignored entirely.
+    name: division
+    query_key: division
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/special/summary
+  returns_schema: native/pff/special_teams_summary
+  short: facet_special_summary
+  summary: League-wide special-teams leaderboard
+- example_args:
+    league: nfl
+    season: '2022'
+    week: '1'
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, and the SECOND positional argument of the four signature
+      commands.
+    name: season
+    query_key: season
+    required: true
+    type: str
+  - description: Week, and the THIRD positional argument of the four signature commands.
+    name: week
+    query_key: week
+    required: true
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/signature/passing/time_in_pocket
+  returns_schema: native/pff/time_in_pockets
+  short: signature_passing_time_in_pocket
+  summary: 'Signature stat: time in pocket'
+- example_args:
+    league: nfl
+    season: '2022'
+    week: '1'
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, and the SECOND positional argument of the four signature
+      commands.
+    name: season
+    query_key: season
+    required: true
+    type: str
+  - description: Week, and the THIRD positional argument of the four signature commands.
+    name: week
+    query_key: week
+    required: true
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/signature/pass-blocking/efficiency/line
+  returns_schema: native/pff/pbes
+  short: signature_pass_blocking_efficiency_line
+  summary: 'Signature stat: pass-blocking efficiency, by line'
+- example_args:
+    league: nfl
+    season: '2022'
+    week: '1'
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, and the SECOND positional argument of the four signature
+      commands.
+    name: season
+    query_key: season
+    required: true
+    type: str
+  - description: Week, and the THIRD positional argument of the four signature commands.
+    name: week
+    query_key: week
+    required: true
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/signature/defense/outside_pass_rush
+  returns_schema: native/pff/prps
+  short: signature_defense_outside_pass_rush
+  summary: 'Signature stat: outside pass rush'
+- example_args:
+    league: nfl
+    season: '2022'
+    week: '1'
+  extra_params:
+  - description: League slug, and the FIRST positional argument of every command that
+      takes one — every command except the facet leaderboards, where --league stays
+      a flag because --game alone is a complete request.
+    name: league
+    query_key: league
+    required: true
+    type: str
+  - description: Season, and the SECOND positional argument of the four signature
+      commands.
+    name: season
+    query_key: season
+    required: true
+    type: str
+  - description: Week, and the THIRD positional argument of the four signature commands.
+    name: week
+    query_key: week
+    required: true
+    type: str
+  parser: parse_pff_report
+  path: /v1/facet/signature/defense/slot_coverage
+  returns_schema: native/pff/slot_coverages
+  short: signature_defense_slot_coverage
+  summary: 'Signature stat: slot coverage'
+- path: /v1/auth/whoami
+  short: whoami
+  summary: Show what this API believes about the current credential
+- example_args:
+    league: nfl
+    report: offense
+    season: 2022
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'Which part of the season to cover: REG (regular season), PO (playoffs)
+      or REGPO (both, the default).'
+    name: week_group
+    query_key: weekGroup
+    type: str
+  - description: Narrow the report to one week of the weekGroup — or, with weekTo,
+      to a span of weeks.
+    name: week
+    query_key: week
+    type: int
+  - description: The last week of a span that starts at week; requires week.
+    name: week_to
+    query_key: weekTo
+    type: int
+  parser: parse_pff_v2_table
+  path: /v2/{league}/positions/reports/{report}
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: 'Which report: offense, passing, passing-depth, passing-pressure,
+      receiving, receiving-depth, rushing, blocking, pass-blocking, run-blocking,
+      defense, run-defense, pass-rush, coverage, special-teams, kick-returns, field-goals,
+      punting, kickoffs — the same vocabulary as team-report.'
+    name: report
+    required: true
+    type: str
+  returns_schema: native/pff_api/position_report
+  short: position_report
+  summary: One of nineteen player reports for the whole league, one row per player
+- example_args:
+    league: nfl
+    season: 2022
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_directory
+  short: team_directory
+  summary: The league's teams for a season, with ids, slugs, colours and groups
+- example_args:
+    league: nfl
+    season: 2022
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'Which part of the season to cover: REG (regular season), PO (playoffs)
+      or REGPO (both, the default).'
+    name: week_group
+    query_key: weekGroup
+    type: str
+  - description: Comma-separated week ids to cover instead of a whole weekGroup —
+      1,2,3 is the first three regular-season weeks.
+    name: week_ids
+    query_key: weekIds
+    type: str
+  - description: Which stat category the table covers.
+    name: category
+    query_key: category
+    type: str
+  - description: 'Which teams the ranks are computed against — and which rows come
+      back: league (every team, the default), a conference (afc, nfc) or a division
+      (afc-east … nfc-west).'
+    name: scope
+    query_key: scope
+    type: str
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/stats
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_stats
+  short: team_stats
+  summary: Team stats table for one category, every value ranked against the scope
+- example_args:
+    league: nfl
+    season: 2022
+    team: cincinnati-bengals
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/{team}/roster
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: The team, as its slug (los-angeles-rams) or its numeric franchise
+      id (26) — both resolve through the league's team directory for the season, and
+      both produce the same answer.
+    name: team
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_roster
+  short: team_roster
+  summary: A team's depth-chart roster with grades, ranks and snap counts
+- example_args:
+    league: nfl
+    season: 2022
+    team: cincinnati-bengals
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/{team}/schedule
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: The team, as its slug (los-angeles-rams) or its numeric franchise
+      id (26) — both resolve through the league's team directory for the season, and
+      both produce the same answer.
+    name: team
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_schedule
+  short: team_schedule
+  summary: A team's season schedule, with results and strength of schedule
+- example_args:
+    league: nfl
+    season: 2022
+    team: cincinnati-bengals
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'Which part of the season to cover: REG (regular season), PO (playoffs)
+      or REGPO (both, the default).'
+    name: week_group
+    query_key: weekGroup
+    type: str
+  - description: Which position group the leaders come from — receiving (the default),
+      passing, rushing or defense.
+    name: group
+    query_key: group
+    type: str
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/{team}/leaders
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: The team, as its slug (los-angeles-rams) or its numeric franchise
+      id (26) — both resolve through the league's team directory for the season, and
+      both produce the same answer.
+    name: team
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_leaders
+  short: team_leaders
+  summary: A team's leaders for one position group, with rank and percentile
+- example_args:
+    league: nfl
+    season: 2022
+    team: cincinnati-bengals
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'Which part of the season to cover: REG (regular season), PO (playoffs)
+      or REGPO (both, the default).'
+    name: week_group
+    query_key: weekGroup
+    type: str
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/{team}/reports/rushing-direction
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: The team, as its slug (los-angeles-rams) or its numeric franchise
+      id (26) — both resolve through the league's team directory for the season, and
+      both produce the same answer.
+    name: team
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_rushing_direction
+  short: team_rushing_direction
+  summary: A team's rushing by direction, one row per rusher and gap, plus totals
+- example_args:
+    league: nfl
+    report: offense
+    season: 2022
+    team: cincinnati-bengals
+  extra_params:
+  - description: 'Season, as a four-digit year: 2006 or later, and at most one year
+      past the current season.'
+    name: season
+    query_key: season
+    type: int
+  - description: 'Which part of the season to cover: REG (regular season), PO (playoffs)
+      or REGPO (both, the default).'
+    name: week_group
+    query_key: weekGroup
+    type: str
+  - description: Narrow the report to one week of the weekGroup — or, with weekTo,
+      to a span of weeks.
+    name: week
+    query_key: week
+    type: int
+  - description: The last week of a span that starts at week; requires week.
+    name: week_to
+    query_key: weekTo
+    type: int
+  parser: parse_pff_v2_table
+  path: /v2/{league}/teams/{team}/reports/{report}
+  path_params:
+  - description: 'League slug: nfl or ncaa.'
+    name: league
+    required: true
+    type: str
+  - description: The team, as its slug (los-angeles-rams) or its numeric franchise
+      id (26) — both resolve through the league's team directory for the season, and
+      both produce the same answer.
+    name: team
+    required: true
+    type: str
+  - description: 'Which report: offense, passing, passing-depth, passing-pressure,
+      receiving, receiving-depth, rushing, blocking, pass-blocking, run-blocking,
+      defense, run-defense, pass-rush, coverage, special-teams, kick-returns, field-goals,
+      punting, kickoffs.'
+    name: report
+    required: true
+    type: str
+  returns_schema: native/pff_api/team_report
+  short: team_report
+  summary: One of nineteen player reports for a team, one row per player
+getter_module: sportsdataverse.nfl.pff_api_runtime
+host: https://api.pff.com
+module: pff_api
+name_pattern: pff_api_{short}
+parser_module: nfl.pff_parsers
+runtime_imports:
+- _get

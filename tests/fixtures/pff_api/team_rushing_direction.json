@@ -1,0 +1,247 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "weekGroup": "REGPO",
+ "team": {
+  "franchiseId": 7,
+  "slug": "cincinnati-bengals",
+  "abbreviation": "CIN",
+  "name": "Cincinnati Bengals"
+ },
+ "columns": [
+  {
+   "key": "playerId",
+   "label": "Player id",
+   "type": "integer"
+  },
+  {
+   "key": "player",
+   "label": "Player",
+   "type": "string"
+  },
+  {
+   "key": "position",
+   "label": "Pos",
+   "type": "string"
+  },
+  {
+   "key": "direction",
+   "label": "Direction",
+   "type": "string"
+  },
+  {
+   "key": "attempts",
+   "label": "ATT",
+   "type": "integer"
+  },
+  {
+   "key": "yards",
+   "label": "YDS",
+   "type": "integer"
+  },
+  {
+   "key": "ypa",
+   "label": "YPA",
+   "type": "number"
+  },
+  {
+   "key": "touchdowns",
+   "label": "TD",
+   "type": "integer"
+  },
+  {
+   "key": "firstDowns",
+   "label": "1st",
+   "type": "integer"
+  },
+  {
+   "key": "explosive",
+   "label": "10+",
+   "type": "integer"
+  },
+  {
+   "key": "yardsAfterContact",
+   "label": "YCO",
+   "type": "integer"
+  },
+  {
+   "key": "ycoAttempt",
+   "label": "YCO/A",
+   "type": "number"
+  },
+  {
+   "key": "longest",
+   "label": "LNG",
+   "type": "integer"
+  },
+  {
+   "key": "avoidedTackles",
+   "label": "MTF",
+   "type": "integer"
+  },
+  {
+   "key": "fumbles",
+   "label": "FUM",
+   "type": "integer"
+  }
+ ],
+ "rows": [
+  {
+   "playerId": 11803,
+   "player": "Joe Mixon",
+   "position": "HB",
+   "direction": "LE",
+   "attempts": 24,
+   "yards": 106,
+   "ypa": 4.4,
+   "touchdowns": 2,
+   "firstDowns": 6,
+   "explosive": 4,
+   "yardsAfterContact": 83,
+   "ycoAttempt": 3.46,
+   "longest": 14,
+   "avoidedTackles": 6,
+   "fumbles": 0
+  },
+  {
+   "playerId": 11803,
+   "player": "Joe Mixon",
+   "position": "HB",
+   "direction": "LT",
+   "attempts": 17,
+   "yards": 49,
+   "ypa": 2.9,
+   "touchdowns": 0,
+   "firstDowns": 4,
+   "explosive": 1,
+   "yardsAfterContact": 33,
+   "ycoAttempt": 1.94,
+   "longest": 12,
+   "avoidedTackles": 2,
+   "fumbles": 0
+  },
+  {
+   "playerId": 11803,
+   "player": "Joe Mixon",
+   "position": "HB",
+   "direction": "LG",
+   "attempts": 32,
+   "yards": 98,
+   "ypa": 3.1,
+   "touchdowns": 3,
+   "firstDowns": 9,
+   "explosive": 3,
+   "yardsAfterContact": 79,
+   "ycoAttempt": 2.47,
+   "longest": 16,
+   "avoidedTackles": 4,
+   "fumbles": 0
+  }
+ ],
+ "totalsColumns": [
+  {
+   "key": "direction",
+   "label": "Direction",
+   "type": "string"
+  },
+  {
+   "key": "attempts",
+   "label": "ATT",
+   "type": "integer"
+  },
+  {
+   "key": "yards",
+   "label": "YDS",
+   "type": "integer"
+  },
+  {
+   "key": "ypa",
+   "label": "YPA",
+   "type": "number"
+  },
+  {
+   "key": "touchdowns",
+   "label": "TD",
+   "type": "integer"
+  },
+  {
+   "key": "firstDowns",
+   "label": "1st",
+   "type": "integer"
+  },
+  {
+   "key": "explosive",
+   "label": "10+",
+   "type": "integer"
+  },
+  {
+   "key": "yardsAfterContact",
+   "label": "YCO",
+   "type": "integer"
+  },
+  {
+   "key": "ycoAttempt",
+   "label": "YCO/A",
+   "type": "number"
+  },
+  {
+   "key": "longest",
+   "label": "LNG",
+   "type": "integer"
+  },
+  {
+   "key": "avoidedTackles",
+   "label": "MTF",
+   "type": "integer"
+  },
+  {
+   "key": "fumbles",
+   "label": "FUM",
+   "type": "integer"
+  }
+ ],
+ "teamTotals": [
+  {
+   "direction": "JS-L",
+   "attempts": 3,
+   "yards": 10,
+   "ypa": 3.3,
+   "touchdowns": 0,
+   "firstDowns": 1,
+   "explosive": 1,
+   "yardsAfterContact": 9,
+   "ycoAttempt": 3,
+   "longest": 11,
+   "avoidedTackles": 1,
+   "fumbles": 0
+  },
+  {
+   "direction": "LE",
+   "attempts": 41,
+   "yards": 151,
+   "ypa": 3.7,
+   "touchdowns": 2,
+   "firstDowns": 7,
+   "explosive": 4,
+   "yardsAfterContact": 126,
+   "ycoAttempt": 3.07,
+   "longest": 14,
+   "avoidedTackles": 7,
+   "fumbles": 0
+  },
+  {
+   "direction": "LT",
+   "attempts": 23,
+   "yards": 76,
+   "ypa": 3.3,
+   "touchdowns": 0,
+   "firstDowns": 4,
+   "explosive": 1,
+   "yardsAfterContact": 47,
+   "ycoAttempt": 2.04,
+   "longest": 12,
+   "avoidedTackles": 2,
+   "fumbles": 0
+  }
+ ]
+}

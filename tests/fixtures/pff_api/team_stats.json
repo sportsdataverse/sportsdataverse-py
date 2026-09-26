@@ -1,0 +1,186 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "category": "offense-overall-success",
+ "scope": "afc-north",
+ "weekGroup": "REGPO",
+ "updatedAt": "2026-09-02T16:05:41.662Z",
+ "columns": [
+  {
+   "key": "teamId",
+   "label": "Team id",
+   "type": "integer"
+  },
+  {
+   "key": "abbreviation",
+   "label": "Team",
+   "type": "string"
+  },
+  {
+   "key": "name",
+   "label": "Name",
+   "type": "string"
+  },
+  {
+   "key": "epaPerPlay",
+   "label": "EPA / play",
+   "type": "number"
+  },
+  {
+   "key": "epaPerPlayRank",
+   "label": "EPA / play rank",
+   "type": "integer"
+  },
+  {
+   "key": "successRate",
+   "label": "Success rate",
+   "type": "number"
+  },
+  {
+   "key": "successRateRank",
+   "label": "Success rate rank",
+   "type": "integer"
+  },
+  {
+   "key": "explosivePlayRate",
+   "label": "Explosive play rate",
+   "type": "number"
+  },
+  {
+   "key": "explosivePlayRateRank",
+   "label": "Explosive play rate rank",
+   "type": "integer"
+  },
+  {
+   "key": "pointsPerDrive",
+   "label": "Points per drive",
+   "type": "number"
+  },
+  {
+   "key": "pointsPerDriveRank",
+   "label": "Points per drive rank",
+   "type": "integer"
+  },
+  {
+   "key": "thirdDownConversionRate",
+   "label": "Third down conversion rate",
+   "type": "number"
+  },
+  {
+   "key": "thirdDownConversionRateRank",
+   "label": "Third down conversion rate rank",
+   "type": "integer"
+  },
+  {
+   "key": "redZoneConversionRate",
+   "label": "Red zone conversion rate",
+   "type": "number"
+  },
+  {
+   "key": "redZoneConversionRateRank",
+   "label": "Red zone conversion rate rank",
+   "type": "integer"
+  },
+  {
+   "key": "offensiveTurnovers",
+   "label": "Offensive turnovers",
+   "type": "integer"
+  },
+  {
+   "key": "offensiveTurnoversRank",
+   "label": "Offensive turnovers rank",
+   "type": "integer"
+  },
+  {
+   "key": "wepa",
+   "label": "Weighted EPA / play",
+   "type": "number"
+  },
+  {
+   "key": "wepaRank",
+   "label": "Weighted EPA / play rank",
+   "type": "integer"
+  },
+  {
+   "key": "conversionAfter4",
+   "label": "Series conversion rate",
+   "type": "number"
+  },
+  {
+   "key": "conversionAfter4Rank",
+   "label": "Series conversion rate rank",
+   "type": "integer"
+  }
+ ],
+ "rows": [
+  {
+   "teamId": 3,
+   "abbreviation": "BAL",
+   "name": "Baltimore Ravens",
+   "epaPerPlay": -0.0011422182468694172,
+   "epaPerPlayRank": 4,
+   "successRate": 0.45796064400715564,
+   "successRateRank": 3,
+   "explosivePlayRate": 0.15506035283194058,
+   "explosivePlayRateRank": 1,
+   "pointsPerDrive": 1.7246376811594204,
+   "pointsPerDriveRank": 2,
+   "thirdDownConversionRate": 0.4148471615720524,
+   "thirdDownConversionRateRank": 3,
+   "redZoneConversionRate": 0.36363636363636365,
+   "redZoneConversionRateRank": 4,
+   "offensiveTurnovers": 32,
+   "offensiveTurnoversRank": 4,
+   "wepa": 0.04061080053667263,
+   "wepaRank": 2,
+   "conversionAfter4": 0.7214428857715431,
+   "conversionAfter4Rank": 2
+  },
+  {
+   "teamId": 7,
+   "abbreviation": "CIN",
+   "name": "Cincinnati Bengals",
+   "epaPerPlay": 0.08366720386784852,
+   "epaPerPlayRank": 1,
+   "successRate": 0.48751007252215955,
+   "successRateRank": 1,
+   "explosivePlayRate": 0.12468407750631845,
+   "explosivePlayRateRank": 3,
+   "pointsPerDrive": 2.1126126126126126,
+   "pointsPerDriveRank": 1,
+   "thirdDownConversionRate": 0.4773662551440329,
+   "thirdDownConversionRateRank": 1,
+   "redZoneConversionRate": 0.5,
+   "redZoneConversionRateRank": 1,
+   "offensiveTurnovers": 23,
+   "offensiveTurnoversRank": 1,
+   "wepa": 0.09219242546333602,
+   "wepaRank": 1,
+   "conversionAfter4": 0.7622504537205081,
+   "conversionAfter4Rank": 1
+  },
+  {
+   "teamId": 8,
+   "abbreviation": "CLE",
+   "name": "Cleveland Browns",
+   "epaPerPlay": 0.019342293906810033,
+   "epaPerPlayRank": 2,
+   "successRate": 0.4507168458781362,
+   "successRateRank": 4,
+   "explosivePlayRate": 0.146455223880597,
+   "explosivePlayRateRank": 2,
+   "pointsPerDrive": 1.700507614213198,
+   "pointsPerDriveRank": 3,
+   "thirdDownConversionRate": 0.3793103448275862,
+   "thirdDownConversionRateRank": 4,
+   "redZoneConversionRate": 0.4225352112676056,
+   "redZoneConversionRateRank": 2,
+   "offensiveTurnovers": 24,
+   "offensiveTurnoversRank": 3,
+   "wepa": 0.013324260752688173,
+   "wepaRank": 4,
+   "conversionAfter4": 0.7214137214137214,
+   "conversionAfter4Rank": 3
+  }
+ ]
+}

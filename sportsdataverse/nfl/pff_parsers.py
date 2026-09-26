@@ -32,9 +32,24 @@ from sportsdataverse.dl_utils import underscore
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import
     import pandas as pd
 
-__all__ = ["parse_pff_report", "parse_pff_player_detail", "parse_pff_matrix"]
+__all__ = ["parse_pff_report", "parse_pff_player_detail", "parse_pff_matrix", "parse_pff_v2_table"]
 
 _MATRIX_KEYS = {"defenders", "receivers", "versus"}
+
+# The Developer API (api.pff.com) may add a ``restricted`` block (columns withheld by the
+# caller's entitlement) BESIDE the report envelope. It is metadata, not a table: every
+# single-envelope rule below must look past it or the report comes back as a dict/empty.
+_META_KEYS = {"restricted"}
+
+# /v2 tables: row key -> the key holding that table's self-described columns
+_V2_TABLES = {"rows": "columns", "teamTotals": "totalsColumns"}
+_V2_DTYPES = {"integer": pl.Int64, "number": pl.Float64, "boolean": pl.Boolean, "string": pl.Utf8}
+
+
+def _envelope(raw: dict) -> dict:
+    """``raw`` without the non-table metadata keys (``restricted``)."""
+    return {k: v for k, v in raw.items() if k not in _META_KEYS}
+
 
 # columns that are integer join keys / ids and must be kept Int64 (never float, never str)
 _ID_COLS = (
@@ -135,6 +150,7 @@ def parse_pff_report(
     """
     if not isinstance(raw, dict) or not raw:
         return _maybe_pandas(pl.DataFrame(), return_as_pandas)
+    raw = _envelope(raw)
 
     if report is not None:
         val = raw.get(report)
@@ -239,6 +255,7 @@ def parse_pff_player_detail(
     """
     if not isinstance(raw, dict) or not raw:
         return _maybe_pandas(pl.DataFrame(), return_as_pandas)
+    raw = _envelope(raw)
     keys = list(raw.keys())
     obj = raw[keys[0]] if len(keys) == 1 and isinstance(raw[keys[0]], dict) else raw
     if not isinstance(obj, dict):
@@ -265,3 +282,80 @@ def parse_pff_player_detail(
         flat.append(r)
 
     return _maybe_pandas(_frame(flat), return_as_pandas)
+
+
+def parse_pff_v2_table(
+    raw: dict,
+    table: str = "rows",
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Parse a PFF Developer API ``/v2`` table body into a tidy frame.
+
+    Every ``/v2`` body is ``{...metadata..., columns: [{key, label, type}], rows: [...]}``;
+    ``team-rushing-direction`` carries a second table (``teamTotals`` described by
+    ``totalsColumns``). The declared column types ARE the schema: integer -> ``Int64``
+    (so ``player_id`` / ``team_id`` / ``franchise_id`` stay integer join keys), number ->
+    ``Float64``, boolean -> ``Boolean``, string -> ``Utf8``. Keys are snake-cased
+    (``epaPerPlayRank`` -> ``epa_per_play_rank``). Metadata beside the table (``team``,
+    ``sos``, ``qualification``, ``updatedAt``, the echoed week span) is not a column --
+    read it from the raw body (``return_parsed=False``).
+
+    Args:
+        raw: Raw JSON body from an ``https://api.pff.com/v2/...`` endpoint.
+        table: Which table to return: ``"rows"`` (default) or ``"teamTotals"``.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per table row, columns in PFF's declared order. An empty or malformed body
+        returns a zero-row frame that still carries the declared columns and dtypes.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.pff_api import pff_api_team_stats
+
+            df = pff_api_team_stats(league="nfl", season=2024, category="offense-passing")
+            print(df.sort("epa_per_play_rank").head())
+
+        Parse a raw body yourself::
+
+            from sportsdataverse.nfl.pff_parsers import parse_pff_v2_table
+
+            raw = pff_api_team_stats(league="nfl", season=2024, return_parsed=False)
+            print(raw["updatedAt"], parse_pff_v2_table(raw).shape)
+
+        See Also:
+            * `PFF Developer API`_ -- the ``/v2`` table contract
+            * `nflverse`_ -- NFL data ecosystem
+
+        .. _PFF Developer API: https://developer.pff.com
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    body = raw if isinstance(raw, dict) else {}
+    declared = [
+        c for c in body.get(_V2_TABLES.get(table, f"{table}Columns")) or [] if isinstance(c, dict) and c.get("key")
+    ]
+    schema = {underscore(c["key"]): _V2_DTYPES.get(str(c.get("type")), pl.Utf8) for c in declared}
+    # ids are join keys: Int64 whatever the declaration says (an empty answer declares them string)
+    schema = {c: (pl.Int64 if c == "id" or c.endswith("_id") else t) for c, t in schema.items()}
+    rows = [r for r in body.get(table) or [] if isinstance(r, dict)]
+    if not rows:
+        # PFF declares an all-null column -- and EVERY column of an empty answer -- "string": that
+        # carries no type, so it is Null (which unions with any week's real dtype)
+        return _maybe_pandas(
+            pl.DataFrame(schema={c: (pl.Null if t == pl.Utf8 else t) for c, t in schema.items()}), return_as_pandas
+        )
+    df = pl.DataFrame([{k: _scalarize(v) for k, v in r.items()} for r in rows], infer_schema_length=None)
+    df = df.rename({c: underscore(c) for c in df.columns})
+    for c, t in schema.items():
+        if c not in df.columns:
+            df = df.with_columns(pl.lit(None, dtype=pl.Null if t == pl.Utf8 else t).alias(c))
+        elif t == pl.Utf8 and df[c].null_count() == df.height:
+            df = df.with_columns(pl.col(c).cast(pl.Null))
+        else:
+            try:
+                df = df.with_columns(pl.col(c).cast(t, strict=False))
+            except pl.exceptions.InvalidOperationError:
+                pass  # e.g. text in a boolean-declared column: keep the inferred dtype, never raise
+    return _maybe_pandas(df.select([*schema, *(c for c in df.columns if c not in schema)]), return_as_pandas)

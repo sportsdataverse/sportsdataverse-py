@@ -38,6 +38,10 @@ SPEC_PATH = _REFS / "pff" / "pff-premium.openapi.yaml"
 
 HOST = "https://premium.pff.com"
 
+# Every wrapper of this stem is LEGACY: PFF's official Developer API (api.pff.com, API key)
+# serves the same /v1 reports; see tools/codegen/gen_pff_api.py and the pff_api_* wrappers.
+_LEGACY = "LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). "
+
 # OpenAPI JSON-schema primitive -> R-style returns-schema type
 _DTYPE = {
     "number": "numeric",
@@ -172,7 +176,7 @@ def build() -> tuple[dict, Dict[str, dict]]:
         endpoints.append(
             {
                 "short": short,
-                "summary": op.get("summary", ""),
+                "summary": _LEGACY + op.get("summary", ""),
                 "path": path,
                 "extra_params": _extra_params([r for r in (_param_ref(p) for p in op.get("parameters", [])) if r]),
                 "parser": "parse_pff_player_detail" if is_player_detail else "parse_pff_report",

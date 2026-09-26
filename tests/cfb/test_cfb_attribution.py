@@ -1076,6 +1076,84 @@ def test_penalty_side_three_letter_consonant_skeleton():
             },
             "Interception Return",
         ),
+        # a field goal the defence returned for the score (2007-13, typed as the kick)
+        (
+            {
+                "type.text": "Field Goal Good",
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -6,
+                "text": "Ross Thevenot 46 yard field goal GOOD, Quentin Cotton for 44 yards, to the Tulan 0 for a TOUCHDOWN.",
+            },
+            "Missed Field Goal Return Touchdown",
+        ),
+        (
+            {
+                "type.text": "Field Goal Good",
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -7,
+                "text": "Nico Grasu 42 yard field goal BLOCKED, Zack Follett for 65 yards return for a TOUCHDOWN.",
+            },
+            "Blocked Field Goal Touchdown",
+        ),
+        # ... not a made field goal whose text mentions a touchdown elsewhere
+        (
+            {
+                "type.text": "Field Goal Good",
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": 3,
+                "text": "Jon Teague 29 yard field goal GOOD, Marquese Wheaton for 79 yards, to the Navy 0 for a TOUCHDOWN.",
+            },
+            "Field Goal Good",
+        ),
+        # a kickoff fumble the kicking team recovered for the score (the receiver's margin fell)
+        (
+            {
+                "type.text": "Kickoff",
+                "kickoff_play": True,
+                "fumble_vec": True,
+                "change_of_poss": 1,
+                "td_play": True,
+                "td_check": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -7,
+                "text": "Ben Vroman kickoff for 69 yards returned by Curtis Marsh, fumbled, recovered by Utah Elijah "
+                "Wesson at the UthSt 20, Elijah Wesson for 20 yards, to the UthSt 0 for a TOUCHDOWN.",
+            },
+            "Kickoff Team Fumble Recovery Touchdown",
+        ),
+        # ... the receiver's own fumble returned for the score stays the receiver's return touchdown
+        (
+            {
+                "type.text": "Kickoff",
+                "kickoff_play": True,
+                "fumble_vec": True,
+                "change_of_poss": 1,
+                "td_play": True,
+                "td_check": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": 6,
+                "text": "X kickoff for 65 yards returned by Y, fumbled, recovered by Y for 95 yards for a TOUCHDOWN.",
+            },
+            "Kickoff Return Touchdown",
+        ),
+        # the offence's own fumble recovered in the end zone (typed "Rush")
+        (
+            {
+                "type.text": "Rush",
+                "rush": True,
+                "fumble_vec": True,
+                "td_play": True,
+                "td_check": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": 6,
+                "text": "Keenan Reynolds rush for no gain, fumbled, recovered by Navy Jake Zuzek in the endzone for a "
+                "TOUCHDOWN.",
+            },
+            "Fumble Recovery (Own) Touchdown",
+        ),
     ],
 )
 def test_return_and_short_text_touchdowns_are_typed_by_who_scored(row: dict, expected: str) -> None:

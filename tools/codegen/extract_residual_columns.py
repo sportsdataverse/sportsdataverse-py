@@ -62,8 +62,16 @@ def _bucket_of(path: str) -> str:
 # manufacture authority the capture does not carry. See
 # sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md for the full
 # provenance note and the identified (partial) load_nfl_nextgen_stats cross-walk.
+#
+# native/pff_api (added 2026-09-26) is deferred for the ordinary "not yet authored" reason:
+# the PFF Developer API /v2 tables (team stats/leaders/roster/schedule and the 19 report
+# tables, ~3,000 cells) arrived as one new vocabulary. It IS authorable -- every /v2 body
+# carries PFF's own {key, label, type} per column (tabulated in sdv-internal-refs
+# pff/developer/pff-developer-returns.md) -- so describe it in manual_column_descriptions.yaml
+# and promote the bucket back out. /v1 routes already reuse the described native/pff schemas.
 _DEFERRED_BUCKETS = {
     "native/nflpro",
+    "native/pff_api",
 }
 
 
