@@ -19,9 +19,15 @@ Example:
 
         pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
         sched = load_cfb_schedule(2024)
+        # ESPN's start_date is a UTC instant; CFB kickoffs run late-night UTC that
+        # is still the prior evening on the US East Coast, so convert before taking
+        # the date -- otherwise a handful of games land on the wrong calendar day.
         game_dates = sched.select(
             pl.col("game_id").cast(pl.Int64),
-            game_date=pl.col("start_date").str.slice(0, 10).str.to_date(),
+            game_date=pl.col("start_date")
+            .str.to_datetime(time_zone="UTC")
+            .dt.convert_time_zone("America/New_York")
+            .dt.date(),
         )
         ev = football_events(pbp, game_dates)
         ev.filter(pl.col("window_unit") == "dropback").head()

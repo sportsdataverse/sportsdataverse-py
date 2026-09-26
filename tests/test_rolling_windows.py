@@ -23,9 +23,14 @@ def cfb_pbp() -> pl.DataFrame:
 @pytest.fixture(scope="module")
 def cfb_dates() -> pl.DataFrame:
     s = pl.read_parquet(FIX / "cfb_schedule_4433971_2021_2024.parquet")
+    # ESPN's start_date is a UTC instant; late-night CFB kickoffs are still the
+    # prior evening on the US East Coast, so convert before taking the date.
     return s.select(
         pl.col("game_id").cast(pl.Int64),
-        game_date=pl.col("start_date").str.slice(0, 10).str.to_date(),
+        game_date=pl.col("start_date")
+        .str.to_datetime(time_zone="UTC")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date(),
     )
 
 
@@ -100,8 +105,10 @@ def test_qb_dropback_windows_match_a_hand_count(rw2024, n, cur, prev, start, car
     assert r["delta_prev"] == pytest.approx(cur - prev, abs=1e-6)
     assert r["delta_season"] == pytest.approx(cur - start, abs=1e-6)
     assert r["entity_name"] == "Kyle McCord" and r["team_id"] == "183"
-    assert r["last_event_date"] == date(2024, 12, 28)
-    assert r["as_of_date"] == date(2024, 12, 28)
+    # 401729867 (his last 2024 game) kicked off 2024-12-28T01:00:00Z -- still the
+    # evening of 2024-12-27 on the US East Coast, the local date football_events uses.
+    assert r["last_event_date"] == date(2024, 12, 27)
+    assert r["as_of_date"] == date(2024, 12, 27)
     assert r["season"] == 2024
 
 
