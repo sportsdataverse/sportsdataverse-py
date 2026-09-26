@@ -1,0 +1,635 @@
+frames:
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: games
+    type: integer
+  - description: ''
+    name: games_rank
+    type: integer
+  - description: ''
+    name: games_rank_of
+    type: integer
+  - description: ''
+    name: games_percentile
+    type: integer
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: targets_rank
+    type: integer
+  - description: ''
+    name: targets_rank_of
+    type: integer
+  - description: ''
+    name: targets_percentile
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: receptions_rank
+    type: integer
+  - description: ''
+    name: receptions_rank_of
+    type: integer
+  - description: ''
+    name: receptions_percentile
+    type: integer
+  - description: ''
+    name: reception_pct
+    type: numeric
+  - description: ''
+    name: reception_pct_rank
+    type: integer
+  - description: ''
+    name: reception_pct_rank_of
+    type: integer
+  - description: ''
+    name: reception_pct_percentile
+    type: integer
+  - description: ''
+    name: receiving_yards
+    type: integer
+  - description: ''
+    name: receiving_yards_rank
+    type: integer
+  - description: ''
+    name: receiving_yards_rank_of
+    type: integer
+  - description: ''
+    name: receiving_yards_percentile
+    type: integer
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: yards_per_reception_rank
+    type: integer
+  - description: ''
+    name: yards_per_reception_rank_of
+    type: integer
+  - description: ''
+    name: yards_per_reception_percentile
+    type: integer
+  - description: ''
+    name: receiving_td
+    type: integer
+  - description: ''
+    name: receiving_td_rank
+    type: integer
+  - description: ''
+    name: receiving_td_rank_of
+    type: integer
+  - description: ''
+    name: receiving_td_percentile
+    type: integer
+  - description: ''
+    name: grade_offense
+    type: numeric
+  - description: ''
+    name: grade_offense_rank
+    type: integer
+  - description: ''
+    name: grade_offense_rank_of
+    type: integer
+  - description: ''
+    name: grade_offense_percentile
+    type: integer
+  - description: ''
+    name: grade_receiving
+    type: numeric
+  - description: ''
+    name: grade_receiving_rank
+    type: integer
+  - description: ''
+    name: grade_receiving_rank_of
+    type: integer
+  - description: ''
+    name: grade_receiving_percentile
+    type: integer
+  - description: ''
+    name: grade_drop
+    type: numeric
+  - description: ''
+    name: grade_drop_rank
+    type: integer
+  - description: ''
+    name: grade_drop_rank_of
+    type: integer
+  - description: ''
+    name: grade_drop_percentile
+    type: integer
+  - description: ''
+    name: grade_fumble
+    type: numeric
+  - description: ''
+    name: grade_fumble_rank
+    type: integer
+  - description: ''
+    name: grade_fumble_rank_of
+    type: integer
+  - description: ''
+    name: grade_fumble_percentile
+    type: integer
+  - description: ''
+    name: grade_pass_block
+    type: numeric
+  - description: ''
+    name: grade_pass_block_rank
+    type: integer
+  - description: ''
+    name: grade_pass_block_rank_of
+    type: integer
+  - description: ''
+    name: grade_pass_block_percentile
+    type: integer
+  section: receiving
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: games
+    type: integer
+  - description: ''
+    name: games_rank
+    type: integer
+  - description: ''
+    name: games_rank_of
+    type: integer
+  - description: ''
+    name: games_percentile
+    type: integer
+  - description: ''
+    name: pass_attempts
+    type: integer
+  - description: ''
+    name: pass_attempts_rank
+    type: integer
+  - description: ''
+    name: pass_attempts_rank_of
+    type: integer
+  - description: ''
+    name: pass_attempts_percentile
+    type: integer
+  - description: ''
+    name: completions
+    type: integer
+  - description: ''
+    name: completions_rank
+    type: integer
+  - description: ''
+    name: completions_rank_of
+    type: integer
+  - description: ''
+    name: completions_percentile
+    type: integer
+  - description: ''
+    name: completion_pct
+    type: numeric
+  - description: ''
+    name: completion_pct_rank
+    type: integer
+  - description: ''
+    name: completion_pct_rank_of
+    type: integer
+  - description: ''
+    name: completion_pct_percentile
+    type: integer
+  - description: ''
+    name: passing_yards
+    type: integer
+  - description: ''
+    name: passing_yards_rank
+    type: integer
+  - description: ''
+    name: passing_yards_rank_of
+    type: integer
+  - description: ''
+    name: passing_yards_percentile
+    type: integer
+  - description: ''
+    name: yards_per_attempt
+    type: numeric
+  - description: ''
+    name: yards_per_attempt_rank
+    type: integer
+  - description: ''
+    name: yards_per_attempt_rank_of
+    type: integer
+  - description: ''
+    name: yards_per_attempt_percentile
+    type: integer
+  - description: ''
+    name: passing_td
+    type: integer
+  - description: ''
+    name: passing_td_rank
+    type: integer
+  - description: ''
+    name: passing_td_rank_of
+    type: integer
+  - description: ''
+    name: passing_td_percentile
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: interceptions_rank
+    type: integer
+  - description: ''
+    name: interceptions_rank_of
+    type: integer
+  - description: ''
+    name: interceptions_percentile
+    type: integer
+  - description: ''
+    name: grade_offense
+    type: numeric
+  - description: ''
+    name: grade_offense_rank
+    type: integer
+  - description: ''
+    name: grade_offense_rank_of
+    type: integer
+  - description: ''
+    name: grade_offense_percentile
+    type: integer
+  - description: ''
+    name: grade_pass
+    type: numeric
+  - description: ''
+    name: grade_pass_rank
+    type: integer
+  - description: ''
+    name: grade_pass_rank_of
+    type: integer
+  - description: ''
+    name: grade_pass_percentile
+    type: integer
+  - description: ''
+    name: grade_run
+    type: numeric
+  - description: ''
+    name: grade_run_rank
+    type: integer
+  - description: ''
+    name: grade_run_rank_of
+    type: integer
+  - description: ''
+    name: grade_run_percentile
+    type: integer
+  - description: ''
+    name: grade_fumble
+    type: numeric
+  - description: ''
+    name: grade_fumble_rank
+    type: integer
+  - description: ''
+    name: grade_fumble_rank_of
+    type: integer
+  - description: ''
+    name: grade_fumble_percentile
+    type: integer
+  section: passing
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: games
+    type: integer
+  - description: ''
+    name: games_rank
+    type: integer
+  - description: ''
+    name: games_rank_of
+    type: integer
+  - description: ''
+    name: games_percentile
+    type: integer
+  - description: ''
+    name: rush_attempts
+    type: integer
+  - description: ''
+    name: rush_attempts_rank
+    type: integer
+  - description: ''
+    name: rush_attempts_rank_of
+    type: integer
+  - description: ''
+    name: rush_attempts_percentile
+    type: integer
+  - description: ''
+    name: rushing_yards
+    type: integer
+  - description: ''
+    name: rushing_yards_rank
+    type: integer
+  - description: ''
+    name: rushing_yards_rank_of
+    type: integer
+  - description: ''
+    name: rushing_yards_percentile
+    type: integer
+  - description: ''
+    name: yards_per_carry
+    type: numeric
+  - description: ''
+    name: yards_per_carry_rank
+    type: integer
+  - description: ''
+    name: yards_per_carry_rank_of
+    type: integer
+  - description: ''
+    name: yards_per_carry_percentile
+    type: integer
+  - description: ''
+    name: yards_after_contact_per_attempt
+    type: numeric
+  - description: ''
+    name: yards_after_contact_per_attempt_rank
+    type: integer
+  - description: ''
+    name: yards_after_contact_per_attempt_rank_of
+    type: integer
+  - description: ''
+    name: yards_after_contact_per_attempt_percentile
+    type: integer
+  - description: ''
+    name: rushing_td
+    type: integer
+  - description: ''
+    name: rushing_td_rank
+    type: integer
+  - description: ''
+    name: rushing_td_rank_of
+    type: integer
+  - description: ''
+    name: rushing_td_percentile
+    type: integer
+  - description: ''
+    name: fumbles
+    type: integer
+  - description: ''
+    name: fumbles_rank
+    type: integer
+  - description: ''
+    name: fumbles_rank_of
+    type: integer
+  - description: ''
+    name: fumbles_percentile
+    type: integer
+  - description: ''
+    name: grade_offense
+    type: numeric
+  - description: ''
+    name: grade_offense_rank
+    type: integer
+  - description: ''
+    name: grade_offense_rank_of
+    type: integer
+  - description: ''
+    name: grade_offense_percentile
+    type: integer
+  - description: ''
+    name: grade_run
+    type: numeric
+  - description: ''
+    name: grade_run_rank
+    type: integer
+  - description: ''
+    name: grade_run_rank_of
+    type: integer
+  - description: ''
+    name: grade_run_percentile
+    type: integer
+  - description: ''
+    name: grade_fumble
+    type: numeric
+  - description: ''
+    name: grade_fumble_rank
+    type: integer
+  - description: ''
+    name: grade_fumble_rank_of
+    type: integer
+  - description: ''
+    name: grade_fumble_percentile
+    type: integer
+  - description: ''
+    name: grade_receiving
+    type: numeric
+  - description: ''
+    name: grade_receiving_rank
+    type: integer
+  - description: ''
+    name: grade_receiving_rank_of
+    type: integer
+  - description: ''
+    name: grade_receiving_percentile
+    type: integer
+  - description: ''
+    name: grade_pass_block
+    type: numeric
+  - description: ''
+    name: grade_pass_block_rank
+    type: integer
+  - description: ''
+    name: grade_pass_block_rank_of
+    type: integer
+  - description: ''
+    name: grade_pass_block_percentile
+    type: integer
+  section: rushing
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: games
+    type: integer
+  - description: ''
+    name: games_rank
+    type: integer
+  - description: ''
+    name: games_rank_of
+    type: integer
+  - description: ''
+    name: games_percentile
+    type: integer
+  - description: ''
+    name: tackles
+    type: integer
+  - description: ''
+    name: tackles_rank
+    type: integer
+  - description: ''
+    name: tackles_rank_of
+    type: integer
+  - description: ''
+    name: tackles_percentile
+    type: integer
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: assists_rank
+    type: integer
+  - description: ''
+    name: assists_rank_of
+    type: integer
+  - description: ''
+    name: assists_percentile
+    type: integer
+  - description: ''
+    name: sacks
+    type: numeric
+  - description: ''
+    name: sacks_rank
+    type: integer
+  - description: ''
+    name: sacks_rank_of
+    type: integer
+  - description: ''
+    name: sacks_percentile
+    type: integer
+  - description: ''
+    name: qb_hurries
+    type: integer
+  - description: ''
+    name: qb_hurries_rank
+    type: integer
+  - description: ''
+    name: qb_hurries_rank_of
+    type: integer
+  - description: ''
+    name: qb_hurries_percentile
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: interceptions_rank
+    type: integer
+  - description: ''
+    name: interceptions_rank_of
+    type: integer
+  - description: ''
+    name: interceptions_percentile
+    type: integer
+  - description: ''
+    name: passes_defended
+    type: integer
+  - description: ''
+    name: passes_defended_rank
+    type: integer
+  - description: ''
+    name: passes_defended_rank_of
+    type: integer
+  - description: ''
+    name: passes_defended_percentile
+    type: integer
+  - description: ''
+    name: grade_defense
+    type: numeric
+  - description: ''
+    name: grade_defense_rank
+    type: integer
+  - description: ''
+    name: grade_defense_rank_of
+    type: integer
+  - description: ''
+    name: grade_defense_percentile
+    type: integer
+  - description: ''
+    name: grade_run_defense
+    type: numeric
+  - description: ''
+    name: grade_run_defense_rank
+    type: integer
+  - description: ''
+    name: grade_run_defense_rank_of
+    type: integer
+  - description: ''
+    name: grade_run_defense_percentile
+    type: integer
+  - description: ''
+    name: grade_tackle
+    type: numeric
+  - description: ''
+    name: grade_tackle_rank
+    type: integer
+  - description: ''
+    name: grade_tackle_rank_of
+    type: integer
+  - description: ''
+    name: grade_tackle_percentile
+    type: integer
+  - description: ''
+    name: grade_pass_rush
+    type: numeric
+  - description: ''
+    name: grade_pass_rush_rank
+    type: integer
+  - description: ''
+    name: grade_pass_rush_rank_of
+    type: integer
+  - description: ''
+    name: grade_pass_rush_percentile
+    type: integer
+  - description: ''
+    name: grade_coverage
+    type: numeric
+  - description: ''
+    name: grade_coverage_rank
+    type: integer
+  - description: ''
+    name: grade_coverage_rank_of
+    type: integer
+  - description: ''
+    name: grade_coverage_percentile
+    type: integer
+  section: defense
+kind: frames
+schema: team_leaders

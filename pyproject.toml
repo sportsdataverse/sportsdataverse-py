@@ -390,6 +390,7 @@ files = [
     "sportsdataverse/nfl/nfl_simulations.py",
     "sportsdataverse/nfl/nfl_stats.py",
     "sportsdataverse/nfl/pff_runtime.py",
+    "sportsdataverse/nfl/pff_api_runtime.py",
     "sportsdataverse/nfl/nflpro_parsers.py",
     "sportsdataverse/nfl/nflpro_runtime.py",
     "sportsdataverse/nfl/pff_parsers.py",

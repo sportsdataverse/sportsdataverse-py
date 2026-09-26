@@ -366,7 +366,7 @@ ratings.sort("adj_net", descending=True).head()
 
 ### `pff_aaf_facet_blocking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_blocking_summary}
 
-Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
@@ -397,7 +397,7 @@ pff_facet_blocking_summary()
 
 ### `pff_aaf_facet_coverage_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_coverage_scheme}
 
-Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_scheme`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
@@ -428,7 +428,7 @@ pff_facet_coverage_scheme()
 
 ### `pff_aaf_facet_coverage_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_coverage_summary}
 
-Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
@@ -459,7 +459,7 @@ pff_facet_coverage_summary()
 
 ### `pff_aaf_facet_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_defense_summary}
 
-Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/defense/summary
@@ -490,7 +490,7 @@ pff_facet_defense_summary()
 
 ### `pff_aaf_facet_field_goal_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_field_goal_summary}
 
-Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/field_goal/summary`
 Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
@@ -521,7 +521,7 @@ pff_facet_field_goal_summary()
 
 ### `pff_aaf_facet_kicking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_kicking_summary}
 
-Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/kickoff/summary`
 Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
@@ -552,7 +552,7 @@ pff_facet_kicking_summary()
 
 ### `pff_aaf_facet_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_offense_summary}
 
-Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/offense/summary
@@ -583,7 +583,7 @@ pff_facet_offense_summary()
 
 ### `pff_aaf_facet_pass_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pass_blocking}
 
-Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/pass_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
@@ -614,7 +614,7 @@ pff_facet_pass_blocking()
 
 ### `pff_aaf_facet_pass_rush_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pass_rush_summary}
 
-Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
@@ -645,7 +645,7 @@ pff_facet_pass_rush_summary()
 
 ### `pff_aaf_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_allowed_pressure}
 
-Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/allowed_pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
@@ -676,7 +676,7 @@ pff_facet_passing_allowed_pressure()
 
 ### `pff_aaf_facet_passing_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_concept}
 
-Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/concept`
 Example URL: https://premium.pff.com/api/v1/facet/passing/concept
@@ -707,7 +707,7 @@ pff_facet_passing_concept()
 
 ### `pff_aaf_facet_passing_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_depth}
 
-Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/depth`
 Example URL: https://premium.pff.com/api/v1/facet/passing/depth
@@ -738,7 +738,7 @@ pff_facet_passing_depth()
 
 ### `pff_aaf_facet_passing_detail_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_detail_stats}
 
-Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/detail`
 Example URL: https://premium.pff.com/api/v1/facet/passing/detail
@@ -769,7 +769,7 @@ pff_facet_passing_detail_stats()
 
 ### `pff_aaf_facet_passing_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_pressure}
 
-Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
@@ -800,7 +800,7 @@ pff_facet_passing_pressure()
 
 ### `pff_aaf_facet_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_summary}
 
-Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/passing/summary
@@ -831,7 +831,7 @@ pff_facet_passing_summary()
 
 ### `pff_aaf_facet_pbes(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pbes}
 
-Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line`
 Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line
@@ -862,7 +862,7 @@ pff_facet_pbes()
 
 ### `pff_aaf_facet_prps(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_prps}
 
-Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush
@@ -893,7 +893,7 @@ pff_facet_prps()
 
 ### `pff_aaf_facet_punting_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_punting_summary}
 
-Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/punting/summary`
 Example URL: https://premium.pff.com/api/v1/facet/punting/summary
@@ -924,7 +924,7 @@ pff_facet_punting_summary()
 
 ### `pff_aaf_facet_receiving_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_concept}
 
-Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/concept`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
@@ -955,7 +955,7 @@ pff_facet_receiving_concept()
 
 ### `pff_aaf_facet_receiving_coverage(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_coverage}
 
-Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
@@ -986,7 +986,7 @@ pff_facet_receiving_coverage()
 
 ### `pff_aaf_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_coverage_stats}
 
-Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_matchup`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
@@ -1017,7 +1017,7 @@ pff_facet_receiving_coverage_stats()
 
 ### `pff_aaf_facet_receiving_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_depth}
 
-Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/depth`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
@@ -1048,7 +1048,7 @@ pff_facet_receiving_depth()
 
 ### `pff_aaf_facet_receiving_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_scheme}
 
-Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/scheme`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
@@ -1079,7 +1079,7 @@ pff_facet_receiving_scheme()
 
 ### `pff_aaf_facet_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_summary}
 
-Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
@@ -1110,7 +1110,7 @@ pff_facet_receiving_summary()
 
 ### `pff_aaf_facet_return_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_return_summary}
 
-Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/return/summary`
 Example URL: https://premium.pff.com/api/v1/facet/return/summary
@@ -1141,7 +1141,7 @@ pff_facet_return_summary()
 
 ### `pff_aaf_facet_run_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_run_blocking}
 
-Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/run_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
@@ -1172,7 +1172,7 @@ pff_facet_run_blocking()
 
 ### `pff_aaf_facet_run_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_run_defense_summary}
 
-Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/run`
 Example URL: https://premium.pff.com/api/v1/facet/defense/run
@@ -1203,7 +1203,7 @@ pff_facet_run_defense_summary()
 
 ### `pff_aaf_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_rushing_direction_stats}
 
-Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/direction`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
@@ -1234,7 +1234,7 @@ pff_facet_rushing_direction_stats()
 
 ### `pff_aaf_facet_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_rushing_summary}
 
-Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
@@ -1265,7 +1265,7 @@ pff_facet_rushing_summary()
 
 ### `pff_aaf_facet_slot_coverages(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_slot_coverages}
 
-Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
@@ -1296,7 +1296,7 @@ pff_facet_slot_coverages()
 
 ### `pff_aaf_facet_special_teams_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_special_teams_summary}
 
-Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/special/summary`
 Example URL: https://premium.pff.com/api/v1/facet/special/summary
@@ -1327,7 +1327,7 @@ pff_facet_special_teams_summary()
 
 ### `pff_aaf_facet_time_in_pockets(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_time_in_pockets}
 
-Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
 Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
@@ -1358,7 +1358,7 @@ pff_facet_time_in_pockets()
 
 ### `pff_aaf_games(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_games}
 
-Games list for league-season(-week)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
 Endpoint: `GET https://premium.pff.com/api/v1/games`
 Example URL: https://premium.pff.com/api/v1/games
@@ -1386,7 +1386,7 @@ pff_games()
 
 ### `pff_aaf_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_leagues}
 
-Leagues + seasons + week groups (bootstrap)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
 Endpoint: `GET https://premium.pff.com/api/v1/leagues`
 Example URL: https://premium.pff.com/api/v1/leagues
@@ -1411,7 +1411,7 @@ pff_leagues()
 
 ### `pff_aaf_player_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_defense_summary}
 
-Player-detail report /defense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/defense/summary`
 Example URL: https://premium.pff.com/api/v1/player/defense/summary
@@ -1441,7 +1441,7 @@ pff_player_defense_summary()
 
 ### `pff_aaf_player_offense_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_offense_blocking}
 
-Player-detail report /offense/blocking (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/player/offense/blocking
@@ -1471,7 +1471,7 @@ pff_player_offense_blocking()
 
 ### `pff_aaf_player_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_offense_summary}
 
-Player-detail report /offense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/summary`
 Example URL: https://premium.pff.com/api/v1/player/offense/summary
@@ -1501,7 +1501,7 @@ pff_player_offense_summary()
 
 ### `pff_aaf_player_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_passing_summary}
 
-Player-detail report /passing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/passing/summary`
 Example URL: https://premium.pff.com/api/v1/player/passing/summary
@@ -1531,7 +1531,7 @@ pff_player_passing_summary()
 
 ### `pff_aaf_player_position_pivot(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_position_pivot}
 
-Positional-pivot export (JSON; UI also uses this for CSV download)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/position/pivot`
 Example URL: https://premium.pff.com/api/v1/player/position/pivot
@@ -1560,7 +1560,7 @@ pff_player_position_pivot()
 
 ### `pff_aaf_player_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_receiving_summary}
 
-Player-detail report /receiving/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/player/receiving/summary
@@ -1590,7 +1590,7 @@ pff_player_receiving_summary()
 
 ### `pff_aaf_player_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_rushing_summary}
 
-Player-detail report /rushing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/player/rushing/summary
@@ -1620,7 +1620,7 @@ pff_player_rushing_summary()
 
 ### `pff_aaf_player_seasons(*, league: 'Optional[str]' = 'aaf', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_seasons}
 
-Seasons a player has data for
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/seasons`
 Example URL: https://premium.pff.com/api/v1/player/seasons
@@ -1647,7 +1647,7 @@ pff_player_seasons()
 
 ### `pff_aaf_player_snaps_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_snaps_summary}
 
-Player-detail report /snaps/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/snaps/summary`
 Example URL: https://premium.pff.com/api/v1/player/snaps/summary
@@ -1677,7 +1677,7 @@ pff_player_snaps_summary()
 
 ### `pff_aaf_players(*, league: 'Optional[str]' = 'aaf', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_players}
 
-Player search (name=) or lookup (id=)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
 Endpoint: `GET https://premium.pff.com/api/v1/players`
 Example URL: https://premium.pff.com/api/v1/players
@@ -1705,7 +1705,7 @@ pff_players()
 
 ### `pff_aaf_teams(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_teams}
 
-Teams / franchise groups + games for a league-season
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams`
 Example URL: https://premium.pff.com/api/v1/teams
@@ -1732,7 +1732,7 @@ pff_teams()
 
 ### `pff_aaf_teams_overview(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_teams_overview}
 
-Team overview table (By Team landing)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams/overview`
 Example URL: https://premium.pff.com/api/v1/teams/overview
@@ -1760,7 +1760,7 @@ pff_teams_overview()
 
 ### `pff_ncaa_facet_blocking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_blocking_summary}
 
-Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
@@ -1791,7 +1791,7 @@ pff_facet_blocking_summary()
 
 ### `pff_ncaa_facet_coverage_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_coverage_scheme}
 
-Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_scheme`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
@@ -1822,7 +1822,7 @@ pff_facet_coverage_scheme()
 
 ### `pff_ncaa_facet_coverage_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_coverage_summary}
 
-Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
@@ -1853,7 +1853,7 @@ pff_facet_coverage_summary()
 
 ### `pff_ncaa_facet_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_defense_summary}
 
-Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/defense/summary
@@ -1884,7 +1884,7 @@ pff_facet_defense_summary()
 
 ### `pff_ncaa_facet_field_goal_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_field_goal_summary}
 
-Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/field_goal/summary`
 Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
@@ -1915,7 +1915,7 @@ pff_facet_field_goal_summary()
 
 ### `pff_ncaa_facet_kicking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_kicking_summary}
 
-Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/kickoff/summary`
 Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
@@ -1946,7 +1946,7 @@ pff_facet_kicking_summary()
 
 ### `pff_ncaa_facet_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_offense_summary}
 
-Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/offense/summary
@@ -1977,7 +1977,7 @@ pff_facet_offense_summary()
 
 ### `pff_ncaa_facet_pass_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pass_blocking}
 
-Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/pass_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
@@ -2008,7 +2008,7 @@ pff_facet_pass_blocking()
 
 ### `pff_ncaa_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pass_rush_summary}
 
-Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
@@ -2039,7 +2039,7 @@ pff_facet_pass_rush_summary()
 
 ### `pff_ncaa_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_allowed_pressure}
 
-Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/allowed_pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
@@ -2070,7 +2070,7 @@ pff_facet_passing_allowed_pressure()
 
 ### `pff_ncaa_facet_passing_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_concept}
 
-Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/concept`
 Example URL: https://premium.pff.com/api/v1/facet/passing/concept
@@ -2101,7 +2101,7 @@ pff_facet_passing_concept()
 
 ### `pff_ncaa_facet_passing_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_depth}
 
-Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/depth`
 Example URL: https://premium.pff.com/api/v1/facet/passing/depth
@@ -2132,7 +2132,7 @@ pff_facet_passing_depth()
 
 ### `pff_ncaa_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_detail_stats}
 
-Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/detail`
 Example URL: https://premium.pff.com/api/v1/facet/passing/detail
@@ -2163,7 +2163,7 @@ pff_facet_passing_detail_stats()
 
 ### `pff_ncaa_facet_passing_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_pressure}
 
-Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
@@ -2194,7 +2194,7 @@ pff_facet_passing_pressure()
 
 ### `pff_ncaa_facet_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_summary}
 
-Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/passing/summary
@@ -2225,7 +2225,7 @@ pff_facet_passing_summary()
 
 ### `pff_ncaa_facet_pbes(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pbes}
 
-Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line`
 Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line
@@ -2256,7 +2256,7 @@ pff_facet_pbes()
 
 ### `pff_ncaa_facet_prps(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_prps}
 
-Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush
@@ -2287,7 +2287,7 @@ pff_facet_prps()
 
 ### `pff_ncaa_facet_punting_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_punting_summary}
 
-Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/punting/summary`
 Example URL: https://premium.pff.com/api/v1/facet/punting/summary
@@ -2318,7 +2318,7 @@ pff_facet_punting_summary()
 
 ### `pff_ncaa_facet_receiving_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_concept}
 
-Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/concept`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
@@ -2349,7 +2349,7 @@ pff_facet_receiving_concept()
 
 ### `pff_ncaa_facet_receiving_coverage(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_coverage}
 
-Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
@@ -2380,7 +2380,7 @@ pff_facet_receiving_coverage()
 
 ### `pff_ncaa_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_coverage_stats}
 
-Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_matchup`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
@@ -2411,7 +2411,7 @@ pff_facet_receiving_coverage_stats()
 
 ### `pff_ncaa_facet_receiving_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_depth}
 
-Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/depth`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
@@ -2442,7 +2442,7 @@ pff_facet_receiving_depth()
 
 ### `pff_ncaa_facet_receiving_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_scheme}
 
-Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/scheme`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
@@ -2473,7 +2473,7 @@ pff_facet_receiving_scheme()
 
 ### `pff_ncaa_facet_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_summary}
 
-Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
@@ -2504,7 +2504,7 @@ pff_facet_receiving_summary()
 
 ### `pff_ncaa_facet_return_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_return_summary}
 
-Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/return/summary`
 Example URL: https://premium.pff.com/api/v1/facet/return/summary
@@ -2535,7 +2535,7 @@ pff_facet_return_summary()
 
 ### `pff_ncaa_facet_run_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_run_blocking}
 
-Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/run_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
@@ -2566,7 +2566,7 @@ pff_facet_run_blocking()
 
 ### `pff_ncaa_facet_run_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_run_defense_summary}
 
-Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/run`
 Example URL: https://premium.pff.com/api/v1/facet/defense/run
@@ -2597,7 +2597,7 @@ pff_facet_run_defense_summary()
 
 ### `pff_ncaa_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_rushing_direction_stats}
 
-Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/direction`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
@@ -2628,7 +2628,7 @@ pff_facet_rushing_direction_stats()
 
 ### `pff_ncaa_facet_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_rushing_summary}
 
-Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
@@ -2659,7 +2659,7 @@ pff_facet_rushing_summary()
 
 ### `pff_ncaa_facet_slot_coverages(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_slot_coverages}
 
-Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
@@ -2690,7 +2690,7 @@ pff_facet_slot_coverages()
 
 ### `pff_ncaa_facet_special_teams_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_special_teams_summary}
 
-Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/special/summary`
 Example URL: https://premium.pff.com/api/v1/facet/special/summary
@@ -2721,7 +2721,7 @@ pff_facet_special_teams_summary()
 
 ### `pff_ncaa_facet_time_in_pockets(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_time_in_pockets}
 
-Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
 Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
@@ -2752,7 +2752,7 @@ pff_facet_time_in_pockets()
 
 ### `pff_ncaa_games(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_games}
 
-Games list for league-season(-week)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
 Endpoint: `GET https://premium.pff.com/api/v1/games`
 Example URL: https://premium.pff.com/api/v1/games
@@ -2780,7 +2780,7 @@ pff_games()
 
 ### `pff_ncaa_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_leagues}
 
-Leagues + seasons + week groups (bootstrap)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
 Endpoint: `GET https://premium.pff.com/api/v1/leagues`
 Example URL: https://premium.pff.com/api/v1/leagues
@@ -2805,7 +2805,7 @@ pff_leagues()
 
 ### `pff_ncaa_player_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_defense_summary}
 
-Player-detail report /defense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/defense/summary`
 Example URL: https://premium.pff.com/api/v1/player/defense/summary
@@ -2835,7 +2835,7 @@ pff_player_defense_summary()
 
 ### `pff_ncaa_player_offense_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_offense_blocking}
 
-Player-detail report /offense/blocking (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/player/offense/blocking
@@ -2865,7 +2865,7 @@ pff_player_offense_blocking()
 
 ### `pff_ncaa_player_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_offense_summary}
 
-Player-detail report /offense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/summary`
 Example URL: https://premium.pff.com/api/v1/player/offense/summary
@@ -2895,7 +2895,7 @@ pff_player_offense_summary()
 
 ### `pff_ncaa_player_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_passing_summary}
 
-Player-detail report /passing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/passing/summary`
 Example URL: https://premium.pff.com/api/v1/player/passing/summary
@@ -2925,7 +2925,7 @@ pff_player_passing_summary()
 
 ### `pff_ncaa_player_position_pivot(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_position_pivot}
 
-Positional-pivot export (JSON; UI also uses this for CSV download)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/position/pivot`
 Example URL: https://premium.pff.com/api/v1/player/position/pivot
@@ -2954,7 +2954,7 @@ pff_player_position_pivot()
 
 ### `pff_ncaa_player_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_receiving_summary}
 
-Player-detail report /receiving/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/player/receiving/summary
@@ -2984,7 +2984,7 @@ pff_player_receiving_summary()
 
 ### `pff_ncaa_player_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_rushing_summary}
 
-Player-detail report /rushing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/player/rushing/summary
@@ -3014,7 +3014,7 @@ pff_player_rushing_summary()
 
 ### `pff_ncaa_player_seasons(*, league: 'Optional[str]' = 'ncaa', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_seasons}
 
-Seasons a player has data for
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/seasons`
 Example URL: https://premium.pff.com/api/v1/player/seasons
@@ -3041,7 +3041,7 @@ pff_player_seasons()
 
 ### `pff_ncaa_player_snaps_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_snaps_summary}
 
-Player-detail report /snaps/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/snaps/summary`
 Example URL: https://premium.pff.com/api/v1/player/snaps/summary
@@ -3071,7 +3071,7 @@ pff_player_snaps_summary()
 
 ### `pff_ncaa_players(*, league: 'Optional[str]' = 'ncaa', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_players}
 
-Player search (name=) or lookup (id=)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
 Endpoint: `GET https://premium.pff.com/api/v1/players`
 Example URL: https://premium.pff.com/api/v1/players
@@ -3099,7 +3099,7 @@ pff_players()
 
 ### `pff_ncaa_teams(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_teams}
 
-Teams / franchise groups + games for a league-season
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams`
 Example URL: https://premium.pff.com/api/v1/teams
@@ -3126,7 +3126,7 @@ pff_teams()
 
 ### `pff_ncaa_teams_overview(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_teams_overview}
 
-Team overview table (By Team landing)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams/overview`
 Example URL: https://premium.pff.com/api/v1/teams/overview
@@ -3154,7 +3154,7 @@ pff_teams_overview()
 
 ### `pff_nfl_facet_blocking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_blocking_summary}
 
-Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
@@ -3185,7 +3185,7 @@ pff_facet_blocking_summary()
 
 ### `pff_nfl_facet_coverage_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_coverage_scheme}
 
-Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_scheme`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
@@ -3216,7 +3216,7 @@ pff_facet_coverage_scheme()
 
 ### `pff_nfl_facet_coverage_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_coverage_summary}
 
-Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
@@ -3247,7 +3247,7 @@ pff_facet_coverage_summary()
 
 ### `pff_nfl_facet_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_defense_summary}
 
-Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/defense/summary
@@ -3278,7 +3278,7 @@ pff_facet_defense_summary()
 
 ### `pff_nfl_facet_field_goal_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_field_goal_summary}
 
-Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/field_goal/summary`
 Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
@@ -3309,7 +3309,7 @@ pff_facet_field_goal_summary()
 
 ### `pff_nfl_facet_kicking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_kicking_summary}
 
-Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/kickoff/summary`
 Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
@@ -3340,7 +3340,7 @@ pff_facet_kicking_summary()
 
 ### `pff_nfl_facet_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_offense_summary}
 
-Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/offense/summary
@@ -3371,7 +3371,7 @@ pff_facet_offense_summary()
 
 ### `pff_nfl_facet_pass_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pass_blocking}
 
-Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/pass_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
@@ -3402,7 +3402,7 @@ pff_facet_pass_blocking()
 
 ### `pff_nfl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pass_rush_summary}
 
-Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
@@ -3433,7 +3433,7 @@ pff_facet_pass_rush_summary()
 
 ### `pff_nfl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_allowed_pressure}
 
-Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/allowed_pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
@@ -3464,7 +3464,7 @@ pff_facet_passing_allowed_pressure()
 
 ### `pff_nfl_facet_passing_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_concept}
 
-Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/concept`
 Example URL: https://premium.pff.com/api/v1/facet/passing/concept
@@ -3495,7 +3495,7 @@ pff_facet_passing_concept()
 
 ### `pff_nfl_facet_passing_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_depth}
 
-Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/depth`
 Example URL: https://premium.pff.com/api/v1/facet/passing/depth
@@ -3526,7 +3526,7 @@ pff_facet_passing_depth()
 
 ### `pff_nfl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_detail_stats}
 
-Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/detail`
 Example URL: https://premium.pff.com/api/v1/facet/passing/detail
@@ -3557,7 +3557,7 @@ pff_facet_passing_detail_stats()
 
 ### `pff_nfl_facet_passing_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_pressure}
 
-Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
@@ -3588,7 +3588,7 @@ pff_facet_passing_pressure()
 
 ### `pff_nfl_facet_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_summary}
 
-Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/passing/summary
@@ -3619,7 +3619,7 @@ pff_facet_passing_summary()
 
 ### `pff_nfl_facet_pbes(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pbes}
 
-Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line`
 Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line
@@ -3650,7 +3650,7 @@ pff_facet_pbes()
 
 ### `pff_nfl_facet_prps(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_prps}
 
-Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush
@@ -3681,7 +3681,7 @@ pff_facet_prps()
 
 ### `pff_nfl_facet_punting_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_punting_summary}
 
-Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/punting/summary`
 Example URL: https://premium.pff.com/api/v1/facet/punting/summary
@@ -3712,7 +3712,7 @@ pff_facet_punting_summary()
 
 ### `pff_nfl_facet_receiving_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_concept}
 
-Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/concept`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
@@ -3743,7 +3743,7 @@ pff_facet_receiving_concept()
 
 ### `pff_nfl_facet_receiving_coverage(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_coverage}
 
-Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
@@ -3774,7 +3774,7 @@ pff_facet_receiving_coverage()
 
 ### `pff_nfl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_coverage_stats}
 
-Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_matchup`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
@@ -3805,7 +3805,7 @@ pff_facet_receiving_coverage_stats()
 
 ### `pff_nfl_facet_receiving_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_depth}
 
-Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/depth`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
@@ -3836,7 +3836,7 @@ pff_facet_receiving_depth()
 
 ### `pff_nfl_facet_receiving_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_scheme}
 
-Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/scheme`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
@@ -3867,7 +3867,7 @@ pff_facet_receiving_scheme()
 
 ### `pff_nfl_facet_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_summary}
 
-Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
@@ -3898,7 +3898,7 @@ pff_facet_receiving_summary()
 
 ### `pff_nfl_facet_return_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_return_summary}
 
-Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/return/summary`
 Example URL: https://premium.pff.com/api/v1/facet/return/summary
@@ -3929,7 +3929,7 @@ pff_facet_return_summary()
 
 ### `pff_nfl_facet_run_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_run_blocking}
 
-Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/run_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
@@ -3960,7 +3960,7 @@ pff_facet_run_blocking()
 
 ### `pff_nfl_facet_run_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_run_defense_summary}
 
-Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/run`
 Example URL: https://premium.pff.com/api/v1/facet/defense/run
@@ -3991,7 +3991,7 @@ pff_facet_run_defense_summary()
 
 ### `pff_nfl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_rushing_direction_stats}
 
-Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/direction`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
@@ -4022,7 +4022,7 @@ pff_facet_rushing_direction_stats()
 
 ### `pff_nfl_facet_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_rushing_summary}
 
-Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
@@ -4053,7 +4053,7 @@ pff_facet_rushing_summary()
 
 ### `pff_nfl_facet_slot_coverages(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_slot_coverages}
 
-Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
@@ -4084,7 +4084,7 @@ pff_facet_slot_coverages()
 
 ### `pff_nfl_facet_special_teams_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_special_teams_summary}
 
-Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/special/summary`
 Example URL: https://premium.pff.com/api/v1/facet/special/summary
@@ -4115,7 +4115,7 @@ pff_facet_special_teams_summary()
 
 ### `pff_nfl_facet_time_in_pockets(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_time_in_pockets}
 
-Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
 Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
@@ -4146,7 +4146,7 @@ pff_facet_time_in_pockets()
 
 ### `pff_nfl_games(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_games}
 
-Games list for league-season(-week)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
 Endpoint: `GET https://premium.pff.com/api/v1/games`
 Example URL: https://premium.pff.com/api/v1/games
@@ -4174,7 +4174,7 @@ pff_games()
 
 ### `pff_nfl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_leagues}
 
-Leagues + seasons + week groups (bootstrap)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
 Endpoint: `GET https://premium.pff.com/api/v1/leagues`
 Example URL: https://premium.pff.com/api/v1/leagues
@@ -4199,7 +4199,7 @@ pff_leagues()
 
 ### `pff_nfl_player_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_defense_summary}
 
-Player-detail report /defense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/defense/summary`
 Example URL: https://premium.pff.com/api/v1/player/defense/summary
@@ -4229,7 +4229,7 @@ pff_player_defense_summary()
 
 ### `pff_nfl_player_offense_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_offense_blocking}
 
-Player-detail report /offense/blocking (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/player/offense/blocking
@@ -4259,7 +4259,7 @@ pff_player_offense_blocking()
 
 ### `pff_nfl_player_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_offense_summary}
 
-Player-detail report /offense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/summary`
 Example URL: https://premium.pff.com/api/v1/player/offense/summary
@@ -4289,7 +4289,7 @@ pff_player_offense_summary()
 
 ### `pff_nfl_player_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_passing_summary}
 
-Player-detail report /passing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/passing/summary`
 Example URL: https://premium.pff.com/api/v1/player/passing/summary
@@ -4319,7 +4319,7 @@ pff_player_passing_summary()
 
 ### `pff_nfl_player_position_pivot(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_position_pivot}
 
-Positional-pivot export (JSON; UI also uses this for CSV download)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/position/pivot`
 Example URL: https://premium.pff.com/api/v1/player/position/pivot
@@ -4348,7 +4348,7 @@ pff_player_position_pivot()
 
 ### `pff_nfl_player_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_receiving_summary}
 
-Player-detail report /receiving/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/player/receiving/summary
@@ -4378,7 +4378,7 @@ pff_player_receiving_summary()
 
 ### `pff_nfl_player_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_rushing_summary}
 
-Player-detail report /rushing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/player/rushing/summary
@@ -4408,7 +4408,7 @@ pff_player_rushing_summary()
 
 ### `pff_nfl_player_seasons(*, league: 'Optional[str]' = 'nfl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_seasons}
 
-Seasons a player has data for
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/seasons`
 Example URL: https://premium.pff.com/api/v1/player/seasons
@@ -4435,7 +4435,7 @@ pff_player_seasons()
 
 ### `pff_nfl_player_snaps_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_snaps_summary}
 
-Player-detail report /snaps/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/snaps/summary`
 Example URL: https://premium.pff.com/api/v1/player/snaps/summary
@@ -4465,7 +4465,7 @@ pff_player_snaps_summary()
 
 ### `pff_nfl_players(*, league: 'Optional[str]' = 'nfl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_players}
 
-Player search (name=) or lookup (id=)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
 Endpoint: `GET https://premium.pff.com/api/v1/players`
 Example URL: https://premium.pff.com/api/v1/players
@@ -4493,7 +4493,7 @@ pff_players()
 
 ### `pff_nfl_teams(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_teams}
 
-Teams / franchise groups + games for a league-season
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams`
 Example URL: https://premium.pff.com/api/v1/teams
@@ -4520,7 +4520,7 @@ pff_teams()
 
 ### `pff_nfl_teams_overview(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_teams_overview}
 
-Team overview table (By Team landing)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams/overview`
 Example URL: https://premium.pff.com/api/v1/teams/overview
@@ -4548,7 +4548,7 @@ pff_teams_overview()
 
 ### `pff_ufl_facet_blocking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_blocking_summary}
 
-Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
@@ -4579,7 +4579,7 @@ pff_facet_blocking_summary()
 
 ### `pff_ufl_facet_coverage_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_coverage_scheme}
 
-Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_scheme`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
@@ -4610,7 +4610,7 @@ pff_facet_coverage_scheme()
 
 ### `pff_ufl_facet_coverage_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_coverage_summary}
 
-Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
@@ -4641,7 +4641,7 @@ pff_facet_coverage_summary()
 
 ### `pff_ufl_facet_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_defense_summary}
 
-Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/defense/summary
@@ -4672,7 +4672,7 @@ pff_facet_defense_summary()
 
 ### `pff_ufl_facet_field_goal_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_field_goal_summary}
 
-Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/field_goal/summary`
 Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
@@ -4703,7 +4703,7 @@ pff_facet_field_goal_summary()
 
 ### `pff_ufl_facet_kicking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_kicking_summary}
 
-Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/kickoff/summary`
 Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
@@ -4734,7 +4734,7 @@ pff_facet_kicking_summary()
 
 ### `pff_ufl_facet_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_offense_summary}
 
-Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/summary`
 Example URL: https://premium.pff.com/api/v1/facet/offense/summary
@@ -4765,7 +4765,7 @@ pff_facet_offense_summary()
 
 ### `pff_ufl_facet_pass_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pass_blocking}
 
-Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/pass_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
@@ -4796,7 +4796,7 @@ pff_facet_pass_blocking()
 
 ### `pff_ufl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pass_rush_summary}
 
-Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
@@ -4827,7 +4827,7 @@ pff_facet_pass_rush_summary()
 
 ### `pff_ufl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_allowed_pressure}
 
-Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/allowed_pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
@@ -4858,7 +4858,7 @@ pff_facet_passing_allowed_pressure()
 
 ### `pff_ufl_facet_passing_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_concept}
 
-Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/concept`
 Example URL: https://premium.pff.com/api/v1/facet/passing/concept
@@ -4889,7 +4889,7 @@ pff_facet_passing_concept()
 
 ### `pff_ufl_facet_passing_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_depth}
 
-Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/depth`
 Example URL: https://premium.pff.com/api/v1/facet/passing/depth
@@ -4920,7 +4920,7 @@ pff_facet_passing_depth()
 
 ### `pff_ufl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_detail_stats}
 
-Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/detail`
 Example URL: https://premium.pff.com/api/v1/facet/passing/detail
@@ -4951,7 +4951,7 @@ pff_facet_passing_detail_stats()
 
 ### `pff_ufl_facet_passing_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_pressure}
 
-Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/pressure`
 Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
@@ -4982,7 +4982,7 @@ pff_facet_passing_pressure()
 
 ### `pff_ufl_facet_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_summary}
 
-Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/passing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/passing/summary
@@ -5013,7 +5013,7 @@ pff_facet_passing_summary()
 
 ### `pff_ufl_facet_pbes(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pbes}
 
-Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line`
 Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line
@@ -5044,7 +5044,7 @@ pff_facet_pbes()
 
 ### `pff_ufl_facet_prps(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_prps}
 
-Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush
@@ -5075,7 +5075,7 @@ pff_facet_prps()
 
 ### `pff_ufl_facet_punting_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_punting_summary}
 
-Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/punting/summary`
 Example URL: https://premium.pff.com/api/v1/facet/punting/summary
@@ -5106,7 +5106,7 @@ pff_facet_punting_summary()
 
 ### `pff_ufl_facet_receiving_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_concept}
 
-Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/concept`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
@@ -5137,7 +5137,7 @@ pff_facet_receiving_concept()
 
 ### `pff_ufl_facet_receiving_coverage(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_coverage}
 
-Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/coverage`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
@@ -5168,7 +5168,7 @@ pff_facet_receiving_coverage()
 
 ### `pff_ufl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_coverage_stats}
 
-Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/coverage_matchup`
 Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
@@ -5199,7 +5199,7 @@ pff_facet_receiving_coverage_stats()
 
 ### `pff_ufl_facet_receiving_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_depth}
 
-Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/depth`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
@@ -5230,7 +5230,7 @@ pff_facet_receiving_depth()
 
 ### `pff_ufl_facet_receiving_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_scheme}
 
-Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/scheme`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
@@ -5261,7 +5261,7 @@ pff_facet_receiving_scheme()
 
 ### `pff_ufl_facet_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_summary}
 
-Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
@@ -5292,7 +5292,7 @@ pff_facet_receiving_summary()
 
 ### `pff_ufl_facet_return_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_return_summary}
 
-Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/return/summary`
 Example URL: https://premium.pff.com/api/v1/facet/return/summary
@@ -5323,7 +5323,7 @@ pff_facet_return_summary()
 
 ### `pff_ufl_facet_run_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_run_blocking}
 
-Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/offense/run_blocking`
 Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
@@ -5354,7 +5354,7 @@ pff_facet_run_blocking()
 
 ### `pff_ufl_facet_run_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_run_defense_summary}
 
-Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/defense/run`
 Example URL: https://premium.pff.com/api/v1/facet/defense/run
@@ -5385,7 +5385,7 @@ pff_facet_run_defense_summary()
 
 ### `pff_ufl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_rushing_direction_stats}
 
-Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/direction`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
@@ -5416,7 +5416,7 @@ pff_facet_rushing_direction_stats()
 
 ### `pff_ufl_facet_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_rushing_summary}
 
-Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
@@ -5447,7 +5447,7 @@ pff_facet_rushing_summary()
 
 ### `pff_ufl_facet_slot_coverages(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_slot_coverages}
 
-Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
 Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
@@ -5478,7 +5478,7 @@ pff_facet_slot_coverages()
 
 ### `pff_ufl_facet_special_teams_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_special_teams_summary}
 
-Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/special/summary`
 Example URL: https://premium.pff.com/api/v1/facet/special/summary
@@ -5509,7 +5509,7 @@ pff_facet_special_teams_summary()
 
 ### `pff_ufl_facet_time_in_pockets(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_time_in_pockets}
 
-Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
 Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
 Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
@@ -5540,7 +5540,7 @@ pff_facet_time_in_pockets()
 
 ### `pff_ufl_games(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_games}
 
-Games list for league-season(-week)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
 Endpoint: `GET https://premium.pff.com/api/v1/games`
 Example URL: https://premium.pff.com/api/v1/games
@@ -5568,7 +5568,7 @@ pff_games()
 
 ### `pff_ufl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_leagues}
 
-Leagues + seasons + week groups (bootstrap)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
 Endpoint: `GET https://premium.pff.com/api/v1/leagues`
 Example URL: https://premium.pff.com/api/v1/leagues
@@ -5593,7 +5593,7 @@ pff_leagues()
 
 ### `pff_ufl_player_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_defense_summary}
 
-Player-detail report /defense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/defense/summary`
 Example URL: https://premium.pff.com/api/v1/player/defense/summary
@@ -5623,7 +5623,7 @@ pff_player_defense_summary()
 
 ### `pff_ufl_player_offense_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_offense_blocking}
 
-Player-detail report /offense/blocking (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/blocking`
 Example URL: https://premium.pff.com/api/v1/player/offense/blocking
@@ -5653,7 +5653,7 @@ pff_player_offense_blocking()
 
 ### `pff_ufl_player_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_offense_summary}
 
-Player-detail report /offense/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/offense/summary`
 Example URL: https://premium.pff.com/api/v1/player/offense/summary
@@ -5683,7 +5683,7 @@ pff_player_offense_summary()
 
 ### `pff_ufl_player_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_passing_summary}
 
-Player-detail report /passing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/passing/summary`
 Example URL: https://premium.pff.com/api/v1/player/passing/summary
@@ -5713,7 +5713,7 @@ pff_player_passing_summary()
 
 ### `pff_ufl_player_position_pivot(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_position_pivot}
 
-Positional-pivot export (JSON; UI also uses this for CSV download)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/position/pivot`
 Example URL: https://premium.pff.com/api/v1/player/position/pivot
@@ -5742,7 +5742,7 @@ pff_player_position_pivot()
 
 ### `pff_ufl_player_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_receiving_summary}
 
-Player-detail report /receiving/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/receiving/summary`
 Example URL: https://premium.pff.com/api/v1/player/receiving/summary
@@ -5772,7 +5772,7 @@ pff_player_receiving_summary()
 
 ### `pff_ufl_player_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_rushing_summary}
 
-Player-detail report /rushing/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/rushing/summary`
 Example URL: https://premium.pff.com/api/v1/player/rushing/summary
@@ -5802,7 +5802,7 @@ pff_player_rushing_summary()
 
 ### `pff_ufl_player_seasons(*, league: 'Optional[str]' = 'ufl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_seasons}
 
-Seasons a player has data for
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/seasons`
 Example URL: https://premium.pff.com/api/v1/player/seasons
@@ -5829,7 +5829,7 @@ pff_player_seasons()
 
 ### `pff_ufl_player_snaps_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_snaps_summary}
 
-Player-detail report /snaps/summary (per-week + totals for one player)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
 Endpoint: `GET https://premium.pff.com/api/v1/player/snaps/summary`
 Example URL: https://premium.pff.com/api/v1/player/snaps/summary
@@ -5859,7 +5859,7 @@ pff_player_snaps_summary()
 
 ### `pff_ufl_players(*, league: 'Optional[str]' = 'ufl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_players}
 
-Player search (name=) or lookup (id=)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
 Endpoint: `GET https://premium.pff.com/api/v1/players`
 Example URL: https://premium.pff.com/api/v1/players
@@ -5887,7 +5887,7 @@ pff_players()
 
 ### `pff_ufl_teams(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_teams}
 
-Teams / franchise groups + games for a league-season
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams`
 Example URL: https://premium.pff.com/api/v1/teams
@@ -5914,7 +5914,7 @@ pff_teams()
 
 ### `pff_ufl_teams_overview(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_teams_overview}
 
-Team overview table (By Team landing)
+LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
 Endpoint: `GET https://premium.pff.com/api/v1/teams/overview`
 Example URL: https://premium.pff.com/api/v1/teams/overview

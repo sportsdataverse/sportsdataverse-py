@@ -44,8 +44,14 @@ def _sub_slugs(path: str, sport: str, league: str) -> str:
     """Substitute only the {sport}/{league} slugs, leaving path-param tokens intact.
 
     (``str.format`` would raise KeyError on the remaining ``{athlete_id}`` etc.)
+    A flat API passes ``""`` for both: its ``{league}`` (PFF ``/v2/{league}/...``) is
+    then an ordinary path param, so an unknown slug leaves the token in place.
     """
-    return path.replace("{sport}", sport).replace("{league}", league)
+    if sport:
+        path = path.replace("{sport}", sport)
+    if league:
+        path = path.replace("{league}", league)
+    return path
 
 
 def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> str:
@@ -1778,6 +1784,7 @@ FLAT_APIS = [
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
     ("pff", "nfl"),
+    ("pff_api", "nfl"),
     ("torvik", "mbb"),
     ("bart_wbb", "wbb"),
     ("kenpom", "mbb"),
@@ -2357,8 +2364,9 @@ _FLAT_API_DOC = {
     "sports247_site_pages": "247Sports Site Pages (247sports.com)",
     # keyed twice: "pff" matches the FLAT_APIS stem; "pff_core" matches the rendered
     # module name the docs renderer looks up (api.module).
-    "pff": "PFF Premium Stats (premium.pff.com)",
-    "pff_core": "PFF Premium Stats (premium.pff.com)",
+    "pff": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
+    "pff_core": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
+    "pff_api": "PFF Developer API (api.pff.com, API key)",
     "torvik": "Bart Torvik T-Rank (barttorvik.com)",
     "bart_wbb": "Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)",
     "kenpom": "KenPom (kenpom.com, subscription)",
