@@ -199,6 +199,8 @@ def _trimmed(game_id: int) -> dict:
       a touchdown and a two-point pass in one row, in the 2014 "(Two pt pass, ...)" wording.
     * ``summary_401831583_trimmed.json.gz`` -- Arizona @ SMU, 2025 bowl. Two Arizona
       touchdowns whose appended two-point tries fail, one of them re-tried after a penalty.
+    * ``summary_401628439_trimmed.json.gz`` -- Georgia Tech @ Georgia, 2024 week 14. Eight
+      overtimes; from the third on, alternating two-point attempts.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -458,6 +460,24 @@ def test_a_vendor_touchdowns_last_two_point_attempt_decides() -> None:
     for row_id in (401831583536, 401831583650):
         r = plays.filter(pl.col("id") == row_id).row(0, named=True)
         assert (r["type.text"], r["EP_end"]) == ("Passing Touchdown", 6), row_id
+
+
+def test_a_failed_overtime_two_point_attempt_realises_nothing() -> None:
+    """401628439: Georgia and Georgia Tech trade two-point attempts from the third overtime.
+
+    ESPN types each attempt "Two Point Pass" / "Two Point Rush", and the EP_end branch for
+    those types read only the 2004 wording "is no good": the nine "Two-Point Conversion
+    failed" rows realised 2 (EPA +1.08, the value of a made two) instead of 0.
+    """
+    plays = _offline_plays(401628439)
+    tries = plays.filter(pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"]))
+    failed = tries.filter(pl.col("text") == "Two-Point Conversion failed")
+    assert failed.height == 9
+    assert failed["EP_end"].to_list() == [0] * 9
+    assert failed["EPA"].to_list() == pytest.approx([-0.92] * 9)
+    # the attempts ESPN scored (no text) are the made ones
+    made = tries.filter(pl.col("scoringPlay") == True)  # noqa: E712
+    assert made.height and made["EP_end"].to_list() == [2] * made.height
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

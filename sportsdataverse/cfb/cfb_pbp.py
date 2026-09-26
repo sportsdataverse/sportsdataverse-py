@@ -6636,19 +6636,18 @@ class CFBPlayProcess(object):
                 # Two-Point Conversion Missed
                 .when(pl.col("type.text").is_in(["Two-Point Conversion Missed"]))
                 .then(0)
-                # Two Point Pass/Rush Missed (Pre-2014 Data)
+                # Two Point Pass/Rush Missed: 2004-06 "2 point pass from X to Y is no good", and
+                # 2019-26 overtime-shootout attempts "Two-Point Conversion failed" / "#1 X pass
+                # attempt failed" (14 rows, which read as good and realised 2). A shootout row
+                # with no text is read from ESPN's scoringPlay.
                 .when(
                     (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good"),
+                        pl.col("text").str.contains(r"(?i)no good|failed").fill_null(pl.col("scoringPlay") != True),  # noqa: E712
                     ),
                 )
                 .then(0)
-                # Two Point Pass/Rush Good (Pre-2014 Data)
-                .when(
-                    (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good") == False,
-                    ),
-                )
+                # Two Point Pass/Rush Good
+                .when(pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"]))
                 .then(2)
                 # Blocked PAT
                 .when(pl.col("type.text").is_in(["Blocked PAT"]))
