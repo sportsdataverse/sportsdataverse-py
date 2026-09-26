@@ -497,8 +497,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         # ``col`` on the last row before this one that is not a dead-ball row
         return pl.when(dead_ball).then(None).otherwise(pl.col(col)).forward_fill().shift(1)
 
-    # The touchdown before a try row is the last play before it that is not a clock
-    # stoppage. What it hands over is its end state scored for its END team: the model's
+    # The touchdown before a try row is the last play before it that is not a dead-ball
+    # row. What it hands over is its end state scored for its END team: the model's
     # own end prediction when it kept its frame, and the end view restated with the end
     # team's margin (``_wa_flip``, as B14 uses it) when ESPN flipped a scoring play's
     # end.team to the scorer -- a pick-six, a punt or fumble return. The plain end view of
