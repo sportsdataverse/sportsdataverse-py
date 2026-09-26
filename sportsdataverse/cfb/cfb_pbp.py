@@ -2767,6 +2767,72 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
+            .with_columns(
+                # 2007-13 old-NCAA feeds file a touchdown play and its kick as ONE row typed
+                # as the kick: "Maynard, Zach left side pass complete to Miller, Anthony for 19
+                # yards to the WSU0, 1ST DOWN CAL, TOUCHDOWN, clock 03:41, D'Amato, Vincen kick
+                # attempt good." / "Jahvid Best rush for 1 yard for a TOUCHDOWN. Jordan Kay
+                # extra point GOOD." (270 rows typed "Extra Point Good|Missed"). The try pin
+                # scored the whole drive-ending play as a kick (EPA +0.08). A pass or rush
+                # touchdown is retyped to the scrimmage type ESPN uses for it, so the pipeline
+                # makes it a Passing/Rushing Touchdown, and __add_xp_suffix_cols reads its
+                # kick. Not the try texts that end "... for a TOUCHDOWN" ("Two-point
+                # conversion attempt, X rush GOOD for a TOUCHDOWN."), and not a return or
+                # fumble touchdown (23 rows): ESPN's start team on those is the scorer, not
+                # the team the play began with, so the defensive touchdown types would book
+                # the points to the wrong side; they keep the kick's type.
+                pl.when(
+                    pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & pl.col("text").str.contains(r"(?i)touchdown|\btd\b")
+                    & ~pl.col("text").str.contains(
+                        r"(?i)(?:extra point|kick attempt|conversion).*(?:touchdown|\btd\b)"
+                        r"|intercept|fumble|punt|kick ?off|\breturn"
+                    ),
+                )
+                .then(
+                    pl.when(pl.col("text").str.contains(r"(?i)\bpass\b"))
+                    .then(pl.lit("Pass Completion"))
+                    .when(pl.col("text").str.contains(r"(?i)\brush|\brun\b|scramble|sneak"))
+                    .then(pl.lit("Rush"))
+                    .otherwise(pl.col("type.text"))
+                )
+                # The same feeds type a handful of other plays as a kick (2008-12, 6 rows): a
+                # kickoff, a penalty on the try, a field goal, an overtime marker.
+                .when(
+                    pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & ~pl.col("text").str.contains(r"(?i)extra point|kick attempt|conversion|pass attempt|rush attempt")
+                )
+                .then(
+                    pl.when(pl.col("text").str.contains(r"(?i)\bkickoff\b"))
+                    .then(pl.lit("Kickoff"))
+                    .when(pl.col("text").str.contains(r"(?i)field goal (?:is )?good"))
+                    .then(pl.lit("Field Goal Good"))
+                    .when(pl.col("text").str.contains(r"(?i)\bpenalty\b"))
+                    .then(pl.lit("Penalty"))
+                    .when(pl.col("text").str.contains(r"(?i)(?:start|end) of .*(?:quarter|half|overtime)"))
+                    .then(pl.lit("End Period"))
+                    .otherwise(pl.col("type.text"))
+                )
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # Such a row keeps the try's start state (down -1, often the 3). A touchdown's
+                # gain is its distance to the end zone, so the text's "for 19 yards" is where
+                # the snap was (it matches ESPN's own start on 195 of the 245 rows naming one).
+                pl.when(
+                    pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & pl.col("type.text").is_in(["Pass Completion", "Rush"])
+                )
+                .then(
+                    pl.col("text")
+                    .str.extract(r"(?i)\bfor (\d{1,2}) (?:yards?|yds?|yd)\b", 1)
+                    .cast(pl.Int64, strict=False)
+                    .fill_null(pl.col("start.yardsToEndzone"))
+                )
+                .otherwise(pl.col("start.yardsToEndzone"))
+                .alias("start.yardsToEndzone"),
+            )
         )
 
         return pbp_txt
@@ -5820,15 +5886,26 @@ class CFBPlayProcess(object):
         xp_miss_kw_re = r"(?i)\(\s*([^()]*?)\s*\b(?:pat|kick)\s+(?:missed|blocked|failed)\s*\)"
         xp_miss_bare_re = r"(?i)\(\s*([^()]+?)\s+(?:missed|blocked)\s*\)"
         xp_ncaa_re = r"(?i)(?:#\d+\s+)?([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+kick attempt\s+(good|failed)"
+        xp_old_re = r"(?i)[.,]\s+([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+extra point\s+(good|missed|blocked|no good)"
 
         is_td_row = (pl.col("td_play") == True) | pl.col("type.text").str.contains("(?i)touchdown")  # noqa: E712
-        gated = (pl.col("season") >= 2014) & is_td_row & pl.col("text").is_not_null()
+        # 2007-13: the pass and rush touchdowns ESPN typed as their own kick (retyped in
+        # __helper_cfb_pbp_features) have no separate try row; their kick is read here too,
+        # including the old wording "... for a TOUCHDOWN. Jordan Kay extra point GOOD.".
+        folded_kick_row = (
+            pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed"])
+            & pl.col("type.text").is_in(["Passing Touchdown", "Rushing Touchdown"])
+            if "orig_play_type" in play_df.columns
+            else pl.lit(False)
+        )
+        gated = ((pl.col("season") >= 2014) | folded_kick_row) & is_td_row & pl.col("text").is_not_null()
 
         made_name = pl.col("text").str.extract(xp_made_re, 1)
         miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
         miss_bare_name = pl.col("text").str.extract(xp_miss_bare_re, 1)
         ncaa_name = pl.col("text").str.extract(xp_ncaa_re, 1)
-        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2)
+        # lower-cased: 2007-13 writes "kick attempt GOOD" (2014+ always "good")
+        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2).str.to_lowercase()
 
         def _guard(e):
             # a captured "name" that is really a 2pt phrase is nulled
@@ -5836,11 +5913,19 @@ class CFBPlayProcess(object):
 
         # fill_null(False) is load-bearing: Kleene logic makes `False | null` null,
         # and (ncaa_result == "good") is null wherever the pattern did not match.
-        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good"))).fill_null(False)
+        old_name = pl.when(folded_kick_row).then(pl.col("text").str.extract(xp_old_re, 1))
+        old_result = pl.when(folded_kick_row).then(pl.col("text").str.extract(xp_old_re, 2).str.to_lowercase())
+
+        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good")) | (old_result == pl.lit("good"))).fill_null(
+            False
+        )
         missed = (
-            miss_kw_name.is_not_null() | _guard(miss_bare_name).is_not_null() | (ncaa_result == pl.lit("failed"))
+            miss_kw_name.is_not_null()
+            | _guard(miss_bare_name).is_not_null()
+            | (ncaa_result == pl.lit("failed"))
+            | old_result.is_in(["missed", "blocked", "no good"])
         ).fill_null(False)
-        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name).str.strip_chars()
+        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name, old_name).str.strip_chars()
 
         return play_df.with_columns(
             pl.when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),

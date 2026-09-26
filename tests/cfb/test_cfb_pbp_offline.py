@@ -213,6 +213,8 @@ def _trimmed(game_id: int) -> dict:
       then an empty "2pt Conversion" row at the same clock.
     * ``summary_292542649_trimmed.json.gz`` -- Colorado @ Toledo, 2009 week 2. "Two-point
       conversion attempt, Aaron Opelt pass failed." typed "2pt Conversion" and scored.
+    * ``summary_313090025_trimmed.json.gz`` -- Washington State @ California, 2011 week 10.
+      Each of the four touchdowns is one old-NCAA row, play and kick, typed "Extra Point Good".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -561,6 +563,60 @@ def test_a_try_row_repeating_a_realised_try_realises_nothing() -> None:
     plays = _offline_plays(292542649)
     r = plays.filter(pl.col("text").str.contains("Aaron Opelt pass failed")).row(0, named=True)
     assert (r["type.text"], r["EP_end"]) == ("Two-Point Conversion Missed", 0)
+
+
+def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None:
+    """313090025: "Maynard, Zach left side pass complete to Miller, Anthony for 19 yards to the
+    WSU0, 1ST DOWN CAL, TOUCHDOWN, clock 10:57, ... kick attempt good." typed "Extra Point
+    Good", as is each of the game's four touchdowns (2007-13: 247 such pass/rush rows).
+
+    The try pin scored each as a kick: EP_start 0.92, EP_end 1, EPA +0.08 for a touchdown
+    drive's last play. It is now the pass or rush touchdown the text describes, from the spot
+    its gain names, and realises the touchdown and its kick (7, or 6 on "kick attempt failed
+    (blocked)").
+    """
+    plays = _offline_plays(313090025)
+    tds = plays.filter((pl.col("orig_play_type") == "Extra Point Good") & pl.col("text").str.contains("TOUCHDOWN"))
+    assert tds.height == 4
+    assert set(tds["type.text"]) == {"Passing Touchdown", "Rushing Touchdown"}
+    r = tds.filter(pl.col("text").str.starts_with("Maynard, Zach left side pass complete")).row(0, named=True)
+    assert (r["type.text"], r["start.yardsToEndzone"], r["xp_made"], r["EP_end"]) == ("Passing Touchdown", 19, True, 7)
+    assert 2 < r["EPA"] < 5
+    blocked = tds.filter(pl.col("text").str.contains("kick attempt failed")).row(0, named=True)
+    assert (blocked["xp_attempt"], blocked["xp_made"], blocked["EP_end"]) == (True, False, 6)
+    # no scrimmage touchdown is left pinned as a try
+    assert (tds["EP_start"] != 0.92).all()
+
+
+@pytest.mark.parametrize(
+    ("text", "made"),
+    [
+        ("Jahvid Best rush for 1 yard for a TOUCHDOWN. Jordan Kay extra point GOOD.", True),
+        ("Tony Zenon rush for 35 yards for a TOUCHDOWN.  David Scully extra point GOOD.", True),
+        ("Nate Allen 3 yd run for a TOUCHDOWN. Delbert Alvarado extra point MISSED.", False),
+        (
+            "JONES, Aaron rush right for 8 yards to the NM0, TOUCHDOWN, clock 01:19, MATTOX, Jay kick attempt GOOD.",
+            True,
+        ),
+    ],
+)
+def test_the_old_ncaa_kick_wordings_on_a_touchdown_row(text: str, made: bool) -> None:
+    frame = pl.DataFrame(
+        {
+            "text": [text],
+            "season": [2012],
+            "td_play": [True],
+            "type.text": ["Rushing Touchdown"],
+            "orig_play_type": ["Extra Point Good"],
+        }
+    )
+    out = CFBPlayProcess(gameId=1)._CFBPlayProcess__add_xp_suffix_cols(frame).row(0, named=True)
+    assert (out["xp_attempt"], out["xp_made"]) == (True, made)
+    # a touchdown ESPN typed as the play itself keeps its separate kick row: not read
+    out = CFBPlayProcess(gameId=1)._CFBPlayProcess__add_xp_suffix_cols(
+        frame.with_columns(pl.lit("Rush").alias("orig_play_type"))
+    )
+    assert out["xp_attempt"].to_list() == [False]
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:
