@@ -521,6 +521,14 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     takes_over = (t.is_in(_TRY_TYPES) & (td_end == team)) | (
         before_try & ((td_end == team) | (td_end == _next(team, dead_ball)))
     )
+    # An overtime shootout attempt (2019-26, periods 5+: alternating "Two Point Pass|Rush"
+    # rows, no touchdown before them) is not a try after a touchdown. ESPN often leaves its
+    # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
+    # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
+    if "period.number" in play_df.columns:
+        takes_over = takes_over & ~(
+            (pl.col("period.number") >= 5) & ~_last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
+        )
 
     return (
         play_df.with_columns(

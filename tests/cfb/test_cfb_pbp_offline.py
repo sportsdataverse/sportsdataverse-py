@@ -217,6 +217,8 @@ def _trimmed(game_id: int) -> dict:
       Each of the four touchdowns is one old-NCAA row, play and kick, typed "Extra Point Good".
     * ``summary_282710130_trimmed.json.gz`` -- Wisconsin @ Michigan, 2008 week 5. Michigan
       scores, is flagged for ineligible downfield, and misses the two.
+    * ``summary_401282146_trimmed.json.gz`` -- Alabama @ Auburn, 2021 week 13. Four
+      overtimes; the third and fourth are two-point attempts, all filed under Alabama.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -643,6 +645,24 @@ def test_a_penalty_between_a_touchdown_and_its_try_is_dead_ball() -> None:
     assert pen["wp_after"] == pytest.approx(pen["wp_before"], abs=1e-6)
     assert tr["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
     assert (pen["EP_start"], pen["EP_end"], pen["EPA"]) == (pytest.approx(0.92), pytest.approx(0.92), 0)
+
+
+def test_an_overtime_shootout_attempt_is_not_handed_a_touchdowns_board() -> None:
+    """401282146: after both teams' field goals in the second overtime, "Bryce Young Pass to
+    John Metchie III for Two-Point Conversion" opens the third.
+
+    Shootout attempts are typed as tries, so each took the end state of the row before it as
+    if that were its touchdown -- here Alabama's field goal before it (0.532), and the one
+    two-point pass swung win probability by 0.447. ESPN leaves most attempts' team
+    empty and the fill copies the previous one's, so consecutive attempts of different teams
+    handed over to each other (17 of 31 pairs, 2019-26). An attempt in overtime with no
+    touchdown before it starts from its own state.
+    """
+    plays = _offline_plays(401282146)
+    first = plays.filter(pl.col("type.text") == "Two Point Pass").row(0, named=True)
+    assert first["period"] == 7
+    assert abs(first["wpa"]) < 0.05, first["wpa"]
+    assert first["wp_before"] > 0.9
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:
