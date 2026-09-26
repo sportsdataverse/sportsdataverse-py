@@ -8972,19 +8972,19 @@ A team's depth-chart roster with grades, ranks and snap counts
 |---|---|---|
 | `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
 | `name` | character | Player's display name as PFF lists it (e.g. "Joe Burrow"). |
-| `jersey` | character | Athlete's jersey number as a string. |
-| `position` | character | Position abbreviation. |
+| `jersey` | character | Jersey number as a string (e.g. "9"); null when PFF lists none. |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
 | `alignment` | character | Depth-chart alignment PFF lists the player at (e.g. "QB", "HB"); rows come in depth-chart order. |
 | `unit` | character | Depth-chart unit of the row: offense, defense or special-teams. |
 | `depth_order` | integer | Player's order on the depth chart at his alignment (1 = first on the depth chart). |
 | `grade` | numeric | Player's PFF season grade (0-100) for the requested season; null when he has no graded snaps. |
 | `grade_rank` | integer | Rank of the player's PFF grade within the pool PFF ranks him in (1 = highest grade; pool size in grade_rank_of). |
 | `grade_rank_of` | integer | Size of the ranked pool behind grade_rank (PFF's 'Grade rank of'); null when the player is unranked. |
-| `height` | integer | Athlete height. ESPN rosters give total inches (e.g. 74); the PFF Developer API roster packs feet and inches as feet x 100 + inches (e.g. 604 = 6 ft 4 in). |
-| `weight` | integer | Athlete weight in pounds. |
+| `height` | integer | Player height packed as feet x 100 + inches (e.g. 604 = 6 ft 4 in); null when PFF has none. |
+| `weight` | integer | Player weight in pounds; null when PFF has none. |
 | `birth_date` | character | Player's date of birth (YYYY-MM-DD). |
 | `eligibility_year` | integer | Eligibility year PFF lists for the player; on the NFL rows captured it is the season the player became draft-eligible (e.g. 2020). |
-| `status` | character | Roster status (e.g. Active). |
+| `status` | character | Player availability status: "active", "questionable" or "out". |
 | `snap_counts` | integer | Snaps the player played for the team in the requested season; null when he played none. |
 | `snap_pct` | numeric | Player's snap share in percent (e.g. 98.8), PFF's 'Snap %'; null when he played no snaps. |
 
@@ -10232,7 +10232,7 @@ One of nineteen player reports for a team, one row per player
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `franchise_id` | integer | PFF franchise (team) id (integer join key). |
 | `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
 | `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
 | `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
 | `targets` | integer | Targets: passes thrown to the player (receiving, rushing reports) or into the player's coverage (coverage, defense reports). |
@@ -10292,7 +10292,7 @@ One of nineteen player reports for a team, one row per player
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `franchise_id` | integer | PFF franchise (team) id (integer join key). |
 | `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
 | `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
 | `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
 | `base_targets` | integer | Total targets from the facet's unsplit base row, across all depths and directions. |
@@ -10458,7 +10458,7 @@ One of nineteen player reports for a team, one row per player
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `franchise_id` | integer | PFF franchise (team) id (integer join key). |
 | `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
 | `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
 | `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
 | `snap_counts_offense` | integer | Offensive snaps played. |
@@ -10496,7 +10496,7 @@ One of nineteen player reports for a team, one row per player
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `franchise_id` | integer | PFF franchise (team) id (integer join key). |
 | `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
 | `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
 | `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
 | `snap_counts_lt` | integer | Snaps aligned at left tackle. |
@@ -10551,7 +10551,7 @@ One of nineteen player reports for a team, one row per player
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `franchise_id` | integer | PFF franchise (team) id (integer join key). |
 | `team_abbreviation` | character | Abbreviation of the team the player is credited to for the range (the /v2 counterpart of /v1's team). |
-| `games_played` | integer | Games played. |
+| `games_played` | integer | Number of games the player appeared in over the requested span (the /v2 counterpart of /v1's player_game_count). |
 | `draft_season` | integer | Season of the player's NFL draft class, per PFF. |
 | `eligible_season` | integer | Season of the player's NFL draft eligibility, per PFF. |
 | `snap_counts_lt` | integer | Snaps aligned at left tackle. |

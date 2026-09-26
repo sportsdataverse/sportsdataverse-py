@@ -695,4 +695,4 @@ frames:
     type: integer
   section: defense-opponent-tendencies
 kind: frames
-schema: team_stats
+schema: pff_api_team_stats
