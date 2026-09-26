@@ -195,6 +195,8 @@ def _trimmed(game_id: int) -> dict:
       Tech returns a blocked ECU extra point "for 2 defensive point conversion".
     * ``summary_243392572_trimmed.json.gz`` -- California @ Southern Miss, 2004. Cal returns
       Southern Miss's missed extra point for two (16-17 -> 16-19); the row has no type.
+    * ``summary_400548425_trimmed.json.gz`` -- Idaho @ Georgia Southern, 2014 week 7. Idaho scores
+      a touchdown and a two-point pass in one row, in the 2014 "(Two pt pass, ...)" wording.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -424,6 +426,20 @@ def test_a_2004_missed_pat_returned_is_a_defensive_two() -> None:
     td = plays.row(r["i"] - 1, named=True)
     assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Rushing Touchdown"
     assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
+def test_a_2014_two_pt_clause_scores_the_two() -> None:
+    """400548425: "Elijhaa Penny run for 4 yds for a TD, (Two pt pass, Matt Linehan pass  to
+    Deon Watson GOOD)" (Idaho trails 10-33 -> 18-33).
+
+    The two-point text test wanted the word "conversion", which 2014's "(Two pt pass|rush,
+    ... GOOD)" never uses (37 rows), and in 2014 ESPN rarely sends pointAfterAttempt: the
+    touchdown realised the 6.92 unknown instead of 8.
+    """
+    plays = _offline_plays(400548425)
+    r = plays.filter(pl.col("id") == 400548425103968901).row(0, named=True)
+    assert r["type.text"] == "Rushing Touchdown"
+    assert r["EP_end"] == 8
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

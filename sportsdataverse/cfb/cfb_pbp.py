@@ -6506,8 +6506,14 @@ class CFBPlayProcess(object):
         # in the 6 rows where it disagrees with a value-2 pointAfterAttempt ("Two-Point Run
         # Conversion Failed", 2019-26), ESPN's score moved by 6.
         _lower = pl.col("text").str.to_lowercase()
-        two_pt_failed = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed"))
-        two_pt_good = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed") == False)
+        # The text names a two-point try: "(X pass to Y for Two-Point Conversion)", "(Two-Point
+        # Conversion Failed)" (2014-26), and 2014's "(Two pt pass, X pass to Y GOOD)" / "(Two
+        # pt rush, X GOOD)" (37 rows, all good; ESPN's score +8), which name no "conversion"
+        # and took the 6.92 unknown. Not a bare "2 pt": 400547980's "PAT blocked, returned by
+        # defense for 2 pt conv" is the defence's two.
+        two_pt_named = _lower.str.contains(r"(?i)conversion|(?:two|2) pt (?:pass|rush)")
+        two_pt_failed = two_pt_named.and_(_lower.str.contains(r"(?i)failed"))
+        two_pt_good = two_pt_named.and_(_lower.str.contains(r"(?i)failed") == False)
         if "two_point_conv_result" in play_df.columns:
             two_pt_failed = (pl.col("two_point_conv_result") == "failure").fill_null(False).or_(two_pt_failed)
             two_pt_good = (
