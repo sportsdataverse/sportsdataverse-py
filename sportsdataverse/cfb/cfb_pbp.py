@@ -3223,6 +3223,21 @@ class CFBPlayProcess(object):
                 for c in ("homeScore", "awayScore")
             ]
         )
+        # A few feeds keep homeScore/awayScore reversed for the whole game (2006 262590245,
+        # 2016 400876038 / 400876049, 2018 401135269): the away team's points sit under
+        # homeScore from its first score to the last row, so every margin in the game read
+        # for the wrong side. The header's final is the one statement of the score that does
+        # not come from a play row; when the last row is that final reversed, and the two
+        # sides differ, the columns are swapped back before any margin is derived.
+        _reversed = (
+            (pl.col("homeScore").last() == pl.col("awayFinalScore").first())
+            & (pl.col("awayScore").last() == pl.col("homeFinalScore").first())
+            & (pl.col("homeFinalScore").first() != pl.col("awayFinalScore").first())
+        ).fill_null(False)
+        play_df = play_df.with_columns(
+            homeScore=pl.when(_reversed).then(pl.col("awayScore")).otherwise(pl.col("homeScore")),
+            awayScore=pl.when(_reversed).then(pl.col("homeScore")).otherwise(pl.col("awayScore")),
+        )
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )

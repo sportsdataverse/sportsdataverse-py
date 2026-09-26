@@ -975,3 +975,13 @@ def test_a_2004_touchdown_started_by_the_wrong_team_is_the_scorers() -> None:
     assert r["start.pos_team.id"] == r["end.pos_team.id"] == 12
     assert r["type.text"] == "Rushing Touchdown"
     assert r["EPA"] > 0
+
+
+def test_a_game_whose_score_columns_are_reversed_reads_the_header_final():
+    # 2016 400876049: ESPN files the away team's points under homeScore for the whole game
+    # (the last play shows 35-52 against a 52-35 header final), so every margin read for
+    # the wrong side. The columns are swapped back from the header final.
+    df = _offline_plays(400876049)
+    assert (df["homeScore"].max(), df["awayScore"].max()) == (52, 35)
+    td = df.filter((pl.col("scoringPlay") == True) & (pl.col("start.pos_team.id").cast(pl.Utf8) == "2393"))  # noqa: E712
+    assert td.row(0, named=True)["end.pos_score_diff"] == 7
