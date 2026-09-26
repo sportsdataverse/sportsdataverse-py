@@ -3631,15 +3631,15 @@ payload = nba_l2m("0042500405", raw=True)
 print(payload["game"])
 ```
 
-### `nba_l2m_games(season: 'int', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'pl.DataFrame'` {#nba_l2m_games}
+### `nba_l2m_games(season: 'int', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_l2m_games}
 
 Fetch the list of games with Last Two Minute reports for an NBA season.
 
 Retrieves and parses the L2M season index page from official.nba.com,
 returning a table of all games for which L2M reports exist. JSON reports
 exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
-which this function ignores. Historical (PDF-era) access is planned as a
-vendored release loader (see Plan 01 Task 10); it does not exist yet.
+which this function ignores. A release loader for historical (PDF-era)
+reports is planned but does not exist yet.
 
 **Parameters**
 
@@ -3651,7 +3651,7 @@ vendored release loader (see Plan 01 Task 10); it does not exist yet.
 
 **Returns**
 
-A DataFrame with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
+A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
 
 | col_name | type | description |
 |---|---|---|
