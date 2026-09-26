@@ -564,8 +564,22 @@ class _TermsRefusedError(_TermsGateError):
     (refusals come in windows), which ``fetch_html`` backs off and retries."""
 
 
+# Chromium's error for an in-page fetch() that died at the network layer. A
+# residential exit drops the odd request (seen ~once per 15 min at 8 shards), and
+# rotating on it relaunches the browser AND spends a fresh Terms acceptance from
+# the site-wide budget -- so retry once on the same page first. A second drop in a
+# row is the proxy, and raises (rotates) exactly as before.
+_DROPPED_FETCH = "TypeError: Failed to fetch"
+
+
 def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
-    result = page.evaluate(_RAW_FETCH_JS, url)
+    try:
+        result = page.evaluate(_RAW_FETCH_JS, url)
+    except Exception as exc:  # noqa: BLE001 - only a dropped request is retried
+        if _DROPPED_FETCH not in str(exc):
+            raise
+        logger.debug("in-page fetch dropped, retrying once on the same browser: %s", url)
+        result = page.evaluate(_RAW_FETCH_JS, url)
     return int(result["status"]), str(result["text"])
 
 

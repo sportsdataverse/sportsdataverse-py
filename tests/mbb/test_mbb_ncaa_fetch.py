@@ -329,6 +329,66 @@ def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> N
     assert fetcher._dead == set()  # unsolved != banned -- the IP is not retired
 
 
+class _DroppingPage(_FakePage):
+    """evaluate() raises the scripted errors first, then serves bodies."""
+
+    def __init__(self, errors: "list[str]", bodies: "list[str]") -> None:
+        super().__init__(bodies)
+        self.errors = list(errors)
+        self.evaluates = 0
+
+    def evaluate(self, js: str, url: str) -> dict:
+        self.evaluates += 1
+        if self.errors:
+            raise RuntimeError(self.errors.pop(0))
+        return super().evaluate(js, url)
+
+
+_DROPPED = "Error: Page.evaluate: TypeError: Failed to fetch"
+
+
+def test_dropped_in_page_fetch_is_retried_on_the_same_browser() -> None:
+    """A dropped request used to rotate: a browser relaunch plus a fresh Terms
+    acceptance spent from the site-wide budget, for a network blip."""
+    page = _DroppingPage([_DROPPED], [_CLEAN])
+    t = _transport_with(page)
+    t._challenge_solved = True
+
+    assert t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {}) == (200, _CLEAN)
+    assert page.evaluates == 2 and page.gotos == 0  # retried in place, no navigation
+
+
+@pytest.mark.parametrize(
+    "errors",
+    [[_DROPPED, _DROPPED], ["Error: Page.evaluate: Target page, context or browser has been closed"]],
+    ids=["dropped-twice", "not-a-dropped-request"],
+)
+def test_in_page_fetch_raises_so_the_fetcher_can_rotate(errors: "list[str]") -> None:
+    page = _DroppingPage(errors, [_CLEAN])
+    t = _transport_with(page)
+    t._challenge_solved = True
+
+    with pytest.raises(RuntimeError, match=errors[-1].split(": ", 1)[1]):
+        t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {})
+    assert page.evaluates == len(errors)  # one retry for a drop, none for anything else
+
+
+def test_twice_dropped_fetch_rotates_to_the_next_proxy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The real transport inside the real fetcher: a double drop must stay an
+    ordinary transport error (rotated), never a Terms error (which is not)."""
+    pages = {_POOL[0]: _DroppingPage([_DROPPED, _DROPPED], []), _POOL[1]: _DroppingPage([], [_CLEAN])}
+    t = playwright_transport(challenge_wait_ms=0, solve_attempts=2)
+
+    def ensure_page(proxies: dict) -> None:  # one fake page per proxy; no browser launch
+        t._page, t._current_proxy, t._challenge_solved = pages[proxies["http"]], proxies["http"], True
+
+    monkeypatch.setattr(t, "_ensure_page", ensure_page)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=t, rotation_backoff=0.0)
+
+    assert NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/1/play_by_play") == _CLEAN
+    assert [pages[p].evaluates for p in _POOL[:2]] == [2, 1]  # retried once, then rotated
+
+
 def test_rotation_logs_the_transport_error_without_credentials(
     tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
