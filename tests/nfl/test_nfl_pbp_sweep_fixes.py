@@ -886,3 +886,27 @@ def test_a_try_after_an_unflagged_return_touchdown_still_hands_over() -> None:
                 same = nxt["start.pos_team.id"] == r["start.pos_team.id"]
                 assert r["wp_after"] == pytest.approx(nxt["wp_before"] if same else 1 - nxt["wp_before"], abs=1e-6)
     assert found >= 1
+
+
+def test_a_try_hands_to_the_kickoff_through_every_penalty_walked_off_before_it() -> None:
+    """261022011 (2006): an extra point, two penalties walked off on the kickoff spot, then
+    the kickoff. Every penalty in the run is dead-ball on the kickoff's board: the try's
+    wp_after is the kickoff's wp_before restated for the kicking team, and neither penalty
+    row moves win probability. (With only the last penalty recognised, the try never
+    reached the kickoff's board.)
+    """
+    rows = _process(261022011).sort("game_play_number").to_dicts()
+    i = next(k for k, r in enumerate(rows) if str(r["id"]) == "2610220111662")
+    xp = rows[i]
+    assert xp["type.text"] == "Extra Point Good"
+    pens, j = [], i + 1
+    while rows[j]["type.text"] in ("Penalty", "Timeout", "End Period", "Two-Minute Warning", "Official Timeout"):
+        if rows[j]["type.text"] == "Penalty":
+            pens.append(rows[j])
+        j += 1
+    ko = rows[j]
+    assert len(pens) == 2 and "kickoff" in str(ko["type.text"]).lower()
+    ko_wb = ko["wp_before"] if ko["start.pos_team.id"] == xp["start.pos_team.id"] else 1 - ko["wp_before"]
+    assert xp["wp_after"] == pytest.approx(ko_wb, abs=1e-6)
+    for pen in pens:
+        assert pen["wpa"] == pytest.approx(0.0, abs=1e-6)

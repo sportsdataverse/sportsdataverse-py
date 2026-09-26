@@ -2389,21 +2389,29 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     # the try's team. After a try the next row is the kickoff, whose wp_before is the
     # receiver's touchback view; a try that ends a half hands to the second-half kickoff.
     # The model's own end state scored ESPN's placeholder for the try's end.
-    def _next_play(col: pl.Expr) -> pl.Expr:
-        # ``col`` on the first row after this one that is not a clock stoppage
-        stoppage = pl.col("type.text").is_in(clock_stoppage_vec)
-        return pl.when(stoppage).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
-
-    team = pl.col("start.pos_team.id")
-    # A penalty walked off on the kickoff spot after the try is dead-ball the same way: the
-    # try hands to the kickoff through it, and the penalty row sits on that board.
-    _pen_before_kick = (pl.col("type.text") == "Penalty") & _next_play(pl.col("type.text").is_in(kickoff_vec))
-
-    def _next_live(col: pl.Expr) -> pl.Expr:
-        skip = pl.col("type.text").is_in(clock_stoppage_vec) | _pen_before_kick
+    def _next_play(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+        # ``col`` on the first row after this one that is not ``skip``
         return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
 
-    kick_team, kick_wb = _next_live(team), _next_live(pl.col("wp_before"))
+    team = pl.col("start.pos_team.id")
+    _stoppage = pl.col("type.text").is_in(clock_stoppage_vec)
+    # A penalty walked off on the kickoff spot after the try is dead-ball the same way: the
+    # try hands to the kickoff through it, and the penalty row sits on that board. Every
+    # penalty in a run before the kickoff counts (261022011 walks off two).
+    _pen_before_kick = (pl.col("type.text") == "Penalty") & _next_play(
+        pl.col("type.text").is_in(kickoff_vec), _stoppage | (pl.col("type.text") == "Penalty")
+    )
+
+    def _next_live(col: pl.Expr) -> pl.Expr:
+        return _next_play(col, _stoppage | _pen_before_kick)
+
+    # the kickoff's wp_before as it will stand once the touchback overlay below has run
+    _kick_wb_col = (
+        pl.when(pl.col("type.text").is_in(kickoff_vec)).then(pl.col("wp_touchback")).otherwise(pl.col("wp_before"))
+        if "wp_touchback" in df.columns
+        else pl.col("wp_before")
+    )
+    kick_team, kick_wb = _next_live(team), _next_live(_kick_wb_col)
     try_to_kickoff = (
         (is_try | _pen_before_kick)
         & _next_live(pl.col("type.text").is_in(kickoff_vec))

@@ -927,3 +927,24 @@ def test_a_touchdown_before_a_standalone_try_ends_on_the_boards_expectation() ->
         # the kick realises the 8% the board did not already count (a kickoff row whose
         # score lags a play can pull it a little under, see the caveat above)
         assert -0.05 < xp["wpa"] < 0.06, (xp["id"], xp["wpa"])
+
+
+def test_a_penalty_walked_off_before_the_kickoff_sits_on_the_kickoff_board() -> None:
+    """282432641: a try, a dead-ball penalty on the kickoff spot, the kickoff. The penalty row
+    reads the kickoff's board on both sides, so it moves nothing and the try still hands to
+    the kickoff through it.
+    """
+    rows = _offline_plays(282432641).to_dicts()
+    found = 0
+    for k, r in enumerate(rows[1:-1], start=1):
+        if r["type.text"] != "Penalty" or not str(rows[k - 1]["type.text"]).startswith("Extra Point"):
+            continue
+        ko = rows[k + 1]
+        if "kickoff" not in str(ko["type.text"]).lower():
+            continue
+        found += 1
+        board = ko["wp_before"] if ko["start.pos_team.id"] == r["start.pos_team.id"] else 1 - ko["wp_before"]
+        assert r["wp_before"] == pytest.approx(board, abs=1e-6)
+        assert r["wpa"] == pytest.approx(0.0, abs=1e-6)
+        assert rows[k - 1]["wp_after"] == pytest.approx(board, abs=1e-6)
+    assert found == 2

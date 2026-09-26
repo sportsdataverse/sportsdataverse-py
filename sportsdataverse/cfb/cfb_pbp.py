@@ -542,9 +542,12 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # A penalty walked off on the kickoff spot after the try (282432641: "Extra Point
     # Missed", "Penalty", "Kickoff", all 8:32) is dead-ball the same way: the try hands
     # to the kickoff through it, and the penalty row sits on that board.
-    penalty_before_kick = (t == "Penalty") & _next(touchback_mask.fill_null(False), stoppage)
+    # every penalty in a run walked off before the kickoff (a stoppage may sit between them)
+    penalty_before_kick = (t == "Penalty") & _next(touchback_mask.fill_null(False), stoppage | (t == "Penalty"))
     skip_after_try = stoppage | penalty_before_kick
-    kick_team, kick_wb = _next(team, skip_after_try), _next(pl.col(wb), skip_after_try)
+    # the kickoff's wp_before as it will stand once the touchback overlay below has run
+    kick_team = _next(team, skip_after_try)
+    kick_wb = _next(pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)), skip_after_try)
     try_to_kickoff = (
         (t.is_in(_TRY_TYPES) | penalty_before_kick)
         & _next(touchback_mask.fill_null(False), skip_after_try)
@@ -7588,8 +7591,18 @@ class CFBPlayProcess(object):
             (kick_team == end_team).fill_null(False).alias("_ko_is_end"),
             before_try.alias("_before_try"),
             (start_team == end_team).fill_null(False).alias("_kept"),
-            _next(t, dead)
-            .is_in(["Two-Point Conversion Good", "Two-Point Conversion Missed", "Two Point Pass", "Two Point Rush"])
+            # a two by the try row's type, or by the touchdown's own attempt text when the
+            # try that follows is the defence's (a Defensive 2pt Conversion names no attempt)
+            (
+                _next(t, dead).is_in(
+                    ["Two-Point Conversion Good", "Two-Point Conversion Missed", "Two Point Pass", "Two Point Rush"]
+                )
+                | (
+                    pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.contains("(?i)two point")
+                    if "pointAfterAttempt.text" in play_df.columns
+                    else pl.lit(False)
+                )
+            )
             .fill_null(False)
             .alias("_two"),
         ).with_columns([_next(pl.col(c), ~kick).alias(c) for c in wp_start_touchback_columns])
