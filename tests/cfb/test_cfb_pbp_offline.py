@@ -903,6 +903,8 @@ def test_an_own_fumble_recovered_for_a_touchdown_is_a_touchdown() -> None:
     plays = _offline_plays(322802005)
     r = plays.filter(pl.col("id") == 322802005186).row(0, named=True)
     assert (r["orig_play_type"], r["type.text"]) == ("Rush", "Fumble Recovery (Own) Touchdown")
+    # the flag read off the feed's type is recomputed after the retype
+    assert r["touchdown"] is True
     assert r["EP_end"] == pytest.approx(6.92)
 
 

@@ -4238,6 +4238,12 @@ class CFBPlayProcess(object):
             .alias("start.distance"),
         )
 
+        # The touchdown flag was read off the feed's type before the retyping above; a row
+        # that is a touchdown only by its new type (an own fumble taken in, a field goal or
+        # kickoff returned for the score) carries it too.
+        play_df = play_df.with_columns(
+            touchdown=pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
+        )
         return play_df
 
     def __setup_penalty_data(self, play_df):
