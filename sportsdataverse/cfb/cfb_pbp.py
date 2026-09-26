@@ -403,8 +403,31 @@ _TRY_TYPES = (
 #: Regulation", "Coin Toss") are dropped in __add_downs_data; "End Period" survives as the
 #: relabelled 2004 "Unknown" quarter marker. The EP chain treats the same two as stoppages.
 _CLOCK_STOPPAGES = ("Timeout", "End Period")
-#: The text of a try the defence returned for two, whatever ESPN typed the row.
-_DEFENSIVE_TRY_RETURN = r"(?i)for (?:a )?(?:2-point |two-point )?defensive (?:pat|two-point conversion|conversion)"
+
+
+def _penalty_before_try() -> pl.Expr:
+    """A penalty walked off between a touchdown and its try: the next row that is not a clock
+    stoppage is a try. 2004-13, where the try is its own row ("TD, Penalty, Extra Point
+    Good": ~130 rows 2004-06, ~725 2007-13, 2 since); with the clock stoppages, the only
+    rows ESPN files there. It is dead-ball: the try's value is pinned whatever the spot.
+    """
+    t = pl.col("type.text")
+    nxt = pl.when(t.is_in(_CLOCK_STOPPAGES)).then(None).otherwise(t).backward_fill().shift(-1)
+    return ((t == "Penalty") & nxt.is_in(_TRY_TYPES)).fill_null(False)
+
+
+#: The text of a try the defence returned for two, whatever ESPN typed the row. Shapes,
+#: all 2007-13 (2014+ ESPN types the row "Defensive 2pt Conversion" itself): "... returned
+#: for 2-point defensive conversion by X", "... returned by X for defensive PAT", "...
+#: returned for 2 defensive point conversion by X" (2008), "Blocked PAT returned by X for a
+#: TWO-POINT CONVERSION" (2007), "Pass intercepted by X and returned for two-points." (2009).
+#: 2004's "Kelvin Hayden (MSU), missed PAT returned." comes with no type at all (see the
+#: retype). Over every raw try row 2004-26 it matches the 44 returns and nothing else.
+_DEFENSIVE_TRY_RETURN = (
+    r"(?i)for (?:a )?(?:2-point |two-point |2 )?defensive (?:pat|two-point conversion|(?:point )?conversion)"
+    r"|returned\b.{0,60}\bfor (?:a )?(?:two|2)[- ]?point(?:s\b| conversion)"
+    r"|missed pat returned"
+)
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
@@ -458,18 +481,24 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
 
-    def _last_play(col: str) -> pl.Expr:
-        # ``col`` on the last row before this one that is not a clock stoppage
-        return (
-            pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
-            .then(None)
-            .otherwise(pl.col(col))
-            .forward_fill()
-            .shift(1)
-        )
+    # Dead-ball rows between a touchdown and its try: the clock stoppages and a penalty
+    # walked off before the try. The penalty inherits the touchdown's end state like a
+    # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
+    # the penalty started at 0.799).
+    t = pl.col("type.text")
 
-    # The touchdown before a try row is the last play before it that is not a clock
-    # stoppage. What it hands over is its end state scored for its END team: the model's
+    def _next(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+        # ``col`` on the first row after this one that is not ``skip``
+        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)
+
+    dead_ball = t.is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
+
+    def _last_play(col: str) -> pl.Expr:
+        # ``col`` on the last row before this one that is not a dead-ball row
+        return pl.when(dead_ball).then(None).otherwise(pl.col(col)).forward_fill().shift(1)
+
+    # The touchdown before a try row is the last play before it that is not a dead-ball
+    # row. What it hands over is its end state scored for its END team: the model's
     # own end prediction when it kept its frame, and the end view restated with the end
     # team's margin (``_wa_flip``, as B14 uses it) when ESPN flipped a scoring play's
     # end.team to the scorer -- a pick-six, a punt or fumble return. The plain end view of
@@ -488,10 +517,21 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # just before a try when either the stoppage or the try is that team's. ESPN credits a
     # stoppage to either team, so the value is restated for the stoppage's own team.
     team = pl.col("start.pos_team.id")
-    before_try = pl.col("type.text").is_in(_CLOCK_STOPPAGES) & pl.col("type.text").shift(-1).is_in(_TRY_TYPES)
-    takes_over = (pl.col("type.text").is_in(_TRY_TYPES) & (td_end == team)) | (
-        before_try & ((td_end == team) | (td_end == team.shift(-1)))
+    before_try = dead_ball & _next(t, dead_ball).is_in(_TRY_TYPES)
+    takes_over = (t.is_in(_TRY_TYPES) & (td_end == team)) | (
+        before_try & ((td_end == team) | (td_end == _next(team, dead_ball)))
     )
+    # An overtime shootout attempt (2019-26, periods 5+: alternating "Two Point Pass|Rush"
+    # rows, no touchdown before them) is not a try after a touchdown. ESPN often leaves its
+    # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
+    # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
+    if "period.number" in play_df.columns:
+        # a touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the
+        # end zone for a TD", typed "Rush", 322802005 in overtime) counts by its text
+        last_td = _last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
+        if "td_play" in play_df.columns:
+            last_td = last_td | (_last_play("td_play") == True).fill_null(False)  # noqa: E712
+        takes_over = takes_over & ~((pl.col("period.number") >= 5) & ~last_td)
 
     return (
         play_df.with_columns(
@@ -1180,6 +1220,38 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _place_tries_filed_after_the_kickoff(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Put a try ESPN filed after the next kickoff back behind its touchdown.
+
+    ESPN sometimes files a defensive two with an id and sequence past the kickoff that
+    follows its touchdown, at the touchdown's clock: touchdown, kickoff, then "Zack Sanchez
+    return for defensive PAT" (400547867, 400548185, 400548250, 400852742, 401524046). No
+    clock steps back, so ``_reorder_late_inserts`` never flags it; the kickoff took the
+    touchdown's end state and the try the kickoff's. A try row right after a kickoff, whose
+    touchdown is the row before that in the same period and at the same clock, swaps with
+    the kickoff. Over the corpus (2004-2026, id order) the shape occurs in exactly those five
+    games, all 2014-23, all defensive twos.
+    """
+    if not {"type.text", "period.number", "start.adj_TimeSecsRem"} <= set(plays_df.columns):
+        return plays_df
+    t, per, clk = pl.col("type.text"), pl.col("period.number"), pl.col("start.adj_TimeSecsRem")
+    misfiled = (
+        t.is_in(_TRY_TYPES)
+        & t.shift(1).is_in(kickoff_vec)
+        & t.shift(2).str.contains("(?i)touchdown")
+        & (per == per.shift(2))
+        & (clk == clk.shift(2))
+    ).fill_null(False)
+    if not plays_df.select(misfiled.any()).item():
+        return plays_df
+    return (
+        plays_df.with_row_index("_pos")
+        .with_columns(_key=pl.when(misfiled).then(pl.col("_pos") - 1.5).otherwise(pl.col("_pos")))
+        .sort("_key", maintain_order=True)
+        .drop("_pos", "_key")
+    )
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -1196,7 +1268,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return plays_df
-    plays_df = _reorder_late_inserts(plays_df)
+    plays_df = _place_tries_filed_after_the_kickoff(_reorder_late_inserts(plays_df))
     period = pl.col("period.number").cast(pl.Int32, strict=False)
     ot = plays_df.filter(period >= 5)
     if ot.height == 0:
@@ -2714,12 +2786,82 @@ class CFBPlayProcess(object):
                 # McFadden." (Extra Point Missed), "pass attempt failed (intercepted), returned
                 # by Hamlin, M for defensive PAT." (Extra Point Good). It scored 0 or +1 for the
                 # kicking team instead of the -2 a "Defensive 2pt Conversion" row carries.
+                # 2004 files its three ("X (T), missed PAT returned.") with no type, "Unknown"
+                # by now, and the model scored them as scrimmage snaps (EPA -1.4 to -2.9).
                 pl.when(
-                    pl.col("type.text").is_in(_TRY_TYPES).and_(pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)),
+                    (pl.col("type.text").is_in(_TRY_TYPES) | (pl.col("type.text") == "Unknown")).and_(
+                        pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)
+                    ),
                 )
                 .then(pl.lit("Defensive 2pt Conversion"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
+            )
+            .with_columns(
+                # 2007-13 old-NCAA feeds file a touchdown play and its kick as ONE row typed
+                # as the kick: "Maynard, Zach left side pass complete to Miller, Anthony for 19
+                # yards to the WSU0, 1ST DOWN CAL, TOUCHDOWN, clock 03:41, D'Amato, Vincen kick
+                # attempt good." / "Jahvid Best rush for 1 yard for a TOUCHDOWN. Jordan Kay
+                # extra point GOOD." (270 rows typed "Extra Point Good|Missed"). The try pin
+                # scored the whole drive-ending play as a kick (EPA +0.08). A pass or rush
+                # touchdown is retyped to the scrimmage type ESPN uses for it, so the pipeline
+                # makes it a Passing/Rushing Touchdown, and __add_xp_suffix_cols reads its
+                # kick. Not the try texts that end "... for a TOUCHDOWN" ("Two-point
+                # conversion attempt, X rush GOOD for a TOUCHDOWN."), and not a return or
+                # fumble touchdown (23 rows): ESPN's start team on those is the scorer, not
+                # the team the play began with, so the defensive touchdown types would book
+                # the points to the wrong side; they keep the kick's type.
+                pl.when(
+                    pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & pl.col("text").str.contains(r"(?i)touchdown|\btd\b")
+                    & ~pl.col("text").str.contains(
+                        r"(?i)(?:extra point|kick attempt|conversion).*(?:touchdown|\btd\b)"
+                        r"|intercept|fumble|punt|kick ?off|\breturn"
+                    ),
+                )
+                .then(
+                    pl.when(pl.col("text").str.contains(r"(?i)\bpass\b"))
+                    .then(pl.lit("Pass Completion"))
+                    .when(pl.col("text").str.contains(r"(?i)\brush|\brun\b|scramble|sneak"))
+                    .then(pl.lit("Rush"))
+                    .otherwise(pl.col("type.text"))
+                )
+                # The same feeds type a handful of other plays as a kick (2008-12, 6 rows): a
+                # kickoff, a penalty on the try, a field goal, an overtime marker.
+                .when(
+                    pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & ~pl.col("text").str.contains(r"(?i)extra point|kick attempt|conversion|pass attempt|rush attempt")
+                )
+                .then(
+                    pl.when(pl.col("text").str.contains(r"(?i)\bkickoff\b"))
+                    .then(pl.lit("Kickoff"))
+                    .when(pl.col("text").str.contains(r"(?i)field goal (?:is )?good"))
+                    .then(pl.lit("Field Goal Good"))
+                    .when(pl.col("text").str.contains(r"(?i)\bpenalty\b"))
+                    .then(pl.lit("Penalty"))
+                    .when(pl.col("text").str.contains(r"(?i)(?:start|end) of .*(?:quarter|half|overtime)"))
+                    .then(pl.lit("End Period"))
+                    .otherwise(pl.col("type.text"))
+                )
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # Such a row keeps the try's start state (down -1, often the 3). A touchdown's
+                # gain is its distance to the end zone, so the text's "for 19 yards" is where
+                # the snap was (it matches ESPN's own start on 195 of the 245 rows naming one).
+                pl.when(
+                    pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed"])
+                    & pl.col("type.text").is_in(["Pass Completion", "Rush"])
+                )
+                .then(
+                    pl.col("text")
+                    .str.extract(r"(?i)\bfor (\d{1,2}) (?:yards?|yds?|yd)\b", 1)
+                    .cast(pl.Int64, strict=False)
+                    .fill_null(pl.col("start.yardsToEndzone"))
+                )
+                .otherwise(pl.col("start.yardsToEndzone"))
+                .alias("start.yardsToEndzone"),
             )
         )
 
@@ -3481,7 +3623,13 @@ class CFBPlayProcess(object):
             # (failed ones are already "Two-Point Conversion Missed"). Resolve good/missed
             # via scoringPlay so the play routes through the two-point EPA/scoring path
             # instead of being treated as a generic scrimmage play.
-            pl.when((pl.col("type.text") == "2pt Conversion").and_(pl.col("scoringPlay") == True))
+            pl.when(
+                (pl.col("type.text") == "2pt Conversion")
+                .and_(pl.col("scoringPlay") == True)
+                # the text wins over scoringPlay: "Two-point conversion attempt, Aaron Opelt
+                # pass failed." is scored in 292542649 (the score does not move)
+                .and_(pl.col("text").str.contains(r"(?i)failed|no good").fill_null(False).not_())
+            )
             .then(pl.lit("Two-Point Conversion Good"))
             .when(pl.col("type.text") == "2pt Conversion")
             .then(pl.lit("Two-Point Conversion Missed"))
@@ -4655,6 +4803,34 @@ class CFBPlayProcess(object):
             ]
         play_df = play_df.with_columns(scoring_exprs)
 
+        # The defence's return of a try for two, flagged (as nflverse and the NFL processor do)
+        # on the one row that carries its -2: the "Defensive 2pt Conversion" row, else a
+        # touchdown row whose text folds the return in with no such row after it -- 2010's
+        # "... for a TOUCHDOWN. Cam Miller extra point blocked returned by Kenny Okoro for two
+        # point conversion" (302450154), the one such row 2004-26. 2016's "(X PAT BLOCKED)
+        # Shaun Crawford return for defensive PAT" is followed by its own D2C row. A CFB
+        # return is always a made two, so the two flags agree.
+        _next_play_type = (
+            pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
+            .then(None)
+            .otherwise(pl.col("type.text"))
+            .backward_fill()
+            .shift(-1)
+        )
+        _def_two = (
+            (pl.col("type.text") == "Defensive 2pt Conversion")
+            | (
+                (pl.col("td_play") == True)  # noqa: E712
+                & ~pl.col("type.text").is_in(_TRY_TYPES)
+                & pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)
+                & _next_play_type.ne_missing("Defensive 2pt Conversion")
+            )
+        ).fill_null(False)
+        play_df = play_df.with_columns(
+            _def_two.alias("defensive_two_point_attempt"),
+            _def_two.alias("defensive_two_point_conv"),
+        )
+
         return play_df
 
     def __add_yardage_cols(self, play_df):
@@ -5740,15 +5916,26 @@ class CFBPlayProcess(object):
         xp_miss_kw_re = r"(?i)\(\s*([^()]*?)\s*\b(?:pat|kick)\s+(?:missed|blocked|failed)\s*\)"
         xp_miss_bare_re = r"(?i)\(\s*([^()]+?)\s+(?:missed|blocked)\s*\)"
         xp_ncaa_re = r"(?i)(?:#\d+\s+)?([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+kick attempt\s+(good|failed)"
+        xp_old_re = r"(?i)[.,]\s+([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+extra point\s+(good|missed|blocked|no good)"
 
         is_td_row = (pl.col("td_play") == True) | pl.col("type.text").str.contains("(?i)touchdown")  # noqa: E712
-        gated = (pl.col("season") >= 2014) & is_td_row & pl.col("text").is_not_null()
+        # 2007-13: the pass and rush touchdowns ESPN typed as their own kick (retyped in
+        # __helper_cfb_pbp_features) have no separate try row; their kick is read here too,
+        # including the old wording "... for a TOUCHDOWN. Jordan Kay extra point GOOD.".
+        folded_kick_row = (
+            pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed"])
+            & pl.col("type.text").is_in(["Passing Touchdown", "Rushing Touchdown"])
+            if "orig_play_type" in play_df.columns
+            else pl.lit(False)
+        )
+        gated = ((pl.col("season") >= 2014) | folded_kick_row) & is_td_row & pl.col("text").is_not_null()
 
         made_name = pl.col("text").str.extract(xp_made_re, 1)
         miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
         miss_bare_name = pl.col("text").str.extract(xp_miss_bare_re, 1)
         ncaa_name = pl.col("text").str.extract(xp_ncaa_re, 1)
-        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2)
+        # lower-cased: 2007-13 writes "kick attempt GOOD" (2014+ always "good")
+        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2).str.to_lowercase()
 
         def _guard(e):
             # a captured "name" that is really a 2pt phrase is nulled
@@ -5756,11 +5943,19 @@ class CFBPlayProcess(object):
 
         # fill_null(False) is load-bearing: Kleene logic makes `False | null` null,
         # and (ncaa_result == "good") is null wherever the pattern did not match.
-        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good"))).fill_null(False)
+        old_name = pl.when(folded_kick_row).then(pl.col("text").str.extract(xp_old_re, 1))
+        old_result = pl.when(folded_kick_row).then(pl.col("text").str.extract(xp_old_re, 2).str.to_lowercase())
+
+        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good")) | (old_result == pl.lit("good"))).fill_null(
+            False
+        )
         missed = (
-            miss_kw_name.is_not_null() | _guard(miss_bare_name).is_not_null() | (ncaa_result == pl.lit("failed"))
+            miss_kw_name.is_not_null()
+            | _guard(miss_bare_name).is_not_null()
+            | (ncaa_result == pl.lit("failed"))
+            | old_result.is_in(["missed", "blocked", "no good"])
         ).fill_null(False)
-        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name).str.strip_chars()
+        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name, old_name).str.strip_chars()
 
         return play_df.with_columns(
             pl.when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
@@ -6485,6 +6680,16 @@ class CFBPlayProcess(object):
             == True
         )
 
+        def _prev_play(col: str) -> pl.Expr:
+            # ``col`` on the last row before this one that is not a clock stoppage
+            return (
+                pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
+                .then(None)
+                .otherwise(pl.col(col))
+                .forward_fill()
+                .shift(1)
+            )
+
         # The two-point try folded into a touchdown row: ESPN's structured result
         # (``two_point_conv_result``, from pointAfterAttempt) where the text names none --
         # "LJ Martin run for 9 yds for a TD (Jake Retzlaff intercepted)", "Dylan McDuffie 1 Yd
@@ -6492,8 +6697,33 @@ class CFBPlayProcess(object):
         # in the 6 rows where it disagrees with a value-2 pointAfterAttempt ("Two-Point Run
         # Conversion Failed", 2019-26), ESPN's score moved by 6.
         _lower = pl.col("text").str.to_lowercase()
-        two_pt_failed = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed"))
-        two_pt_good = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed") == False)
+        # The text names a two-point try: "(X pass to Y for Two-Point Conversion)", "(Two-Point
+        # Conversion Failed)" (2014-26), and 2014's "(Two pt pass, X pass to Y GOOD)" / "(Two
+        # pt rush, X GOOD)" (37 rows, all good; ESPN's score +8), which name no "conversion"
+        # and took the 6.92 unknown. Not a bare "2 pt": 400547980's "PAT blocked, returned by
+        # defense for 2 pt conv" is the defence's two.
+        two_pt_named = _lower.str.contains(r"(?i)conversion|(?:two|2) pt (?:pass|rush)")
+        two_pt_failed = two_pt_named.and_(_lower.str.contains(r"(?i)failed"))
+        two_pt_good = two_pt_named.and_(_lower.str.contains(r"(?i)failed") == False)
+        # The 2025+ vendor template trails the try after the touchdown's clock, penalty re-tries
+        # and all: "... TOUCHDOWN, clock 13:34 #13 S.Robertson pass attempt failed PENALTY CIN
+        # Pass Interference ... NO PLAY #23 M.Turner rush attempt Successful". The last attempt
+        # is the one that stood; a review's "(Original Play: ... rush attempt failed)" is not an
+        # attempt. It names no "conversion", and on 29 rows pointAfterAttempt is "NA"/0, so they
+        # took the 6.92 unknown (ESPN's score +6). Where the text has such an attempt it decides
+        # (it agrees with every two-point pointAfterAttempt in 2025-26). 2007-13 old-NCAA
+        # touchdowns carry the same words ("... for a TOUCHDOWN. Rush attempt failed.", 2 rows).
+        _last_attempt = (
+            _lower.str.replace_all(r"\(original play:[^)]*\)", "")
+            .str.extract_all(r"(?:pass|rush) attempt (?:failed|successful)")
+            .list.last()
+        )
+        two_pt_failed = (
+            pl.when(_last_attempt.is_not_null()).then(_last_attempt.str.ends_with("failed")).otherwise(two_pt_failed)
+        )
+        two_pt_good = (
+            pl.when(_last_attempt.is_not_null()).then(_last_attempt.str.ends_with("successful")).otherwise(two_pt_good)
+        )
         if "two_point_conv_result" in play_df.columns:
             two_pt_failed = (pl.col("two_point_conv_result") == "failure").fill_null(False).or_(two_pt_failed)
             two_pt_good = (
@@ -6554,6 +6784,12 @@ class CFBPlayProcess(object):
                 # Defense TD
                 .when(pl.col("type.text").is_in(defense_score_vec))
                 .then(-6.92)
+                # Offense TD + a try the defence returned for two, folded into the row
+                # (defensive_two_point_conv above): 6 - 2
+                .when(
+                    (pl.col("type.text").is_in(offense_score_vec)).and_(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+                )
+                .then(4)
                 # Offense TD + Failed Two-Point Conversion
                 .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
                 .then(6)
@@ -6597,19 +6833,18 @@ class CFBPlayProcess(object):
                 # Two-Point Conversion Missed
                 .when(pl.col("type.text").is_in(["Two-Point Conversion Missed"]))
                 .then(0)
-                # Two Point Pass/Rush Missed (Pre-2014 Data)
+                # Two Point Pass/Rush Missed: 2004-06 "2 point pass from X to Y is no good", and
+                # 2019-26 overtime-shootout attempts "Two-Point Conversion failed" / "#1 X pass
+                # attempt failed" (14 rows, which read as good and realised 2). A shootout row
+                # with no text is read from ESPN's scoringPlay.
                 .when(
                     (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good"),
+                        pl.col("text").str.contains(r"(?i)no good|failed").fill_null(pl.col("scoringPlay") != True),  # noqa: E712
                     ),
                 )
                 .then(0)
-                # Two Point Pass/Rush Good (Pre-2014 Data)
-                .when(
-                    (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good") == False,
-                    ),
-                )
+                # Two Point Pass/Rush Good
+                .when(pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"]))
                 .then(2)
                 # Blocked PAT
                 .when(pl.col("type.text").is_in(["Blocked PAT"]))
@@ -6627,6 +6862,37 @@ class CFBPlayProcess(object):
                 # Onside kicks
                 .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
                 .then(pl.col("EP_end") * -1)
+                .otherwise(pl.col("EP_end")),
+            )
+            .with_columns(
+                # A try row that repeats a try already realised realises nothing (EPA 0):
+                # the row right after a touchdown whose EP_end already carries its try
+                # (2007-13: "... for a TOUCHDOWN. Two-point conversion attempt, Ben Olson
+                # pass FAILED." then the same text again as its own row, 272720204; or a
+                # two ruled good twice, 282432641), and a try row with no text at all (a
+                # 2007-13 phantom: 293182305's second "2pt Conversion" after the real one,
+                # ~200 "Extra Point Good/Missed" rows ESPN scored 0). Not a defensive two:
+                # that is its own event after a folded "(X PAT BLOCKED)". Not an overtime
+                # shootout attempt ("Two Point Pass|Rush", 2019-26) either: in play order
+                # the first one follows the last overtime touchdown, but it is a new try.
+                # A penalty walked off before a try is dead-ball: the try's 0.92 on both
+                # sides (the model scored ESPN's placeholder start, EP ~5.4, EPA -0.7 on
+                # average over 2004-13's ~850 such rows).
+                EP_start=pl.when(_penalty_before_try()).then(0.92).otherwise(pl.col("EP_start")),
+                EP_end=pl.when(_penalty_before_try())
+                .then(0.92)
+                .when(
+                    pl.col("type.text").is_in(_TRY_TYPES)
+                    & ~pl.col("type.text").is_in(["Defensive 2pt Conversion", "Two Point Pass", "Two Point Rush"])
+                    & (
+                        (
+                            (_prev_play("td_play") == True)  # noqa: E712
+                            & _prev_play("EP_end").abs().is_in([6.0, 7.0, 8.0])
+                        )
+                        | (pl.col("text").str.strip_chars().str.len_chars() == 0).fill_null(True)
+                    ),
+                )
+                .then(pl.col("EP_start"))
                 .otherwise(pl.col("EP_end")),
             )
             .with_columns(
@@ -6712,6 +6978,14 @@ class CFBPlayProcess(object):
             .with_columns(
                 EPA=pl.when(pl.col("type.text").is_in(["Timeout"]))
                 .then(0)
+                # A try row realises its own result, EP_end - EP_start, whatever the clock
+                # or the penalty text on it: its start is pinned at 0.92 and its end is the
+                # try's points, so neither the end-of-half loss of the possession nor the
+                # EP_between of a penalty applies. 2004-13 made kicks at 0:00 booked -0.92
+                # through the end-of-half branch, and "X extra point BLOCKED, Navy penalty
+                # 35 yard face mask" folded a spot gap in (+0.92).
+                .when(pl.col("type.text").is_in(_TRY_TYPES))
+                .then(pl.col("EP_end") - pl.col("EP_start"))
                 .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
                 .then(-1 * pl.col("EP_start"))
                 .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
