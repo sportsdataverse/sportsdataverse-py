@@ -2,11 +2,14 @@ import datetime as dt
 import json
 from pathlib import Path
 
+import polars as pl
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_live as mod
 from sportsdataverse.nba.nba_live import (
+    PBP_CORE_SCHEMA,
+    PLAYERS_CORE_SCHEMA,
     nba_live_boxscore,
     nba_live_pbp,
     parse_nba_live_boxscore,
@@ -65,6 +68,14 @@ def test_pbp_empty_payload_is_zero_rows():
     assert df.height == 0
 
 
+def test_pbp_empty_actions_has_core_schema():
+    df = parse_nba_live_pbp({"game": {"gameId": "0022500001", "actions": []}})
+    assert df.height == 0
+    for name, dtype in PBP_CORE_SCHEMA.items():
+        assert name in df.columns
+        assert df.schema[name] == dtype
+
+
 # ---------------------------------------------------------------------------
 # parse_nba_live_boxscore
 # ---------------------------------------------------------------------------
@@ -89,6 +100,21 @@ def test_boxscore_keys():
 def test_boxscore_empty_payload_is_zero_rows_everywhere():
     result = parse_nba_live_boxscore({})
     assert all(v.height == 0 for v in result.values())
+
+
+def test_boxscore_one_side_zero_players_stays_concat_safe():
+    box2 = json.loads(json.dumps(BOX_PAYLOAD))
+    box2["game"]["homeTeam"]["players"] = []
+    result = parse_nba_live_boxscore(box2)
+    home, away = result["home_players"], result["away_players"]
+    assert home.height == 0
+    assert away.height > 0
+    for df in (home, away):
+        for name, dtype in PLAYERS_CORE_SCHEMA.items():
+            assert name in df.columns
+            assert df.schema[name] == dtype
+    combined = pl.concat([home, away], how="diagonal_relaxed")
+    assert combined.height == away.height
 
 
 # ---------------------------------------------------------------------------
@@ -132,3 +158,12 @@ def test_s3_access_denied_403_is_no_data(monkeypatch):
     monkeypatch.setattr(mod, "_curl_transport", transport)
     with pytest.raises(NoDataError):
         nba_live_boxscore("0022500001")
+
+
+def test_transport_exception_is_reclassified_as_fetch_error(monkeypatch):
+    def raising_transport(url, params, headers, proxy_url):
+        raise TimeoutError("curl_cffi timed out")
+
+    monkeypatch.setattr(mod, "_curl_transport", raising_transport)
+    with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
