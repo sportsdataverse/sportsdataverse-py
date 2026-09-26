@@ -1,0 +1,449 @@
+{
+ "league": "nfl",
+ "season": 2022,
+ "weekGroup": "REGPO",
+ "team": {
+  "franchiseId": 7,
+  "slug": "cincinnati-bengals",
+  "abbreviation": "CIN",
+  "name": "Cincinnati Bengals"
+ },
+ "group": "receiving",
+ "updatedAt": "2026-09-16T15:00:14.399Z",
+ "qualification": {
+  "key": "targets",
+  "label": "targets",
+  "share": 0.2,
+  "minimums": {
+   "WR": 37,
+   "TE": 36.4,
+   "RB": 25.200000000000003
+  }
+ },
+ "columns": [
+  {
+   "key": "playerId",
+   "label": "Player id",
+   "type": "integer"
+  },
+  {
+   "key": "name",
+   "label": "Player",
+   "type": "string"
+  },
+  {
+   "key": "position",
+   "label": "Pos",
+   "type": "string"
+  },
+  {
+   "key": "jersey",
+   "label": "No.",
+   "type": "string"
+  },
+  {
+   "key": "games",
+   "label": "#G",
+   "type": "integer"
+  },
+  {
+   "key": "gamesRank",
+   "label": "#G rank",
+   "type": "integer"
+  },
+  {
+   "key": "gamesRankOf",
+   "label": "#G rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gamesPercentile",
+   "label": "#G percentile",
+   "type": "integer"
+  },
+  {
+   "key": "targets",
+   "label": "TGT",
+   "type": "integer"
+  },
+  {
+   "key": "targetsRank",
+   "label": "TGT rank",
+   "type": "integer"
+  },
+  {
+   "key": "targetsRankOf",
+   "label": "TGT rank of",
+   "type": "integer"
+  },
+  {
+   "key": "targetsPercentile",
+   "label": "TGT percentile",
+   "type": "integer"
+  },
+  {
+   "key": "receptions",
+   "label": "REC",
+   "type": "integer"
+  },
+  {
+   "key": "receptionsRank",
+   "label": "REC rank",
+   "type": "integer"
+  },
+  {
+   "key": "receptionsRankOf",
+   "label": "REC rank of",
+   "type": "integer"
+  },
+  {
+   "key": "receptionsPercentile",
+   "label": "REC percentile",
+   "type": "integer"
+  },
+  {
+   "key": "receptionPct",
+   "label": "REC%",
+   "type": "number"
+  },
+  {
+   "key": "receptionPctRank",
+   "label": "REC% rank",
+   "type": "integer"
+  },
+  {
+   "key": "receptionPctRankOf",
+   "label": "REC% rank of",
+   "type": "integer"
+  },
+  {
+   "key": "receptionPctPercentile",
+   "label": "REC% percentile",
+   "type": "integer"
+  },
+  {
+   "key": "receivingYards",
+   "label": "YDS",
+   "type": "integer"
+  },
+  {
+   "key": "receivingYardsRank",
+   "label": "YDS rank",
+   "type": "integer"
+  },
+  {
+   "key": "receivingYardsRankOf",
+   "label": "YDS rank of",
+   "type": "integer"
+  },
+  {
+   "key": "receivingYardsPercentile",
+   "label": "YDS percentile",
+   "type": "integer"
+  },
+  {
+   "key": "yardsPerReception",
+   "label": "Y/REC",
+   "type": "number"
+  },
+  {
+   "key": "yardsPerReceptionRank",
+   "label": "Y/REC rank",
+   "type": "integer"
+  },
+  {
+   "key": "yardsPerReceptionRankOf",
+   "label": "Y/REC rank of",
+   "type": "integer"
+  },
+  {
+   "key": "yardsPerReceptionPercentile",
+   "label": "Y/REC percentile",
+   "type": "integer"
+  },
+  {
+   "key": "receivingTd",
+   "label": "TD",
+   "type": "integer"
+  },
+  {
+   "key": "receivingTdRank",
+   "label": "TD rank",
+   "type": "integer"
+  },
+  {
+   "key": "receivingTdRankOf",
+   "label": "TD rank of",
+   "type": "integer"
+  },
+  {
+   "key": "receivingTdPercentile",
+   "label": "TD percentile",
+   "type": "integer"
+  },
+  {
+   "key": "gradeOffense",
+   "label": "OFF",
+   "type": "number"
+  },
+  {
+   "key": "gradeOffenseRank",
+   "label": "OFF rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradeOffenseRankOf",
+   "label": "OFF rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gradeOffensePercentile",
+   "label": "OFF percentile",
+   "type": "integer"
+  },
+  {
+   "key": "gradeReceiving",
+   "label": "RECV",
+   "type": "number"
+  },
+  {
+   "key": "gradeReceivingRank",
+   "label": "RECV rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradeReceivingRankOf",
+   "label": "RECV rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gradeReceivingPercentile",
+   "label": "RECV percentile",
+   "type": "integer"
+  },
+  {
+   "key": "gradeDrop",
+   "label": "DROP",
+   "type": "number"
+  },
+  {
+   "key": "gradeDropRank",
+   "label": "DROP rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradeDropRankOf",
+   "label": "DROP rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gradeDropPercentile",
+   "label": "DROP percentile",
+   "type": "integer"
+  },
+  {
+   "key": "gradeFumble",
+   "label": "FUM",
+   "type": "number"
+  },
+  {
+   "key": "gradeFumbleRank",
+   "label": "FUM rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradeFumbleRankOf",
+   "label": "FUM rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gradeFumblePercentile",
+   "label": "FUM percentile",
+   "type": "integer"
+  },
+  {
+   "key": "gradePassBlock",
+   "label": "PBLK",
+   "type": "number"
+  },
+  {
+   "key": "gradePassBlockRank",
+   "label": "PBLK rank",
+   "type": "integer"
+  },
+  {
+   "key": "gradePassBlockRankOf",
+   "label": "PBLK rank of",
+   "type": "integer"
+  },
+  {
+   "key": "gradePassBlockPercentile",
+   "label": "PBLK percentile",
+   "type": "integer"
+  }
+ ],
+ "rows": [
+  {
+   "playerId": 84270,
+   "name": "Ja'Marr Chase",
+   "position": "WR",
+   "jersey": "01",
+   "games": 15,
+   "gamesRank": 63,
+   "gamesRankOf": 102,
+   "gamesPercentile": 30,
+   "targets": 155,
+   "targetsRank": 7,
+   "targetsRankOf": 102,
+   "targetsPercentile": 93,
+   "receptions": 107,
+   "receptionsRank": 7,
+   "receptionsRankOf": 102,
+   "receptionsPercentile": 93,
+   "receptionPct": 0.69,
+   "receptionPctRank": 33,
+   "receptionPctRankOf": 102,
+   "receptionPctPercentile": 67,
+   "receivingYards": 1266,
+   "receivingYardsRank": 9,
+   "receivingYardsRankOf": 102,
+   "receivingYardsPercentile": 91,
+   "yardsPerReception": 11.8,
+   "yardsPerReceptionRank": 61,
+   "yardsPerReceptionRankOf": 102,
+   "yardsPerReceptionPercentile": 39,
+   "receivingTd": 11,
+   "receivingTdRank": 3,
+   "receivingTdRankOf": 102,
+   "receivingTdPercentile": 96,
+   "gradeOffense": 83.9,
+   "gradeOffenseRank": 10,
+   "gradeOffenseRankOf": 102,
+   "gradeOffensePercentile": 90,
+   "gradeReceiving": 85.2,
+   "gradeReceivingRank": 11,
+   "gradeReceivingRankOf": 102,
+   "gradeReceivingPercentile": 89,
+   "gradeDrop": 79.1,
+   "gradeDropRank": 40,
+   "gradeDropRankOf": 102,
+   "gradeDropPercentile": 61,
+   "gradeFumble": 37.9,
+   "gradeFumbleRank": 76,
+   "gradeFumbleRankOf": 102,
+   "gradeFumblePercentile": 25,
+   "gradePassBlock": null,
+   "gradePassBlockRank": null,
+   "gradePassBlockRankOf": null,
+   "gradePassBlockPercentile": null
+  },
+  {
+   "playerId": 45775,
+   "name": "Trayveon Williams",
+   "position": "RB",
+   "jersey": "32",
+   "games": 6,
+   "gamesRank": null,
+   "gamesRankOf": null,
+   "gamesPercentile": null,
+   "targets": 2,
+   "targetsRank": null,
+   "targetsRankOf": null,
+   "targetsPercentile": null,
+   "receptions": 2,
+   "receptionsRank": null,
+   "receptionsRankOf": null,
+   "receptionsPercentile": null,
+   "receptionPct": 1,
+   "receptionPctRank": null,
+   "receptionPctRankOf": null,
+   "receptionPctPercentile": null,
+   "receivingYards": 30,
+   "receivingYardsRank": null,
+   "receivingYardsRankOf": null,
+   "receivingYardsPercentile": null,
+   "yardsPerReception": 15,
+   "yardsPerReceptionRank": null,
+   "yardsPerReceptionRankOf": null,
+   "yardsPerReceptionPercentile": null,
+   "receivingTd": 0,
+   "receivingTdRank": null,
+   "receivingTdRankOf": null,
+   "receivingTdPercentile": null,
+   "gradeOffense": 82.3,
+   "gradeOffenseRank": null,
+   "gradeOffenseRankOf": null,
+   "gradeOffensePercentile": null,
+   "gradeReceiving": 81.6,
+   "gradeReceivingRank": null,
+   "gradeReceivingRankOf": null,
+   "gradeReceivingPercentile": null,
+   "gradeDrop": 68.3,
+   "gradeDropRank": null,
+   "gradeDropRankOf": null,
+   "gradeDropPercentile": null,
+   "gradeFumble": 81.1,
+   "gradeFumbleRank": null,
+   "gradeFumbleRankOf": null,
+   "gradeFumblePercentile": null,
+   "gradePassBlock": 80.9,
+   "gradePassBlockRank": null,
+   "gradePassBlockRankOf": null,
+   "gradePassBlockPercentile": null
+  },
+  {
+   "playerId": 11803,
+   "name": "Joe Mixon",
+   "position": "RB",
+   "jersey": "28",
+   "games": 17,
+   "gamesRank": 14,
+   "gamesRankOf": 48,
+   "gamesPercentile": 46,
+   "targets": 79,
+   "targetsRank": 6,
+   "targetsRankOf": 48,
+   "targetsPercentile": 88,
+   "receptions": 68,
+   "receptionsRank": 5,
+   "receptionsRankOf": 48,
+   "receptionsPercentile": 90,
+   "receptionPct": 0.861,
+   "receptionPctRank": 10,
+   "receptionPctRankOf": 48,
+   "receptionPctPercentile": 79,
+   "receivingYards": 491,
+   "receivingYardsRank": 5,
+   "receivingYardsRankOf": 48,
+   "receivingYardsPercentile": 90,
+   "yardsPerReception": 7.2,
+   "yardsPerReceptionRank": 24,
+   "yardsPerReceptionRankOf": 48,
+   "yardsPerReceptionPercentile": 50,
+   "receivingTd": 2,
+   "receivingTdRank": 11,
+   "receivingTdRankOf": 48,
+   "receivingTdPercentile": 67,
+   "gradeOffense": 80.8,
+   "gradeOffenseRank": 10,
+   "gradeOffenseRankOf": 48,
+   "gradeOffensePercentile": 79,
+   "gradeReceiving": 77,
+   "gradeReceivingRank": 7,
+   "gradeReceivingRankOf": 48,
+   "gradeReceivingPercentile": 85,
+   "gradeDrop": 69,
+   "gradeDropRank": 20,
+   "gradeDropRankOf": 48,
+   "gradeDropPercentile": 58,
+   "gradeFumble": 91.3,
+   "gradeFumbleRank": 1,
+   "gradeFumbleRankOf": 48,
+   "gradeFumblePercentile": 98,
+   "gradePassBlock": 34.9,
+   "gradePassBlockRank": 38,
+   "gradePassBlockRankOf": 48,
+   "gradePassBlockPercentile": 21
+  }
+ ]
+}

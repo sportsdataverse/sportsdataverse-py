@@ -1,0 +1,142 @@
+{
+ "pass_blocking": {
+  "career": {
+   "declined_penalties": 1,
+   "hits_allowed": 1,
+   "hurries_allowed": 6,
+   "non_spike_pass_block": 266,
+   "non_spike_pass_block_percentage": 100,
+   "non_spike_passing": 266,
+   "pass_block_percent": 100,
+   "pbe": 98.7,
+   "penalties": 2,
+   "player_id": 10855,
+   "pressures_allowed": 7,
+   "sacks_allowed": 0,
+   "snap_counts_pass_block": 287,
+   "snap_counts_pass_play": 287,
+   "true_pass_set_hits_allowed": 0,
+   "true_pass_set_hurries_allowed": 4,
+   "true_pass_set_non_spike_pass_block": 125,
+   "true_pass_set_non_spike_pass_block_percentage": 100,
+   "true_pass_set_non_spike_passing": 125,
+   "true_pass_set_pass_block_percent": 100,
+   "true_pass_set_pbe": 98.4,
+   "true_pass_set_pressures_allowed": 4,
+   "true_pass_set_sacks_allowed": 0,
+   "true_pass_set_snap_counts_pass_block": 136,
+   "true_pass_set_snap_counts_pass_play": 136
+  },
+  "seasons": [
+   {
+    "declined_penalties": 0,
+    "franchise_id": [
+     7
+    ],
+    "grades_pass_block": 65.4,
+    "hits_allowed": 0,
+    "hurries_allowed": 0,
+    "non_spike_pass_block": 29,
+    "non_spike_pass_block_percentage": 100,
+    "non_spike_passing": 29,
+    "pass_block_percent": 100,
+    "pbe": 100,
+    "penalties": 0,
+    "pressures_allowed": 0,
+    "sacks_allowed": 0,
+    "season": 2025,
+    "season_id": 2025,
+    "snap_counts_pass_block": 30,
+    "snap_counts_pass_play": 30,
+    "true_pass_set_hits_allowed": 0,
+    "true_pass_set_hurries_allowed": 0,
+    "true_pass_set_non_spike_pass_block": 18,
+    "true_pass_set_non_spike_pass_block_percentage": 100,
+    "true_pass_set_non_spike_passing": 18,
+    "true_pass_set_pass_block_percent": 100,
+    "true_pass_set_pbe": 100,
+    "true_pass_set_pressures_allowed": 0,
+    "true_pass_set_sacks_allowed": 0,
+    "true_pass_set_snap_counts_pass_block": 19,
+    "true_pass_set_snap_counts_pass_play": 19
+   },
+   {
+    "declined_penalties": 1,
+    "franchise_id": [
+     7
+    ],
+    "grades_pass_block": 78.4,
+    "hits_allowed": 0,
+    "hurries_allowed": 0,
+    "non_spike_pass_block": 35,
+    "non_spike_pass_block_percentage": 100,
+    "non_spike_passing": 35,
+    "pass_block_percent": 100,
+    "pbe": 100,
+    "penalties": 1,
+    "pressures_allowed": 0,
+    "sacks_allowed": 0,
+    "season": 2024,
+    "season_id": 2024,
+    "snap_counts_pass_block": 38,
+    "snap_counts_pass_play": 38,
+    "true_pass_set_hits_allowed": 0,
+    "true_pass_set_hurries_allowed": 0,
+    "true_pass_set_non_spike_pass_block": 15,
+    "true_pass_set_non_spike_pass_block_percentage": 100,
+    "true_pass_set_non_spike_passing": 15,
+    "true_pass_set_pass_block_percent": 100,
+    "true_pass_set_pbe": 100,
+    "true_pass_set_pressures_allowed": 0,
+    "true_pass_set_sacks_allowed": 0,
+    "true_pass_set_snap_counts_pass_block": 16,
+    "true_pass_set_snap_counts_pass_play": 16
+   },
+   {
+    "declined_penalties": 0,
+    "franchise_id": [
+     7
+    ],
+    "grades_pass_block": 37.3,
+    "hits_allowed": 1,
+    "hurries_allowed": 1,
+    "non_spike_pass_block": 34,
+    "non_spike_pass_block_percentage": 100,
+    "non_spike_passing": 34,
+    "pass_block_percent": 100,
+    "pbe": 97.1,
+    "penalties": 0,
+    "pressures_allowed": 2,
+    "sacks_allowed": 0,
+    "season": 2023,
+    "season_id": 2023,
+    "snap_counts_pass_block": 36,
+    "snap_counts_pass_play": 36,
+    "true_pass_set_hits_allowed": 0,
+    "true_pass_set_hurries_allowed": 1,
+    "true_pass_set_non_spike_pass_block": 15,
+    "true_pass_set_non_spike_pass_block_percentage": 100,
+    "true_pass_set_non_spike_passing": 15,
+    "true_pass_set_pass_block_percent": 100,
+    "true_pass_set_pbe": 96.7,
+    "true_pass_set_pressures_allowed": 1,
+    "true_pass_set_sacks_allowed": 0,
+    "true_pass_set_snap_counts_pass_block": 16,
+    "true_pass_set_snap_counts_pass_play": 16
+   }
+  ],
+  "subject": {
+   "eligible": "offense",
+   "grade_keys": [
+    "pass_block"
+   ],
+   "league_id": 1,
+   "player_id": 10855,
+   "roster": "offense",
+   "secondary": false,
+   "week": [
+    "1"
+   ]
+  }
+ }
+}

@@ -1,5 +1,12 @@
 """Runtime getter for the generated PFF Premium Stats wrappers (:mod:`sportsdataverse.nfl.pff_core`).
 
+.. note:: **LEGACY.** ``premium.pff.com/api/v1`` is the reverse-engineered, cookie-authenticated
+   surface. PFF now ships an official Developer API (``https://api.pff.com``, one bearer API
+   key) whose ``/v1`` serves the same reports byte-for-byte plus a ``/v2`` table contract --
+   use the ``pff_api_*`` wrappers (:mod:`sportsdataverse.nfl.pff_api`, runtime
+   :mod:`sportsdataverse.nfl.pff_api_runtime`). This module and the ``pff_*`` / ``pff_<league>_*``
+   wrappers stay as a working fallback for cookie-session users.
+
 PFF Premium Stats (``premium.pff.com/api/v1``) is **paywalled**: every request must carry the
 authenticated-session cookies from a logged-in browser. Unlike stats.nba.com, PFF does **not**
 JA3/TLS-fingerprint-block plain ``requests`` -- the only gate is the cookies -- so the live
