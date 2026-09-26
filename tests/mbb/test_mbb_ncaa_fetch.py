@@ -1060,6 +1060,9 @@ def test_sweep_orphan_profiles_reaps_only_dead_or_stale_unmarked(tmp_path):
     unrelated = tmp_path / "patchright_udd_x"
     unrelated.mkdir()
 
-    assert f._sweep_orphan_profiles(str(tmp_path)) == 2
+    # Windows never probes owners (os.kill(pid, 0) is CTRL_C_EVENT there), so a
+    # marked orphan is kept rather than reaped; everything else is the same.
+    on_windows = os.name == "nt"
+    assert f._sweep_orphan_profiles(str(tmp_path)) == (1 if on_windows else 2)
     assert live.exists() and new_unmarked.exists() and unrelated.exists()
-    assert not orphan.exists() and not old_unmarked.exists()
+    assert orphan.exists() is on_windows and not old_unmarked.exists()
