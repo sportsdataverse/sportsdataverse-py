@@ -48,6 +48,7 @@ def test_strip_overturned_none_input():
 
 
 import polars as pl
+import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
@@ -517,6 +518,9 @@ def _npt_base(**over):
         "kickoff_safety": False,
         "punt_safety": False,
         "penalty_safety": False,
+        # __add_team_score_variables runs first: the start team's margin before and after
+        "start.pos_score_diff": 0,
+        "end.pos_score_diff": 0,
     }
     row.update(over)
     return row
@@ -1003,3 +1007,77 @@ def test_penalty_side_three_letter_consonant_skeleton():
         away=("MEM", "Memphis", None, "Tigers"),
     )
     assert side == "home"
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        # "for a TD" names the touchdown without the word td_check needs (2014-26, typed "Rush")
+        (
+            {
+                "type.text": "Rush",
+                "rush": True,
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": 7,
+                "text": "Bra'Lon Cherry run for 3 yds for a TD, (Niklas Sade KICK)",
+            },
+            "Rushing Touchdown",
+        ),
+        # ... but only when ESPN scored it for the rushing team
+        (
+            {
+                "type.text": "Rush",
+                "rush": True,
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -7,
+                "text": "Bra'Lon Cherry run for 3 yds for a TD, (Niklas Sade KICK)",
+            },
+            "Rush",
+        ),
+        # a fumble the defence returned for the score (2020-26, typed "Fumble Recovery (Opponent)")
+        (
+            {
+                "type.text": "Fumble Recovery (Opponent)",
+                "fumble_vec": True,
+                "change_of_poss": 1,
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -7,
+                "text": "Isaac Brown fumbled, forced by Simeon Barrow Jr., recovered by MIA Raul Aguirre Jr. for a TD "
+                "(Andres Borregales KICK)",
+            },
+            "Fumble Recovery (Opponent) Touchdown",
+        ),
+        # an interception returned for the score in a shape the text rules did not know
+        (
+            {
+                "type.text": "Pass Interception",
+                "pass": True,
+                "change_of_poss": 1,
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": -6,
+                "text": "Mike Wegzyn pass intercepted by Dwayne Gratz at the UMass 37, returned for 37 yards for a TOUCHDOWN.",
+            },
+            "Interception Return Touchdown",
+        ),
+        # ESPN's start team is the interceptor: the margin rose, so the row is left alone
+        (
+            {
+                "type.text": "Pass Interception",
+                "pass": True,
+                "change_of_poss": 1,
+                "td_play": True,
+                "scoringPlay": True,
+                "end.pos_score_diff": 6,
+                "text": "Mike Wegzyn pass intercepted by Dwayne Gratz at the UMass 37, returned for 37 yards for a TOUCHDOWN.",
+            },
+            "Interception Return",
+        ),
+    ],
+)
+def test_return_and_short_text_touchdowns_are_typed_by_who_scored(row: dict, expected: str) -> None:
+    out = _npt([_npt_base(**row)])
+    assert out["type.text"].to_list() == [expected]

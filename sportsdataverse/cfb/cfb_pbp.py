@@ -34,6 +34,26 @@ from xgboost import Booster, DMatrix
 _PENALTY_NEGATED_TEXT = r"(?i)no play|nullified by penalty"
 
 
+def _touchdown_negated() -> pl.Expr:
+    """Whether ESPN's no-play marker negates the touchdown a row's text names.
+
+    The 2025+ vendor template appends the try to the touchdown row, penalties and all:
+    "... rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 #13 S.Robertson
+    pass attempt failed PENALTY CIN Pass Interference ... NO PLAY #23 M.Turner rush
+    attempt Successful". On a row ESPN scored, a marker after the touchdown's clock tail is
+    the try's, and the touchdown stood (16 rows in 2025-26, every one of them moving the
+    score by 6-8). A touchdown that did not stand reads "TOUCHDOWN nullified by penalty,
+    clock ..." and is not a scoring play; elsewhere the whole text is read, as before.
+    """
+    text = pl.col("text")
+    head = text.str.replace(r"(?i)(touchdown, clock \d{1,2}:\d{2}).*$", "$1")
+    return (
+        pl.when(pl.col("scoringPlay") == True)  # noqa: E712
+        .then(head.str.contains(_PENALTY_NEGATED_TEXT))
+        .otherwise(text.str.contains(_PENALTY_NEGATED_TEXT))
+    )
+
+
 #: Infractions that WIPE OUT the play, measured by how often the down is
 #: replayed among plays with penalty text and no explicit outcome marker
 #: (no-penalty baseline 0.155): false start 0.976, ineligible downfield 0.968,
@@ -378,6 +398,11 @@ _TRY_TYPES = (
     # it EPA ~-7.7
     "Defensive 2pt Conversion",
 )
+#: Clock-stoppage rows that reach the play frame: not plays, and they carry no game state
+#: of their own. The other markers ESPN files ("End of Half", "End of Game", "End of
+#: Regulation", "Coin Toss") are dropped in __add_downs_data; "End Period" survives as the
+#: relabelled 2004 "Unknown" quarter marker. The EP chain treats the same two as stoppages.
+_CLOCK_STOPPAGES = ("Timeout", "End Period")
 #: The text of a try the defence returned for two, whatever ESPN typed the row.
 _DEFENSIVE_TRY_RETURN = r"(?i)for (?:a )?(?:2-point |two-point )?defensive (?:pat|two-point conversion|conversion)"
 
@@ -434,8 +459,39 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         end_team_score_diff = pl.col("pos_score_diff_end")
 
     def _last_play(col: str) -> pl.Expr:
-        # ``col`` on the last row before this one that is not a timeout
-        return pl.when(pl.col("type.text") == "Timeout").then(None).otherwise(pl.col(col)).forward_fill().shift(1)
+        # ``col`` on the last row before this one that is not a clock stoppage
+        return (
+            pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
+            .then(None)
+            .otherwise(pl.col(col))
+            .forward_fill()
+            .shift(1)
+        )
+
+    # The touchdown before a try row is the last play before it that is not a clock
+    # stoppage. What it hands over is its end state scored for its END team: the model's
+    # own end prediction when it kept its frame, and the end view restated with the end
+    # team's margin (``_wa_flip``, as B14 uses it) when ESPN flipped a scoring play's
+    # end.team to the scorer -- a pick-six, a punt or fumble return. The plain end view of
+    # such a row is the scorer at its own 1 trailing by the lead it just took.
+    td_start, td_end = _last_play("start.pos_team.id"), _last_play("end.pos_team.id")
+    td_kept_frame = td_start == td_end
+    td_flipped_score = (
+        (td_start != td_end)
+        & (_last_play("scoringPlay") == True)  # noqa: E712
+        # a two-point try of an overtime shootout is a scoring play whose end team is the
+        # next team to try; it is not a touchdown to hand over from
+        & ~_last_play("type.text").is_in(_TRY_TYPES)
+    )
+    td_wp_after = pl.when(td_kept_frame).then(_last_play(wa)).otherwise(_last_play(f"_wa_flip{suffix}"))
+    # The row takes it when it is a try of the touchdown's end team, or a clock stoppage
+    # just before a try when either the stoppage or the try is that team's. ESPN credits a
+    # stoppage to either team, so the value is restated for the stoppage's own team.
+    team = pl.col("start.pos_team.id")
+    before_try = pl.col("type.text").is_in(_CLOCK_STOPPAGES) & pl.col("type.text").shift(-1).is_in(_TRY_TYPES)
+    takes_over = (pl.col("type.text").is_in(_TRY_TYPES) & (td_end == team)) | (
+        before_try & ((td_end == team) | (td_end == team.shift(-1)))
+    )
 
     return (
         play_df.with_columns(
@@ -455,16 +511,12 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             # as a live snap at the 3 and ran 0.04 above the touchdown's end state (the
             # board with the TD counted, the other team about to receive) on 2014-26
             # tries, 0.14 in 401234597. A timeout between the two scores the same
-            # placeholder, so it inherits too. The NFL twin (nfl/ep_wp.py) does the same.
-            .when(
-                (
-                    pl.col("type.text").is_in(_TRY_TYPES)
-                    | ((pl.col("type.text") == "Timeout") & pl.col("type.text").shift(-1).is_in(_TRY_TYPES))
-                )
-                & (_last_play("start.pos_team.id") == pl.col("start.pos_team.id"))
-                & (_last_play("end.pos_team.id") == _last_play("start.pos_team.id")),
-            )
-            .then(_last_play(wa))
+            # placeholder, so it inherits too, stated for its own team. After a return or
+            # defensive touchdown the try is the end team's, and the touchdown's own wp_after
+            # (borrowed from the next row below) is this value restated for the team that
+            # gave up the score. The NFL twin (nfl/ep_wp.py) does the same.
+            .when(takes_over & (td_kept_frame | td_flipped_score) & team.is_not_null())
+            .then(pl.when(team == td_end).then(td_wp_after).otherwise(1 - td_wp_after))
             .otherwise(pl.col(wb))
             .alias(wb),
         )
@@ -486,7 +538,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             pl.col(wb).shift(-2).alias(lwb2),
         )
         .with_columns(
-            pl.when(pl.col("type.text").is_in(["Timeout"]))
+            # a stoppage just before a try took the touchdown's wp_after above and does not move it
+            pl.when(pl.col("type.text").is_in(["Timeout"]) | before_try)
             .then(pl.col(wb))
             .when(
                 (pl.col("status_type_completed") == True)
@@ -2980,13 +3033,10 @@ class CFBPlayProcess(object):
                 # scoring logic below consumes `td_play` long before
                 # `__setup_penalty_data` runs -- hence the shared constant
                 # rather than a second copy of the pattern.
-                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
-                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
-                touchdown=pl.col("type.text").str.contains("(?i)touchdown")
-                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
+                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD") & ~_touchdown_negated(),
+                touchdown=pl.col("type.text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
-                td_check=pl.col("text").str.contains("(?i)touchdown")
-                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
+                td_check=pl.col("text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
                 safety=pl.col("text").str.contains("(?i)safety"),
                 fumble_vec=pl.when(pl.col("text").str.contains("(?i)fumble"))
                 .then(True)
@@ -3416,6 +3466,12 @@ class CFBPlayProcess(object):
         Creates the following columns in play_df:
             * Fix play types
         """
+        # Who scored a touchdown the text names: ESPN scored the row and the start team's
+        # margin (__add_team_score_variables) rose or fell by six or more.
+        _margin_change = pl.col("end.pos_score_diff") - pl.col("start.pos_score_diff")
+        _scored_td = (pl.col("td_play") == True) & (pl.col("scoringPlay") == True)  # noqa: E712
+        offence_scored_td = _scored_td & (_margin_change >= 6)
+        defence_scored_td = _scored_td & (_margin_change <= -6)
         # --------------------------------------------------
         # --- Legacy / pre-2014 ESPN label normalization ----
         # These raw labels appear only in older seasons (verified 2004-2013); every
@@ -3564,11 +3620,14 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 # -- Fix rush/pass tds that aren't explicit----
+                # td_check needs the word "touchdown"; "Kirk Rice run for 5 yds for a TD, (Ben
+                # Hicks KICK)" (2014-26, typed "Rush") names it only as "TD" and counts when
+                # ESPN scored it for the rushing team.
                 pl.when(
                     (pl.col("td_play") == True)
                     .and_(pl.col("rush") == True)
                     .and_(pl.col("fumble_vec") == False)
-                    .and_(pl.col("td_check") == True),
+                    .and_((pl.col("td_check") == True) | offence_scored_td),
                 )
                 .then(pl.lit("Rushing Touchdown"))
                 .otherwise(pl.col("type.text"))
@@ -3703,6 +3762,34 @@ class CFBPlayProcess(object):
                 # --- Moving non-Touchdown pass interceptions to one play_type: "Interception Return" -----
                 pl.when(pl.col("type.text").is_in(["Interception", "Pass Interception", "Pass Interception Return"]))
                 .then(pl.lit("Interception Return"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # -- A return touchdown in a text shape the rules above do not know. An
+                # interception: "... pass intercepted by R. Ruud at the Nebr 35, returned for 35
+                # yards for a TD." (2004-13, typed "Pass Interception" or, 2004-07, "Passing
+                # Touchdown") and "... pass intercepted by #14 R.Pleasant at ARK49 #14 R.Pleasant
+                # return 49 yards to the ARK00 TOUCHDOWN" (2025+); a fumble: "... fumbled by #7
+                # at UL30 forced by #1 recovered by LT #9 at UL30 #9 return 30 yards to the UL00
+                # TOUCHDOWN" (2025+, typed "Fumble Recovery (Opponent)"). The row realised the
+                # thrower's EP after a turnover (EPA about +0.5) or an offensive touchdown (+7)
+                # instead of the defence's touchdown. The text says the turnover was returned
+                # for the score and the thrower's margin fell by 6 or more; where ESPN's start
+                # team is the returner, the row is left as it is.
+                pl.when(
+                    defence_scored_td
+                    & _espn_text.returned_for_touchdown("text")
+                    & pl.col("type.text").is_in(["Interception Return", "Passing Touchdown"])
+                    & pl.col("text").str.contains("(?i)intercept"),
+                )
+                .then(pl.lit("Interception Return Touchdown"))
+                .when(
+                    defence_scored_td
+                    & _espn_text.returned_for_touchdown("text")
+                    & (pl.col("type.text") == "Fumble Recovery (Opponent)"),
+                )
+                .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -4242,7 +4329,7 @@ class CFBPlayProcess(object):
                 # ESPN's type alone does not catch every return TD: 2005-2007 pick-sixes
                 # are labelled "Passing Touchdown", so the text -- which says the ball was
                 # intercepted or lost and THEN scored -- gates ahead of the label (O3).
-                pass_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                pass_td=pl.when(_touchdown_negated())
                 .then(False)
                 .when(_espn_text.returned_for_touchdown("text"))
                 .then(False)
@@ -4253,7 +4340,7 @@ class CFBPlayProcess(object):
                 .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                rush_td=pl.when(_touchdown_negated())
                 .then(False)
                 .when(_espn_text.returned_for_touchdown("text"))
                 .then(False)
@@ -7113,9 +7200,30 @@ class CFBPlayProcess(object):
         # The spread surface keeps the canonical un-suffixed column names; the
         # spread-free surface mirrors it under the ``_naive`` suffix.
         # B14: the same end-state prediction with the score differential restated in
-        # the END team's perspective (see _apply_wp_derivation). Only consumed on the
-        # last row of a game in progress.
-        _flip_df = play_df.with_columns((-pl.col("end.pos_score_diff")).alias("end.pos_score_diff"))
+        # the END team's perspective (see _apply_wp_derivation). Consumed on the last row
+        # of a game in progress, and handed to the try after a return or defensive
+        # touchdown as that touchdown's end state for the scorer.
+        #
+        # On such a touchdown (a scoring play whose end.team ESPN flipped to the scorer)
+        # the expected margin is restated too: end.ExpScoreDiff sits in whichever frame
+        # pos_score_diff_end landed in, and before 2014 it subtracts the try as the start
+        # team's loss (defense_score_vec) or leaves it out (a pick-six typed "Interception
+        # Return"). The scorer's board is its lead plus, before 2014, the try it is about
+        # to attempt -- what an offensive touchdown's end.ExpScoreDiff carries.
+        _flipped_td = (
+            (pl.col("scoringPlay") == True)
+            & (pl.col("td_play") == True)
+            & (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+        )
+        _flip_df = play_df.with_columns((-pl.col("end.pos_score_diff")).alias("end.pos_score_diff")).with_columns(
+            pl.when(_flipped_td)
+            .then(
+                (pl.col("end.pos_score_diff") + pl.when(pl.col("season") <= 2013).then(0.92).otherwise(0.0))
+                / (pl.col("end.adj_TimeSecsRem") + 1)
+            )
+            .otherwise(pl.col("end.ExpScoreDiff_Time_Ratio"))
+            .alias("end.ExpScoreDiff_Time_Ratio"),
+        )
         _, _, WP_end_flip = _wp_predict(
             _flip_df, wp_model, wp_final_names, wp_start_touchback_columns, wp_start_columns, wp_end_columns
         )

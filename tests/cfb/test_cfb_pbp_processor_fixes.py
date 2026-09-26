@@ -535,11 +535,22 @@ def test_vendor_tackler_separator_is_not_an_entity():
 
 def test_mislabelled_pick_six_is_not_a_passing_touchdown():
     # ESPN types the 2005 college pick-six "Passing Touchdown", so gating on the type alone left
-    # `pass_td` true and summarize_passer booked it as the thrower's passing TD.
+    # `pass_td` true and summarize_passer booked it as the thrower's passing TD. The label is
+    # now the defence's touchdown too: as a "Passing Touchdown" it realised Notre Dame's +7.
     row = _row(_plays(252600087), "Brady Quinn pass intercepted by Darean Adams")
-    assert row["type.text"] == "Passing Touchdown"
+    assert row["type.text"] == "Interception Return Touchdown"
     assert not row["pass_td"] and not row["rush_td"]
     assert row["yds_receiving"] == 0
+    assert row["EP_end"] == pytest.approx(-6.92)
+
+
+def test_vendor_pick_six_is_an_interception_return_touchdown() -> None:
+    # 2025 vendor text: "... pass intercepted by #14 R.Pleasant at ARK49 #14 R.Pleasant return 49
+    # yards to the ARK00 TOUCHDOWN, clock 09:15 ... #12 A.Daniels rush attempt Successful"
+    # stayed "Interception Return" (EP_end +0.99, EPA +0.09 for Arkansas).
+    row = _row(_plays(401752746), "#14 R.Pleasant return 49 yards to the ARK00 TOUCHDOWN")
+    assert (row["orig_play_type"], row["type.text"]) == ("Pass Interception Return", "Interception Return Touchdown")
+    assert row["EP_end"] == -8  # the defence's touchdown and its two
 
 
 def test_opponent_fumble_return_yards_are_not_receiving_yards():

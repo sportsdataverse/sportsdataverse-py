@@ -182,6 +182,15 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_272650152_trimmed.json.gz`` -- Clemson @ NC State, 2007 week 4. Clemson
       intercepts NC State's two-point try and returns it for two; ESPN typed the row
       "Extra Point Good".
+    * ``summary_243040265_trimmed.json.gz`` -- USC @ Washington State, 2004. USC returns a
+      punt for a touchdown and kicks the extra point (0-14 -> 0-21); late on, Washington
+      State returns an interception for a touchdown, calls a timeout and tries for two.
+    * ``summary_400547980_trimmed.json.gz`` -- Northwestern @ Notre Dame, 2014. Notre Dame
+      returns a fumble for a touchdown and Northwestern returns the try for two.
+    * ``summary_401756930_trimmed.json.gz`` -- Baylor @ Cincinnati, 2025 week 9. Two Baylor
+      touchdowns whose appended two-point tries carry a no-play penalty.
+    * ``summary_322430041_trimmed.json.gz`` -- UMass @ UConn, 2012 week 1. A pick-six ESPN
+      typed "Pass Interception".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -372,3 +381,157 @@ def test_defensive_try_return_text_shapes(text: str) -> None:
     from sportsdataverse.cfb.cfb_pbp import _DEFENSIVE_TRY_RETURN
 
     assert pl.Series([text]).str.contains(_DEFENSIVE_TRY_RETURN).item()
+
+
+def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:
+    """Each scoring play whose end team ESPN flipped to the scorer, with the rows up to its try."""
+    out = []
+    for td in plays.filter(
+        (pl.col("scoringPlay") == True) & (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+    ).iter_rows(named=True):
+        nxt = []
+        for r in plays.slice(td["i"] + 1, 3).iter_rows(named=True):
+            nxt.append(r)
+            if r["type.text"] != "Timeout":
+                break
+        out.append((td, nxt))
+    return out
+
+
+def test_a_try_after_a_return_touchdown_starts_where_the_touchdown_ended() -> None:
+    """243040265 / 400547980: a try after a punt return or a fumble return touchdown.
+
+    ESPN flips the touchdown's end team to the scorer, so #577's handover (touchdown kept
+    its frame) skipped these: the try kept the WP model's value for its placeholder start,
+    the touchdown borrowed its wp_after from it, and USC's made extra point after its punt
+    return cost USC 0.036. The try now starts from the touchdown's end state scored for the
+    scorer, and the touchdown's wp_after is that value restated for the punting team.
+    """
+    for game_id, td_type, try_type in (
+        (243040265, "Punt Return Touchdown", "Extra Point Good"),
+        (400547980, "Fumble Return Touchdown", "Defensive 2pt Conversion"),
+    ):
+        plays = _offline_plays(game_id).with_row_index("i")
+        (td, (tr,)), *_ = _rows_after_flipped_touchdowns(plays)
+        assert (td["type.text"], tr["type.text"]) == (td_type, try_type), game_id
+        assert tr["start.pos_team.id"] == td["end.pos_team.id"] != td["start.pos_team.id"]
+        assert tr["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6), game_id
+        assert tr["home_wp_before"] == pytest.approx(td["home_wp_after"], abs=1e-6), game_id
+        assert tr["wp_before_naive"] == pytest.approx(1 - td["wp_after_naive"], abs=1e-6), game_id
+        if try_type == "Extra Point Good":
+            # one point on top of the 0.92 the try was worth: a small gain, not a loss
+            assert 0 < tr["wpa"] < 0.02, tr["wpa"]
+
+
+def test_a_return_touchdown_hands_over_the_scorers_board() -> None:
+    """243040265: USC's punt return touchdown, 0-14 -> 0-20 with 26:31 left.
+
+    What the try inherits is the touchdown's end view in the scorer's frame: USC's lead
+    and, before 2014, the try it is about to attempt, as an offensive touchdown's
+    end.ExpScoreDiff carries. The plain end view states the lead for the punting team, and
+    the pre-2014 defensive-touchdown branch subtracts the try from the scorer's lead.
+    """
+    from xgboost import DMatrix
+
+    from sportsdataverse.cfb.cfb_pbp import wp_model
+    from sportsdataverse.cfb.model_vars import wp_end_columns, wp_final_names
+
+    plays = _offline_plays(243040265).with_row_index("i")
+    (td, (tr,)), *_ = _rows_after_flipped_touchdowns(plays)
+    lead = -td["end.pos_score_diff"]
+    assert lead == 20
+    scorer = (
+        pl.DataFrame([td])
+        .select(wp_end_columns)
+        .with_columns(
+            pl.lit(lead).alias("end.pos_score_diff"),
+            pl.lit((lead + 0.92) / (td["end.adj_TimeSecsRem"] + 1)).alias("end.ExpScoreDiff_Time_Ratio"),
+        )
+    )
+    scorer.columns = wp_final_names
+    expected = float(wp_model.predict(DMatrix(scorer.to_pandas()))[0])
+    assert tr["wp_before"] == pytest.approx(expected, abs=1e-6)
+
+
+def test_a_timeout_between_a_return_touchdown_and_its_try_keeps_the_board() -> None:
+    """243040265: Washington State's interception return, a timeout, then its two-point try.
+
+    The timeout scored ESPN's placeholder (0.0074) and the try another (0.0062). Both now
+    carry the touchdown's end state for Washington State, and the timeout does not move it.
+    """
+    plays = _offline_plays(243040265).with_row_index("i")
+    _, (td, (timeout, tr)) = _rows_after_flipped_touchdowns(plays)
+    assert (timeout["type.text"], tr["type.text"]) == ("Timeout", "Two Point Pass")
+    assert timeout["start.pos_team.id"] == tr["start.pos_team.id"] == td["end.pos_team.id"]
+    assert timeout["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
+    assert timeout["wp_after"] == pytest.approx(timeout["wp_before"], abs=1e-6)
+    assert tr["wp_before"] == pytest.approx(timeout["wp_after"], abs=1e-6)
+
+
+def test_a_no_play_on_the_try_does_not_wipe_out_the_touchdown() -> None:
+    """401756930: "... rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 #13
+    S.Robertson pass attempt failed ... PENALTY CIN Face Mask (#2 D.Corleone). NO PLAY #23
+    M.Turner rush attempt Successful" (Baylor 12-27 -> 20-27).
+
+    The 2025+ vendor template appends the try, penalties and all, to the touchdown row, and
+    ESPN's no-play marker there is the try's. It negated the touchdown: the row stayed
+    "Rush" and realised EP_end -0.29 (EPA -6.13), and the "Passing Touchdown" row of the same
+    shape did not count as a passing touchdown.
+    """
+    plays = _offline_plays(401756930)
+    rush = plays.filter(pl.col("id") == 401756930616).row(0, named=True)
+    assert (rush["orig_play_type"], rush["type.text"]) == ("Rush", "Rushing Touchdown")
+    assert rush["td_play"] and rush["rush_td"]
+    assert (rush["two_point_conv_result"], rush["EP_end"]) == ("success", 8)
+    catch = plays.filter(pl.col("id") == 401756930467).row(0, named=True)
+    assert catch["type.text"] == "Passing Touchdown" and catch["pass_td"]
+
+
+@pytest.mark.parametrize(
+    ("text", "scoring", "negated"),
+    [
+        # the try's no-play marker, on a touchdown ESPN scored
+        (
+            "No Huddle-Shotgun #13 S.Robertson rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 "
+            "#13 S.Robertson pass attempt failed PENALTY CIN Pass Interference (#8 O.Arnold) 1 yard from CIN03 "
+            "to CIN02. NO PLAY #23 M.Turner rush attempt Successful",
+            True,
+            False,
+        ),
+        # the same text on a row ESPN did not score is read whole
+        (
+            "No Huddle-Shotgun #13 S.Robertson rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 "
+            "PENALTY CIN Holding 10 yards from CIN10 to CIN20. NO PLAY",
+            False,
+            True,
+        ),
+        # a touchdown that did not stand
+        (
+            "No Huddle-Shotgun #18 C.Coppock rush left for 27 yards gain to the FIU00 TOUCHDOWN nullified by "
+            "penalty, clock 06:01 PENALTY KSU Holding (#17 G.Bullock Jr.) 10 yards from FIU27 to FIU37. NO PLAY",
+            False,
+            True,
+        ),
+        ("Jordan Travis pass complete to Ontaria Wilson for 20 yds for a TD (NO PLAY)", True, True),
+    ],
+)
+def test_touchdown_negated_reads_the_try_tail_as_the_trys(text: str, scoring: bool, negated: bool) -> None:
+    from sportsdataverse.cfb.cfb_pbp import _touchdown_negated
+
+    frame = pl.DataFrame({"text": [text], "scoringPlay": [scoring]})
+    assert frame.select(_touchdown_negated()).item() is negated
+
+
+def test_an_interception_returned_for_a_touchdown_is_typed_one() -> None:
+    """322430041: "Mike Wegzyn pass intercepted by Dwayne Gratz at the UMass 37, returned for 37
+    yards for a TOUCHDOWN." (UConn 13-0 -> 19-0), typed "Pass Interception".
+
+    Only "pass intercepted for a TD" was retyped, so the row stayed "Interception Return" and
+    realised UMass's own EP at the end of a turnover (EPA +0.46).
+    """
+    plays = _offline_plays(322430041)
+    r = plays.filter(pl.col("id") == 322430041105).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Pass Interception", "Interception Return Touchdown")
+    assert r["int_td"]
+    assert r["EP_end"] == pytest.approx(-6.92)
+    assert r["EPA"] < -6
