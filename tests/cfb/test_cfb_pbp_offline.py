@@ -197,6 +197,8 @@ def _trimmed(game_id: int) -> dict:
       Southern Miss's missed extra point for two (16-17 -> 16-19); the row has no type.
     * ``summary_400548425_trimmed.json.gz`` -- Idaho @ Georgia Southern, 2014 week 7. Idaho scores
       a touchdown and a two-point pass in one row, in the 2014 "(Two pt pass, ...)" wording.
+    * ``summary_401831583_trimmed.json.gz`` -- Arizona @ SMU, 2025 bowl. Two Arizona
+      touchdowns whose appended two-point tries fail, one of them re-tried after a penalty.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -440,6 +442,22 @@ def test_a_2014_two_pt_clause_scores_the_two() -> None:
     r = plays.filter(pl.col("id") == 400548425103968901).row(0, named=True)
     assert r["type.text"] == "Rushing Touchdown"
     assert r["EP_end"] == 8
+
+
+def test_a_vendor_touchdowns_last_two_point_attempt_decides() -> None:
+    """401831583: "... to the SMU00 TOUCHDOWN, clock 02:37, 1ST DOWN #1 N.Fifita pass attempt
+    failed #1 N.Fifita pass attempt failed PENALTY SMU Pass Interference ... NO PLAY #24 Q.Craig
+    rush attempt failed" (Arizona 0-24 -> 6-24).
+
+    The 2025+ vendor template names no "conversion", and ESPN's pointAfterAttempt on this row
+    is "NA", value 0, so the touchdown took the 6.92 unknown. The last attempt is the one that
+    stood; the second touchdown's single "pass attempt failed" (pointAfterAttempt "Two Point
+    Pass", 0) already realised 6.
+    """
+    plays = _offline_plays(401831583)
+    for row_id in (401831583536, 401831583650):
+        r = plays.filter(pl.col("id") == row_id).row(0, named=True)
+        assert (r["type.text"], r["EP_end"]) == ("Passing Touchdown", 6), row_id
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

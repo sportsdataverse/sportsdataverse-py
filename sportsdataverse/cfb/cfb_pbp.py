@@ -6514,6 +6514,25 @@ class CFBPlayProcess(object):
         two_pt_named = _lower.str.contains(r"(?i)conversion|(?:two|2) pt (?:pass|rush)")
         two_pt_failed = two_pt_named.and_(_lower.str.contains(r"(?i)failed"))
         two_pt_good = two_pt_named.and_(_lower.str.contains(r"(?i)failed") == False)
+        # The 2025+ vendor template trails the try after the touchdown's clock, penalty re-tries
+        # and all: "... TOUCHDOWN, clock 13:34 #13 S.Robertson pass attempt failed PENALTY CIN
+        # Pass Interference ... NO PLAY #23 M.Turner rush attempt Successful". The last attempt
+        # is the one that stood; a review's "(Original Play: ... rush attempt failed)" is not an
+        # attempt. It names no "conversion", and on 29 rows pointAfterAttempt is "NA"/0, so they
+        # took the 6.92 unknown (ESPN's score +6). Where the text has such an attempt it decides
+        # (it agrees with every two-point pointAfterAttempt in 2025-26). 2007-13 old-NCAA
+        # touchdowns carry the same words ("... for a TOUCHDOWN. Rush attempt failed.", 2 rows).
+        _last_attempt = (
+            _lower.str.replace_all(r"\(original play:[^)]*\)", "")
+            .str.extract_all(r"(?:pass|rush) attempt (?:failed|successful)")
+            .list.last()
+        )
+        two_pt_failed = (
+            pl.when(_last_attempt.is_not_null()).then(_last_attempt.str.ends_with("failed")).otherwise(two_pt_failed)
+        )
+        two_pt_good = (
+            pl.when(_last_attempt.is_not_null()).then(_last_attempt.str.ends_with("successful")).otherwise(two_pt_good)
+        )
         if "two_point_conv_result" in play_df.columns:
             two_pt_failed = (pl.col("two_point_conv_result") == "failure").fill_null(False).or_(two_pt_failed)
             two_pt_good = (
