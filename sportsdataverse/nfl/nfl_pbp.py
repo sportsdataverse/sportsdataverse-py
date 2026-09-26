@@ -5681,7 +5681,9 @@ class NFLPlayProcess(object):
         X_wp_end = _espn_wp_features(
             play_df.with_columns(
                 pl.when(
-                    (pl.col("scoringPlay") == True).and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id")),
+                    ((pl.col("scoringPlay") == True) | (pl.col("td_play") == True)).and_(  # noqa: E712
+                        pl.col("start.pos_team.id") != pl.col("end.pos_team.id")
+                    ),
                 )
                 .then(-pl.col("end.pos_score_diff"))
                 .otherwise(pl.col("end.pos_score_diff"))
@@ -5700,6 +5702,94 @@ class NFLPlayProcess(object):
             def_timeouts_col="end.defPosTeamTimeouts",
         )
         WP_end = _wp_model.predict(DMatrix(X_wp_end, feature_names=WP_SPREAD_FEATURES))
+
+        # Before a standalone try, the touchdown ends on the board the kickoff will start
+        # from: the receiver's touchback view (the kickoff row's own start state, as
+        # WP_start_touchback scores it) at each outcome of the try, weighted by the try's
+        # odds -- a kick 92% for one, a two 46% for two -- and restated for the scorer.
+        # ESPN's end state for the touchdown (down -1 at the scorer's own 1) read as the
+        # scorer pinned at its goal line, so the try inherited a value below its board and
+        # a made kick read as a small loss (306 of 12,394 in #577's sample). Touchdown, try
+        # and kickoff now read one board, and the try's WPA is its result: the 8% a made
+        # kick was not already expected to bring, the 92% a miss gives back. The frame is
+        # the scorer's whether the row kept it or ESPN flipped it (_end_team_score_diff).
+        _t = pl.col("type.text")
+        _stop = _t.is_in(clock_stoppage_vec)
+
+        def _nxt(col: pl.Expr) -> pl.Expr:
+            return pl.when(_stop).then(None).otherwise(col).backward_fill().shift(-1)
+
+        _bt = play_df.with_row_index("_i").with_columns(
+            _n1=_nxt(pl.col("_i")),
+            _n1_type=_nxt(_t),
+            _n1_team=_nxt(pl.col("start.pos_team.id")),
+            _n2_type=_nxt(_nxt(_t)),
+            _n2=_nxt(_nxt(pl.col("_i"))),
+            _n2_psd=_nxt(_nxt(pl.col("pos_score_diff_start"))),
+        )
+        # The scorer's lead before the try, read off the kickoff row the try hands to: the
+        # receiver's margin there is -(lead + the try's points). Some feeds count the kick on
+        # the touchdown row already, so end.pos_score_diff there can sit a point high; the
+        # kickoff's margin is the one the try's wp_after is restated from.
+        _realised = (
+            pl.when(pl.col("_n1_type") == "Extra Point Good")
+            .then(1.0)
+            .when(pl.col("_n1_type") == "Two-Point Conversion Good")
+            .then(2.0)
+            .when(pl.col("_n1_type").is_in(["Extra Point Missed", "Two-Point Conversion Missed"]))
+            .then(0.0)
+            .otherwise(None)
+        )
+        _bt = _bt.with_columns(
+            _lead=pl.when(_realised.is_not_null() & pl.col("_n2_psd").is_not_null())
+            .then(-pl.col("_n2_psd").cast(pl.Float64) - _realised)
+            .otherwise(
+                pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+                .then(pl.col("end.pos_score_diff"))
+                .otherwise(-pl.col("end.pos_score_diff"))
+                .cast(pl.Float64)
+            )
+        )
+        _is_td = (pl.col("td_play") == True) if "td_play" in _bt.columns else _t.str.contains("(?i)touchdown")  # noqa: E712
+        _before_try = (
+            (_is_td | _t.str.contains("(?i)touchdown"))
+            & pl.col("_n1_type").is_in(
+                ["Extra Point Good", "Extra Point Missed", "Two-Point Conversion Good", "Two-Point Conversion Missed"]
+            )
+            & (pl.col("_n1_team") == pl.col("end.pos_team.id"))
+            & pl.col("_n2_type").is_in(kickoff_vec)
+            & (pl.col("start.pos_team.id") == pl.col("end.pos_team.id")).or_(
+                (pl.col("scoringPlay") == True) | _is_td  # noqa: E712
+            )
+        ).fill_null(False)
+        _rows = _bt.filter(_before_try).select("_i", "_n1_type", "_n2", "_lead")
+        if _rows.height:
+            _kick = play_df[_rows["_n2"].to_list()]
+            _two = _rows["_n1_type"].is_in(["Two-Point Conversion Good", "Two-Point Conversion Missed"]).to_numpy()
+            _lead_arr = _rows["_lead"].cast(pl.Float64).to_numpy()
+
+            def _board_at(k: float) -> np.ndarray:
+                # the receiver's touchback view with the scorer's lead plus k on the board
+                view = _kick.with_columns((-(pl.Series(_lead_arr) + k)).cast(pl.Float64).alias("_o_sd"))
+                X = _espn_wp_features(
+                    view,
+                    receive_ko_col="start.pos_team_receives_2H_kickoff",
+                    spread_time_col="start.spread_time",
+                    home_col="start.is_home",
+                    half_sec_col="start.TimeSecsRem",
+                    game_sec_col="start.adj_TimeSecsRem",
+                    score_diff_col="_o_sd",
+                    down_col="start.down",
+                    ydstogo_col="start.distance",
+                    yardline_col="start.yardsToEndzone.touchback",
+                    pos_timeouts_col="start.posTeamTimeouts",
+                    def_timeouts_col="start.defPosTeamTimeouts",
+                )
+                return 1 - _wp_model.predict(DMatrix(X, feature_names=WP_SPREAD_FEATURES))
+
+            w0, w1, w2 = _board_at(0.0), _board_at(1.0), _board_at(2.0)
+            board = np.where(_two, 0.46 * w2 + 0.54 * w0, 0.92 * w1 + 0.08 * w0).astype(WP_end.dtype)
+            WP_end[_rows["_i"].to_numpy()] = board
 
         # Attach the scored WP point estimates, then delegate the derivation half to
         # the shared, model-free calculate_wpa. calculate_wpa is the verbatim lift of

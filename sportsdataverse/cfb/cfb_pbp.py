@@ -405,6 +405,11 @@ _TRY_TYPES = (
 _CLOCK_STOPPAGES = ("Timeout", "End Period")
 
 
+def _next(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+    """``col`` on the first row after this one that is not ``skip``."""
+    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)
+
+
 def _penalty_before_try() -> pl.Expr:
     """A penalty walked off between a touchdown and its try: the next row that is not a clock
     stoppage is a try. 2004-13, where the try is its own row ("TD, Penalty, Extra Point
@@ -486,11 +491,6 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
     # the penalty started at 0.799).
     t = pl.col("type.text")
-
-    def _next(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
-        # ``col`` on the first row after this one that is not ``skip``
-        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)
-
     dead_ball = t.is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
 
     def _last_play(col: str) -> pl.Expr:
@@ -532,6 +532,29 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         if "td_play" in play_df.columns:
             last_td = last_td | (_last_play("td_play") == True).fill_null(False)  # noqa: E712
         takes_over = takes_over & ~((pl.col("period.number") >= 5) & ~last_td)
+    # A try hands over the same way: its wp_after is the next row's wp_before, restated for
+    # the try's team. After a try the next row is the kickoff (or the penalty walked off on
+    # it), whose wp_before is the receiver's touchback view; a try that ends a half hands to
+    # the second-half kickoff, the board at the break. The model's own end state scored
+    # ESPN's placeholder for the try's end (down -1, 70 yards out). An overtime try is
+    # followed by the next possession's snap, not a kickoff, and keeps it.
+    stoppage = t.is_in(_CLOCK_STOPPAGES)
+    # A penalty walked off on the kickoff spot after the try (282432641: "Extra Point
+    # Missed", "Penalty", "Kickoff", all 8:32) is dead-ball the same way: the try hands
+    # to the kickoff through it, and the penalty row sits on that board.
+    # every penalty in a run walked off before the kickoff (a stoppage may sit between them)
+    penalty_before_kick = (t == "Penalty") & _next(touchback_mask.fill_null(False), stoppage | (t == "Penalty"))
+    skip_after_try = stoppage | penalty_before_kick
+    # the kickoff's wp_before as it will stand once the touchback overlay below has run
+    kick_team = _next(team, skip_after_try)
+    kick_wb = _next(pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)), skip_after_try)
+    try_to_kickoff = (
+        (t.is_in(_TRY_TYPES) | penalty_before_kick)
+        & _next(touchback_mask.fill_null(False), skip_after_try)
+        & team.is_not_null()
+        & kick_team.is_not_null()
+    )
+    kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
 
     return (
         play_df.with_columns(
@@ -557,6 +580,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             # gave up the score. The NFL twin (nfl/ep_wp.py) does the same.
             .when(takes_over & (td_kept_frame | td_flipped_score) & team.is_not_null())
             .then(pl.when(team == td_end).then(td_wp_after).otherwise(1 - td_wp_after))
+            .when(penalty_before_kick & kick_team.is_not_null())
+            .then(kick_board)
             .otherwise(pl.col(wb))
             .alias(wb),
         )
@@ -601,6 +626,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 .and_(end_team_score_diff < 0),
             )
             .then(0.0)
+            .when(try_to_kickoff)
+            .then(kick_board)
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
@@ -7669,6 +7696,111 @@ class CFBPlayProcess(object):
             wp_naive_start_columns,
             wp_naive_end_columns,
         )
+
+        # Before a standalone try the touchdown's end state is the kickoff to come: the
+        # receiver's touchback view, with the scorer's lead plus the try's expected 0.92,
+        # restated for the scorer. ESPN ends the touchdown at down -1 on the scorer's own 1,
+        # which the model read as the scorer pinned at its goal line, so every 2004-13 try
+        # started below its board (made-XP WPA median +0.016, and +0.007 on a miss). The
+        # try's wp_after is the same view with the try's realised points
+        # (_apply_wp_derivation): the touchdown, the try and the kickoff read one board, and
+        # the try's WPA is its result. A try filed without a kickoff after it (overtime, the
+        # end of regulation) keeps the touchdown's own end state.
+        t = pl.col("type.text")
+        start_team, end_team = pl.col("start.pos_team.id"), pl.col("end.pos_team.id")
+        stop = t.is_in(_CLOCK_STOPPAGES)
+        dead = stop | _penalty_before_try()
+        kick = (t.is_in(kickoff_vec) | (pl.col("penalty_assessed_on_kickoff") == True)).fill_null(False)
+        kick_team = _next(start_team, ~kick)
+        # The scorer's lead before the try, read off the kickoff row the try hands to: the
+        # receiver's margin there is -(lead + the try's points). Where ESPN counts the kick
+        # on the touchdown row already, end.pos_score_diff sits a point high; the kickoff's
+        # margin is the one the try's wp_after is restated from, so the board is built on it.
+        _try_type = _next(t, dead)
+        _realised = (
+            pl.when(_try_type == "Extra Point Good")
+            .then(1.0)
+            .when(_try_type == "Two-Point Conversion Good")
+            .then(2.0)
+            .when(_try_type.is_in(["Extra Point Missed", "Two-Point Conversion Missed", "Blocked PAT"]))
+            .then(0.0)
+            .otherwise(None)
+        )
+        _kick_psd = _next(pl.col("pos_score_diff_start"), ~kick)
+        lead = (
+            pl.when(_realised.is_not_null() & _kick_psd.is_not_null())
+            .then(-_kick_psd.cast(pl.Float64) - _realised)
+            .otherwise(
+                pl.when(start_team == end_team)
+                .then(pl.col("end.pos_score_diff"))
+                .otherwise(-pl.col("end.pos_score_diff"))
+                .cast(pl.Float64)
+            )
+        )
+        before_try = (
+            ~t.is_in(_TRY_TYPES)
+            & _next(t, dead).is_in(_TRY_TYPES)
+            & (_next(start_team, dead) == end_team)
+            & _next(_next(kick, stop), dead)
+            & ((start_team == end_team) | (pl.col("scoringPlay") == True))
+            & kick_team.is_not_null()
+        ).fill_null(False)
+        _ko_df = play_df.with_columns(
+            lead.alias("_lead"),
+            _next(pl.col("EP_start_touchback"), ~kick).alias("_ko_ep"),
+            (kick_team == end_team).fill_null(False).alias("_ko_is_end"),
+            before_try.alias("_before_try"),
+            (start_team == end_team).fill_null(False).alias("_kept"),
+            # a two by the try row's type, or by the touchdown's own attempt text when the
+            # try that follows is the defence's (a Defensive 2pt Conversion names no attempt)
+            (
+                _next(t, dead).is_in(
+                    ["Two-Point Conversion Good", "Two-Point Conversion Missed", "Two Point Pass", "Two Point Rush"]
+                )
+                | (
+                    pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.contains("(?i)two point")
+                    if "pointAfterAttempt.text" in play_df.columns
+                    else pl.lit(False)
+                )
+            )
+            .fill_null(False)
+            .alias("_two"),
+        ).with_columns([_next(pl.col(c), ~kick).alias(c) for c in wp_start_touchback_columns])
+
+        def _view(pos_pts, exp_pts):
+            sign = pl.when(pl.col("_ko_is_end")).then(1.0).otherwise(-1.0)
+            return _ko_df.with_columns(
+                (sign * (pl.col("_lead") + pos_pts)).alias("pos_score_diff_start"),
+                ((sign * (pl.col("_lead") + exp_pts) + pl.col("_ko_ep")) / (pl.col("start.adj_TimeSecsRem") + 1)).alias(
+                    "start.ExpScoreDiff_Time_Ratio_touchback"
+                ),
+            )
+
+        # The board before the try is its expectation over the try's outcomes: a kick lands
+        # 1 point 92% of the time, a two-point try 2 points 46% of the time (the corpus rates
+        # the 0.92 pin encodes). Scoring the kickoff view at each outcome and weighting keeps
+        # the try's own WPA to its result -- a made kick a little above the board, a miss well
+        # below it -- instead of a single 0.92 board that reads every kick as a gain.
+        is_end = _ko_df["_ko_is_end"].to_numpy()
+        two = _ko_df["_two"].to_numpy()
+        kept_before_try = (_ko_df["_before_try"] & _ko_df["_kept"]).to_numpy()
+        flipped_before_try = (_ko_df["_before_try"] & ~_ko_df["_kept"]).to_numpy()
+        for model, names, cols, arrays in (
+            (wp_model, wp_final_names, wp_start_touchback_columns, (WP_end, WP_end_flip)),
+            (wp_naive_model, wp_naive_final_names, wp_naive_start_touchback_columns, (WP_end_naive, WP_end_flip_naive)),
+        ):
+
+            def _board_at(pos_pts: float, exp_pts: float, model=model, names=names, cols=cols):
+                ko = _view(pos_pts, exp_pts).select(cols)
+                ko.columns = names
+                return model.predict(DMatrix(ko))
+
+            w0, w1, w2 = _board_at(0.0, 0.0), _board_at(1.0, 1.0), _board_at(2.0, 2.0)
+            board = np.where(two, 0.46 * w2 + 0.54 * w0, 0.92 * w1 + 0.08 * w0).astype(np.float32)
+            board = np.where(is_end, board, 1 - board)
+            arrays[0][kept_before_try] = board[kept_before_try]
+            arrays[1][flipped_before_try] = board[flipped_before_try]
+
         play_df = _apply_wp_derivation(
             play_df, WP_start, WP_start_touchback, WP_end, suffix="", wp_after_flip_raw=WP_end_flip
         )
