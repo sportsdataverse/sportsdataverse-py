@@ -15,10 +15,12 @@ def wnba_referee_assignments(
 ) -> dict[str, Any]:
     """Fetch and parse WNBA referee assignments for a given date from official.nba.com.
 
-    Retrieves the referee crew assignments (crew chief + up to three officials per game)
-    and replay center officials for all WNBA games on a given date. This is a thin shim
-    over :func:`sportsdataverse.nba.nba_officiating.nba_referee_assignments` that sets
-    ``league="wnba"``.
+    Retrieves the referee crew assignments and replay center officials for all WNBA
+    games on a given date. The ``crew_position`` column (1–4) represents the feed's
+    slot order; slot 1 is inferred to be the crew chief. The ``season`` column is
+    the WNBA single-year season (feed year converted as-is). This is a thin shim
+    over :func:`sportsdataverse.nba.nba_officiating.nba_referee_assignments` that
+    sets ``league="wnba"``.
 
     Args:
         date: The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date).

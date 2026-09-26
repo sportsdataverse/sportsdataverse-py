@@ -456,12 +456,31 @@ def _mdy(s: str | None) -> _dt.date | None:
     return _dt.datetime.strptime(s, "%m/%d/%Y").date() if s else None
 
 
+def _season_end_year(s: str, league: str) -> int | None:
+    """Convert feed season format <type digit><START year> to END year per league.
+
+    NBA and G-League play two-calendar-year seasons (e.g., 2025-26), so season code
+    2025 represents the 2026 end year. WNBA plays single-year seasons, so season code
+    2026 represents the 2026 season.
+    """
+    if len(s) != 5:
+        return None
+    start_year = int(s[1:])
+    return start_year + 1 if league in ("nba", "gl") else start_year
+
+
 def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[str, pl.DataFrame]:
     """Parse NBA referee assignment payload into tidy DataFrames.
 
     Parses the raw referee assignment JSON from official.nba.com into two related
     tables: officials (long format, one row per game × crew slot) and replay center
     (one replay center official per game per league).
+
+    The ``crew_position`` column contains the feed's slot order (1–4); slot 1 is
+    inferred to be the crew chief from that order, as the NBA does not label roles
+    in the API. The ``season`` column converts the feed's format ``<type digit><START year>``
+    to an END year: START+1 for NBA/G-League (two-calendar-year seasons) and START
+    unchanged for WNBA (single-year seasons).
 
     Args:
         payload: The JSON payload (dict) from official.nba.com referee assignments endpoint.
@@ -503,8 +522,7 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
                     "league": league,
                     "game_id": _gid(g["game_id"]),
                     "game_date": _mdy(g.get("game_date")),
-                    # feed season = <type digit><START year>; convert to END year
-                    "season": int(s[1:]) + 1 if len(s) == 5 else None,
+                    "season": _season_end_year(s, league),
                     "season_type": _SEASON_TYPES.get(s[:1]),
                     "game_code": g.get("game_code"),
                     "home_team_id": g.get("home_team_id"),
@@ -539,9 +557,11 @@ def nba_referee_assignments(
 ) -> dict[str, Any]:
     """Fetch and parse NBA referee assignments for a given date from official.nba.com.
 
-    Retrieves the referee crew assignments (crew chief + three officials per game)
-    and replay center officials for all games on a given date across NBA, G-League,
-    and WNBA.
+    Retrieves the referee crew assignments and replay center officials for all games
+    on a given date across NBA, G-League, and WNBA. The ``crew_position`` column (1–4)
+    represents the feed's slot order; slot 1 is inferred to be the crew chief. The
+    ``season`` column converts from the feed's format to an END year: START+1 for
+    NBA/G-League (two-calendar-year seasons) and START unchanged for WNBA.
 
     Args:
         date: The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date).

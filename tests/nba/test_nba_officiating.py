@@ -173,3 +173,12 @@ def test_assignments_invalid_league_raises():
 
     with pytest.raises(ValueError, match="league must be"):
         nba_referee_assignments("2026-06-13", league="bogus")
+
+
+def test_assignments_wnba_season_no_increment():
+    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
+
+    out = parse_nba_referee_assignments(_assign(), "wnba")
+    wnba_officials = out["officials"]
+    assert (wnba_officials["season"] == 2026).all()
+    assert wnba_officials["season_type"].unique().to_list() == ["regular"]
