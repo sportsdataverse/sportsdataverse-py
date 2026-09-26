@@ -635,7 +635,8 @@ def test_walk_forward_beats_shuffled_date_control():
     # shuffled-date control: randomly reassign game_date so "future" no longer
     # follows "past" in a meaningful order -- walk-forward signal should collapse.
     rng = np.random.default_rng(9)
-    dates = poss.select("game_date").unique()["game_date"].to_list()
+    # sorted: unique() order varies per process, which re-rolled this seeded shuffle every run
+    dates = sorted(poss["game_date"].unique().to_list())
     shuffled_map = dict(
         zip(sorted(poss["game_id"].unique().to_list()), rng.permutation(dates * 100)[: poss["game_id"].n_unique()])
     )
