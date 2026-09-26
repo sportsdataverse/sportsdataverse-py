@@ -163,17 +163,19 @@ def _read_payload(path: Path) -> Any:
 
 
 def _row_count(payload: Any) -> int:
-    """Rows in ``payload``: result-table rows, or for a v3 ``{<entity>, meta}``
-    payload (no result tables) the list entries under its entity.
+    """Rows in ``payload``: result-table rows for a v2 envelope, or for a v3
+    ``{<entity>, meta}`` payload the list entries under its entity.
 
-    Only compared against zero, so the v3 count need not be exact -- it only has
-    to be 0 exactly when every entity list is empty.
+    v2 is recognised by the ``resultSets``/``resultSet`` KEY, not by having
+    tables, so a v2 answer with ``resultSets: []`` counts 0 instead of falling
+    through to the v3 walk. Only compared against zero, so the v3 count need not
+    be exact -- it only has to be 0 exactly when every entity list is empty.
     """
-    tables = _result_tables(payload)
-    if tables:
-        return sum(len(t.get("rowSet") or []) for t in tables)
+    if isinstance(payload, dict) and ("resultSets" in payload or "resultSet" in payload):
+        return sum(len(t.get("rowSet") or []) for t in _result_tables(payload))
 
     def _items(node: Any) -> int:
+        """List entries anywhere under ``node``, skipping ``meta``."""
         if isinstance(node, list):
             return len(node) + sum(_items(v) for v in node)
         if isinstance(node, dict):
@@ -266,7 +268,9 @@ def capture_season(
         path = payload_path(root, endpoint, season, variant)
         fresh = _capture(path, endpoint, kwargs, f"{endpoint}[{variant}]")
         if _is_team_source(endpoint, kwargs):
-            team_source = fresh if fresh is not None else _read_payload(path)
+            # Never downgrade to None: a later matching variant that failed with
+            # nothing on disk must not discard a team source already in hand.
+            team_source = fresh if fresh is not None else (_read_payload(path) or team_source)
 
     # commonteamroster is per (season, team); team ids come from the team-stats
     # capture above rather than a second index call.
