@@ -155,6 +155,10 @@ def parse_nba_l2m(payload: dict, *, return_as_pandas: bool = False) -> dict[str,
         Each value is a DataFrame with the specified schema. Empty payloads return
         zero-row DataFrames.
 
+    Raises:
+        This function does not raise. Empty or malformed payloads produce zero-row
+        DataFrames with the documented schemas; missing fields become nulls.
+
     Example:
         Parse a real L2M report::
 
