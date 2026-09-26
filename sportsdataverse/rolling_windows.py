@@ -217,6 +217,7 @@ OUTPUT_SCHEMA: dict[str, pl.DataType] = {
     "delta_career": pl.Float64,
     "delta_prev_rank": pl.Int64,
     "n": pl.Int64,
+    "qualified": pl.Boolean,
     "last_event_date": pl.Date,
     "as_of_date": pl.Date,
 }
@@ -261,8 +262,9 @@ def rolling_windows(
     Returns:
         pl.DataFrame: one row per (entity, unit, metric, window size), ``OUTPUT_SCHEMA``.
         ``prev`` / ``season_start`` need a FULL window and ``career_baseline`` at least
-        one window of history, else null; ``delta_prev_rank`` (1 = biggest riser, ties
-        share the lowest rank) is null unless ``n == window_n`` and ``prev`` exists.
+        one window of history, else null; ``qualified`` is ``True`` iff ``n == window_n``;
+        ``delta_prev_rank`` (1 = biggest riser, ties share the lowest rank) is null unless
+        ``qualified`` and ``prev`` exists.
 
     Example:
         Quick start::
@@ -308,19 +310,26 @@ def rolling_windows(
     ]
     if not parts:
         return pl.DataFrame(schema=OUTPUT_SCHEMA)
-    qualified = (pl.col("n") == pl.col("window_n")) & pl.col("prev").is_not_null()
+    # ranking (and rank-eligibility) reads a fully-qualified window with a full
+    # prior window to diff against; `qualified` alone (see OUTPUT_SCHEMA) is a
+    # weaker, output-facing condition that doesn't require `prev`.
+    ranked = (pl.col("n") == pl.col("window_n")) & pl.col("prev").is_not_null()
     out = (
         pl.concat(parts)
         .with_columns(
             season=pl.lit(season, dtype=pl.Int64),
-            delta_prev=pl.col("cur") - pl.col("prev"),
-            delta_season=pl.col("cur") - pl.col("season_start"),
-            delta_career=pl.col("cur") - pl.col("career_baseline"),
+            # round before ranking: two entities whose deltas are "really" equal can
+            # still differ at ~1e-16 from IEEE 754 subtraction (e.g. 0.6 - 0.4 vs.
+            # 0.5 - 0.3), which would otherwise split a tie into adjacent ranks.
+            delta_prev=(pl.col("cur") - pl.col("prev")).round(12),
+            delta_season=(pl.col("cur") - pl.col("season_start")).round(12),
+            delta_career=(pl.col("cur") - pl.col("career_baseline")).round(12),
+            qualified=pl.col("n") == pl.col("window_n"),
             as_of_date=pl.lit(as_of, dtype=pl.Date),
         )
         .with_columns(
-            delta_prev_rank=pl.when(qualified).then(
-                pl.when(qualified).then(pl.col("delta_prev")).rank(method="min", descending=True).over(_RANK_GROUP)
+            delta_prev_rank=pl.when(ranked).then(
+                pl.when(ranked).then(pl.col("delta_prev")).rank(method="min", descending=True).over(_RANK_GROUP)
             )
         )
     )

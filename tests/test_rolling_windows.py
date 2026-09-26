@@ -136,6 +136,56 @@ def test_rank_is_min_rank_of_delta_prev_descending(rw2024):
         assert rank == 1 + sum(1 for o in deltas if o > d)
 
 
+def test_qualified_flags_full_vs_short_windows(rw2024):
+    full = rw2024.filter(pl.col("qualified"))
+    short = rw2024.filter(~pl.col("qualified"))
+    assert full.height > 0 and short.height > 0
+    assert (full["n"] == full["window_n"]).all()
+    assert (short["n"] < short["window_n"]).all()
+
+
+def _synthetic_events(rows: list[dict]) -> pl.DataFrame:
+    """A minimal EVENT_SCHEMA frame from plain dicts, for cases too fiddly to hand-pick from the fixture."""
+    return pl.DataFrame(rows, schema=EVENT_SCHEMA, orient="row")
+
+
+def test_tied_deltas_split_by_float_noise_share_the_lowest_rank():
+    # 0.6 - 0.4 and 0.5 - 0.3 are both "really" 0.2, but IEEE 754 subtraction gives
+    # 0.19999999999999996 for the first and 0.2 (exact) for the second -- a real
+    # divergence at ~1e-16 that .round(12) must collapse before ranking.
+    assert (0.6 - 0.4) != (0.5 - 0.3)
+    assert round(0.6 - 0.4, 12) == round(0.5 - 0.3, 12) == 0.2
+    ev = _synthetic_events(
+        [
+            dict(
+                season=2024,
+                entity_type="player",
+                entity_id=eid,
+                entity_name=name,
+                team_id="1",
+                window_unit="dropback",
+                metric="epa",
+                game_id=g,
+                event_date=d,
+                seq=1,
+                value=v,
+            )
+            for eid, name, g, d, v in [
+                ("A1", "Entity A", "g1", date(2024, 1, 1), 0.4),
+                ("A1", "Entity A", "g2", date(2024, 1, 8), 0.6),
+                ("B1", "Entity B", "g1", date(2024, 1, 1), 0.3),
+                ("B1", "Entity B", "g2", date(2024, 1, 8), 0.5),
+            ]
+        ]
+    )
+    rw = rolling_windows(ev, 2024, windows={"dropback": (1,)})
+    a = _row(rw, entity_id="A1", window_unit="dropback", metric="epa", window_n=1)
+    b = _row(rw, entity_id="B1", window_unit="dropback", metric="epa", window_n=1)
+    assert a["delta_prev"] == pytest.approx(0.2, abs=1e-12)
+    assert b["delta_prev"] == pytest.approx(0.2, abs=1e-12)
+    assert a["delta_prev_rank"] == b["delta_prev_rank"] == 1
+
+
 def test_rows_only_for_entities_with_a_2024_event(cfb_events, rw2024):
     active = set(cfb_events.filter(pl.col("season") == 2024)["entity_id"].unique())
     assert set(rw2024["entity_id"].unique()) <= active
