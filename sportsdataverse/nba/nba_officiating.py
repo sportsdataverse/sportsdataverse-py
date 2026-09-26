@@ -26,6 +26,10 @@ __all__ = [
     "L2M_CALLS_SCHEMA",
     "L2M_GAME_SCHEMA",
     "L2M_STATS_SCHEMA",
+    "parse_nba_referee_assignments",
+    "nba_referee_assignments",
+    "ASSIGN_SCHEMA",
+    "REPLAY_SCHEMA",
 ]
 
 _OFFICIAL_HEADERS = {
@@ -134,6 +138,26 @@ _L2M_URL = "https://official.nba.com/l2m/json/{gid}.json"
 _LISTING_URL = "https://official.nba.com/{span}-nba-officiating-last-two-minute-reports/"
 # Regex, not CSS: the page's selectors changed almost every season upstream.
 _LISTING_RE = re.compile(r"L2MReport\.html\?gameId=(?:%0[dD])?(\d{10})[^>]*>([^<]*)</a>")
+_ASSIGN_URL = "https://official.nba.com/wp-json/api/v1/get-game-officials"
+ASSIGN_SCHEMA = pl.Schema(
+    {
+        "league": pl.Utf8,
+        "game_id": pl.Utf8,
+        "game_date": pl.Date,
+        "season": pl.Int32,
+        "season_type": pl.Utf8,
+        "game_code": pl.Utf8,
+        "home_team_id": pl.Int64,
+        "home_team_abbr": pl.Utf8,
+        "away_team_id": pl.Int64,
+        "away_team_abbr": pl.Utf8,
+        "crew_position": pl.Int32,
+        "official_id": pl.Int64,
+        "official_name": pl.Utf8,
+        "jersey_num": pl.Utf8,
+    }
+)
+REPLAY_SCHEMA = pl.Schema({"league": pl.Utf8, "game_date": pl.Date, "official_id": pl.Int64, "official_name": pl.Utf8})
 
 
 def _gid(game_id: str | int) -> str:
@@ -425,3 +449,140 @@ def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | 
     html = _official_get(_LISTING_URL.format(span=span), proxy=proxy).text
     df = parse_nba_l2m_games(html, season)
     return df.to_pandas() if return_as_pandas else df
+
+
+def _mdy(s: str | None) -> _dt.date | None:
+    """Parse a date string in MM/DD/YYYY format."""
+    return _dt.datetime.strptime(s, "%m/%d/%Y").date() if s else None
+
+
+def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[str, pl.DataFrame]:
+    """Parse NBA referee assignment payload into tidy DataFrames.
+
+    Parses the raw referee assignment JSON from official.nba.com into two related
+    tables: officials (long format, one row per game × crew slot) and replay center
+    (one replay center official per game per league).
+
+    Args:
+        payload: The JSON payload (dict) from official.nba.com referee assignments endpoint.
+        league: The league to extract ("nba", "gl", or "wnba"). Defaults to "nba".
+
+    Returns:
+        A dict with two keys: ``"officials"`` (ASSIGN_SCHEMA, 14 columns) and
+        ``"replay_center"`` (REPLAY_SCHEMA, 4 columns). Each value is a DataFrame
+        with the specified schema. Empty payloads return zero-row DataFrames.
+
+    Raises:
+        ValueError: If an unknown league is specified.
+
+    Example:
+        Parse referee assignments::
+
+            import json
+            from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
+            with open("assignments.json") as f:
+                raw = json.load(f)
+            result = parse_nba_referee_assignments(raw, "nba")
+            officials = result["officials"]
+            print(f"Found {officials.height} official slots across games")
+
+        See Also:
+            * `hoopR`_ -- R package for NBA data access and visualization
+
+            .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    block = payload.get(league) or {}
+    rows = []
+    for g in (block.get("Table") or {}).get("rows") or []:
+        s = str(g.get("season") or "")
+        for k in range(1, 5):
+            if not g.get(f"official{k}"):
+                continue
+            rows.append(
+                {
+                    "league": league,
+                    "game_id": _gid(g["game_id"]),
+                    "game_date": _mdy(g.get("game_date")),
+                    # feed season = <type digit><START year>; convert to END year
+                    "season": int(s[1:]) + 1 if len(s) == 5 else None,
+                    "season_type": _SEASON_TYPES.get(s[:1]),
+                    "game_code": g.get("game_code"),
+                    "home_team_id": g.get("home_team_id"),
+                    "home_team_abbr": g.get("home_team_abbr"),
+                    "away_team_id": g.get("away_team_id"),
+                    "away_team_abbr": g.get("away_team_abbr"),
+                    "crew_position": k,
+                    "official_id": g.get(f"official{k}_code"),
+                    "official_name": g.get(f"official{k}"),
+                    "jersey_num": g.get(f"official{k}_JNum"),
+                }
+            )
+    replay = [
+        {
+            "league": league,
+            "game_date": _mdy(r.get("game_date")),
+            "official_id": r.get("official_code"),
+            "official_name": r.get("replaycenter_official"),
+        }
+        for r in (block.get("Table1") or {}).get("rows") or []
+    ]
+    return {"officials": _frame(rows, ASSIGN_SCHEMA), "replay_center": _frame(replay, REPLAY_SCHEMA)}
+
+
+def nba_referee_assignments(
+    date: str | _dt.date,
+    *,
+    league: str = "nba",
+    raw: bool = False,
+    return_as_pandas: bool = False,
+    proxy: dict | None = None,
+) -> dict[str, Any]:
+    """Fetch and parse NBA referee assignments for a given date from official.nba.com.
+
+    Retrieves the referee crew assignments (crew chief + three officials per game)
+    and replay center officials for all games on a given date across NBA, G-League,
+    and WNBA.
+
+    Args:
+        date: The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date).
+        league: The league to extract ("nba", "gl", or "wnba"). Defaults to "nba".
+        raw: If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames.
+        return_as_pandas: If True, return pandas DataFrames instead of polars.
+        proxy: Optional proxy dict passed through to the HTTP layer.
+
+    Returns:
+        If ``raw=True``, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise,
+        a dict with keys ``"officials"`` and ``"replay_center"`` mapping to DataFrames
+        as documented in :func:`parse_nba_referee_assignments`.
+
+    Raises:
+        ValueError: If league is not "nba", "gl", or "wnba".
+        NoDataError: The date has no games (unlikely).
+        AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF block).
+
+    Example:
+        Fetch referee assignments for a date::
+
+            from sportsdataverse.nba.nba_officiating import nba_referee_assignments
+            result = nba_referee_assignments("2026-06-13")
+            officials = result["officials"]
+            print(f"Found {officials.height} official slots")
+
+        Fetch WNBA assignments for the same date::
+
+            result = nba_referee_assignments("2026-06-13", league="wnba")
+            wnba_officials = result["officials"]
+
+        See Also:
+            * `hoopR`_ -- R package for NBA data access and visualization
+
+            .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if league not in ("nba", "gl", "wnba"):
+        raise ValueError(f"league must be 'nba', 'gl' or 'wnba', got {league!r}")
+    day = date.isoformat() if isinstance(date, _dt.date) else str(date)
+    payload = _official_get(f"{_ASSIGN_URL}?&date={day}", proxy=proxy).json()
+    if raw:
+        return payload  # full three-league {nba, gl, wnba} payload
+    out = parse_nba_referee_assignments(payload, league)
+    return {k: v.to_pandas() for k, v in out.items()} if return_as_pandas else out

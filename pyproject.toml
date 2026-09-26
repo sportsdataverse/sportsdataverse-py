@@ -688,6 +688,7 @@ files = [
     "sportsdataverse/nba/nba_game_officials.py",
     "sportsdataverse/nba/nba_officiating.py",
     "sportsdataverse/nba/nba_season_producers.py",
+    "sportsdataverse/wnba/wnba_officiating.py",
     "sportsdataverse/mbb/mbb_play_by_play.py",
     "sportsdataverse/mbb/mbb_player_box.py",
     "sportsdataverse/mbb/mbb_team_box.py",

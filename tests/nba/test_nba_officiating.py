@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import polars as pl
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -136,3 +137,39 @@ def test_listing_url_uses_span(monkeypatch):
     monkeypatch.setattr(mod, "_official_get", fake_get)
     mod.nba_l2m_games(2026)
     assert seen["url"] == "https://official.nba.com/2025-26-nba-officiating-last-two-minute-reports/"
+
+
+def _assign():
+    return json.loads((FIX / "referee_assignments_2026-06-13.json").read_text(encoding="utf-8"))
+
+
+def test_assignments_nba_long_format():
+    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
+
+    out = parse_nba_referee_assignments(_assign(), "nba")
+    o = out["officials"]
+    assert o.height == 4  # 1 game x 4 slots
+    chief = o.filter(pl.col("crew_position") == 1).row(0, named=True)
+    assert (chief["official_id"], chief["official_name"], chief["jersey_num"]) == (1162, "Scott Foster", "48")
+    assert (chief["season"], chief["season_type"], chief["game_id"]) == (2026, "playoffs", "0042500405")
+    assert out["replay_center"].height == 1
+
+
+def test_assignments_empty_league_keeps_schema():
+    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
+
+    out = parse_nba_referee_assignments(_assign(), "gl")
+    assert out["officials"].height == 0 and "official_id" in out["officials"].columns
+
+
+def test_assignments_wnba_rows():
+    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
+
+    assert parse_nba_referee_assignments(_assign(), "wnba")["officials"]["game_id"].n_unique() == 4
+
+
+def test_assignments_invalid_league_raises():
+    from sportsdataverse.nba.nba_officiating import nba_referee_assignments
+
+    with pytest.raises(ValueError, match="league must be"):
+        nba_referee_assignments("2026-06-13", league="bogus")
