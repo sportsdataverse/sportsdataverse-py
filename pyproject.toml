@@ -739,4 +739,5 @@ files = [
     "sportsdataverse/wexp/elo.py",
     "sportsdataverse/wexp/baselines.py",
     "sportsdataverse/wexp/variants.py",
+    "sportsdataverse/rolling_windows.py",
 ]
