@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
@@ -294,6 +295,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
+
+ESPN's 2025 feed writes a run as "rush right for 6 yards gain" (the rush flag on a
+fumble-typed row only read "run for") and files a fumble that goes out of bounds under a new
+`Fumble` type that neither flag listed. 466 of 1,401 FBS-vs-FBS scrimmage fumbles in 2025 came
+out with `rush` and `pass` both False (33 in 2024), 435 of them through these two gaps, so every
+pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed rows now read the
+2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
+2005–2013 feeds pick up the rush flag through the same pattern (~25 per season).
 
 ### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
 
