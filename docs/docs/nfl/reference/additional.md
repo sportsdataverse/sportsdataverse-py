@@ -5259,11 +5259,15 @@ Derivation rules (mirror the original process_wpa`):
   other column derives.  This is the WP analogue of the EPA `0.92`
   scoring-attempt overlay and must fire first.
 * **Try rows:** a standalone try row (`Extra Point Good`, `Two Point
-  Pass`, `Defensive 2pt Conversion`, ...), and a clock stoppage just
-  before one, take the `wp_after` of the last play before them as their
-  `wp_before` when that play is the same possession's and kept its
-  frame, so the touchdown hands over to the try. The model cannot score
-  the try's own start state (ESPN's down-0 placeholder).
+  Pass`, `Defensive 2pt Conversion`, ...) takes the `wp_after` of the
+  touchdown before it (the last play that is not a clock stoppage) as its
+  `wp_before` when the try is the touchdown's end team's, so the
+  touchdown hands over to the try; a clock stoppage just before the try
+  inherits too when it is the same possession's and the touchdown kept its
+  frame. The model cannot score the try's own start state (ESPN's down-0
+  placeholder). A return or defensive touchdown (a `scoringPlay` whose
+  end team is the scorer, not its start team) hands over only a
+  `wp_after` scored for the scorer, as `NFLPlayProcess` scores it.
 * `def_wp_before = 1 - wp_before`; `home_wp_before` / `away_wp_before`
   are the posteam->home perspective columns (the offense's `wp_before`
   flows to home when the start possession team is the home team, otherwise
