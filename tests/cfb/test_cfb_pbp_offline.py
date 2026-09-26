@@ -175,6 +175,10 @@ def _trimmed(game_id: int) -> dict:
       Minnesota returns PSU's blocked kick try for two with 0:18 left in the half; ESPN
       filed the return with id ...104999903 and sequence 102998955, both past the next
       drive's kickoff.
+    * ``summary_401778334_trimmed.json.gz`` -- Wake Forest @ Mississippi State, 2025 week 1.
+    * ``summary_401756960_trimmed.json.gz`` -- Kansas State @ Utah, 2025 week 13.
+    * ``summary_401525860_trimmed.json.gz`` -- UCF @ Kansas, 2023 week 6. Each carries a
+      two-point touchdown whose text names no try result (see the test below).
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -306,3 +310,29 @@ def test_a_late_filed_defensive_two_follows_its_touchdown() -> None:
     assert td["period"] == d2p["period"] == 2
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
     assert abs(d2p["wpa"]) < 0.05, d2p["wpa"]
+
+
+def test_a_two_point_touchdown_reads_espns_structured_result() -> None:
+    """The try ESPN folds into a touchdown row, when the text names no result.
+
+    ``two_point_conv_result`` comes from ESPN's pointAfterAttempt; the EP_end overlay read
+    only the text ("conversion" plus "failed"), so these rows took the 6.92 unknown.
+
+    * 401778334 "... to the MSU00 TOUCHDOWN, clock 14:06, 1ST DOWN": Two Point Rush, 2 -> 8.
+    * 401756960 "J. Jackson run for 24 yds, for a TD (Av. Johnson pass Failed)": 0 -> 6, and
+      the defence's return on the next row keeps its own -2.
+    * 401525860 "Dylan McDuffie 1 Yd Run": Two Point Rush, value 2 -- UCF's two, not Kansas's:
+      the score moves by 6 and UCF's "Defensive 2pt Conversion" follows. The offence's
+      result is "failure" and the touchdown realises 6.
+    """
+    for game_id, row_id, result, ep_end in (
+        (401778334, 401778334456, "success", 8),
+        (401756960, 401756960729, "failure", 6),
+        (401525860, 401525860103929701, "failure", 6),
+    ):
+        plays = _offline_plays(game_id).with_row_index("i")
+        r = plays.filter(pl.col("id") == row_id).row(0, named=True)
+        assert (r["two_point_conv_result"], r["EP_end"]) == (result, ep_end), game_id
+        if result == "failure":
+            d2p = plays.row(r["i"] + 1, named=True)
+            assert (d2p["type.text"], d2p["EP_end"]) == ("Defensive 2pt Conversion", -2), game_id
