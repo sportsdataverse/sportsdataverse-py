@@ -11,11 +11,12 @@ Windows cross season boundaries; a row is labelled with the season its data
 runs through.
 
 Example:
-    >>> import polars as pl
-    >>> from sportsdataverse.rolling_windows import football_events, rolling_windows
-    >>> ev = football_events(pbp, game_dates)            # every season <= 2024
-    >>> rw = rolling_windows(ev, 2024)
-    >>> rw.filter(pl.col("window_unit") == "dropback").sort("delta_prev_rank").head()
+    Quick start::
+
+        from sportsdataverse.rolling_windows import football_events
+
+        ev = football_events(pbp, game_dates)            # every season <= 2024
+        ev.filter(pl.col("window_unit") == "dropback").head()
 """
 
 from __future__ import annotations

@@ -30,3 +30,15 @@ threw a pass.
 - `sched.height` = 36
 
 Reproduced exactly against the source above.
+
+## Known data quirk: ESPN "TEAM" sentinel plays
+
+Within the population `football_events` selects (`EPA_scrimmage` not null, `down`
+1-4, regular season/postseason), 20 distinct plays carry a synthetic negative
+`passer_player_id`/`rusher_player_id` with `passer_player_name`/`rusher_player_name
+== "TEAM"` (16 dropback-flagged, 4 carry-flagged) -- ESPN's play text couldn't be
+attributed to an individual (mostly kneel-type snaps), and `cfb_pbp.py` stamps
+that participant `"TEAM"` (see `sportsdataverse/cfb/cfb_pbp.py:5330`).
+`football_events` excludes these from player units (`dropback`/`target`/`carry`)
+since `"TEAM"` isn't a real player and its sentinel id would poison a player's
+rolling window; the team-level `play` unit is unaffected.
