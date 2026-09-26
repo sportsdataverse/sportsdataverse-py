@@ -15914,7 +15914,7 @@ nba_live_boxscore:
   away_players.person_id: NBA/WNBA player id.
   away_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
   away_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
-  away_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  away_players.starter: Feed's starter flag as a string ("1"/"0") for whether the player started the game.
   away_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
   away_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
   away_team.score: Team's current or final score.
@@ -15932,20 +15932,20 @@ nba_live_boxscore:
   home_players.person_id: NBA/WNBA player id.
   home_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
   home_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
-  home_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  home_players.starter: Feed's starter flag as a string ("1"/"0") for whether the player started the game.
   home_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
   home_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
   home_team.score: Team's current or final score.
   home_team.team_id: NBA/WNBA team id of the side (home or away).
   home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
-  officials.assignment: Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot.
+  officials.assignment: Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot.
   officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.
   officials.jersey_num: Official's jersey number as a string.
   officials.name: Official's display name.
   officials.person_id: NBA/WNBA person id of the on-court official.
 nba_live_pbp:
   action_number: Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically.
-  action_type: Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover.
+  action_type: Action category from the feed, lower-cased, e.g. 2pt, 3pt, foul, substitution, or turnover.
   clock: ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS.
   description: Long-form human-readable description of the action, as shown on NBA.com's live scoreboard.
   game_id: 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId.
@@ -15965,7 +15965,8 @@ nba_l2m_games:
     nba-cup-final.'
 nba_l2m:
   calls.call: Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE.
-  calls.call_type: 'Cleaned "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover: 24 Second Violation".'
+  calls.call_type: 'Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace
+    (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type.'
   calls.comment: Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)".
   calls.committing: Player, team nickname, or coach responsible for the graded action.
   calls.decision: 'Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect
@@ -26416,7 +26417,7 @@ wnba_live_boxscore:
   away_players.person_id: NBA/WNBA player id.
   away_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
   away_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
-  away_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  away_players.starter: Feed's starter flag as a string ("1"/"0") for whether the player started the game.
   away_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
   away_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
   away_team.score: Team's current or final score.
@@ -26434,20 +26435,20 @@ wnba_live_boxscore:
   home_players.person_id: NBA/WNBA player id.
   home_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
   home_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
-  home_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  home_players.starter: Feed's starter flag as a string ("1"/"0") for whether the player started the game.
   home_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
   home_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
   home_team.score: Team's current or final score.
   home_team.team_id: NBA/WNBA team id of the side (home or away).
   home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
-  officials.assignment: Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot.
+  officials.assignment: Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot.
   officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.
   officials.jersey_num: Official's jersey number as a string.
   officials.name: Official's display name.
   officials.person_id: NBA/WNBA person id of the on-court official.
 wnba_live_pbp:
   action_number: Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically.
-  action_type: Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover.
+  action_type: Action category from the feed, lower-cased, e.g. 2pt, 3pt, foul, substitution, or turnover.
   clock: ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS.
   description: Long-form human-readable description of the action, as shown on NBA.com's live scoreboard.
   game_id: 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId.

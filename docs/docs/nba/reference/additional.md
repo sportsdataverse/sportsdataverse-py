@@ -3557,8 +3557,9 @@ Fetch and parse an NBA Last Two Minute report from official.nba.com.
 
 Retrieves the L2M report for a given game and returns parsed tables of calls,
 game metadata, and error statistics. The game_id is zero-padded to 10 digits
-(e.g., 42500405 becomes "0042500405"). Reports are typically available only for
-NBA and playoff games during the last two minutes.
+(e.g., 42500405 becomes "0042500405"). A report is published for any game that
+is within 3 points (5 points before the 2017-18 season) at any point during the
+last two minutes of the fourth quarter or overtime -- not only playoff games.
 
 **Parameters**
 
@@ -3580,7 +3581,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"
 | `calls.period_name` | character | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
 | `calls.pc_time` | character | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
 | `calls.seconds_remaining` | double | Seconds remaining in the period at the graded play, parsed out of pc_time. |
-| `calls.call_type` | character | Cleaned "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover: 24 Second Violation". |
+| `calls.call_type` | character | Raw "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover:  24 Second Violation"; whitespace (including doubled spaces) is NOT cleaned here -- the cleaned, upper-cased parts are call and type. |
 | `calls.call` | character | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
 | `calls.type` | character | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
 | `calls.committing` | character | Player, team nickname, or coach responsible for the graded action. |
@@ -3637,7 +3638,8 @@ Fetch the list of games with Last Two Minute reports for an NBA season.
 Retrieves and parses the L2M season index page from official.nba.com,
 returning a table of all games for which L2M reports exist. JSON reports
 exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
-which this function ignores. For historical access, use `load_nba_l2m`.
+which this function ignores. Historical (PDF-era) access is planned as a
+vendored release loader (see Plan 01 Task 10); it does not exist yet.
 
 **Parameters**
 
@@ -3744,14 +3746,14 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of DataFrames as documented 
 | `officials.person_id` | integer | NBA/WNBA person id of the on-court official. |
 | `officials.name` | character | Official's display name. |
 | `officials.jersey_num` | character | Official's jersey number as a string. |
-| `officials.assignment` | character | Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot. |
+| `officials.assignment` | character | Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot. |
 | `home_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
 | `home_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
 | `home_players.person_id` | integer | NBA/WNBA player id. |
 | `home_players.name` | character | Player's display name. |
 | `home_players.jersey_num` | character | Player's jersey number as a string. |
 | `home_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
-| `home_players.starter` | character | Feed's starter flag as a string ("true"/"false") for whether the player started the game. |
+| `home_players.starter` | character | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
 | `home_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
 | `away_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
 | `away_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
@@ -3759,7 +3761,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of DataFrames as documented 
 | `away_players.name` | character | Player's display name. |
 | `away_players.jersey_num` | character | Player's jersey number as a string. |
 | `away_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
-| `away_players.starter` | character | Feed's starter flag as a string ("true"/"false") for whether the player started the game. |
+| `away_players.starter` | character | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
 | `away_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
 | `home_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
 | `home_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
@@ -3809,7 +3811,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a DataFrame as documented in `parse
 | `period` | integer | Period of the game: 1-4 for quarters, 5+ for overtime periods. |
 | `clock` | character | ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS. |
 | `time_actual` | character | Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time. |
-| `action_type` | character | Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover. |
+| `action_type` | character | Action category from the feed, lower-cased, e.g. 2pt, 3pt, foul, substitution, or turnover. |
 | `sub_type` | character | Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket. |
 | `team_id` | integer | NBA/WNBA team id of the team associated with the action, when applicable. |
 | `person_id` | integer | NBA/WNBA player id of the primary person involved in the action, when applicable. |
