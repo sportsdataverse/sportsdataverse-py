@@ -204,6 +204,9 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_400548250_trimmed.json.gz`` -- Utah State @ Boise State, 2014 week 14. Utah
       State returns Boise State's blocked extra point for two; ESPN files the return after
       the kickoff that follows.
+    * ``summary_302450154_trimmed.json.gz`` -- Presbyterian @ Wake Forest, 2010. Wake Forest
+      returns Presbyterian's blocked extra point for two; ESPN folds it into the touchdown
+      row and files no try row.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -498,6 +501,28 @@ def test_a_try_filed_after_the_next_kickoff_follows_its_touchdown() -> None:
     assert td["pos_team"] == d2p["pos_team"] != kickoff["pos_team"]
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
     assert d2p["wp_after"] == pytest.approx(1 - kickoff["wp_before"], abs=1e-6)
+
+
+def test_a_defensive_two_folded_into_the_touchdown_row_nets_on_it() -> None:
+    """302450154: "Brandon Miley pass complete to Anderico Bailey for 18 yards for a TOUCHDOWN.
+    Cam Miller extra point blocked returned by Kenny Okoro for two point conversion." (35-7 ->
+    35-13, and Wake Forest's 35 -> 37 lands two rows later).
+
+    No try row follows, so no row carried the defence's -2, and the word "conversion" booked
+    the touchdown a made two (EP_end 8). The touchdown row now realises 6 - 2 and carries the
+    defensive_two_point_* flags, as the NFL processor does for the same shape.
+    """
+    plays = _offline_plays(302450154)
+    td = plays.filter(pl.col("text").str.contains("returned by Kenny Okoro")).row(0, named=True)
+    assert td["type.text"] == "Passing Touchdown"
+    assert td["EP_end"] == 4
+    assert td["defensive_two_point_attempt"] and td["defensive_two_point_conv"]
+    assert plays["defensive_two_point_conv"].sum() == 1
+    # a standalone defensive two carries the flags itself, and its touchdown does not
+    plays = _offline_plays(401858228)
+    flagged = plays.filter(pl.col("defensive_two_point_conv"))
+    assert flagged["type.text"].to_list() == ["Defensive 2pt Conversion"]
+    assert flagged["defensive_two_point_attempt"].to_list() == [True]
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

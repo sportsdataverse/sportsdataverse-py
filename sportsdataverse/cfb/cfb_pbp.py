@@ -4701,6 +4701,34 @@ class CFBPlayProcess(object):
             ]
         play_df = play_df.with_columns(scoring_exprs)
 
+        # The defence's return of a try for two, flagged (as nflverse and the NFL processor do)
+        # on the one row that carries its -2: the "Defensive 2pt Conversion" row, else a
+        # touchdown row whose text folds the return in with no such row after it -- 2010's
+        # "... for a TOUCHDOWN. Cam Miller extra point blocked returned by Kenny Okoro for two
+        # point conversion" (302450154), the one such row 2004-26. 2016's "(X PAT BLOCKED)
+        # Shaun Crawford return for defensive PAT" is followed by its own D2C row. A CFB
+        # return is always a made two, so the two flags agree.
+        _next_play_type = (
+            pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
+            .then(None)
+            .otherwise(pl.col("type.text"))
+            .backward_fill()
+            .shift(-1)
+        )
+        _def_two = (
+            (pl.col("type.text") == "Defensive 2pt Conversion")
+            | (
+                (pl.col("td_play") == True)  # noqa: E712
+                & ~pl.col("type.text").is_in(_TRY_TYPES)
+                & pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)
+                & _next_play_type.ne_missing("Defensive 2pt Conversion")
+            )
+        ).fill_null(False)
+        play_df = play_df.with_columns(
+            _def_two.alias("defensive_two_point_attempt"),
+            _def_two.alias("defensive_two_point_conv"),
+        )
+
         return play_df
 
     def __add_yardage_cols(self, play_df):
@@ -6625,6 +6653,12 @@ class CFBPlayProcess(object):
                 # Defense TD
                 .when(pl.col("type.text").is_in(defense_score_vec))
                 .then(-6.92)
+                # Offense TD + a try the defence returned for two, folded into the row
+                # (defensive_two_point_conv above): 6 - 2
+                .when(
+                    (pl.col("type.text").is_in(offense_score_vec)).and_(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+                )
+                .then(4)
                 # Offense TD + Failed Two-Point Conversion
                 .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
                 .then(6)
