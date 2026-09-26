@@ -362,6 +362,24 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     )
 
 
+#: Standalone try rows. Their start state is a placeholder -- the touchdown's own snap
+#: (2nd and 3 at the 3) or down 0 at the 0 or the 100 -- which neither model can score:
+#: EP_start is pinned to 0.92 and wp_before is handed over from the touchdown.
+_TRY_TYPES = (
+    "Extra Point Good",
+    "Extra Point Missed",
+    "Two-Point Conversion Good",
+    "Two-Point Conversion Missed",
+    "Two Point Pass",
+    "Two Point Rush",
+    "Blocked PAT",
+    # the defence returning the try for two is still a try: without this the model scored
+    # the kicking team's snap from the 3 as first-and-goal (EP ~5.7) and the -2 EP_end made
+    # it EPA ~-7.7
+    "Defensive 2pt Conversion",
+)
+
+
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
     """Apply the win-probability game-logic derivation to a set of raw model
     predictions, writing suffixed output columns. With ``suffix=""`` this emits
@@ -412,6 +430,11 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         )
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
+
+    def _last_play(col: str) -> pl.Expr:
+        # ``col`` on the last row before this one that is not a timeout
+        return pl.when(pl.col("type.text") == "Timeout").then(None).otherwise(pl.col(col)).forward_fill().shift(1)
+
     return (
         play_df.with_columns(
             pl.lit(wp_before_raw).alias(wb),
@@ -423,7 +446,25 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             pl.lit(wp_after_flip_raw if wp_after_flip_raw is not None else wp_after_raw).alias(f"_wa_flip{suffix}"),
         )
         .with_columns(
-            pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)).alias(wb),
+            pl.when(touchback_mask)
+            .then(pl.col(wt))
+            # A try row starts where the touchdown ended: row N's wp_after is row N+1's
+            # wp_before within a possession. The model read the try's placeholder start
+            # as a live snap at the 3 and ran 0.04 above the touchdown's end state (the
+            # board with the TD counted, the other team about to receive) on 2014-26
+            # tries, 0.14 in 401234597. A timeout between the two scores the same
+            # placeholder, so it inherits too. The NFL twin (nfl/ep_wp.py) does the same.
+            .when(
+                (
+                    pl.col("type.text").is_in(_TRY_TYPES)
+                    | ((pl.col("type.text") == "Timeout") & pl.col("type.text").shift(-1).is_in(_TRY_TYPES))
+                )
+                & (_last_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                & (_last_play("end.pos_team.id") == _last_play("start.pos_team.id")),
+            )
+            .then(_last_play(wa))
+            .otherwise(pl.col(wb))
+            .alias(wb),
         )
         .with_columns(
             (1 - pl.col(wb)).alias(dwb),
@@ -6317,21 +6358,7 @@ class CFBPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 EP_start=pl.when(
-                    pl.col("type.text").is_in(
-                        [
-                            "Extra Point Good",
-                            "Extra Point Missed",
-                            "Two-Point Conversion Good",
-                            "Two-Point Conversion Missed",
-                            "Two Point Pass",
-                            "Two Point Rush",
-                            "Blocked PAT",
-                            # the defence returning the try for two is still a try: without
-                            # this the model scored the kicking team's snap from the 3 as
-                            # first-and-goal (EP ~5.7) and the -2 below made it EPA ~-7.7
-                            "Defensive 2pt Conversion",
-                        ],
-                    ),
+                    pl.col("type.text").is_in(_TRY_TYPES),
                 )
                 .then(0.92)
                 .otherwise(pl.col("EP_start")),

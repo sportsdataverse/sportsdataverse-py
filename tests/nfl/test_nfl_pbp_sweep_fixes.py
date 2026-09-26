@@ -23,6 +23,16 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   successful two-point conversion, each followed by a clock-stoppage row)
 * ``summary_401128075_trimmed.json.gz`` -- JAX @ IND, 2019 week 11 (IND up 31-13 returns a
   JAX try for a defensive two-point conversion)
+* ``summary_401030824_trimmed.json.gz`` -- LAC @ DEN, 2018 week 17 (DEN's failed two-point
+  try returned by LAC; the text carries both results)
+* ``summary_401671740_trimmed.json.gz`` -- PHI @ TB, 2024 week 4 (a blocked extra point
+  returned for two inside the touchdown row, with no standalone try row)
+* ``summary_301003002_trimmed.json.gz`` -- NYJ @ BUF, 2010 week 4 (seven extra points on
+  standalone try rows)
+* ``summary_400874512_trimmed.json.gz`` -- BAL @ CLE, 2016 week 2 (a blocked extra point
+  returned for two on a standalone try row, CLE up 20-0)
+* ``summary_221013028_trimmed.json.gz`` -- NO @ WSH, 2002 week 6 (a timeout between a
+  touchdown and its extra point, twice)
 """
 
 from __future__ import annotations
@@ -648,3 +658,99 @@ def test_defensive_two_point_conversion_is_scored_as_a_try() -> None:
     assert abs(td["wp_after"] - r["wp_before"]) < 0.01
     assert r["wp_after"] == pytest.approx(1 - kickoff["wp_before"])
     assert r["home_wp_after"] == pytest.approx(kickoff["home_wp_before"])
+
+
+# --- two_point_conv_result is the offence's try ---------------------------------------------------
+
+
+def test_two_point_result_is_the_offences_when_the_defence_returns_the_try() -> None:
+    """401030824: DEN's try fails and LAC returns it for two (Q4 10:10, DEN down 3-14).
+
+    The text carries both results -- "ATTEMPT FAILS. DEFENSIVE TWO-POINT ATTEMPT. C.Hayward
+    intercepted the try attempt. ATTEMPT SUCCEEDS." -- and the SUCCEEDS is the defence's.
+    Reading it booked DEN a made two: two_point_conv_result "success" and a touchdown EP_end
+    of 8. The standalone "Defensive 2pt Conversion" row that follows carries the -2, so the
+    touchdown realises 6.
+    """
+    plays = _process(401030824)
+    td = plays.filter(
+        (pl.col("type.text") == "Passing Touchdown") & pl.col("text").str.contains("DEFENSIVE TWO-POINT")
+    ).row(0, named=True)
+    d2p = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion").row(0, named=True)
+    assert td["two_point_conv_result"] == d2p["two_point_conv_result"] == "failure"
+    assert td["EP_end"] == 6
+    assert d2p["EP_end"] == -2
+    # the two points are LAC's (away): 14 -> 16, and DEN (home) 3 -> 9
+    assert (d2p["awayScore"], d2p["homeScore"]) == (16, 9)
+
+
+# --- a defensive two folded into the touchdown row -----------------------------------------------
+
+
+def test_defensive_two_folded_into_the_touchdown_row_nets_four() -> None:
+    """401671740: PHI blocks TB's extra point and K.Ringo returns it for two (Q3 6:49, TB 24-14).
+
+    ESPN emits no "Defensive 2pt Conversion" row here: the return rides in the touchdown row's
+    text. That row published EP_end 6 (a missed kick) and no row carried the defence's -2. It
+    now realises 6 - 2 = 4 and carries defensive_two_point_conv, as nflverse flags the try row.
+    Where ESPN does emit the standalone row (401030824), the flag and the -2 stay on it alone.
+    """
+    plays = _process(401671740)
+    assert plays.filter(pl.col("type.text") == "Defensive 2pt Conversion").height == 0
+    flagged = plays.filter(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+    assert flagged.height == 1
+    td = flagged.row(0, named=True)
+    assert td["type.text"] == "Rushing Touchdown"
+    assert td["defensive_two_point_attempt"] is True
+    assert td["EP_end"] == 4
+
+    plays = _process(401030824)
+    flagged = plays.filter(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+    assert flagged["type.text"].to_list() == ["Defensive 2pt Conversion"]
+    td = plays.filter(pl.col("text").str.contains("DEFENSIVE TWO-POINT") & (pl.col("type.text") == "Passing Touchdown"))
+    assert td["EP_end"].to_list() == [6]
+
+
+# --- a try row starts where the touchdown ended --------------------------------------------------
+
+
+def test_a_try_row_starts_where_the_touchdown_ended() -> None:
+    """Row N's wp_after is row N+1's wp_before across touchdown -> try.
+
+    The try row's wp_before was the WP model on ESPN's placeholder try state (down 0 or -1,
+    at the 2, the 0 or the 100), which it read as another snap near the goal line: 0.10
+    above nflfastR's PAT WP on average. A made extra point then published a negative WPA,
+    -0.21 for NYJ's in 301003002 (0.41 -> 0.20). The touchdown's end state (the board with the
+    TD counted, the other team about to receive) is the side that matches the PAT WP.
+    400874512 is the report case: the defensive-two row started at 0.827 against the
+    touchdown's 0.751. A timeout between the two (221013028) scores the same placeholder, so
+    the touchdown hands over through it.
+    """
+    plays = _process(301003002).with_columns(
+        pl.col("wp_after").shift(1).alias("prev_wp_after"),
+        pl.col("start.pos_team.id").shift(1).alias("prev_pos_team"),
+    )
+    xps = plays.filter(pl.col("type.text") == "Extra Point Good")
+    assert xps.height == 7
+    assert (xps["prev_pos_team"] == xps["start.pos_team.id"]).all()
+    assert (xps["wp_before"] - xps["prev_wp_after"]).abs().max() < 1e-6
+    # a made extra point cannot cost the kicking team win probability
+    assert xps["wpa"].min() > -0.005, xps["wpa"].to_list()
+
+    plays = _process(400874512)
+    i = plays.with_row_index("i").filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p = plays.slice(i - 1, 2).iter_rows(named=True)
+    assert td["start.pos_team.id"] == d2p["start.pos_team.id"] == 5
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+    plays = _process(221013028).with_columns(
+        pl.col("type.text").shift(1).alias("prev_type"),
+        pl.col("wp_before").shift(1).alias("timeout_wp_before"),
+        pl.col("wp_after").shift(2).alias("td_wp_after"),
+    )
+    xps = plays.filter((pl.col("type.text") == "Extra Point Good") & (pl.col("prev_type") == "Timeout"))
+    assert xps.height == 2
+    for r in xps.iter_rows(named=True):
+        assert r["timeout_wp_before"] == pytest.approx(r["td_wp_after"], abs=1e-6)
+        assert r["wp_before"] == pytest.approx(r["td_wp_after"], abs=1e-6)
+        assert r["wpa"] > 0, r["wpa"]

@@ -1814,6 +1814,23 @@ def calculate_xpass(
 # EPA derivation (lifted from NFLPlayProcess.__process_epa)
 # ---------------------------------------------------------------------------
 
+#: Standalone try rows (the try ESPN did not fold into the touchdown row). Their start
+#: state is ESPN's placeholder -- down 0, 0 or 100 yards out -- which neither model can
+#: score: EP_start is pinned to 0.92 and wp_before is handed over from the touchdown.
+_TRY_TYPES: tuple[str, ...] = (
+    "Extra Point Good",
+    "Extra Point Missed",
+    "Two-Point Conversion Good",
+    "Two-Point Conversion Missed",
+    "Two Point Pass",
+    "Two Point Rush",
+    "Blocked PAT",
+    # the defence returning the try for two is still a try: without this the model scored
+    # ESPN's down-0 start state as a scrimmage snap (EP 2.3-5.3) and the -2 EP_end made it
+    # EPA -4.3..-7.3
+    "Defensive 2pt Conversion",
+)
+
 #: Columns the EPA derivation reads.  ``calculate_epa`` validates that these
 #: are present and raises a clear ``KeyError`` if the caller hasn't scored the
 #: EP point estimates / classified the plays first.
@@ -1939,6 +1956,14 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     if "two_point_conv_result" in df.columns:
         two_pt_good = (pl.col("two_point_conv_result") == "success").or_(two_pt_good)
         two_pt_failed = (pl.col("two_point_conv_result") == "failure").or_(two_pt_failed)
+    # The defence returned the try for two (``defensive_two_point_conv``, NFLPlayProcess).
+    # Where ESPN folds that into the touchdown row instead of emitting a standalone
+    # "Defensive 2pt Conversion" row, the touchdown row realises 6 - 2 (401671740).
+    def_two = (
+        (pl.col("defensive_two_point_conv") == True).fill_null(False)  # noqa: E712
+        if "defensive_two_point_conv" in df.columns
+        else pl.lit(False)
+    )
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
     if "xp_attempt" in df.columns and "xp_made" in df.columns:
@@ -1953,21 +1978,7 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             # (the pre-snap expected value of a scoring attempt) before any EP_end
             # branch fires.  Mirrors nfl_pbp.py lines 3496-3511 verbatim.
             EP_start=pl.when(
-                pl.col("type.text").is_in(
-                    [
-                        "Extra Point Good",
-                        "Extra Point Missed",
-                        "Two-Point Conversion Good",
-                        "Two-Point Conversion Missed",
-                        "Two Point Pass",
-                        "Two Point Rush",
-                        "Blocked PAT",
-                        # the defence returning the try for two is still a try: without
-                        # this the model scored ESPN's down-0 start state as a scrimmage
-                        # snap (EP 2.3-5.3) and the -2 below made it EPA -4.3..-7.3
-                        "Defensive 2pt Conversion",
-                    ],
-                ),
+                pl.col("type.text").is_in(_TRY_TYPES),
             )
             .then(0.92)
             .otherwise(pl.col("EP_start")),
@@ -2005,6 +2016,9 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             # Defense TD
             .when(pl.col("type.text").is_in(defense_score_vec))
             .then(-6.92)
+            # Offense TD + try returned by the defence for two
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(def_two))
+            .then(4)
             # Offense TD + Failed Two-Point Conversion
             .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
             .then(6)
@@ -2218,6 +2232,12 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
       win-probability scored from the touchback feature view — before any
       other column derives.  This is the WP analogue of the EPA ``0.92``
       scoring-attempt overlay and must fire first.
+    * **Try rows:** a standalone try row (``Extra Point Good``, ``Two Point
+      Pass``, ``Defensive 2pt Conversion``, ...), and a clock stoppage just
+      before one, take the ``wp_after`` of the last play before them as their
+      ``wp_before`` when that play is the same possession's and kept its
+      frame, so the touchdown hands over to the try. The model cannot score
+      the try's own start state (ESPN's down-0 placeholder).
     * ``def_wp_before = 1 - wp_before``; ``home_wp_before`` / ``away_wp_before``
       are the posteam->home perspective columns (the offense's ``wp_before``
       flows to home when the start possession team is the home team, otherwise
@@ -2317,6 +2337,18 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         .then(-pl.col("pos_score_diff_end"))
         .otherwise(None)
     )
+
+    def _last_play(col: str) -> pl.Expr:
+        # ``col`` on the last row before this one that is not a clock stoppage
+        return (
+            pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
+            .then(None)
+            .otherwise(pl.col(col))
+            .forward_fill()
+            .shift(1)
+            .over("game_id")
+        )
+
     play_df = (
         df.with_columns(
             # --- Leading overlay: kickoff wp_before uses the touchback view ---
@@ -2324,6 +2356,26 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             # perspective / lead columns derive.
             wp_before=pl.when(pl.col("type.text").is_in(kickoff_vec))
             .then(pl.col("wp_touchback"))
+            # A try row starts where the touchdown ended: row N's wp_after is row N+1's
+            # wp_before within a possession. The model read the try's placeholder start
+            # state (down 0 at the 0 or the 100) as another snap and ran +0.106 above
+            # nflfastR's PAT WP on average, where the touchdown's end state (the board
+            # with the TD counted, the other team about to receive) sits at -0.002. A
+            # timeout between the two scores the same placeholder, so it inherits too.
+            # Only when the touchdown kept its frame: if ESPN flipped its end.team, its
+            # wp_after is borrowed from the next row below.
+            .when(
+                (
+                    pl.col("type.text").is_in(_TRY_TYPES)
+                    | (
+                        pl.col("type.text").is_in(clock_stoppage_vec)
+                        & pl.col("type.text").shift(-1).over("game_id").is_in(_TRY_TYPES)
+                    )
+                )
+                & (_last_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                & (_last_play("end.pos_team.id") == _last_play("start.pos_team.id"))
+            )
+            .then(_last_play("wp_after"))
             .otherwise(pl.col("wp_before")),
         )
         .with_columns(
