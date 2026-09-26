@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
+  - [Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData](#added--nba-officiating-data-last-two-minute-reports-referee-assignments-and-cdn-livedata)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
   - [Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`](#changed--cfb_returning_production-measures-defense-from-play-participants-and-weights-it-into-overall_returning)
@@ -329,6 +330,44 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+### Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData
+
+New module `sportsdataverse.nba.nba_officiating` reads official.nba.com:
+
+- `nba_l2m(game_id)` returns one game's Last Two Minute report as three frames:
+  - `calls`: one row per graded action, with the decision normalized to
+    CC / CNC / IC / INC. A blank or "Undetectable" grade stays `null`, never INC.
+  - `game`: one row of game metadata.
+  - `stats`: the report's calls / errors-in-favor / possessions-in-favor block.
+- `nba_l2m_games(season)` lists every game that has a report, from the season index
+  page. JSON reports exist only from 2019-01-01.
+- `nba_referee_assignments(date, league="nba"|"gl"|"wnba")` returns:
+  - `officials`: one row per game and crew slot. `crew_position` is the feed's
+    order; slot 1 as crew chief is inferred, not labelled.
+  - `replay_center`: that date's replay-center staff.
+
+  `wnba_referee_assignments()` is the WNBA shim.
+
+official.nba.com needs a browser User-Agent: the default libcurl/curl UA gets an
+Akamai 403. Its 403s mean two different things, and the module keeps them apart:
+
+- An S3 `AccessDenied` body means the game has no report. It raises `NoDataError`.
+- An Akamai HTML page means the fetch was blocked. It raises `AssetFetchError`.
+
+New `sportsdataverse.nba.nba_live` / `sportsdataverse.wnba.wnba_live` wrap the
+cdn.nba.com / cdn.wnba.com liveData feeds: `nba_live_pbp()` / `nba_live_boxscore()`,
+plus the WNBA twins.
+
+- The play-by-play carries `official_id` on every foul (2019-20 on), wall-clock
+  `time_actual`, and foul and block locations. This joins to
+  `nba_referee_assignments()` on `official_id`.
+- The cdn now fingerprint-blocks plain HTTP clients, so these use the same
+  curl_cffi Chrome impersonation as `nba_stats_*`.
+- Every frame carries a typed core column set, even for a game with no actions.
+- Late-first-seen fields are kept, because schema inference scans every row.
+
+Port of atlhawksfanatic/L2M's scraping logic (MIT).
 
 ### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
 
