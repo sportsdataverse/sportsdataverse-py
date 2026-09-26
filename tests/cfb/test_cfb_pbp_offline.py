@@ -201,6 +201,9 @@ def _trimmed(game_id: int) -> dict:
       touchdowns whose appended two-point tries fail, one of them re-tried after a penalty.
     * ``summary_401628439_trimmed.json.gz`` -- Georgia Tech @ Georgia, 2024 week 14. Eight
       overtimes; from the third on, alternating two-point attempts.
+    * ``summary_400548250_trimmed.json.gz`` -- Utah State @ Boise State, 2014 week 14. Utah
+      State returns Boise State's blocked extra point for two; ESPN files the return after
+      the kickoff that follows.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -478,6 +481,23 @@ def test_a_failed_overtime_two_point_attempt_realises_nothing() -> None:
     # the attempts ESPN scored (no text) are the made ones
     made = tries.filter(pl.col("scoringPlay") == True)  # noqa: E712
     assert made.height and made["EP_end"].to_list() == [2] * made.height
+
+
+def test_a_try_filed_after_the_next_kickoff_follows_its_touchdown() -> None:
+    """400548250: "Jay Ajayi 19 Yd Run (Dan Goodale PAT blocked)" at 2:05 of the first
+    quarter, then the kickoff (2:04), then "Jalen Davis Defensive PAT Conversion" (2:05).
+
+    The return's id and sequence both sort after the kickoff, and no clock steps back, so
+    the late-insert pass left it there: the kickoff took the touchdown's end state and the
+    return scored its own placeholder (wp_before 0.946 against the touchdown's 0.928).
+    """
+    plays = _offline_plays(400548250).with_row_index("i")
+    i = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p, kickoff = plays.filter(pl.col("i").is_between(i - 1, i + 1)).iter_rows(named=True)
+    assert (td["type.text"], kickoff["type.text"]) == ("Rushing Touchdown", "Kickoff")
+    assert td["pos_team"] == d2p["pos_team"] != kickoff["pos_team"]
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert d2p["wp_after"] == pytest.approx(1 - kickoff["wp_before"], abs=1e-6)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

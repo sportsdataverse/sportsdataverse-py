@@ -1190,6 +1190,38 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _place_tries_filed_after_the_kickoff(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Put a try ESPN filed after the next kickoff back behind its touchdown.
+
+    ESPN sometimes files a defensive two with an id and sequence past the kickoff that
+    follows its touchdown, at the touchdown's clock: touchdown, kickoff, then "Zack Sanchez
+    return for defensive PAT" (400547867, 400548185, 400548250, 400852742, 401524046). No
+    clock steps back, so ``_reorder_late_inserts`` never flags it; the kickoff took the
+    touchdown's end state and the try the kickoff's. A try row right after a kickoff, whose
+    touchdown is the row before that in the same period and at the same clock, swaps with
+    the kickoff. Over the corpus (2004-2026, id order) the shape occurs in exactly those five
+    games, all 2014-23, all defensive twos.
+    """
+    if not {"type.text", "period.number", "start.adj_TimeSecsRem"} <= set(plays_df.columns):
+        return plays_df
+    t, per, clk = pl.col("type.text"), pl.col("period.number"), pl.col("start.adj_TimeSecsRem")
+    misfiled = (
+        t.is_in(_TRY_TYPES)
+        & t.shift(1).is_in(kickoff_vec)
+        & t.shift(2).str.contains("(?i)touchdown")
+        & (per == per.shift(2))
+        & (clk == clk.shift(2))
+    ).fill_null(False)
+    if not plays_df.select(misfiled.any()).item():
+        return plays_df
+    return (
+        plays_df.with_row_index("_pos")
+        .with_columns(_key=pl.when(misfiled).then(pl.col("_pos") - 1.5).otherwise(pl.col("_pos")))
+        .sort("_key", maintain_order=True)
+        .drop("_pos", "_key")
+    )
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -1206,7 +1238,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return plays_df
-    plays_df = _reorder_late_inserts(plays_df)
+    plays_df = _place_tries_filed_after_the_kickoff(_reorder_late_inserts(plays_df))
     period = pl.col("period.number").cast(pl.Int32, strict=False)
     ot = plays_df.filter(period >= 5)
     if ot.height == 0:
