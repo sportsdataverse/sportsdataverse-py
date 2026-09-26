@@ -61,10 +61,15 @@ const config: Config = {
     format: 'detect',
   },
   scripts: [
+    {src: 'https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js', async: true},
+  ],
+  // Plausible's init stub: queues calls until the async script above loads.
+  headTags: [
     {
-      src: 'https://plausible.io/js/script.js',
-      defer: true,
-      'data-domain': 'py.sportsdataverse.org',
+      tagName: 'script',
+      attributes: {},
+      innerHTML:
+        'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
     },
   ],
   presets: [
