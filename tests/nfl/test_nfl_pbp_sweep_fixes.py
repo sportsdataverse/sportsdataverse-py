@@ -35,6 +35,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   touchdown and its extra point, twice)
 * ``summary_231221029_trimmed.json.gz`` -- DET @ CAR, 2003 week 16 (a punt return and a
   fumble return for touchdowns, each followed by its extra point)
+* ``summary_241010028_trimmed.json.gz`` -- BAL @ WSH, 2004 week 5 (a "Washington timeout"
+  row, carried by BAL, between BAL's fumble return touchdown and its extra point)
 """
 
 from __future__ import annotations
@@ -786,3 +788,30 @@ def test_a_try_after_a_return_touchdown_starts_where_the_touchdown_ended() -> No
         # a made extra point gains the kicking team a little, as it does after any touchdown
         assert 0 < r["wpa"] < 0.05, r["wpa"]
     assert xps["wp_before"].to_list() == pytest.approx([0.038, 0.112], abs=0.005)
+
+
+def test_a_timeout_between_a_touchdown_and_its_try_is_stated_for_its_own_team() -> None:
+    """A clock stoppage between a touchdown and its try takes the touchdown's end state too.
+
+    ESPN credits the stoppage to either team. After Ed Reed's fumble return cut WSH's lead to
+    10-6, the "Washington timeout" row carries BAL, while the touchdown row started with WSH,
+    so the timeout was never handed over. It kept the model's placeholder (0.56 for BAL, first
+    and 0 at the 0) and the touchdown borrowed its wp_after from it (WPA -0.39 for WSH). The
+    extra point hands over from the touchdown at 0.298, so it started 0.26 below the timeout.
+    The timeout now takes the touchdown's end state stated for BAL, 0.298 (nflfastR's PAT WP
+    0.316), and the touchdown's WPA is -0.13.
+    """
+    plays = _process(241010028).with_row_index("i")
+    i = plays.filter(
+        (pl.col("type.text") == "Timeout") & (pl.col("type.text").shift(1) == "Fumble Return Touchdown"),
+    )["i"][0]
+    td, timeout, xp = plays.slice(i - 1, 3).iter_rows(named=True)
+    assert (td["start.pos_team.id"], td["end.pos_team.id"]) == (28, 33)
+    assert timeout["start.pos_team.id"] == xp["start.pos_team.id"] == 33
+    assert xp["type.text"] == "Extra Point Good"
+    # the touchdown's wp_after is WSH's; the timeout and the extra point are BAL's
+    assert timeout["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
+    assert timeout["wp_after"] == pytest.approx(timeout["wp_before"], abs=1e-6)
+    assert xp["wp_before"] == pytest.approx(timeout["wp_after"], abs=1e-6)
+    assert xp["wp_before"] == pytest.approx(0.298, abs=0.005)
+    assert 0 < xp["wpa"] < 0.05, xp["wpa"]

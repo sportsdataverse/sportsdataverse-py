@@ -2236,12 +2236,13 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
       Pass``, ``Defensive 2pt Conversion``, ...) takes the ``wp_after`` of the
       touchdown before it (the last play that is not a clock stoppage) as its
       ``wp_before`` when the try is the touchdown's end team's, so the
-      touchdown hands over to the try; a clock stoppage just before the try
-      inherits too when it is the same possession's and the touchdown kept its
-      frame. The model cannot score the try's own start state (ESPN's down-0
-      placeholder). A return or defensive touchdown (a ``scoringPlay`` whose
-      end team is the scorer, not its start team) hands over only a
-      ``wp_after`` scored for the scorer, as ``NFLPlayProcess`` scores it.
+      touchdown hands over to the try. A clock stoppage just before the try
+      inherits too, restated for the team ESPN credits it to, and the try
+      still hands over from the touchdown. The model cannot score the try's
+      own start state (ESPN's down-0 placeholder). A return or defensive
+      touchdown (a ``scoringPlay`` whose end team is the scorer, not its start
+      team) hands over only a ``wp_after`` scored for the scorer, as
+      ``NFLPlayProcess`` scores it.
     * ``def_wp_before = 1 - wp_before``; ``home_wp_before`` / ``away_wp_before``
       are the posteam->home perspective columns (the offense's ``wp_before``
       flows to home when the start possession team is the home team, otherwise
@@ -2361,6 +2362,20 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     td_start, td_end = _last_play("start.pos_team.id"), _last_play("end.pos_team.id")
     td_kept_frame = td_start == td_end
     td_flipped_score = (td_start != td_end) & (_last_play("scoringPlay") == True)  # noqa: E712
+    # The row takes it when it is a try of the touchdown's end team, or a clock stoppage
+    # just before one. ESPN credits a stoppage to either team (the scorer's timeout after a
+    # pick-six sits in the scorer's frame, not the frame of the touchdown row, which started
+    # with the other team), so the value is restated for this row's own team.
+    is_try = pl.col("type.text").is_in(_TRY_TYPES)
+    before_try = pl.col("type.text").is_in(clock_stoppage_vec) & pl.col("type.text").shift(-1).over("game_id").is_in(
+        _TRY_TYPES
+    )
+    try_team = (
+        pl.when(is_try)
+        .then(pl.col("start.pos_team.id"))
+        .otherwise(pl.col("start.pos_team.id").shift(-1).over("game_id"))
+    )
+    td_wp_after = _last_play("wp_after")
 
     play_df = (
         df.with_columns(
@@ -2374,24 +2389,17 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             # state (down 0 at the 0 or the 100) as another snap and ran +0.106 above
             # nflfastR's PAT WP on average, where the touchdown's end state (the board
             # with the TD counted, the other team about to receive) sits at -0.002. A
-            # timeout between the two scores the same placeholder, so it inherits too.
-            # After a return or defensive touchdown the try is the end team's, and the
-            # touchdown's own wp_after (borrowed from the next row below) is this value
-            # restated for the team that gave up the score.
+            # timeout between the two scores the same placeholder, so it inherits too,
+            # stated for its own team. After a return or defensive touchdown the try is
+            # the end team's, and the touchdown's own wp_after (borrowed from the next row
+            # below) is this value restated for the team that gave up the score.
             .when(
-                (
-                    pl.col("type.text").is_in(_TRY_TYPES)
-                    & (td_end == pl.col("start.pos_team.id"))
-                    & (td_kept_frame | td_flipped_score)
-                )
-                | (
-                    pl.col("type.text").is_in(clock_stoppage_vec)
-                    & pl.col("type.text").shift(-1).over("game_id").is_in(_TRY_TYPES)
-                    & (td_start == pl.col("start.pos_team.id"))
-                    & td_kept_frame
-                )
+                (is_try | before_try)
+                & (td_end == try_team)
+                & (td_kept_frame | td_flipped_score)
+                & pl.col("start.pos_team.id").is_not_null()
             )
-            .then(_last_play("wp_after"))
+            .then(pl.when(pl.col("start.pos_team.id") == td_end).then(td_wp_after).otherwise(1 - td_wp_after))
             .otherwise(pl.col("wp_before")),
         )
         .with_columns(
