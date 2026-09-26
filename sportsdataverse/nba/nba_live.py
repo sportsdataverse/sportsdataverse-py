@@ -23,7 +23,9 @@ and fetch helper, matching wehoop's ``wnba_live_pbp`` / ``wnba_live_boxscore``.
 from __future__ import annotations
 
 import json as _json
+import os
 import re
+import time
 from typing import Any, Callable, Optional
 
 import polars as pl
@@ -48,6 +50,15 @@ Transport = Callable[[str, dict, dict, Optional[str]], tuple]
 
 _CDN_HOSTS = {"nba": "cdn.nba.com", "wnba": "cdn.wnba.com"}
 _ID_COL_RE = re.compile(r"(^(official_id|person_id|team_id)$)|(_person_id$)")
+
+# Statuses worth a retry -- throttle/5xx, mirroring nba_stats_runtime._get's
+# retryable failure modes for the same curl_cffi transport family. 403 is
+# deliberately excluded: it is always definitive here (S3 AccessDenied ->
+# NoDataError, Akamai/WAF HTML -> AssetFetchError), never a transient block.
+_RETRYABLE_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
+# Module-level reference (not a bare `time.sleep` call) so tests can
+# monkeypatch it without touching the real `time` module.
+_sleep = time.sleep
 
 # Ruling R4 (Task 5 review, fix round 1): every returned frame carries these core
 # columns with these dtypes -- even at height 0 -- so `pl.concat` across games/sides
@@ -169,6 +180,17 @@ def _fetch_live(
     the WNBA shims in :mod:`sportsdataverse.wnba.wnba_live` -- ``league`` picks the
     host and browser-header set; everything else is identical.
 
+    Retries on a bounded budget shared with
+    :func:`sportsdataverse.nba.nba_stats_runtime._get` (same curl_cffi transport
+    family): ``SDV_PY_NBA_STATS_RETRIES`` (attempts beyond the first, default
+    ``0`` -- byte-identical to a single shot unless a caller opts in) and
+    ``SDV_PY_NBA_STATS_BACKOFF`` (seconds, multiplied by the attempt number,
+    default ``1.5``). A transport exception (other than ``ImportError``), a
+    throttle/5xx status ({408, 429, 500, 502, 503, 504}), or a 200 response whose
+    body is not a non-empty JSON object are all retried; a 404 or a 403 carrying
+    the S3 ``<Code>AccessDenied</Code>`` marker is never retried -- it is a
+    definitive "no data".
+
     Args:
         kind: ``"playbyplay"`` or ``"boxscore"``.
         game_id: NBA/WNBA game ID (int or str). Zero-padded to 10 digits.
@@ -184,17 +206,20 @@ def _fetch_live(
         The parsed JSON payload (dict).
 
     Raises:
-        NoDataError: 404, or a 403 carrying an S3 ``AccessDenied`` body -- no
-            liveData object exists for this game (too old, or not yet started).
-        AssetFetchError: Any other non-200 status, including a WAF/bot-check
-            block (403 HTML) or an exhausted retry budget; also raised (chained
-            via ``from exc``) when the transport itself raises -- a curl_cffi
-            timeout, connection error, or TLS failure never escapes as a bare
+        NoDataError: 404, or a 403 whose body carries the S3
+            ``<Code>AccessDenied</Code>`` marker -- no liveData object exists for
+            this game (too old, or not yet started). Never retried.
+        AssetFetchError: A WAF/bot-check block (403 HTML), a throttle/5xx status,
+            or a 200 whose body is not a non-empty JSON object, once the retry
+            budget above is exhausted; also raised (chained via ``from exc``)
+            once a transport exception (a curl_cffi timeout, connection error, or
+            TLS failure) exhausts the same budget -- it never escapes as a bare
             exception, it is always reclassified into the error vocabulary.
-        ImportError: Propagates unchanged when curl_cffi is not installed --
-            the repo contract that a missing optional dependency surfaces as a
-            clear ``ImportError`` (``pip install curl_cffi`` /
-            ``sportsdataverse[all]``), never masked as ``AssetFetchError``.
+        ImportError: Propagates unchanged on the first attempt when curl_cffi is
+            not installed -- the repo contract that a missing optional
+            dependency surfaces as a clear ``ImportError`` (``pip install
+            curl_cffi`` / ``sportsdataverse[all]``), never masked as
+            ``AssetFetchError`` and never retried.
 
     Example:
         Offline with an injected transport::
@@ -207,22 +232,66 @@ def _fetch_live(
     host = _CDN_HOSTS[league]
     url = f"https://{host}/static/json/liveData/{kind}/{kind}_{_gid(game_id)}.json"
     _transport = transport or _curl_transport
+    headers = _cdn_headers(league)
     proxy_url = (proxy or {}).get("https") or (proxy or {}).get("http")
-    try:
-        status, text = _transport(url, {}, _cdn_headers(league), proxy_url)
-    except (NoDataError, AssetFetchError):
-        raise
-    except ImportError:
-        # A missing curl_cffi must surface as-is (repo contract: `pip install curl_cffi`
-        # or `sportsdataverse[all]`), not be reclassified as a fetch failure.
-        raise
-    except Exception as exc:
-        raise AssetFetchError(f"{host} liveData {kind} transport error for game {_gid(game_id)}: {exc}") from exc
-    if status == 200:
-        return dict(_json.loads(text)) if text else {}
-    if status == 404 or (status == 403 and "AccessDenied" in text[:500]):
-        raise NoDataError(f"{host} has no liveData {kind} for game {_gid(game_id)}")
-    raise AssetFetchError(f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)}")
+
+    # Same env knobs as nba_stats_runtime._get (same curl_cffi transport family) --
+    # reused, not reinvented. Default 0 retries keeps this a single shot, byte-
+    # identical to the prior behavior, unless a caller opts in.
+    retries = int(os.environ.get("SDV_PY_NBA_STATS_RETRIES", "0"))
+    backoff = float(os.environ.get("SDV_PY_NBA_STATS_BACKOFF", "1.5"))
+
+    for attempt in range(retries + 1):
+        is_last = attempt == retries
+        try:
+            status, text = _transport(url, {}, headers, proxy_url)
+        except ImportError:
+            # A missing curl_cffi must surface as-is (repo contract: `pip install
+            # curl_cffi` or `sportsdataverse[all]`), never retried or reclassified.
+            raise
+        except (NoDataError, AssetFetchError):
+            # Already-classified, definitive outcomes -- never retried.
+            raise
+        except Exception as exc:
+            if not is_last:
+                _sleep(backoff * (attempt + 1))
+                continue
+            raise AssetFetchError(f"{host} liveData {kind} transport error for game {_gid(game_id)}: {exc}") from exc
+
+        if status == 404 or (status == 403 and "<Code>AccessDenied</Code>" in text[:500]):
+            raise NoDataError(f"{host} has no liveData {kind} for game {_gid(game_id)}")
+
+        payload = None
+        if status == 200 and text:
+            try:
+                payload = _json.loads(text)
+            except _json.JSONDecodeError:
+                payload = None
+        if status == 200 and isinstance(payload, dict) and payload:
+            return payload
+
+        if status != 200 and status not in _RETRYABLE_STATUSES:
+            raise AssetFetchError(f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)}")
+
+        # Retryable: a throttle/5xx status, or a 200 with an empty/non-dict body
+        # (H2) -- both a transient failure mode, never silently treated as "no
+        # data" the way an unguarded `dict(json.loads(blank_or_bad_text))` would.
+        if not is_last:
+            _sleep(backoff * (attempt + 1))
+            continue
+        if status == 200:
+            raise AssetFetchError(
+                f"{host} liveData {kind} returned a 200 with an empty or non-JSON-object "
+                f"body for game {_gid(game_id)} after exhausting the retry budget"
+            )
+        raise AssetFetchError(
+            f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)} "
+            "after exhausting the retry budget"
+        )
+
+    # Unreachable under normal env values (retries >= 0 guarantees at least one
+    # iteration); kept as a defensive fallback + satisfies mypy's return-path check.
+    raise AssetFetchError(f"{host} liveData {kind} fetch failed for game {_gid(game_id)}")
 
 
 def _normalize(records: list[dict[str, Any]]) -> pl.DataFrame:
@@ -445,6 +514,8 @@ def nba_live_pbp(
             not yet started).
         AssetFetchError: The fetch failed (network error, rate limit, or a
             bot-check block).
+        ImportError: curl_cffi is not installed -- required for the live
+            transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
     Example:
         Fetch a game's live play-by-play::
@@ -496,6 +567,8 @@ def nba_live_boxscore(
             yet started).
         AssetFetchError: The fetch failed (network error, rate limit, or a
             bot-check block).
+        ImportError: curl_cffi is not installed -- required for the live
+            transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
     Example:
         Fetch a game's live boxscore::

@@ -51,6 +51,8 @@ def wnba_live_pbp(
         NoDataError: The game has no liveData play-by-play object.
         AssetFetchError: The fetch failed (network error, rate limit, or a
             bot-check block).
+        ImportError: curl_cffi is not installed -- required for the live
+            transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
     Example:
         Fetch a game's live play-by-play::
@@ -97,6 +99,8 @@ def wnba_live_boxscore(
         NoDataError: The game has no liveData boxscore object.
         AssetFetchError: The fetch failed (network error, rate limit, or a
             bot-check block).
+        ImportError: curl_cffi is not installed -- required for the live
+            transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
     Example:
         Fetch a game's live boxscore::

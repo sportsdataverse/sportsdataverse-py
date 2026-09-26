@@ -32,6 +32,29 @@ def _fake_transport(status, text):
     return transport, seen
 
 
+def _sequence_transport(*responses):
+    """Transport yielding *responses* in order (status/text tuple or an Exception instance);
+    extra calls beyond the given sequence repeat the last entry. Returns (transport, calls)."""
+    responses = list(responses)
+    calls = {"n": 0}
+
+    def transport(url, params, headers, proxy_url):
+        calls["n"] += 1
+        item = responses[min(calls["n"] - 1, len(responses) - 1)]
+        if isinstance(item, Exception):
+            raise item
+        return item
+
+    return transport, calls
+
+
+@pytest.fixture(autouse=True)
+def _no_real_sleep(monkeypatch):
+    """H1: retry backoff must never actually sleep in tests -- monkeypatch the
+    module-level reference, not the global ``time`` module."""
+    monkeypatch.setattr(mod, "_sleep", lambda *_: None)
+
+
 # ---------------------------------------------------------------------------
 # parse_nba_live_pbp
 # ---------------------------------------------------------------------------
@@ -239,3 +262,84 @@ def test_missing_curl_cffi_import_error_is_not_masked(monkeypatch):
     monkeypatch.setattr(mod, "_curl_transport", raising_transport)
     with pytest.raises(ImportError):
         nba_live_pbp("0022500001")
+
+
+# ---------------------------------------------------------------------------
+# _fetch_live retry/backoff (H1) + 200-body validation (H2)
+# ---------------------------------------------------------------------------
+
+
+def test_503_then_200_recovers(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    transport, calls = _sequence_transport((503, ""), (200, json.dumps(PBP_PAYLOAD)))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    df = nba_live_pbp("0022500001")
+    assert df.height == len(PBP_PAYLOAD["game"]["actions"])
+    assert calls["n"] == 2
+
+
+def test_always_503_raises_after_configured_attempts(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    transport, calls = _sequence_transport((503, ""))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
+    assert calls["n"] == 3  # retries(2) + the first attempt
+
+
+def test_timeout_then_200_recovers(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "1")
+    transport, calls = _sequence_transport(TimeoutError("curl_cffi timed out"), (200, json.dumps(PBP_PAYLOAD)))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    df = nba_live_pbp("0022500001")
+    assert df.height == len(PBP_PAYLOAD["game"]["actions"])
+    assert calls["n"] == 2
+
+
+def test_s3_access_denied_never_retries(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "3")
+    body = (FIX / "playbyplay_0029999999_no_object_s3_403.xml").read_text()
+    transport, calls = _sequence_transport((403, body))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(NoDataError):
+        nba_live_pbp("0022500001")
+    assert calls["n"] == 1
+
+
+def test_import_error_never_retries(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "3")
+    transport, calls = _sequence_transport(ImportError("curl_cffi is required"))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(ImportError):
+        nba_live_pbp("0022500001")
+    assert calls["n"] == 1
+
+
+def test_200_html_body_always_raises_asset_fetch_error(monkeypatch):
+    transport, _ = _fake_transport(200, "<html>akamai interstitial</html>")
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
+
+
+def test_200_empty_body_always_raises_asset_fetch_error(monkeypatch):
+    transport, _ = _fake_transport(200, "")
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
+
+
+def test_200_null_body_always_raises_asset_fetch_error(monkeypatch):
+    transport, _ = _fake_transport(200, "null")
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
+
+
+def test_200_html_then_valid_json_recovers(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "1")
+    transport, calls = _sequence_transport((200, "<html>akamai interstitial</html>"), (200, json.dumps(PBP_PAYLOAD)))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    df = nba_live_pbp("0022500001")
+    assert df.height == len(PBP_PAYLOAD["game"]["actions"])
+    assert calls["n"] == 2

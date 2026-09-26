@@ -136,11 +136,35 @@ def test_listing_url_uses_span(monkeypatch):
 
     def fake_get(url, **kw):
         seen["url"] = url
-        return _Resp(200, "", "text/html")
+        return _Resp(200, "<html><title>2025-26 NBA Officiating Last Two Minute Reports</title></html>", "text/html")
 
     monkeypatch.setattr(mod, "_official_get", fake_get)
     mod.nba_l2m_games(2026)
     assert seen["url"] == "https://official.nba.com/2025-26-nba-officiating-last-two-minute-reports/"
+
+
+def test_listing_without_marker_raises_asset_fetch_error(monkeypatch):
+    """H3: a 200 body missing the 'Last Two Minute' marker (Akamai interstitial, blank
+    body, or a redesigned page) must not silently parse to zero games."""
+
+    def fake_get(url, **kw):
+        return _Resp(200, "<html><body>please verify you are a human</body></html>", "text/html")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    with pytest.raises(AssetFetchError):
+        mod.nba_l2m_games(2026)
+
+
+def test_listing_via_wrapper_real_fixture_still_yields_415(monkeypatch):
+    """H3 regression guard: the marker check must not reject the real capture."""
+    html = (FIX / "l2m_listing_2025-26.html").read_text(encoding="utf-8")
+
+    def fake_get(url, **kw):
+        return _Resp(200, html, "text/html")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    df = mod.nba_l2m_games(2026)
+    assert df.height == 415
 
 
 def _assign():
@@ -223,24 +247,26 @@ def test_referee_assignments_datetime_with_time_normalizes_to_date(monkeypatch):
     seen = {}
 
     def fake_get(url, **kw):
-        seen["url"] = url
+        seen["url"], seen["params"] = url, kw.get("params")
         return _Resp(200, json.dumps(_assign()), "application/json")
 
     monkeypatch.setattr(mod, "_official_get", fake_get)
     nba_referee_assignments(dt.datetime(2026, 6, 13, 19, 30))
-    assert seen["url"].endswith("date=2026-06-13")
+    assert seen["url"] == mod._ASSIGN_URL  # H4: date travels as params=, not hand-built into the URL
+    assert seen["params"] == {"date": "2026-06-13"}
 
 
 def test_referee_assignments_plain_date_still_works(monkeypatch):
     seen = {}
 
     def fake_get(url, **kw):
-        seen["url"] = url
+        seen["url"], seen["params"] = url, kw.get("params")
         return _Resp(200, json.dumps(_assign()), "application/json")
 
     monkeypatch.setattr(mod, "_official_get", fake_get)
     nba_referee_assignments(dt.date(2026, 6, 13))
-    assert seen["url"].endswith("date=2026-06-13")
+    assert seen["url"] == mod._ASSIGN_URL
+    assert seen["params"] == {"date": "2026-06-13"}
 
 
 # ---------------------------------------------------------------------------
@@ -252,3 +278,23 @@ def test_calls_period_dtype_is_int64():
     out = parse_nba_l2m(_payload())
     assert out["calls"].schema["period"] == pl.Int64
     assert L2M_CALLS_SCHEMA["period"] == pl.Int64
+
+
+# ---------------------------------------------------------------------------
+# parse_nba_l2m -- D2: None payload / non-numeric GameId must not raise
+# ---------------------------------------------------------------------------
+
+
+def test_none_payload_is_zero_rows():
+    out = parse_nba_l2m(None)
+    assert out["calls"].height == 0
+    assert out["game"].height == 0
+    assert out["stats"].height == 0
+
+
+def test_non_numeric_game_id_is_kept_raw_not_raised():
+    p = _payload()
+    p["game"][0]["GameId"] = "ABC123"
+    out = parse_nba_l2m(p)
+    assert out["game"]["game_id"][0] == "ABC123"
+    assert out["calls"]["game_id"][0] == "ABC123"

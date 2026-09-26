@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import datetime as _dt
 import re
-from typing import Any
+from typing import Any, Literal, Union, overload
 
+import pandas as pd
 import polars as pl
 import requests
 
@@ -44,11 +45,14 @@ _OFFICIAL_HEADERS = {
 _RETRY_NO_403 = frozenset({408, 429, 500, 502, 503, 504})
 
 
-def _official_get(url: str, *, proxy: dict | None = None) -> requests.Response:
+def _official_get(url: str, *, params: dict | None = None, proxy: dict | None = None) -> requests.Response:
     """Fetch a URL from ``official.nba.com`` with the browser UA it requires, classifying 403s.
 
     Args:
         url: Full ``official.nba.com`` URL to fetch.
+        params: Optional query-string parameters, forwarded verbatim to
+            :func:`sportsdataverse.dl_utils.download` -- prefer this over
+            hand-building the query string onto *url*.
         proxy: Optional proxy dict passed through to
             :func:`sportsdataverse.dl_utils.download`.
 
@@ -73,7 +77,7 @@ def _official_get(url: str, *, proxy: dict | None = None) -> requests.Response:
             payload = resp.json()
     """
     try:
-        resp = download(url, headers=_OFFICIAL_HEADERS, proxy=proxy, retry_statuses=_RETRY_NO_403)
+        resp = download(url, params=params, headers=_OFFICIAL_HEADERS, proxy=proxy, retry_statuses=_RETRY_NO_403)
     except requests.exceptions.RequestException as exc:
         raise AssetFetchError(f"official.nba.com fetch failed (transport error) for {url}: {exc}") from exc
     if resp.status_code == 200:
@@ -170,6 +174,11 @@ _L2M_URL = "https://official.nba.com/l2m/json/{gid}.json"
 _LISTING_URL = "https://official.nba.com/{span}-nba-officiating-last-two-minute-reports/"
 # Regex, not CSS: the page's selectors changed almost every season upstream.
 _LISTING_RE = re.compile(r"L2MReport\.html\?gameId=(?:%0[dD])?(\d{10})[^>]*>([^<]*)</a>")
+# H3: a real listing page's <title>/<h1> always carry this phrase. An Akamai
+# interstitial, a blank body, or a redesigned page do not -- and zero report
+# links is otherwise a silent-but-legitimate outcome (an off-season span), so
+# this marker, not the row count, is the fetch-level health check.
+_LISTING_MARKER_RE = re.compile(r"last two minute", re.IGNORECASE)
 _ASSIGN_URL = "https://official.nba.com/wp-json/api/v1/get-game-officials"
 NBA_REFEREE_ASSIGN_SCHEMA = pl.Schema(
     {
@@ -199,6 +208,27 @@ def _gid(game_id: str | int) -> str:
     return str(int(game_id)).zfill(10)
 
 
+def _l2m_gid(raw: Any) -> str | None:
+    """Zero-pad a payload ``GameId`` when it's all-digits; otherwise keep it verbatim.
+
+    Guards against malformed upstream JSON (D2): unlike the strict :func:`_gid`
+    (used for a caller-supplied id that builds the request URL, where a
+    non-numeric id should raise), this tolerates a non-numeric ``GameId`` in the
+    *response* body instead of raising ``ValueError``.
+
+    Args:
+        raw: The payload's raw ``GameId`` value (``int``, ``str``, or ``None``).
+
+    Returns:
+        The zero-padded 10-digit string when *raw* is all-digits, the verbatim
+        string otherwise, or ``None`` when *raw* is ``None``.
+    """
+    if raw is None:
+        return None
+    s = str(raw)
+    return s.zfill(10) if s.isdigit() else s
+
+
 def _frame(rows: list[dict[str, Any]], schema: pl.Schema) -> pl.DataFrame:
     """Create a polars DataFrame from rows with explicit schema; empty rows carry schema."""
     if not rows:
@@ -206,7 +236,7 @@ def _frame(rows: list[dict[str, Any]], schema: pl.Schema) -> pl.DataFrame:
     return pl.DataFrame(rows, schema=schema, strict=False)
 
 
-def parse_nba_l2m(payload: dict, *, return_as_pandas: bool = False) -> dict[str, Any]:
+def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> dict[str, Any]:
     """Parse an NBA Last Two Minute report payload into tidy DataFrames.
 
     Parses the raw L2M report JSON from official.nba.com into three related
@@ -216,7 +246,8 @@ def parse_nba_l2m(payload: dict, *, return_as_pandas: bool = False) -> dict[str,
     tags ("CC", "CNC", "INC") are normalized from raw values.
 
     Args:
-        payload: The JSON payload (dict) from official.nba.com L2M endpoint.
+        payload: The JSON payload (dict) from official.nba.com L2M endpoint, or
+            ``None`` (treated as an empty payload).
         return_as_pandas: If True, return pandas DataFrames instead of polars.
 
     Returns:
@@ -252,9 +283,10 @@ def parse_nba_l2m(payload: dict, *, return_as_pandas: bool = False) -> dict[str,
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
+    payload = payload or {}
     game_rows = payload.get("game") or []
     g = game_rows[0] if game_rows else {}
-    gid = _gid(g["GameId"]) if g.get("GameId") else None
+    gid = _l2m_gid(g.get("GameId"))
     calls = _frame(
         [
             {
@@ -436,14 +468,26 @@ def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
     )
 
 
-def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | None = None) -> pl.DataFrame:
+@overload
+def nba_l2m_games(
+    season: int, *, return_as_pandas: Literal[False] = False, proxy: dict | None = None
+) -> pl.DataFrame: ...
+
+
+@overload
+def nba_l2m_games(season: int, *, return_as_pandas: Literal[True], proxy: dict | None = None) -> pd.DataFrame: ...
+
+
+def nba_l2m_games(
+    season: int, *, return_as_pandas: bool = False, proxy: dict | None = None
+) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch the list of games with Last Two Minute reports for an NBA season.
 
     Retrieves and parses the L2M season index page from official.nba.com,
     returning a table of all games for which L2M reports exist. JSON reports
     exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
-    which this function ignores. Historical (PDF-era) access is planned as a
-    vendored release loader (see Plan 01 Task 10); it does not exist yet.
+    which this function ignores. A release loader for historical (PDF-era)
+    reports is planned but does not exist yet.
 
     Args:
         season: The NBA season (end year), e.g., 2026 for the 2025-26 season.
@@ -451,13 +495,18 @@ def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | 
         proxy: Optional proxy dict passed through to the HTTP layer.
 
     Returns:
-        A DataFrame with schema ``{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}``,
+        A :class:`polars.DataFrame` (or :class:`pandas.DataFrame` when
+        ``return_as_pandas=True``) with schema
+        ``{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}``,
         one row per unique game ID in page order.
 
     Raises:
         NoDataError: The official.nba.com page cannot be found (very unlikely).
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai
-            WAF block).
+            WAF block), or a 200 response that is missing the expected "Last Two
+            Minute" page marker (an Akamai interstitial, a blank body, or a
+            redesigned page) -- checked here, not in :func:`parse_nba_l2m_games`,
+            so the parser itself never raises.
 
     Example:
         Fetch the 2025-26 season L2M games::
@@ -483,7 +532,14 @@ def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | 
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
     span = f"{season - 1}-{str(season)[-2:]}"
-    html = _official_get(_LISTING_URL.format(span=span), proxy=proxy).text
+    url = _LISTING_URL.format(span=span)
+    html = _official_get(url, proxy=proxy).text
+    if not _LISTING_MARKER_RE.search(html):
+        raise AssetFetchError(
+            f"official.nba.com L2M listing page for {span} is missing the expected "
+            f"'Last Two Minute' marker (Akamai interstitial, blank body, or a "
+            f"redesigned page) at {url}"
+        )
     df = parse_nba_l2m_games(html, season)
     return df.to_pandas() if return_as_pandas else df
 
@@ -656,8 +712,8 @@ def nba_referee_assignments(
         day = date.isoformat()
     else:
         day = str(date)
-    url = f"{_ASSIGN_URL}?&date={day}"
-    payload = _official_json(_official_get(url, proxy=proxy), url)
+    resp = _official_get(_ASSIGN_URL, params={"date": day}, proxy=proxy)
+    payload = _official_json(resp, f"{_ASSIGN_URL}?date={day}")
     if raw:
         return payload  # full three-league {nba, gl, wnba} payload
     out = parse_nba_referee_assignments(payload, league)
