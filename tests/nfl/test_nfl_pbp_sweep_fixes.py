@@ -25,6 +25,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   JAX try for a defensive two-point conversion)
 * ``summary_401030824_trimmed.json.gz`` -- LAC @ DEN, 2018 week 17 (DEN's failed two-point
   try returned by LAC; the text carries both results)
+* ``summary_401671740_trimmed.json.gz`` -- PHI @ TB, 2024 week 4 (a blocked extra point
+  returned for two inside the touchdown row, with no standalone try row)
 """
 
 from __future__ import annotations
@@ -674,4 +676,31 @@ def test_two_point_result_is_the_offences_when_the_defence_returns_the_try() -> 
     assert d2p["EP_end"] == -2
     # the two points are LAC's (away): 14 -> 16, and DEN (home) 3 -> 9
     assert (d2p["awayScore"], d2p["homeScore"]) == (16, 9)
+
+
+# --- a defensive two folded into the touchdown row -----------------------------------------------
+
+
+def test_defensive_two_folded_into_the_touchdown_row_nets_four() -> None:
+    """401671740: PHI blocks TB's extra point and K.Ringo returns it for two (Q3 6:49, TB 24-14).
+
+    ESPN emits no "Defensive 2pt Conversion" row here: the return rides in the touchdown row's
+    text. That row published EP_end 6 (a missed kick) and no row carried the defence's -2. It
+    now realises 6 - 2 = 4 and carries defensive_two_point_conv, as nflverse flags the try row.
+    Where ESPN does emit the standalone row (401030824), the flag and the -2 stay on it alone.
+    """
+    plays = _process(401671740)
+    assert plays.filter(pl.col("type.text") == "Defensive 2pt Conversion").height == 0
+    flagged = plays.filter(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+    assert flagged.height == 1
+    td = flagged.row(0, named=True)
+    assert td["type.text"] == "Rushing Touchdown"
+    assert td["defensive_two_point_attempt"] is True
+    assert td["EP_end"] == 4
+
+    plays = _process(401030824)
+    flagged = plays.filter(pl.col("defensive_two_point_conv") == True)  # noqa: E712
+    assert flagged["type.text"].to_list() == ["Defensive 2pt Conversion"]
+    td = plays.filter(pl.col("text").str.contains("DEFENSIVE TWO-POINT") & (pl.col("type.text") == "Passing Touchdown"))
+    assert td["EP_end"].to_list() == [6]
 

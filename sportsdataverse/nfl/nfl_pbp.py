@@ -2979,6 +2979,7 @@ class NFLPlayProcess(object):
         # ATTEMPT SUCCEEDS." -- that SUCCEEDS is the defence's, and reading it booked the
         # offence a made two (TD EP_end 8 instead of 6; 401030824, 401030967, 401772892).
         _offence_try = pl.col("text").str.replace(r"DEFENSIVE TWO-POINT.*$", "")
+        _defence_try = pl.col("text").str.extract(r"(DEFENSIVE TWO-POINT.*)$")
         play_df = play_df.with_columns(
             two_point_conv_result=pl.when(
                 (pl.col("two_point_attempt") == True).and_(_offence_try.str.contains("ATTEMPT SUCCEEDS")),  # noqa: E712
@@ -2987,6 +2988,20 @@ class NFLPlayProcess(object):
             .when((pl.col("two_point_attempt") == True).and_(_offence_try.str.contains("ATTEMPT FAILS")))  # noqa: E712
             .then(pl.lit("failure"))
             .otherwise(_existing_2pt_result),
+            # The defence's return of the try, flagged (as nflverse does) on the one row that
+            # carries its -2: the standalone "Defensive 2pt Conversion" row when ESPN emits
+            # one, else the touchdown row whose text folds it in (401128067, 401671740).
+            defensive_two_point_attempt=(
+                (pl.col("type.text") == "Defensive 2pt Conversion")
+                | (_defence_try.is_not_null() & pl.col("lead_play_type").ne_missing("Defensive 2pt Conversion"))
+            ).fill_null(False),
+            defensive_two_point_conv=(
+                (pl.col("type.text") == "Defensive 2pt Conversion")
+                | (
+                    _defence_try.str.contains("ATTEMPT SUCCEEDS")
+                    & pl.col("lead_play_type").ne_missing("Defensive 2pt Conversion")
+                )
+            ).fill_null(False),
             two_point_pass=(pl.col("two_point_attempt") == True).and_(  # noqa: E712
                 pl.col("text").str.contains(r"CONVERSION ATTEMPT\. [^.]* pass "),
             ),

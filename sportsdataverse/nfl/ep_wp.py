@@ -1939,6 +1939,14 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     if "two_point_conv_result" in df.columns:
         two_pt_good = (pl.col("two_point_conv_result") == "success").or_(two_pt_good)
         two_pt_failed = (pl.col("two_point_conv_result") == "failure").or_(two_pt_failed)
+    # The defence returned the try for two (``defensive_two_point_conv``, NFLPlayProcess).
+    # Where ESPN folds that into the touchdown row instead of emitting a standalone
+    # "Defensive 2pt Conversion" row, the touchdown row realises 6 - 2 (401671740).
+    def_two = (
+        (pl.col("defensive_two_point_conv") == True).fill_null(False)  # noqa: E712
+        if "defensive_two_point_conv" in df.columns
+        else pl.lit(False)
+    )
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
     if "xp_attempt" in df.columns and "xp_made" in df.columns:
@@ -2005,6 +2013,9 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             # Defense TD
             .when(pl.col("type.text").is_in(defense_score_vec))
             .then(-6.92)
+            # Offense TD + try returned by the defence for two
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(def_two))
+            .then(4)
             # Offense TD + Failed Two-Point Conversion
             .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
             .then(6)
