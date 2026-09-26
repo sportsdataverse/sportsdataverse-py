@@ -17,11 +17,13 @@ CFB_GAME_ID = 401628334  # 2024 week 1 (final)
 
 @pytest.fixture(scope="session")
 def nfl_summary() -> dict:
+    """The stored ESPN summary for the NFL fixture game."""
     return json.loads((NFL_FIX / f"summary_{NFL_GAME_ID}.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture(scope="session")
 def cfb_summary() -> dict:
+    """The stored ESPN summary for the CFB fixture game."""
     return json.loads((CFB_FIX / f"summary_{CFB_GAME_ID}.json").read_text(encoding="utf-8"))
 
 
@@ -29,6 +31,7 @@ def _block_downloads(mp: pytest.MonkeyPatch) -> None:
     """Make any download on the processor modules a test failure (the offline path must not reach ESPN)."""
 
     def _boom(*a, **k):
+        """Stand-in transport: any call is a test failure."""
         raise AssertionError("network call on the offline path")
 
     # the CBS adapter is the first registered alternate that FETCHES when it is reached with

@@ -23,6 +23,7 @@ from .conftest import CFB_GAME_ID, NFL_GAME_ID
 
 
 def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGame):
+    """The ESPN path serves a stored summary through the real pipeline, with full provenance."""
     prov = nfl_processed.provenance
     assert nfl_processed.game["source"] is prov
     assert prov["requested"] == prov["served"] == "espn" and prov["fallback"] is False
@@ -55,6 +56,7 @@ def test_offline_guard_ends_with_its_consumer(nfl_processed):
 
 
 def test_cfb_offline_dispatch(cfb_summary, no_network):
+    """CFB dispatch builds the game from a stored summary without touching the network."""
     out = _process_game("cfb", CFB_GAME_ID, payloads={"espn": cfb_summary})
     assert out.provenance["served"] == "espn" and out.provenance["contract"]["ok"]
     assert out.game["gameId"] == CFB_GAME_ID and len(out.game["plays"]) > 100
