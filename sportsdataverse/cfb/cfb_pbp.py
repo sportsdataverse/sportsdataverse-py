@@ -526,9 +526,12 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
     # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
     if "period.number" in play_df.columns:
-        takes_over = takes_over & ~(
-            (pl.col("period.number") >= 5) & ~_last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
-        )
+        # a touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the
+        # end zone for a TD", typed "Rush", 322802005 in overtime) counts by its text
+        last_td = _last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
+        if "td_play" in play_df.columns:
+            last_td = last_td | (_last_play("td_play") == True).fill_null(False)  # noqa: E712
+        takes_over = takes_over & ~((pl.col("period.number") >= 5) & ~last_td)
 
     return (
         play_df.with_columns(

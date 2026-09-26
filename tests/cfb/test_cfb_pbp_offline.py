@@ -219,6 +219,8 @@ def _trimmed(game_id: int) -> dict:
       scores, is flagged for ineligible downfield, and misses the two.
     * ``summary_401282146_trimmed.json.gz`` -- Alabama @ Auburn, 2021 week 13. Four
       overtimes; the third and fourth are two-point attempts, all filed under Alabama.
+    * ``summary_322802005_trimmed.json.gz`` -- Navy @ Air Force, 2012 week 6. Navy's
+      overtime touchdown is a fumble recovered in the end zone, typed "Rush".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -663,6 +665,18 @@ def test_an_overtime_shootout_attempt_is_not_handed_a_touchdowns_board() -> None
     assert first["period"] == 7
     assert abs(first["wpa"]) < 0.05, first["wpa"]
     assert first["wp_before"] > 0.9
+
+
+def test_an_overtime_try_after_a_touchdown_typed_as_the_play_hands_over() -> None:
+    """322802005: "Keenan Reynolds rush for no gain, fumbled, recovered by Navy Jake Zuzek in
+    the end zone for a TOUCHDOWN" (typed "Rush") in overtime, then "Nick Sloan extra point
+    GOOD." The shootout gate read only the touchdown types and cut this try's handover.
+    """
+    plays = _offline_plays(322802005).with_row_index("i")
+    r = plays.filter((pl.col("text") == "Nick Sloan extra point GOOD.") & (pl.col("period") == 5)).row(0, named=True)
+    td = plays.row(r["i"] - 1, named=True)
+    assert td["td_play"] and td["pos_team"] == r["pos_team"]
+    assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:
