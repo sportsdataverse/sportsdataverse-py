@@ -171,6 +171,10 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_401234597_trimmed.json.gz`` -- North Carolina @ Boston College, 2020
       week 5. BC's touchdown with 0:45 left makes it 22-24, and UNC returns the two-point
       try for 26-22.
+    * ``summary_401628559_trimmed.json.gz`` -- Penn State @ Minnesota, 2024 week 12.
+      Minnesota returns PSU's blocked kick try for two with 0:18 left in the half; ESPN
+      filed the return with id ...104999903 and sequence 102998955, both past the next
+      drive's kickoff.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -284,3 +288,21 @@ def test_a_try_row_starts_where_the_touchdown_ended() -> None:
     assert td["start.pos_team.id"] == d2p["start.pos_team.id"] == 103
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
     assert -0.2 < d2p["wpa"] < -0.05, d2p["wpa"]
+
+
+def test_a_late_filed_defensive_two_follows_its_touchdown() -> None:
+    """401628559: ESPN filed Minnesota's return of PSU's try for two at the end of the game.
+
+    Its id (...104999903) sorts after the final whistle and its sequence (102998955) after
+    the next drive's kickoff and kneel, so the late-insert pass could not place it: the row
+    sat last, in period 2, and took the end-of-game WP (wp_before 0.97, wp_after 1.0). A
+    late try row now goes right after the last touchdown sequenced before it.
+    """
+    plays = _offline_plays(401628559).with_row_index("i")
+    i = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p, *nxt = plays.filter(pl.col("i").is_between(i - 1, i + 1)).iter_rows(named=True)
+    assert td["type.text"] == "Rushing Touchdown", td["type.text"]
+    assert [r["type.text"] for r in nxt] == ["Timeout"]
+    assert td["period"] == d2p["period"] == 2
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert abs(d2p["wpa"]) < 0.05, d2p["wpa"]

@@ -1088,6 +1088,27 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
         .filter((pl.col("_tdrv") == pl.col("_drv")) | (pl.col("_ndrv") == pl.col("_drv")))
         .select("_pos", "_tpos")
     )
+    # A try row fails the drive test when ESPN files it under a pseudo drive ("...0") or
+    # sequences it past the kickoff that follows (401628559: a defensive two with id
+    # ...104999903 and sequence 102998955, after the next drive's kneel). It belongs right
+    # after its touchdown: the last one sequenced before it in the same period. Only
+    # defensive twos meet this in 2014-2026 (7 rows, 2020-24).
+    tries = df.filter(pl.col("_late") & pl.col("type.text").is_in(_TRY_TYPES)).join(target, on="_pos", how="anti")
+    if tries.height:
+        tds = df.filter(~pl.col("_late") & pl.col("type.text").str.contains("(?i)touchdown")).select(
+            _tpos="_pos", _tseq="_seq", _tper="_per"
+        )
+        target = pl.concat(
+            [
+                target,
+                tries.select("_pos", "_seq", "_per")
+                .join(tds, how="cross")
+                .filter((pl.col("_tseq") < pl.col("_seq")) & (pl.col("_tper") == pl.col("_per")))
+                .sort("_tseq")
+                .group_by("_pos")
+                .agg(pl.col("_tpos").last()),
+            ]
+        )
     if target.height == 0:
         return plays_df
     return (
