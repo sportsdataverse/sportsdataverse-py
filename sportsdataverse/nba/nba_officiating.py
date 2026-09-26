@@ -9,6 +9,7 @@ official.nba.com is S3 behind Akamai Bot Manager: a browser User-Agent is requir
 from __future__ import annotations
 
 import datetime as _dt
+import re
 from typing import Any
 
 import polars as pl
@@ -17,7 +18,15 @@ import requests
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
-__all__ = ["parse_nba_l2m", "nba_l2m", "L2M_CALLS_SCHEMA", "L2M_GAME_SCHEMA", "L2M_STATS_SCHEMA"]
+__all__ = [
+    "parse_nba_l2m",
+    "nba_l2m",
+    "parse_nba_l2m_games",
+    "nba_l2m_games",
+    "L2M_CALLS_SCHEMA",
+    "L2M_GAME_SCHEMA",
+    "L2M_STATS_SCHEMA",
+]
 
 _OFFICIAL_HEADERS = {
     "User-Agent": (
@@ -122,6 +131,9 @@ _SEASON_TYPES = {
     "6": "nba-cup-final",
 }
 _L2M_URL = "https://official.nba.com/l2m/json/{gid}.json"
+_LISTING_URL = "https://official.nba.com/{span}-nba-officiating-last-two-minute-reports/"
+# Regex, not CSS: the page's selectors changed almost every season upstream.
+_LISTING_RE = re.compile(r"L2MReport\.html\?gameId=(?:%0[dD])?(\d{10})[^>]*>([^<]*)</a>")
 
 
 def _gid(game_id: str | int) -> str:
@@ -311,3 +323,105 @@ def nba_l2m(
     """
     payload = _official_get(_L2M_URL.format(gid=_gid(game_id)), proxy=proxy).json()
     return payload if raw else parse_nba_l2m(payload, return_as_pandas=return_as_pandas)
+
+
+def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
+    """Parse an NBA season's Last Two Minute games listing from the HTML index page.
+
+    Extracts game IDs and matchup labels from the L2M season index page
+    (e.g., official.nba.com/2025-26-nba-officiating-last-two-minute-reports/).
+    Duplicates are deduplicated, keeping the first occurrence. The output is ordered
+    by appearance on the page.
+
+    Args:
+        html: The HTML content of the L2M season listing page.
+        season: The NBA season (end year), used to populate the ``season`` column.
+
+    Returns:
+        A DataFrame with schema ``{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}``,
+        one row per unique game ID in page order. If no report links are found, returns
+        a zero-row frame with the documented schema.
+
+    Raises:
+        This function does not raise. HTML with no report links yields a zero-row
+        frame with the documented schema.
+
+    Example:
+        Parse a real season listing::
+
+            from sportsdataverse.nba.nba_officiating import parse_nba_l2m_games
+            with open("l2m_listing_2025-26.html") as f:
+                html = f.read()
+            df = parse_nba_l2m_games(html, 2026)
+            print(df.filter(df["season_type"] == "playoffs").height)
+
+        See Also:
+            * `hoopR`_ -- R package for NBA data access and visualization
+            * `atlhawksfanatic/L2M`_ -- L2M report scraper and archive
+
+            .. _hoopR: https://hoopR.sportsdataverse.org
+            .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
+    """
+    seen: dict[str, str] = {}
+    for gid, label in _LISTING_RE.findall(html):
+        seen.setdefault(gid, label.strip())
+    return pl.DataFrame(
+        {
+            "game_id": list(seen),
+            "season": [season] * len(seen),
+            "season_type": [_SEASON_TYPES.get(g[2]) for g in seen],
+            "label": list(seen.values()),
+        },
+        schema={"game_id": pl.Utf8, "season": pl.Int32, "season_type": pl.Utf8, "label": pl.Utf8},
+    )
+
+
+def nba_l2m_games(season: int, *, return_as_pandas: bool = False, proxy: dict | None = None) -> pl.DataFrame:
+    """Fetch the list of games with Last Two Minute reports for an NBA season.
+
+    Retrieves and parses the L2M season index page from official.nba.com,
+    returning a table of all games for which L2M reports exist. JSON reports
+    are available only from the 2018-19 season onward; earlier seasons' pages
+    list PDFs instead, which this function ignores.
+
+    Args:
+        season: The NBA season (end year), e.g., 2026 for the 2025-26 season.
+        return_as_pandas: If True, return a pandas DataFrame instead of polars.
+        proxy: Optional proxy dict passed through to the HTTP layer.
+
+    Returns:
+        A DataFrame with schema ``{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}``,
+        one row per unique game ID in page order.
+
+    Raises:
+        NoDataError: The official.nba.com page cannot be found (very unlikely).
+        AssetFetchError: The fetch failed (network error, rate limit, or Akamai
+            WAF block).
+
+    Example:
+        Fetch the 2025-26 season L2M games::
+
+            from sportsdataverse.nba.nba_officiating import nba_l2m_games
+            df = nba_l2m_games(2026)
+            print(f"Season had {df.height} games with L2M reports")
+
+        Get playoff games only::
+
+            df = nba_l2m_games(2026)
+            playoffs = df.filter(df["season_type"] == "playoffs")
+
+        Convert to pandas::
+
+            df = nba_l2m_games(2026, return_as_pandas=True)
+
+        See Also:
+            * `hoopR`_ -- R package for NBA data access and visualization
+            * `atlhawksfanatic/L2M`_ -- L2M report scraper and archive
+
+            .. _hoopR: https://hoopR.sportsdataverse.org
+            .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
+    """
+    span = f"{season - 1}-{str(season)[-2:]}"
+    html = _official_get(_LISTING_URL.format(span=span), proxy=proxy).text
+    df = parse_nba_l2m_games(html, season)
+    return df.to_pandas() if return_as_pandas else df

@@ -5,7 +5,12 @@ import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_officiating as mod
-from sportsdataverse.nba.nba_officiating import L2M_CALLS_SCHEMA, nba_l2m, parse_nba_l2m
+from sportsdataverse.nba.nba_officiating import (
+    L2M_CALLS_SCHEMA,
+    nba_l2m,
+    parse_nba_l2m,
+    parse_nba_l2m_games,
+)
 
 FIX = Path(__file__).parent / "fixtures" / "official_nba"
 
@@ -105,3 +110,29 @@ def test_game_id_zero_padded_from_int(monkeypatch):
     monkeypatch.setattr(mod, "_official_get", fake_get)
     nba_l2m(42500405)
     assert seen["url"].endswith("/l2m/json/0042500405.json")
+
+
+def test_listing_2025_26():
+    html = (FIX / "l2m_listing_2025-26.html").read_text(encoding="utf-8")
+    df = parse_nba_l2m_games(html, 2026)
+    assert df.height == 415  # 416 links, one duplicate
+    assert df["game_id"].n_unique() == 415
+    assert df["season_type"].value_counts(sort=True).rows() == [("regular", 386), ("playoffs", 26), ("play-in", 3)]
+    assert df.row(0, named=True) == {
+        "game_id": "0042500405",
+        "season": 2026,
+        "season_type": "playoffs",
+        "label": "Knicks 94, Spurs 90",
+    }
+
+
+def test_listing_url_uses_span(monkeypatch):
+    seen = {}
+
+    def fake_get(url, **kw):
+        seen["url"] = url
+        return _Resp(200, "", "text/html")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    mod.nba_l2m_games(2026)
+    assert seen["url"] == "https://official.nba.com/2025-26-nba-officiating-last-two-minute-reports/"
