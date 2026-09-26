@@ -353,7 +353,9 @@ def test_a_late_filed_defensive_two_follows_its_touchdown() -> None:
     assert [r["type.text"] for r in nxt] == ["Timeout"]
     assert td["period"] == d2p["period"] == 2
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
-    assert abs(d2p["wpa"]) < 0.05, d2p["wpa"]
+    # on its board (PSU 17-16, 0:19 left in the half) the two the defence takes back is a
+    # three-point swing at the break: a real loss for the kicking team, not the placeholder's
+    assert -0.25 < d2p["wpa"] < -0.03, d2p["wpa"]
 
 
 def test_a_two_point_touchdown_reads_espns_structured_result() -> None:
@@ -744,26 +746,16 @@ def test_a_return_touchdown_hands_over_the_scorers_board() -> None:
     end.ExpScoreDiff carries. The plain end view states the lead for the punting team, and
     the pre-2014 defensive-touchdown branch subtracts the try from the scorer's lead.
     """
-    from xgboost import DMatrix
-
-    from sportsdataverse.cfb.cfb_pbp import wp_model
-    from sportsdataverse.cfb.model_vars import wp_end_columns, wp_final_names
 
     plays = _offline_plays(243040265).with_row_index("i")
     (td, (tr,)), *_ = _rows_after_flipped_touchdowns(plays)
     lead = -td["end.pos_score_diff"]
     assert lead == 20
-    scorer = (
-        pl.DataFrame([td])
-        .select(wp_end_columns)
-        .with_columns(
-            pl.lit(lead).alias("end.pos_score_diff"),
-            pl.lit((lead + 0.92) / (td["end.adj_TimeSecsRem"] + 1)).alias("end.ExpScoreDiff_Time_Ratio"),
-        )
-    )
-    scorer.columns = wp_final_names
-    expected = float(wp_model.predict(DMatrix(scorer.to_pandas()))[0])
-    assert tr["wp_before"] == pytest.approx(expected, abs=1e-6)
+    # the scorer's board: the kickoff to come over the try's outcomes, the touchdown's own
+    # wp_after restated from the team that gave up the score to the scorer
+    assert tr["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
+    assert tr["wp_before"] > 0.8
+    assert -0.01 < tr["wpa"] < 0.06, tr["wpa"]
 
 
 def test_a_timeout_between_a_return_touchdown_and_its_try_keeps_the_board() -> None:
@@ -848,3 +840,90 @@ def test_an_interception_returned_for_a_touchdown_is_typed_one() -> None:
     assert r["int_td"]
     assert r["EP_end"] == pytest.approx(-6.92)
     assert r["EPA"] < -6
+
+
+# --- a try ends on the board the kickoff starts from ----------------------------------------
+
+
+_STANDALONE_TRIES = (
+    "Extra Point Good",
+    "Extra Point Missed",
+    "Two-Point Conversion Good",
+    "Two-Point Conversion Missed",
+)
+
+
+def _try_kickoff_pairs(plays: pl.DataFrame) -> list[tuple[dict, dict]]:
+    """Each regulation standalone try row with the kickoff that follows it (stoppages and a
+    walked-off penalty skipped), as (try, kickoff) rows."""
+    rows = plays.sort("game_play_number").to_dicts()
+    out = []
+    for i, r in enumerate(rows):
+        if r["type.text"] not in _STANDALONE_TRIES or (r["period.number"] or 0) > 4:
+            continue
+        j = i + 1
+        while j < len(rows) and rows[j]["type.text"] in ("Timeout", "End Period", "Penalty"):
+            j += 1
+        if j < len(rows) and "kickoff" in str(rows[j]["type.text"]).lower():
+            out.append((r, rows[j]))
+    return out
+
+
+def _restated(row: dict, other: dict) -> float:
+    """``other``'s wp_before in ``row``'s team frame."""
+    same = other["start.pos_team.id"] == row["start.pos_team.id"]
+    return other["wp_before"] if same else 1 - other["wp_before"]
+
+
+@pytest.mark.parametrize("game_id", [282432641, 292542649, 243040265])
+def test_a_try_ends_on_the_board_the_kickoff_starts_from(game_id: int) -> None:
+    """2004-13 standalone tries: row N's wp_after is row N+1's wp_before in the same frame.
+
+    The try's own end state was ESPN's placeholder (down -1, 70 yards out), which the model
+    scored as a live snap; the kickoff that follows starts from the touchback view of the
+    board with the try counted. The try's wp_after is now that value, restated for the
+    kicking team, and its WPA is its result: a made kick a little above the board, a miss
+    below it.
+    """
+    plays = _offline_plays(game_id)
+    pairs = _try_kickoff_pairs(plays)
+    assert len(pairs) >= 3, len(pairs)
+    made = []
+    for t, k in pairs:
+        assert t["wp_after"] == pytest.approx(_restated(t, k), abs=1e-6), (t["id"], t["wp_after"], k["wp_before"])
+        if t["type.text"] == "Extra Point Good":
+            made.append(t["wpa"])
+        elif t["type.text"] == "Extra Point Missed":
+            assert t["wpa"] < 0.005, (t["id"], t["wpa"])
+    # a made kick is a small gain on the board. Some 2004-13 kickoff rows carry the score
+    # of the play after them (282710130: 20-19 on a kickoff taken at 14-19), and that error
+    # is the kickoff's, inherited here rather than hidden; the tolerance is for it.
+    assert made and min(made) > -0.05, made
+    assert sorted(made)[len(made) // 2] >= 0, made
+
+
+def test_a_touchdown_before_a_standalone_try_ends_on_the_boards_expectation() -> None:
+    """292542649 (2009): the touchdown's end state before a standalone try is the kickoff to
+    come, weighted over the try's outcomes, so the try starts on its board and a made kick
+    gains only the 8% it was not already expected to.
+
+    ESPN ends a 2004-13 touchdown at down -1 on the scorer's own 1, which the model read as
+    the scorer pinned at its goal line: every try started below its board (made-XP WPA
+    median +0.016). Now touchdown -> try -> kickoff read one board.
+    """
+    plays = _offline_plays(292542649).sort("game_play_number")
+    rows = plays.to_dicts()
+    made = [
+        (rows[i - 1], r)
+        for i, r in enumerate(rows)
+        if r["type.text"] == "Extra Point Good"
+        and i > 0
+        and "touchdown" in str(rows[i - 1]["type.text"]).lower()
+        and rows[i - 1]["start.pos_team.id"] == r["start.pos_team.id"]
+    ]
+    assert len(made) >= 3, len(made)
+    for td, xp in made:
+        assert xp["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+        # the kick realises the 8% the board did not already count (a kickoff row whose
+        # score lags a play can pull it a little under, see the caveat above)
+        assert -0.05 < xp["wpa"] < 0.06, (xp["id"], xp["wpa"])

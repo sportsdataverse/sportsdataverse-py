@@ -2361,7 +2361,15 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     # scores with the scorer's margin.
     td_start, td_end = _last_play("start.pos_team.id"), _last_play("end.pos_team.id")
     td_kept_frame = td_start == td_end
-    td_flipped_score = (td_start != td_end) & (_last_play("scoringPlay") == True)  # noqa: E712
+    # ESPN leaves scoringPlay off a handful of return touchdowns (261126002, 261022011,
+    # 271021006, 311204034), and on those rows its score columns do not move either, so
+    # the touchdown itself is the signal: the row's type names it, or its text does.
+    _td_row = (_last_play("td_play") == True) if "td_play" in df.columns else pl.lit(False)  # noqa: E712
+    td_flipped_score = (td_start != td_end) & (
+        (_last_play("scoringPlay") == True)  # noqa: E712
+        | _td_row.fill_null(False)
+        | _last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
+    )
     # The row takes it when it is a try of the touchdown's end team, or a clock stoppage
     # just before one. ESPN credits a stoppage to either team (the scorer's timeout after a
     # pick-six sits in the scorer's frame, not the frame of the touchdown row, which started
@@ -2376,6 +2384,33 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         .otherwise(pl.col("start.pos_team.id").shift(-1).over("game_id"))
     )
     td_wp_after = _last_play("wp_after")
+
+    # A try hands over the same way: its wp_after is the next row's wp_before, restated for
+    # the try's team. After a try the next row is the kickoff, whose wp_before is the
+    # receiver's touchback view; a try that ends a half hands to the second-half kickoff.
+    # The model's own end state scored ESPN's placeholder for the try's end.
+    def _next_play(col: pl.Expr) -> pl.Expr:
+        # ``col`` on the first row after this one that is not a clock stoppage
+        stoppage = pl.col("type.text").is_in(clock_stoppage_vec)
+        return pl.when(stoppage).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
+
+    team = pl.col("start.pos_team.id")
+    # A penalty walked off on the kickoff spot after the try is dead-ball the same way: the
+    # try hands to the kickoff through it, and the penalty row sits on that board.
+    _pen_before_kick = (pl.col("type.text") == "Penalty") & _next_play(pl.col("type.text").is_in(kickoff_vec))
+
+    def _next_live(col: pl.Expr) -> pl.Expr:
+        skip = pl.col("type.text").is_in(clock_stoppage_vec) | _pen_before_kick
+        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
+
+    kick_team, kick_wb = _next_live(team), _next_live(pl.col("wp_before"))
+    try_to_kickoff = (
+        (is_try | _pen_before_kick)
+        & _next_live(pl.col("type.text").is_in(kickoff_vec))
+        & team.is_not_null()
+        & kick_team.is_not_null()
+    )
+    kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
 
     play_df = (
         df.with_columns(
@@ -2400,6 +2435,8 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                 & pl.col("start.pos_team.id").is_not_null()
             )
             .then(pl.when(pl.col("start.pos_team.id") == td_end).then(td_wp_after).otherwise(1 - td_wp_after))
+            .when(_pen_before_kick & kick_team.is_not_null())
+            .then(kick_board)
             .otherwise(pl.col("wp_before")),
         )
         .with_columns(
@@ -2455,6 +2492,8 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
                 .and_(_start_pos_score_diff_end < 0),
             )
             .then(0.0)
+            .when(try_to_kickoff)
+            .then(kick_board)
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
