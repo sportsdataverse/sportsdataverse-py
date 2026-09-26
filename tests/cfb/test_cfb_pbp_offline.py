@@ -221,6 +221,8 @@ def _trimmed(game_id: int) -> dict:
       overtimes; the third and fourth are two-point attempts, all filed under Alabama.
     * ``summary_322802005_trimmed.json.gz`` -- Navy @ Air Force, 2012 week 6. Navy's
       overtime touchdown is a fumble recovered in the end zone, typed "Rush".
+    * ``summary_292810142_trimmed.json.gz`` -- Nebraska @ Missouri, 2009 week 6. Missouri
+      scores and kicks the extra point with no time left in the half.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -677,6 +679,21 @@ def test_an_overtime_try_after_a_touchdown_typed_as_the_play_hands_over() -> Non
     td = plays.row(r["i"] - 1, named=True)
     assert td["td_play"] and td["pos_team"] == r["pos_team"]
     assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
+def test_a_try_at_the_end_of_a_half_realises_its_own_result() -> None:
+    """292810142: "Blaine Gabbert rush for 1 yard for a TOUCHDOWN." and "Grant Ressel extra
+    point GOOD." at 0:00 of the second quarter.
+
+    The end-of-half branch books a non-scoring play ending a half -EP_start, and ESPN did not
+    flag the kick as scoring: a made extra point realised -0.92. A try row's EPA is its own
+    result, EP_end - EP_start.
+    """
+    plays = _offline_plays(292810142)
+    r = plays.filter(pl.col("text") == "Grant Ressel extra point GOOD.").row(0, named=True)
+    assert r["clock.displayValue"] == "0:00"
+    assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), 1)
+    assert r["EPA"] == pytest.approx(0.08)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:
