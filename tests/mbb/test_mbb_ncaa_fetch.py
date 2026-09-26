@@ -1029,3 +1029,37 @@ def test_ban_check_ignores_blocked_shot_in_real_content(tmp_path: Path) -> None:
     fetcher = NcaaFetcher(_cfg(tmp_path, transport))
     assert fetcher.fetch_html("contests/1613299/play_by_play") == real
     assert len(transport.calls) == 1  # accepted first response, no rotation
+
+
+def test_sweep_orphan_profiles_reaps_only_dead_or_stale_unmarked(tmp_path):
+    """Profiles stranded by killed runs are reaped; a live owner's profile never is."""
+    import os
+    import subprocess
+    import sys
+    import time
+
+    from sportsdataverse.mbb import mbb_ncaa_fetch as f
+
+    dead = subprocess.Popen([sys.executable, "-c", "pass"])
+    dead.wait()
+
+    def profile(name, owner=None, age_s=0):
+        """An ncaa_pw_* dir, optionally owner-marked, with its mtime pushed back ``age_s``."""
+        d = tmp_path / f"ncaa_pw_{name}"
+        d.mkdir()
+        if owner is not None:
+            (d / f._OWNER_FILE).write_text(str(owner))
+        stamp = time.time() - age_s
+        os.utime(d, (stamp, stamp))
+        return d
+
+    live = profile("live", owner=os.getpid())
+    orphan = profile("orphan", owner=dead.pid)
+    old_unmarked = profile("old", age_s=2 * 86_400)
+    new_unmarked = profile("new")
+    unrelated = tmp_path / "patchright_udd_x"
+    unrelated.mkdir()
+
+    assert f._sweep_orphan_profiles(str(tmp_path)) == 2
+    assert live.exists() and new_unmarked.exists() and unrelated.exists()
+    assert not orphan.exists() and not old_unmarked.exists()

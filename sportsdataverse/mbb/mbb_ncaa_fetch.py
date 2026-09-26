@@ -105,6 +105,7 @@ import logging
 import math
 import os
 import re
+import shutil
 import time
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -608,6 +609,55 @@ def _raw_fetch(page: Any, url: str, nav_timeout_ms: int) -> "tuple[int, str]":
     return status, text
 
 
+_PROFILE_PREFIX = "ncaa_pw_"
+_OWNER_FILE = ".sdv_owner_pid"
+_UNMARKED_MAX_AGE_S = 86_400
+
+
+def _pid_alive(pid: int) -> bool:
+    """True unless ``pid`` is certainly gone (a PID we may not signal is alive)."""
+    if os.name == "nt":
+        # On Windows os.kill(pid, 0) is not a probe: 0 is CTRL_C_EVENT, which would
+        # interrupt that process group. Treat every owner as alive there.
+        return True
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def _sweep_orphan_profiles(root: str) -> int:
+    """Remove ``ncaa_pw_*`` Chromium profiles whose owning process is gone.
+
+    ``close()``, ``atexit`` and GC finalizers cannot run when a scraper is
+    SIGKILLed (OOM, pkill, a killed shard), so each such exit stranded one
+    ~8 MB profile in TMPDIR -- 48 in one day of backfill restarts (2026-09-25).
+    Each profile records its owner's PID, so this never touches a live
+    process's profile; a recycled PID only errs toward keeping a dir.
+    Unmarked dirs (created before the marker) go once they are a day old.
+    Returns the number removed.
+    """
+    removed = 0
+    for d in Path(root).glob(f"{_PROFILE_PREFIX}*"):
+        try:
+            owner = int((d / _OWNER_FILE).read_text())
+        except (OSError, ValueError):
+            owner = None
+        try:
+            if owner is None and time.time() - d.stat().st_mtime < _UNMARKED_MAX_AGE_S:
+                continue
+        except OSError:
+            continue
+        if owner is not None and _pid_alive(owner):
+            continue
+        shutil.rmtree(d, ignore_errors=True)
+        removed += 1
+    return removed
+
+
 class _PlaywrightTransport:
     """Stateful `FetchTransport` that drives an anti-detect Chromium (patchright)
     to clear the Akamai ``bm-verify`` challenge, then returns raw server HTML.
@@ -724,7 +774,11 @@ class _PlaywrightTransport:
         # Retain the profile dir on the instance so close() can remove it; a bare
         # mkdtemp leaked one dir per launch, and the browser relaunches on every
         # proxy rotation. TemporaryDirectory also GC-finalizes as a backstop.
-        self._temp_dir = tempfile.TemporaryDirectory(prefix="ncaa_pw_")
+        # Reap profiles stranded by killed runs, then mark ours so a later sweep
+        # can tell it is live (see _sweep_orphan_profiles).
+        _sweep_orphan_profiles(tempfile.gettempdir())
+        self._temp_dir = tempfile.TemporaryDirectory(prefix=_PROFILE_PREFIX)
+        Path(self._temp_dir.name, _OWNER_FILE).write_text(str(os.getpid()))
         launch_kwargs: "dict[str, object]" = {
             "user_data_dir": self._temp_dir.name,
             "user_agent": self.user_agent,
@@ -760,8 +814,10 @@ class _PlaywrightTransport:
         if self._temp_dir is not None:
             try:
                 self._temp_dir.cleanup()
-            except Exception:  # noqa: BLE001 - best-effort; a lingering file lock may defer it
-                pass
+            except Exception:  # noqa: BLE001 - Chromium may still be writing into it
+                # Our PID is alive, so the orphan sweep would never reclaim this dir;
+                # remove what we can now rather than strand it for the process lifetime.
+                shutil.rmtree(self._temp_dir.name, ignore_errors=True)
             self._temp_dir = None
         self._browser = self._page = None
         self._challenge_solved = False
