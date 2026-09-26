@@ -378,6 +378,8 @@ _TRY_TYPES = (
     # it EPA ~-7.7
     "Defensive 2pt Conversion",
 )
+#: The text of a try the defence returned for two, whatever ESPN typed the row.
+_DEFENSIVE_TRY_RETURN = r"(?i)for (?:a )?(?:2-point |two-point )?defensive (?:pat|two-point conversion|conversion)"
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
@@ -2650,6 +2652,19 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
                 )
                 .then(pl.lit("Extra Point Missed"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # 2007-13 types a try the defence returned for two as the kick it started as:
+                # "extra point BLOCKED returned for 2-point defensive conversion by Leon
+                # McFadden." (Extra Point Missed), "pass attempt failed (intercepted), returned
+                # by Hamlin, M for defensive PAT." (Extra Point Good). It scored 0 or +1 for the
+                # kicking team instead of the -2 a "Defensive 2pt Conversion" row carries.
+                pl.when(
+                    pl.col("type.text").is_in(_TRY_TYPES).and_(pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)),
+                )
+                .then(pl.lit("Defensive 2pt Conversion"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )

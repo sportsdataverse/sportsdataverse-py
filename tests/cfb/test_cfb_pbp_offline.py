@@ -179,6 +179,9 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_401756960_trimmed.json.gz`` -- Kansas State @ Utah, 2025 week 13.
     * ``summary_401525860_trimmed.json.gz`` -- UCF @ Kansas, 2023 week 6. Each carries a
       two-point touchdown whose text names no try result (see the test below).
+    * ``summary_272650152_trimmed.json.gz`` -- Clemson @ NC State, 2007 week 4. Clemson
+      intercepts NC State's two-point try and returns it for two; ESPN typed the row
+      "Extra Point Good".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -336,3 +339,36 @@ def test_a_two_point_touchdown_reads_espns_structured_result() -> None:
         if result == "failure":
             d2p = plays.row(r["i"] + 1, named=True)
             assert (d2p["type.text"], d2p["EP_end"]) == ("Defensive 2pt Conversion", -2), game_id
+
+
+def test_a_try_the_defence_returned_is_typed_a_defensive_two() -> None:
+    """272650152: "Evans, D. pass attempt failed (intercepted), returned by Hamlin, M for
+    defensive PAT." -- typed "Extra Point Good", so it realised +1 for NC State (EPA +0.08)
+    while Clemson's score went 37 -> 39. 2007-13 carry 36 such rows, 35 of them typed
+    "Extra Point Missed" (0 instead of -2).
+    """
+    plays = _offline_plays(272650152).with_row_index("i")
+    r = plays.filter(pl.col("text").str.contains("for defensive PAT")).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Extra Point Good", "Defensive 2pt Conversion")
+    assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), -2)
+    td = plays.row(r["i"] - 1, named=True)
+    assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Passing Touchdown"
+    assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Ryan Griffith extra point BLOCKED returned for 2-point defensive conversion by Leon McFadden.",
+        "Paul Young extra point BLOCKED; Damion Owens return of blocked extra point for two-point defensive conversion.",
+        "Two-point conversion attempt, Zac Robinson fumble recovered by Frank Alexander and returned for a "
+        "defensive two-point conversion.",
+        "KEENUM, Case pass attempt failed (intercepted), returned by FERGUSON, Josh for defensive PAT.",
+        "Cole Way rush attempt failed  (fumbled), returned  for defensive PAT..",
+    ],
+)
+def test_defensive_try_return_text_shapes(text: str) -> None:
+    """Every 2004-13 shape of a returned try (the corpus has these five)."""
+    from sportsdataverse.cfb.cfb_pbp import _DEFENSIVE_TRY_RETURN
+
+    assert pl.Series([text]).str.contains(_DEFENSIVE_TRY_RETURN).item()
