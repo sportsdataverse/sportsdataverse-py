@@ -187,6 +187,10 @@ def _trimmed(game_id: int) -> dict:
       State returns an interception for a touchdown, calls a timeout and tries for two.
     * ``summary_400547980_trimmed.json.gz`` -- Northwestern @ Notre Dame, 2014. Notre Dame
       returns a fumble for a touchdown and Northwestern returns the try for two.
+    * ``summary_401756930_trimmed.json.gz`` -- Baylor @ Cincinnati, 2025 week 9. Two Baylor
+      touchdowns whose appended two-point tries carry a no-play penalty.
+    * ``summary_322430041_trimmed.json.gz`` -- UMass @ UConn, 2012 week 1. A pick-six ESPN
+      typed "Pass Interception".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -462,3 +466,72 @@ def test_a_timeout_between_a_return_touchdown_and_its_try_keeps_the_board() -> N
     assert timeout["wp_before"] == pytest.approx(1 - td["wp_after"], abs=1e-6)
     assert timeout["wp_after"] == pytest.approx(timeout["wp_before"], abs=1e-6)
     assert tr["wp_before"] == pytest.approx(timeout["wp_after"], abs=1e-6)
+
+
+def test_a_no_play_on_the_try_does_not_wipe_out_the_touchdown() -> None:
+    """401756930: "... rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 #13
+    S.Robertson pass attempt failed ... PENALTY CIN Face Mask (#2 D.Corleone). NO PLAY #23
+    M.Turner rush attempt Successful" (Baylor 12-27 -> 20-27).
+
+    The 2025+ vendor template appends the try, penalties and all, to the touchdown row, and
+    ESPN's no-play marker there is the try's. It negated the touchdown: the row stayed
+    "Rush" and realised EP_end -0.29 (EPA -6.13), and the "Passing Touchdown" row of the same
+    shape did not count as a passing touchdown.
+    """
+    plays = _offline_plays(401756930)
+    rush = plays.filter(pl.col("id") == 401756930616).row(0, named=True)
+    assert (rush["orig_play_type"], rush["type.text"]) == ("Rush", "Rushing Touchdown")
+    assert rush["td_play"] and rush["rush_td"]
+    assert (rush["two_point_conv_result"], rush["EP_end"]) == ("success", 8)
+    catch = plays.filter(pl.col("id") == 401756930467).row(0, named=True)
+    assert catch["type.text"] == "Passing Touchdown" and catch["pass_td"]
+
+
+@pytest.mark.parametrize(
+    ("text", "scoring", "negated"),
+    [
+        # the try's no-play marker, on a touchdown ESPN scored
+        (
+            "No Huddle-Shotgun #13 S.Robertson rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 "
+            "#13 S.Robertson pass attempt failed PENALTY CIN Pass Interference (#8 O.Arnold) 1 yard from CIN03 "
+            "to CIN02. NO PLAY #23 M.Turner rush attempt Successful",
+            True,
+            False,
+        ),
+        # the same text on a row ESPN did not score is read whole
+        (
+            "No Huddle-Shotgun #13 S.Robertson rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 "
+            "PENALTY CIN Holding 10 yards from CIN10 to CIN20. NO PLAY",
+            False,
+            True,
+        ),
+        # a touchdown that did not stand
+        (
+            "No Huddle-Shotgun #18 C.Coppock rush left for 27 yards gain to the FIU00 TOUCHDOWN nullified by "
+            "penalty, clock 06:01 PENALTY KSU Holding (#17 G.Bullock Jr.) 10 yards from FIU27 to FIU37. NO PLAY",
+            False,
+            True,
+        ),
+        ("Jordan Travis pass complete to Ontaria Wilson for 20 yds for a TD (NO PLAY)", True, True),
+    ],
+)
+def test_touchdown_negated_reads_the_try_tail_as_the_trys(text: str, scoring: bool, negated: bool) -> None:
+    from sportsdataverse.cfb.cfb_pbp import _touchdown_negated
+
+    frame = pl.DataFrame({"text": [text], "scoringPlay": [scoring]})
+    assert frame.select(_touchdown_negated()).item() is negated
+
+
+def test_an_interception_returned_for_a_touchdown_is_typed_one() -> None:
+    """322430041: "Mike Wegzyn pass intercepted by Dwayne Gratz at the UMass 37, returned for 37
+    yards for a TOUCHDOWN." (UConn 13-0 -> 19-0), typed "Pass Interception".
+
+    Only "pass intercepted for a TD" was retyped, so the row stayed "Interception Return" and
+    realised UMass's own EP at the end of a turnover (EPA +0.46).
+    """
+    plays = _offline_plays(322430041)
+    r = plays.filter(pl.col("id") == 322430041105).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Pass Interception", "Interception Return Touchdown")
+    assert r["int_td"]
+    assert r["EP_end"] == pytest.approx(-6.92)
+    assert r["EPA"] < -6
