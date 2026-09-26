@@ -21,6 +21,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   "Interception Return", not "... Touchdown")
 * ``summary_401547449_trimmed.json.gz`` -- LA @ IND, 2023 week 4 (two touchdowns with a
   successful two-point conversion, each followed by a clock-stoppage row)
+* ``summary_401128075_trimmed.json.gz`` -- JAX @ IND, 2019 week 11 (IND up 31-13 returns a
+  JAX try for a defensive two-point conversion)
 """
 
 from __future__ import annotations
@@ -616,3 +618,33 @@ def test_clock_stoppage_after_a_score_does_not_inherit_the_realized_ep():
     assert f["EP_start"].drop_nulls().abs().max() <= 7.0
     non_scoring = f.filter(pl.col("EP_end").is_not_null() & (pl.col("scoring_play") == False))  # noqa: E712
     assert non_scoring["EP_end"].abs().max() <= 7.0
+
+
+# --- a defensive two-point conversion is scored as a try -------------------------------------------
+
+
+def test_defensive_two_point_conversion_is_scored_as_a_try() -> None:
+    """401128075: IND returns a JAX try for two, IND up 31-13 in the fourth.
+
+    The kicking team goes from a try's expected value to -2, so EPA is about -2.9, and an
+    18 -> 20 point deficit this late cannot swing win probability. It published EPA -7.26:
+    "Defensive 2pt Conversion" was missing from the fixed-EP try list, so the model scored
+    ESPN's down-0 start state as a scrimmage snap (EP 5.26). The CFB twin is #571.
+    """
+    plays = _process(401128075).with_row_index("i")
+    d2p = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")
+    assert d2p.height == 1
+    r = d2p.row(0, named=True)
+    assert r["EP_start"] == 0.92
+    assert -4 <= r["EPA"] <= -2, r["EPA"]
+    assert abs(r["wpa"]) < 0.05, r["wpa"]
+
+    td, _, kickoff = plays.filter(pl.col("i").is_between(r["i"] - 1, r["i"] + 1)).iter_rows(named=True)
+    assert (td["type.text"], kickoff["type.text"]) == ("Passing Touchdown", "Kickoff")
+    # JAX (30) scores and tries; IND (11) receives the kickoff JAX then makes
+    assert [td["pos_team"], r["pos_team"], kickoff["pos_team"]] == [30, 30, 11]
+    # WP hands over across the three rows: the try starts where the TD ended, and ends
+    # where the kickoff starts, restated from the receiver's frame into JAX's
+    assert abs(td["wp_after"] - r["wp_before"]) < 0.01
+    assert r["wp_after"] == pytest.approx(1 - kickoff["wp_before"])
+    assert r["home_wp_after"] == pytest.approx(kickoff["home_wp_before"])

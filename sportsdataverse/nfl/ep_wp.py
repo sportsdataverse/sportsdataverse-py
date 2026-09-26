@@ -1881,9 +1881,9 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         rewritten to ``0.92`` for scoring-attempt play types (``Extra Point
         Good``, ``Extra Point Missed``, ``Two-Point Conversion Good``,
         ``Two-Point Conversion Missed``, ``Two Point Pass``, ``Two Point Rush``,
-        ``Blocked PAT``) before any other overlays fire.  ``EP_start`` /
-        ``EP_end`` are then rewritten in place (overlays, sign flips,
-        touchback), ``EP_between``, ``lag_EP_end`` and
+        ``Blocked PAT``, ``Defensive 2pt Conversion``) before any other overlays
+        fire.  ``EP_start`` / ``EP_end`` are then rewritten in place (overlays,
+        sign flips, touchback), ``EP_between``, ``lag_EP_end`` and
         ``lag_change_of_pos_team`` are added, ``EPA`` is added, and lowercase
         nflverse aliases ``ep`` (``= EP_end``), ``epa`` (``= EPA``),
         ``ep_start`` (``= EP_start``) and ``ep_end`` (``= EP_end``) are added
@@ -1962,6 +1962,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
                         "Two Point Pass",
                         "Two Point Rush",
                         "Blocked PAT",
+                        # the defence returning the try for two is still a try: without
+                        # this the model scored ESPN's down-0 start state as a scrimmage
+                        # snap (EP 2.3-5.3) and the -2 below made it EPA -4.3..-7.3
+                        "Defensive 2pt Conversion",
                     ],
                 ),
             )
