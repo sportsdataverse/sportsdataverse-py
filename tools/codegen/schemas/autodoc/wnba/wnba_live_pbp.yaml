@@ -1,0 +1,43 @@
+schema: wnba_live_pbp
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: action_number
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: clock
+  type: character
+  description: ''
+- name: time_actual
+  type: character
+  description: ''
+- name: action_type
+  type: character
+  description: ''
+- name: sub_type
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: person_id
+  type: integer
+  description: ''
+- name: official_id
+  type: integer
+  description: ''
+- name: x_legacy
+  type: double
+  description: ''
+- name: y_legacy
+  type: double
+  description: ''
+- name: description
+  type: character
+  description: ''

@@ -298,7 +298,11 @@ from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers
 from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
+from sportsdataverse.nba import nba_l2m as nba_l2m  # noqa: F401
+from sportsdataverse.nba import nba_l2m_games as nba_l2m_games  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
+from sportsdataverse.nba import nba_live_boxscore as nba_live_boxscore  # noqa: F401
+from sportsdataverse.nba import nba_live_pbp as nba_live_pbp  # noqa: F401
 from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F401
@@ -311,6 +315,7 @@ from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # 
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_season_frame  # noqa: F401
+from sportsdataverse.nba import nba_referee_assignments as nba_referee_assignments  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
 from sportsdataverse.nba import nba_schedule_crosswalk as nba_schedule_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
@@ -330,6 +335,11 @@ from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import nbadraft_mock_draft as nbadraft_mock_draft  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nba import parse_nba_l2m as parse_nba_l2m  # noqa: F401
+from sportsdataverse.nba import parse_nba_l2m_games as parse_nba_l2m_games  # noqa: F401
+from sportsdataverse.nba import parse_nba_live_boxscore as parse_nba_live_boxscore  # noqa: F401
+from sportsdataverse.nba import parse_nba_live_pbp as parse_nba_live_pbp  # noqa: F401
+from sportsdataverse.nba import parse_nba_referee_assignments as parse_nba_referee_assignments  # noqa: F401
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
 from sportsdataverse.nba import player_play_context as player_play_context  # noqa: F401
 from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
@@ -656,7 +666,11 @@ __all__ = [
     "nba_foul_drawing",
     "nba_four_factor_rapm",
     "nba_in_game_win_prob",
+    "nba_l2m",
+    "nba_l2m_games",
     "nba_la_rapm",
+    "nba_live_boxscore",
+    "nba_live_pbp",
     "nba_matchup_drapm",
     "nba_pbp_disk",
     "nba_play_context",
@@ -669,6 +683,7 @@ __all__ = [
     "nba_predict_games",
     "nba_ratings_panel",
     "nba_raw_store_season_frame",
+    "nba_referee_assignments",
     "nba_rookie_projection",
     "nba_schedule_crosswalk",
     "nba_shot_value",
@@ -689,6 +704,11 @@ __all__ = [
     "nbadraft_mock_draft",
     "normalize_player_name",
     "normalize_team_roster_columns",
+    "parse_nba_l2m",
+    "parse_nba_l2m_games",
+    "parse_nba_live_boxscore",
+    "parse_nba_live_pbp",
+    "parse_nba_referee_assignments",
     "parse_nba_stats_result_sets",
     "player_play_context",
     "player_rates",

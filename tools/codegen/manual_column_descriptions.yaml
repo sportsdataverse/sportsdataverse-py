@@ -15907,6 +15907,105 @@ nba_aging_curve:
   rel_value: 'Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player
     consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the
     peak age is exactly 1.0 and the lowest-valued age 0.4.'
+nba_live_boxscore:
+  away_players.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's player entry.
+  away_players.jersey_num: Player's jersey number as a string.
+  away_players.name: Player's display name.
+  away_players.person_id: NBA/WNBA player id.
+  away_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
+  away_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
+  away_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  away_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
+  away_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
+  away_team.score: Team's current or final score.
+  away_team.team_id: NBA/WNBA team id of the side (home or away).
+  away_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  game.attendance: Reported attendance figure for the game, when published by the feed.
+  game.away_team_id: NBA/WNBA team id of the away team, taken from the payload's awayTeam object.
+  game.game_id: 10-digit NBA/WNBA game id (zero-padded), from the payload's game.gameId.
+  game.game_status: 'Numeric game status code from the feed: 1 scheduled, 2 in progress, 3 final.'
+  game.game_time_utc: Scheduled tip-off time in UTC (ISO-8601 timestamp).
+  game.home_team_id: NBA/WNBA team id of the home team, taken from the payload's homeTeam object.
+  home_players.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's player entry.
+  home_players.jersey_num: Player's jersey number as a string.
+  home_players.name: Player's display name.
+  home_players.person_id: NBA/WNBA player id.
+  home_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
+  home_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
+  home_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  home_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
+  home_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
+  home_team.score: Team's current or final score.
+  home_team.team_id: NBA/WNBA team id of the side (home or away).
+  home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  officials.assignment: Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot.
+  officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.
+  officials.jersey_num: Official's jersey number as a string.
+  officials.name: Official's display name.
+  officials.person_id: NBA/WNBA person id of the on-court official.
+nba_live_pbp:
+  action_number: Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically.
+  action_type: Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover.
+  clock: ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS.
+  description: Long-form human-readable description of the action, as shown on NBA.com's live scoreboard.
+  game_id: 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId.
+  official_id: Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season.
+  period: 'Period of the game: 1-4 for quarters, 5+ for overtime periods.'
+  person_id: NBA/WNBA player id of the primary person involved in the action, when applicable.
+  sub_type: Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket.
+  team_id: NBA/WNBA team id of the team associated with the action, when applicable.
+  time_actual: Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time.
+  x_legacy: Shot or event x-coordinate in the legacy stats.nba.com coordinate system.
+  y_legacy: Shot or event y-coordinate in the legacy stats.nba.com coordinate system.
+nba_l2m_games:
+  game_id: 10-digit NBA game id (zero-padded), parsed from the season listing page's report link.
+  label: Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)".
+  season: NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row.
+  season_type: 'Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or
+    nba-cup-final.'
+nba_l2m:
+  calls.call: Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE.
+  calls.call_type: 'Cleaned "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover: 24 Second Violation".'
+  calls.comment: Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)".
+  calls.committing: Player, team nickname, or coach responsible for the graded action.
+  calls.decision: 'Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect
+    non-call); null when the report marks the play undetectable at game speed.'
+  calls.decision_raw: Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into
+    decision.
+  calls.difficulty: Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable.
+  calls.disadvantaged: Player or team nickname disadvantaged by the graded action, blank when not applicable.
+  calls.game_id: 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables.
+  calls.pc_time: Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format.
+  calls.period: 'Period number extracted from period_name''s digits: 4 for the fourth quarter, 5+ for overtime periods (Q5
+    = OT1 through Q8 = OT4).'
+  calls.period_name: Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime.
+  calls.pos_end: Game clock at the end of the possession containing this graded play.
+  calls.pos_id: Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end
+    belong to the same possession.
+  calls.pos_start: Game clock at the start of the possession containing this graded play.
+  calls.pos_team_id: 10-digit NBA team id of the team in possession during the graded play.
+  calls.seconds_remaining: Seconds remaining in the period at the graded play, parsed out of pc_time.
+  calls.type: Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION.
+  calls.video_event_id: L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play
+    EVENTNUM, so it cannot be joined to pbp data.
+  game.away_score: Away team's final score for the game.
+  game.away_team_abbr: Three-letter abbreviation of the away team.
+  game.away_team_id: 10-digit NBA team id (1610612xxx) of the away team.
+  game.away_team_name: Away team nickname as published in the report.
+  game.game_date: Game date parsed from the report's local tip-off timestamp (no timezone offset is applied).
+  game.game_id: 10-digit NBA game id (zero-padded), the join key to the calls and stats tables.
+  game.home_score: Home team's final score for the game.
+  game.home_team_abbr: Three-letter abbreviation of the home team.
+  game.home_team_id: 10-digit NBA team id (1610612xxx) of the home team.
+  game.home_team_name: Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder.
+  game.l2m_comments: Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost
+    every game.
+  game.season_type: 'Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in,
+    or nba-cup-final.'
+  stats.away: Value of stat_name attributed to the away team.
+  stats.game_id: 10-digit NBA game id (zero-padded), the join key to the calls and game tables.
+  stats.home: Value of stat_name attributed to the home team.
+  stats.stat_name: 'Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor.'
 nba_player_crosswalk:
   nba_jersey_num: Jersey number as a string from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the
     athlete had no Stats match.
@@ -15917,6 +16016,29 @@ nba_player_crosswalk:
     no Stats match.
   nba_position: Position from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats
     match.
+nba_referee_assignments:
+  officials.away_team_abbr: Three-letter abbreviation of the away team.
+  officials.away_team_id: 10-digit NBA team id of the away team.
+  officials.crew_position: Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not
+    label roles.
+  officials.game_code: League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations.
+  officials.game_date: Game date parsed from the feed's MM/DD/YYYY format.
+  officials.game_id: 10-digit game id (zero-padded) for the assigned game.
+  officials.home_team_abbr: Three-letter abbreviation of the home team.
+  officials.home_team_id: 10-digit NBA team id of the home team.
+  officials.jersey_num: Official's jersey number as a string, from the feed's official{n}_JNum field.
+  officials.league: 'League the assignment belongs to: nba, gl (G League), or wnba.'
+  officials.official_id: Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's
+    OFFICIAL_ID.
+  officials.official_name: Official's display name for this crew slot.
+  officials.season: 'Season end year, converted from the feed''s <season-type digit><start year> code: start year + 1 for
+    NBA/G League''s two-calendar-year seasons, start year unchanged for WNBA''s single-year seasons.'
+  officials.season_type: 'Season type decoded from the feed''s season code first digit: preseason, regular, all-star, playoffs,
+    play-in, or nba-cup-final.'
+  replay_center.game_date: Date the replay-center official worked; a date-level staffing record, not tied to one game.
+  replay_center.league: 'League the replay-center staffing belongs to: nba, gl, or wnba.'
+  replay_center.official_id: Numeric replay-center official id from the feed.
+  replay_center.official_name: Replay-center official's display name for that date.
 nba_team_crosswalk:
   nba_conference: Team's conference as NBA Stats labels it (conference) from nba_stats_leaguestandingsv3; null when no Stats
     team matched the ESPN team.
@@ -26287,3 +26409,76 @@ wnba_aging_curve:
   rel_value: 'Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player
     consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the
     peak age is exactly 1.0 and the lowest-valued age 0.4.'
+wnba_live_boxscore:
+  away_players.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's player entry.
+  away_players.jersey_num: Player's jersey number as a string.
+  away_players.name: Player's display name.
+  away_players.person_id: NBA/WNBA player id.
+  away_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
+  away_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
+  away_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  away_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
+  away_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
+  away_team.score: Team's current or final score.
+  away_team.team_id: NBA/WNBA team id of the side (home or away).
+  away_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  game.attendance: Reported attendance figure for the game, when published by the feed.
+  game.away_team_id: NBA/WNBA team id of the away team, taken from the payload's awayTeam object.
+  game.game_id: 10-digit NBA/WNBA game id (zero-padded), from the payload's game.gameId.
+  game.game_status: 'Numeric game status code from the feed: 1 scheduled, 2 in progress, 3 final.'
+  game.game_time_utc: Scheduled tip-off time in UTC (ISO-8601 timestamp).
+  game.home_team_id: NBA/WNBA team id of the home team, taken from the payload's homeTeam object.
+  home_players.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's player entry.
+  home_players.jersey_num: Player's jersey number as a string.
+  home_players.name: Player's display name.
+  home_players.person_id: NBA/WNBA player id.
+  home_players.played: Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0").
+  home_players.position: Listed roster position (G, F, C, etc.), populated only for starters.
+  home_players.starter: Feed's starter flag as a string ("true"/"false") for whether the player started the game.
+  home_players.team_id: NBA/WNBA team id of the side (home or away) the player belongs to.
+  home_team.game_id: 10-digit NBA/WNBA game id (zero-padded) for this side's team entry.
+  home_team.score: Team's current or final score.
+  home_team.team_id: NBA/WNBA team id of the side (home or away).
+  home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  officials.assignment: Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot.
+  officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.
+  officials.jersey_num: Official's jersey number as a string.
+  officials.name: Official's display name.
+  officials.person_id: NBA/WNBA person id of the on-court official.
+wnba_live_pbp:
+  action_number: Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically.
+  action_type: Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover.
+  clock: ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS.
+  description: Long-form human-readable description of the action, as shown on NBA.com's live scoreboard.
+  game_id: 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId.
+  official_id: Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season.
+  period: 'Period of the game: 1-4 for quarters, 5+ for overtime periods.'
+  person_id: NBA/WNBA player id of the primary person involved in the action, when applicable.
+  sub_type: Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket.
+  team_id: NBA/WNBA team id of the team associated with the action, when applicable.
+  time_actual: Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time.
+  x_legacy: Shot or event x-coordinate in the legacy stats.nba.com coordinate system.
+  y_legacy: Shot or event y-coordinate in the legacy stats.nba.com coordinate system.
+wnba_referee_assignments:
+  officials.away_team_abbr: Three-letter abbreviation of the away team.
+  officials.away_team_id: 10-digit NBA team id of the away team.
+  officials.crew_position: Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not
+    label roles.
+  officials.game_code: League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations.
+  officials.game_date: Game date parsed from the feed's MM/DD/YYYY format.
+  officials.game_id: 10-digit game id (zero-padded) for the assigned game.
+  officials.home_team_abbr: Three-letter abbreviation of the home team.
+  officials.home_team_id: 10-digit NBA team id of the home team.
+  officials.jersey_num: Official's jersey number as a string, from the feed's official{n}_JNum field.
+  officials.league: 'League the assignment belongs to: nba, gl (G League), or wnba.'
+  officials.official_id: Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's
+    OFFICIAL_ID.
+  officials.official_name: Official's display name for this crew slot.
+  officials.season: 'Season end year, converted from the feed''s <season-type digit><start year> code: start year + 1 for
+    NBA/G League''s two-calendar-year seasons, start year unchanged for WNBA''s single-year seasons.'
+  officials.season_type: 'Season type decoded from the feed''s season code first digit: preseason, regular, all-star, playoffs,
+    play-in, or nba-cup-final.'
+  replay_center.game_date: Date the replay-center official worked; a date-level staffing record, not tied to one game.
+  replay_center.league: 'League the replay-center staffing belongs to: nba, gl, or wnba.'
+  replay_center.official_id: Numeric replay-center official id from the feed.
+  replay_center.official_name: Replay-center official's display name for that date.

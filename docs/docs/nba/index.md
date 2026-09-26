@@ -14,7 +14,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 36 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 173 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 178 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -103,4 +103,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_nba_schedule`](reference/loaders#load_nba_schedule) | [`load_nba_schedule`](https://hoopR.sportsdataverse.org/reference/load_nba_schedule.html) |
 | [`load_nba_standings`](reference/loaders#load_nba_standings) | [`load_nba_standings`](https://hoopR.sportsdataverse.org/reference/load_nba_standings.html) |
 | [`most_recent_nba_season`](reference/additional#most_recent_nba_season) | [`most_recent_nba_season`](https://hoopR.sportsdataverse.org/reference/most_recent_nba_season.html) |
+| [`nba_live_boxscore`](reference/additional#nba_live_boxscore) | [`nba_live_boxscore`](https://hoopR.sportsdataverse.org/reference/nba_live_boxscore.html) |
+| [`nba_live_pbp`](reference/additional#nba_live_pbp) | [`nba_live_pbp`](https://hoopR.sportsdataverse.org/reference/nba_live_pbp.html) |
 | [`year_to_season`](reference/additional#year_to_season) | [`year_to_season`](https://hoopR.sportsdataverse.org/reference/year_to_season.html) |

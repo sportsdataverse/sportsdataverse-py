@@ -3551,6 +3551,130 @@ pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 wp = nba_in_game_win_prob(pbp, 0.62)
 ```
 
+### `nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'` {#nba_l2m}
+
+Fetch and parse an NBA Last Two Minute report from official.nba.com.
+
+Retrieves the L2M report for a given game and returns parsed tables of calls,
+game metadata, and error statistics. The game_id is zero-padded to 10 digits
+(e.g., 42500405 becomes "0042500405"). Reports are typically available only for
+NBA and playoff games during the last two minutes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (can be int or str). Automatically zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a dict with keys `"calls"`, `"game"`, `"stats"` mapping to DataFrames as documented in `parse_nba_l2m`.
+
+| col_name | type | description |
+|---|---|---|
+| `calls.game_id` | character | 10-digit NBA game id (zero-padded), the join key back to the L2M game and stats tables. |
+| `calls.period` | integer | Period number extracted from period_name's digits: 4 for the fourth quarter, 5+ for overtime periods (Q5 = OT1 through Q8 = OT4). |
+| `calls.period_name` | character | Raw NBA.com period label for the graded play, e.g. Q4 for the fourth quarter or Q5 for the first overtime. |
+| `calls.pc_time` | character | Raw game clock string from the L2M report before normalization, in MM:SS or MM:SS.t tenths-of-a-second format. |
+| `calls.seconds_remaining` | double | Seconds remaining in the period at the graded play, parsed out of pc_time. |
+| `calls.call_type` | character | Cleaned "Call: Type" label from the report, e.g. "Foul: Shooting" or "Turnover: 24 Second Violation". |
+| `calls.call` | character | Upper-cased category before the colon in call_type, e.g. FOUL, TURNOVER, or STOPPAGE. |
+| `calls.type` | character | Upper-cased detail after the colon in call_type, e.g. SHOOTING or 24 SECOND VIOLATION. |
+| `calls.committing` | character | Player, team nickname, or coach responsible for the graded action. |
+| `calls.disadvantaged` | character | Player or team nickname disadvantaged by the graded action, blank when not applicable. |
+| `calls.decision` | character | Normalized grading decision: CC (correct call), CNC (correct non-call), IC (incorrect call), or INC (incorrect non-call); null when the report marks the play undetectable at game speed. |
+| `calls.decision_raw` | character | Raw grading code from the report before normalization, including the rare NCC/NCI aliases folded into decision. |
+| `calls.comment` | character | Grader's free-text explanation of the ruling, sometimes naming a player as "Last (TEAM)". |
+| `calls.difficulty` | character | Grader's difficulty rating for the play, e.g. Observable, Difficult, Blatant/Hard, or Undetectable. |
+| `calls.video_event_id` | character | L2M video event id from the report (source field VideolLink, sic); not a stats.nba.com play-by-play EVENTNUM, so it cannot be joined to pbp data. |
+| `calls.pos_id` | integer | Possession id assigned by the report, rising monotonically across the game; rows sharing pos_start/pos_end belong to the same possession. |
+| `calls.pos_start` | character | Game clock at the start of the possession containing this graded play. |
+| `calls.pos_end` | character | Game clock at the end of the possession containing this graded play. |
+| `calls.pos_team_id` | integer | 10-digit NBA team id of the team in possession during the graded play. |
+| `game.game_id` | character | 10-digit NBA game id (zero-padded), the join key to the calls and stats tables. |
+| `game.game_date` | date | Game date parsed from the report's local tip-off timestamp (no timezone offset is applied). |
+| `game.season_type` | character | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `game.home_team_id` | integer | 10-digit NBA team id (1610612xxx) of the home team. |
+| `game.away_team_id` | integer | 10-digit NBA team id (1610612xxx) of the away team. |
+| `game.home_team_abbr` | character | Three-letter abbreviation of the home team. |
+| `game.away_team_abbr` | character | Three-letter abbreviation of the away team. |
+| `game.home_team_name` | character | Home team nickname as published in the report, e.g. Thunder rather than Oklahoma City Thunder. |
+| `game.away_team_name` | character | Away team nickname as published in the report. |
+| `game.home_score` | integer | Home team's final score for the game. |
+| `game.away_score` | integer | Away team's final score for the game. |
+| `game.l2m_comments` | character | Report-level note from the league, e.g. a technical-issue disclaimer about missing video; null for almost every game. |
+| `stats.game_id` | character | 10-digit NBA game id (zero-padded), the join key to the calls and game tables. |
+| `stats.stat_name` | character | Name of the report-level error-rate statistic: Calls, Errors in Favor, or Possessions in Favor. |
+| `stats.home` | integer | Value of stat_name attributed to the home team. |
+| `stats.away` | integer | Value of stat_name attributed to the away team. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_l2m
+result = nba_l2m("0042500405")
+calls = result["calls"]
+print(f"Game had {calls.height} tracked plays in the L2M window")
+
+# Parse as pandas instead
+
+result = nba_l2m("0042500405", return_as_pandas=True)
+calls_pd = result["calls"]
+
+# Access raw JSON
+
+payload = nba_l2m("0042500405", raw=True)
+print(payload["game"])
+```
+
+### `nba_l2m_games(season: 'int', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'pl.DataFrame'` {#nba_l2m_games}
+
+Fetch the list of games with Last Two Minute reports for an NBA season.
+
+Retrieves and parses the L2M season index page from official.nba.com,
+returning a table of all games for which L2M reports exist. JSON reports
+exist only from 2019-01-01 onward; earlier seasons' index pages list PDFs,
+which this function ignores. For historical access, use `load_nba_l2m`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | The NBA season (end year), e.g., 2026 for the 2025-26 season. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+A DataFrame with schema `{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}`, one row per unique game ID in page order.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | 10-digit NBA game id (zero-padded), parsed from the season listing page's report link. |
+| `season` | integer | NBA season end year passed to the function (e.g. 2026 for the 2025-26 season), stamped onto every row. |
+| `season_type` | character | Season type inferred from the third digit of game_id: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `label` | character | Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)". |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_l2m_games
+df = nba_l2m_games(2026)
+print(f"Season had {df.height} games with L2M reports")
+
+# Get playoff games only
+
+df = nba_l2m_games(2026)
+playoffs = df.filter(df["season_type"] == "playoffs")
+
+# Convert to pandas
+
+df = nba_l2m_games(2026, return_as_pandas=True)
+```
+
 ### `nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_la_rapm}
 
 Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
@@ -3585,6 +3709,125 @@ print(df.sort("la_rapm", descending=True).head())
 # Planted-truth shooter rates (e.g. for testing)
 
 df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
+```
+
+### `nba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#nba_live_boxscore}
+
+Fetch and parse NBA cdn.nba.com liveData boxscore for a game.
+
+Retrieves `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{game_id}.json`
+and parses it via `parse_nba_live_boxscore` into six tables (game,
+officials, home/away players, home/away team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (int or str). Zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict[str, str] \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a dict of DataFrames as documented in `parse_nba_live_boxscore`.
+
+| col_name | type | description |
+|---|---|---|
+| `game.game_id` | character | 10-digit NBA/WNBA game id (zero-padded), from the payload's game.gameId. |
+| `game.game_status` | integer | Numeric game status code from the feed: 1 scheduled, 2 in progress, 3 final. |
+| `game.game_time_utc` | character | Scheduled tip-off time in UTC (ISO-8601 timestamp). |
+| `game.home_team_id` | integer | NBA/WNBA team id of the home team, taken from the payload's homeTeam object. |
+| `game.away_team_id` | integer | NBA/WNBA team id of the away team, taken from the payload's awayTeam object. |
+| `game.attendance` | integer | Reported attendance figure for the game, when published by the feed. |
+| `officials.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked. |
+| `officials.person_id` | integer | NBA/WNBA person id of the on-court official. |
+| `officials.name` | character | Official's display name. |
+| `officials.jersey_num` | character | Official's jersey number as a string. |
+| `officials.assignment` | character | Crew role label from the feed, e.g. official1/official2/official3 or a replay-center slot. |
+| `home_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
+| `home_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
+| `home_players.person_id` | integer | NBA/WNBA player id. |
+| `home_players.name` | character | Player's display name. |
+| `home_players.jersey_num` | character | Player's jersey number as a string. |
+| `home_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
+| `home_players.starter` | character | Feed's starter flag as a string ("true"/"false") for whether the player started the game. |
+| `home_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `away_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
+| `away_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
+| `away_players.person_id` | integer | NBA/WNBA player id. |
+| `away_players.name` | character | Player's display name. |
+| `away_players.jersey_num` | character | Player's jersey number as a string. |
+| `away_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
+| `away_players.starter` | character | Feed's starter flag as a string ("true"/"false") for whether the player started the game. |
+| `away_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `home_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
+| `home_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
+| `home_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
+| `home_team.score` | integer | Team's current or final score. |
+| `away_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
+| `away_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
+| `away_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
+| `away_team.score` | integer | Team's current or final score. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_live import nba_live_boxscore
+result = nba_live_boxscore("0022500001")
+officials = result["officials"]
+print(officials.select("person_id", "name", "assignment"))
+```
+
+### `nba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#nba_live_pbp}
+
+Fetch and parse NBA cdn.nba.com liveData play-by-play for a game.
+
+Retrieves `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{game_id}.json`
+and parses it via `parse_nba_live_pbp`. Unlike stats.nba.com's
+play-by-play, this feed carries per-whistle referee ids (`official_id`,
+populated on every foul since the 2019-20 season) and wall-clock timestamps
+(`time_actual`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (int or str). Zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of a DataFrame. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
+| `proxy` | `dict[str, str] \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a DataFrame as documented in `parse_nba_live_pbp`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId. |
+| `action_number` | integer | Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically. |
+| `period` | integer | Period of the game: 1-4 for quarters, 5+ for overtime periods. |
+| `clock` | character | ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS. |
+| `time_actual` | character | Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time. |
+| `action_type` | character | Action category from the feed, e.g. foul, Made Shot, Substitution, or Turnover. |
+| `sub_type` | character | Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket. |
+| `team_id` | integer | NBA/WNBA team id of the team associated with the action, when applicable. |
+| `person_id` | integer | NBA/WNBA player id of the primary person involved in the action, when applicable. |
+| `official_id` | integer | Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season. |
+| `x_legacy` | double | Shot or event x-coordinate in the legacy stats.nba.com coordinate system. |
+| `y_legacy` | double | Shot or event y-coordinate in the legacy stats.nba.com coordinate system. |
+| `description` | character | Long-form human-readable description of the action, as shown on NBA.com's live scoreboard. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_live import nba_live_pbp
+pbp = nba_live_pbp("0022500001")
+print(pbp.filter(pbp["action_type"] == "foul").height)
+
+# Pipeline next step (fouls with a referee id)
+
+fouls = pbp.filter(pbp["action_type"] == "foul").select("official_id", "time_actual")
 ```
 
 ### `nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_matchup_drapm}
@@ -4046,6 +4289,65 @@ logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_s
 
 frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
 positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
+```
+
+### `nba_referee_assignments(date: 'str | _dt.date', *, league: 'str' = 'nba', raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'` {#nba_referee_assignments}
+
+Fetch and parse NBA referee assignments for a given date from official.nba.com.
+
+Retrieves the referee crew assignments and replay center officials for all games
+on a given date across NBA, G-League, and WNBA. The `crew_position` column (1–4)
+represents the feed's slot order; slot 1 is inferred to be the crew chief. The
+`season` column converts from the feed's format to an END year: START+1 for
+NBA/G-League (two-calendar-year seasons) and START unchanged for WNBA.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `str \| date` |  | The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date). |
+| `league` | `str` | `'nba'` | The league to extract ("nba", "gl", or "wnba"). Defaults to "nba". |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dict with keys `"officials"` and `"replay_center"` mapping to DataFrames as documented in `parse_nba_referee_assignments`.
+
+| col_name | type | description |
+|---|---|---|
+| `officials.league` | character | League the assignment belongs to: nba, gl (G League), or wnba. |
+| `officials.game_id` | character | 10-digit game id (zero-padded) for the assigned game. |
+| `officials.game_date` | date | Game date parsed from the feed's MM/DD/YYYY format. |
+| `officials.season` | integer | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
+| `officials.season_type` | character | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `officials.game_code` | character | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
+| `officials.home_team_id` | integer | 10-digit NBA team id of the home team. |
+| `officials.home_team_abbr` | character | Three-letter abbreviation of the home team. |
+| `officials.away_team_id` | integer | 10-digit NBA team id of the away team. |
+| `officials.away_team_abbr` | character | Three-letter abbreviation of the away team. |
+| `officials.crew_position` | integer | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
+| `officials.official_id` | integer | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
+| `officials.official_name` | character | Official's display name for this crew slot. |
+| `officials.jersey_num` | character | Official's jersey number as a string, from the feed's official{n}_JNum field. |
+| `replay_center.league` | character | League the replay-center staffing belongs to: nba, gl, or wnba. |
+| `replay_center.game_date` | date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
+| `replay_center.official_id` | integer | Numeric replay-center official id from the feed. |
+| `replay_center.official_name` | character | Replay-center official's display name for that date. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_referee_assignments
+result = nba_referee_assignments("2026-06-13")
+officials = result["officials"]
+print(f"Found {officials.height} official slots")
+
+# Fetch WNBA assignments for the same date
+
+result = nba_referee_assignments("2026-06-13", league="wnba")
+wnba_officials = result["officials"]
 ```
 
 ### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}

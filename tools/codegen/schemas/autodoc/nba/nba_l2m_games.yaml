@@ -1,0 +1,16 @@
+schema: nba_l2m_games
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: label
+  type: character
+  description: ''
