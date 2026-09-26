@@ -378,6 +378,8 @@ _TRY_TYPES = (
     # it EPA ~-7.7
     "Defensive 2pt Conversion",
 )
+#: The text of a try the defence returned for two, whatever ESPN typed the row.
+_DEFENSIVE_TRY_RETURN = r"(?i)for (?:a )?(?:2-point |two-point )?defensive (?:pat|two-point conversion|conversion)"
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
@@ -1088,6 +1090,27 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
         .filter((pl.col("_tdrv") == pl.col("_drv")) | (pl.col("_ndrv") == pl.col("_drv")))
         .select("_pos", "_tpos")
     )
+    # A try row fails the drive test when ESPN files it under a pseudo drive ("...0") or
+    # sequences it past the kickoff that follows (401628559: a defensive two with id
+    # ...104999903 and sequence 102998955, after the next drive's kneel). It belongs right
+    # after its touchdown: the last one sequenced before it in the same period. Only
+    # defensive twos meet this in 2014-2026 (7 rows, 2020-24).
+    tries = df.filter(pl.col("_late") & pl.col("type.text").is_in(_TRY_TYPES)).join(target, on="_pos", how="anti")
+    if tries.height:
+        tds = df.filter(~pl.col("_late") & pl.col("type.text").str.contains("(?i)touchdown")).select(
+            _tpos="_pos", _tseq="_seq", _tper="_per"
+        )
+        target = pl.concat(
+            [
+                target,
+                tries.select("_pos", "_seq", "_per")
+                .join(tds, how="cross")
+                .filter((pl.col("_tseq") < pl.col("_seq")) & (pl.col("_tper") == pl.col("_per")))
+                .sort("_tseq")
+                .group_by("_pos")
+                .agg(pl.col("_tpos").last()),
+            ]
+        )
     if target.height == 0:
         return plays_df
     return (
@@ -2629,6 +2652,19 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
                 )
                 .then(pl.lit("Extra Point Missed"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # 2007-13 types a try the defence returned for two as the kick it started as:
+                # "extra point BLOCKED returned for 2-point defensive conversion by Leon
+                # McFadden." (Extra Point Missed), "pass attempt failed (intercepted), returned
+                # by Hamlin, M for defensive PAT." (Extra Point Good). It scored 0 or +1 for the
+                # kicking team instead of the -2 a "Defensive 2pt Conversion" row carries.
+                pl.when(
+                    pl.col("type.text").is_in(_TRY_TYPES).and_(pl.col("text").str.contains(_DEFENSIVE_TRY_RETURN)),
+                )
+                .then(pl.lit("Defensive 2pt Conversion"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -4513,10 +4549,17 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(None)
                 .alias("extra_point_result"),
-                # two_point_conv_result: "success" | "failure" | null (non-TD plays)
+                # two_point_conv_result: "success" | "failure" | null (non-TD plays). The
+                # offence's result, as in nflfastR: when the defence returns the try the value
+                # can be ITS two (401525860: "Two Point Rush", value 2, score +6, and a
+                # "Defensive 2pt Conversion" row next).
                 pl.when(pl.col("pointAfterAttempt.abbreviation").str.contains(r"(?i)two.?point"))
                 .then(
-                    pl.when(pl.col("pointAfterAttempt.value") == 2.0)
+                    pl.when(
+                        (pl.col("pointAfterAttempt.value") == 2.0).and_(
+                            pl.col("type.text").shift(-1).ne_missing("Defensive 2pt Conversion")
+                        )
+                    )
                     .then(pl.lit("success"))
                     .otherwise(pl.lit("failure"))
                 )
@@ -6355,6 +6398,24 @@ class CFBPlayProcess(object):
             == True
         )
 
+        # The two-point try folded into a touchdown row: ESPN's structured result
+        # (``two_point_conv_result``, from pointAfterAttempt) where the text names none --
+        # "LJ Martin run for 9 yds for a TD (Jake Retzlaff intercepted)", "Dylan McDuffie 1 Yd
+        # Run" -- else those rows fell through to the 6.92 unknown. A text "failed" still wins:
+        # in the 6 rows where it disagrees with a value-2 pointAfterAttempt ("Two-Point Run
+        # Conversion Failed", 2019-26), ESPN's score moved by 6.
+        _lower = pl.col("text").str.to_lowercase()
+        two_pt_failed = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed"))
+        two_pt_good = _lower.str.contains(r"(?i)conversion").and_(_lower.str.contains(r"(?i)failed") == False)
+        if "two_point_conv_result" in play_df.columns:
+            two_pt_failed = (pl.col("two_point_conv_result") == "failure").fill_null(False).or_(two_pt_failed)
+            two_pt_good = (
+                (pl.col("two_point_conv_result") == "success")
+                .fill_null(False)
+                .or_(two_pt_good)
+                .and_(two_pt_failed.not_())
+            )
+
         play_df = (
             play_df.with_columns(
                 EP_start=pl.when(
@@ -6382,18 +6443,10 @@ class CFBPlayProcess(object):
                 )
                 .then(-2)
                 # Defense TD + Successful Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-                )
+                .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
                 .then(-8)
                 # Defense TD + Failed Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-                )
+                .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
                 .then(-6)
                 # Defense TD + Kick/PAT Missed. Reads __add_xp_suffix_cols: the old text test
                 # matched an upper-case "PAT" against lower-cased text, so it never fired.
@@ -6415,18 +6468,10 @@ class CFBPlayProcess(object):
                 .when(pl.col("type.text").is_in(defense_score_vec))
                 .then(-6.92)
                 # Offense TD + Failed Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-                )
+                .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
                 .then(6)
                 # Offense TD + Successful Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-                )
+                .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
                 .then(8)
                 # Offense Made FG
                 .when(

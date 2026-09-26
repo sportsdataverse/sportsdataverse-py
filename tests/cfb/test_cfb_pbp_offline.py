@@ -171,6 +171,17 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_401234597_trimmed.json.gz`` -- North Carolina @ Boston College, 2020
       week 5. BC's touchdown with 0:45 left makes it 22-24, and UNC returns the two-point
       try for 26-22.
+    * ``summary_401628559_trimmed.json.gz`` -- Penn State @ Minnesota, 2024 week 12.
+      Minnesota returns PSU's blocked kick try for two with 0:18 left in the half; ESPN
+      filed the return with id ...104999903 and sequence 102998955, both past the next
+      drive's kickoff.
+    * ``summary_401778334_trimmed.json.gz`` -- Wake Forest @ Mississippi State, 2025 week 1.
+    * ``summary_401756960_trimmed.json.gz`` -- Kansas State @ Utah, 2025 week 13.
+    * ``summary_401525860_trimmed.json.gz`` -- UCF @ Kansas, 2023 week 6. Each carries a
+      two-point touchdown whose text names no try result (see the test below).
+    * ``summary_272650152_trimmed.json.gz`` -- Clemson @ NC State, 2007 week 4. Clemson
+      intercepts NC State's two-point try and returns it for two; ESPN typed the row
+      "Extra Point Good".
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -284,3 +295,80 @@ def test_a_try_row_starts_where_the_touchdown_ended() -> None:
     assert td["start.pos_team.id"] == d2p["start.pos_team.id"] == 103
     assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
     assert -0.2 < d2p["wpa"] < -0.05, d2p["wpa"]
+
+
+def test_a_late_filed_defensive_two_follows_its_touchdown() -> None:
+    """401628559: ESPN filed Minnesota's return of PSU's try for two at the end of the game.
+
+    Its id (...104999903) sorts after the final whistle and its sequence (102998955) after
+    the next drive's kickoff and kneel, so the late-insert pass could not place it: the row
+    sat last, in period 2, and took the end-of-game WP (wp_before 0.97, wp_after 1.0). A
+    late try row now goes right after the last touchdown sequenced before it.
+    """
+    plays = _offline_plays(401628559).with_row_index("i")
+    i = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p, *nxt = plays.filter(pl.col("i").is_between(i - 1, i + 1)).iter_rows(named=True)
+    assert td["type.text"] == "Rushing Touchdown", td["type.text"]
+    assert [r["type.text"] for r in nxt] == ["Timeout"]
+    assert td["period"] == d2p["period"] == 2
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert abs(d2p["wpa"]) < 0.05, d2p["wpa"]
+
+
+def test_a_two_point_touchdown_reads_espns_structured_result() -> None:
+    """The try ESPN folds into a touchdown row, when the text names no result.
+
+    ``two_point_conv_result`` comes from ESPN's pointAfterAttempt; the EP_end overlay read
+    only the text ("conversion" plus "failed"), so these rows took the 6.92 unknown.
+
+    * 401778334 "... to the MSU00 TOUCHDOWN, clock 14:06, 1ST DOWN": Two Point Rush, 2 -> 8.
+    * 401756960 "J. Jackson run for 24 yds, for a TD (Av. Johnson pass Failed)": 0 -> 6, and
+      the defence's return on the next row keeps its own -2.
+    * 401525860 "Dylan McDuffie 1 Yd Run": Two Point Rush, value 2 -- UCF's two, not Kansas's:
+      the score moves by 6 and UCF's "Defensive 2pt Conversion" follows. The offence's
+      result is "failure" and the touchdown realises 6.
+    """
+    for game_id, row_id, result, ep_end in (
+        (401778334, 401778334456, "success", 8),
+        (401756960, 401756960729, "failure", 6),
+        (401525860, 401525860103929701, "failure", 6),
+    ):
+        plays = _offline_plays(game_id).with_row_index("i")
+        r = plays.filter(pl.col("id") == row_id).row(0, named=True)
+        assert (r["two_point_conv_result"], r["EP_end"]) == (result, ep_end), game_id
+        if result == "failure":
+            d2p = plays.row(r["i"] + 1, named=True)
+            assert (d2p["type.text"], d2p["EP_end"]) == ("Defensive 2pt Conversion", -2), game_id
+
+
+def test_a_try_the_defence_returned_is_typed_a_defensive_two() -> None:
+    """272650152: "Evans, D. pass attempt failed (intercepted), returned by Hamlin, M for
+    defensive PAT." -- typed "Extra Point Good", so it realised +1 for NC State (EPA +0.08)
+    while Clemson's score went 37 -> 39. 2007-13 carry 36 such rows, 35 of them typed
+    "Extra Point Missed" (0 instead of -2).
+    """
+    plays = _offline_plays(272650152).with_row_index("i")
+    r = plays.filter(pl.col("text").str.contains("for defensive PAT")).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == ("Extra Point Good", "Defensive 2pt Conversion")
+    assert (r["EP_start"], r["EP_end"]) == (pytest.approx(0.92), -2)
+    td = plays.row(r["i"] - 1, named=True)
+    assert td["pos_team"] == r["pos_team"] and td["type.text"] == "Passing Touchdown"
+    assert r["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Ryan Griffith extra point BLOCKED returned for 2-point defensive conversion by Leon McFadden.",
+        "Paul Young extra point BLOCKED; Damion Owens return of blocked extra point for two-point defensive conversion.",
+        "Two-point conversion attempt, Zac Robinson fumble recovered by Frank Alexander and returned for a "
+        "defensive two-point conversion.",
+        "KEENUM, Case pass attempt failed (intercepted), returned by FERGUSON, Josh for defensive PAT.",
+        "Cole Way rush attempt failed  (fumbled), returned  for defensive PAT..",
+    ],
+)
+def test_defensive_try_return_text_shapes(text: str) -> None:
+    """Every 2004-13 shape of a returned try (the corpus has these five)."""
+    from sportsdataverse.cfb.cfb_pbp import _DEFENSIVE_TRY_RETURN
+
+    assert pl.Series([text]).str.contains(_DEFENSIVE_TRY_RETURN).item()
