@@ -23,6 +23,8 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   successful two-point conversion, each followed by a clock-stoppage row)
 * ``summary_401128075_trimmed.json.gz`` -- JAX @ IND, 2019 week 11 (IND up 31-13 returns a
   JAX try for a defensive two-point conversion)
+* ``summary_401030824_trimmed.json.gz`` -- LAC @ DEN, 2018 week 17 (DEN's failed two-point
+  try returned by LAC; the text carries both results)
 """
 
 from __future__ import annotations
@@ -648,3 +650,28 @@ def test_defensive_two_point_conversion_is_scored_as_a_try() -> None:
     assert abs(td["wp_after"] - r["wp_before"]) < 0.01
     assert r["wp_after"] == pytest.approx(1 - kickoff["wp_before"])
     assert r["home_wp_after"] == pytest.approx(kickoff["home_wp_before"])
+
+
+# --- two_point_conv_result is the offence's try ---------------------------------------------------
+
+
+def test_two_point_result_is_the_offences_when_the_defence_returns_the_try() -> None:
+    """401030824: DEN's try fails and LAC returns it for two (Q4 10:10, DEN down 3-14).
+
+    The text carries both results -- "ATTEMPT FAILS. DEFENSIVE TWO-POINT ATTEMPT. C.Hayward
+    intercepted the try attempt. ATTEMPT SUCCEEDS." -- and the SUCCEEDS is the defence's.
+    Reading it booked DEN a made two: two_point_conv_result "success" and a touchdown EP_end
+    of 8. The standalone "Defensive 2pt Conversion" row that follows carries the -2, so the
+    touchdown realises 6.
+    """
+    plays = _process(401030824)
+    td = plays.filter(
+        (pl.col("type.text") == "Passing Touchdown") & pl.col("text").str.contains("DEFENSIVE TWO-POINT")
+    ).row(0, named=True)
+    d2p = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion").row(0, named=True)
+    assert td["two_point_conv_result"] == d2p["two_point_conv_result"] == "failure"
+    assert td["EP_end"] == 6
+    assert d2p["EP_end"] == -2
+    # the two points are LAC's (away): 14 -> 16, and DEN (home) 3 -> 9
+    assert (d2p["awayScore"], d2p["homeScore"]) == (16, 9)
+

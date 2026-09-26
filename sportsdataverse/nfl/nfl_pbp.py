@@ -2973,12 +2973,18 @@ class NFLPlayProcess(object):
             if "two_point_conv_result" in play_df.columns
             else pl.lit(None, dtype=pl.Utf8)
         )
+        # two_point_conv_result is the OFFENCE's try (nflverse keeps it "failure" and flags
+        # defensive_two_point_conv when the defence returns it). A returned try reads "...
+        # ATTEMPT FAILS. DEFENSIVE TWO-POINT ATTEMPT. C.Hayward intercepted the try attempt.
+        # ATTEMPT SUCCEEDS." -- that SUCCEEDS is the defence's, and reading it booked the
+        # offence a made two (TD EP_end 8 instead of 6; 401030824, 401030967, 401772892).
+        _offence_try = pl.col("text").str.replace(r"DEFENSIVE TWO-POINT.*$", "")
         play_df = play_df.with_columns(
             two_point_conv_result=pl.when(
-                (pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT SUCCEEDS")),  # noqa: E712
+                (pl.col("two_point_attempt") == True).and_(_offence_try.str.contains("ATTEMPT SUCCEEDS")),  # noqa: E712
             )
             .then(pl.lit("success"))
-            .when((pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT FAILS")))  # noqa: E712
+            .when((pl.col("two_point_attempt") == True).and_(_offence_try.str.contains("ATTEMPT FAILS")))  # noqa: E712
             .then(pl.lit("failure"))
             .otherwise(_existing_2pt_result),
             two_point_pass=(pl.col("two_point_attempt") == True).and_(  # noqa: E712
