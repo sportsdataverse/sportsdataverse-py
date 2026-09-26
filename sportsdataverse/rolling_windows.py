@@ -38,6 +38,7 @@ from __future__ import annotations
 import polars as pl
 
 __all__ = [
+    "COUNTED_SEASON_TYPES",
     "EVENT_SCHEMA",
     "FOOTBALL_PBP_COLUMNS",
     "OUTPUT_SCHEMA",
@@ -148,8 +149,18 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
         Quick start::
 
             import polars as pl
-            from sportsdataverse.rolling_windows import football_events
+            from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+            from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
 
+            pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+            sched = load_cfb_schedule(2024)
+            game_dates = sched.select(
+                pl.col("game_id").cast(pl.Int64),
+                game_date=pl.col("start_date")
+                .str.to_datetime(time_zone="UTC")
+                .dt.convert_time_zone("America/New_York")
+                .dt.date(),
+            )
             ev = football_events(pbp, game_dates)
             ev.filter(pl.col("window_unit") == "dropback").head()
 
@@ -275,24 +286,51 @@ def rolling_windows(
 
     Returns:
         pl.DataFrame: one row per (entity, unit, metric, window size), ``OUTPUT_SCHEMA``.
-        ``prev`` / ``season_start`` need a FULL window and ``career_baseline`` at least
-        one window of history, else null; ``qualified`` is ``True`` iff ``n == window_n``;
-        ``delta_prev_rank`` (1 = biggest riser, ties share the lowest rank) is null unless
-        ``qualified`` and ``prev`` exists.
+        Null / NaN event values are dropped before any window is computed. Columns:
+
+        * ``cur``: the mean of the entity's last ``window_n`` events through ``season``.
+        * ``prev``: the mean of the ``window_n`` events immediately before ``cur``'s
+          window; null unless a full window of earlier history exists.
+        * ``season_start``: the mean of the ``window_n`` events immediately before
+          season ``season`` started -- i.e. the entity's form entering the season,
+          not counting any event actually played in ``season``.
+        * ``career_baseline``: the mean of every event before ``cur``'s window,
+          including earlier events within ``season`` itself; null unless at least
+          one full window of history precedes it.
+        * ``qualified``: ``True`` iff ``n == window_n`` -- the window is fully
+          populated (not padded by a short career). Consumers building a "hottest"
+          list should filter on this first.
+        * ``team_id`` / ``entity_name``: taken from the entity's single latest event
+          through ``season``, so a player who changed teams mid-season is labelled
+          with their current team.
+        * ``delta_prev_rank``: 1 = biggest riser, ties share the lowest rank; null
+          unless ``qualified`` and ``prev`` exists.
 
     Example:
         Quick start::
 
             import polars as pl
-            from sportsdataverse.rolling_windows import football_events, rolling_windows
+            from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+            from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
 
+            pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+            sched = load_cfb_schedule(2024)
+            game_dates = sched.select(
+                pl.col("game_id").cast(pl.Int64),
+                game_date=pl.col("start_date")
+                .str.to_datetime(time_zone="UTC")
+                .dt.convert_time_zone("America/New_York")
+                .dt.date(),
+            )
             ev = football_events(pbp, game_dates)
             rw = rolling_windows(ev, 2024)
             rw.filter(pl.col("window_unit") == "dropback").head()
 
         Pipeline next step (one line)::
 
-            rw.filter(pl.col("delta_prev_rank") == 1).select("entity_name", "window_unit", "window_n")
+            rw.filter(pl.col("qualified") & (pl.col("delta_prev_rank") == 1)).select(
+                "entity_name", "window_unit", "window_n"
+            )
     """
     windows = WINDOWS if windows is None else windows
     ev = events.filter((pl.col("season") <= season) & pl.col("value").is_not_null() & pl.col("value").is_not_nan())
@@ -300,8 +338,10 @@ def rolling_windows(
     if current.height == 0:
         return pl.DataFrame(schema=OUTPUT_SCHEMA)
     as_of = current["event_date"].max()
-    # ponytail: whole history in memory (~2 GB for CFB 2004-2026); pre-filter to the
-    # season's active entities if a runner OOMs
+    # ponytail: whole history in memory. Measured on real CFB data: ~1.5 GB peak
+    # RSS for 4 seasons / 2.2M events, scaling roughly linearly with event count,
+    # so a full 2004-2026 CFB history (~23 seasons) is roughly 5-7 GB. Pre-filter
+    # to the season's active entities first if a runner OOMs.
     ev = (
         ev.sort([*_KEY, "event_date", "game_id", "seq"], maintain_order=True)
         .with_columns(
@@ -316,12 +356,8 @@ def rolling_windows(
             _r0=pl.col("_prior") - 1 - pl.col("_i"),  # 0 = the last event before the season
         )
     )
-    parts = [
-        _window(ev.filter(pl.col("window_unit") == unit), size)
-        for unit, sizes in windows.items()
-        for size in sizes
-        if ev.filter(pl.col("window_unit") == unit).height
-    ]
+    by_unit = ev.partition_by("window_unit", as_dict=True)
+    parts = [_window(by_unit[(unit,)], size) for unit, sizes in windows.items() for size in sizes if (unit,) in by_unit]
     if not parts:
         return pl.DataFrame(schema=OUTPUT_SCHEMA)
     # ranking (and rank-eligibility) reads a fully-qualified window with a full
