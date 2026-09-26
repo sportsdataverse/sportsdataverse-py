@@ -27,6 +27,12 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
   try returned by LAC; the text carries both results)
 * ``summary_401671740_trimmed.json.gz`` -- PHI @ TB, 2024 week 4 (a blocked extra point
   returned for two inside the touchdown row, with no standalone try row)
+* ``summary_301003002_trimmed.json.gz`` -- NYJ @ BUF, 2010 week 4 (seven extra points on
+  standalone try rows)
+* ``summary_400874512_trimmed.json.gz`` -- BAL @ CLE, 2016 week 2 (a blocked extra point
+  returned for two on a standalone try row, CLE up 20-0)
+* ``summary_221013028_trimmed.json.gz`` -- NO @ WSH, 2002 week 6 (a timeout between a
+  touchdown and its extra point, twice)
 """
 
 from __future__ import annotations
@@ -704,3 +710,47 @@ def test_defensive_two_folded_into_the_touchdown_row_nets_four() -> None:
     td = plays.filter(pl.col("text").str.contains("DEFENSIVE TWO-POINT") & (pl.col("type.text") == "Passing Touchdown"))
     assert td["EP_end"].to_list() == [6]
 
+
+# --- a try row starts where the touchdown ended --------------------------------------------------
+
+
+def test_a_try_row_starts_where_the_touchdown_ended() -> None:
+    """Row N's wp_after is row N+1's wp_before across touchdown -> try.
+
+    The try row's wp_before was the WP model on ESPN's placeholder try state (down 0 or -1,
+    at the 2, the 0 or the 100), which it read as another snap near the goal line: 0.10
+    above nflfastR's PAT WP on average. A made extra point then published a negative WPA,
+    -0.21 for NYJ's in 301003002 (0.41 -> 0.20). The touchdown's end state (the board with the
+    TD counted, the other team about to receive) is the side that matches the PAT WP.
+    400874512 is the report case: the defensive-two row started at 0.827 against the
+    touchdown's 0.751. A timeout between the two (221013028) scores the same placeholder, so
+    the touchdown hands over through it.
+    """
+    plays = _process(301003002).with_columns(
+        pl.col("wp_after").shift(1).alias("prev_wp_after"),
+        pl.col("start.pos_team.id").shift(1).alias("prev_pos_team"),
+    )
+    xps = plays.filter(pl.col("type.text") == "Extra Point Good")
+    assert xps.height == 7
+    assert (xps["prev_pos_team"] == xps["start.pos_team.id"]).all()
+    assert (xps["wp_before"] - xps["prev_wp_after"]).abs().max() < 1e-6
+    # a made extra point cannot cost the kicking team win probability
+    assert xps["wpa"].min() > -0.005, xps["wpa"].to_list()
+
+    plays = _process(400874512)
+    i = plays.with_row_index("i").filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p = plays.slice(i - 1, 2).iter_rows(named=True)
+    assert td["start.pos_team.id"] == d2p["start.pos_team.id"] == 5
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+    plays = _process(221013028).with_columns(
+        pl.col("type.text").shift(1).alias("prev_type"),
+        pl.col("wp_before").shift(1).alias("timeout_wp_before"),
+        pl.col("wp_after").shift(2).alias("td_wp_after"),
+    )
+    xps = plays.filter((pl.col("type.text") == "Extra Point Good") & (pl.col("prev_type") == "Timeout"))
+    assert xps.height == 2
+    for r in xps.iter_rows(named=True):
+        assert r["timeout_wp_before"] == pytest.approx(r["td_wp_after"], abs=1e-6)
+        assert r["wp_before"] == pytest.approx(r["td_wp_after"], abs=1e-6)
+        assert r["wpa"] > 0, r["wpa"]

@@ -5258,6 +5258,12 @@ Derivation rules (mirror the original process_wpa`):
   win-probability scored from the touchback feature view — before any
   other column derives.  This is the WP analogue of the EPA `0.92`
   scoring-attempt overlay and must fire first.
+* **Try rows:** a standalone try row (`Extra Point Good`, `Two Point
+  Pass`, `Defensive 2pt Conversion`, ...), and a clock stoppage just
+  before one, take the `wp_after` of the last play before them as their
+  `wp_before` when that play is the same possession's and kept its
+  frame, so the touchdown hands over to the try. The model cannot score
+  the try's own start state (ESPN's down-0 placeholder).
 * `def_wp_before = 1 - wp_before`; `home_wp_before` / `away_wp_before`
   are the posteam->home perspective columns (the offense's `wp_before`
   flows to home when the start possession team is the home team, otherwise
