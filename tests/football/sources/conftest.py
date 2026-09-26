@@ -17,31 +17,38 @@ CFB_GAME_ID = 401628334  # 2024 week 1 (final)
 
 @pytest.fixture(scope="session")
 def nfl_summary() -> dict:
+    """The stored ESPN summary for the NFL fixture game."""
     return json.loads((NFL_FIX / f"summary_{NFL_GAME_ID}.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture(scope="session")
 def cfb_summary() -> dict:
+    """The stored ESPN summary for the CFB fixture game."""
     return json.loads((CFB_FIX / f"summary_{CFB_GAME_ID}.json").read_text(encoding="utf-8"))
 
 
-@pytest.fixture(scope="session")
-def no_network():
-    """Any download on the processor modules is a test failure (the offline path must not reach ESPN)."""
-    import sportsdataverse.cfb.cfb_pbp as cfb_mod
-    import sportsdataverse.nfl.cbs_pbp.game_id as cbs_id_mod
-    import sportsdataverse.nfl.nfl_pbp as nfl_mod
+def _block_downloads(mp: pytest.MonkeyPatch) -> None:
+    """Make any download on the processor modules a test failure (the offline path must not reach ESPN)."""
 
     def _boom(*a, **k):
+        """Stand-in transport: any call is a test failure."""
         raise AssertionError("network call on the offline path")
 
-    saved = (nfl_mod.download, cfb_mod.download, cbs_id_mod.download)
     # the CBS adapter is the first registered alternate that FETCHES when it is reached with
     # no payload (a week scoreboard page, then four NAPI bodies), so the offline guard has to
     # cover its transport too, not just the processors'
-    nfl_mod.download = cfb_mod.download = cbs_id_mod.download = _boom
-    yield
-    nfl_mod.download, cfb_mod.download, cbs_id_mod.download = saved
+    for mod in ("sportsdataverse.nfl.nfl_pbp", "sportsdataverse.cfb.cfb_pbp", "sportsdataverse.nfl.cbs_pbp.game_id"):
+        mp.setattr(f"{mod}.download", _boom)
+
+
+@pytest.fixture
+def no_network(monkeypatch):
+    """Block downloads for this test only.
+
+    Function-scoped on purpose: a session-scoped block outlived its test and failed every later
+    NFL live test in the same run with "network call on the offline path".
+    """
+    _block_downloads(monkeypatch)
 
 
 @pytest.fixture
@@ -80,6 +87,11 @@ def offline_schedule(monkeypatch):
 
 
 @pytest.fixture(scope="session")
-def nfl_processed(nfl_summary, no_network):
-    """The ESPN path through ``_process_game`` on the stored summary (one ~8 s pipeline run per session)."""
-    return _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary})
+def nfl_processed(nfl_summary):
+    """The ESPN path through ``_process_game`` on the stored summary (one ~8 s pipeline run per session).
+
+    Downloads are blocked only while it builds; the block is gone before the first consumer runs.
+    """
+    with pytest.MonkeyPatch.context() as mp:
+        _block_downloads(mp)
+        return _process_game("nfl", NFL_GAME_ID, payloads={"espn": nfl_summary})

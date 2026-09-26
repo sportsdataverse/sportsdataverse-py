@@ -23,6 +23,7 @@ from .conftest import CFB_GAME_ID, NFL_GAME_ID
 
 
 def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGame):
+    """The ESPN path serves a stored summary through the real pipeline, with full provenance."""
     prov = nfl_processed.provenance
     assert nfl_processed.game["source"] is prov
     assert prov["requested"] == prov["served"] == "espn" and prov["fallback"] is False
@@ -39,7 +40,23 @@ def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGa
     assert nfl_processed.processor.join_participants is False
 
 
+def test_offline_guard_ends_with_its_consumer(nfl_processed):
+    """The download block must not outlive the fixture that raised it.
+
+    It was session-scoped once, so every NFL live test after this directory hit "network call
+    on the offline path" (live-tests-cron run 35638161356). ``nfl_processed`` is session-scoped
+    and ran under the block, so this is the case that leaked.
+    """
+    import sportsdataverse.cfb.cfb_pbp as cfb_mod
+    import sportsdataverse.nfl.cbs_pbp.game_id as cbs_id_mod
+    import sportsdataverse.nfl.nfl_pbp as nfl_mod
+    from sportsdataverse.dl_utils import download
+
+    assert nfl_mod.download is cfb_mod.download is cbs_id_mod.download is download
+
+
 def test_cfb_offline_dispatch(cfb_summary, no_network):
+    """CFB dispatch builds the game from a stored summary without touching the network."""
     out = _process_game("cfb", CFB_GAME_ID, payloads={"espn": cfb_summary})
     assert out.provenance["served"] == "espn" and out.provenance["contract"]["ok"]
     assert out.game["gameId"] == CFB_GAME_ID and len(out.game["plays"]) > 100
