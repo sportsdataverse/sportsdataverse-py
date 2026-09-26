@@ -168,6 +168,9 @@ def _trimmed(game_id: int) -> dict:
     * ``summary_401858228_trimmed.json.gz`` -- Mercer @ Georgia Tech, 2026 week 3. GT
       leads 30-6 in the third when Mercer returns a blocked kick try for a defensive
       two-point conversion.
+    * ``summary_401234597_trimmed.json.gz`` -- North Carolina @ Boston College, 2020
+      week 5. BC's touchdown with 0:45 left makes it 22-24, and UNC returns the two-point
+      try for 26-22.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -265,3 +268,19 @@ def test_defensive_two_point_conversion_is_scored_as_a_try():
     assert abs(td["wp_after"] - r["wp_before"]) < 0.01
     assert r["wp_after"] == pytest.approx(1 - kickoff["wp_before"])
     assert r["home_wp_after"] == pytest.approx(kickoff["home_wp_before"])
+
+
+def test_a_try_row_starts_where_the_touchdown_ended() -> None:
+    """401234597: BC scores to trail UNC 22-24 with 0:45 left; UNC returns the two for 26-22.
+
+    Row N's wp_after is row N+1's wp_before within a possession. The try row's wp_before was
+    the WP model on its placeholder start (BC's snap from the 3 again), 0.305 against the
+    touchdown's 0.167 -- the TD row's end state is the board with the TD counted and UNC
+    about to receive. The try row now starts from the touchdown's wp_after.
+    """
+    plays = _offline_plays(401234597).with_row_index("i")
+    i = plays.filter(pl.col("type.text") == "Defensive 2pt Conversion")["i"][0]
+    td, d2p = plays.filter(pl.col("i").is_between(i - 1, i)).iter_rows(named=True)
+    assert td["start.pos_team.id"] == d2p["start.pos_team.id"] == 103
+    assert d2p["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert -0.2 < d2p["wpa"] < -0.05, d2p["wpa"]
