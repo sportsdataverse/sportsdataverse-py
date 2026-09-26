@@ -269,6 +269,40 @@ def test_referee_assignments_plain_date_still_works(monkeypatch):
     assert seen["params"] == {"date": "2026-06-13"}
 
 
+@pytest.mark.parametrize("bad", ["2026-02-31", "06/13/2026", "2026-6-13", "20260613", ""])
+def test_referee_assignments_invalid_date_raises_before_request(monkeypatch, bad):
+    def fake_get(url, **kw):
+        raise AssertionError("no request expected")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    with pytest.raises(ValueError, match="YYYY-MM-DD"):
+        nba_referee_assignments(bad)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"nba": {"Table": {"rows": []}, "Table1": {"rows": []}}},  # no wnba block
+        {"wnba": {"Table": {"rows": []}}},  # block without Table1
+        {"message": "error"},  # error envelope
+    ],
+)
+def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypatch, payload):
+    # The live feed carries every league's Table/Table1 block on every date (zero rows
+    # on a day without games), so a missing block is a failed fetch, not an empty day.
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13", league="wnba")
+
+
+def test_referee_assignments_empty_block_is_an_empty_day(monkeypatch):
+    payload = {"wnba": {"Table": {"rows": []}, "Table1": {"rows": []}}}
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    out = nba_referee_assignments("2026-06-13", league="wnba")
+    assert out["officials"].height == 0
+    assert out["replay_center"].height == 0
+
+
 # ---------------------------------------------------------------------------
 # L2M calls.period dtype -- Ruling R7 (Minor 9)
 # ---------------------------------------------------------------------------

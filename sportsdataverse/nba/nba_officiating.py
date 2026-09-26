@@ -674,14 +674,17 @@ def nba_referee_assignments(
         as documented in :func:`parse_nba_referee_assignments`.
 
     Raises:
-        ValueError: If league is not "nba", "gl", or "wnba".
-        AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF block).
+        ValueError: If league is not "nba", "gl", or "wnba", or date is not a valid
+            "YYYY-MM-DD" date (checked before any request).
+        AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF
+            block), or the response lacks the league's ``Table``/``Table1`` block.
 
     Note:
         A date with no games for the requested league is not an error -- the endpoint
         always returns a 200 with an empty ``rows`` list for that league's block, so
         ``result["officials"]`` and ``result["replay_center"]`` come back as zero-row
-        DataFrames rather than raising ``NoDataError``.
+        DataFrames rather than raising ``NoDataError``. Because every league's block is
+        always present, a response without it is treated as a failed fetch.
 
     Example:
         Fetch referee assignments for a date::
@@ -712,9 +715,25 @@ def nba_referee_assignments(
         day = date.isoformat()
     else:
         day = str(date)
+    # fullmatch pins the shape (3.11+ fromisoformat also accepts "20260613");
+    # fromisoformat rejects impossible dates such as "2026-02-31".
+    try:
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+            raise ValueError(day)
+        _dt.date.fromisoformat(day)
+    except ValueError:
+        raise ValueError(f"date must be a valid 'YYYY-MM-DD' date, got {date!r}") from None
     resp = _official_get(_ASSIGN_URL, params={"date": day}, proxy=proxy)
     payload = _official_json(resp, f"{_ASSIGN_URL}?date={day}")
     if raw:
         return payload  # full three-league {nba, gl, wnba} payload
+    # The feed carries nba, gl and wnba blocks, each with Table and Table1, on every
+    # date (zero rows on a day without games), so a missing block is an error
+    # envelope or a changed schema -- never an empty day.
+    block = payload.get(league)
+    if not isinstance(block, dict) or "Table" not in block or "Table1" not in block:
+        raise AssetFetchError(
+            f"official.nba.com referee assignments for {day}: no {league!r} Table/Table1 block in the response"
+        )
     out = parse_nba_referee_assignments(payload, league)
     return {k: v.to_pandas() for k, v in out.items()} if return_as_pandas else out
