@@ -13,9 +13,17 @@ runs through.
 Example:
     Quick start::
 
-        from sportsdataverse.rolling_windows import football_events
+        import polars as pl
+        from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+        from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
 
-        ev = football_events(pbp, game_dates)            # every season <= 2024
+        pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+        sched = load_cfb_schedule(2024)
+        game_dates = sched.select(
+            pl.col("game_id").cast(pl.Int64),
+            game_date=pl.col("start_date").str.slice(0, 10).str.to_date(),
+        )
+        ev = football_events(pbp, game_dates)
         ev.filter(pl.col("window_unit") == "dropback").head()
 """
 
