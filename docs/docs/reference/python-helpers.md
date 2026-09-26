@@ -333,6 +333,50 @@ df = decompose_college_baseball_plays(
 print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
 ```
 
+### `football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_events}
+
+Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays.
+
+Population: plays from scrimmage on a numbered down (`EPA_scrimmage` not null,
+`down` 1-4) in the regular season or postseason -- the population sdv-db's
+player routes aggregate. `pass` includes sacks (a sack is a dropback); CFB has no
+scramble flag, so a scramble is a carry.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | released pbp plays, any number of seasons (project to `FOOTBALL_PBP_COLUMNS`). |
+| `game_dates` | `DataFrame` |  | `game_id` (int) and `game_date` (date) for every game in `pbp`. |
+
+**Returns**
+
+one row per event x metric (`epa`, `success_rate`), `EVENT_SCHEMA`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+sched = load_cfb_schedule(2024)
+game_dates = sched.select(
+    pl.col("game_id").cast(pl.Int64),
+    game_date=pl.col("start_date")
+    .str.to_datetime(time_zone="UTC")
+    .dt.convert_time_zone("America/New_York")
+    .dt.date(),
+)
+ev = football_events(pbp, game_dates)
+ev.filter(pl.col("window_unit") == "dropback").head()
+
+# Pipeline next step (one line)
+
+ev.group_by("entity_id", "season").agg(pl.col("value").mean())
+```
+
 ### `get_cache_mode() -> 'str'` {#get_cache_mode}
 
 Return the current cache mode.
@@ -5938,6 +5982,49 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 pff_teams_overview()
+```
+
+### `rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'` {#rolling_windows}
+
+Rolling-window form for every entity with an event in `season`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | an `EVENT_SCHEMA` frame covering every season up to `season` (the career history the baselines read). |
+| `season` | `int` |  | the season the rows describe; later seasons in `events` are ignored. |
+| `windows` | `dict[str, tuple[int, ...]] \| None` | `None` | `{window_unit: (sizes...)}`; defaults to `WINDOWS`. |
+
+**Returns**
+
+one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN event values are dropped before any window is computed. Columns: * `cur`: the mean of the entity's last `window_n` events through `season`. * `prev`: the mean of the `window_n` events immediately before `cur`'s window; null unless a full window of earlier history exists. * `season_start`: the mean of the `window_n` events immediately before season `season` started -- i.e. the entity's form entering the season, not counting any event actually played in `season`. * `career_baseline`: the mean of every event before `cur`'s window, including earlier events within `season` itself; null unless at least one full window of history precedes it. * `qualified`: `True` iff `n == window_n` -- the window is fully populated (not padded by a short career). Consumers building a "hottest" list should filter on this first. * `team_id` / `entity_name`: taken from the entity's single latest event through `season`, so a player who changed teams mid-season is labelled with their current team. * `delta_prev_rank`: 1 = biggest riser, ties share the lowest rank; null unless `qualified` and `prev` exists.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+sched = load_cfb_schedule(2024)
+game_dates = sched.select(
+    pl.col("game_id").cast(pl.Int64),
+    game_date=pl.col("start_date")
+    .str.to_datetime(time_zone="UTC")
+    .dt.convert_time_zone("America/New_York")
+    .dt.date(),
+)
+ev = football_events(pbp, game_dates)
+rw = rolling_windows(ev, 2024)
+rw.filter(pl.col("window_unit") == "dropback").head()
+
+# Pipeline next step (one line)
+
+rw.filter(pl.col("qualified") & (pl.col("delta_prev_rank") == 1)).select(
+    "entity_name", "window_unit", "window_n"
+)
 ```
 
 ### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}

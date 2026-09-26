@@ -140,6 +140,12 @@ from sportsdataverse.discover import function_count, list_functions
 # The per-game data-integrity gate (0.1.5+): one pure function every consumer --
 # a release build stage, the Data API, Game on Paper -- calls on a processed game.
 from sportsdataverse.validation import validate_game
+
+# Rolling event-count windows (F3): one pure function every producer calls.
+# Note: sportsdataverse.rolling_windows is this FUNCTION (it shadows the submodule
+# name at package level) -- import module constants with
+# `from sportsdataverse.rolling_windows import WINDOWS`, not an attribute path.
+from sportsdataverse.rolling_windows import football_events, rolling_windows
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,
