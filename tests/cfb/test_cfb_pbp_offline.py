@@ -215,6 +215,8 @@ def _trimmed(game_id: int) -> dict:
       conversion attempt, Aaron Opelt pass failed." typed "2pt Conversion" and scored.
     * ``summary_313090025_trimmed.json.gz`` -- Washington State @ California, 2011 week 10.
       Each of the four touchdowns is one old-NCAA row, play and kick, typed "Extra Point Good".
+    * ``summary_282710130_trimmed.json.gz`` -- Wisconsin @ Michigan, 2008 week 5. Michigan
+      scores, is flagged for ineligible downfield, and misses the two.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -617,6 +619,30 @@ def test_the_old_ncaa_kick_wordings_on_a_touchdown_row(text: str, made: bool) ->
         frame.with_columns(pl.lit("Rush").alias("orig_play_type"))
     )
     assert out["xp_attempt"].to_list() == [False]
+
+
+def test_a_penalty_between_a_touchdown_and_its_try_is_dead_ball() -> None:
+    """282710130: "Allan Evridge pass complete to David Gilreath for 22 yards for a TOUCHDOWN.",
+    "Wisconsin penalty 5 yard ineligible downfield on pass accepted.", "Two-point conversion
+    attempt, Allan Evridge pass FAILED."
+
+    Only a timeout was handed the touchdown's end state, so the penalty carried the model's
+    placeholder for ESPN's try start (wp_before 0.799 after a touchdown ending at 0.081; EP
+    about 5.4) and the try inherited from the penalty. The penalty is dead-ball like a
+    timeout: it starts and ends at the touchdown's wp_after and the try's 0.92.
+    """
+    plays = _offline_plays(282710130).with_row_index("i")
+    i = plays.filter(pl.col("text").str.starts_with("Wisconsin penalty 5 yard ineligible downfield"))["i"][0]
+    td, pen, tr = plays.filter(pl.col("i").is_between(i - 1, i + 1)).iter_rows(named=True)
+    assert (td["type.text"], pen["type.text"], tr["type.text"]) == (
+        "Passing Touchdown",
+        "Penalty",
+        "Two-Point Conversion Missed",
+    )
+    assert pen["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert pen["wp_after"] == pytest.approx(pen["wp_before"], abs=1e-6)
+    assert tr["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+    assert (pen["EP_start"], pen["EP_end"], pen["EPA"]) == (pytest.approx(0.92), pytest.approx(0.92), 0)
 
 
 def _rows_after_flipped_touchdowns(plays: pl.DataFrame) -> list[tuple[dict, list[dict]]]:

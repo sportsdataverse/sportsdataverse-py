@@ -403,6 +403,19 @@ _TRY_TYPES = (
 #: Regulation", "Coin Toss") are dropped in __add_downs_data; "End Period" survives as the
 #: relabelled 2004 "Unknown" quarter marker. The EP chain treats the same two as stoppages.
 _CLOCK_STOPPAGES = ("Timeout", "End Period")
+
+
+def _penalty_before_try() -> pl.Expr:
+    """A penalty walked off between a touchdown and its try: the next row that is not a clock
+    stoppage is a try. 2004-13, where the try is its own row ("TD, Penalty, Extra Point
+    Good": ~130 rows 2004-06, ~725 2007-13, 2 since); with the clock stoppages, the only
+    rows ESPN files there. It is dead-ball: the try's value is pinned whatever the spot.
+    """
+    t = pl.col("type.text")
+    nxt = pl.when(t.is_in(_CLOCK_STOPPAGES)).then(None).otherwise(t).backward_fill().shift(-1)
+    return ((t == "Penalty") & nxt.is_in(_TRY_TYPES)).fill_null(False)
+
+
 #: The text of a try the defence returned for two, whatever ESPN typed the row. Shapes,
 #: all 2007-13 (2014+ ESPN types the row "Defensive 2pt Conversion" itself): "... returned
 #: for 2-point defensive conversion by X", "... returned by X for defensive PAT", "...
@@ -468,15 +481,21 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
 
+    # Dead-ball rows between a touchdown and its try: the clock stoppages and a penalty
+    # walked off before the try. The penalty inherits the touchdown's end state like a
+    # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
+    # the penalty started at 0.799).
+    t = pl.col("type.text")
+
+    def _next(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+        # ``col`` on the first row after this one that is not ``skip``
+        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)
+
+    dead_ball = t.is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
+
     def _last_play(col: str) -> pl.Expr:
-        # ``col`` on the last row before this one that is not a clock stoppage
-        return (
-            pl.when(pl.col("type.text").is_in(_CLOCK_STOPPAGES))
-            .then(None)
-            .otherwise(pl.col(col))
-            .forward_fill()
-            .shift(1)
-        )
+        # ``col`` on the last row before this one that is not a dead-ball row
+        return pl.when(dead_ball).then(None).otherwise(pl.col(col)).forward_fill().shift(1)
 
     # The touchdown before a try row is the last play before it that is not a clock
     # stoppage. What it hands over is its end state scored for its END team: the model's
@@ -498,9 +517,9 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # just before a try when either the stoppage or the try is that team's. ESPN credits a
     # stoppage to either team, so the value is restated for the stoppage's own team.
     team = pl.col("start.pos_team.id")
-    before_try = pl.col("type.text").is_in(_CLOCK_STOPPAGES) & pl.col("type.text").shift(-1).is_in(_TRY_TYPES)
-    takes_over = (pl.col("type.text").is_in(_TRY_TYPES) & (td_end == team)) | (
-        before_try & ((td_end == team) | (td_end == team.shift(-1)))
+    before_try = dead_ball & _next(t, dead_ball).is_in(_TRY_TYPES)
+    takes_over = (t.is_in(_TRY_TYPES) & (td_end == team)) | (
+        before_try & ((td_end == team) | (td_end == _next(team, dead_ball)))
     )
 
     return (
@@ -6845,7 +6864,13 @@ class CFBPlayProcess(object):
                 # that is its own event after a folded "(X PAT BLOCKED)". Not an overtime
                 # shootout attempt ("Two Point Pass|Rush", 2019-26) either: in play order
                 # the first one follows the last overtime touchdown, but it is a new try.
-                EP_end=pl.when(
+                # A penalty walked off before a try is dead-ball: the try's 0.92 on both
+                # sides (the model scored ESPN's placeholder start, EP ~5.4, EPA -0.7 on
+                # average over 2004-13's ~850 such rows).
+                EP_start=pl.when(_penalty_before_try()).then(0.92).otherwise(pl.col("EP_start")),
+                EP_end=pl.when(_penalty_before_try())
+                .then(0.92)
+                .when(
                     pl.col("type.text").is_in(_TRY_TYPES)
                     & ~pl.col("type.text").is_in(["Defensive 2pt Conversion", "Two Point Pass", "Two Point Rush"])
                     & (
