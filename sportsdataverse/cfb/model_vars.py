@@ -151,6 +151,9 @@ defense_score_vec = [
     "Fumble Recovery (Opponent) Touchdown",
     "Fumble Return Touchdown",
     "Kickoff Touchdown",  # <--- Kickoff Team recovers the return team fumble and scores
+    # A kickoff row's start team is the receiver (cfb_pbp flips ESPN's kicking team), so the
+    # kicking team's recovery touchdown is the defence's score, as in cfbfastR's def_TD.
+    "Kickoff Team Fumble Recovery Touchdown",
     "Defensive 2pt Conversion",
     "Safety",
     "Sack Touchdown",
@@ -201,7 +204,6 @@ offense_score_vec = [
     "Punt Touchdown",  # <--- Punting Team recovers the return team fumble and scores
     "Punt Team Fumble Recovery Touchdown",
     "Kickoff Return Touchdown",
-    "Kickoff Team Fumble Recovery Touchdown",
 ]
 punt_vec = [
     "Blocked Punt",
