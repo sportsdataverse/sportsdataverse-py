@@ -5,11 +5,12 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_live as mod
 from sportsdataverse.nba.nba_live import (
-    PBP_CORE_SCHEMA,
-    PLAYERS_CORE_SCHEMA,
+    NBA_LIVE_PBP_CORE_SCHEMA,
+    NBA_LIVE_PLAYERS_CORE_SCHEMA,
     nba_live_boxscore,
     nba_live_pbp,
     parse_nba_live_boxscore,
@@ -71,9 +72,68 @@ def test_pbp_empty_payload_is_zero_rows():
 def test_pbp_empty_actions_has_core_schema():
     df = parse_nba_live_pbp({"game": {"gameId": "0022500001", "actions": []}})
     assert df.height == 0
-    for name, dtype in PBP_CORE_SCHEMA.items():
+    for name, dtype in NBA_LIVE_PBP_CORE_SCHEMA.items():
         assert name in df.columns
         assert df.schema[name] == dtype
+
+
+# ---------------------------------------------------------------------------
+# Ruling: infer_schema_length=None -- fields first seen after row 100 must survive
+# ---------------------------------------------------------------------------
+
+
+def _expected_flat_columns(actions):
+    """Every column ``pl.json_normalize(..., separator="_")`` + ``underscore()`` produces
+    for the full action list, with no row cap -- the ground truth ``_normalize`` must match."""
+    flat = pl.json_normalize(actions, separator="_", infer_schema_length=None)
+    return {underscore(c) for c in flat.columns}
+
+
+@pytest.mark.parametrize(
+    "fixture_path",
+    [
+        FIX / "playbyplay_0022500001.json",
+        Path(__file__).parent.parent / "wnba" / "fixtures" / "wnba_live" / "playbyplay_1022600097.json",
+    ],
+    ids=["nba", "wnba"],
+)
+def test_pbp_every_flattened_key_survives_on_both_fixtures(fixture_path):
+    payload = json.loads(fixture_path.read_text())
+    actions = payload["game"]["actions"]
+    expected = _expected_flat_columns(actions)
+    df = parse_nba_live_pbp(payload)
+    missing = expected - set(df.columns)
+    assert not missing, f"columns dropped by schema inference: {sorted(missing)}"
+
+
+def test_pbp_block_person_id_present_and_int64_on_both_fixtures():
+    for fixture_path in (
+        FIX / "playbyplay_0022500001.json",
+        Path(__file__).parent.parent / "wnba" / "fixtures" / "wnba_live" / "playbyplay_1022600097.json",
+    ):
+        payload = json.loads(fixture_path.read_text())
+        df = parse_nba_live_pbp(payload)
+        assert "block_person_id" in df.columns, fixture_path
+        assert df.schema["block_person_id"] == pl.Int64, fixture_path
+        assert df["block_person_id"].null_count() < df.height, fixture_path
+
+
+def test_pbp_official_id_survives_when_first_occurrence_moves_past_row_100():
+    """Reorder a copy of the real fixture so the first officialId-bearing action lands
+    well past the old 100-row inference cap, and assert no official_id is lost."""
+    payload = json.loads((FIX / "playbyplay_0022500001.json").read_text())
+    actions = payload["game"]["actions"]
+    before_count = parse_nba_live_pbp(payload)["official_id"].null_count()
+
+    without_official = [a for a in actions if "officialId" not in a]
+    with_official = [a for a in actions if "officialId" in a]
+    assert len(without_official) > 100  # sanity: the reorder actually pushes past the old cap
+    reordered = dict(payload)
+    reordered["game"] = dict(payload["game"])
+    reordered["game"]["actions"] = without_official + with_official
+
+    after_count = parse_nba_live_pbp(reordered)["official_id"].null_count()
+    assert after_count == before_count
 
 
 # ---------------------------------------------------------------------------
@@ -110,7 +170,7 @@ def test_boxscore_one_side_zero_players_stays_concat_safe():
     assert home.height == 0
     assert away.height > 0
     for df in (home, away):
-        for name, dtype in PLAYERS_CORE_SCHEMA.items():
+        for name, dtype in NBA_LIVE_PLAYERS_CORE_SCHEMA.items():
             assert name in df.columns
             assert df.schema[name] == dtype
     combined = pl.concat([home, away], how="diagonal_relaxed")
@@ -154,7 +214,8 @@ def test_blocked_403_is_fetch_error(monkeypatch):
 
 
 def test_s3_access_denied_403_is_no_data(monkeypatch):
-    transport, _ = _fake_transport(403, "<Error><Code>AccessDenied</Code></Error>")
+    body = (FIX / "playbyplay_0029999999_no_object_s3_403.xml").read_text()
+    transport, _ = _fake_transport(403, body)
     monkeypatch.setattr(mod, "_curl_transport", transport)
     with pytest.raises(NoDataError):
         nba_live_boxscore("0022500001")
@@ -166,4 +227,15 @@ def test_transport_exception_is_reclassified_as_fetch_error(monkeypatch):
 
     monkeypatch.setattr(mod, "_curl_transport", raising_transport)
     with pytest.raises(AssetFetchError):
+        nba_live_pbp("0022500001")
+
+
+def test_missing_curl_cffi_import_error_is_not_masked(monkeypatch):
+    """A missing curl_cffi must surface as ImportError, not be reclassified as AssetFetchError."""
+
+    def raising_transport(url, params, headers, proxy_url):
+        raise ImportError("curl_cffi is required: pip install curl_cffi")
+
+    monkeypatch.setattr(mod, "_curl_transport", raising_transport)
+    with pytest.raises(ImportError):
         nba_live_pbp("0022500001")

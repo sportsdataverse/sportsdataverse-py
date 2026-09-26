@@ -1,16 +1,20 @@
+import datetime as dt
 import json
 from pathlib import Path
 
 import polars as pl
 import pytest
+import requests
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_officiating as mod
 from sportsdataverse.nba.nba_officiating import (
     L2M_CALLS_SCHEMA,
     nba_l2m,
+    nba_referee_assignments,
     parse_nba_l2m,
     parse_nba_l2m_games,
+    parse_nba_referee_assignments,
 )
 
 FIX = Path(__file__).parent / "fixtures" / "official_nba"
@@ -144,7 +148,6 @@ def _assign():
 
 
 def test_assignments_nba_long_format():
-    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
 
     out = parse_nba_referee_assignments(_assign(), "nba")
     o = out["officials"]
@@ -156,29 +159,96 @@ def test_assignments_nba_long_format():
 
 
 def test_assignments_empty_league_keeps_schema():
-    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
 
     out = parse_nba_referee_assignments(_assign(), "gl")
     assert out["officials"].height == 0 and "official_id" in out["officials"].columns
 
 
 def test_assignments_wnba_rows():
-    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
 
     assert parse_nba_referee_assignments(_assign(), "wnba")["officials"]["game_id"].n_unique() == 4
 
 
 def test_assignments_invalid_league_raises():
-    from sportsdataverse.nba.nba_officiating import nba_referee_assignments
 
     with pytest.raises(ValueError, match="league must be"):
         nba_referee_assignments("2026-06-13", league="bogus")
 
 
 def test_assignments_wnba_season_no_increment():
-    from sportsdataverse.nba.nba_officiating import parse_nba_referee_assignments
 
     out = parse_nba_referee_assignments(_assign(), "wnba")
     wnba_officials = out["officials"]
     assert (wnba_officials["season"] == 2026).all()
     assert wnba_officials["season_type"].unique().to_list() == ["regular"]
+
+
+def test_parse_assignments_invalid_league_raises():
+    with pytest.raises(ValueError, match="league must be"):
+        parse_nba_referee_assignments(_assign(), "bogus")
+
+
+# ---------------------------------------------------------------------------
+# _official_get -- requests.exceptions.* reclassified as AssetFetchError
+# ---------------------------------------------------------------------------
+
+
+def test_connection_error_is_asset_fetch_error(monkeypatch):
+    def raising_download(url, **kw):
+        raise requests.exceptions.ConnectionError("connection reset")
+
+    monkeypatch.setattr(mod, "download", raising_download)
+    with pytest.raises(AssetFetchError):
+        mod._official_get("https://official.nba.com/l2m/json/0042500405.json")
+
+
+def test_l2m_non_json_200_body_is_asset_fetch_error(monkeypatch):
+    _patch(monkeypatch, _Resp(200, "<html>not json</html>", "text/html"))
+    with pytest.raises(AssetFetchError):
+        nba_l2m("0042500405")
+
+
+def test_referee_assignments_non_json_200_body_is_asset_fetch_error(monkeypatch):
+    _patch(monkeypatch, _Resp(200, "<html>not json</html>", "text/html"))
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13")
+
+
+# ---------------------------------------------------------------------------
+# nba_referee_assignments -- datetime normalization (Minor 4)
+# ---------------------------------------------------------------------------
+
+
+def test_referee_assignments_datetime_with_time_normalizes_to_date(monkeypatch):
+    seen = {}
+
+    def fake_get(url, **kw):
+        seen["url"] = url
+        return _Resp(200, json.dumps(_assign()), "application/json")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    nba_referee_assignments(dt.datetime(2026, 6, 13, 19, 30))
+    assert seen["url"].endswith("date=2026-06-13")
+
+
+def test_referee_assignments_plain_date_still_works(monkeypatch):
+    seen = {}
+
+    def fake_get(url, **kw):
+        seen["url"] = url
+        return _Resp(200, json.dumps(_assign()), "application/json")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    nba_referee_assignments(dt.date(2026, 6, 13))
+    assert seen["url"].endswith("date=2026-06-13")
+
+
+# ---------------------------------------------------------------------------
+# L2M calls.period dtype -- Ruling R7 (Minor 9)
+# ---------------------------------------------------------------------------
+
+
+def test_calls_period_dtype_is_int64():
+    out = parse_nba_l2m(_payload())
+    assert out["calls"].schema["period"] == pl.Int64
+    assert L2M_CALLS_SCHEMA["period"] == pl.Int64

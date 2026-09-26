@@ -33,8 +33,12 @@ def wnba_referee_assignments(
         If ``raw=True``, returns the full three-league JSON payload instead.
 
     Raises:
-        NoDataError: The date has no games.
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF block).
+
+    Note:
+        A date with no WNBA games is not an error -- the endpoint always returns a
+        200 with an empty ``rows`` list for the ``wnba`` block, so both frames come
+        back zero-row rather than raising ``NoDataError``.
 
     Example:
         Fetch WNBA referee assignments for a date::

@@ -33,11 +33,11 @@ from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba.nba_stats_runtime import _curl_transport
 
 __all__ = [
-    "PBP_CORE_SCHEMA",
-    "OFFICIALS_CORE_SCHEMA",
-    "PLAYERS_CORE_SCHEMA",
-    "TEAM_CORE_SCHEMA",
-    "GAME_CORE_SCHEMA",
+    "NBA_LIVE_PBP_CORE_SCHEMA",
+    "NBA_LIVE_OFFICIALS_CORE_SCHEMA",
+    "NBA_LIVE_PLAYERS_CORE_SCHEMA",
+    "NBA_LIVE_TEAM_CORE_SCHEMA",
+    "NBA_LIVE_GAME_CORE_SCHEMA",
     "parse_nba_live_pbp",
     "parse_nba_live_boxscore",
     "nba_live_pbp",
@@ -54,7 +54,7 @@ _ID_COL_RE = re.compile(r"(^(official_id|person_id|team_id)$)|(_person_id$)")
 # never breaks on a schema mismatch. Names below are fixture-verified against the
 # 2025-26 NBA capture (`tests/nba/fixtures/nba_live/`); none needed correcting from
 # the reviewer's proposed names.
-PBP_CORE_SCHEMA = pl.Schema(
+NBA_LIVE_PBP_CORE_SCHEMA = pl.Schema(
     {
         "game_id": pl.Utf8,
         "action_number": pl.Int64,
@@ -71,7 +71,7 @@ PBP_CORE_SCHEMA = pl.Schema(
         "description": pl.Utf8,
     }
 )
-OFFICIALS_CORE_SCHEMA = pl.Schema(
+NBA_LIVE_OFFICIALS_CORE_SCHEMA = pl.Schema(
     {
         "game_id": pl.Utf8,
         "person_id": pl.Int64,
@@ -80,7 +80,7 @@ OFFICIALS_CORE_SCHEMA = pl.Schema(
         "assignment": pl.Utf8,
     }
 )
-PLAYERS_CORE_SCHEMA = pl.Schema(
+NBA_LIVE_PLAYERS_CORE_SCHEMA = pl.Schema(
     {
         "game_id": pl.Utf8,
         "team_id": pl.Int64,
@@ -92,7 +92,7 @@ PLAYERS_CORE_SCHEMA = pl.Schema(
         "played": pl.Utf8,
     }
 )
-TEAM_CORE_SCHEMA = pl.Schema(
+NBA_LIVE_TEAM_CORE_SCHEMA = pl.Schema(
     {
         "game_id": pl.Utf8,
         "team_id": pl.Int64,
@@ -100,7 +100,7 @@ TEAM_CORE_SCHEMA = pl.Schema(
         "score": pl.Int64,
     }
 )
-GAME_CORE_SCHEMA = pl.Schema(
+NBA_LIVE_GAME_CORE_SCHEMA = pl.Schema(
     {
         "game_id": pl.Utf8,
         "game_status": pl.Int64,
@@ -191,6 +191,10 @@ def _fetch_live(
             via ``from exc``) when the transport itself raises -- a curl_cffi
             timeout, connection error, or TLS failure never escapes as a bare
             exception, it is always reclassified into the error vocabulary.
+        ImportError: Propagates unchanged when curl_cffi is not installed --
+            the repo contract that a missing optional dependency surfaces as a
+            clear ``ImportError`` (``pip install curl_cffi`` /
+            ``sportsdataverse[all]``), never masked as ``AssetFetchError``.
 
     Example:
         Offline with an injected transport::
@@ -208,6 +212,10 @@ def _fetch_live(
         status, text = _transport(url, {}, _cdn_headers(league), proxy_url)
     except (NoDataError, AssetFetchError):
         raise
+    except ImportError:
+        # A missing curl_cffi must surface as-is (repo contract: `pip install curl_cffi`
+        # or `sportsdataverse[all]`), not be reclassified as a fetch failure.
+        raise
     except Exception as exc:
         raise AssetFetchError(f"{host} liveData {kind} transport error for game {_gid(game_id)}: {exc}") from exc
     if status == 200:
@@ -221,7 +229,9 @@ def _normalize(records: list[dict[str, Any]]) -> pl.DataFrame:
     """``pl.json_normalize`` + snake_case rename + id-column Int64 cast, or an empty frame."""
     if not records:
         return pl.DataFrame()
-    df = pl.json_normalize(records, separator="_")
+    # infer_schema_length=None: default 100-row inference silently drops fields that
+    # first appear later (e.g. block_person_id first seen ~action 110 on real captures).
+    df = pl.json_normalize(records, separator="_", infer_schema_length=None)
     df = df.rename({c: underscore(c) for c in df.columns})
     id_cols = [c for c in df.columns if _is_id_col(c)]
     if id_cols:
@@ -252,9 +262,9 @@ def _ensure_core_schema(df: pl.DataFrame, schema: pl.Schema) -> pl.DataFrame:
     Example:
         Backfill a zero-player boxscore side::
 
-            from sportsdataverse.nba.nba_live import PLAYERS_CORE_SCHEMA, _ensure_core_schema
+            from sportsdataverse.nba.nba_live import NBA_LIVE_PLAYERS_CORE_SCHEMA, _ensure_core_schema
             import polars as pl
-            df = _ensure_core_schema(pl.DataFrame(), PLAYERS_CORE_SCHEMA)
+            df = _ensure_core_schema(pl.DataFrame(), NBA_LIVE_PLAYERS_CORE_SCHEMA)
             print(df.height, df.columns)  # 0 ['game_id', 'team_id', ...]
     """
     if df.height == 0:
@@ -284,12 +294,12 @@ def parse_nba_live_pbp(payload: dict[str, Any], *, return_as_pandas: bool = Fals
     Returns:
         A DataFrame with one row per action. Empty/malformed payloads (missing
         ``game`` or ``actions``) return a zero-row frame that still carries
-        :data:`PBP_CORE_SCHEMA`'s columns at their declared dtypes, so a caller
+        :data:`NBA_LIVE_PBP_CORE_SCHEMA`'s columns at their declared dtypes, so a caller
         can ``pl.concat`` across games without a schema mismatch.
 
     Raises:
         This function does not raise. Empty or malformed payloads produce a
-        zero-row DataFrame carrying :data:`PBP_CORE_SCHEMA`.
+        zero-row DataFrame carrying :data:`NBA_LIVE_PBP_CORE_SCHEMA`.
 
     Example:
         Parse a real capture::
@@ -314,7 +324,7 @@ def parse_nba_live_pbp(payload: dict[str, Any], *, return_as_pandas: bool = Fals
     df = _normalize(actions)
     if df.height and game.get("gameId"):
         df = df.with_columns(pl.lit(_gid(game["gameId"])).alias("game_id"))
-    df = _ensure_core_schema(df, PBP_CORE_SCHEMA)
+    df = _ensure_core_schema(df, NBA_LIVE_PBP_CORE_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
 
@@ -372,14 +382,14 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
     def _team_frame(team: dict[str, Any]) -> pl.DataFrame:
         flat = {k: v for k, v in team.items() if k not in ("players", "periods")}
         df = _with_gid(_normalize([flat] if flat else []))
-        return _ensure_core_schema(df, TEAM_CORE_SCHEMA)
+        return _ensure_core_schema(df, NBA_LIVE_TEAM_CORE_SCHEMA)
 
     def _players_frame(team: dict[str, Any]) -> pl.DataFrame:
         df = _normalize(team.get("players") or [])
         if df.height:
             df = df.with_columns(pl.lit(team.get("teamId")).cast(pl.Int64).alias("team_id"))
         df = _with_gid(df)
-        return _ensure_core_schema(df, PLAYERS_CORE_SCHEMA)
+        return _ensure_core_schema(df, NBA_LIVE_PLAYERS_CORE_SCHEMA)
 
     game_meta = {k: v for k, v in g.items() if k not in ("officials", "homeTeam", "awayTeam", "arena")}
     home_team = g.get("homeTeam") or {}
@@ -393,8 +403,10 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
         )
 
     out = {
-        "game": _ensure_core_schema(game_df, GAME_CORE_SCHEMA),
-        "officials": _ensure_core_schema(_with_gid(_normalize(g.get("officials") or [])), OFFICIALS_CORE_SCHEMA),
+        "game": _ensure_core_schema(game_df, NBA_LIVE_GAME_CORE_SCHEMA),
+        "officials": _ensure_core_schema(
+            _with_gid(_normalize(g.get("officials") or [])), NBA_LIVE_OFFICIALS_CORE_SCHEMA
+        ),
         "home_players": _players_frame(home_team),
         "away_players": _players_frame(away_team),
         "home_team": _team_frame(home_team),

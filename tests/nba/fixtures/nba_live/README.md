@@ -14,6 +14,7 @@ Real captures backing `tests/nba/test_nba_live.py`.
 |---|---|---|---|
 | `playbyplay_0022500001.json` | `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_0022500001.json` | 2026-09-26 | curl_cffi (`impersonate="chrome"`) via `sportsdataverse.nba.nba_stats_runtime._curl_transport` |
 | `boxscore_0022500001.json` | `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_0022500001.json` | 2026-09-26 | curl_cffi (`impersonate="chrome"`) via `sportsdataverse.nba.nba_stats_runtime._curl_transport` |
+| `playbyplay_0029999999_no_object_s3_403.xml` | `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_0029999999.json` (nonexistent game id) | 2026-09-26 | curl_cffi (`impersonate="chrome"`) via `sportsdataverse.nba.nba_stats_runtime._curl_transport` |
 
 Game `0022500001` is the 2025-26 regular-season opener. `sportsdataverse.dl_utils.download`
 (plain `requests`, Chrome UA + `Origin`/`Referer: https://www.nba.com`, matching hoopR's
