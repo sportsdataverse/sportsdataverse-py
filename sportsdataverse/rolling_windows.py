@@ -34,8 +34,10 @@ import polars as pl
 __all__ = [
     "EVENT_SCHEMA",
     "FOOTBALL_PBP_COLUMNS",
+    "OUTPUT_SCHEMA",
     "WINDOWS",
     "football_events",
+    "rolling_windows",
 ]
 
 #: window sizes per unit; a producer may pass its own to :func:`rolling_windows`
@@ -195,3 +197,135 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
             ).unpivot(on=["epa", "success_rate"], index=index, variable_name="metric", value_name="value")
         )
     return pl.concat(frames).select(list(EVENT_SCHEMA)).cast(EVENT_SCHEMA)
+
+
+OUTPUT_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64,
+    "entity_type": pl.Utf8,
+    "entity_id": pl.Utf8,
+    "entity_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "metric": pl.Utf8,
+    "window_unit": pl.Utf8,
+    "window_n": pl.Int64,
+    "cur": pl.Float64,
+    "prev": pl.Float64,
+    "season_start": pl.Float64,
+    "career_baseline": pl.Float64,
+    "delta_prev": pl.Float64,
+    "delta_season": pl.Float64,
+    "delta_career": pl.Float64,
+    "delta_prev_rank": pl.Int64,
+    "n": pl.Int64,
+    "last_event_date": pl.Date,
+    "as_of_date": pl.Date,
+}
+_KEY = ["entity_type", "entity_id", "window_unit", "metric"]
+_RANK_GROUP = ["entity_type", "window_unit", "window_n", "metric"]
+
+
+def _window(ev: pl.DataFrame, size: int) -> pl.DataFrame:
+    """One window size over events already indexed from the end (``_r``) and season start (``_r0``)."""
+    r, r0, v = pl.col("_r"), pl.col("_r0"), pl.col("value")
+    in_cur = r < size
+    in_prev = (r >= size) & (r < 2 * size)
+    in_start = (r0 >= 0) & (r0 < size)
+    before = r >= size
+    return (
+        ev.group_by(_KEY)
+        .agg(
+            entity_name=pl.col("entity_name").filter(r == 0).first(),
+            team_id=pl.col("team_id").filter(r == 0).first(),
+            last_event_date=pl.col("event_date").filter(r == 0).first(),
+            cur=v.filter(in_cur).mean(),
+            n=in_cur.sum(),
+            prev=pl.when(in_prev.sum() == size).then(v.filter(in_prev).mean()),
+            season_start=pl.when(in_start.sum() == size).then(v.filter(in_start).mean()),
+            career_baseline=pl.when(before.sum() >= size).then(v.filter(before).mean()),
+        )
+        .with_columns(window_n=pl.lit(size, dtype=pl.Int64))
+    )
+
+
+def rolling_windows(
+    events: pl.DataFrame, season: int, windows: dict[str, tuple[int, ...]] | None = None
+) -> pl.DataFrame:
+    """Rolling-window form for every entity with an event in ``season``.
+
+    Args:
+        events: an ``EVENT_SCHEMA`` frame covering every season up to ``season``
+            (the career history the baselines read).
+        season: the season the rows describe; later seasons in ``events`` are ignored.
+        windows: ``{window_unit: (sizes...)}``; defaults to :data:`WINDOWS`.
+
+    Returns:
+        pl.DataFrame: one row per (entity, unit, metric, window size), ``OUTPUT_SCHEMA``.
+        ``prev`` / ``season_start`` need a FULL window and ``career_baseline`` at least
+        one window of history, else null; ``delta_prev_rank`` (1 = biggest riser, ties
+        share the lowest rank) is null unless ``n == window_n`` and ``prev`` exists.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.rolling_windows import football_events, rolling_windows
+
+            ev = football_events(pbp, game_dates)
+            rw = rolling_windows(ev, 2024)
+            rw.filter(pl.col("window_unit") == "dropback").head()
+
+        Pipeline next step (one line)::
+
+            rw.filter(pl.col("delta_prev_rank") == 1).select("entity_name", "window_unit", "window_n")
+    """
+    windows = WINDOWS if windows is None else windows
+    ev = events.filter((pl.col("season") <= season) & pl.col("value").is_not_null())
+    current = ev.filter(pl.col("season") == season)
+    if current.height == 0:
+        return pl.DataFrame(schema=OUTPUT_SCHEMA)
+    as_of = current["event_date"].max()
+    # ponytail: whole history in memory (~2 GB for CFB 2004-2026); pre-filter to the
+    # season's active entities if a runner OOMs
+    ev = (
+        ev.sort([*_KEY, "event_date", "game_id", "seq"], maintain_order=True)
+        .with_columns(
+            _i=pl.int_range(pl.len()).over(_KEY),
+            _n=pl.len().over(_KEY),
+            _prior=(pl.col("season") < season).sum().over(_KEY),
+            _in=(pl.col("season") == season).any().over(_KEY),
+        )
+        .filter(pl.col("_in"))
+        .with_columns(
+            _r=pl.col("_n") - 1 - pl.col("_i"),  # 0 = the latest event
+            _r0=pl.col("_prior") - 1 - pl.col("_i"),  # 0 = the last event before the season
+        )
+    )
+    parts = [
+        _window(ev.filter(pl.col("window_unit") == unit), size)
+        for unit, sizes in windows.items()
+        for size in sizes
+        if ev.filter(pl.col("window_unit") == unit).height
+    ]
+    if not parts:
+        return pl.DataFrame(schema=OUTPUT_SCHEMA)
+    qualified = (pl.col("n") == pl.col("window_n")) & pl.col("prev").is_not_null()
+    out = (
+        pl.concat(parts)
+        .with_columns(
+            season=pl.lit(season, dtype=pl.Int64),
+            delta_prev=pl.col("cur") - pl.col("prev"),
+            delta_season=pl.col("cur") - pl.col("season_start"),
+            delta_career=pl.col("cur") - pl.col("career_baseline"),
+            as_of_date=pl.lit(as_of, dtype=pl.Date),
+        )
+        .with_columns(
+            delta_prev_rank=pl.when(qualified).then(
+                pl.when(qualified).then(pl.col("delta_prev")).rank(method="min", descending=True).over(_RANK_GROUP)
+            )
+        )
+    )
+    return (
+        out.select(list(OUTPUT_SCHEMA))
+        .cast(OUTPUT_SCHEMA)
+        .sort(["window_unit", "window_n", "metric", "entity_type", "entity_id"])
+    )
