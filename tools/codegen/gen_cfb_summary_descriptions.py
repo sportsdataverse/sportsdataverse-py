@@ -53,7 +53,7 @@ BASES: dict[str, str] = {
     "explosive": "explosive-play rate -- the share of plays carrying the explosive flag",
     "play_stuffed": "stuffed-play rate -- the share of plays carrying the stuffed flag",
     "line_yards": "average line yards credited to the offensive line on rushes",
-    "opportunity_rate": "opportunity rate -- the share of rushes carrying the opportunity flag",
+    "opportunity_rate": "opportunity rate -- opportunity-flagged rushes as a share of all plays",
     "start_position": "average drive start position, measured in yards from the opponent goal line",
 }
 
@@ -62,6 +62,14 @@ SIDE = {
     "def": "with the team on defense (i.e. allowed to opponents)",
 }
 PHASE = {"pass": " on pass plays", "rush": " on rush plays"}
+
+# Bases whose meaning changes by phase split. opportunity_run is
+# (rush == 1) & (yds_rushed >= 4) and False -- not null -- on every other play,
+# so the producer's mean runs over ALL plays in the split, not over rushes.
+PHASE_NOUNS: dict[tuple[str, str | None], str] = {
+    ("opportunity_rate", "pass"): "opportunity rate (always 0: only rushes carry the opportunity flag)",
+    ("opportunity_rate", "rush"): "opportunity rate -- the share of rushes carrying the opportunity flag",
+}
 
 _RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<suffix>_rank|_n)?$")
 
@@ -85,11 +93,11 @@ N_OF: dict[str, str] = {
     "red_zone_success": "red-zone plays",
     "third_down_success": "third-down plays",
     "third_down_distance": "third-down plays",
-    "late_down_success": "late-down plays",
+    "late_down_success": "third- and fourth-down plays",
     "early_down_EPA": "early-down plays",
     "start_position": "plays with a known drive start",
     "nonExplosiveEpaPerPlay": "non-explosive plays",
-    "line_yards": "rushes credited with line yards",
+    "line_yards": "rushes",
     "playsgame": "games",
     "EPAgame": "games",
     "yardsgame": "games",
@@ -182,15 +190,19 @@ def describe(col: str) -> str | None:
     base, side, phase, suffix = m["base"], m["side"], m["phase"], m["suffix"]
     if base not in BASES:
         return None
-    noun, ph = BASES[base], PHASE.get(phase or "", "")
+    noun, ph = PHASE_NOUNS.get((base, phase), BASES[base]), PHASE.get(phase or "", "")
     rank = suffix == "_rank"
 
     if suffix == "_n":
         if side == "margin" or base not in N_OF:
             return None
+        # line_yards is null on every non-rush play, so its pass split has nothing to average
+        always_0 = (
+            " Always 0 here: line yards are credited only on rushes." if (base, phase) == ("line_yards", "pass") else ""
+        )
         return (
             f"Sample size behind {col[:-2]}: the number of {N_OF[base]} it is computed over{ph}, {SIDE[side]}. "
-            "Null when the team has no rows in that split; read it as 0."
+            f"Null when the team has no rows in that split; read it as 0.{always_0}"
         )
 
     if side == "margin":

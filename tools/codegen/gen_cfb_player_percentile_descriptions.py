@@ -96,14 +96,13 @@ MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 #: cfbfastR-cfb-data/python/cfb_data_build/team_summaries.py::PLAYER_SAMPLE_SIZES.
 #: CFB's passer ``success``/``yardsplay`` are counted over completions +
 #: incompletions (``att`` -- sacks AND interceptions are excluded from that
-#: frame); this is a DIFFERENT population from the NFL loader's analogous
-#: columns, which count dropbacks. ``comppct`` counts throws including
-#: interceptions but excluding sacks (``att + pass_int``).
+#: frame). ``comppct`` counts throws including interceptions but excluding
+#: sacks (``att + pass_int``); a dropback is ``att + sacked + pass_int``.
 _GAMES = {m: "games" for m in ("EPAgame", "yardsgame", "playsgame")}
 PLAYER_N_OF: dict[str, dict[str, str]] = {
     "load_cfb_passing": {
-        "EPAplay": "dropbacks (attempts, sacks and interceptions)",
-        "yardsdropback": "dropbacks (attempts, sacks and interceptions)",
+        "EPAplay": "dropbacks (completions, incompletions, sacks and interceptions)",
+        "yardsdropback": "dropbacks (completions, incompletions, sacks and interceptions)",
         "comppct": "throws (including interceptions, excluding sacks)",
         "success": "completions and incompletions (interceptions and sacks excluded)",
         "yardsplay": "completions and incompletions (interceptions and sacks excluded)",
@@ -121,10 +120,19 @@ PLAYER_N_OF: dict[str, dict[str, str]] = {
     },
 }
 
-#: (loader, base) pairs whose CFB count differs from the NFL twin's dropback
-#: convention -- the description must say so (program amendment 14).
-_NFL_DROPBACK_CONTRAST = {("load_cfb_passing", "success"), ("load_cfb_passing", "yardsplay")}
-_NFL_DROPBACK_NOTE = "The NFL loader's equivalent counts dropbacks instead."
+#: (loader, base) pairs whose CFB count differs from the NFL twin's -- the
+#: description must say so (program amendment 14). sdv-py has no NFL summaries
+#: loader, so the twin is named by its nfl-data table. Transcribed from
+#: nfl-data/python/nfl_team_summaries/build.py PLAYER_SAMPLE_SIZES: success is
+#: over ``plays`` (dropbacks), yardsplay over ``att`` (thrown balls -- input.py
+#: drops sacks from nflfastR's pass_attempt, interceptions stay in).
+NFL_NOTES = {
+    ("load_cfb_passing", "success"): "nfl-data's nfl_passing table counts its success_n over dropbacks instead.",
+    ("load_cfb_passing", "yardsplay"): (
+        "nfl-data's nfl_passing table counts its yardsplay_n over pass attempts instead: "
+        "interceptions included, sacks still excluded."
+    ),
+}
 
 
 def n_desc(base: str, noun: str, subject: str, *, note: str = "") -> str:
@@ -188,10 +196,12 @@ def main() -> None:
         curated = manual.get(t) or {}
         declared = {(e["name"] if isinstance(e, dict) else str(e)) for e in schemas.get(t, [])}
         for col in sorted(declared):
-            if col.endswith("_n") and col[:-2] in PLAYER_N_OF[t]:
+            if col.endswith("_n"):
                 base = col[:-2]
-                note = _NFL_DROPBACK_NOTE if (t, base) in _NFL_DROPBACK_CONTRAST else ""
-                out[t][col] = n_desc(base, PLAYER_N_OF[t][base], subject, note=note)
+                if base not in PLAYER_N_OF[t]:
+                    unparsed.append(f"{t}.{col}")
+                    continue
+                out[t][col] = n_desc(base, PLAYER_N_OF[t][base], subject, note=NFL_NOTES.get((t, base), ""))
                 continue
             if not col.endswith("_rank"):
                 continue
