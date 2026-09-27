@@ -471,7 +471,8 @@ def nba_l2m(
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
-    url = _L2M_URL.format(gid=_gid(game_id))
+    gid = _gid(game_id)
+    url = _L2M_URL.format(gid=gid)
     payload = _official_json(_official_get(url, proxy=proxy), url)
     # Every report carries exactly one game row. Anything else is an error envelope or
     # a changed schema -- a failed fetch, never an empty report -- and a second row
@@ -480,6 +481,13 @@ def nba_l2m(
     game = payload.get("game")
     if not (isinstance(game, list) and len(game) == 1 and isinstance(game[0], dict)):
         raise AssetFetchError(f"official.nba.com returned an L2M body without exactly one game row for {url}")
+    # ... and that row must be the game asked for: a missing id, or a cached or
+    # misrouted payload for another game, is a failed fetch, not this game's report.
+    got = _l2m_gid(game[0].get("GameId"))
+    if got != gid:
+        raise AssetFetchError(
+            f"official.nba.com returned the L2M report for game {got!r} when {gid} was requested ({url})"
+        )
     return payload if raw else parse_nba_l2m(payload, return_as_pandas=return_as_pandas)
 
 

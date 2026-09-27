@@ -621,3 +621,22 @@ def test_parsers_return_pandas_on_request():
     out = parse_nba_referee_assignments(_assign(), "nba", return_as_pandas=True)
     assert all(isinstance(v, pd.DataFrame) for v in out.values())
     assert out["officials"].shape == (4, 14)
+
+
+@pytest.mark.parametrize(
+    "game",
+    [[{"GameId": "0042500406"}], [{}], [{"GameId": ""}], [{"GameId": None}]],
+)
+def test_l2m_report_for_another_game_or_without_id_is_asset_fetch_error(monkeypatch, game):
+    payload = {"game": game, "l2m": [], "stats": []}
+    _patch(monkeypatch, _Resp(200, json.dumps(payload), "application/json"))
+    with pytest.raises(AssetFetchError):
+        nba_l2m("0042500405")
+    with pytest.raises(AssetFetchError):
+        nba_l2m("0042500405", raw=True)
+
+
+def test_l2m_numeric_game_id_matches_after_padding(monkeypatch):
+    payload = {"game": [{"GameId": 42500405}], "l2m": [], "stats": []}
+    _patch(monkeypatch, _Resp(200, json.dumps(payload), "application/json"))
+    assert nba_l2m("0042500405", raw=True)["game"][0]["GameId"] == 42500405

@@ -473,3 +473,12 @@ def test_only_failed_fetches_say_fetch_failed(monkeypatch, response, blocked):
     with pytest.raises(AssetFetchError) as err:
         nba_live_pbp("0022500001")
     assert ("fetch failed" in str(err.value)) is blocked
+
+
+def test_fractional_ids_are_null_not_truncated():
+    df = mod._normalize([{"personId": 1628983.5}, {"personId": 1628983.0}, {"personId": "1628983"}])
+    assert df["person_id"].to_list() == [None, 1628983, 1628983]
+    box = parse_nba_live_boxscore(
+        {"game": {"gameId": "0022500001", "homeTeam": {"teamId": 1610612737.5, "players": [{"personId": 1}]}}}
+    )
+    assert box["home_players"]["team_id"].to_list() == [None]

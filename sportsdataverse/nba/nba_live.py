@@ -325,7 +325,15 @@ def _flatten(records: list[dict[str, Any]]) -> pl.DataFrame:
         df = df.select(list(names.values()))
     df = df.rename({c: n for n, c in names.items()})
     id_cols = [c for c in df.columns if _is_id_col(c)]
-    return df.with_columns([pl.col(c).cast(pl.Int64, strict=False) for c in id_cols]) if id_cols else df
+    return df.with_columns([_int_id(c, df.schema[c]) for c in id_cols]) if id_cols else df
+
+
+def _int_id(name: str, dtype: pl.DataType) -> pl.Expr:
+    """Cast an id column to Int64; a fractional float is null, never truncated into another id."""
+    col = pl.col(name)
+    if dtype.is_float():
+        return pl.when(col == col.floor()).then(col.cast(pl.Int64, strict=False)).otherwise(None).alias(name)
+    return col.cast(pl.Int64, strict=False)
 
 
 def _normalize(records: list[dict[str, Any]]) -> pl.DataFrame:
@@ -495,8 +503,11 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
         return _ensure_core_schema(df, NBA_LIVE_TEAM_CORE_SCHEMA)
 
     def _team_id(v: Any) -> pl.Expr:
-        # A list or object teamId cannot cast to Int64: null, not an error.
-        return pl.lit(None if isinstance(v, (dict, list)) else v).cast(pl.Int64, strict=False)
+        # A list/object/bool teamId, or a fractional number, is null: never an error
+        # and never a truncated id.
+        if isinstance(v, (dict, list, bool)) or (isinstance(v, float) and not v.is_integer()):
+            v = None
+        return pl.lit(v).cast(pl.Int64, strict=False)
 
     def _players_frame(team: dict[str, Any]) -> pl.DataFrame:
         df = _normalize(_records(team.get("players")))
