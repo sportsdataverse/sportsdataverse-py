@@ -2197,6 +2197,55 @@ load_cfb_game_rosters:
   type: Float64
 - name: date_of_birth
   type: String
+load_cfb_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_cfb_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_cfb_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_cfb_linescores:
 - name: team_id
   type: Int64
@@ -5174,6 +5223,29 @@ load_cfb_team_box:
   type: Int64
 - name: season
   type: Int64
+load_cfb_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_cfb_team_info:
 - name: team_id
   type: Int64
@@ -8687,6 +8759,55 @@ load_mbb_game_rosters:
   type: Boolean
 - name: reason
   type: String
+load_mbb_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_mbb_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_mbb_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_mbb_officials:
 - name: season
   type: Int32
@@ -9644,6 +9765,29 @@ load_mbb_team_crosswalk:
   type: Float64
 - name: match_method
   type: String
+load_mbb_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_mbb_team_season_stats:
 - name: season
   type: Int32
@@ -9738,6 +9882,55 @@ load_mlb_expected_stats:
   type: Float64
 - name: ba
   type: Float64
+load_mlb_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_mlb_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_mlb_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_mlb_oaa:
 - name: fielder_id
   type: String
@@ -9894,6 +10087,29 @@ load_mlb_stuff_plus:
   type: Float64
 - name: season
   type: Int64
+load_mlb_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_mlb_we_table:
 - name: inning_capped
   type: Int64
@@ -10046,6 +10262,55 @@ load_nba_game_rosters:
 - name: ejected
   type: Boolean
 - name: reason
+  type: String
+load_nba_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_nba_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_nba_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
   type: String
 load_nba_officials:
 - name: season
@@ -13104,6 +13369,29 @@ load_nba_team_crosswalk:
   type: String
 - name: match_confidence
   type: Float64
+load_nba_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_nba_team_season_stats:
 - name: season
   type: Int32
@@ -13158,6 +13446,55 @@ load_ncaa_baseball_games:
   type: String
 - name: home_final
   type: Int64
+load_ncaa_baseball_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_ncaa_baseball_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_ncaa_baseball_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_ncaa_baseball_linescore:
 - name: contest_id
   type: String
@@ -13512,6 +13849,29 @@ load_ncaa_baseball_situational_stats:
   type: String
 - name: season
   type: Int64
+load_ncaa_baseball_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_ncaa_baseball_team_stats:
 - name: contest_id
   type: String
@@ -17432,6 +17792,55 @@ load_nfl_ftn_charting:
   type: Boolean
 - name: date_pulled
   type: Datetime(time_unit='us', time_zone='UTC')
+load_nfl_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_nfl_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_nfl_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_nfl_injuries:
 - name: season
   type: Int32
@@ -19142,6 +19551,29 @@ load_nfl_snap_counts:
   type: Float64
 - name: st_pct
   type: Float64
+load_nfl_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_nfl_team_tendencies:
 - name: season
   type: Int64
@@ -20447,6 +20879,55 @@ load_nhl_goalie_boxscores:
 - name: season
   type: Int64
 - name: game_date
+  type: String
+load_nhl_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_nhl_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_nhl_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
   type: String
 load_nhl_linescore:
 - name: game_id
@@ -21801,6 +22282,29 @@ load_nhl_team_boxscores:
   type: Int64
 - name: game_date
   type: String
+load_nhl_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_nhl_three_stars:
 - name: star
   type: Int64
@@ -23118,6 +23622,55 @@ load_wbb_game_rosters:
   type: Boolean
 - name: reason
   type: String
+load_wbb_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_wbb_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_wbb_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
+  type: String
 load_wbb_officials:
 - name: season
   type: Int32
@@ -24109,6 +24662,29 @@ load_wbb_team_crosswalk:
   type: Float64
 - name: match_method
   type: String
+load_wbb_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_wbb_team_season_stats:
 - name: season
   type: Int32
@@ -24257,6 +24833,55 @@ load_wnba_game_rosters:
 - name: ejected
   type: Boolean
 - name: reason
+  type: String
+load_wnba_group_aliases:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: source
+  type: String
+- name: source_id
+  type: String
+- name: name_kind
+  type: String
+- name: value
+  type: String
+- name: valid_from
+  type: Int32
+- name: valid_to
+  type: Int32
+load_wnba_group_seasons:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: season
+  type: Int32
+- name: level
+  type: String
+- name: name
+  type: String
+- name: short_name
+  type: String
+- name: abbreviation
+  type: String
+- name: parent_group_id
+  type: String
+- name: n_teams
+  type: Int32
+load_wnba_groups:
+- name: league
+  type: String
+- name: group_id
+  type: String
+- name: level
+  type: String
+- name: first_season
+  type: Int32
+- name: last_season
+  type: Int32
+- name: notes
   type: String
 load_wnba_officials:
 - name: season
@@ -25805,6 +26430,29 @@ load_wnba_team_crosswalk:
   type: String
 - name: match_confidence
   type: Float64
+load_wnba_team_group_seasons:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: team_id
+  type: String
+- name: team_id_source
+  type: String
+- name: team_name
+  type: String
+- name: subdivision_id
+  type: String
+- name: conference_id
+  type: String
+- name: division_id
+  type: String
+- name: source
+  type: String
+- name: sources_agree
+  type: Boolean
+- name: notes
+  type: String
 load_wnba_team_season_stats:
 - name: season
   type: Int32

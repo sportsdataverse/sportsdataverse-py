@@ -123,6 +123,11 @@ NFL_NGS_SDV_URL = SDVRELEASES + "{tag}/{stem}_{season}.parquet"
 # season under espn_nfl_<stem>; coach_careers is a single season-less file.
 NFL_ESPN_FOOTBALL_URL = SDVRELEASES + "espn_nfl_{stem}/{stem}_{season}.parquet"
 NFL_ESPN_COACH_CAREERS_URL = SDVRELEASES + "espn_nfl_coach_careers/coach_careers.parquet"
+# SDV conference / division reference tables (sdv-reference-data), tag nfl_groups:
+# three season-less tables ({table} = groups | group_seasons | group_aliases) plus
+# one team_group_seasons asset per season.
+NFL_GROUPS_URL = SDVRELEASES + "nfl_groups/nfl_{table}.parquet"
+NFL_TEAM_GROUP_SEASONS_URL = SDVRELEASES + "nfl_groups/nfl_team_group_seasons_{season}.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"

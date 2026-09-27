@@ -48,8 +48,9 @@ def ncaa_wbb_date_games(
 
     Args:
         date: ``"MM/DD/YYYY"``. Defaults to yesterday (R default).
-        conference: Conference name filter (e.g. ``"SEC"``); default
-            ``"All"``. Unknown names warn and fall back to all conferences.
+        conference: Conference name filter (e.g. ``"SEC"``,
+            ``"Summit League"``); case/punctuation-insensitive. Default
+            ``"All"`` (every conference). Unknown names raise.
         conference_id: Explicit stats.ncaa.org conference id; overrides
             *conference* when given.
         fetcher: Injectable :class:`~sportsdataverse.mbb.mbb_ncaa_fetch.
@@ -63,8 +64,9 @@ def ncaa_wbb_date_games(
 
     Raises:
         ValueError: The date's season has no WBB ``season_divisions`` id
-            (includes 2009-10 — see module docstring), the date is not
-            ``MM/DD/YYYY``, or the fetched page has no games table.
+            (includes 2009-10 — see module docstring), *conference* is not a
+            known conference, the date is not ``MM/DD/YYYY``, or the fetched
+            page has no games table.
 
     Example:
         Quick start::
