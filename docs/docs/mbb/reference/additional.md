@@ -7980,7 +7980,7 @@ game id needed by the play-by-play / box-score scrapers. Port of bigballR
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `date` | `Optional[str]` | `None` | `"MM/DD/YYYY"`. Defaults to yesterday (R default). |
-| `conference` | `str` | `'All'` | Conference name filter (e.g. `"ACC"`, `"Big Ten"`); case/punctuation-insensitive. Default `"All"`. Unknown names warn and fall back to all conferences (R behavior). |
+| `conference` | `str` | `'All'` | Conference name filter (e.g. `"ACC"`, `"Big Ten"`, `"Metro"` / `"MAAC"`); case/punctuation-insensitive, and both the current stats.ncaa.org label and bigballR's abbreviation work. Default `"All"` (every conference). Unknown names raise. |
 | `conference_id` | `Optional[int]` | `None` | Explicit stats.ncaa.org conference id; overrides *conference* when given (R's `conference.ID`). |
 | `fetcher` | `Optional[NcaaFetcher]` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch .NcaaFetcher` (tests pass an offline fake). `None` uses `NcaaFetcher.with_browser()` — the page is JS-rendered behind Akamai bm-verify, so the browser transport is the live default. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

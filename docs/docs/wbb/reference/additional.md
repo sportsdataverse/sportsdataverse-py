@@ -7255,7 +7255,7 @@ the 2010-11..2025-26 coverage caveat).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `date` | `Optional[str]` | `None` | `"MM/DD/YYYY"`. Defaults to yesterday (R default). |
-| `conference` | `str` | `'All'` | Conference name filter (e.g. `"SEC"`); default `"All"`. Unknown names warn and fall back to all conferences. |
+| `conference` | `str` | `'All'` | Conference name filter (e.g. `"SEC"`, `"Summit League"`); case/punctuation-insensitive. Default `"All"` (every conference). Unknown names raise. |
 | `conference_id` | `Optional[int]` | `None` | Explicit stats.ncaa.org conference id; overrides *conference* when given. |
 | `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher` (tests pass an offline fake). `None` uses `NcaaFetcher.with_browser()`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

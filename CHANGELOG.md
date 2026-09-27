@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
@@ -294,6 +295,22 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — conference and division reference tables for nine leagues (`{league}_groups`)
+
+Thirty-six dataset loaders over the `{league}_groups` release tags built by
+`sportsdataverse/sdv-reference-data`, four per league for `cfb`, `mbb`, `wbb`, `nfl`,
+`nba`, `wnba`, `mlb`, `nhl` and NCAA baseball (`load_ncaa_baseball_*`, under `mlb`):
+the season-less `load_<league>_groups()` (one row per group lineage, with SDV's own
+`<league>:<slug>` `group_id`), `load_<league>_group_seasons()` (each group's name,
+abbreviation, parent and member count as of that season, never today's label applied
+to the past) and `load_<league>_group_aliases()` (every label and id a source uses for
+a group, with its valid seasons), plus `load_<league>_team_group_seasons(seasons)` (each
+team's subdivision / conference / division per season, one asset per season). Seasons
+keep each league's own key -- the ENDING year for `mbb`, `wbb`, `nba` and `nhl` -- so no
+asset offset is applied. `team_id` stays a string, as the tables publish it. The NFL
+loaders are hand-written in `nfl_loaders.py` (a missing season raises `NoDataError`);
+the rest are generated. Every column is described in the returns tables.
 
 ### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
 
