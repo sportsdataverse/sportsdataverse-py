@@ -2269,6 +2269,8 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `EPAdrive_off_n` | Int64 | Sample size behind EPAdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `yardsdrive_off_n` | Int64 | Sample size behind yardsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsdrive_off_n` | Int64 | Sample size behind playsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `turnovers_off_n` | Int64 | Sample size behind turnovers_off: the number of games it is computed over. |
+| `turnovers_off` | Float64 | Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt counts against the return team). Lower is better. |
 | `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
 | `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
 | `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
@@ -2297,6 +2299,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
 | `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
 | `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `turnovers_off_rank` | Float64 | National rank of turnovers_off, where 1 is best (fewest giveaways per game). |
 | `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
 | `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
 | `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
@@ -2347,6 +2350,8 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `EPAdrive_def_n` | Int64 | Sample size behind EPAdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `yardsdrive_def_n` | Int64 | Sample size behind yardsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsdrive_def_n` | Int64 | Sample size behind playsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `turnovers_def_n` | Int64 | Sample size behind turnovers_def: the number of games it is computed over. |
+| `turnovers_def` | Float64 | Takeaways per game: the opponents' giveaways, counted the same way. Higher is better. |
 | `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
@@ -2375,6 +2380,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `turnovers_def_rank` | Float64 | National rank of turnovers_def, where 1 is best (most takeaways per game). |
 | `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
@@ -2395,20 +2401,32 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
 | `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `explosive_margin` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. |
+| `turnover_margin` | Float64 | Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better. Spelled singular; there is no turnovers_margin column. |
+| `explosive_margin_rank` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `turnover_margin_rank` | Float64 | National rank of turnover_margin, 1 = largest margin. |
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
 | `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
@@ -2934,6 +2952,8 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `EPAdrive_off_n` | Int64 | Sample size behind EPAdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `yardsdrive_off_n` | Int64 | Sample size behind yardsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsdrive_off_n` | Int64 | Sample size behind playsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `turnovers_off_n` | Int64 | Sample size behind turnovers_off: the number of games it is computed over. |
+| `turnovers_off` | Float64 | Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt counts against the return team). Lower is better. |
 | `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
 | `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
 | `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
@@ -2962,6 +2982,7 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
 | `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
 | `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `turnovers_off_rank` | Float64 | National rank of turnovers_off, where 1 is best (fewest giveaways per game). |
 | `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
 | `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
 | `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
@@ -3012,6 +3033,8 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `EPAdrive_def_n` | Int64 | Sample size behind EPAdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `yardsdrive_def_n` | Int64 | Sample size behind yardsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsdrive_def_n` | Int64 | Sample size behind playsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `turnovers_def_n` | Int64 | Sample size behind turnovers_def: the number of games it is computed over. |
+| `turnovers_def` | Float64 | Takeaways per game: the opponents' giveaways, counted the same way. Higher is better. |
 | `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
@@ -3040,6 +3063,7 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `turnovers_def_rank` | Float64 | National rank of turnovers_def, where 1 is best (most takeaways per game). |
 | `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
@@ -3060,20 +3084,32 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
 | `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `explosive_margin` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. |
+| `turnover_margin` | Float64 | Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better. Spelled singular; there is no turnovers_margin column. |
+| `explosive_margin_rank` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `turnover_margin_rank` | Float64 | National rank of turnover_margin, 1 = largest margin. |
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
 | `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |

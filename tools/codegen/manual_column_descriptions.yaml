@@ -8852,6 +8852,10 @@ load_cfb_team_summaries:
     the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
   explosive_def_rush_rank: National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag
     on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best.
+  explosive_margin: 'Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team''s offensive
+    value minus the value it allowed on defense.'
+  explosive_margin_rank: 'Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team''s offensive
+    value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
   explosive_off: Explosive-play rate -- the share of plays carrying the explosive flag, with the team on offense.
   explosive_off_n: 'Sample size behind explosive_off: the number of plays it is computed over, with the team on offense. Null
     when the team has no rows in that split; read it as 0.'
@@ -9180,6 +9184,24 @@ load_cfb_team_summaries:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
+  pts_per_opp_def: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
+    opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
+    3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no
+    scoring opportunity.
+  pts_per_opp_def_n: 'Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents'' drives against
+    the team''s defense. 0 when there were none, and pts_per_opp_def is then null.'
+  pts_per_opp_def_rank: 'National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when
+    pts_per_opp_def is null: unranked, not last.'
+  pts_per_opp_margin: pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better.
+  pts_per_opp_margin_rank: 'National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null:
+    unranked, not last.'
+  pts_per_opp_off: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
+    opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
+    3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity.
+  pts_per_opp_off_n: 'Sample size behind pts_per_opp_off: the number of scoring opportunities on the team''s own drives. 0
+    when there were none, and pts_per_opp_off is then null.'
+  pts_per_opp_off_rank: 'National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off
+    is null: unranked, not last.'
   red_zone_success_def: Success rate on red-zone plays, with the team on defense (i.e. allowed to opponents).
   red_zone_success_def_n: 'Sample size behind red_zone_success_def: the number of red-zone plays it is computed over, with
     the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
@@ -9380,6 +9402,16 @@ load_cfb_team_summaries:
   total_gained_yards_margin: Yards the team gained minus yards it allowed.
   total_gained_yards_margin_rank: National rank of total_gained_yards_margin, 1 = largest margin.
   total_gained_yards_off: Total yards the team actually gained across its own drives.
+  turnover_margin: 'Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better.
+    Spelled singular; there is no turnovers_margin column.'
+  turnover_margin_rank: National rank of turnover_margin, 1 = largest margin.
+  turnovers_def: 'Takeaways per game: the opponents'' giveaways, counted the same way. Higher is better.'
+  turnovers_def_n: 'Sample size behind turnovers_def: the number of games it is computed over.'
+  turnovers_def_rank: National rank of turnovers_def, where 1 is best (most takeaways per game).
+  turnovers_off: 'Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt
+    counts against the return team). Lower is better.'
+  turnovers_off_n: 'Sample size behind turnovers_off: the number of games it is computed over.'
+  turnovers_off_rank: National rank of turnovers_off, where 1 is best (fewest giveaways per game).
   valid_games: Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below
     two valid games are dropped from the adjusted ratings.
   yards_def: Total yards gained, with the team on defense (i.e. allowed to opponents).
@@ -9748,6 +9780,10 @@ load_cfb_team_summaries_weekly:
     the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
   explosive_def_rush_rank: National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag
     on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best.
+  explosive_margin: 'Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team''s offensive
+    value minus the value it allowed on defense.'
+  explosive_margin_rank: 'Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team''s offensive
+    value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
   explosive_off: Explosive-play rate -- the share of plays carrying the explosive flag, with the team on offense.
   explosive_off_n: 'Sample size behind explosive_off: the number of plays it is computed over, with the team on offense. Null
     when the team has no rows in that split; read it as 0.'
@@ -10076,6 +10112,24 @@ load_cfb_team_summaries_weekly:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
+  pts_per_opp_def: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
+    opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
+    3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no
+    scoring opportunity.
+  pts_per_opp_def_n: 'Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents'' drives against
+    the team''s defense. 0 when there were none, and pts_per_opp_def is then null.'
+  pts_per_opp_def_rank: 'National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when
+    pts_per_opp_def is null: unranked, not last.'
+  pts_per_opp_margin: pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better.
+  pts_per_opp_margin_rank: 'National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null:
+    unranked, not last.'
+  pts_per_opp_off: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
+    opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
+    3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity.
+  pts_per_opp_off_n: 'Sample size behind pts_per_opp_off: the number of scoring opportunities on the team''s own drives. 0
+    when there were none, and pts_per_opp_off is then null.'
+  pts_per_opp_off_rank: 'National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off
+    is null: unranked, not last.'
   red_zone_success_def: Success rate on red-zone plays, with the team on defense (i.e. allowed to opponents).
   red_zone_success_def_n: 'Sample size behind red_zone_success_def: the number of red-zone plays it is computed over, with
     the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
@@ -10278,6 +10332,16 @@ load_cfb_team_summaries_weekly:
   total_gained_yards_margin: Yards the team gained minus yards it allowed.
   total_gained_yards_margin_rank: National rank of total_gained_yards_margin, 1 = largest margin.
   total_gained_yards_off: Total yards the team actually gained across its own drives.
+  turnover_margin: 'Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better.
+    Spelled singular; there is no turnovers_margin column.'
+  turnover_margin_rank: National rank of turnover_margin, 1 = largest margin.
+  turnovers_def: 'Takeaways per game: the opponents'' giveaways, counted the same way. Higher is better.'
+  turnovers_def_n: 'Sample size behind turnovers_def: the number of games it is computed over.'
+  turnovers_def_rank: National rank of turnovers_def, where 1 is best (most takeaways per game).
+  turnovers_off: 'Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt
+    counts against the return team). Lower is better.'
+  turnovers_off_n: 'Sample size behind turnovers_off: the number of games it is computed over.'
+  turnovers_off_rank: National rank of turnovers_off, where 1 is best (fewest giveaways per game).
   valid_games: Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below
     two valid games are dropped from the adjusted ratings.
   yards_def: Total yards gained, with the team on defense (i.e. allowed to opponents).

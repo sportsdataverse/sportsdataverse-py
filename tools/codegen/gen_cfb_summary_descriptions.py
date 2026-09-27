@@ -111,6 +111,9 @@ N_OF: dict[str, str] = {
 #   adj_*/net/strength/valid_games -> sportsdataverse/cfb/cfb_adjusted_epa.py
 #   available/total_*_yards        -> team_summaries.py (drive aggregation)
 #   fbs_class                      -> team_summaries.py::prepare_for_write
+#   pts_per_opp_*                  -> team_summaries.py::_drives / _drive_owners
+#   turnovers_* / turnover_margin  -> team_summaries.py::_summarize_team, summaries_input.game_giveaways
+# explosive_margin(_rank) parses on the grid below (explosive_off - explosive_def).
 _ADJ = (
     "opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense "
     "team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across "
@@ -169,6 +172,49 @@ EXTRA: dict[str, str] = {
     "total_available_yards_margin_rank": "National rank of total_available_yards_margin, 1 = largest margin.",
     "total_gained_yards_margin_rank": "National rank of total_gained_yards_margin, 1 = largest margin.",
     "available_yards_pct_margin_rank": "National rank of available_yards_pct_margin, 1 = largest margin.",
+}
+
+# Five Factors (cfbfastR-cfb-data#103). Whole-team only: no _pass/_rush split.
+_PPO = (
+    "Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside "
+    "the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive "
+    "result, 7 for a touchdown, 3 for a field goal and 0 otherwise"
+)
+_TOV = (
+    "interceptions and lost fumbles on every play, special teams included (a muffed punt counts against "
+    "the return team)"
+)
+for _s, _who, _null, _best in (
+    ("off", "the team's own drives", "the team had", "most points per opportunity"),
+    ("def", "opponents' drives against the team's defense", "opponents had", "fewest points allowed per opportunity"),
+):
+    EXTRA |= {
+        f"pts_per_opp_{_s}": f"{_PPO}. Counted on {_who}. Null when {_null} no scoring opportunity.",
+        f"pts_per_opp_{_s}_rank": (
+            f"National rank of pts_per_opp_{_s}, where 1 is best ({_best}). "
+            f"Null when pts_per_opp_{_s} is null: unranked, not last."
+        ),
+        f"pts_per_opp_{_s}_n": (
+            f"Sample size behind pts_per_opp_{_s}: the number of scoring opportunities on {_who}. "
+            f"0 when there were none, and pts_per_opp_{_s} is then null."
+        ),
+        f"turnovers_{_s}_n": f"Sample size behind turnovers_{_s}: the number of games it is computed over.",
+    }
+EXTRA |= {
+    "pts_per_opp_margin": "pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better.",
+    "pts_per_opp_margin_rank": (
+        "National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: "
+        "unranked, not last."
+    ),
+    "turnovers_off": f"Giveaways per game: {_TOV}. Lower is better.",
+    "turnovers_def": "Takeaways per game: the opponents' giveaways, counted the same way. Higher is better.",
+    "turnovers_off_rank": "National rank of turnovers_off, where 1 is best (fewest giveaways per game).",
+    "turnovers_def_rank": "National rank of turnovers_def, where 1 is best (most takeaways per game).",
+    "turnover_margin": (
+        "Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is "
+        "better. Spelled singular; there is no turnovers_margin column."
+    ),
+    "turnover_margin_rank": "National rank of turnover_margin, 1 = largest margin.",
 }
 
 
