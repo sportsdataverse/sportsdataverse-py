@@ -285,14 +285,20 @@ def test_referee_assignments_invalid_date_raises_before_request(monkeypatch, bad
         {"nba": {"Table": {"rows": []}, "Table1": {"rows": []}}},  # no wnba block
         {"wnba": {"Table": {"rows": []}}},  # block without Table1
         {"message": "error"},  # error envelope
+        {"wnba": {"Table": None, "Table1": {"rows": []}}},  # null table
+        {"wnba": {"Table": {}, "Table1": {"rows": []}}},  # table without rows
+        {"wnba": {"Table": {"rows": None}, "Table1": {"rows": []}}},  # null rows
     ],
 )
 def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypatch, payload):
-    # The live feed carries every league's Table/Table1 block on every date (zero rows
-    # on a day without games), so a missing block is a failed fetch, not an empty day.
+    # The live feed carries every league's Table/Table1 block, each with a rows list,
+    # on every date (zero rows on a day without games), so anything else is a failed
+    # fetch, not an empty day -- including under raw=True, which a capture job stores.
     monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
     with pytest.raises(AssetFetchError):
         nba_referee_assignments("2026-06-13", league="wnba")
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13", league="wnba", raw=True)
 
 
 def test_referee_assignments_empty_block_is_an_empty_day(monkeypatch):

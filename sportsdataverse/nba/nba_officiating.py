@@ -741,15 +741,18 @@ def nba_referee_assignments(
         raise ValueError(f"date must be a valid 'YYYY-MM-DD' date, got {date!r}") from None
     resp = _official_get(_ASSIGN_URL, params={"date": day}, proxy=proxy)
     payload = _official_json(resp, f"{_ASSIGN_URL}?date={day}")
+    # The feed carries nba, gl and wnba blocks, each with Table and Table1 holding a
+    # ``rows`` list, on every date (zero rows on a day without games), so anything
+    # else is an error envelope or a changed schema -- never an empty day. Checked
+    # before the raw return too, so a raw capture never stores an error envelope.
+    block = payload.get(league)
+    if not isinstance(block, dict) or not all(
+        isinstance(block.get(t), dict) and isinstance(block[t].get("rows"), list) for t in ("Table", "Table1")
+    ):
+        raise AssetFetchError(
+            f"official.nba.com referee assignments for {day}: no {league!r} Table/Table1 rows in the response"
+        )
     if raw:
         return payload  # full three-league {nba, gl, wnba} payload
-    # The feed carries nba, gl and wnba blocks, each with Table and Table1, on every
-    # date (zero rows on a day without games), so a missing block is an error
-    # envelope or a changed schema -- never an empty day.
-    block = payload.get(league)
-    if not isinstance(block, dict) or "Table" not in block or "Table1" not in block:
-        raise AssetFetchError(
-            f"official.nba.com referee assignments for {day}: no {league!r} Table/Table1 block in the response"
-        )
     out = parse_nba_referee_assignments(payload, league)
     return {k: v.to_pandas() for k, v in out.items()} if return_as_pandas else out
