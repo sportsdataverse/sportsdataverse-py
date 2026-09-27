@@ -470,7 +470,12 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
         each still carrying its ``*_CORE_SCHEMA`` columns at their declared
         dtypes -- so e.g. a boxscore where one side has 0 players still lets
         ``pl.concat([home_players, away_players], how="diagonal_relaxed")``
-        succeed.
+        succeed. Every other liveData field is passed through, snake-cased, with
+        each nested ``statistics`` object flattened into ``statistics_*`` columns
+        (``statistics_points``, ``statistics_plus_minus_points``, ...); a field only
+        some players carry, such as ``not_playing_reason``, is present only when a
+        player on that side has it. The payload's ``arena`` object and each team's
+        ``periods`` list are dropped.
 
     Raises:
         This function does not raise. Empty or malformed payloads produce
@@ -631,8 +636,20 @@ def nba_live_boxscore(
         proxy: Optional proxy dict passed through to the HTTP layer.
 
     Returns:
-        If ``raw=True``, the raw JSON dict. Otherwise, a dict of DataFrames as
-        documented in :func:`parse_nba_live_boxscore`.
+        If ``raw=True``, the raw JSON dict. Otherwise, a dict of six DataFrames
+        (``game``, ``officials``, ``home_players``, ``away_players``,
+        ``home_team``, ``away_team``) parsed by :func:`parse_nba_live_boxscore`.
+        Their core columns are guaranteed on every frame, even a zero-row one, at
+        their declared dtypes: ``game_id`` on all six, plus ``game_status``,
+        ``game_time_utc``, ``home_team_id``, ``away_team_id``, and ``attendance`` on
+        ``game``; ``person_id``, ``name``, ``jersey_num``, and ``assignment`` on
+        ``officials``; ``team_id``, ``person_id``, ``name``, ``jersey_num``,
+        ``position``, ``starter``, and ``played`` on the player frames; and
+        ``team_id``, ``team_tricode``, and ``score`` on the team frames. Every other
+        liveData field is passed through, snake-cased, with each nested
+        ``statistics`` object flattened into ``statistics_*`` columns; a field only
+        some players carry, such as ``not_playing_reason``, is present only when a
+        player on that side has it.
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a

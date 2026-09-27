@@ -103,8 +103,21 @@ def wnba_live_boxscore(
         proxy: Optional proxy dict passed through to the HTTP layer.
 
     Returns:
-        If ``raw=True``, the raw JSON dict. Otherwise, a dict of DataFrames as
-        documented in :func:`sportsdataverse.nba.nba_live.parse_nba_live_boxscore`.
+        If ``raw=True``, the raw JSON dict. Otherwise, a dict of six DataFrames
+        (``game``, ``officials``, ``home_players``, ``away_players``,
+        ``home_team``, ``away_team``) parsed by
+        :func:`sportsdataverse.nba.nba_live.parse_nba_live_boxscore`. Their core
+        columns are guaranteed on every frame, even a zero-row one, at their
+        declared dtypes: ``game_id`` on all six, plus ``game_status``,
+        ``game_time_utc``, ``home_team_id``, ``away_team_id``, and ``attendance`` on
+        ``game``; ``person_id``, ``name``, ``jersey_num``, and ``assignment`` on
+        ``officials``; ``team_id``, ``person_id``, ``name``, ``jersey_num``,
+        ``position``, ``starter``, and ``played`` on the player frames; and
+        ``team_id``, ``team_tricode``, and ``score`` on the team frames. Every other
+        liveData field is passed through, snake-cased, with each nested
+        ``statistics`` object flattened into ``statistics_*`` columns; a field only
+        some players carry, such as ``not_playing_reason``, is present only when a
+        player on that side has it.
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a

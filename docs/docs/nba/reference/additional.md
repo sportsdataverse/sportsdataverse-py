@@ -3732,7 +3732,7 @@ officials, home/away players, home/away team).
 
 **Returns**
 
-If `raw=True`, the raw JSON dict. Otherwise, a dict of DataFrames as documented in `parse_nba_live_boxscore`.
+If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `officials`, `home_players`, `away_players`, `home_team`, `away_team`) parsed by `parse_nba_live_boxscore`. Their core columns are guaranteed on every frame, even a zero-row one, at their declared dtypes: `game_id` on all six, plus `game_status`, `game_time_utc`, `home_team_id`, `away_team_id`, and `attendance` on `game`; `person_id`, `name`, `jersey_num`, and `assignment` on `officials`; `team_id`, `person_id`, `name`, `jersey_num`, `position`, `starter`, and `played` on the player frames; and `team_id`, `team_tricode`, and `score` on the team frames. Every other liveData field is passed through, snake-cased, with each nested `statistics` object flattened into `statistics_*` columns; a field only some players carry, such as `not_playing_reason`, is present only when a player on that side has it.
 
 | col_name | type | description |
 |---|---|---|
@@ -3742,35 +3742,263 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of DataFrames as documented 
 | `game.home_team_id` | integer | NBA/WNBA team id of the home team, taken from the payload's homeTeam object. |
 | `game.away_team_id` | integer | NBA/WNBA team id of the away team, taken from the payload's awayTeam object. |
 | `game.attendance` | integer | Reported attendance figure for the game, when published by the feed. |
+| `game.game_time_local` | character | Scheduled tip-off in the arena's local time, ISO-8601 with UTC offset, e.g. 2025-10-21T18:30:00-05:00. |
+| `game.game_time_home` | character | Scheduled tip-off in the home team's local time, ISO-8601 with UTC offset; the same as game_time_local on the capture, whose two teams share the arena's time zone. |
+| `game.game_time_away` | character | Scheduled tip-off in the away team's local time, ISO-8601 with UTC offset; the same as game_time_local on the capture, whose two teams share the arena's time zone. |
+| `game.game_et` | character | Scheduled tip-off in US Eastern time, ISO-8601 with UTC offset, e.g. 2025-10-21T19:30:00-04:00. |
+| `game.duration` | integer | Wall-clock length of the game in whole minutes, opening tip to final buzzer, e.g. 196 on the double-overtime capture, whose first and last play-by-play actions are 3h16m apart. |
+| `game.game_code` | character | Game code written as the game date (YYYYMMDD), a slash, then the away and home team tricodes, e.g. 20251021/HOUOKC. |
+| `game.game_status_text` | character | Game status as display text, e.g. Final. |
+| `game.regulation_periods` | integer | Number of regulation periods in the game, 4. |
+| `game.period` | integer | Current period, or the last period played on a final game; 5 and up are overtime periods (6 on the double-overtime capture). |
+| `game.game_clock` | character | Time left in the current period as an ISO-8601 duration, e.g. PT00M00.00S on a final game. |
+| `game.sellout` | character | Sellout flag as a string, "1" when the game sold out; "1" on the capture. |
 | `officials.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked. |
 | `officials.person_id` | integer | NBA/WNBA person id of the on-court official. |
 | `officials.name` | character | Official's display name. |
 | `officials.jersey_num` | character | Official's jersey number as a string. |
 | `officials.assignment` | character | Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot. |
+| `officials.name_i` | character | Official's first initial and last name, e.g. Z. Zarba. |
+| `officials.first_name` | character | Official's first name as the feed writes it. |
+| `officials.family_name` | character | Official's last name as the feed writes it. |
 | `home_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
 | `home_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
 | `home_players.person_id` | integer | NBA/WNBA player id. |
 | `home_players.name` | character | Player's display name. |
 | `home_players.jersey_num` | character | Player's jersey number as a string. |
-| `home_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
+| `home_players.position` | character | Starting-lineup slot, one each of SF, PF, C, SG, and PG across the five starters (order 1-5) rather than the player's roster position; null for non-starters. |
 | `home_players.starter` | character | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
 | `home_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `home_players.status` | character | Roster status, ACTIVE or INACTIVE (ruled out before the game); an ACTIVE player can still sit out, which played and not_playing_reason show. |
+| `home_players.order` | integer | Player's place in the feed's roster listing for the team, from 1; the five starters are 1-5 (SF, PF, C, SG, PG), then the rest of the active roster, then inactive players. |
+| `home_players.oncourt` | character | Flag as a string ("1"/"0") for whether the player is on the floor as of the capture; on a final game, the five on the floor at the final buzzer. |
+| `home_players.name_i` | character | Player's first initial and last name, e.g. L. Dort or J. Smith Jr. |
+| `home_players.first_name` | character | Player's first name as the feed writes it. |
+| `home_players.family_name` | character | Player's last name including any suffix, e.g. Gilgeous-Alexander or Smith Jr. |
+| `home_players.statistics_assists` | integer | Assists credited to the player. |
+| `home_players.statistics_blocks` | integer | Opponent shots the player blocked. |
+| `home_players.statistics_blocks_received` | integer | Player's shot attempts that an opponent blocked. |
+| `home_players.statistics_field_goals_attempted` | integer | Field-goal attempts, statistics_two_pointers_attempted plus statistics_three_pointers_attempted. |
+| `home_players.statistics_field_goals_made` | integer | Field goals made, statistics_two_pointers_made plus statistics_three_pointers_made. |
+| `home_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
+| `home_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `home_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
+| `home_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
+| `home_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
+| `home_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
+| `home_players.statistics_free_throws_made` | integer | Free throws the player made. |
+| `home_players.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |
+| `home_players.statistics_minus` | double | Points the opponent scored while the player was on the floor, as a float (e.g. 92.0); 0.0 for a player who did not play. |
+| `home_players.statistics_minutes` | character | Playing time as an ISO-8601 duration to the hundredth of a second, e.g. PT45M15.10S; PT00M00.00S for a player who did not play. |
+| `home_players.statistics_minutes_calculated` | character | Playing time in whole minutes as an ISO-8601 duration, e.g. PT45M; usually statistics_minutes rounded to the nearest minute, but adjusted so the team's players add up to the team's statistics_minutes_calculated (a 20:32 stint shows PT20M and a 0:05.6 one PT01M). |
+| `home_players.statistics_plus` | double | Points the player's team scored while the player was on the floor, as a float (e.g. 94.0); 0.0 for a player who did not play. |
+| `home_players.statistics_plus_minus_points` | double | Plus-minus, statistics_plus minus statistics_minus, as a float (e.g. 2.0). |
+| `home_players.statistics_points` | integer | Points the player scored. |
+| `home_players.statistics_points_fast_break` | integer | Fast-break points, free throws included. |
+| `home_players.statistics_points_in_the_paint` | integer | Points on field goals made in the paint. |
+| `home_players.statistics_points_second_chance` | integer | Second-chance points, free throws included. |
+| `home_players.statistics_rebounds_defensive` | integer | Defensive rebounds the player grabbed. |
+| `home_players.statistics_rebounds_offensive` | integer | Offensive rebounds the player grabbed. |
+| `home_players.statistics_rebounds_total` | integer | Total rebounds, statistics_rebounds_offensive plus statistics_rebounds_defensive. |
+| `home_players.statistics_steals` | integer | Steals credited to the player. |
+| `home_players.statistics_three_pointers_attempted` | integer | Three-point field-goal attempts. |
+| `home_players.statistics_three_pointers_made` | integer | Three-point field goals made. |
+| `home_players.statistics_three_pointers_percentage` | double | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted; 0 when the player attempted none. |
+| `home_players.statistics_turnovers` | integer | Turnovers charged to the player. |
+| `home_players.statistics_two_pointers_attempted` | integer | Two-point field-goal attempts. |
+| `home_players.statistics_two_pointers_made` | integer | Two-point field goals made. |
+| `home_players.statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted; 0 when the player attempted none. |
+| `home_players.not_playing_reason` | character | Code for why the player did not play, e.g. INACTIVE_INJURY, INACTIVE_GLEAGUE_TWOWAY, or DND_INJURY; null for everyone else, including some players who sat out with no stated reason. The column is present only when a player on that side has one. |
+| `home_players.not_playing_description` | character | Free-text detail for not_playing_reason, for an injury the body part and the injury, e.g. "Left Knee; Contusion" (sometimes with a trailing space); null when none is given, as on INACTIVE_GLEAGUE_TWOWAY. The column is present only when a player on that side has one. |
 | `away_players.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
 | `away_players.team_id` | integer | NBA/WNBA team id of the side (home or away) the player belongs to. |
 | `away_players.person_id` | integer | NBA/WNBA player id. |
 | `away_players.name` | character | Player's display name. |
 | `away_players.jersey_num` | character | Player's jersey number as a string. |
-| `away_players.position` | character | Listed roster position (G, F, C, etc.), populated only for starters. |
+| `away_players.position` | character | Starting-lineup slot, one each of SF, PF, C, SG, and PG across the five starters (order 1-5) rather than the player's roster position; null for non-starters. |
 | `away_players.starter` | character | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
 | `away_players.played` | character | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `away_players.status` | character | Roster status, ACTIVE or INACTIVE (ruled out before the game); an ACTIVE player can still sit out, which played and not_playing_reason show. |
+| `away_players.order` | integer | Player's place in the feed's roster listing for the team, from 1; the five starters are 1-5 (SF, PF, C, SG, PG), then the rest of the active roster, then inactive players. |
+| `away_players.oncourt` | character | Flag as a string ("1"/"0") for whether the player is on the floor as of the capture; on a final game, the five on the floor at the final buzzer. |
+| `away_players.name_i` | character | Player's first initial and last name, e.g. L. Dort or J. Smith Jr. |
+| `away_players.first_name` | character | Player's first name as the feed writes it. |
+| `away_players.family_name` | character | Player's last name including any suffix, e.g. Gilgeous-Alexander or Smith Jr. |
+| `away_players.statistics_assists` | integer | Assists credited to the player. |
+| `away_players.statistics_blocks` | integer | Opponent shots the player blocked. |
+| `away_players.statistics_blocks_received` | integer | Player's shot attempts that an opponent blocked. |
+| `away_players.statistics_field_goals_attempted` | integer | Field-goal attempts, statistics_two_pointers_attempted plus statistics_three_pointers_attempted. |
+| `away_players.statistics_field_goals_made` | integer | Field goals made, statistics_two_pointers_made plus statistics_three_pointers_made. |
+| `away_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
+| `away_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `away_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
+| `away_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
+| `away_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
+| `away_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
+| `away_players.statistics_free_throws_made` | integer | Free throws the player made. |
+| `away_players.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |
+| `away_players.statistics_minus` | double | Points the opponent scored while the player was on the floor, as a float (e.g. 92.0); 0.0 for a player who did not play. |
+| `away_players.statistics_minutes` | character | Playing time as an ISO-8601 duration to the hundredth of a second, e.g. PT45M15.10S; PT00M00.00S for a player who did not play. |
+| `away_players.statistics_minutes_calculated` | character | Playing time in whole minutes as an ISO-8601 duration, e.g. PT45M; usually statistics_minutes rounded to the nearest minute, but adjusted so the team's players add up to the team's statistics_minutes_calculated (a 20:32 stint shows PT20M and a 0:05.6 one PT01M). |
+| `away_players.statistics_plus` | double | Points the player's team scored while the player was on the floor, as a float (e.g. 94.0); 0.0 for a player who did not play. |
+| `away_players.statistics_plus_minus_points` | double | Plus-minus, statistics_plus minus statistics_minus, as a float (e.g. 2.0). |
+| `away_players.statistics_points` | integer | Points the player scored. |
+| `away_players.statistics_points_fast_break` | integer | Fast-break points, free throws included. |
+| `away_players.statistics_points_in_the_paint` | integer | Points on field goals made in the paint. |
+| `away_players.statistics_points_second_chance` | integer | Second-chance points, free throws included. |
+| `away_players.statistics_rebounds_defensive` | integer | Defensive rebounds the player grabbed. |
+| `away_players.statistics_rebounds_offensive` | integer | Offensive rebounds the player grabbed. |
+| `away_players.statistics_rebounds_total` | integer | Total rebounds, statistics_rebounds_offensive plus statistics_rebounds_defensive. |
+| `away_players.statistics_steals` | integer | Steals credited to the player. |
+| `away_players.statistics_three_pointers_attempted` | integer | Three-point field-goal attempts. |
+| `away_players.statistics_three_pointers_made` | integer | Three-point field goals made. |
+| `away_players.statistics_three_pointers_percentage` | double | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted; 0 when the player attempted none. |
+| `away_players.statistics_turnovers` | integer | Turnovers charged to the player. |
+| `away_players.statistics_two_pointers_attempted` | integer | Two-point field-goal attempts. |
+| `away_players.statistics_two_pointers_made` | integer | Two-point field goals made. |
+| `away_players.statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted; 0 when the player attempted none. |
+| `away_players.not_playing_reason` | character | Code for why the player did not play, e.g. INACTIVE_INJURY, INACTIVE_GLEAGUE_TWOWAY, or DND_INJURY; null for everyone else, including some players who sat out with no stated reason. The column is present only when a player on that side has one. |
+| `away_players.not_playing_description` | character | Free-text detail for not_playing_reason, for an injury the body part and the injury, e.g. "Left Knee; Contusion" (sometimes with a trailing space); null when none is given, as on INACTIVE_GLEAGUE_TWOWAY. The column is present only when a player on that side has one. |
 | `home_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
 | `home_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
 | `home_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
 | `home_team.score` | integer | Team's current or final score. |
+| `home_team.team_name` | character | Team nickname, e.g. Thunder or Rockets. |
+| `home_team.team_city` | character | Team's location label, e.g. Oklahoma City or Houston. |
+| `home_team.in_bonus` | character | Flag as a string ("1"/"0") for whether the team is in the bonus as of the capture, i.e. the opponent has reached the team-foul penalty in the current period (the last period on a final game). |
+| `home_team.timeouts_remaining` | integer | Timeouts the team has left as of the capture (at the end of the game on a final). |
+| `home_team.statistics_assists` | integer | Team assists, the players' assists summed. |
+| `home_team.statistics_assists_turnover_ratio` | double | Assists divided by statistics_turnovers_total (team turnovers included), e.g. 29 / 12 = 2.4167. |
+| `home_team.statistics_bench_points` | integer | Points scored by the players who did not start. |
+| `home_team.statistics_biggest_lead` | integer | Team's largest lead in points during the game. |
+| `home_team.statistics_biggest_lead_score` | character | Score when the team first reached its biggest lead, written away-home, e.g. "104-110" for the home team's 6-point lead. |
+| `home_team.statistics_biggest_scoring_run` | integer | Team's longest run of unanswered points in the game. |
+| `home_team.statistics_biggest_scoring_run_score` | character | Score when the team's longest run ended, written away-home, e.g. "104-110". |
+| `home_team.statistics_blocks` | integer | Opponent shots the team blocked. |
+| `home_team.statistics_blocks_received` | integer | Team's shot attempts that were blocked, equal to the opponent's blocks. |
+| `home_team.statistics_fast_break_points_attempted` | integer | Fast-break field-goal attempts; free throws are not counted. |
+| `home_team.statistics_fast_break_points_made` | integer | Fast-break field goals made; free throws are not counted. |
+| `home_team.statistics_fast_break_points_percentage` | double | statistics_fast_break_points_made / statistics_fast_break_points_attempted as a 0-1 fraction. |
+| `home_team.statistics_field_goals_attempted` | integer | Field-goal attempts by the team's players, the sum of the player rows; a heave counted in statistics_team_field_goal_attempts is not included. |
+| `home_team.statistics_field_goals_effective_adjusted` | double | Effective field-goal percentage as a 0-1 fraction, (statistics_field_goals_made + 0.5 * statistics_three_pointers_made) / statistics_field_goals_attempted. |
+| `home_team.statistics_field_goals_made` | integer | Field goals made by the team's players. |
+| `home_team.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted. |
+| `home_team.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `home_team.statistics_fouls_drawn` | integer | Fouls drawn, equal to the opponent's statistics_fouls_personal on the capture. |
+| `home_team.statistics_fouls_personal` | integer | Personal fouls committed by the team's players, offensive fouls included and technical fouls excluded. |
+| `home_team.statistics_fouls_team` | integer | Team fouls, statistics_fouls_personal minus statistics_fouls_offensive on the capture. |
+| `home_team.statistics_fouls_technical` | integer | Technical fouls charged to the team's players (0 on the capture). |
+| `home_team.statistics_fouls_team_technical` | integer | Technical fouls charged to the team rather than a player (0 on the capture). |
+| `home_team.statistics_free_throws_attempted` | integer | Free-throw attempts by the team's players. |
+| `home_team.statistics_free_throws_made` | integer | Free throws made by the team's players. |
+| `home_team.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted. |
+| `home_team.statistics_lead_changes` | integer | Number of lead changes in the game, the same on both teams' rows. |
+| `home_team.statistics_minutes` | character | Total playing time of the team's players as an ISO-8601 duration, five times the game length, e.g. PT290M00.00S for a double-overtime game. |
+| `home_team.statistics_minutes_calculated` | character | Total playing time in whole minutes as an ISO-8601 duration, e.g. PT290M; the players' statistics_minutes_calculated add up to it. |
+| `home_team.statistics_points` | integer | Team points, equal to score on the capture. |
+| `home_team.statistics_points_against` | integer | Points the opponent scored. |
+| `home_team.statistics_points_fast_break` | integer | Fast-break points, free throws included. |
+| `home_team.statistics_points_from_turnovers` | integer | Points scored off the opponent's turnovers, free throws included. |
+| `home_team.statistics_points_in_the_paint` | integer | Points on field goals made in the paint. |
+| `home_team.statistics_points_in_the_paint_attempted` | integer | Field-goal attempts in the paint. |
+| `home_team.statistics_points_in_the_paint_made` | integer | Field goals made in the paint. |
+| `home_team.statistics_points_in_the_paint_percentage` | double | statistics_points_in_the_paint_made / statistics_points_in_the_paint_attempted as a 0-1 fraction. |
+| `home_team.statistics_points_second_chance` | integer | Second-chance points, free throws included. |
+| `home_team.statistics_rebounds_defensive` | integer | Defensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_defensive. |
+| `home_team.statistics_rebounds_offensive` | integer | Offensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_offensive. |
+| `home_team.statistics_rebounds_personal` | integer | Rebounds by the team's players, statistics_rebounds_defensive plus statistics_rebounds_offensive. |
+| `home_team.statistics_rebounds_team` | integer | Team rebounds credited to the team rather than a player, statistics_rebounds_team_defensive plus statistics_rebounds_team_offensive. |
+| `home_team.statistics_rebounds_team_defensive` | integer | Defensive rebounds credited to the team rather than a player. |
+| `home_team.statistics_rebounds_team_offensive` | integer | Offensive rebounds credited to the team rather than a player. |
+| `home_team.statistics_rebounds_total` | integer | All rebounds, statistics_rebounds_personal plus statistics_rebounds_team. |
+| `home_team.statistics_second_chance_points_attempted` | integer | Second-chance field-goal attempts; free throws are not counted. |
+| `home_team.statistics_second_chance_points_made` | integer | Second-chance field goals made; free throws are not counted. |
+| `home_team.statistics_second_chance_points_percentage` | double | statistics_second_chance_points_made / statistics_second_chance_points_attempted as a 0-1 fraction. |
+| `home_team.statistics_steals` | integer | Steals by the team's players. |
+| `home_team.statistics_team_field_goal_attempts` | integer | Field-goal attempts credited to the team rather than a player and left out of statistics_field_goals_attempted, e.g. an end-of-quarter heave (1 for Houston on the capture, whose play-by-play logs one heave). |
+| `home_team.statistics_three_pointers_attempted` | integer | Three-point field-goal attempts by the team's players. |
+| `home_team.statistics_three_pointers_made` | integer | Three-point field goals made by the team's players. |
+| `home_team.statistics_three_pointers_percentage` | double | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted. |
+| `home_team.statistics_time_leading` | character | Game-clock time the team held the lead, as an ISO-8601 duration, e.g. PT10M18.70S. |
+| `home_team.statistics_times_tied` | integer | Number of times the score was tied after 0-0, the same on both teams' rows. |
+| `home_team.statistics_true_shooting_attempts` | double | True-shooting attempts, statistics_field_goals_attempted + 0.44 * statistics_free_throws_attempted. |
+| `home_team.statistics_true_shooting_percentage` | double | True-shooting percentage as a 0-1 fraction, statistics_points / (2 * statistics_true_shooting_attempts). |
+| `home_team.statistics_turnovers` | integer | Turnovers by the team's players; team turnovers are in statistics_turnovers_team. |
+| `home_team.statistics_turnovers_team` | integer | Turnovers charged to the team rather than a player, e.g. a shot-clock violation. |
+| `home_team.statistics_turnovers_total` | integer | All turnovers, statistics_turnovers plus statistics_turnovers_team. |
+| `home_team.statistics_two_pointers_attempted` | integer | Two-point field-goal attempts by the team's players. |
+| `home_team.statistics_two_pointers_made` | integer | Two-point field goals made by the team's players. |
+| `home_team.statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
 | `away_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
 | `away_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
 | `away_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
 | `away_team.score` | integer | Team's current or final score. |
+| `away_team.team_name` | character | Team nickname, e.g. Thunder or Rockets. |
+| `away_team.team_city` | character | Team's location label, e.g. Oklahoma City or Houston. |
+| `away_team.in_bonus` | character | Flag as a string ("1"/"0") for whether the team is in the bonus as of the capture, i.e. the opponent has reached the team-foul penalty in the current period (the last period on a final game). |
+| `away_team.timeouts_remaining` | integer | Timeouts the team has left as of the capture (at the end of the game on a final). |
+| `away_team.statistics_assists` | integer | Team assists, the players' assists summed. |
+| `away_team.statistics_assists_turnover_ratio` | double | Assists divided by statistics_turnovers_total (team turnovers included), e.g. 29 / 12 = 2.4167. |
+| `away_team.statistics_bench_points` | integer | Points scored by the players who did not start. |
+| `away_team.statistics_biggest_lead` | integer | Team's largest lead in points during the game. |
+| `away_team.statistics_biggest_lead_score` | character | Score when the team first reached its biggest lead, written away-home, e.g. "104-110" for the home team's 6-point lead. |
+| `away_team.statistics_biggest_scoring_run` | integer | Team's longest run of unanswered points in the game. |
+| `away_team.statistics_biggest_scoring_run_score` | character | Score when the team's longest run ended, written away-home, e.g. "104-110". |
+| `away_team.statistics_blocks` | integer | Opponent shots the team blocked. |
+| `away_team.statistics_blocks_received` | integer | Team's shot attempts that were blocked, equal to the opponent's blocks. |
+| `away_team.statistics_fast_break_points_attempted` | integer | Fast-break field-goal attempts; free throws are not counted. |
+| `away_team.statistics_fast_break_points_made` | integer | Fast-break field goals made; free throws are not counted. |
+| `away_team.statistics_fast_break_points_percentage` | double | statistics_fast_break_points_made / statistics_fast_break_points_attempted as a 0-1 fraction. |
+| `away_team.statistics_field_goals_attempted` | integer | Field-goal attempts by the team's players, the sum of the player rows; a heave counted in statistics_team_field_goal_attempts is not included. |
+| `away_team.statistics_field_goals_effective_adjusted` | double | Effective field-goal percentage as a 0-1 fraction, (statistics_field_goals_made + 0.5 * statistics_three_pointers_made) / statistics_field_goals_attempted. |
+| `away_team.statistics_field_goals_made` | integer | Field goals made by the team's players. |
+| `away_team.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted. |
+| `away_team.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `away_team.statistics_fouls_drawn` | integer | Fouls drawn, equal to the opponent's statistics_fouls_personal on the capture. |
+| `away_team.statistics_fouls_personal` | integer | Personal fouls committed by the team's players, offensive fouls included and technical fouls excluded. |
+| `away_team.statistics_fouls_team` | integer | Team fouls, statistics_fouls_personal minus statistics_fouls_offensive on the capture. |
+| `away_team.statistics_fouls_technical` | integer | Technical fouls charged to the team's players (0 on the capture). |
+| `away_team.statistics_fouls_team_technical` | integer | Technical fouls charged to the team rather than a player (0 on the capture). |
+| `away_team.statistics_free_throws_attempted` | integer | Free-throw attempts by the team's players. |
+| `away_team.statistics_free_throws_made` | integer | Free throws made by the team's players. |
+| `away_team.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted. |
+| `away_team.statistics_lead_changes` | integer | Number of lead changes in the game, the same on both teams' rows. |
+| `away_team.statistics_minutes` | character | Total playing time of the team's players as an ISO-8601 duration, five times the game length, e.g. PT290M00.00S for a double-overtime game. |
+| `away_team.statistics_minutes_calculated` | character | Total playing time in whole minutes as an ISO-8601 duration, e.g. PT290M; the players' statistics_minutes_calculated add up to it. |
+| `away_team.statistics_points` | integer | Team points, equal to score on the capture. |
+| `away_team.statistics_points_against` | integer | Points the opponent scored. |
+| `away_team.statistics_points_fast_break` | integer | Fast-break points, free throws included. |
+| `away_team.statistics_points_from_turnovers` | integer | Points scored off the opponent's turnovers, free throws included. |
+| `away_team.statistics_points_in_the_paint` | integer | Points on field goals made in the paint. |
+| `away_team.statistics_points_in_the_paint_attempted` | integer | Field-goal attempts in the paint. |
+| `away_team.statistics_points_in_the_paint_made` | integer | Field goals made in the paint. |
+| `away_team.statistics_points_in_the_paint_percentage` | double | statistics_points_in_the_paint_made / statistics_points_in_the_paint_attempted as a 0-1 fraction. |
+| `away_team.statistics_points_second_chance` | integer | Second-chance points, free throws included. |
+| `away_team.statistics_rebounds_defensive` | integer | Defensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_defensive. |
+| `away_team.statistics_rebounds_offensive` | integer | Offensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_offensive. |
+| `away_team.statistics_rebounds_personal` | integer | Rebounds by the team's players, statistics_rebounds_defensive plus statistics_rebounds_offensive. |
+| `away_team.statistics_rebounds_team` | integer | Team rebounds credited to the team rather than a player, statistics_rebounds_team_defensive plus statistics_rebounds_team_offensive. |
+| `away_team.statistics_rebounds_team_defensive` | integer | Defensive rebounds credited to the team rather than a player. |
+| `away_team.statistics_rebounds_team_offensive` | integer | Offensive rebounds credited to the team rather than a player. |
+| `away_team.statistics_rebounds_total` | integer | All rebounds, statistics_rebounds_personal plus statistics_rebounds_team. |
+| `away_team.statistics_second_chance_points_attempted` | integer | Second-chance field-goal attempts; free throws are not counted. |
+| `away_team.statistics_second_chance_points_made` | integer | Second-chance field goals made; free throws are not counted. |
+| `away_team.statistics_second_chance_points_percentage` | double | statistics_second_chance_points_made / statistics_second_chance_points_attempted as a 0-1 fraction. |
+| `away_team.statistics_steals` | integer | Steals by the team's players. |
+| `away_team.statistics_team_field_goal_attempts` | integer | Field-goal attempts credited to the team rather than a player and left out of statistics_field_goals_attempted, e.g. an end-of-quarter heave (1 for Houston on the capture, whose play-by-play logs one heave). |
+| `away_team.statistics_three_pointers_attempted` | integer | Three-point field-goal attempts by the team's players. |
+| `away_team.statistics_three_pointers_made` | integer | Three-point field goals made by the team's players. |
+| `away_team.statistics_three_pointers_percentage` | double | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted. |
+| `away_team.statistics_time_leading` | character | Game-clock time the team held the lead, as an ISO-8601 duration, e.g. PT10M18.70S. |
+| `away_team.statistics_times_tied` | integer | Number of times the score was tied after 0-0, the same on both teams' rows. |
+| `away_team.statistics_true_shooting_attempts` | double | True-shooting attempts, statistics_field_goals_attempted + 0.44 * statistics_free_throws_attempted. |
+| `away_team.statistics_true_shooting_percentage` | double | True-shooting percentage as a 0-1 fraction, statistics_points / (2 * statistics_true_shooting_attempts). |
+| `away_team.statistics_turnovers` | integer | Turnovers by the team's players; team turnovers are in statistics_turnovers_team. |
+| `away_team.statistics_turnovers_team` | integer | Turnovers charged to the team rather than a player, e.g. a shot-clock violation. |
+| `away_team.statistics_turnovers_total` | integer | All turnovers, statistics_turnovers plus statistics_turnovers_team. |
+| `away_team.statistics_two_pointers_attempted` | integer | Two-point field-goal attempts by the team's players. |
+| `away_team.statistics_two_pointers_made` | integer | Two-point field goals made by the team's players. |
+| `away_team.statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
 
 **Example**
 

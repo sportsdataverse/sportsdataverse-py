@@ -430,6 +430,31 @@ def test_malformed_live_payloads_never_raise(payload):
 
 
 @pytest.mark.parametrize(
+    ("fixture_path", "schema_path"),
+    [
+        (FIX / "boxscore_0022500001.json", _AUTODOC / "nba" / "nba_live_boxscore.yaml"),
+        (
+            Path(__file__).parent.parent / "wnba" / "fixtures" / "wnba_live" / "boxscore_1022600097.json",
+            _AUTODOC / "wnba" / "wnba_live_boxscore.yaml",
+        ),
+    ],
+    ids=["nba", "wnba"],
+)
+def test_boxscore_returns_table_documents_every_capture_column(fixture_path, schema_path):
+    """Per frame, the hand-authored Returns table lists the core columns first, then
+    every other column a real capture produces, at the captured dtype."""
+    box = parse_nba_live_boxscore(json.loads(fixture_path.read_text()))
+    columns = yaml.safe_load(schema_path.read_text(encoding="utf-8"))["columns"]
+    assert [c["name"].split(".", 1)[0] for c in columns] == [k for k, df in box.items() for _ in df.columns]
+    for key, df in box.items():
+        doc = {c["name"].split(".", 1)[1]: c["type"] for c in columns if c["name"].startswith(f"{key}.")}
+        assert list(doc)[: len(_BOX_CORE[key])] == _BOX_CORE[key].names(), key
+        assert set(doc) == set(df.columns), key
+        for name, dtype in df.schema.items():
+            assert doc[name] == _DOC_TYPE[str(dtype)], f"{key}.{name}"
+
+
+@pytest.mark.parametrize(
     ("action", "col"),
     [({"personId": [1, 2]}, "person_id"), ({"clock": [1]}, "clock"), ({"description": ["a"]}, "description")],
 )
