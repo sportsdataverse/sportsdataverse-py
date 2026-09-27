@@ -5336,10 +5336,10 @@ Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | String | ESPN team id. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `team_id` | String | stats.ncaa.org team id. It is issued per season, so a school's id changes from year to year; it is not an ESPN id. |
+| `team_name` | String | School name as stats.ncaa.org lists it, without the mascot. |
 | `academic_year` | Int32 | Academic year the team record covers (the ENDING year of the fall/spring split) -- distinct from `season`, which is the STARTING year. |
-| `division` | Int32 | Division in the conference for the team. |
+| `division` | Int32 | stats.ncaa.org division code, 11 = FBS and 12 = FCS; not a conference division (the table has no conference column). |
 | `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
