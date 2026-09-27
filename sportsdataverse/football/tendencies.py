@@ -125,8 +125,31 @@ _DIFF_RATES: tuple[tuple[str, str, str], ...] = (
     ("third_down_over_expected", "third_down_conversions", "third_down_expected"),
 )
 
+#: Offensive points by ESPN ``drive.result``. CFB 2004-2013 and NFL 2002-2005 spell
+#: the outcome out ("RUSHING TD", "FG GOOD", "MADE FG", ...; NFL also "FG GOOD" in
+#: 2009-2013; CFB 2004 and NFL 2002-2004 have no plain "TD"/"FG" drive at all),
+#: so a "TD"/"FG"-only match scored those seasons at ~0. A trailing " TD TD" is a drive
+#: id ESPN merged across a change of possession; the result is the scoring segment's.
+#: Return TDs ("INT TD", "PUNT RETURN TD", ...) are the other team's points: 0.
+_DRIVE_RESULT_POINTS: dict[str, float] = {
+    "TD": 7.0,
+    "RUSHING TD": 7.0,
+    "PASSING TD": 7.0,
+    "RUSHING TD TD": 7.0,
+    "PASSING TD TD": 7.0,
+    "RUSH TD": 7.0,  # NFL 2005
+    "PASSRECEPTION TD": 7.0,  # NFL 2005
+    "LATERAL TD": 7.0,  # NFL 2002-2003
+    "FG": 3.0,
+    "FG GOOD": 3.0,
+    "MADE FG": 3.0,
+    "FIELDGOAL MADE FG": 3.0,  # NFL 2005
+}
 _DRIVE_PTS = (
-    pl.when(pl.col("drive.result") == "TD").then(7.0).when(pl.col("drive.result") == "FG").then(3.0).otherwise(0.0)
+    pl.col("drive.result")
+    .cast(pl.Utf8)
+    .replace_strict(_DRIVE_RESULT_POINTS, default=0.0, return_dtype=pl.Float64)
+    .fill_null(0.0)
 )
 _SCRIPTED_DRIVES_PER_HALF = 2
 

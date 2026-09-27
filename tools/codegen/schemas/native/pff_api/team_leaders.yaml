@@ -632,4 +632,4 @@ frames:
     type: integer
   section: defense
 kind: frames
-schema: team_leaders
+schema: pff_api_team_leaders

@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [rolling_windows fixtures](#rolling_windows-fixtures)
+  - [Source](#source)
+  - [Selection rule](#selection-rule)
+  - [Expected counts](#expected-counts)
+  - [Known data quirk: ESPN "TEAM" sentinel plays](#known-data-quirk-espn-team-sentinel-plays)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # rolling_windows fixtures
 
 Real released CFB play-by-play, sliced to the 36 games (2021-2024) in which

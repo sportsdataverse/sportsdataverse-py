@@ -15,7 +15,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 | [NHL EDGE API](reference/nhl_edge) | 35 | `https://api-web.nhle.com` |
 | [NHL Stats REST API](reference/nhl_stats_rest) | 21 | `https://api.nhle.com/stats/rest` |
 | [NHL Records API](reference/nhl_records) | 44 | `https://records.nhl.com/site/api` |
-| [Dataset loaders](reference/loaders) | 23 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 27 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 87 | hand-written wrappers, loaders & helpers |
 
 ## Examples

@@ -110,6 +110,7 @@ def opponent_adjusted_ridge(
     resp_col: str,
     lam: float,
     penalize_home: bool = False,
+    hfa_col: str | None = None,
 ) -> tuple[pl.DataFrame, float, float]:
     """Ridge-regress ``resp_col`` on offense + defense team indicators + HFA.
 
@@ -117,10 +118,10 @@ def opponent_adjusted_ridge(
     offense/defense-indicator + intercept + home design and solves the
     ridge normal equations ``beta = (X'X + lam*R)^-1 X'y``. Only team
     coefficients are penalised; the intercept (and, unless
-    ``penalize_home``, the home term) is free. Moved verbatim (T7.2) from
-    ``sportsdataverse.nfl.nfl_ratings`` -- NFL is currently the sole
-    adopter of this exact dense-design encoding (CFB's ridge is the
-    genuinely different :func:`dropped_level_ridge`).
+    ``penalize_home``, the home term) is free. Moved (T7.2) from
+    ``sportsdataverse.nfl.nfl_ratings``. Callers: NFL ratings, and CFB
+    adjusted EPA (``cfb_adjusted_epa._fit_team_strengths``, via ``hfa_col``);
+    ``cfb_ratings`` uses the different :func:`dropped_level_ridge`.
 
     Args:
         plays: One row per play. Rows with a null ``off_col`` / ``def_col``
@@ -133,6 +134,10 @@ def opponent_adjusted_ridge(
         lam: Ridge penalty applied to the team coefficients.
         penalize_home: Also penalise the home-field coefficient
             (default False).
+        hfa_col: Numeric column used as the home regressor as-is (e.g. CFB's
+            ``+1`` home offense / ``0`` neutral site / ``-1`` away), in place
+            of the ``off_col == home_col`` indicator, which then goes unused.
+            Must not contain nulls (raises ``ValueError``).
 
     Returns:
         A ``(frame, intercept, home_coef)`` tuple: ``frame`` has one row per
@@ -166,13 +171,22 @@ def opponent_adjusted_ridge(
     X[np.arange(n), oi] = 1.0
     X[np.arange(n), n_t + di] = 1.0
     X[:, 2 * n_t] = 1.0  # intercept
-    is_home = (off == plays[home_col].cast(pl.Utf8)).to_numpy().astype(float)
-    X[:, 2 * n_t + 1] = is_home  # HFA (offense is home)
+    if hfa_col is not None:
+        if plays[hfa_col].null_count():
+            raise ValueError(f"opponent_adjusted_ridge: {hfa_col!r} has nulls; filter or fill them before fitting")
+        X[:, 2 * n_t + 1] = plays[hfa_col].cast(pl.Float64).to_numpy()
+    else:
+        X[:, 2 * n_t + 1] = (off == plays[home_col].cast(pl.Utf8)).to_numpy().astype(float)  # HFA (offense is home)
     y = plays[resp_col].cast(pl.Float64).to_numpy()
     R = np.eye(p)
     R[2 * n_t, 2 * n_t] = 0.0  # don't penalise intercept
     if not penalize_home:
         R[2 * n_t + 1, 2 * n_t + 1] = 0.0  # don't penalise HFA
+    if np.ptp(X[:, 2 * n_t + 1]) == 0:
+        # No home/away contrast (e.g. every game at a neutral site): the term is not
+        # identified and an unpenalised zero column makes X'X singular. Fit it at 0.
+        X[:, 2 * n_t + 1] = 0.0
+        R[2 * n_t + 1, 2 * n_t + 1] = 1.0
     beta = np.linalg.solve(X.T @ X + lam * R, X.T @ y)
     frame = pl.DataFrame(
         {

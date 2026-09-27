@@ -1,4 +1,4 @@
 columns: []
 kind: dataframe
 note: opaque
-schema: player_rushing_direction
+schema: pff_api_player_rushing_direction

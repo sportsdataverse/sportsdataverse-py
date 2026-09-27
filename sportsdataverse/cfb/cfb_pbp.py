@@ -3458,9 +3458,15 @@ class CFBPlayProcess(object):
                                     "Fumble Recovery (Own)",
                                     "Fumble Recovery (Own) Touchdown",
                                     "Fumble Return Touchdown",
+                                    "Fumble",
                                 ],
                             )
-                        ).and_(pl.col("text").str.contains("run for")),
+                        )
+                        # 2025+ ESPN writes "rush right for 6 yards gain" (and stats crews
+                        # "rush middle , fumble by"); "run for" alone left 435 FBS scrimmage
+                        # fumbles in 2025 neither rush nor pass. Case-sensitive on purpose:
+                        # "(X Run for Two-Point Conversion)" is a try, not this play.
+                        .and_(pl.col("text").str.contains(r"run for|\brush (?:(?:left|right|middle) )?(?:for\b|,)")),
                     ),
                 )
                 .then(True)
@@ -3524,6 +3530,12 @@ class CFBPlayProcess(object):
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                    )
+                    # 2025+ ESPN type for a fumble with no recovery (out of bounds)
+                    .or_(
+                        (pl.col("type.text") == "Fumble").and_(
+                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                        ),
                     )
                     # Interception plays are pass attempts. The branches above
                     # only catch them in the 2005 and 2014+ text formats; 2004
@@ -3831,6 +3843,14 @@ class CFBPlayProcess(object):
         )
         play_df = (
             play_df.with_columns(
+                # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
+                # it is an interception, not a strip sack for the rule below to retype.
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                .then(pl.lit("Interception Return"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # --- Fix Strip Sacks to Fumbles ----
                 pl.when(
                     (pl.col("fumble_vec") == True)
@@ -4608,6 +4628,8 @@ class CFBPlayProcess(object):
                     .and_(pl.col("pass") == True)
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
+                .then(True)
+                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass complete")))
                 .then(True)
                 .otherwise(False),
                 pass_attempt=pl.when(
