@@ -308,7 +308,10 @@ published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The exi
 branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
 readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
 and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
-penalty residual `statYardage - yds_rushed` all move. The 2025 season needs a reprocess.
+penalty residual `statYardage - yds_rushed` all move. A run filed twice in one 2023 text
+("run for 7 yds ... fumbled ... rush middle for 7 yards loss") reads the loss from the second copy
+(43 rows). The 2023 and 2025 seasons and 2026 to date need a reprocess (2022 has one rush and one
+reception).
 
 ### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
 
