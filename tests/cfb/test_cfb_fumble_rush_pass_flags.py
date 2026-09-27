@@ -135,3 +135,17 @@ def test_scrimmage_fumbles_are_pass_or_rush_end_to_end(game_id: int, name: str) 
     assert (scrimmage["rush"] != scrimmage["pass"]).all(), scrimmage.select("type.text", "text", "rush", "pass")
     completions = scrimmage.filter(pl.col("text").str.contains("pass complete"))
     assert completions["completion"].all()
+
+
+def test_intercepted_pass_fumbled_out_of_bounds_keeps_the_interception() -> None:
+    """A ``Fumble``-typed pick whose returner fumbles out of bounds is an interception, not a lost fumble.
+
+    Once the pass flag reads ``Fumble`` rows, the strip-sack rule would retype this row
+    "Fumble Recovery (Opponent)" (a pass, a fumble, a change of possession) and ``int`` would miss it.
+    """
+    with gzip.open(FIX / "summary_401761657_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)  # Old Dominion @ Georgia Southern, 2025
+    plays = _offline_plays(summary, 401761657)
+    row = plays.filter(pl.col("text").str.contains("J.French IV pass intercepted by #12 J.Carter", literal=True))
+    assert row.height == 1
+    assert row.select("type.text", "pass", "int").row(0) == ("Interception Return", True, True)

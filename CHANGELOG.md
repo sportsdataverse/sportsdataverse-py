@@ -306,7 +306,9 @@ fumble-typed row only read "run for") and files a fumble that goes out of bounds
 out with `rush` and `pass` both False (33 in 2024), 435 of them through these two gaps, so every
 pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed rows now read the
 2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
-2005–2013 feeds pick up the rush flag through the same pattern (~25 per season).
+2005–2013 feeds pick up the rush flag through the same pattern (~25 per season). A `Fumble`-typed pick whose returner
+fumbles out of bounds is typed "Interception Return" (3 rows in 2025–26), so the strip-sack rule no
+longer retypes it as a lost fumble.
 
 ### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
 

@@ -3821,6 +3821,14 @@ class CFBPlayProcess(object):
         )
         play_df = (
             play_df.with_columns(
+                # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
+                # it is an interception, not a strip sack for the rule below to retype.
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                .then(pl.lit("Interception Return"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # --- Fix Strip Sacks to Fumbles ----
                 pl.when(
                     (pl.col("fumble_vec") == True)
