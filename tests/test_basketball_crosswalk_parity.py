@@ -310,13 +310,16 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
     )
 
 
-def test_kenpom_teams_falls_back_to_the_newest_bundled_year() -> None:
-    """Out-of-range seasons reuse the newest capture (``mbb_crosswalk.R:349-354``)."""
-    newest = mbb_crosswalk._kenpom_teams(2026)
-    assert newest.height == 365
+def test_kenpom_teams_has_no_rows_for_an_unbundled_season() -> None:
+    """Out-of-range seasons get nothing, NOT the newest capture R falls back to.
+
+    ``mbb_crosswalk.R:349-354`` substitutes ``max(kp_yrs)``, which stamped the
+    newest season's conferences on any season the bundle lacks.
+    """
+    assert mbb_crosswalk._kenpom_teams(2026).height == 365
     assert mbb_crosswalk._kenpom_teams(2002).height == 327
-    assert mbb_crosswalk._kenpom_teams(1999).to_dicts() == newest.to_dicts()
-    assert mbb_crosswalk._kenpom_teams(2030).to_dicts() == newest.to_dicts()
+    assert mbb_crosswalk._kenpom_teams(1999).height == 0
+    assert mbb_crosswalk._kenpom_teams(2030).height == 0
 
 
 def test_wnba_team_crosswalk_parity() -> None:

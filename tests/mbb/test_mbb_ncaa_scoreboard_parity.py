@@ -26,8 +26,11 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from sportsdataverse.mbb.mbb_ncaa_scoreboard import (
+    _CONF_NORM_RE,
+    _NCAA_BB_CONFERENCE_LABELS,
     NCAA_MBB_SEASON_DIVISIONS,
     SCOREBOARD_SCHEMA,
+    _resolve_conference_id,
     ncaa_mbb_date_games,
     parse_ncaa_bb_scoreboard,
 )
@@ -146,3 +149,47 @@ def test_mbb_season_table_boundaries() -> None:
     assert NCAA_MBB_SEASON_DIVISIONS["2025-26"] == 18703
     assert NCAA_MBB_SEASON_DIVISIONS["2009-10"] == 10060
     assert len(NCAA_MBB_SEASON_DIVISIONS) == 17
+
+
+@pytest.mark.parametrize(
+    ("label", "conf_id"),
+    [
+        # stats.ncaa.org / NCAA.com labels -- all returned 0 ("all") before the id-keyed table.
+        ("America East", 845),
+        ("Ivy League", 865),
+        ("Summit League", 819),
+        ("Mountain West", 5486),
+        ("American", 823),
+        ("Metro", 871),
+        ("UAC ", 923),  # the trailing space is real on stats.ncaa.org and NCAA.com
+        # bigballR abbreviations, which already worked.
+        ("MWC", 5486),
+        ("AAC", 823),
+        ("Horizon", 881),
+        ("C-USA", 24312),
+        ("MAAC", 871),
+        ("WAC", 923),
+        ("Big 10", 827),
+        ("big ten", 827),
+        ("All", 0),
+    ],
+)
+def test_resolve_conference_id_labels(label: str, conf_id: int) -> None:
+    assert _resolve_conference_id(label) == conf_id
+
+
+def test_resolve_conference_id_unknown_raises() -> None:
+    """An unknown label must not silently widen the scoreboard to every conference."""
+    with pytest.raises(ValueError, match=r"Unknown conference 'Not A Conference'.*'Metro'"):
+        _resolve_conference_id("Not A Conference")
+    with pytest.raises(ValueError, match="Unknown conference"):
+        ncaa_mbb_date_games(DATE, conference="Pac-10", fetcher=object())  # type: ignore[arg-type]
+
+
+def test_conference_labels_do_not_collide() -> None:
+    """Two ids sharing a normalized label would silently shadow one of them."""
+    owners: dict[str, set[int]] = {}
+    for cid, labels in _NCAA_BB_CONFERENCE_LABELS.items():
+        for lab in labels:
+            owners.setdefault(_CONF_NORM_RE.sub("", lab).lower(), set()).add(cid)
+    assert {k: ids for k, ids in owners.items() if len(ids) > 1} == {}

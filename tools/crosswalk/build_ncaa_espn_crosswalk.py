@@ -1,17 +1,23 @@
 """Build the stats.ncaa.org <-> ESPN basketball team-id crosswalk.
 
-Two modes:
+Three modes:
 
 ``--capture``
     Hit ESPN once and refresh the committed reference tables
     (``espn_mbb_teams.csv`` / ``espn_wbb_teams.csv`` in this directory).
-    Requires network; run rarely (new D-I members, conference realignment).
+    Requires network; run rarely (new D-I members, renames).
+
+``--capture-groups``
+    Refresh ``conference_seasons_{mbb,wbb}.csv`` in this directory from the
+    ``{lg}_groups`` sportsdataverse-data release (per-season team -> conference
+    membership). Requires network; run after each realignment summer.
 
 default
     Fully offline. Reads the committed reference tables, the hoopR
     cross-provider name dictionary, and the hand-curated alias tables, then
     writes ``sportsdataverse/{mbb,wbb}/data/ncaa_espn_team_crosswalk_{mbb,wbb}.csv``
-    and prints the per-season match-rate report.
+    and prints the per-season match-rate report. Conference columns come from
+    ``conference_seasons_{league}.csv``, joined per season on the ESPN id.
 
 Match order (first hit wins, and a candidate is only accepted when it resolves
 to exactly ONE ESPN team):
@@ -32,11 +38,13 @@ Usage::
 
     uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py
     uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py --capture
+    uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py --capture-groups
 """
 
 from __future__ import annotations
 
 import argparse
+import io
 import re
 from pathlib import Path
 from typing import Dict, List, Optional, Set
@@ -48,6 +56,9 @@ ROOT = HERE.parents[1]
 HOOPR_DICT = HERE / "dict_hoopR_ncaa_espn.csv"
 ALIAS = HERE / "alias_ncaa_espn.csv"
 _SITE_TEAM = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams"
+_GROUPS_ASSET = (
+    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/{league}_groups/{league}_{table}.parquet"
+)
 
 #: AP-style abbreviations stats.ncaa.org uses that ESPN spells out. Derived
 #: empirically from the unmatched residue, not guessed -- every entry below
@@ -276,6 +287,89 @@ def capture() -> None:
     print(f"dict_hoopR_ncaa_espn.csv: {dct.height} rows")
 
 
+def _groups_table(league: str, table: str) -> pl.DataFrame:
+    from sportsdataverse.dl_utils import download
+
+    return pl.read_parquet(io.BytesIO(download(url=_GROUPS_ASSET.format(league=league, table=table)).content))
+
+
+def _nearest_alias(aliases: pl.DataFrame, keys: pl.DataFrame, value: str, name: str) -> pl.DataFrame:
+    """Per ``(conference_id, season)``: *value* of the alias whose validity window is nearest.
+
+    Distance is 0 inside ``[valid_from, valid_to]``, so an in-window alias always
+    wins; a season outside every window takes the closest one (the NCAA labels
+    are only asserted from 2017-18 in men's, but a conference's label does not
+    change with the season).
+    """
+    return (
+        keys.join(aliases, on="conference_id")
+        .with_columns(
+            pl.max_horizontal(
+                pl.col("valid_from") - pl.col("season"), pl.col("season") - pl.col("valid_to"), pl.lit(0)
+            ).alias("_dist")
+        )
+        .sort("conference_id", "season", "_dist", "valid_from", descending=[False, False, False, True])
+        .unique(subset=["conference_id", "season"], keep="first", maintain_order=True)
+        .select("conference_id", "season", pl.col(value).alias(name))
+    )
+
+
+def capture_groups() -> None:
+    """Refresh ``conference_seasons_{league}.csv`` from the ``{league}_groups`` release.
+
+    One row per ``(season, espn_team_id)`` with ``season`` the ENDING year, the
+    SDV group id (``conference_id``), ESPN's group id for that season (Summit
+    League was 15 before 2008, 49 since), the group's name that season, and the
+    NCAA label (``group_aliases`` source ``ncaa``; the SDV abbreviation for a
+    group the NCAA vocabulary never covered, e.g. men's Great West).
+    """
+    for league in ("mbb", "wbb"):
+        teams = (
+            _groups_table(league, "team_group_seasons")
+            .filter(pl.col("team_id_source") == "espn")
+            .select(pl.col("season").cast(pl.Int64), pl.col("team_id").alias("espn_team_id"), "conference_id")
+        )
+        names = _groups_table(league, "group_seasons").select(
+            pl.col("group_id").alias("conference_id"),
+            pl.col("season").cast(pl.Int64),
+            pl.col("name").alias("espn_conference_name"),
+        )
+        aliases = (
+            _groups_table(league, "group_aliases")
+            .rename({"group_id": "conference_id"})
+            # A null bound is an open-ended window.
+            .with_columns(
+                pl.col("valid_from").cast(pl.Int64).fill_null(0), pl.col("valid_to").cast(pl.Int64).fill_null(9999)
+            )
+        )
+        keys = teams.select("conference_id", "season").unique()
+        espn = aliases.filter((pl.col("source") == "espn") & (pl.col("name_kind") == "name"))
+        ncaa = aliases.filter(pl.col("source") == "ncaa")
+        sdv = aliases.filter((pl.col("source") == "sdv") & (pl.col("name_kind") == "abbreviation"))
+        out = (
+            teams.join(names, on=["conference_id", "season"], how="left")
+            .join(
+                _nearest_alias(espn, keys, "source_id", "espn_conference_id"),
+                on=["conference_id", "season"],
+                how="left",
+            )
+            .join(_nearest_alias(ncaa, keys, "value", "ncaa_conference"), on=["conference_id", "season"], how="left")
+            .join(_nearest_alias(sdv, keys, "value", "sdv_abbreviation"), on=["conference_id", "season"], how="left")
+            .select(
+                "season",
+                "espn_team_id",
+                "conference_id",
+                "espn_conference_id",
+                "espn_conference_name",
+                pl.coalesce("ncaa_conference", "sdv_abbreviation").alias("ncaa_conference"),
+            )
+            .sort("season", "espn_team_id")
+        )
+        assert out.select("season", "espn_team_id").is_duplicated().sum() == 0, f"{league}: a team in two conferences"
+        out.write_csv(HERE / f"conference_seasons_{league}.csv")
+        print(f"conference_seasons_{league}.csv: {out.height} rows")
+
+
 # --------------------------------------------------------------------------
 # build
 # --------------------------------------------------------------------------
@@ -341,7 +435,7 @@ def build(league: str) -> pl.DataFrame:
     def col(field: str) -> List[Optional[str]]:
         return [espn_by_id[i][field] if i is not None else None for i in espn_ids]
 
-    return ncaa.select(
+    teams = ncaa.select(
         pl.col("season"),
         pl.col("id").cast(pl.Int64).alias("ncaa_team_id"),
         pl.col("team").alias("ncaa_team"),
@@ -351,10 +445,38 @@ def build(league: str) -> pl.DataFrame:
         pl.Series("espn_location", col("location"), dtype=pl.Utf8),
         pl.Series("espn_mascot", col("mascot"), dtype=pl.Utf8),
         pl.Series("espn_abbreviation", col("abbreviation"), dtype=pl.Utf8),
-        pl.Series("espn_conference_name", col("conference_name"), dtype=pl.Utf8),
-        pl.Series("espn_conference_id", col("conference_id"), dtype=pl.Utf8),
         pl.Series("match_method", methods, dtype=pl.Utf8),
-    ).sort("season", "ncaa_team")
+        # "2009-10" -> 2010: the groups tables key seasons by the ENDING year.
+        (pl.col("season").str.slice(0, 4).cast(pl.Int64) + 1).alias("_end_season"),
+    )
+    conf = pl.read_csv(
+        HERE / f"conference_seasons_{league}.csv",
+        schema_overrides={"season": pl.Int64, "espn_team_id": pl.Utf8, "espn_conference_id": pl.Utf8},
+    ).rename({"season": "_end_season", "ncaa_conference": "_ncaa_conference"})
+    for key in ("_end_season", "espn_team_id"):
+        assert teams.schema[key] == conf.schema[key], f"{key}: {teams.schema[key]} != {conf.schema[key]}"
+    return (
+        teams.join(conf, on=["_end_season", "espn_team_id"], how="left")
+        # The NCAA label follows the season's membership; a team the groups
+        # table does not carry that season keeps its stats.ncaa.org label.
+        .with_columns(pl.coalesce("_ncaa_conference", "ncaa_conference").alias("ncaa_conference"))
+        .select(
+            "season",
+            "ncaa_team_id",
+            "ncaa_team",
+            "ncaa_conference",
+            "conference_id",
+            "espn_team_id",
+            "espn_display_name",
+            "espn_location",
+            "espn_mascot",
+            "espn_abbreviation",
+            "espn_conference_name",
+            "espn_conference_id",
+            "match_method",
+        )
+        .sort("season", "ncaa_team")
+    )
 
 
 def report(league: str, df: pl.DataFrame) -> None:
@@ -391,10 +513,16 @@ def report(league: str, df: pl.DataFrame) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--capture", action="store_true", help="refresh the ESPN reference tables from the network")
+    parser.add_argument(
+        "--capture-groups", action="store_true", help="refresh conference_seasons_*.csv from the {lg}_groups release"
+    )
     args = parser.parse_args()
 
     if args.capture:
         capture()
+        return
+    if args.capture_groups:
+        capture_groups()
         return
 
     for league in ("mbb", "wbb"):
