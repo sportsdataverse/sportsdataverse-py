@@ -364,7 +364,7 @@ def _nfl_repair_scores(scores, scoring, texts, final=None):
 
     ``final`` is the header's final score for this team (None while the game is
     live), the one statement of the end state that does not come from a play
-    row, and it anchors the rule the way CFB's ``_repair_score`` does: a rise to
+    row, and it anchors the rule the way CFB's ``_repair_scores`` does: a rise to
     exactly that score which the rest of the game keeps is the game's last
     points, however the feed typed the row, so it is never reverted. Without the
     anchor a 2008 safety (SD @ NO, 37-30 against a 37-32 header) and six 2017
