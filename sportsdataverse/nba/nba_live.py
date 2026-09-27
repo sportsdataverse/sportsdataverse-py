@@ -381,8 +381,9 @@ def _ensure_core_schema(df: pl.DataFrame, schema: pl.Schema) -> pl.DataFrame:
     """
     if df.height == 0:
         return pl.DataFrame(schema=schema)
+    # Int64 columns go through _int_id: a plain cast truncates a fractional float (4.5 -> 4).
     exprs = [
-        pl.col(name).cast(dtype, strict=False)
+        (_int_id(name, df.schema[name]) if dtype == pl.Int64 else pl.col(name).cast(dtype, strict=False))
         if name in df.columns and not df.schema[name].is_nested()
         else pl.lit(None, dtype=dtype).alias(name)
         for name, dtype in schema.items()

@@ -509,3 +509,11 @@ def test_fractional_ids_are_null_not_truncated():
         {"game": {"gameId": "0022500001", "homeTeam": {"teamId": 1610612737.5, "players": [{"personId": 1}]}}}
     )
     assert box["home_players"]["team_id"].to_list() == [None]
+
+
+def test_fractional_core_integers_are_null_not_truncated():
+    df = mod._ensure_core_schema(
+        pl.DataFrame({"period": [4.5, 4.0], "clock": ["PT00M01.00S"] * 2}), NBA_LIVE_PBP_CORE_SCHEMA
+    )
+    assert df["period"].to_list() == [None, 4]
+    assert df.schema["period"] == pl.Int64
