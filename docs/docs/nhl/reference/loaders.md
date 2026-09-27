@@ -1056,7 +1056,9 @@ load_nhl_three_stars(seasons=2024)
 
 ## `load_nhl_groups`
 
-Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_groups.parquet`:::caution Coverage
+Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_groups.parquet`
+
+:::caution Coverage
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nhl:metropolitan) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season).
 :::
 
@@ -1077,7 +1079,9 @@ load_nhl_groups()
 
 ## `load_nhl_group_seasons`
 
-Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_seasons.parquet`:::caution Coverage
+Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_seasons.parquet`
+
+:::caution Coverage
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season).
 :::
 
@@ -1101,7 +1105,9 @@ load_nhl_group_seasons()
 
 ## `load_nhl_group_aliases`
 
-Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_aliases.parquet`:::caution Coverage
+Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_aliases.parquet`
+
+:::caution Coverage
 One season-less file: every name, abbreviation, slug and source id that a source (espn, nhl) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
@@ -1124,7 +1130,9 @@ load_nhl_group_aliases()
 
 ## `load_nhl_team_group_seasons`
 
-Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_team_group_seasons_{season}.parquet`:::caution Coverage
+Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_team_group_seasons_{season}.parquet`
+
+:::caution Coverage
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the NHL id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 1918-2026. No 2005 asset (the 2004-05 lockout).
 :::
 
