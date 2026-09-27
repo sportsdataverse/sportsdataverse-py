@@ -42,6 +42,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     espn_team_directory,
     fox_rosters,
     fox_season_teams,
+    next_season_movers,
     require_source,
     sdv_conference_map,
     stats_rosters,
@@ -1238,6 +1239,8 @@ def test_mbb_team_crosswalk_nulls_fox_sections_fox_filed_a_season_early(monkeypa
     from sportsdataverse.mbb import mbb_crosswalk
 
     _patch_fox(monkeypatch, {"13": _fox_fixture("fox_cbk_standings_13_2022.json")}, [])
+    # Movers left empty on purpose: the majority vote alone must catch these.
+    monkeypatch.setattr(mbb_crosswalk, "next_season_movers", lambda league, season: [])
     monkeypatch.setattr(
         mbb_crosswalk,
         "espn_team_directory",
@@ -1270,6 +1273,7 @@ def test_drop_unconfirmed_fox_sections_needs_two_agreeing_teams() -> None:
 
     xwalk = pl.DataFrame(
         {
+            "espn_team_id": pl.Series([2130, 2305, 239], dtype=pl.Int32),
             "espn_location": ["Chicago State", "Kansas", "Baylor"],
             "espn_conference": ["Western Athletic Conference", "Big 12 Conference", "Big 12 Conference"],
             "fox_section": ["Independents (DI)", "Big 12", "Big 12"],
@@ -1278,3 +1282,80 @@ def test_drop_unconfirmed_fox_sections_needs_two_agreeing_teams() -> None:
     out = drop_unconfirmed_fox_sections(xwalk)
     assert out.columns == xwalk.columns
     assert out["fox_section"].to_list() == [None, "Big 12", "Big 12"]
+
+
+def _serve_group_fixtures(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Serve committed ``mbb_groups`` release assets; an absent one reads as a 404."""
+    import sportsdataverse._codegen_runtime as runtime
+
+    def fake(url: str) -> pl.DataFrame:
+        path = _XW_FIXTURES / url.rsplit("/", 1)[1]
+        if not path.exists():
+            raise NoDataError(url)
+        return pl.read_parquet(path)
+
+    monkeypatch.setattr(runtime, "_fetch_release_parquet", fake)
+
+
+def test_next_season_movers_reads_both_seasons(monkeypatch: pytest.MonkeyPatch) -> None:
+    """2025-26 -> 2026-27: the rebuilt Pac-12 is all movers; San Jose State stayed in the MWC."""
+    _serve_group_fixtures(monkeypatch)
+    movers = set(next_season_movers("mbb", 2026))
+    assert {"68", "36", "278", "2250", "204", "21", "326", "328", "265"} <= movers  # 2026-27 Pac-12
+    assert "23" not in movers  # San Jose State
+    assert next_season_movers("mbb", 2027) == [], "no 2028 reference yet: nobody has moved"
+
+
+def test_mbb_team_crosswalk_nulls_a_fox_conference_made_of_next_season_arrivals(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Fox's 2025-26 Pac-12 table is the 2026-27 Pac-12; none of its teams played in it.
+
+    Real capture. Five of its nine teams were in the Mountain West that season,
+    so a majority vote alone would have kept "Pac-12" for them.
+    """
+    from sportsdataverse.mbb import mbb_crosswalk
+
+    _serve_group_fixtures(monkeypatch)
+    _patch_fox(monkeypatch, {"31": _fox_fixture("fox_cbk_standings_31_2025.json")}, [])
+    members = pl.read_parquet(_XW_FIXTURES / "mbb_team_group_seasons_2026.parquet").filter(
+        pl.col("team_id").is_in(["68", "36", "278", "2250", "204", "21", "326", "328", "265"])
+    )
+    names = pl.read_parquet(_XW_FIXTURES / "mbb_group_seasons.parquet").filter(pl.col("season") == 2026)
+    espn = members.join(names.select("group_id", "name"), left_on="conference_id", right_on="group_id").select(
+        "team_id",
+        pl.lit("X").alias("abbreviation"),
+        pl.col("team_name").alias("display_name"),
+        pl.col("team_name").alias("short_name"),
+        pl.col("team_name").alias("team"),
+        pl.lit("X").alias("mascot"),
+        pl.col("name").alias("conference_name"),
+    )
+    monkeypatch.setattr(mbb_crosswalk, "espn_team_directory", lambda *a, **k: espn)
+
+    out = mbb_crosswalk.mbb_team_crosswalk(season=2026, bart=pl.DataFrame(), kenpom=pl.DataFrame())
+
+    assert out.height == 9
+    assert out["fox_team_id"].null_count() == 0, "every team still matches its Fox id"
+    assert out["fox_section"].null_count() == 9, "no 2025-26 row may read Pac-12"
+
+
+def test_drop_unconfirmed_fox_sections_keeps_a_mover_fox_lists_correctly() -> None:
+    """Fox's 2017-18 tables show 2017-18 membership: Liberty, leaving the Big South, stays."""
+    from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
+
+    xwalk = pl.DataFrame(
+        {
+            "espn_team_id": pl.Series([2561, 2272, 2335, 2916], dtype=pl.Int32),
+            "espn_conference": [
+                "Big South Conference",
+                "Big South Conference",
+                "Big South Conference",
+                "ASUN Conference",
+            ],
+            "fox_section": ["Big South", "Big South", "Big South", "Big South"],
+        }
+    )
+    # 2335 Liberty (Big South, leaving) is listed correctly; 2916 (ASUN, arriving) is not.
+    out = drop_unconfirmed_fox_sections(xwalk, movers=["2335", "2916"])
+    assert out["fox_section"].to_list() == ["Big South", "Big South", "Big South", None]

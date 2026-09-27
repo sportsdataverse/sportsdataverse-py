@@ -34,6 +34,7 @@ __all__ = [
     "espn_team_directory",
     "fox_season_teams",
     "drop_unconfirmed_fox_sections",
+    "next_season_movers",
     "torvik_teams",
     "espn_scoreboard_games",
     "espn_rosters",
@@ -719,23 +720,82 @@ def fox_season_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
     return pl.DataFrame(rows, schema=_FOX_TEAMS_SCHEMA)
 
 
-def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame) -> pl.DataFrame:
-    """Null ``fox_section`` where Fox files a team under a conference it was not in.
+def next_season_movers(league: str, season: int) -> List[str]:
+    """ESPN team ids whose conference in ``season + 1`` is not their ``season`` one.
 
-    Fox's past-season standings pair that season's records with a LATER
-    membership list: the 2022-23 Big 12 table carries BYU, Cincinnati, Houston
-    and UCF (who joined in 2023-24), the 2023-24 Big Ten carries Oregon, UCLA,
-    USC and Washington. So each Fox conference is identified by the
-    ``espn_conference`` most of its listed teams actually had that season, and a
-    team whose own ``espn_conference`` differs gets a null ``fox_section``. A
-    Fox conference with fewer than two agreeing teams cannot be confirmed
-    either (Fox's 2021-22 Independents table holds only Chicago State, then
-    in the WAC), so its ``fox_section`` is nulled too. The ``fox_team_id`` is
-    kept: the id is right, only the conference is not.
+    Reads ``{league}_team_group_seasons`` for both seasons from the
+    ``{league}_groups`` release. A team that leaves Division I after *season*
+    counts as a mover. When the release has no ``season + 1`` yet, nobody has
+    moved.
 
     Args:
-        xwalk: An assembled team crosswalk (``fox_section`` +
-            ``espn_conference``, the latter already season-correct).
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year.
+
+    Returns:
+        ESPN team ids (``str``).
+
+    Raises:
+        CrosswalkSourceError: Either season's asset could not be read, or
+            *season* is missing while ``season + 1`` exists.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import next_season_movers
+            print(next_season_movers("mbb", 2026))
+    """
+    from sportsdataverse._codegen_runtime import _fetch_release_parquet, _read_release_parquet
+    from sportsdataverse.config import SDVRELEASES
+
+    base = f"{SDVRELEASES}{league}_groups/{league}_team_group_seasons_"
+
+    def espn_ids(raw: pl.DataFrame) -> pl.DataFrame:
+        return raw.filter(pl.col("team_id_source") == "espn").select(
+            pl.col("team_id").cast(pl.Utf8), pl.col("conference_id").cast(pl.Utf8)
+        )
+
+    def next_or_empty() -> pl.DataFrame:
+        raw = _read_release_parquet(f"{base}{season + 1}.parquet")
+        return pl.DataFrame() if raw is None else raw
+
+    later = require_source(f"{league}_team_group_seasons_{season + 1}", next_or_empty)
+    if later.height == 0:
+        return []
+    now = require_source(
+        f"{league}_team_group_seasons_{season}", lambda: _fetch_release_parquet(f"{base}{season}.parquet")
+    )
+    now, later = espn_ids(now), espn_ids(later)
+    assert now.schema["team_id"] == later.schema["team_id"] == pl.Utf8
+    both = now.join(later, on="team_id", how="left", suffix="_next")
+    return both.filter(pl.col("conference_id").eq_missing(pl.col("conference_id_next")) == False)["team_id"].to_list()
+
+
+def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame, movers: Sequence[str] = ()) -> pl.DataFrame:
+    """Null ``fox_section`` where Fox files a team under a conference it was not in.
+
+    Fox's past-season standings usually pair that season's records with the
+    NEXT season's membership: the 2022-23 Big 12 table carries BYU,
+    Cincinnati, Houston and UCF (who joined in 2023-24), and the 2025-26
+    Pac-12 table is the entire 2026-27 Pac-12, none of whom played in it that
+    season. (Its 2017-18 tables still show 2017-18 membership.) So:
+
+    * each Fox conference is identified by the ``espn_conference`` most of its
+      teams had that season, counting only teams whose conference does not
+      change the next season (*movers*, see :func:`next_season_movers`), so a
+      table made of next-season arrivals cannot vote itself in;
+    * a team whose ``espn_conference`` disagrees with that identity is nulled,
+      which drops every arrival and keeps a mover Fox still lists correctly;
+    * a Fox conference with fewer than two agreeing non-movers cannot be
+      confirmed (Fox's 2021-22 Independents table holds only Chicago State,
+      then in the WAC), so it is nulled too.
+
+    The ``fox_team_id`` is kept: the id is right, only the conference is not.
+
+    Args:
+        xwalk: An assembled team crosswalk (``espn_team_id``, ``fox_section``
+            and ``espn_conference``, the latter already season-correct).
+        movers: ESPN team ids whose conference changes the next season.
 
     Returns:
         ``xwalk`` with unconfirmed ``fox_section`` values set to null.
@@ -744,12 +804,11 @@ def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame) -> pl.DataFrame:
         Quick start::
 
             from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
-            out = drop_unconfirmed_fox_sections(xwalk)
+            out = drop_unconfirmed_fox_sections(xwalk, next_season_movers("mbb", 2026))
     """
-    # ponytail: majority vote per Fox conference. A conference whose Fox table
-    # is MOSTLY later arrivals would vote wrong; none did 2017-18..2023-24.
+    stayed = pl.col("fox_section").is_not_null() & (pl.col("espn_team_id").cast(pl.Utf8).is_in(list(movers)) == False)
     modal = (
-        xwalk.filter(pl.col("fox_section").is_not_null())
+        xwalk.filter(stayed)
         .group_by("fox_section")
         .agg(pl.col("espn_conference").mode().sort(nulls_last=True).first().alias("_fox_conf"))
     )
@@ -757,7 +816,7 @@ def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame) -> pl.DataFrame:
     return (
         xwalk.join(modal, on="fox_section", how="left", maintain_order="left")
         .with_columns(
-            pl.when(agree & (agree.sum().over("fox_section") >= 2))
+            pl.when(agree & ((agree & stayed).sum().over("fox_section") >= 2))
             .then(pl.col("fox_section"))
             .otherwise(pl.lit(None, dtype=pl.Utf8))
             .alias("fox_section")
