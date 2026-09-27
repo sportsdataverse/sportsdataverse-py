@@ -27,4 +27,4 @@ columns:
   name: group_ids
   type: character
 kind: dataframe
-schema: team_directory
+schema: pff_api_team_directory

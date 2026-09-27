@@ -72,4 +72,4 @@ columns:
   name: week
   type: integer
 kind: dataframe
-schema: team_summary
+schema: pff_api_team_summary

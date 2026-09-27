@@ -121,3 +121,18 @@ def test_dropped_level_ridge_emits_the_reference_team_at_the_intercept() -> None
     gamma_off = offense.filter(pl.col("team_id") == "Gamma")["adjmodelOff"].item()
     assert alpha_off > beta_off > gamma_off
     assert isinstance(intercept, float)
+
+
+def test_opponent_adjusted_ridge_rejects_null_home_regressor() -> None:
+    # A null in hfa_col became NaN in X and poisoned np.linalg.solve (CodeRabbit, #598).
+    plays = pl.DataFrame(
+        {
+            "o": ["A", "B", "A", "B"],
+            "d": ["B", "A", "B", "A"],
+            "h": ["A", "A", "B", "B"],
+            "y": [0.1, -0.1, 0.2, 0.0],
+            "hfa": [1.0, -1.0, None, 0.0],
+        }
+    )
+    with pytest.raises(ValueError, match="hfa"):
+        opponent_adjusted_ridge(plays, off_col="o", def_col="d", home_col="h", resp_col="y", lam=10.0, hfa_col="hfa")

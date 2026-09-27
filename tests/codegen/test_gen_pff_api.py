@@ -53,6 +53,21 @@ def test_csv_switches_are_not_wrapped_and_legacy_schemas_are_reused():
     assert "parser" not in eps["whoami"]
 
 
+def test_new_returns_schemas_have_unique_schema_names():
+    """Descriptions are keyed by ``schema:``; a bare ``team_roster`` shared ESPN's text with PFF's."""
+    base = ROOT / "tools/codegen/schemas"
+    ours = {}
+    for p in (base / "native/pff_api").glob("*.yaml"):
+        ours[p] = yaml.safe_load(p.read_text(encoding="utf-8"))["schema"]
+        assert ours[p] == f"pff_api_{p.stem}", p.name
+    taken = set(ours.values())
+    for p in base.rglob("*.yaml"):
+        if p in ours:
+            continue
+        d = yaml.safe_load(p.read_text(encoding="utf-8"))
+        assert not (isinstance(d, dict) and d.get("schema") in taken), p
+
+
 @pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff/developer spec not present (local-only source)")
 def test_generator_reproduces_the_committed_yaml():
     spec = importlib.util.spec_from_file_location("gen_pff_api", ROOT / "tools/codegen/gen_pff_api.py")

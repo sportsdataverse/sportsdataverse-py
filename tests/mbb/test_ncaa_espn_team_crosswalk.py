@@ -50,7 +50,7 @@ def test_id_dtypes(crosswalks, league):
 
 
 def test_pandas_round_trip(league):
-    assert ncaa_espn_team_crosswalk(league=league, return_as_pandas=True).shape[1] == 12
+    assert ncaa_espn_team_crosswalk(league=league, return_as_pandas=True).shape[1] == 13
 
 
 def test_no_team_is_dropped(crosswalks, league):
@@ -143,3 +143,42 @@ def test_known_hard_cases(crosswalks):
         "Southern Ind.": "88",
     }
     assert {k: lookup.get(k) for k in expected} == expected
+
+
+#: (school, last season before the move, first season after, conference before, after) --
+#: realignments that are true in both leagues. SDV group ids, prefixed by the league.
+REALIGNMENTS = [
+    ("Maryland", "2013-14", "2014-15", "acc", "big-ten"),
+    ("Creighton", "2012-13", "2013-14", "mvc", "big-east"),
+    ("Wichita St.", "2016-17", "2017-18", "mvc", "american"),
+    ("Southern California", "2023-24", "2024-25", "pac-12", "big-ten"),
+    ("Texas", "2023-24", "2024-25", "big-12", "sec"),
+    ("Oklahoma", "2023-24", "2024-25", "big-12", "sec"),
+    ("Lamar University", "2021-22", "2022-23", "wac", "southland"),  # one WAC season, then back to the Southland
+]
+
+
+@pytest.mark.parametrize(("team", "before", "after", "conf_before", "conf_after"), REALIGNMENTS)
+def test_conference_columns_follow_realignment(crosswalks, league, team, before, after, conf_before, conf_after):
+    """Fails if any conference column goes back to one flat value per school."""
+    rows = crosswalks[league].filter((pl.col("ncaa_team") == team) & pl.col("season").is_in([before, after]))
+    by_season = {r["season"]: r for r in rows.iter_rows(named=True)}
+    assert by_season[before]["conference_id"] == f"{league}:{conf_before}"
+    assert by_season[after]["conference_id"] == f"{league}:{conf_after}"
+    for col in ("ncaa_conference", "espn_conference_id", "espn_conference_name"):
+        assert by_season[before][col] != by_season[after][col], (team, col)
+
+
+def test_conference_columns_populated(crosswalks, league):
+    """Every matched team has a conference that season, except rows the groups table lacks."""
+    df = crosswalks[league]
+    assert df["ncaa_conference"].null_count() == 0
+    missing = df.filter(pl.col("espn_team_id").is_not_null() & pl.col("conference_id").is_null())
+    # WBB: "LIU" is aliased to the post-2019 merged LIU id for all seasons (10 rows, 2009-10..2018-19).
+    # Any other gap in the groups table fails here.
+    expected = {("LIU", "112358", f"{y}-{(y + 1) % 100:02d}") for y in range(2009, 2019)} if league == "wbb" else set()
+    got = {(r["ncaa_team"], str(r["espn_team_id"]), r["season"]) for r in missing.iter_rows(named=True)}
+    assert got == expected, sorted(got ^ expected)
+    both = df.filter(pl.col("conference_id").is_not_null())
+    assert both["espn_conference_id"].null_count() == 0
+    assert both["espn_conference_name"].null_count() == 0

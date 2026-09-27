@@ -41,6 +41,9 @@ Deliberate divergences from R (each documented at its site):
   R's ``sub("[^[:alnum:]=\\.]", "", conference)`` (M:1216-1217) uses ``sub``
   not ``gsub`` and therefore strips only the FIRST such character — a bug
   (e.g. ``"Big Ten "`` normalizes to ``"bigten "`` and misses the table).
+* An unknown conference name raises :class:`ValueError` instead of R's
+  ``message("Conference ID not found, using all")`` fallback to id 0, which
+  silently turned an unlisted label into an unfiltered scoreboard.
 * A game-id count mismatch against the assignable-game mask raises
   :class:`ValueError` instead of R's silent vector recycling (M:1367).
 * R's lookaround regexes (``(?<=/contests/)\\d+(?=/box_score)`` etc.) are
@@ -69,7 +72,6 @@ See Also:
 from __future__ import annotations
 
 import re
-import warnings
 from datetime import date as date_cls
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Literal, Optional, Union, overload
@@ -142,47 +144,59 @@ NCAA_WBB_SEASON_DIVISIONS: "dict[str, int]" = {
     "2025-26": 18704,
 }
 
-#: Conference name -> stats.ncaa.org conference id (bigballR
-#: all_functions.R:1218-1253; verified identical in wbigballR — conference ids
-#: are cross-sport on stats.ncaa.org). Keys are the fully-normalized form
-#: produced by :func:`_resolve_conference_id` (lowercased, all non-alphanumeric
-#: stripped) — a deliberate fix of R's single-char ``sub`` normalization bug
-#: (see module docstring). ``big10`` is R's explicit alias for ``bigten``.
+# Deliberate fix of R's sub() (first-char-only) normalization (M:1216-1217):
+# strip EVERY character outside R's keep-class [[:alnum:]=.].
+_CONF_NORM_RE = re.compile(r"[^0-9A-Za-z=.]")
+
+#: stats.ncaa.org conference id -> every label that names it. Keyed by the id
+#: because stats.ncaa.org relabels a conference in place (871 MAAC -> Metro,
+#: 923 WAC -> UAC, 823 AAC -> American) and shows the current label for every
+#: season. The first label is the current stats.ncaa.org / NCAA.com one; the
+#: rest are bigballR's abbreviation (all_functions.R:1218-1253, identical in
+#: wbigballR; ids are cross-sport) and the older or long-form names.
+_NCAA_BB_CONFERENCE_LABELS: "dict[int, tuple[str, ...]]" = {
+    821: ("ACC", "Atlantic Coast Conference"),
+    845: ("America East", "America East Conference"),
+    823: ("American", "AAC", "The American", "American Athletic Conference", "American Conference"),
+    920: ("ASUN", "Atlantic Sun", "Atlantic Sun Conference", "ASUN Conference"),
+    820: ("Atlantic 10", "A-10", "Atlantic 10 Conference"),
+    25354: ("Big 12", "Big 12 Conference"),
+    30184: ("Big East", "Big East Conference"),
+    825: ("Big Sky", "Big Sky Conference"),
+    826: ("Big South", "Big South Conference"),
+    827: ("Big Ten", "Big 10", "B1G", "Big Ten Conference"),
+    904: ("Big West", "Big West Conference"),
+    837: ("CAA", "Coastal Athletic Association", "Colonial Athletic Association"),
+    24312: ("CUSA", "C-USA", "Conference USA"),
+    881: ("Horizon", "Horizon League"),
+    865: ("Ivy League", "Ivy"),
+    875: ("MAC", "Mid-American Conference"),
+    876: ("MEAC", "Mid-Eastern Athletic Conference"),
+    871: ("Metro", "MAAC", "Metro Conference", "Metro Atlantic Athletic Conference"),
+    5486: ("Mountain West", "MWC", "Mountain West Conference"),
+    884: ("MVC", "Missouri Valley Conference"),
+    846: ("NEC", "Northeast Conference"),
+    902: ("OVC", "Ohio Valley Conference"),
+    905: ("Pac-12", "Pac-12 Conference"),
+    838: ("Patriot", "Patriot League"),
+    911: ("SEC", "Southeastern Conference"),
+    912: ("SoCon", "Southern Conference"),
+    914: ("Southland", "Southland Conference"),
+    819: ("Summit League", "Summit", "The Summit League"),
+    818: ("Sun Belt", "Sun Belt Conference"),
+    916: ("SWAC", "Southwestern Athletic Conference"),
+    923: ("UAC", "WAC", "United Athletic Conference", "Western Athletic Conference"),
+    922: ("WCC", "West Coast Conference"),
+    0: ("All",),
+}
+
+#: Normalized conference label -> stats.ncaa.org conference id, derived from
+#: the id-keyed label table above. Keys are the form produced by
+#: :func:`_resolve_conference_id` (lowercased, every non-``[0-9A-Za-z=.]``
+#: character stripped), so ``"UAC "``, ``"Pac-12"`` and ``"big ten"`` all hit.
+#: ``"all"`` -> 0 asks for every conference.
 NCAA_BB_CONFERENCE_IDS: "dict[str, int]" = {
-    "aac": 823,
-    "acc": 821,
-    "asun": 920,
-    "americaneast": 845,
-    "atlantic10": 820,
-    "big12": 25354,
-    "bigeast": 30184,
-    "bigsky": 825,
-    "bigsouth": 826,
-    "bigten": 827,
-    "big10": 827,
-    "bigwest": 904,
-    "cusa": 24312,
-    "caa": 837,
-    "horizon": 881,
-    "ivy": 865,
-    "maac": 871,
-    "mac": 875,
-    "meac": 876,
-    "mvc": 884,
-    "mwc": 5486,
-    "nec": 846,
-    "ovc": 902,
-    "pac12": 905,
-    "patriot": 838,
-    "sec": 911,
-    "swac": 916,
-    "socon": 912,
-    "southland": 914,
-    "summit": 819,
-    "sunbelt": 818,
-    "wac": 923,
-    "wcc": 922,
-    "all": 0,
+    _CONF_NORM_RE.sub("", label).lower(): cid for cid, labels in _NCAA_BB_CONFERENCE_LABELS.items() for label in labels
 }
 
 #: Output contract (snake_case of R's ``Date, Start_Time, Home, Away, BoxID,
@@ -217,9 +231,6 @@ _RANK_STRIP_RE = re.compile(r"#[0-9]{1,2} ")
 # R: "(?<=[(])\\d+(?=-)" / "(?<=-)\\d+(?=[)])" (M:1387-1394) — capture rewrites.
 _WINS_RE = re.compile(r"\((\d+)-")
 _LOSSES_RE = re.compile(r"-(\d+)\)")
-# Deliberate fix of R's sub() (first-char-only) normalization (M:1216-1217):
-# strip EVERY character outside R's keep-class [[:alnum:]=.].
-_CONF_NORM_RE = re.compile(r"[^0-9A-Za-z=.]")
 
 
 def _empty_scoreboard() -> pl.DataFrame:
@@ -393,17 +404,17 @@ def _resolve_conference_id(conference: str) -> int:
 
     Normalization strips ALL non-``[0-9A-Za-z=.]`` characters then lowercases
     (deliberate fix of R's first-char-only ``sub`` — module docstring).
-    Unknown names warn and fall back to 0 ("All"), matching R's
-    ``message("Conference ID not found, using all")`` behavior.
+    ``"All"`` resolves to 0, the scoreboard's every-conference filter.
+
+    Raises:
+        ValueError: *conference* names no known conference. R falls back to 0
+            ("all conferences") instead, which silently returned an unfiltered
+            scoreboard for any unlisted label.
     """
-    key = _CONF_NORM_RE.sub("", conference).lower()
-    cid = NCAA_BB_CONFERENCE_IDS.get(key)
+    cid = NCAA_BB_CONFERENCE_IDS.get(_CONF_NORM_RE.sub("", conference).lower())
     if cid is None:
-        warnings.warn(
-            f"Conference ID not found for {conference!r}, using all",
-            stacklevel=3,
-        )
-        return 0
+        valid = ", ".join(repr(labels[0]) for labels in _NCAA_BB_CONFERENCE_LABELS.values())
+        raise ValueError(f"Unknown conference {conference!r}; expected one of {valid}, or pass conference_id=")
     return cid
 
 
@@ -445,7 +456,8 @@ def _ncaa_bb_date_games(
         date: ``"MM/DD/YYYY"``; ``None`` -> yesterday (R's default,
             ``format(Sys.Date() - 1, "%m/%d/%Y")``, M:1120).
         conference: Conference name, resolved via
-            :func:`_resolve_conference_id`. Default ``"All"`` -> 0.
+            :func:`_resolve_conference_id` (raises on an unknown name).
+            ``"All"`` -> 0.
         conference_id: Explicit id override (R's ``conference.ID``; wins over
             *conference* when given, M:1261-1263).
         fetcher: Injectable :class:`~sportsdataverse.mbb.mbb_ncaa_fetch
@@ -514,9 +526,10 @@ def ncaa_mbb_date_games(
 
     Args:
         date: ``"MM/DD/YYYY"``. Defaults to yesterday (R default).
-        conference: Conference name filter (e.g. ``"ACC"``, ``"Big Ten"``);
-            case/punctuation-insensitive. Default ``"All"``. Unknown names
-            warn and fall back to all conferences (R behavior).
+        conference: Conference name filter (e.g. ``"ACC"``, ``"Big Ten"``,
+            ``"Metro"`` / ``"MAAC"``); case/punctuation-insensitive, and both
+            the current stats.ncaa.org label and bigballR's abbreviation work.
+            Default ``"All"`` (every conference). Unknown names raise.
         conference_id: Explicit stats.ncaa.org conference id; overrides
             *conference* when given (R's ``conference.ID``).
         fetcher: Injectable :class:`~sportsdataverse.mbb.mbb_ncaa_fetch
@@ -535,8 +548,9 @@ def ncaa_mbb_date_games(
     Raises:
         ValueError: The date's season has no known ``season_divisions`` id
             (R returns the string ``"Season Not Available"`` — deliberate
-            fix), the date is not ``MM/DD/YYYY``, the fetched page has no
-            games table, or the game-id link count mismatches the schedule.
+            fix), *conference* is not a known conference (R falls back to all
+            conferences), the date is not ``MM/DD/YYYY``, the fetched page has
+            no games table, or the game-id link count mismatches the schedule.
 
     Example:
         Quick start::

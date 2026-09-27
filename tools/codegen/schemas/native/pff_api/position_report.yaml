@@ -4685,4 +4685,4 @@ frames:
     type: integer
   section: kickoffs
 kind: frames
-schema: position_report
+schema: pff_api_position_report

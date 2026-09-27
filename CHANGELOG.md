@@ -4,6 +4,8 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
+  - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
+  - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
@@ -306,6 +308,32 @@ pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed r
 2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
 2005–2013 feeds pick up the rush flag through the same pattern (~25 per season).
 
+### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
+
+`load_mlb_park_dimensions()` reads the season-less `mlb_parks` release built by
+`sportsdataverse/sdv-reference-data`: one row per MLB venue per season, 2001 on
+(regular-season, spring-training, neutral and international sites), with fence
+distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and
+coordinates as of that season, from the MLB Stats API. `venue_id` stays a string (the
+API's `venue.id`). Cited corrections for fence moves the API lags or misses are applied
+and described in `notes`. Every column is described in the returns table.
+
+### Added — conference and division reference tables for nine leagues (`{league}_groups`)
+
+Thirty-six dataset loaders over the `{league}_groups` release tags built by
+`sportsdataverse/sdv-reference-data`, four per league for `cfb`, `mbb`, `wbb`, `nfl`,
+`nba`, `wnba`, `mlb`, `nhl` and NCAA baseball (`load_ncaa_baseball_*`, under `mlb`):
+the season-less `load_<league>_groups()` (one row per group lineage, with SDV's own
+`<league>:<slug>` `group_id`), `load_<league>_group_seasons()` (each group's name,
+abbreviation, parent and member count as of that season, never today's label applied
+to the past) and `load_<league>_group_aliases()` (every label and id a source uses for
+a group, with its valid seasons), plus `load_<league>_team_group_seasons(seasons)` (each
+team's subdivision / conference / division per season, one asset per season). Seasons
+keep each league's own key -- the ENDING year for `mbb`, `wbb`, `nba` and `nhl` -- so no
+asset offset is applied. `team_id` stays a string, as the tables publish it. The NFL
+loaders are hand-written in `nfl_loaders.py` (a missing season raises `NoDataError`);
+the rest are generated. Every column is described in the returns tables.
+
 ### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
 
 PFF now publishes an official, API-key-authenticated Developer API. `pff_api_*` (68 generated
@@ -336,10 +364,28 @@ documents itself as LEGACY, as do their runtime module and reference page. `pars
 `parse_pff_player_detail` now look past the `restricted` block the Developer API may place beside
 a report envelope. Previously such a body came back as a dict or an empty frame.
 
+Every `pff_api` return table now documents its columns (2,739 descriptions). Report metrics that
+`/v1` already shipped reuse the legacy `native/pff` text; the `/v2`-only metrics (over-expected
+rates, positive/negative graded-play rates, pass-rush side splits, true-pass-set rates) and the
+team tables are described from PFF's own column labels and captured bodies. Each team-stats rank
+states which end ranks first, read from PFF's captured rows (1 = highest EPA, 1 = fewest
+turnovers). `native/pff_api` is off the deferred list, so the residual-description gate now covers
+it. The new tables' returns-schemas are named `pff_api_<table>` (`pff_api_team_roster`, ...):
+descriptions are looked up by that name, and the bare `team_roster`, `team_schedule`, `team_stats`
+and `team_report` already belong to ESPN, MLB, CBS, NWSL and NHL tables, so one source's text
+would have rendered on another's page (PFF packs height as feet x 100 + inches; ESPN gives inches).
+
 Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+The legacy PFF return tables (`pff_*`, and the `pff_api` `/v1` routes that reuse them) no longer
+borrow another source's column text: 277 columns that showed nflreadr/ESPN wording ("as reported
+by NFL.com", "ESPN franchise id", "Player ID (aka GSIS ID)") now describe PFF's own values —
+PFF team abbreviations and ids, per-target EPA, gross punt yards, one row per team line on the
+pass-blocking-efficiency table. The description check now resolves a flat family's fallback text
+with the league its page renders it with.
 
 ### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
 

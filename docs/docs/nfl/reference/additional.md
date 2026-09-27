@@ -2843,7 +2843,7 @@ this same parquet).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
-| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
+| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface, with `gsis_id` and the other cross-system IDs enriched by a best-effort join against the nflverse player master. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3575,7 +3575,7 @@ this same parquet).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
-| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
+| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface, with `gsis_id` and the other cross-system IDs enriched by a best-effort join against the nflverse player master. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3644,6 +3644,52 @@ players_sdv.select(["display_name", "position", "espn_id"]).head()
 
 import polars as pl
 load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
+```
+
+### `load_rosters(seasons: 'List[int]', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_rosters}
+
+Load NFL season roster data for the requested seasons.
+
+Reads nflverse's published season-roster parquet (one row per player per
+season). nflverse's roster product is the union of three upstream tiers --
+NFL Next Gen Stats (2016+), the credentialed NFL Data Exchange (2002-2015),
+and the public NFL Shield endpoint (all seasons) -- so it carries densely
+populated cross-system identifier columns (`espn_id`, `sportradar_id`,
+`yahoo_id`, `pff_id`, `pfr_id`, ...) alongside biographical and
+depth-chart fields. This is the richest roster surface; prefer it whenever a
+network round trip to nflverse is acceptable.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list` |  | Seasons to load (e.g. `[2024]` or `range(2020, 2025)`). A single `int` is accepted and wrapped. 1920 is the earliest available season. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe (default). |
+| `source` | `str` | `'nflverse'` | Which roster release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse season-roster releases described above -- the full multi-source product (1920+, densely populated cross-system IDs). `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_rosters` release built by `sportsdataverse.nfl.build_nfl_rosters` from the **public NFL Shield / ESPN** surface, with cross-system IDs and `college` enriched by a best-effort join against the nflverse player master (`sportsdataverse.nfl.load_nfl_players`, on `gsis_id`; skipped if that load fails). The SDV tier is a partial build: its 30 columns are a subset of nflverse's 36, and cross-system IDs are sparser pre-2016. It covers only the published seasons (rosters 2022+). The default stays `"nflverse"`. Any other value raises `ValueError`. |
+
+**Returns**
+
+Polars dataframe of season rosters for the requested seasons (`pandas.DataFrame` when `return_as_pandas=True`).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_rosters
+rosters = load_nfl_rosters(seasons=[2024])
+
+# Multi-season range
+
+rosters = load_nfl_rosters(seasons=range(2020, 2025))
+
+# Filter to a single team
+
+import polars as pl
+kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
+
+# SDV-native rosters (public Shield/ESPN build; published seasons 2022+; 30-column subset of nflverse, sparser cross-IDs pre-2016)
+
+rosters_sdv = load_nfl_rosters(seasons=[2023], source="sdv")
+rosters_sdv.select(["season", "team", "full_name", "gsis_id"]).head()
 ```
 
 ### `load_rosters_weekly(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_rosters_weekly}
@@ -8811,7 +8857,7 @@ sched = nfl_week_games(season=2024, season_type="REG", week=1)
 sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
-### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
+### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
 
 Ridge-regress `resp_col` on offense + defense team indicators + HFA.
 
@@ -8819,10 +8865,10 @@ League-agnostic (column names are arguments): builds the full
 offense/defense-indicator + intercept + home design and solves the
 ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only team
 coefficients are penalised; the intercept (and, unless
-`penalize_home`, the home term) is free. Moved verbatim (T7.2) from
-`sportsdataverse.nfl.nfl_ratings` -- NFL is currently the sole
-adopter of this exact dense-design encoding (CFB's ridge is the
-genuinely different `dropped_level_ridge`).
+`penalize_home`, the home term) is free. Moved (T7.2) from
+`sportsdataverse.nfl.nfl_ratings`. Callers: NFL ratings, and CFB
+adjusted EPA (`cfb_adjusted_epa._fit_team_strengths`, via `hfa_col`);
+`cfb_ratings` uses the different `dropped_level_ridge`.
 
 **Parameters**
 
@@ -8835,6 +8881,7 @@ genuinely different `dropped_level_ridge`).
 | `resp_col` | `str` |  | Numeric response column (e.g. `epa`). |
 | `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
+| `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. Must not contain nulls (raises `ValueError`). |
 
 **Returns**
 
