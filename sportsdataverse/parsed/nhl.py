@@ -323,6 +323,9 @@ from sportsdataverse.nhl import load_nhl_game_rosters as load_nhl_game_rosters  
 from sportsdataverse.nhl import load_nhl_games as load_nhl_games  # noqa: F401
 from sportsdataverse.nhl import load_nhl_goalie_box as load_nhl_goalie_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_goalie_boxscores as load_nhl_goalie_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_group_aliases as load_nhl_group_aliases  # noqa: F401
+from sportsdataverse.nhl import load_nhl_group_seasons as load_nhl_group_seasons  # noqa: F401
+from sportsdataverse.nhl import load_nhl_groups as load_nhl_groups  # noqa: F401
 from sportsdataverse.nhl import load_nhl_linescore as load_nhl_linescore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_officials as load_nhl_officials  # noqa: F401
 from sportsdataverse.nhl import load_nhl_pbp as load_nhl_pbp  # noqa: F401
@@ -345,6 +348,7 @@ from sportsdataverse.nhl import load_nhl_skater_boxscores as load_nhl_skater_box
 from sportsdataverse.nhl import load_nhl_team_box as load_nhl_team_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_team_group_seasons as load_nhl_team_group_seasons  # noqa: F401
 from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
 from sportsdataverse.nhl import load_xg_models as load_xg_models  # noqa: F401
 from sportsdataverse.nhl import log_loss_score as log_loss_score  # noqa: F401
@@ -595,6 +599,9 @@ __all__ = [
     "load_nhl_games",
     "load_nhl_goalie_box",
     "load_nhl_goalie_boxscores",
+    "load_nhl_group_aliases",
+    "load_nhl_group_seasons",
+    "load_nhl_groups",
     "load_nhl_linescore",
     "load_nhl_officials",
     "load_nhl_pbp",
@@ -617,6 +624,7 @@ __all__ = [
     "load_nhl_team_box",
     "load_nhl_team_boxscore",
     "load_nhl_team_boxscores",
+    "load_nhl_team_group_seasons",
     "load_nhl_three_stars",
     "load_xg_models",
     "log_loss_score",

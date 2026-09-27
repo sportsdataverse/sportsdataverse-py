@@ -5,7 +5,7 @@ from typing import List
 import polars as pl
 from tqdm import tqdm
 
-from sportsdataverse._codegen_runtime import _fetch_release_parquet
+from sportsdataverse._codegen_runtime import _as_season_list, _fetch_release_parquet
 from sportsdataverse._deprecation import warn_deprecated as _warn_deprecated
 from sportsdataverse.config import (
     NFL_BASE_URL,
@@ -23,6 +23,7 @@ from sportsdataverse.config import (
     NFL_FF_RANKINGS_DRAFT_URL,
     NFL_FF_RANKINGS_WEEK_URL,
     NFL_FTN_CHARTING_URL,
+    NFL_GROUPS_URL,
     NFL_INJURIES_URL,
     NFL_MODEL_PBP_URL,
     NFL_NGS_PASSING_URL,
@@ -50,6 +51,7 @@ from sportsdataverse.config import (
     NFL_SDV_ROSTER_URL,
     NFL_SDV_TEAM_STATS_URL,
     NFL_SNAP_COUNTS_URL,
+    NFL_TEAM_GROUP_SEASONS_URL,
     NFL_TEAM_LOGO_URL,
     NFL_TEAM_SCHEDULE_URL,
     NFL_TEAM_STATS_URL,
@@ -3007,4 +3009,174 @@ def load_nfl_coach_careers(return_as_pandas: bool = False) -> pl.DataFrame:
 
     """
     data = _fetch_release_parquet(NFL_ESPN_COACH_CAREERS_URL)
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+# ---------------------------------------------------------------------------
+# SDV conference / division reference tables (``nfl_groups`` release)
+# ---------------------------------------------------------------------------
+# Built by sportsdataverse/sdv-reference-data; the same four tables ship for
+# every league under ``{league}_groups`` (the others are generated loaders).
+# Hand-written here because NFL is not a generated-loader league, so the season
+# contract is the nfl_loaders one: a season with no published asset raises
+# ``NoDataError``. Seasons are the STARTING year, 1970 (the AFL-NFL merger) on.
+
+_NFL_GROUPS_FLOOR = 1970
+
+
+@cached_loader
+def load_nfl_groups(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the NFL group lineages (``nfl_groups`` release, ``nfl_groups.parquet``).
+
+    One season-less file with one row per group lineage -- the league
+    (``nfl:nfl``), the two conferences and every division -- plus the first and
+    last season it had members. ``group_id`` is SDV's own ``nfl:<slug>`` id and
+    names a lineage: a rename that keeps continuity keeps the id, a new body gets
+    a new one (the AFC Central, dissolved in the 2002 realignment, is not the
+    AFC North), and ``notes`` records each call.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per group: ``league``, ``group_id``, ``level``,
+        ``first_season``, ``last_season``, ``notes``.
+
+    Raises:
+        NoDataError: If the asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_groups
+            groups = load_nfl_groups()
+            groups.filter(groups["level"] == "division")
+
+        See Also:
+            * :func:`load_nfl_group_seasons` -- each group's name and parent per season
+            * :func:`load_nfl_team_group_seasons` -- which group every team was in
+    """
+    data = _fetch_release_parquet(NFL_GROUPS_URL.format(table="groups"))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_group_seasons(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the NFL groups season by season (``nfl_groups`` release, ``nfl_group_seasons.parquet``).
+
+    One season-less file with one row per group per season it existed: its
+    name, short name, abbreviation and parent group AS OF that season (never
+    today's label applied to the past) and its member count. ``season`` is the
+    STARTING year (2025 = the 2025-26 season).
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per ``(group_id, season)``: ``league``,
+        ``group_id``, ``season``, ``level``, ``name``, ``short_name``,
+        ``abbreviation``, ``parent_group_id``, ``n_teams``.
+
+    Raises:
+        NoDataError: If the asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_group_seasons
+            gs = load_nfl_group_seasons()
+            gs.filter(gs["season"] == 2001, gs["level"] == "division").select("name", "parent_group_id", "n_teams")
+
+        See Also:
+            * :func:`load_nfl_groups` -- one row per group lineage
+    """
+    data = _fetch_release_parquet(NFL_GROUPS_URL.format(table="group_seasons"))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_group_aliases(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load every label and id sources use for an NFL group (``nfl_groups`` release, ``nfl_group_aliases.parquet``).
+
+    One season-less file: every name, abbreviation, slug and source id that
+    ESPN, nflverse or SDV uses for a group, each with the seasons it is valid
+    for (``valid_from`` / ``valid_to``, inclusive; null = unbounded). Match a
+    source's conference or division label here to reach ``group_id``.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per alias: ``league``, ``group_id``, ``source``,
+        ``source_id``, ``name_kind``, ``value``, ``valid_from``, ``valid_to``.
+
+    Raises:
+        NoDataError: If the asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_group_aliases
+            aliases = load_nfl_group_aliases()
+            aliases.filter(aliases["source"] == "espn", aliases["name_kind"] == "abbreviation")
+
+        See Also:
+            * :func:`load_nfl_groups` -- one row per group lineage
+    """
+    data = _fetch_release_parquet(NFL_GROUPS_URL.format(table="group_aliases"))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load each NFL team's conference and division by season (``nfl_groups`` release).
+
+    One row per team per season: the SDV conference and division group ids
+    the team belonged to that season, the team name as of that season, where
+    the membership came from, and whether a second source agreed (null when
+    only one source covers the season). ``team_id`` is the ESPN team id, as a
+    string (``team_id_source`` is ``"espn"``). One asset per season,
+    ``nfl_groups/nfl_team_group_seasons_{season}.parquet``, 1970-2026.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per ``(team_id, season)``: ``league``, ``season``,
+        ``team_id``, ``team_id_source``, ``team_name``, ``subdivision_id``
+        (always null for the NFL), ``conference_id``, ``division_id``,
+        ``source``, ``sources_agree``, ``notes``. Multi-season reads are unioned
+        with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 1970.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_team_group_seasons
+            tgs = load_nfl_team_group_seasons(seasons=[2001, 2002])
+            tgs.filter(tgs["team_name"].str.contains("Seahawks")).select("season", "conference_id", "division_id")
+
+        See Also:
+            * :func:`load_nfl_group_seasons` -- the groups' names as of each season
+            * :func:`load_nfl_teams` -- nflverse team metadata
+    """
+    frames: list[pl.DataFrame] = []
+    for i in _as_season_list(seasons):
+        season_not_found_error(i, _NFL_GROUPS_FLOOR)
+        frames.append(_fetch_release_parquet(NFL_TEAM_GROUP_SEASONS_URL.format(season=i)))
+    if not frames:
+        data = pl.DataFrame()
+    elif len(frames) == 1:
+        data = frames[0]
+    else:
+        data = pl.concat(frames, how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

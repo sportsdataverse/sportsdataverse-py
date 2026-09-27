@@ -45,6 +45,10 @@ flowchart LR
 | `load_wnba_stats_schedules` | [wnba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_schedules) | — |
 | `load_wnba_stats_shots` | [wnba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_shots) | — |
 | `load_wnba_stats_team_boxscores` | [wnba_stats_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_team_boxscores) | — |
+| `load_wnba_groups` | [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) | — |
+| `load_wnba_group_seasons` | [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) | — |
+| `load_wnba_group_aliases` | [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) | — |
+| `load_wnba_team_group_seasons` | [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) | — |
 
 ## `load_wnba_pbp`
 
@@ -1237,4 +1241,98 @@ Release: [wnba_stats_team_boxscores](https://github.com/sportsdataverse/sportsda
 
 ```python
 load_wnba_stats_team_boxscores(seasons=2026)
+```
+
+## `load_wnba_groups`
+
+Release: [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_groups.parquet`:::caution Coverage
+One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. wnba:east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wnba"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `first_season` | Int32 | First season in which the group had at least one member (calendar year). |
+| `last_season` | Int32 | Last season in which the group had at least one member (calendar year). |
+| `notes` | String | Builder notes on the group: the lineage decisions behind its group_id and any source caveats. |
+
+```python
+load_wnba_groups()
+```
+
+## `load_wnba_group_seasons`
+
+Release: [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_group_seasons.parquet`:::caution Coverage
+One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wnba"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `season` | Int32 | Season the row describes (calendar year). |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `name` | String | Full name of the group as of that season -- the label in use then, not today's name. |
+| `short_name` | String | Short display name of the group as of that season. |
+| `abbreviation` | String | Abbreviation of the group as of that season. |
+| `parent_group_id` | String | group_id one level up as of that season (division -> conference -> subdivision -> league); null at the top level or where no higher group applied that season. |
+| `n_teams` | Int32 | Number of member teams in the group that season. |
+
+```python
+load_wnba_group_seasons()
+```
+
+## `load_wnba_group_aliases`
+
+Release: [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_group_aliases.parquet`:::caution Coverage
+One season-less file: every name, abbreviation, slug and source id that a source (espn, sdv, wnba_stats) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wnba"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `source` | String | Source that uses this label or id (in this table: espn, sdv, wnba_stats); "sdv" marks SDV's own labels. |
+| `source_id` | String | The source's own id for the group (ESPN group id, NCAA conf_id, CFBD id, MLB division id) when it has one; null otherwise. |
+| `name_kind` | String | Kind of label in value: "name", "short_name", "abbreviation", "slug" or "code". |
+| `value` | String | The label exactly as the source writes it; match a source's conference or division label against it to reach group_id. |
+| `valid_from` | Int32 | First season the alias is valid for, inclusive (calendar year); null = unbounded. |
+| `valid_to` | Int32 | Last season the alias is valid for, inclusive (calendar year); null = unbounded (still in use). |
+
+```python
+load_wnba_group_aliases()
+```
+
+## `load_wnba_team_group_seasons`
+
+Release: [wnba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_groups/wnba_team_group_seasons_{season}.parquet`:::caution Coverage
+One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the calendar year; seasons 1997-2026.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wnba"); the prefix of every group_id in it. |
+| `season` | Int32 | Season of the membership (calendar year). |
+| `team_id` | String | Team id as a string: the ESPN team id where ESPN covers the team, otherwise the league's own id; team_id_source says which. |
+| `team_id_source` | String | Id space of team_id (in this table: espn). |
+| `team_name` | String | Team name as of that season, not today's. |
+| `subdivision_id` | String | SDV group_id of the team's subdivision that season (e.g. FBS / FCS, Division I); null where the league has no subdivision level. |
+| `conference_id` | String | SDV group_id of the team's conference that season; null where the team had no conference (an independent, or a season played without conferences). |
+| `division_id` | String | SDV group_id of the team's division that season; null where the level does not apply. |
+| `source` | String | Source the membership was taken from -- the most reliable per-season source for that era. |
+| `sources_agree` | Boolean | Whether a second source agreed on the membership; null when only one source covers the season. |
+| `notes` | String | Builder notes on the team-season, such as a source disagreement or which of several listed memberships was kept. |
+
+```python
+load_wnba_team_group_seasons(seasons=2024)
 ```
