@@ -3416,7 +3416,9 @@ load_cfb_team_summaries_weekly(seasons=2024)
 
 ## `load_cfb_usage_players`
 
-Release: [espn_cfb_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet`
+
+:::caution Coverage
 position_group is null for seasons whose play-by-play carried no participant positions.
 :::
 
@@ -3476,7 +3478,9 @@ load_cfb_usage_players(seasons=2024)
 
 ## `load_cfb_usage_position_groups`
 
-Release: [espn_cfb_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants: rows exist only for seasons whose play-by-play carried player positions.
 :::
 
@@ -3534,7 +3538,9 @@ load_cfb_usage_position_groups(seasons=2024)
 
 ## `load_cfb_usage_tackles`
 
-Release: [espn_cfb_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants (tackler / assist ids); a season without them has no rows, and position_group is null when no participant carried a position.
 :::
 
@@ -3561,7 +3567,9 @@ load_cfb_usage_tackles(seasons=2024)
 
 ## `load_cfb_usage_position_group_tackles`
 
-Release: [espn_cfb_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants with player positions; a season without them has no rows.
 :::
 
@@ -4135,7 +4143,9 @@ load_cfb_team_tendencies(seasons=2024)
 
 ## `load_cfb_coach_tendencies`
 
-Release: [espn_cfb_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet`
+
+:::caution Coverage
 One row per (season, team, head coach). The coach comes from the producer's vendored CFBD coach roster (team-season attribution), so role is always "HC".
 :::
 
@@ -4416,7 +4426,9 @@ load_cfb_coach_tendencies(seasons=2024)
 
 ## `load_cfb_coach_careers`
 
-Release: [espn_cfb_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet`:::caution Coverage
+Release: [espn_cfb_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet`
+
+:::caution Coverage
 One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag.
 :::
 
@@ -5336,6 +5348,11 @@ load_ncaa_mfb_rosters(seasons=2024)
 ## `load_ncaa_mfb_teams`
 
 Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet`
+
+:::caution Coverage
+No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release).
+:::
+
 ### Returns
 
 | col_name | type | description |
@@ -5358,7 +5375,7 @@ Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdatavers
 | col_name | type | description |
 |---|---|---|
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `category` | String | stats.ncaa.org box-score section the stat belongs to (Passing, Rushing, First Downs, Total Offense, Kicking, Punt Returns, Kickoffs and KO Returns, Sacks, Passes Defended); not a CFBD category. |
 | `stat` | String | Stat. |
 | `period` | String | Period (quarter) number. |
 | `away_team` | String | Away team name. |
@@ -5476,7 +5493,9 @@ load_ncaa_mfb_linescore(seasons=2024)
 
 ## `load_cfb_groups`
 
-Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet`:::caution Coverage
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet`
+
+:::caution Coverage
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. cfb:big-ten) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the fall 2025 season).
 :::
 
@@ -5497,7 +5516,9 @@ load_cfb_groups()
 
 ## `load_cfb_group_seasons`
 
-Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet`:::caution Coverage
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet`
+
+:::caution Coverage
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the fall 2025 season).
 :::
 
@@ -5521,7 +5542,9 @@ load_cfb_group_seasons()
 
 ## `load_cfb_group_aliases`
 
-Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet`:::caution Coverage
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet`
+
+:::caution Coverage
 One season-less file: every name, abbreviation, slug and source id that a source (cfbd, espn, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
@@ -5544,7 +5567,9 @@ load_cfb_group_aliases()
 
 ## `load_cfb_team_group_seasons`
 
-Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet`:::caution Coverage
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet`
+
+:::caution Coverage
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the CFBD id; team_id_source names the id space. season is the STARTING year (2025 = the fall 2025 season); seasons 1869-2026. No 1871 asset.
 :::
 

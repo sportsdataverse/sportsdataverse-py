@@ -7286,6 +7286,9 @@ def load_ncaa_mfb_teams(seasons, return_as_pandas: bool = False):
         |division      |Int32  |
         |season        |Int64  |
 
+    Note:
+        No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release).
+
     Raises:
         SeasonNotFoundError: if a requested season is below 2013.
 

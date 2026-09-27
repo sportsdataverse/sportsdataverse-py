@@ -13151,6 +13151,8 @@ load_ncaa_mfb_schedule:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_team_stats:
   away_value: Team-stat value for the away team; each row is one stat category for one game, wide by side.
+  category: stats.ncaa.org box-score section the stat belongs to (Passing, Rushing, First Downs, Total Offense, Kicking,
+    Punt Returns, Kickoffs and KO Returns, Sacks, Passes Defended); not a CFBD category.
   home_value: Team-stat value for the home team; each row is one stat category for one game, wide by side.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_teams:
