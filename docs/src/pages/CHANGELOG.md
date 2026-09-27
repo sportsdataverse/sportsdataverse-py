@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
   - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
@@ -298,6 +299,19 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB plays ESPN files twice under new ids are dropped
+
+ESPN sometimes files a play again under a fresh play id, in three shapes the adjacent-copy
+dedupe could not see: a stub echo on the next row (same text and down/distance, no spot), a batch
+of a drive's plays filed at the drive's start clock ahead of the same plays at their real clocks,
+and the same play on both sides of a timeout or end-of-period row. `CFBPlayProcess` now drops
+them before that dedupe, keeping the echo's play type (401752854, Oregon @ Penn State 2025, files
+its punts, kickoffs and a missed field goal first as "Pass Completion"). That game goes from 281
+rows to 173, and its scrimmage plays now match the box score. Across the raw store the pass removes
+809 rows in 105 games in 2014–2026 and 727 in 156 games in 2007–2013. Feeds with no start spot
+(2004–2006) are left to the adjacent rule. Play counts, EPA/play and success rate move in the
+affected games, so every season with drops needs a reprocess.
 
 ### Fixed — CFB losses written "for N yards loss" read as gains
 
