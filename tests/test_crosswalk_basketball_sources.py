@@ -41,9 +41,12 @@ from sportsdataverse._crosswalk_basketball_sources import (
     espn_scoreboard_games,
     espn_team_directory,
     fox_rosters,
+    fox_season_teams,
     require_source,
+    sdv_conference_map,
     stats_rosters,
     stats_schedule_games,
+    torvik_teams,
 )
 from sportsdataverse.errors import NoDataError
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
@@ -853,8 +856,8 @@ def _boom(*args: Any, **kwargs: Any) -> Any:
         # the Fox leg is under test here.
         ("nba", "fox_nba_teams", {"stats": pl.DataFrame()}),
         ("wnba", "fox_wnba_teams", {"stats": pl.DataFrame()}),
-        ("mbb", "fox_mbb_teams_all", {"bart": pl.DataFrame()}),
-        ("wbb", "fox_wbb_teams_all", {"bart": pl.DataFrame()}),
+        ("mbb", "fox_season_teams", {"bart": pl.DataFrame()}),
+        ("wbb", "fox_season_teams", {"bart": pl.DataFrame()}),
     ],
 )
 def test_team_crosswalk_raises_when_fox_cannot_be_produced(
@@ -863,8 +866,13 @@ def test_team_crosswalk_raises_when_fox_cannot_be_produced(
     """A dead Fox source must fail the build, not ship all-null fox_* columns."""
     import importlib
 
-    monkeypatch.setattr(importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext"), target, _boom)
     crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    # The college builders bind the season-aware Fox adapter by value; the pro
+    # ones call their fox_ext module.
+    owner = (
+        crosswalk if league in ("mbb", "wbb") else importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext")
+    )
+    monkeypatch.setattr(owner, target, _boom)
     # Bind the ESPN stub in the crosswalk module's own namespace -- it imported
     # espn_team_directory by value, so patching the source module is a no-op.
     monkeypatch.setattr(
@@ -1024,7 +1032,13 @@ def test_espn_team_directory_joins_conference_on_a_clean_utf8_id(monkeypatch: py
             )
         },
     )
-    _patch_tree(monkeypatch, {2: ("Atlantic Coast Conference", [52]), 8: ("Southeastern Conference", [2579])})
+    monkeypatch.setattr(
+        src,
+        "sdv_conference_map",
+        lambda league, season: pl.DataFrame(
+            {"team_id": ["52", "2579"], "conference_name": ["Atlantic Coast Conference", "Southeastern Conference"]}
+        ),
+    )
 
     out = espn_team_directory("wbb", season=2026)
 
@@ -1044,9 +1058,223 @@ def test_espn_team_directory_prefers_an_upstream_conference_column(monkeypatch: 
         },
     )
 
-    def _boom(league: str) -> Any:  # pragma: no cover - must not be reached
-        raise AssertionError("the group tree must not be walked when upstream ships conference")
+    def _boom(league: str, season: int) -> Any:  # pragma: no cover - must not be reached
+        raise AssertionError("the conference reference must not be read when upstream ships conference")
 
-    monkeypatch.setattr(src, "_ncaa_group_accessors", _boom)
+    monkeypatch.setattr(src, "sdv_conference_map", _boom)
 
     assert espn_team_directory("wbb", season=2026)["conference_name"].to_list() == ["Big Ten Conference"]
+
+
+# ---------------------------------------------------------------------------
+# Season-correct sources for the college team crosswalks.
+#
+# Each source is read AS OF the requested season, and a source that cannot
+# answer a season leaves its columns null for it -- never another season's
+# data, and never an all-null column dressed up as a successful fetch.
+# ---------------------------------------------------------------------------
+
+_XW_FIXTURES = Path(__file__).parent / "fixtures" / "crosswalk_basketball"
+
+
+def _fox_fixture(name: str) -> dict:
+    return json.loads((_XW_FIXTURES / name).read_text(encoding="utf-8"))
+
+
+def _patch_fox(monkeypatch: pytest.MonkeyPatch, standings: dict[str, dict], calls: list) -> None:
+    """Serve the real cbk conference catalog, and ``standings[groupId]`` (else Fox's ``{}``)."""
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    catalog = _fox_fixture("fox_cbk_conferences.json")
+
+    def fake(path: str, params: Optional[dict] = None, **kwargs: Any) -> dict:
+        calls.append((path, params))
+        if path.endswith("league/conferences"):
+            return catalog
+        return standings.get(str((params or {}).get("groupId")), {})
+
+    monkeypatch.setattr(src, "_fox_json", fake)
+
+
+def test_fox_season_teams_reads_the_requested_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    """2018 (2017-18) asks Fox for season=2017 and stamps that season's conference."""
+    calls: list = []
+    _patch_fox(monkeypatch, {"17": _fox_fixture("fox_cbk_standings_17_2017.json")}, calls)
+
+    out = fox_season_teams("mbb", 2018)
+
+    assert out.schema == {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+    assert out.height == 14, "the 2017-18 Big Ten had 14 teams (18 today)"
+    assert set(out["fox_section"]) == {"Big Ten"}
+    standings = [params for path, params in calls if path.endswith("league/standings")]
+    assert len(standings) == 33, "one standings call per catalogued conference"
+    assert {p["season"] for p in standings} == {2017}, "Fox keys seasons by START year"
+
+
+def test_fox_season_teams_drops_standings_labelled_with_another_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Fox answers a season it lacks with the CURRENT one; those rows must not stamp it."""
+    # Real capture: wcbk Big Ten asked for season=2016 came back labelled "2026".
+    _patch_fox(monkeypatch, {"17": _fox_fixture("fox_wcbk_standings_18_2016.json")}, [])
+    with pytest.raises(CrosswalkSourceError, match="no 2018-19 standings"):
+        fox_season_teams("wbb", 2019)
+
+
+def test_fox_season_teams_is_empty_before_fox_history(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No Fox call at all for a season before its floor; the columns stay null."""
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    monkeypatch.setattr(src, "_fox_json", _boom)
+    assert fox_season_teams("mbb", 2017).height == 0
+    assert fox_season_teams("wbb", 2018).height == 0
+
+
+def test_sdv_conference_map_names_each_conference_as_of_the_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    """2025 WAC members read "Western Athletic Conference", not today's "United Athletic"."""
+    import sportsdataverse._codegen_runtime as runtime
+
+    urls: list = []
+
+    def fake(url: str) -> pl.DataFrame:
+        urls.append(url)
+        return pl.read_parquet(_XW_FIXTURES / url.rsplit("/", 1)[1])
+
+    monkeypatch.setattr(runtime, "_fetch_release_parquet", fake)
+
+    out = sdv_conference_map("mbb", 2025)
+
+    assert urls[0].endswith("/mbb_groups/mbb_team_group_seasons_2025.parquet")
+    assert out.schema == {"team_id": pl.Utf8, "conference_name": pl.Utf8}
+    assert out.height == 364
+    names = dict(zip(out["team_id"], out["conference_name"]))
+    assert names["3101"] == "Western Athletic Conference"  # Utah Tech
+    assert names["2000"] == "Western Athletic Conference"  # Abilene Christian
+    assert "United Athletic Conference" not in set(out["conference_name"])
+
+
+def test_sdv_conference_map_raises_when_the_reference_is_missing(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sportsdataverse._codegen_runtime as runtime
+
+    def absent(url: str) -> pl.DataFrame:
+        raise NoDataError(url)
+
+    monkeypatch.setattr(runtime, "_fetch_release_parquet", absent)
+    with pytest.raises(CrosswalkSourceError, match="team_group_seasons_2031"):
+        sdv_conference_map("mbb", 2031)
+
+
+class _Resp:
+    """The slice of ``requests.Response`` the Torvik runtime reads."""
+
+    def __init__(self, status: int, body: str, ctype: str) -> None:
+        self.status_code = status
+        self.text = body
+        self.headers = {"content-type": ctype}
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+@pytest.mark.parametrize(
+    ("status", "body", "ctype"),
+    [(403, "Request blocked.", "text/plain"), (200, "", "text/csv")],
+    ids=["403-blocked", "200-empty"],
+)
+def test_team_crosswalk_raises_when_torvik_answers_without_teams(
+    monkeypatch: pytest.MonkeyPatch, league: str, status: int, body: str, ctype: str
+) -> None:
+    """A blocked or empty Torvik answer must fail the build, not ship all-null bart_*."""
+    import importlib
+
+    monkeypatch.setattr("sportsdataverse.mbb.torvik_runtime.download", lambda **kw: _Resp(status, body, ctype))
+    crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    monkeypatch.setattr(
+        crosswalk,
+        "espn_team_directory",
+        lambda *a, **k: pl.DataFrame({c: ["1"] for c in _ESPN_DIR_COLS}),
+    )
+    extra = {"kenpom": pl.DataFrame()} if league == "mbb" else {}
+    with pytest.raises(CrosswalkSourceError):
+        getattr(crosswalk, f"{league}_team_crosswalk")(season=2025, fox=pl.DataFrame(), **extra)
+
+
+@pytest.mark.parametrize(("league", "floor"), [("mbb", 2008), ("wbb", 2021)])
+def test_torvik_teams_is_empty_before_torvik_history(monkeypatch: pytest.MonkeyPatch, league: str, floor: int) -> None:
+    """No Torvik call for a season it does not cover; the bart_* columns stay null."""
+    monkeypatch.setattr("sportsdataverse.mbb.torvik_runtime.download", _boom)
+    assert torvik_teams(league, floor - 1).height == 0
+    with pytest.raises(TimeoutError):
+        torvik_teams(league, floor)
+
+
+def test_mbb_team_crosswalk_leaves_kenpom_null_for_an_unbundled_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A season the KenPom bundle lacks gets null kp_*, not the newest season's labels."""
+    from sportsdataverse.mbb import mbb_crosswalk
+
+    monkeypatch.setattr(
+        mbb_crosswalk,
+        "espn_team_directory",
+        lambda *a, **k: pl.DataFrame(
+            {
+                "team_id": ["2"],
+                "abbreviation": ["AUB"],
+                "display_name": ["Auburn Tigers"],
+                "short_name": ["Auburn"],
+                "team": ["Auburn"],
+                "mascot": ["Tigers"],
+            }
+        ),
+    )
+    ok = mbb_crosswalk.mbb_team_crosswalk(season=2026, fox=pl.DataFrame(), bart=pl.DataFrame())
+    assert ok["kp_conf"].to_list() == ["SEC"], "the bundle does carry 2026"
+    out = mbb_crosswalk.mbb_team_crosswalk(season=2030, fox=pl.DataFrame(), bart=pl.DataFrame())
+    assert out["kp_team"].to_list() == [None]
+    assert out["kp_conf"].to_list() == [None]
+
+
+def test_mbb_team_crosswalk_nulls_fox_sections_fox_filed_a_season_early(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Fox's 2022-23 Big 12 table lists BYU and Houston, who joined in 2023-24.
+
+    Real capture. Their Fox ids survive; their fox_section does not, because
+    the season's reference conference says they were not in the Big 12 yet.
+    """
+    from sportsdataverse.mbb import mbb_crosswalk
+
+    _patch_fox(monkeypatch, {"13": _fox_fixture("fox_cbk_standings_13_2022.json")}, [])
+    monkeypatch.setattr(
+        mbb_crosswalk,
+        "espn_team_directory",
+        lambda *a, **k: pl.DataFrame(
+            {
+                "team_id": ["2305", "239", "248", "252"],
+                "abbreviation": ["KU", "BAY", "HOU", "BYU"],
+                "display_name": ["Kansas Jayhawks", "Baylor Bears", "Houston Cougars", "BYU Cougars"],
+                "short_name": ["Kansas", "Baylor", "Houston", "BYU"],
+                "team": ["Kansas", "Baylor", "Houston", "BYU"],
+                "mascot": ["Jayhawks", "Bears", "Cougars", "Cougars"],
+                "conference_name": [
+                    "Big 12 Conference",
+                    "Big 12 Conference",
+                    "American Athletic Conference",
+                    "West Coast Conference",
+                ],
+            }
+        ),
+    )
+    out = mbb_crosswalk.mbb_team_crosswalk(season=2023, bart=pl.DataFrame(), kenpom=pl.DataFrame())
+    got = dict(zip(out["espn_location"], out["fox_section"]))
+    assert got == {"Kansas": "Big 12", "Baylor": "Big 12", "Houston": None, "BYU": None}
+    assert out["fox_team_id"].null_count() == 0, "the Fox ids are right; only the conference is not"
+
+
+def test_drop_unconfirmed_fox_sections_needs_two_agreeing_teams() -> None:
+    """Fox's 2021-22 Independents table held only Chicago State, then in the WAC."""
+    from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
+
+    xwalk = pl.DataFrame(
+        {
+            "espn_location": ["Chicago State", "Kansas", "Baylor"],
+            "espn_conference": ["Western Athletic Conference", "Big 12 Conference", "Big 12 Conference"],
+            "fox_section": ["Independents (DI)", "Big 12", "Big 12"],
+        }
+    )
+    out = drop_unconfirmed_fox_sections(xwalk)
+    assert out.columns == xwalk.columns
+    assert out["fox_section"].to_list() == [None, "Big 12", "Big 12"]

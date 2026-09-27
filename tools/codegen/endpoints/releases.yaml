@@ -1214,7 +1214,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  min_season: 2025
+  min_season: 2002
   example_args:
     seasons: 2026
 - fn: load_wbb_player_crosswalk

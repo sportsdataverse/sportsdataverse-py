@@ -7356,7 +7356,7 @@ per-player tables, so neither is joined.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch, or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -7458,7 +7458,7 @@ paid subscription and is not ported.
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -7697,11 +7697,11 @@ each join on the normalized school name after `BART_ALIAS` /
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
-| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_mbb_teams_all()`-shaped frame. `None` fetches live; pass an empty frame to skip Fox. |
-| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live. |
-| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season* when *season* is inside that bundled range. A season outside it -- 1999 or 2030, say -- falls back to the newest bundled season (2026) instead of returning no rows, mirroring the R builder's `max(kp_yrs)`, so for such a request the `kp_*` columns carry the newest bundled season's team and conference labels rather than *season*'s. Pass an empty frame to skip KenPom and get null `kp_*` columns. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched frame with `fox_team_id` / `fox_team_name` / `fox_section`. `None` fetches *season*'s conference standings live (`~sportsdataverse._crosswalk_basketball_sources.fox_season_teams`); Fox has none before 2017-18, so earlier seasons get null `fox_*`. Pass an empty frame to skip Fox. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live; Torvik starts in 2008, so earlier seasons get null `bart_*`. |
+| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season*. A season the bundle does not carry gets null `kp_*` columns -- never another season's labels. Pass an empty frame to skip KenPom. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Accepted for parity with the schedule and player crosswalks, which forward it; the team build has no per-item fetch loop to relax, so every source failure raises. |
 
 **Returns**
 
@@ -7714,7 +7714,7 @@ from sportsdataverse.mbb import mbb_team_crosswalk
 df = mbb_team_crosswalk(season=2026)
 print(df.shape)
 
-# Skip the slow Fox enumeration
+# Skip Fox
 
 import polars as pl
 df = mbb_team_crosswalk(season=2026, fox=pl.DataFrame())

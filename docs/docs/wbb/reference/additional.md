@@ -9116,7 +9116,7 @@ for WBB, so it is not joined; Yahoo columns are null placeholders.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch, or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -9178,7 +9178,7 @@ games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -9261,10 +9261,10 @@ bridge); Torvik on the normalized school name after the
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
-| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_wbb_teams_all()` frame. `None` fetches live (~60 s); pass an empty frame to skip Fox entirely. |
-| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `bart_wbb_ratings()` frame. `None` fetches live. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched frame with `fox_team_id` / `fox_team_name` / `fox_section`. `None` fetches *season*'s conference standings live (`~sportsdataverse._crosswalk_basketball_sources.fox_season_teams`); Fox has none before 2018-19, so earlier seasons get null `fox_*`. Pass an empty frame to skip Fox entirely. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `bart_wbb_ratings()` frame. `None` fetches live; women's Torvik starts in 2021, so earlier seasons get null `bart_*`. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Accepted for parity with the schedule and player crosswalks, which forward it; the team build has no per-item fetch loop to relax, so every source failure raises. |
 
 **Returns**
 
@@ -9277,7 +9277,7 @@ from sportsdataverse.wbb import wbb_team_crosswalk
 df = wbb_team_crosswalk(season=2026)
 print(df.shape)
 
-# Skip the slow Fox enumeration
+# Skip Fox
 
 import polars as pl
 df = wbb_team_crosswalk(season=2026, fox=pl.DataFrame())
