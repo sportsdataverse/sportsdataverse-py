@@ -1,4 +1,4 @@
-"""Team / coach tendencies on the real NFL fixture game and a synthetic frame."""
+"""Team / coach tendencies on real NFL / CFB fixture games and synthetic frames."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from sportsdataverse.football.play_participants import (
     play_participants_from_items,
 )
 from sportsdataverse.football.tendencies import RATES, aggregate_tendencies, tendencies
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 from sportsdataverse.nfl import NFLPlayProcess
 
 FIX = Path(__file__).parent.parent / "nfl" / "fixtures"
@@ -130,3 +131,64 @@ def test_degrades_without_curve_or_clock(plays):
         aggregate_tendencies([t.with_columns(coach=pl.lit("X")), t], keys=("coach",))
     with pytest.raises(ValueError, match="grouping columns"):
         tendencies(plays.drop("season"), league="nfl")
+
+
+# ESPN spells the drive result out before 2014 (CFB) / 2005 (NFL); the offense's points
+# must not depend on the era's spelling. Return TDs are the other team's points.
+_DRIVE_RESULT_CASES = {
+    "TD": 7.0,
+    "RUSHING TD": 7.0,
+    "PASSING TD": 7.0,
+    "RUSHING TD TD": 7.0,
+    "PASSING TD TD": 7.0,
+    "RUSH TD": 7.0,
+    "PASSRECEPTION TD": 7.0,
+    "LATERAL TD": 7.0,
+    "FG": 3.0,
+    "FG GOOD": 3.0,
+    "MADE FG": 3.0,
+    "FIELDGOAL MADE FG": 3.0,
+    "INT TD": 0.0,
+    "INTERCEPTED PASS TD": 0.0,
+    "PUNT RETURN TD": 0.0,
+    "FUMBLE RETURN TD": 0.0,
+    "BLOCKED PUNT TD": 0.0,
+    "MISSED FG TD": 0.0,
+    "PUNT": 0.0,
+    "MISSED FG": 0.0,
+    "FG MISSED": 0.0,
+}
+
+
+def test_drive_points_read_every_era_spelling():
+    results = [*_DRIVE_RESULT_CASES, None]
+    plays = pl.DataFrame(
+        {
+            "season": 2005,
+            "game_id": 1,
+            "pos_team": [f"T{i}" for i in range(len(results))],
+            "def_pos_team": "OPP",
+            "drive.id": [str(i) for i in range(len(results))],
+            "drive.result": results,
+            "scrimmage_play": True,
+            "penalty_no_play": False,
+        }
+    )
+    t = tendencies(plays, league="cfb", third_down_curve=pl.DataFrame({"distance": [], "rate": []}))
+    got = dict(zip(t["pos_team"], t["drive_points"]))
+    want = {f"T{i}": _DRIVE_RESULT_CASES.get(r, 0.0) for i, r in enumerate(results)}
+    assert got == want
+    assert t.filter(pl.col("pos_team") == "T0")["pts_per_drive"][0] == 7.0
+
+
+def test_drive_points_on_a_2005_cfb_game():
+    """Boston College @ BYU, 2005 (20-3): "PASSING TD" / "FG GOOD" drives score the final."""
+    game_id = 252460252
+    summary = json.loads((Path(__file__).parent.parent / "cfb" / "fixtures" / f"summary_{game_id}.json").read_text())
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    t = tendencies(proc.plays_frame, league="cfb")
+    points = dict(zip(t["pos_team"], t["drive_points"]))
+    assert points == {103: 20.0, 252: 3.0}  # BC: 2 PASSING TD + 2 FG GOOD; BYU: 1 FG GOOD
+    assert dict(zip(t["pos_team"], t["def_drive_points"])) == {103: 3.0, 252: 20.0}
