@@ -90,9 +90,9 @@ __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 # Washington's offense +2.2 EPA/play from 9 competitive plays and put Utah State
 # and Washington State (raw 124th/123rd, both had played Washington) 1st and
 # 2nd. `_fit_team_strengths` keeps lambda but charges it in PLAYS: the penalty
-# is `lambda * _TEAM_SEASON_PLAYS` for every team, so a team shrinks toward the
-# league average by n_t / (n_t + ~20) -- the calibrated ~3% at a full season,
-# 94% at 1 play.
+# is `lambda * _TEAM_SEASON_PLAYS` for every team. `_RIDGE_LAMBDA` stays the
+# standardized fit's calibrated value (`cfb_ratings`, the calibration test);
+# adjusted EPA uses `_ADJ_EPA_LAMBDA` below.
 _RIDGE_LAMBDA = 0.035
 
 # Median fit-band (`_FIT_WP`) offensive pass/rush plays per FBS team in a full
@@ -100,6 +100,18 @@ _RIDGE_LAMBDA = 0.035
 # seasons; 2023-2025 were held out to evaluate the change). Anchors the penalty
 # to a full team season. Was 440 under the old 0.1 <= wp_before <= 0.9 band.
 _TEAM_SEASON_PLAYS = 577.0
+
+# Adjusted-EPA penalty per play of a full team season: ~43 plays, so a team keeps
+# n / (n + 43) of its signal (~93% at a full season, ~2% at 1 play). Tuned on
+# 2019/2021/2022 only, for the owner's target that adjusted EPA/play ranks teams
+# at least as well as raw EPA/play from week 4 on (Spearman of the week-W order
+# against the season's final adjusted order). Every lambda in 0.035-0.3 met that
+# target on those seasons; 0.075 maximizes the worst week-4+ margin over raw
+# (+0.029) and sits within 0.003 of the best week-2-5 accuracy. Heavier shrinkage
+# moves full seasons further from the FPI-calibrated 0.035 (Spearman 0.984 vs the
+# published values on the train seasons), the trade the owner chose for early
+# weeks. Held-out 2023-2025 results are in sdv-py #598.
+_ADJ_EPA_LAMBDA = 0.075
 
 # Plays that fit the opponent strengths: naive (score + clock, no spread) win
 # probability inside 5-95%. Keeps 70-74% of FBS-vs-FBS pass/rush plays in every
@@ -271,7 +283,7 @@ def cfb_adjusted_epa(
 def cfb_adjusted_epa(
     plays: pl.DataFrame | pd.DataFrame,
     *,
-    ridge_lambda: float = _RIDGE_LAMBDA,
+    ridge_lambda: float = _ADJ_EPA_LAMBDA,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Season opponent-adjusted per-team EPA from a season's play-by-play.
@@ -289,9 +301,10 @@ def cfb_adjusted_epa(
             columns listed in the module docstring. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
             is shrunk toward the league average by ``n / (n + ridge_lambda *
-            577)`` for its ``n`` fit plays (~3% at a full season, most
-            of the way on a handful). Must be > 0. Default 0.035, tuned across
-            2021-2025 vs ESPN FPI.
+            577)`` for its ``n`` fit plays (~7% at a full season, most
+            of the way on a handful). Must be > 0. Default 0.075, tuned on
+            2019/2021/2022 so adjusted ranks teams at least as well as raw
+            EPA/play from week 4.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -357,7 +370,7 @@ def cfb_adjusted_epa_by_game(
 def cfb_adjusted_epa_by_game(
     plays: pl.DataFrame | pd.DataFrame,
     *,
-    ridge_lambda: float = _RIDGE_LAMBDA,
+    ridge_lambda: float = _ADJ_EPA_LAMBDA,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
@@ -374,9 +387,10 @@ def cfb_adjusted_epa_by_game(
             module-docstring columns **plus** ``week``. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
             is shrunk toward the league average by ``n / (n + ridge_lambda *
-            577)`` for its ``n`` fit plays (~3% at a full season, most
-            of the way on a handful). Must be > 0. Default 0.035, tuned across
-            2021-2025 vs ESPN FPI.
+            577)`` for its ``n`` fit plays (~7% at a full season, most
+            of the way on a handful). Must be > 0. Default 0.075, tuned on
+            2019/2021/2022 so adjusted ranks teams at least as well as raw
+            EPA/play from week 4.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
