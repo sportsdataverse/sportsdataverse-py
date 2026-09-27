@@ -2,7 +2,7 @@
 
 The schema is a combinatorial grid, not 378 independent concepts:
 
-    {base}_{off|def|margin}[_{pass|rush}][_rank]
+    {base}_{off|def|margin}[_{pass|rush}][_rank|_n]
 
 Every base metric below is transcribed from the PRODUCER
 (cfbfastR-cfb-data/python/cfb_data_build/team_summaries.py::_summarize_team), so
@@ -63,7 +63,41 @@ SIDE = {
 }
 PHASE = {"pass": " on pass plays", "rush": " on rush plays"}
 
-_RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<rank>_rank)?$")
+_RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<suffix>_rank|_n)?$")
+
+#: what a team-grid ``_n`` counts -- transcribed from cfbfastR-cfb-data
+#: team_summaries.py _TEAM_MEAN_SOURCES / _TEAM_RATIO_DENOMINATORS. It is the
+#: split's row count (or n_games/n_drives), computed inside the SAME
+#: group_by(team-side[, phase]) as the metric itself -- a team with zero rows
+#: in that split has no aggregate row at all, so every column including this
+#: one comes back null after the join to the full team roster (see the
+#: null-semantics sentence composed below).
+N_OF: dict[str, str] = {
+    "passrate": "plays",
+    "rushrate": "plays",
+    "havoc": "plays",
+    "explosive": "plays",
+    "EPAplay": "plays",
+    "yardsplay": "plays",
+    "play_stuffed": "plays",
+    "success": "plays",
+    "opportunity_rate": "plays",
+    "red_zone_success": "red-zone plays",
+    "third_down_success": "third-down plays",
+    "third_down_distance": "third-down plays",
+    "late_down_success": "late-down plays",
+    "early_down_EPA": "early-down plays",
+    "start_position": "plays with a known drive start",
+    "nonExplosiveEpaPerPlay": "non-explosive plays",
+    "line_yards": "rushes credited with line yards",
+    "playsgame": "games",
+    "EPAgame": "games",
+    "yardsgame": "games",
+    "drivesgame": "games",
+    "EPAdrive": "drives",
+    "yardsdrive": "drives",
+    "playsdrive": "drives",
+}
 
 # Columns outside the {base}_{side} grid. Each is transcribed from its producer:
 #   adj_*/net/strength/valid_games -> sportsdataverse/cfb/cfb_adjusted_epa.py
@@ -145,10 +179,19 @@ def describe(col: str) -> str | None:
     m = _RE.match(col)
     if not m:
         return None
-    base, side, phase, rank = m["base"], m["side"], m["phase"], m["rank"]
+    base, side, phase, suffix = m["base"], m["side"], m["phase"], m["suffix"]
     if base not in BASES:
         return None
     noun, ph = BASES[base], PHASE.get(phase or "", "")
+    rank = suffix == "_rank"
+
+    if suffix == "_n":
+        if side == "margin" or base not in N_OF:
+            return None
+        return (
+            f"Sample size behind {col[:-2]}: the number of {N_OF[base]} it is computed over{ph}, {SIDE[side]}. "
+            "Null when the team has no rows in that split; read it as 0."
+        )
 
     if side == "margin":
         if base == "start_position":

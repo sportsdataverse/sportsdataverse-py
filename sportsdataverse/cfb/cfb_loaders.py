@@ -3091,6 +3091,16 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |passing_td_pct      |Float64 |
         |pass_int_pct        |Float64 |
         |sacked_pct          |Float64 |
+        |EPAplay_n           |Int64   |
+        |yardsdropback_n     |Int64   |
+        |comppct_n           |Int64   |
+        |success_n           |Int64   |
+        |yardsplay_n         |Int64   |
+        |detmer_n            |Int64   |
+        |detmergame_n        |Int64   |
+        |EPAgame_n           |Int64   |
+        |yardsgame_n         |Int64   |
+        |playsgame_n         |Int64   |
         |fbs_class           |String  |
 
     Raises:
@@ -3255,6 +3265,13 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |fumbles_pct          |Float64 |
         |yardsplay_pct        |Float64 |
         |yardsgame_pct        |Float64 |
+        |EPAplay_n            |Int64   |
+        |success_n            |Int64   |
+        |yardsplay_n          |Int64   |
+        |catchpct_n           |Int64   |
+        |EPAgame_n            |Int64   |
+        |yardsgame_n          |Int64   |
+        |playsgame_n          |Int64   |
         |fbs_class            |String  |
 
     Raises:
@@ -3342,6 +3359,12 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
         |fumbles_pct        |Float64 |
         |yardsplay_pct      |Float64 |
         |yardsgame_pct      |Float64 |
+        |EPAplay_n          |Int64   |
+        |success_n          |Int64   |
+        |yardsplay_n        |Int64   |
+        |EPAgame_n          |Int64   |
+        |yardsgame_n        |Int64   |
+        |playsgame_n        |Int64   |
         |fbs_class          |String  |
 
     Raises:
@@ -3394,6 +3417,23 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |division                             |String  |
         |conference                           |String  |
         |season                               |Int64   |
+        |passrate_off_n                       |Int64   |
+        |rushrate_off_n                       |Int64   |
+        |havoc_off_n                          |Int64   |
+        |explosive_off_n                      |Int64   |
+        |EPAplay_off_n                        |Int64   |
+        |yardsplay_off_n                      |Int64   |
+        |play_stuffed_off_n                   |Int64   |
+        |success_off_n                        |Int64   |
+        |red_zone_success_off_n               |Int64   |
+        |third_down_success_off_n             |Int64   |
+        |third_down_distance_off_n            |Int64   |
+        |late_down_success_off_n              |Int64   |
+        |early_down_EPA_off_n                 |Int64   |
+        |start_position_off_n                 |Int64   |
+        |nonExplosiveEpaPerPlay_off_n         |Int64   |
+        |line_yards_off_n                     |Int64   |
+        |opportunity_rate_off_n               |Int64   |
         |plays_off                            |UInt32  |
         |passrate_off                         |Float64 |
         |rushrate_off                         |Float64 |
@@ -3414,6 +3454,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off           |Float64 |
         |line_yards_off                       |Float64 |
         |opportunity_rate_off                 |Float64 |
+        |playsgame_off_n                      |Int64   |
+        |EPAgame_off_n                        |Int64   |
+        |yardsgame_off_n                      |Int64   |
+        |drivesgame_off_n                     |Int64   |
+        |EPAdrive_off_n                       |Int64   |
+        |yardsdrive_off_n                     |Int64   |
+        |playsdrive_off_n                     |Int64   |
         |playsgame_off                        |Float64 |
         |EPAdrive_off                         |Float64 |
         |EPAgame_off                          |Float64 |
@@ -3448,6 +3495,23 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rank      |Float64 |
         |line_yards_off_rank                  |Float64 |
         |opportunity_rate_off_rank            |Float64 |
+        |passrate_def_n                       |Int64   |
+        |rushrate_def_n                       |Int64   |
+        |havoc_def_n                          |Int64   |
+        |explosive_def_n                      |Int64   |
+        |EPAplay_def_n                        |Int64   |
+        |yardsplay_def_n                      |Int64   |
+        |play_stuffed_def_n                   |Int64   |
+        |success_def_n                        |Int64   |
+        |red_zone_success_def_n               |Int64   |
+        |third_down_success_def_n             |Int64   |
+        |third_down_distance_def_n            |Int64   |
+        |late_down_success_def_n              |Int64   |
+        |early_down_EPA_def_n                 |Int64   |
+        |start_position_def_n                 |Int64   |
+        |nonExplosiveEpaPerPlay_def_n         |Int64   |
+        |line_yards_def_n                     |Int64   |
+        |opportunity_rate_def_n               |Int64   |
         |plays_def                            |UInt32  |
         |passrate_def                         |Float64 |
         |rushrate_def                         |Float64 |
@@ -3468,6 +3532,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def           |Float64 |
         |line_yards_def                       |Float64 |
         |opportunity_rate_def                 |Float64 |
+        |playsgame_def_n                      |Int64   |
+        |EPAgame_def_n                        |Int64   |
+        |yardsgame_def_n                      |Int64   |
+        |drivesgame_def_n                     |Int64   |
+        |EPAdrive_def_n                       |Int64   |
+        |yardsdrive_def_n                     |Int64   |
+        |playsdrive_def_n                     |Int64   |
         |playsgame_def                        |Float64 |
         |EPAdrive_def                         |Float64 |
         |EPAgame_def                          |Float64 |
@@ -3530,6 +3601,22 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
+        |passrate_off_pass_n                  |Int64   |
+        |rushrate_off_pass_n                  |Int64   |
+        |havoc_off_pass_n                     |Int64   |
+        |explosive_off_pass_n                 |Int64   |
+        |EPAplay_off_pass_n                   |Int64   |
+        |yardsplay_off_pass_n                 |Int64   |
+        |play_stuffed_off_pass_n              |Int64   |
+        |success_off_pass_n                   |Int64   |
+        |red_zone_success_off_pass_n          |Int64   |
+        |third_down_success_off_pass_n        |Int64   |
+        |third_down_distance_off_pass_n       |Int64   |
+        |late_down_success_off_pass_n         |Int64   |
+        |early_down_EPA_off_pass_n            |Int64   |
+        |nonExplosiveEpaPerPlay_off_pass_n    |Int64   |
+        |line_yards_off_pass_n                |Int64   |
+        |opportunity_rate_off_pass_n          |Int64   |
         |plays_off_pass                       |UInt32  |
         |passrate_off_pass                    |Float64 |
         |rushrate_off_pass                    |Float64 |
@@ -3549,6 +3636,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_pass      |Float64 |
         |line_yards_off_pass                  |Float64 |
         |opportunity_rate_off_pass            |Float64 |
+        |playsgame_off_pass_n                 |Int64   |
+        |EPAgame_off_pass_n                   |Int64   |
+        |yardsgame_off_pass_n                 |Int64   |
+        |drivesgame_off_pass_n                |Int64   |
+        |EPAdrive_off_pass_n                  |Int64   |
+        |yardsdrive_off_pass_n                |Int64   |
+        |playsdrive_off_pass_n                |Int64   |
         |playsgame_off_pass                   |Float64 |
         |EPAdrive_off_pass                    |Float64 |
         |EPAgame_off_pass                     |Float64 |
@@ -3582,6 +3676,22 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_pass_rank |Float64 |
         |line_yards_off_pass_rank             |Float64 |
         |opportunity_rate_off_pass_rank       |Float64 |
+        |passrate_def_pass_n                  |Int64   |
+        |rushrate_def_pass_n                  |Int64   |
+        |havoc_def_pass_n                     |Int64   |
+        |explosive_def_pass_n                 |Int64   |
+        |EPAplay_def_pass_n                   |Int64   |
+        |yardsplay_def_pass_n                 |Int64   |
+        |play_stuffed_def_pass_n              |Int64   |
+        |success_def_pass_n                   |Int64   |
+        |red_zone_success_def_pass_n          |Int64   |
+        |third_down_success_def_pass_n        |Int64   |
+        |third_down_distance_def_pass_n       |Int64   |
+        |late_down_success_def_pass_n         |Int64   |
+        |early_down_EPA_def_pass_n            |Int64   |
+        |nonExplosiveEpaPerPlay_def_pass_n    |Int64   |
+        |line_yards_def_pass_n                |Int64   |
+        |opportunity_rate_def_pass_n          |Int64   |
         |plays_def_pass                       |UInt32  |
         |passrate_def_pass                    |Float64 |
         |rushrate_def_pass                    |Float64 |
@@ -3601,6 +3711,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_pass      |Float64 |
         |line_yards_def_pass                  |Float64 |
         |opportunity_rate_def_pass            |Float64 |
+        |playsgame_def_pass_n                 |Int64   |
+        |EPAgame_def_pass_n                   |Int64   |
+        |yardsgame_def_pass_n                 |Int64   |
+        |drivesgame_def_pass_n                |Int64   |
+        |EPAdrive_def_pass_n                  |Int64   |
+        |yardsdrive_def_pass_n                |Int64   |
+        |playsdrive_def_pass_n                |Int64   |
         |playsgame_def_pass                   |Float64 |
         |EPAdrive_def_pass                    |Float64 |
         |EPAgame_def_pass                     |Float64 |
@@ -3646,6 +3763,22 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_pass_rank             |Float64 |
         |success_margin_pass_rank             |Float64 |
         |yardsplay_margin_pass_rank           |Float64 |
+        |passrate_off_rush_n                  |Int64   |
+        |rushrate_off_rush_n                  |Int64   |
+        |havoc_off_rush_n                     |Int64   |
+        |explosive_off_rush_n                 |Int64   |
+        |EPAplay_off_rush_n                   |Int64   |
+        |yardsplay_off_rush_n                 |Int64   |
+        |play_stuffed_off_rush_n              |Int64   |
+        |success_off_rush_n                   |Int64   |
+        |red_zone_success_off_rush_n          |Int64   |
+        |third_down_success_off_rush_n        |Int64   |
+        |third_down_distance_off_rush_n       |Int64   |
+        |late_down_success_off_rush_n         |Int64   |
+        |early_down_EPA_off_rush_n            |Int64   |
+        |nonExplosiveEpaPerPlay_off_rush_n    |Int64   |
+        |line_yards_off_rush_n                |Int64   |
+        |opportunity_rate_off_rush_n          |Int64   |
         |plays_off_rush                       |UInt32  |
         |passrate_off_rush                    |Float64 |
         |rushrate_off_rush                    |Float64 |
@@ -3665,6 +3798,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rush      |Float64 |
         |line_yards_off_rush                  |Float64 |
         |opportunity_rate_off_rush            |Float64 |
+        |playsgame_off_rush_n                 |Int64   |
+        |EPAgame_off_rush_n                   |Int64   |
+        |yardsgame_off_rush_n                 |Int64   |
+        |drivesgame_off_rush_n                |Int64   |
+        |EPAdrive_off_rush_n                  |Int64   |
+        |yardsdrive_off_rush_n                |Int64   |
+        |playsdrive_off_rush_n                |Int64   |
         |playsgame_off_rush                   |Float64 |
         |EPAdrive_off_rush                    |Float64 |
         |EPAgame_off_rush                     |Float64 |
@@ -3698,6 +3838,22 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rush_rank |Float64 |
         |line_yards_off_rush_rank             |Float64 |
         |opportunity_rate_off_rush_rank       |Float64 |
+        |passrate_def_rush_n                  |Int64   |
+        |rushrate_def_rush_n                  |Int64   |
+        |havoc_def_rush_n                     |Int64   |
+        |explosive_def_rush_n                 |Int64   |
+        |EPAplay_def_rush_n                   |Int64   |
+        |yardsplay_def_rush_n                 |Int64   |
+        |play_stuffed_def_rush_n              |Int64   |
+        |success_def_rush_n                   |Int64   |
+        |red_zone_success_def_rush_n          |Int64   |
+        |third_down_success_def_rush_n        |Int64   |
+        |third_down_distance_def_rush_n       |Int64   |
+        |late_down_success_def_rush_n         |Int64   |
+        |early_down_EPA_def_rush_n            |Int64   |
+        |nonExplosiveEpaPerPlay_def_rush_n    |Int64   |
+        |line_yards_def_rush_n                |Int64   |
+        |opportunity_rate_def_rush_n          |Int64   |
         |plays_def_rush                       |UInt32  |
         |passrate_def_rush                    |Float64 |
         |rushrate_def_rush                    |Float64 |
@@ -3717,6 +3873,13 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_rush      |Float64 |
         |line_yards_def_rush                  |Float64 |
         |opportunity_rate_def_rush            |Float64 |
+        |playsgame_def_rush_n                 |Int64   |
+        |EPAgame_def_rush_n                   |Int64   |
+        |yardsgame_def_rush_n                 |Int64   |
+        |drivesgame_def_rush_n                |Int64   |
+        |EPAdrive_def_rush_n                  |Int64   |
+        |yardsdrive_def_rush_n                |Int64   |
+        |playsdrive_def_rush_n                |Int64   |
         |playsgame_def_rush                   |Float64 |
         |EPAdrive_def_rush                    |Float64 |
         |EPAgame_def_rush                     |Float64 |
@@ -4018,6 +4181,23 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |division                             |String  |
         |conference                           |String  |
         |season                               |Int64   |
+        |passrate_off_n                       |Int64   |
+        |rushrate_off_n                       |Int64   |
+        |havoc_off_n                          |Int64   |
+        |explosive_off_n                      |Int64   |
+        |EPAplay_off_n                        |Int64   |
+        |yardsplay_off_n                      |Int64   |
+        |play_stuffed_off_n                   |Int64   |
+        |success_off_n                        |Int64   |
+        |red_zone_success_off_n               |Int64   |
+        |third_down_success_off_n             |Int64   |
+        |third_down_distance_off_n            |Int64   |
+        |late_down_success_off_n              |Int64   |
+        |early_down_EPA_off_n                 |Int64   |
+        |start_position_off_n                 |Int64   |
+        |nonExplosiveEpaPerPlay_off_n         |Int64   |
+        |line_yards_off_n                     |Int64   |
+        |opportunity_rate_off_n               |Int64   |
         |plays_off                            |UInt32  |
         |passrate_off                         |Float64 |
         |rushrate_off                         |Float64 |
@@ -4038,6 +4218,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off           |Float64 |
         |line_yards_off                       |Float64 |
         |opportunity_rate_off                 |Float64 |
+        |playsgame_off_n                      |Int64   |
+        |EPAgame_off_n                        |Int64   |
+        |yardsgame_off_n                      |Int64   |
+        |drivesgame_off_n                     |Int64   |
+        |EPAdrive_off_n                       |Int64   |
+        |yardsdrive_off_n                     |Int64   |
+        |playsdrive_off_n                     |Int64   |
         |playsgame_off                        |Float64 |
         |EPAdrive_off                         |Float64 |
         |EPAgame_off                          |Float64 |
@@ -4072,6 +4259,23 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rank      |Float64 |
         |line_yards_off_rank                  |Float64 |
         |opportunity_rate_off_rank            |Float64 |
+        |passrate_def_n                       |Int64   |
+        |rushrate_def_n                       |Int64   |
+        |havoc_def_n                          |Int64   |
+        |explosive_def_n                      |Int64   |
+        |EPAplay_def_n                        |Int64   |
+        |yardsplay_def_n                      |Int64   |
+        |play_stuffed_def_n                   |Int64   |
+        |success_def_n                        |Int64   |
+        |red_zone_success_def_n               |Int64   |
+        |third_down_success_def_n             |Int64   |
+        |third_down_distance_def_n            |Int64   |
+        |late_down_success_def_n              |Int64   |
+        |early_down_EPA_def_n                 |Int64   |
+        |start_position_def_n                 |Int64   |
+        |nonExplosiveEpaPerPlay_def_n         |Int64   |
+        |line_yards_def_n                     |Int64   |
+        |opportunity_rate_def_n               |Int64   |
         |plays_def                            |UInt32  |
         |passrate_def                         |Float64 |
         |rushrate_def                         |Float64 |
@@ -4092,6 +4296,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def           |Float64 |
         |line_yards_def                       |Float64 |
         |opportunity_rate_def                 |Float64 |
+        |playsgame_def_n                      |Int64   |
+        |EPAgame_def_n                        |Int64   |
+        |yardsgame_def_n                      |Int64   |
+        |drivesgame_def_n                     |Int64   |
+        |EPAdrive_def_n                       |Int64   |
+        |yardsdrive_def_n                     |Int64   |
+        |playsdrive_def_n                     |Int64   |
         |playsgame_def                        |Float64 |
         |EPAdrive_def                         |Float64 |
         |EPAgame_def                          |Float64 |
@@ -4154,6 +4365,22 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
+        |passrate_off_pass_n                  |Int64   |
+        |rushrate_off_pass_n                  |Int64   |
+        |havoc_off_pass_n                     |Int64   |
+        |explosive_off_pass_n                 |Int64   |
+        |EPAplay_off_pass_n                   |Int64   |
+        |yardsplay_off_pass_n                 |Int64   |
+        |play_stuffed_off_pass_n              |Int64   |
+        |success_off_pass_n                   |Int64   |
+        |red_zone_success_off_pass_n          |Int64   |
+        |third_down_success_off_pass_n        |Int64   |
+        |third_down_distance_off_pass_n       |Int64   |
+        |late_down_success_off_pass_n         |Int64   |
+        |early_down_EPA_off_pass_n            |Int64   |
+        |nonExplosiveEpaPerPlay_off_pass_n    |Int64   |
+        |line_yards_off_pass_n                |Int64   |
+        |opportunity_rate_off_pass_n          |Int64   |
         |plays_off_pass                       |UInt32  |
         |passrate_off_pass                    |Float64 |
         |rushrate_off_pass                    |Float64 |
@@ -4173,6 +4400,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_pass      |Float64 |
         |line_yards_off_pass                  |Float64 |
         |opportunity_rate_off_pass            |Float64 |
+        |playsgame_off_pass_n                 |Int64   |
+        |EPAgame_off_pass_n                   |Int64   |
+        |yardsgame_off_pass_n                 |Int64   |
+        |drivesgame_off_pass_n                |Int64   |
+        |EPAdrive_off_pass_n                  |Int64   |
+        |yardsdrive_off_pass_n                |Int64   |
+        |playsdrive_off_pass_n                |Int64   |
         |playsgame_off_pass                   |Float64 |
         |EPAdrive_off_pass                    |Float64 |
         |EPAgame_off_pass                     |Float64 |
@@ -4206,6 +4440,22 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_pass_rank |Float64 |
         |line_yards_off_pass_rank             |Float64 |
         |opportunity_rate_off_pass_rank       |Float64 |
+        |passrate_def_pass_n                  |Int64   |
+        |rushrate_def_pass_n                  |Int64   |
+        |havoc_def_pass_n                     |Int64   |
+        |explosive_def_pass_n                 |Int64   |
+        |EPAplay_def_pass_n                   |Int64   |
+        |yardsplay_def_pass_n                 |Int64   |
+        |play_stuffed_def_pass_n              |Int64   |
+        |success_def_pass_n                   |Int64   |
+        |red_zone_success_def_pass_n          |Int64   |
+        |third_down_success_def_pass_n        |Int64   |
+        |third_down_distance_def_pass_n       |Int64   |
+        |late_down_success_def_pass_n         |Int64   |
+        |early_down_EPA_def_pass_n            |Int64   |
+        |nonExplosiveEpaPerPlay_def_pass_n    |Int64   |
+        |line_yards_def_pass_n                |Int64   |
+        |opportunity_rate_def_pass_n          |Int64   |
         |plays_def_pass                       |UInt32  |
         |passrate_def_pass                    |Float64 |
         |rushrate_def_pass                    |Float64 |
@@ -4225,6 +4475,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_pass      |Float64 |
         |line_yards_def_pass                  |Float64 |
         |opportunity_rate_def_pass            |Float64 |
+        |playsgame_def_pass_n                 |Int64   |
+        |EPAgame_def_pass_n                   |Int64   |
+        |yardsgame_def_pass_n                 |Int64   |
+        |drivesgame_def_pass_n                |Int64   |
+        |EPAdrive_def_pass_n                  |Int64   |
+        |yardsdrive_def_pass_n                |Int64   |
+        |playsdrive_def_pass_n                |Int64   |
         |playsgame_def_pass                   |Float64 |
         |EPAdrive_def_pass                    |Float64 |
         |EPAgame_def_pass                     |Float64 |
@@ -4270,6 +4527,22 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_pass_rank             |Float64 |
         |success_margin_pass_rank             |Float64 |
         |yardsplay_margin_pass_rank           |Float64 |
+        |passrate_off_rush_n                  |Int64   |
+        |rushrate_off_rush_n                  |Int64   |
+        |havoc_off_rush_n                     |Int64   |
+        |explosive_off_rush_n                 |Int64   |
+        |EPAplay_off_rush_n                   |Int64   |
+        |yardsplay_off_rush_n                 |Int64   |
+        |play_stuffed_off_rush_n              |Int64   |
+        |success_off_rush_n                   |Int64   |
+        |red_zone_success_off_rush_n          |Int64   |
+        |third_down_success_off_rush_n        |Int64   |
+        |third_down_distance_off_rush_n       |Int64   |
+        |late_down_success_off_rush_n         |Int64   |
+        |early_down_EPA_off_rush_n            |Int64   |
+        |nonExplosiveEpaPerPlay_off_rush_n    |Int64   |
+        |line_yards_off_rush_n                |Int64   |
+        |opportunity_rate_off_rush_n          |Int64   |
         |plays_off_rush                       |UInt32  |
         |passrate_off_rush                    |Float64 |
         |rushrate_off_rush                    |Float64 |
@@ -4289,6 +4562,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rush      |Float64 |
         |line_yards_off_rush                  |Float64 |
         |opportunity_rate_off_rush            |Float64 |
+        |playsgame_off_rush_n                 |Int64   |
+        |EPAgame_off_rush_n                   |Int64   |
+        |yardsgame_off_rush_n                 |Int64   |
+        |drivesgame_off_rush_n                |Int64   |
+        |EPAdrive_off_rush_n                  |Int64   |
+        |yardsdrive_off_rush_n                |Int64   |
+        |playsdrive_off_rush_n                |Int64   |
         |playsgame_off_rush                   |Float64 |
         |EPAdrive_off_rush                    |Float64 |
         |EPAgame_off_rush                     |Float64 |
@@ -4322,6 +4602,22 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rush_rank |Float64 |
         |line_yards_off_rush_rank             |Float64 |
         |opportunity_rate_off_rush_rank       |Float64 |
+        |passrate_def_rush_n                  |Int64   |
+        |rushrate_def_rush_n                  |Int64   |
+        |havoc_def_rush_n                     |Int64   |
+        |explosive_def_rush_n                 |Int64   |
+        |EPAplay_def_rush_n                   |Int64   |
+        |yardsplay_def_rush_n                 |Int64   |
+        |play_stuffed_def_rush_n              |Int64   |
+        |success_def_rush_n                   |Int64   |
+        |red_zone_success_def_rush_n          |Int64   |
+        |third_down_success_def_rush_n        |Int64   |
+        |third_down_distance_def_rush_n       |Int64   |
+        |late_down_success_def_rush_n         |Int64   |
+        |early_down_EPA_def_rush_n            |Int64   |
+        |nonExplosiveEpaPerPlay_def_rush_n    |Int64   |
+        |line_yards_def_rush_n                |Int64   |
+        |opportunity_rate_def_rush_n          |Int64   |
         |plays_def_rush                       |UInt32  |
         |passrate_def_rush                    |Float64 |
         |rushrate_def_rush                    |Float64 |
@@ -4341,6 +4637,13 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_rush      |Float64 |
         |line_yards_def_rush                  |Float64 |
         |opportunity_rate_def_rush            |Float64 |
+        |playsgame_def_rush_n                 |Int64   |
+        |EPAgame_def_rush_n                   |Int64   |
+        |yardsgame_def_rush_n                 |Int64   |
+        |drivesgame_def_rush_n                |Int64   |
+        |EPAdrive_def_rush_n                  |Int64   |
+        |yardsdrive_def_rush_n                |Int64   |
+        |playsdrive_def_rush_n                |Int64   |
         |playsgame_def_rush                   |Float64 |
         |EPAdrive_def_rush                    |Float64 |
         |EPAgame_def_rush                     |Float64 |

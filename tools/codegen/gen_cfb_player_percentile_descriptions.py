@@ -92,6 +92,45 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SCHEMAS = ROOT / "tools" / "codegen" / "schemas" / "loader_schemas.yaml"
 MANUAL = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 
+#: what a player ``_n`` counts, per loader -- transcribed from
+#: cfbfastR-cfb-data/python/cfb_data_build/team_summaries.py::PLAYER_SAMPLE_SIZES.
+#: CFB's passer ``success``/``yardsplay`` are counted over completions +
+#: incompletions (``att`` -- sacks AND interceptions are excluded from that
+#: frame); this is a DIFFERENT population from the NFL loader's analogous
+#: columns, which count dropbacks. ``comppct`` counts throws including
+#: interceptions but excluding sacks (``att + pass_int``).
+_GAMES = {m: "games" for m in ("EPAgame", "yardsgame", "playsgame")}
+PLAYER_N_OF: dict[str, dict[str, str]] = {
+    "load_cfb_passing": {
+        "EPAplay": "dropbacks (attempts, sacks and interceptions)",
+        "yardsdropback": "dropbacks (attempts, sacks and interceptions)",
+        "comppct": "throws (including interceptions, excluding sacks)",
+        "success": "completions and incompletions (interceptions and sacks excluded)",
+        "yardsplay": "completions and incompletions (interceptions and sacks excluded)",
+        "detmer": "games",
+        "detmergame": "games",
+        **_GAMES,
+    },
+    "load_cfb_rushing": {"EPAplay": "carries", "success": "carries", "yardsplay": "carries", **_GAMES},
+    "load_cfb_receiving": {
+        "EPAplay": "targets",
+        "success": "targets",
+        "yardsplay": "targets",
+        "catchpct": "targets",
+        **_GAMES,
+    },
+}
+
+#: (loader, base) pairs whose CFB count differs from the NFL twin's dropback
+#: convention -- the description must say so (program amendment 14).
+_NFL_DROPBACK_CONTRAST = {("load_cfb_passing", "success"), ("load_cfb_passing", "yardsplay")}
+_NFL_DROPBACK_NOTE = "The NFL loader's equivalent counts dropbacks instead."
+
+
+def n_desc(base: str, noun: str, subject: str, *, note: str = "") -> str:
+    text = f"Sample size behind {base}: the number of {noun} the {subject}'s value is computed over. 0 where {base} is null."
+    return f"{text} {note}" if note else text
+
 
 # Nouns whose wording is team-grid leftover and wrong on a player frame.
 # Verified against the producer: summarize_passer/rusher/receiver group by
@@ -149,6 +188,11 @@ def main() -> None:
         curated = manual.get(t) or {}
         declared = {(e["name"] if isinstance(e, dict) else str(e)) for e in schemas.get(t, [])}
         for col in sorted(declared):
+            if col.endswith("_n") and col[:-2] in PLAYER_N_OF[t]:
+                base = col[:-2]
+                note = _NFL_DROPBACK_NOTE if (t, base) in _NFL_DROPBACK_CONTRAST else ""
+                out[t][col] = n_desc(base, PLAYER_N_OF[t][base], subject, note=note)
+                continue
             if not col.endswith("_rank"):
                 continue
             base = col[: -len("_rank")]
@@ -175,7 +219,11 @@ def main() -> None:
     total = sum(len(v) for v in out.values())
     ranks = sum(1 for v in out.values() for c in v if c.endswith("_rank"))
     pcts = sum(1 for v in out.values() for c in v if c.endswith("_pct"))
-    print(f"composed {total} descriptions across {len(TARGETS)} schemas ({ranks} corrected _rank, {pcts} new _pct)")
+    ns = sum(1 for v in out.values() for c in v if c.endswith("_n"))
+    print(
+        f"composed {total} descriptions across {len(TARGETS)} schemas "
+        f"({ranks} corrected _rank, {pcts} new _pct, {ns} new _n)"
+    )
     print(f"UNPARSED (skipped, never invented): {len(unparsed)}")
     print(f"PENDING _pct (column not declared yet, skipped): {len(pending)}")
     for u in sorted(unparsed)[:40]:
