@@ -421,7 +421,8 @@ Every function here follows the same error rules:
     of records (an empty record would become a made-up all-null row), or a liveData
     body without its `game` object;
   - a referee block whose `Table` / `Table1` rows are missing or malformed,
-    including a row without `game_id`;
+    including a `Table` row without `game_id` or a `Table1` (replay-center) row
+    without a `replaycenter_official` name;
   - a listing page without its "Last Two Minute" marker, or whose report links
     the parser cannot read.
 

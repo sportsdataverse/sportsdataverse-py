@@ -316,6 +316,10 @@ def test_referee_assignments_invalid_date_raises_before_request(monkeypatch, bad
         {"wnba": {"Table": {"rows": None}, "Table1": {"rows": []}}},  # null rows
         {"wnba": {"Table": {"rows": {"a": 1}}, "Table1": {"rows": []}}},  # rows is an object
         {"wnba": {"Table": {"rows": [1, 2]}, "Table1": {"rows": []}}},  # rows are not objects
+        # A replay-center row must name its official, or it parses to a row of nulls.
+        {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{}]}}},
+        {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{"game_date": "06/13/2026", "official": "A Ref"}]}}},
+        {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{"replaycenter_official": " "}]}}},
     ],
 )
 def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypatch, payload):

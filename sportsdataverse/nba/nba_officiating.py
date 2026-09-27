@@ -812,8 +812,9 @@ def nba_referee_assignments(
             ``rows`` (see the Note).
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF
             block), the 200 body is not a JSON object, or the league's
-            ``Table``/``Table1`` rows are missing or malformed (a row without
-            ``game_id`` included). With ``raw=True`` all three leagues are checked,
+            ``Table``/``Table1`` rows are missing or malformed (a ``Table`` row without
+            a 10-digit ``game_id``, or a ``Table1`` row without a
+            ``replaycenter_official`` name, included). With ``raw=True`` all three leagues are checked,
             since the whole payload is returned.
 
     Note:
@@ -880,6 +881,12 @@ def nba_referee_assignments(
             # A real game id, 10 digits once a numeric id is zero-padded (the
             # documented game_id contract): "not-an-id" or an 11-digit value is not.
             and all(re.fullmatch(r"\d{10}", _l2m_gid(r.get("game_id")) or "") for r in b["Table"]["rows"])
+            # A replay-center row names its official (every real row does): an empty
+            # record or a renamed field would otherwise parse to a row of nulls.
+            and all(
+                isinstance(r.get("replaycenter_official"), str) and r["replaycenter_official"].strip()
+                for r in b["Table1"]["rows"]
+            )
         )
 
     # raw=True hands back all three leagues, so all three must be well-formed.
