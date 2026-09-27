@@ -124,7 +124,9 @@ NBA_LIVE_GAME_CORE_SCHEMA = pl.Schema(
 
 
 def _gid(game_id: str | int) -> str:
-    """Zero-pad an NBA/WNBA game ID to 10 digits."""
+    """Zero-pad a game ID to 10 digits; a non-integral number is rejected, never truncated."""
+    if isinstance(game_id, float) and not game_id.is_integer():
+        raise ValueError(f"game_id must be an integer id, got {game_id!r}")
     return str(int(game_id)).zfill(10)
 
 

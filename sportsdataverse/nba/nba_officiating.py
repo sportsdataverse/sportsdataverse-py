@@ -208,7 +208,9 @@ NBA_REFEREE_REPLAY_SCHEMA = pl.Schema(
 
 
 def _gid(game_id: str | int) -> str:
-    """Zero-pad game ID to 10 digits."""
+    """Zero-pad a game ID to 10 digits; a non-integral number is rejected, never truncated."""
+    if isinstance(game_id, float) and not game_id.is_integer():
+        raise ValueError(f"game_id must be an integer id, got {game_id!r}")
     return str(int(game_id)).zfill(10)
 
 
@@ -747,7 +749,10 @@ def nba_referee_assignments(
     # before the raw return too, so a raw capture never stores an error envelope.
     block = payload.get(league)
     if not isinstance(block, dict) or not all(
-        isinstance(block.get(t), dict) and isinstance(block[t].get("rows"), list) for t in ("Table", "Table1")
+        isinstance(block.get(t), dict)
+        and isinstance(block[t].get("rows"), list)
+        and all(isinstance(r, dict) for r in block[t]["rows"])
+        for t in ("Table", "Table1")
     ):
         raise AssetFetchError(
             f"official.nba.com referee assignments for {day}: no {league!r} Table/Table1 rows in the response"

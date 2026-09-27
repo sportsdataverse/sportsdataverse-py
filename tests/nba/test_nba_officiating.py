@@ -288,6 +288,8 @@ def test_referee_assignments_invalid_date_raises_before_request(monkeypatch, bad
         {"wnba": {"Table": None, "Table1": {"rows": []}}},  # null table
         {"wnba": {"Table": {}, "Table1": {"rows": []}}},  # table without rows
         {"wnba": {"Table": {"rows": None}, "Table1": {"rows": []}}},  # null rows
+        {"wnba": {"Table": {"rows": {"a": 1}}, "Table1": {"rows": []}}},  # rows is an object
+        {"wnba": {"Table": {"rows": [1, 2]}, "Table1": {"rows": []}}},  # rows are not objects
     ],
 )
 def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypatch, payload):
@@ -366,3 +368,18 @@ def test_non_object_json_200_is_asset_fetch_error(monkeypatch, body):
         nba_l2m("0042500405", raw=True)
     with pytest.raises(AssetFetchError):
         nba_referee_assignments("2026-06-13")
+
+
+@pytest.mark.parametrize("gid", [42500405.5, 1.25])
+def test_fractional_game_id_is_rejected_not_truncated(monkeypatch, gid):
+    # int() would truncate 42500405.5 to another game's id; both helpers must refuse.
+    monkeypatch.setattr(
+        mod, "_official_get", lambda url, **kw: (_ for _ in ()).throw(AssertionError("no request expected"))
+    )
+    with pytest.raises(ValueError, match="integer id"):
+        nba_l2m(gid)
+    from sportsdataverse.nba import nba_live
+
+    with pytest.raises(ValueError, match="integer id"):
+        nba_live._gid(gid)
+    assert nba_live._gid(42500405.0) == "0042500405"
