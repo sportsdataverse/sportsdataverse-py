@@ -3,6 +3,10 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
+  - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
+  - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
+  - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
@@ -295,6 +299,58 @@
 
 ## Unreleased
 
+### Fixed — CFB losses written "for N yards loss" read as gains
+
+ESPN's 2025 text states a loss after the number: "rush middle for 4 yards loss", "caught at
+SAC18, for 1 yard loss". The "rush for N" and "for N" readers matched first and stored the loss
+as a gain, so `yds_rushed` was +N on 2,224 rushes and `yds_receiving` +N on 581 receptions in the
+published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The existing "yds loss"
+branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
+readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
+and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
+penalty residual `statYardage - yds_rushed` all move. A run filed twice in one 2023 text
+("run for 7 yds ... fumbled ... rush middle for 7 yards loss") reads the loss from the second copy
+(43 rows). The 2023 and 2025 seasons and 2026 to date need a reprocess (2022 has one rush and one
+reception).
+
+### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
+
+ESPN's 2025 feed writes a run as "rush right for 6 yards gain" (the rush flag on a
+fumble-typed row only read "run for") and files a fumble that goes out of bounds under a new
+`Fumble` type that neither flag listed. 466 of 1,401 FBS-vs-FBS scrimmage fumbles in 2025 came
+out with `rush` and `pass` both False (33 in 2024), 435 of them through these two gaps, so every
+pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed rows now read the
+2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
+2005–2013 feeds pick up the rush flag through the same pattern (~25 per season). A `Fumble`-typed pick whose returner
+fumbles out of bounds is typed "Interception Return" (3 rows in 2025–26), so the strip-sack rule no
+longer retypes it as a lost fumble.
+
+### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
+
+`load_mlb_park_dimensions()` reads the season-less `mlb_parks` release built by
+`sportsdataverse/sdv-reference-data`: one row per MLB venue per season, 2001 on
+(regular-season, spring-training, neutral and international sites), with fence
+distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and
+coordinates as of that season, from the MLB Stats API. `venue_id` stays a string (the
+API's `venue.id`). Cited corrections for fence moves the API lags or misses are applied
+and described in `notes`. Every column is described in the returns table.
+
+### Added — conference and division reference tables for nine leagues (`{league}_groups`)
+
+Thirty-six dataset loaders over the `{league}_groups` release tags built by
+`sportsdataverse/sdv-reference-data`, four per league for `cfb`, `mbb`, `wbb`, `nfl`,
+`nba`, `wnba`, `mlb`, `nhl` and NCAA baseball (`load_ncaa_baseball_*`, under `mlb`):
+the season-less `load_<league>_groups()` (one row per group lineage, with SDV's own
+`<league>:<slug>` `group_id`), `load_<league>_group_seasons()` (each group's name,
+abbreviation, parent and member count as of that season, never today's label applied
+to the past) and `load_<league>_group_aliases()` (every label and id a source uses for
+a group, with its valid seasons), plus `load_<league>_team_group_seasons(seasons)` (each
+team's subdivision / conference / division per season, one asset per season). Seasons
+keep each league's own key -- the ENDING year for `mbb`, `wbb`, `nba` and `nhl` -- so no
+asset offset is applied. `team_id` stays a string, as the tables publish it. The NFL
+loaders are hand-written in `nfl_loaders.py` (a missing season raises `NoDataError`);
+the rest are generated. Every column is described in the returns tables.
+
 ### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
 
 PFF now publishes an official, API-key-authenticated Developer API. `pff_api_*` (68 generated
@@ -340,6 +396,13 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+The legacy PFF return tables (`pff_*`, and the `pff_api` `/v1` routes that reuse them) no longer
+borrow another source's column text: 277 columns that showed nflreadr/ESPN wording ("as reported
+by NFL.com", "ESPN franchise id", "Player ID (aka GSIS ID)") now describe PFF's own values —
+PFF team abbreviations and ids, per-target EPA, gross punt yards, one row per team line on the
+pass-blocking-efficiency table. The description check now resolves a flat family's fallback text
+with the league its page renders it with.
 
 ### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
 

@@ -26,11 +26,13 @@ read at runtime by `ncaa_espn_team_crosswalk(league=...)`.
 ```sh
 uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py            # offline
 uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py --capture  # refresh inputs (network)
+uv run python tools/crosswalk/build_ncaa_espn_crosswalk.py --capture-groups  # refresh conference_seasons_*.csv (network)
 ```
 
 The default mode is fully offline and deterministic. Run `--capture` only when
-ESPN gains/renames a program or a conference realigns, then re-run the default
-mode and review the diff.
+ESPN gains/renames a program, and `--capture-groups` after each realignment
+summer (once the `{mbb,wbb}_groups` release has the new season), then re-run the
+default mode and review the diff.
 
 ## Files
 
@@ -38,6 +40,7 @@ mode and review the diff.
 |---|---|
 | `espn_mbb_teams.csv` | Captured 2026-08-01. Union of ESPN Site-API `mens-college-basketball/teams?groups=50`, the same women's list, hoopR's committed `data-raw/espn_mbb_teams.csv` (2023 snapshot), and per-id lookups for alias targets. Conference columns from hoopR. |
 | `espn_wbb_teams.csv` | Same union; conference columns from ESPN Core v2 `seasons/2025/types/2/groups/50/children` -> `groups/{id}/teams`. |
+| `conference_seasons_{mbb,wbb}.csv` | Captured by `--capture-groups` from the sportsdataverse-data `{lg}_groups` release: one row per (ending-year `season`, `espn_team_id`) with the SDV `conference_id`, ESPN's group id and the group's name that season, and the NCAA label (`group_aliases` source `ncaa`, nearest validity window; the SDV abbreviation when the NCAA vocabulary has none, e.g. men's Great West). Source of every conference column in the crosswalk. The `conference_*` columns in `espn_*_teams.csv` are no longer read. |
 | `dict_hoopR_ncaa_espn.csv` | `NCAA`/`ESPN`/`ESPN_PBP` columns of hoopR's hand-curated `data-raw/dict_hoopR.csv` (367 rows, `year` 2023). The primary bridge. |
 | `alias_ncaa_espn.csv` | Hand-curated, league-independent. One row per NCAA name the normalizer + dictionary cannot resolve; every row carries a written justification and was verified individually against ESPN's per-team endpoint. |
 

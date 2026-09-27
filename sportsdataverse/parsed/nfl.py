@@ -248,6 +248,9 @@ from sportsdataverse.nfl import load_nfl_ff_playerids as load_nfl_ff_playerids  
 from sportsdataverse.nfl import load_nfl_ff_rankings as load_nfl_ff_rankings  # noqa: F401
 from sportsdataverse.nfl import load_nfl_fp_curve as load_nfl_fp_curve  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ftn_charting as load_nfl_ftn_charting  # noqa: F401
+from sportsdataverse.nfl import load_nfl_group_aliases as load_nfl_group_aliases  # noqa: F401
+from sportsdataverse.nfl import load_nfl_group_seasons as load_nfl_group_seasons  # noqa: F401
+from sportsdataverse.nfl import load_nfl_groups as load_nfl_groups  # noqa: F401
 from sportsdataverse.nfl import load_nfl_injuries as load_nfl_injuries  # noqa: F401
 from sportsdataverse.nfl import load_nfl_model_pbp as load_nfl_model_pbp  # noqa: F401
 from sportsdataverse.nfl import load_nfl_nextgen_stats as load_nfl_nextgen_stats  # noqa: F401
@@ -273,6 +276,7 @@ from sportsdataverse.nfl import load_nfl_ratings_weekly as load_nfl_ratings_week
 from sportsdataverse.nfl import load_nfl_rosters as load_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import load_nfl_schedule as load_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import load_nfl_snap_counts as load_nfl_snap_counts  # noqa: F401
+from sportsdataverse.nfl import load_nfl_team_group_seasons as load_nfl_team_group_seasons  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_stats as load_nfl_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_tendencies as load_nfl_team_tendencies  # noqa: F401
 from sportsdataverse.nfl import load_nfl_teams as load_nfl_teams  # noqa: F401
@@ -576,6 +580,9 @@ __all__ = [
     "load_nfl_ff_rankings",
     "load_nfl_fp_curve",
     "load_nfl_ftn_charting",
+    "load_nfl_group_aliases",
+    "load_nfl_group_seasons",
+    "load_nfl_groups",
     "load_nfl_injuries",
     "load_nfl_model_pbp",
     "load_nfl_nextgen_stats",
@@ -601,6 +608,7 @@ __all__ = [
     "load_nfl_rosters",
     "load_nfl_schedule",
     "load_nfl_snap_counts",
+    "load_nfl_team_group_seasons",
     "load_nfl_team_stats",
     "load_nfl_team_tendencies",
     "load_nfl_teams",

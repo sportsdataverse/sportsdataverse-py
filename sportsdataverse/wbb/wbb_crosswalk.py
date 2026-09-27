@@ -35,8 +35,12 @@ from sportsdataverse._common_crosswalk_basketball import (
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
+    drop_unconfirmed_fox_sections,
     espn_team_directory,
+    fox_season_teams,
+    next_season_movers,
     require_source,
+    torvik_teams,
 )
 
 __all__ = [
@@ -359,14 +363,17 @@ def wbb_team_crosswalk(
     Args:
         season: Season year (e.g. ``2026``). Defaults to the most recent WBB
             season.
-        fox: Pre-fetched ``fox_wbb_teams_all()`` frame. ``None`` fetches live
-            (~60 s); pass an empty frame to skip Fox entirely.
-        bart: Pre-fetched ``bart_wbb_ratings()`` frame. ``None`` fetches live.
+        fox: Pre-fetched frame with ``fox_team_id`` / ``fox_team_name`` /
+            ``fox_section``. ``None`` fetches *season*'s conference standings
+            live (:func:`~sportsdataverse._crosswalk_basketball_sources.fox_season_teams`);
+            Fox has none before 2018-19, so earlier seasons get null ``fox_*``.
+            Pass an empty frame to skip Fox entirely.
+        bart: Pre-fetched ``bart_wbb_ratings()`` frame. ``None`` fetches live;
+            women's Torvik starts in 2021, so earlier seasons get null ``bart_*``.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-conference ESPN group fetch (a 404 is still
-            skipped) instead of skipping isolated failures. Default ``False`` matches the R
-            producers; a provider whose every item failed raises either way. An item
-            the host *answered* -- including a 404 -- counts as answered.
+        strict: Accepted for parity with the schedule and player crosswalks,
+            which forward it; the team build has no per-item fetch loop to
+            relax, so every source failure raises.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -374,31 +381,24 @@ def wbb_team_crosswalk(
         :data:`TEAM_COLUMNS`.
 
     Note:
-        sdv-py's ``espn_wbb_teams()`` ships no conference labels, so
-        ``espn_conference`` is reconstructed from ESPN's Core v2 season group
-        tree (see
-        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`),
-        the same walk the R producer does. There is no ``espn`` parameter --
-        the directory is always fetched here; when the upstream ESPN response
-        does carry ``conference_name``,
-        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_team_directory`
-        preserves it and the group walk is skipped.
+        Every source is read AS OF *season*. ``espn_conference`` is the
+        conference the team was in that season under that season's name, from
+        the SDV reference release (``wbb_groups``; see
+        :func:`~sportsdataverse._crosswalk_basketball_sources.sdv_conference_map`).
+        The ESPN team list itself is today's, so a team that was not in a
+        Division I conference that season has a null ``espn_conference``.
+        ``fox_section`` is that season's Fox conference, nulled where Fox lists
+        the team under the conference it moved to the next season (see
+        :func:`~sportsdataverse._crosswalk_basketball_sources.drop_unconfirmed_fox_sections`).
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could
-            not be produced (Fox or Torvik). Building on a missing source would
-            emit a well-formed crosswalk whose ``fox_*`` / ``bart_*`` columns
-            are silently all-null, so it fails here instead. Pass an explicit
-            empty frame (``fox=pl.DataFrame()``) to opt a source out. Also
-            raised, and propagated from
-            :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`,
-            when the ESPN conference walk resolves no teams at all -- the ESPN
-            directory is not opt-out-able.
-
-        CrosswalkSourceError: The ESPN conference group walk failed every
-            per-item fetch and answered none -- the signature of an unreachable
-            or rate-limited host -- or, with ``strict``, any one fetch failed.
-            Isolated failures are skipped and logged as a warning.
+            not be produced: Fox or Torvik failed, or returned no teams for a
+            season they cover, or the conference reference for *season* could
+            not be read. Building on a missing source would emit a well-formed
+            crosswalk whose columns are silently all-null, so it fails here
+            instead. Pass an explicit empty frame (``fox=pl.DataFrame()``) to
+            opt Fox or Torvik out.
 
     Example:
         Quick start::
@@ -407,7 +407,7 @@ def wbb_team_crosswalk(
             df = wbb_team_crosswalk(season=2026)
             print(df.shape)
 
-        Skip the slow Fox enumeration::
+        Skip Fox::
 
             import polars as pl
             df = wbb_team_crosswalk(season=2026, fox=pl.DataFrame())
@@ -426,26 +426,17 @@ def wbb_team_crosswalk(
     from sportsdataverse.wbb.wbb_schedule import most_recent_wbb_season
 
     season = int(season) if season is not None else most_recent_wbb_season()
-    espn = espn_team_directory("wbb", season=season, strict=strict, **kwargs)
+    espn = espn_team_directory("wbb", season=season, **kwargs)
     if fox is None:
-
-        def _fox() -> Any:
-            from sportsdataverse.wbb.wbb_fox_ext import fox_wbb_teams_all
-
-            return fox_wbb_teams_all(**kwargs)
-
-        fox = require_source("fox_wbb_teams_all()", _fox)
+        fox = require_source(f"fox_season_teams('wbb', {season})", lambda: fox_season_teams("wbb", season, **kwargs))
     if bart is None:
-        # The provider import lives inside the callable so a missing/broken
-        # bart_wbb module surfaces as CrosswalkSourceError, and so a caller who
+        # torvik_teams imports the provider itself, so a missing/broken
+        # bart_wbb module surfaces as CrosswalkSourceError, and a caller who
         # supplied `bart` never pays for (or trips over) the import at all.
-        def _bart() -> Any:
-            from sportsdataverse.wbb.bart_wbb import bart_wbb_ratings
-
-            return bart_wbb_ratings(year=season, **kwargs)
-
-        bart = require_source(f"bart_wbb_ratings(year={season})", _bart)
+        bart = require_source(f"bart_wbb_ratings(year={season})", lambda: torvik_teams("wbb", season, **kwargs))
     out = _assemble_team_crosswalk(espn, fox, bart, season)
+    if out["fox_section"].is_not_null().any():
+        out = drop_unconfirmed_fox_sections(out, next_season_movers("wbb", season))
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -467,8 +458,7 @@ def wbb_schedule_crosswalk(
         season: Season year (e.g. ``2026``). Defaults to the most recent WBB
             season.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-date ESPN scoreboard or per-conference
-            ESPN group fetch (a 404 is still
+        strict: Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
@@ -478,7 +468,7 @@ def wbb_schedule_crosswalk(
         ``pl.DataFrame`` (or pandas) with :data:`SCHEDULE_COLUMNS`.
 
     Raises:
-        CrosswalkSourceError: The per-date ESPN scoreboard or the conference walk failed every
+        CrosswalkSourceError: The per-date ESPN scoreboard failed every
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.
@@ -532,8 +522,7 @@ def wbb_player_crosswalk(
             season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-team ESPN or Fox roster fetch, or
-            per-conference ESPN group fetch (a 404 is still
+        strict: Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
@@ -544,7 +533,7 @@ def wbb_player_crosswalk(
         ending in ``match_method`` / ``match_confidence`` / ``match_keys``.
 
     Raises:
-        CrosswalkSourceError: The per-team ESPN or Fox rosters or the conference walk failed every
+        CrosswalkSourceError: The per-team ESPN or Fox rosters failed every
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.

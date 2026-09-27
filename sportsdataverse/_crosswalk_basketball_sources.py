@@ -21,7 +21,7 @@ from typing import Any, Callable, Dict, List, Optional, Sequence
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import str_id, to_eastern
-from sportsdataverse.errors import NoDataError, SportsDataverseError
+from sportsdataverse.errors import AssetFetchError, NoDataError, SportsDataverseError
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,12 @@ __all__ = [
     "FetchTally",
     "require_source",
     "espn_conference_map",
+    "sdv_conference_map",
     "espn_team_directory",
+    "fox_season_teams",
+    "drop_unconfirmed_fox_sections",
+    "next_season_movers",
+    "torvik_teams",
     "espn_scoreboard_games",
     "espn_rosters",
     "fox_rosters",
@@ -401,6 +406,10 @@ def _ref_ids(frame: Any) -> List[int]:
 def espn_conference_map(league: str, season: int, *, strict: bool = False, **kwargs: Any) -> pl.DataFrame:
     """ESPN team -> conference name for one NCAA season, via the Core v2 group tree.
 
+    Not used by the crosswalks any more: ESPN names every group by its CURRENT
+    name, so the walk stamps today's label on past seasons (the 2025 WAC reads
+    "United Athletic Conference"). The crosswalks read :func:`sdv_conference_map`.
+
     The Site v2 ``teams`` directory carries no conference, so the R producers
     (``wehoop::espn_wbb_teams()`` / ``hoopR::espn_mbb_teams()``) reconstruct it
     by walking ESPN's season group tree: the children of group
@@ -502,9 +511,58 @@ def espn_conference_map(league: str, season: int, *, strict: bool = False, **kwa
     ).unique(subset=["team_id"], keep="first", maintain_order=True)
 
 
-def espn_team_directory(
-    league: str, season: Optional[int] = None, *, strict: bool = False, **kwargs: Any
-) -> pl.DataFrame:
+def sdv_conference_map(league: str, season: int) -> pl.DataFrame:
+    """ESPN team id -> conference name AS OF one season, from the SDV reference release.
+
+    Reads ``{league}_team_group_seasons_{season}.parquet`` (which conference each
+    team was in that season) and ``{league}_group_seasons.parquet`` (each
+    conference's name that season) from the ``{league}_groups`` tag of
+    sportsdataverse-data. Only rows whose ``team_id_source`` is ``"espn"`` are
+    used, so ``team_id`` is an ESPN team id.
+
+    Args:
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year (2025 = 2024-25).
+
+    Returns:
+        ``pl.DataFrame`` with ``team_id`` and ``conference_name`` (both ``Utf8``),
+        one row per team that was in Division I that season. A team in no
+        conference (an independent) carries a null ``conference_name``.
+
+    Raises:
+        CrosswalkSourceError: Either asset is missing or could not be read, or
+            no team resolved to a named conference.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import sdv_conference_map
+            df = sdv_conference_map("mbb", 2025)
+            print(df["conference_name"].value_counts())
+    """
+    from sportsdataverse._codegen_runtime import _fetch_release_parquet
+    from sportsdataverse.config import SDVRELEASES
+
+    base = f"{SDVRELEASES}{league}_groups/{league}_"
+    members = require_source(
+        f"{league}_team_group_seasons_{season}",
+        lambda: _fetch_release_parquet(f"{base}team_group_seasons_{season}.parquet"),
+    )
+    groups = require_source(f"{league}_group_seasons", lambda: _fetch_release_parquet(f"{base}group_seasons.parquet"))
+    members = members.filter(pl.col("team_id_source") == "espn").select(
+        pl.col("team_id").cast(pl.Utf8), pl.col("conference_id").cast(pl.Utf8)
+    )
+    names = groups.filter(pl.col("season") == season).select(
+        pl.col("group_id").cast(pl.Utf8).alias("conference_id"), pl.col("name").cast(pl.Utf8).alias("conference_name")
+    )
+    assert members.schema["conference_id"] == names.schema["conference_id"] == pl.Utf8
+    out = members.join(names, on="conference_id", how="left").select("team_id", "conference_name")
+    if out["conference_name"].drop_nulls().len() == 0:
+        raise CrosswalkSourceError(f"{league}_groups: no team resolved to a named conference for season {season}")
+    return out.unique(subset=["team_id"], keep="first", maintain_order=True)
+
+
+def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any) -> pl.DataFrame:
     """ESPN team directory projected onto the R accessor's column names.
 
     sdv-py's ``espn_{lg}_teams()`` returns ``team_*``-prefixed columns from
@@ -514,14 +572,17 @@ def espn_team_directory(
 
     ``conference_name`` is taken from the upstream frame when it carries one.
     It does not for any sdv-py league, so for the NCAA leagues (``"mbb"`` /
-    ``"wbb"``) with a ``season`` given it is instead reconstructed through
-    :func:`espn_conference_map`, matching what the R producers do.
+    ``"wbb"``) with a ``season`` given it comes from
+    :func:`sdv_conference_map`: the conference each team belonged to IN that
+    season, under that season's name. The ESPN directory itself is the current
+    one -- every season gets today's team list, and a team that was not in a
+    Division I conference that season gets a null ``conference_name``.
 
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
-        season: Season year. Required to resolve ``conference_name`` for the
-            NCAA leagues; unused by the ESPN teams endpoint itself.
-        strict: Forwarded to :func:`espn_conference_map`.
+        season: Season year (ENDING year). Required to resolve
+            ``conference_name`` for the NCAA leagues; unused by the ESPN teams
+            endpoint itself.
         **kwargs: Forwarded to the accessor.
 
     Returns:
@@ -530,8 +591,8 @@ def espn_team_directory(
         crosswalks do not carry it).
 
     Raises:
-        CrosswalkSourceError: The NCAA conference walk produced nothing, or
-            every conference group fetch failed.
+        CrosswalkSourceError: The season's conference reference could not be
+            read, or resolved no conference for any team.
 
     Example:
         Quick start::
@@ -561,9 +622,7 @@ def espn_team_directory(
 
     if season is None or _ncaa_group_accessors(league) is None:
         return out
-    # Not **kwargs: those are the *teams* accessor's, and the group endpoints
-    # take a different parameter set.
-    conferences = espn_conference_map(league, int(season), strict=strict)
+    conferences = sdv_conference_map(league, int(season))
     # Join on Utf8 both sides -- as_str_id keeps a numeric id off the float
     # path, so an Int64 team_id stringifies as "123" and never "123.0". The
     # assert makes that agreement a checked precondition instead of an
@@ -574,6 +633,242 @@ def espn_team_directory(
         f"conferences={conferences.schema['team_id']} (both must be {pl.Utf8})"
     )
     return out.join(conferences, on="team_id", how="left")
+
+
+# First season (ENDING year) each source answers for, probed 2026-09-27. Before it:
+# Fox ``league/standings?season=`` returns ``{}`` (cbk) or silently the CURRENT
+# season (wcbk); Torvik's ``{year}_team_results.csv`` 404s. A season before a
+# floor leaves that source's columns null -- never another season's data.
+FOX_FIRST_SEASON = {"mbb": 2018, "wbb": 2019}
+TORVIK_FIRST_SEASON = {"mbb": 2008, "wbb": 2021}
+_FOX_SPORT = {"mbb": "cbk", "wbb": "wcbk"}
+_FOX_TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+
+
+def _fox_json(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
+    """``fox_get`` that raises on a non-200 instead of reading it as an empty payload."""
+    from sportsdataverse._fox_layout import _HEADERS, API, DATA_KEY
+    from sportsdataverse.dl_utils import download
+
+    resp = download(
+        f"{API}/{path}", params={"apikey": DATA_KEY, "api-version": "1.1", **(params or {})}, headers=_HEADERS, **kwargs
+    )
+    if resp.status_code != 200:
+        raise AssetFetchError(f"Fox {path} {params or ''} answered HTTP {resp.status_code}")
+    return resp.json()
+
+
+def fox_season_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
+    """Fox team directory AS OF one season: one ``league/standings`` call per conference.
+
+    Lists the conferences from ``{sport}/league/conferences`` and asks each for
+    ``league/standings?groupId=&season=`` (Fox keys seasons by START year, so
+    ``season - 1``). ``fox_section`` is the conference the team played in that
+    season. Only standings labelled with the requested season count: Fox answers
+    a season it does not have with the current one.
+
+    Args:
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year (2025 = 2024-25).
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
+
+    Returns:
+        ``pl.DataFrame`` with ``fox_team_id`` / ``fox_team_name`` /
+        ``fox_section`` (all ``Utf8``). Zero rows for a season before
+        :data:`FOX_FIRST_SEASON`, which Fox cannot answer.
+
+    Raises:
+        AssetFetchError: A Fox call answered anything but 200.
+        CrosswalkSourceError: No conference returned standings for the season.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import fox_season_teams
+            df = fox_season_teams("mbb", 2024)
+            print(df.group_by("fox_section").len())
+    """
+    from sportsdataverse._fox_layout import parse_nav_items, parse_teams
+
+    if season < FOX_FIRST_SEASON[league]:
+        return pl.DataFrame(schema=_FOX_TEAMS_SCHEMA)
+    sport = _FOX_SPORT[league]
+    label = f"{season - 1}-{season % 100:02d}"
+    groups = [
+        r["fox_id"]
+        for r in parse_nav_items(_fox_json(f"{sport}/league/conferences", **kwargs))
+        if r["fox_id"] and "/groups/" in (r["content_uri"] or "")
+    ]
+    rows: List[Dict[str, Any]] = []
+    seen: set = set()
+    for gid in groups:
+        try:
+            raw = _fox_json(f"{sport}/league/standings", {"groupId": gid, "season": season - 1}, **kwargs)
+        except NoDataError:
+            continue
+        sections = [
+            sec
+            for sec in raw.get("standingsSections") or []
+            if ((sec.get("metadata") or {}).get("parameters") or {}).get("season") == label
+        ]
+        for row in parse_teams({"standingsSections": sections}):
+            if row["fox_team_id"] not in seen:
+                seen.add(row["fox_team_id"])
+                rows.append(row)
+    if not rows:
+        raise CrosswalkSourceError(f"Fox {sport}: no {label} standings in any of {len(groups)} conferences")
+    return pl.DataFrame(rows, schema=_FOX_TEAMS_SCHEMA)
+
+
+def next_season_movers(league: str, season: int) -> List[str]:
+    """ESPN team ids whose conference in ``season + 1`` is not their ``season`` one.
+
+    Reads ``{league}_team_group_seasons`` for both seasons from the
+    ``{league}_groups`` release. A team that leaves Division I after *season*
+    counts as a mover. When the release has no ``season + 1`` yet, nobody has
+    moved.
+
+    Args:
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year.
+
+    Returns:
+        ESPN team ids (``str``).
+
+    Raises:
+        CrosswalkSourceError: Either season's asset could not be read, or
+            *season* is missing while ``season + 1`` exists.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import next_season_movers
+            print(next_season_movers("mbb", 2026))
+    """
+    from sportsdataverse._codegen_runtime import _fetch_release_parquet, _read_release_parquet
+    from sportsdataverse.config import SDVRELEASES
+
+    base = f"{SDVRELEASES}{league}_groups/{league}_team_group_seasons_"
+
+    def espn_ids(raw: pl.DataFrame) -> pl.DataFrame:
+        return raw.filter(pl.col("team_id_source") == "espn").select(
+            pl.col("team_id").cast(pl.Utf8), pl.col("conference_id").cast(pl.Utf8)
+        )
+
+    def next_or_empty() -> pl.DataFrame:
+        raw = _read_release_parquet(f"{base}{season + 1}.parquet")
+        return pl.DataFrame() if raw is None else raw
+
+    later = require_source(f"{league}_team_group_seasons_{season + 1}", next_or_empty)
+    if later.height == 0:
+        return []
+    now = require_source(
+        f"{league}_team_group_seasons_{season}", lambda: _fetch_release_parquet(f"{base}{season}.parquet")
+    )
+    now, later = espn_ids(now), espn_ids(later)
+    assert now.schema["team_id"] == later.schema["team_id"] == pl.Utf8
+    both = now.join(later, on="team_id", how="left", suffix="_next")
+    return both.filter(pl.col("conference_id").eq_missing(pl.col("conference_id_next")) == False)["team_id"].to_list()
+
+
+def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame, movers: Sequence[str] = ()) -> pl.DataFrame:
+    """Null ``fox_section`` where Fox files a team under a conference it was not in.
+
+    Fox's past-season standings usually pair that season's records with the
+    NEXT season's membership: the 2022-23 Big 12 table carries BYU,
+    Cincinnati, Houston and UCF (who joined in 2023-24), and the 2025-26
+    Pac-12 table is the entire 2026-27 Pac-12, none of whom played in it that
+    season. (Its 2017-18 tables still show 2017-18 membership.) So:
+
+    * each Fox conference is identified by the ``espn_conference`` most of its
+      teams had that season, counting only teams whose conference does not
+      change the next season (*movers*, see :func:`next_season_movers`), so a
+      table made of next-season arrivals cannot vote itself in;
+    * a team whose ``espn_conference`` disagrees with that identity is nulled,
+      which drops every arrival and keeps a mover Fox still lists correctly;
+    * a Fox conference with fewer than two agreeing non-movers cannot be
+      confirmed (Fox's 2021-22 Independents table holds only Chicago State,
+      then in the WAC), so it is nulled too.
+
+    The ``fox_team_id`` is kept: the id is right, only the conference is not.
+
+    Args:
+        xwalk: An assembled team crosswalk (``espn_team_id``, ``fox_section``
+            and ``espn_conference``, the latter already season-correct).
+        movers: ESPN team ids whose conference changes the next season.
+
+    Returns:
+        ``xwalk`` with unconfirmed ``fox_section`` values set to null.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
+            out = drop_unconfirmed_fox_sections(xwalk, next_season_movers("mbb", 2026))
+    """
+    # a vote needs a known conference: two unknowns would otherwise "agree" on a null identity
+    stayed = (
+        pl.col("fox_section").is_not_null()
+        & pl.col("espn_conference").is_not_null()
+        & (pl.col("espn_team_id").cast(pl.Utf8).is_in(list(movers)) == False)
+    )
+    modal = (
+        xwalk.filter(stayed)
+        .group_by("fox_section")
+        .agg(pl.col("espn_conference").mode().sort(nulls_last=True).first().alias("_fox_conf"))
+    )
+    agree = pl.col("fox_section").is_not_null() & pl.col("espn_conference").eq_missing(pl.col("_fox_conf"))
+    return (
+        xwalk.join(modal, on="fox_section", how="left", maintain_order="left")
+        .with_columns(
+            pl.when(agree & ((agree & stayed).sum().over("fox_section") >= 2))
+            .then(pl.col("fox_section"))
+            .otherwise(pl.lit(None, dtype=pl.Utf8))
+            .alias("fox_section")
+        )
+        .drop("_fox_conf")
+    )
+
+
+def torvik_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
+    """Torvik ``team`` / ``conf`` for one season, refusing a response with no teams.
+
+    barttorvik.com answers a blocked request with an HTML page or an empty body
+    rather than an error the wrappers raise on, and either used to reach the
+    crosswalk as a zero-row frame -- a well-formed file with ``bart_*`` all
+    null. A season Torvik covers must now yield team rows or raise.
+
+    Args:
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season, ENDING year.
+        **kwargs: Forwarded to ``torvik_ratings`` / ``bart_wbb_ratings``.
+
+    Returns:
+        ``pl.DataFrame`` with ``team`` / ``conf`` (``Utf8``). Zero rows for a
+        season before :data:`TORVIK_FIRST_SEASON`, which Torvik does not cover.
+
+    Raises:
+        CrosswalkSourceError: A covered season produced no team rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import torvik_teams
+            print(torvik_teams("mbb", 2025).head())
+    """
+    if season < TORVIK_FIRST_SEASON[league]:
+        return pl.DataFrame(schema={"team": pl.Utf8, "conf": pl.Utf8})
+    if league == "mbb":
+        from sportsdataverse.mbb.torvik import torvik_ratings as ratings
+    else:
+        from sportsdataverse.wbb.bart_wbb import bart_wbb_ratings as ratings
+    raw = ratings(year=season, **kwargs)
+    if not {"team", "conf"} <= set(raw.columns) or raw["team"].drop_nulls().len() == 0:
+        raise CrosswalkSourceError(
+            f"Torvik {league} {season}: no team rows ({raw.height} rows, columns {raw.columns[:5]}); "
+            "a blocked or empty response must not ship as null bart_* columns"
+        )
+    return raw.select(pl.col("team").cast(pl.Utf8), pl.col("conf").cast(pl.Utf8))
 
 
 def espn_scoreboard_games(league: str, dates: Sequence[date], *, strict: bool = False, **kwargs: Any) -> pl.DataFrame:

@@ -154,6 +154,10 @@ def _repair_entities(text: str) -> str:
 #: does carry one ("to the 50 yard line") is recognised and refused.
 _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\s+line)?"
 
+#: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
+#: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
+_FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
+
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
@@ -168,26 +172,32 @@ _NOT_OFFENSE_TD_TYPE_RE = r"(?i)interception|fumble|punt|kickoff|blocked|safety|
 _RETURNER_STEPPED_OUT_RE = r"(?i)\breturn\w*\b.*out[- ]of[- ]bounds"
 
 
-def _repair_score(col: str, lag: str, final: str) -> pl.Expr:
-    """One team's per-row score with an unconfirmed change reverted to the previous row's (see the call site).
+def _repair_scores(scores: list, scoring: list, final) -> list:
+    """One team's per-row score with ESPN's feed errors replaced by the last accepted score (see the call site).
 
     A change is confirmed when the next two rows repeat it; past the last row the header's final
-    score stands in, so a glitch on the last row is caught and a real final is kept. Applied twice,
-    so the second row of a two-row glitch is compared with the repaired first row.
+    score stands in, and a missing value on either side does not count against it. An unconfirmed
+    drop is reverted, and so is a rise on a non-scoring row that is unconfirmed or that the feed
+    takes back later (its next change is a drop below it). Each row is judged against the last
+    accepted score, not the feed's previous row, so a reverted row never re-seeds the error.
     """
-    cur, prev = pl.col(col), pl.col(lag)
-    n1 = cur.shift(-1).fill_null(pl.col(final))
-    n2 = cur.shift(-2).fill_null(pl.col(final))
-    confirmed = ((n1 == cur) & (n2 == cur)).fill_null(True)
-    return (
-        pl.when(pl.col("game_play_number") == 1)
-        .then(cur)
-        .when((cur < prev) & ~confirmed)
-        .then(prev)
-        .when((cur > prev) & (pl.col("scoringPlay") == False) & ~confirmed)
-        .then(prev)
-        .otherwise(cur)
-    )
+    n = len(scores)
+    # the feed's next value that differs from each row's (None when it never changes again)
+    next_change = [None] * n
+    for i in range(n - 2, -1, -1):
+        next_change[i] = scores[i + 1] if scores[i + 1] != scores[i] else next_change[i + 1]
+    ahead = [*scores[1:], final, final]
+    out, prev = [], None
+    for i, (cur, is_scoring) in enumerate(zip(scores, scoring)):
+        if cur is not None and prev is not None:
+            confirmed = all(a is None or a == cur for a in ahead[i : i + 2])
+            taken_back = next_change[i] is not None and next_change[i] < cur
+            if (cur < prev and not confirmed) or (cur > prev and is_scoring is False and (not confirmed or taken_back)):
+                cur = prev
+        out.append(cur)
+        if cur is not None:
+            prev = cur
+    return out
 
 
 def _signed_yards(tail: pl.Expr, *, before_fumble: bool = False) -> pl.Expr:
@@ -3518,9 +3528,15 @@ class CFBPlayProcess(object):
                                     "Fumble Recovery (Own)",
                                     "Fumble Recovery (Own) Touchdown",
                                     "Fumble Return Touchdown",
+                                    "Fumble",
                                 ],
                             )
-                        ).and_(pl.col("text").str.contains("run for")),
+                        )
+                        # 2025+ ESPN writes "rush right for 6 yards gain" (and stats crews
+                        # "rush middle , fumble by"); "run for" alone left 435 FBS scrimmage
+                        # fumbles in 2025 neither rush nor pass. Case-sensitive on purpose:
+                        # "(X Run for Two-Point Conversion)" is a try, not this play.
+                        .and_(pl.col("text").str.contains(r"run for|\brush (?:(?:left|right|middle) )?(?:for\b|,)")),
                     ),
                 )
                 .then(True)
@@ -3584,6 +3600,12 @@ class CFBPlayProcess(object):
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                    )
+                    # 2025+ ESPN type for a fumble with no recovery (out of bounds)
+                    .or_(
+                        (pl.col("type.text") == "Fumble").and_(
+                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                        ),
                     )
                     # Interception plays are pass attempts. The branches above
                     # only catch them in the 2005 and 2014+ text formats; 2004
@@ -3674,20 +3696,36 @@ class CFBPlayProcess(object):
                 # previous row's score -- any drop, or a rise on a non-scoring row -- and the
                 # last row, which has no next row, is confirmed by the header's final score.
                 # A change that persists (a review reversal, a score the feed attached one
-                # row late, the real final) is kept. Scoring rows keep their rises. Two
-                # passes, so a two-row glitch is caught whole (73% of one-row deviations in
-                # the 2004-2026 sample return to the previous score after one row, 19% after
-                # two).
-                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
-                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
-            )
-            .with_columns(
-                lag_homeScore=pl.col("homeScore").shift(1),
-                lag_awayScore=pl.col("awayScore").shift(1),
-            )
-            .with_columns(
-                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
-                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
+                # row late, the real final) is kept. Scoring rows keep their rises (73% of
+                # one-row deviations in the 2004-2026 sample return to the previous score
+                # after one row, 19% after two).
+                #
+                # Each row is judged against the last ACCEPTED score. Two vectorised passes
+                # judged it against the feed's previous row, so the row after a reverted
+                # glitch looked like an unconfirmed rise and was reverted to the glitch:
+                # 401762835 shows 14-21 on the kickoff after BGSU ties it 21-21, and the dip
+                # walked two rows forward onto McMillian's go-ahead touchdown (WPA +0.54).
+                # And a rise on a non-scoring row that the feed takes back later is not
+                # kept however long it persists: ESPN books a field goal's or a safety's
+                # points again on the next kickoff and carries them to the next score, where
+                # it restates the real board (401752684: USF 15 -> 17 on the free kick after
+                # Florida's safety, back to 15 eleven rows later on Florida's touchdown).
+                homeScore=pl.Series(
+                    _repair_scores(
+                        play_df["homeScore"].to_list(),
+                        play_df["scoringPlay"].to_list(),
+                        play_df["homeFinalScore"].max(),
+                    ),
+                    dtype=play_df.schema["homeScore"],
+                ),
+                awayScore=pl.Series(
+                    _repair_scores(
+                        play_df["awayScore"].to_list(),
+                        play_df["scoringPlay"].to_list(),
+                        play_df["awayFinalScore"].max(),
+                    ),
+                    dtype=play_df.schema["awayScore"],
+                ),
             )
             .drop(["lag_homeScore", "lag_awayScore"])
             .with_columns(
@@ -3875,6 +3913,14 @@ class CFBPlayProcess(object):
         )
         play_df = (
             play_df.with_columns(
+                # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
+                # it is an interception, not a strip sack for the rule below to retype.
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                .then(pl.lit("Interception Return"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # --- Fix Strip Sacks to Fumbles ----
                 pl.when(
                     (pl.col("fumble_vec") == True)
@@ -4653,6 +4699,8 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
+                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass complete")))
+                .then(True)
                 .otherwise(False),
                 pass_attempt=pl.when(
                     pl.col("type.text").is_in(
@@ -5111,6 +5159,12 @@ class CFBPlayProcess(object):
         # clause booked it as receiving / rushing yards (O3). The guards still read the
         # whole text, so the "intercepted" -> 0 branches below still fire.
         _gain_text = _espn_text.before_turnover("cleaned_text")
+        # A run's stated loss is read up to the turnover first, and past it only when the text
+        # carries it nowhere else: 2023 files some fumbled runs twice ("run for 7 yds ... fumbled,
+        # ... rush middle for 7 yards loss ..."), the loss only in the second copy (43 rows).
+        _rush_loss_yards = pl.coalesce(
+            _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE), pl.col("cleaned_text").str.extract(_FOR_N_YARDS_LOSS_RE)
+        ).cast(pl.Int32)
         play_df = play_df.with_columns(
             # Rush yardage reads cleaned_text (direction word stripped) so
             # "rush middle for 5 yards" -> "rush for 5 yards" matches; raw `text`
@@ -5125,6 +5179,9 @@ class CFBPlayProcess(object):
             .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
             .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
+            .then(-1 * _rush_loss_yards)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
@@ -5135,9 +5192,7 @@ class CFBPlayProcess(object):
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
-            # ESPN "N yds loss" / "N yds gain" phrasings (0.36-live port)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds loss")))
-            .then(-1 * _gain_text.str.extract(r"(?i)(\d+) y\w*ds loss").cast(pl.Int32))
+            # ESPN "N yds gain" phrasing (0.36-live port)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
             .then(_gain_text.str.extract(r"(?i)(\d+) y\w*ds gain").cast(pl.Int32))
             .when(
@@ -5168,6 +5223,14 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains(r"(?i)for a loss of")),
             )
             .then(-1 * _gain_text.str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
+            .when(
+                (pl.col("pass") == True)
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
+                # up to the turnover only: a review's "(Original Play: ... pass complete ... for 3
+                # yards loss)" after a sack's fumble is not this play's catch (401856783)
+                .and_(_gain_text.str.contains(_FOR_N_YARDS_LOSS_RE)),
+            )
+            .then(-1 * _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE).cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))
             .then(_gain_text.str.extract(r"(?i)for (-?\d+)").cast(pl.Int32))
             .when(

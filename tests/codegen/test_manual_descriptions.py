@@ -50,6 +50,28 @@ def test_residual_total_matches_known_baseline():
     assert total <= 0, f"residual grew to {total} (>0) — new blank columns need descriptions"
 
 
+def test_native_schemas_resolve_fallback_with_their_page_league():
+    # A native schema's path names an API family, not a league, but its reference page renders
+    # R-dict fallback text with the FLAT_APIS league (``_return_table(rs, prefix)``). The check
+    # must resolve with the same league, or it reads text the page never shows.
+    import os
+
+    import yaml
+
+    checked = 0
+    for stem, prefix in gen.FLAT_APIS:
+        y = gen.ENDPOINTS / f"{stem}.yaml"
+        if not y.exists():
+            continue
+        for ep in yaml.safe_load(y.read_text(encoding="utf-8"))["endpoints"]:
+            rs = ep.get("returns_schema")
+            path = os.path.join(extract.SCHEMA_DIR, f"{rs}.yaml") if rs else ""
+            if path and os.path.exists(path):
+                assert extract._league_of(path) == prefix, rs
+                checked += 1
+    assert checked > 500
+
+
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
 
 
