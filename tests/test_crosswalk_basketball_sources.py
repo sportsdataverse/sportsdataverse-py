@@ -1284,6 +1284,22 @@ def test_drop_unconfirmed_fox_sections_needs_two_agreeing_teams() -> None:
     assert out["fox_section"].to_list() == [None, "Big 12", "Big 12"]
 
 
+def test_drop_unconfirmed_fox_sections_ignores_unknown_conferences_as_votes() -> None:
+    """Two rows with no ESPN conference must not vote a Fox table into a null identity."""
+    from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
+
+    xwalk = pl.DataFrame(
+        {
+            "espn_team_id": pl.Series([1, 2, 3], dtype=pl.Int32),
+            "espn_location": ["A", "B", "C"],
+            "espn_conference": [None, None, "Big South Conference"],
+            "fox_section": ["Big South", "Big South", "Big South"],
+        }
+    )
+    out = drop_unconfirmed_fox_sections(xwalk)
+    assert out["fox_section"].to_list() == [None, None, None]
+
+
 def _serve_group_fixtures(monkeypatch: pytest.MonkeyPatch) -> None:
     """Serve committed ``mbb_groups`` release assets; an absent one reads as a 404."""
     import sportsdataverse._codegen_runtime as runtime

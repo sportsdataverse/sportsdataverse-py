@@ -806,7 +806,12 @@ def drop_unconfirmed_fox_sections(xwalk: pl.DataFrame, movers: Sequence[str] = (
             from sportsdataverse._crosswalk_basketball_sources import drop_unconfirmed_fox_sections
             out = drop_unconfirmed_fox_sections(xwalk, next_season_movers("mbb", 2026))
     """
-    stayed = pl.col("fox_section").is_not_null() & (pl.col("espn_team_id").cast(pl.Utf8).is_in(list(movers)) == False)
+    # a vote needs a known conference: two unknowns would otherwise "agree" on a null identity
+    stayed = (
+        pl.col("fox_section").is_not_null()
+        & pl.col("espn_conference").is_not_null()
+        & (pl.col("espn_team_id").cast(pl.Utf8).is_in(list(movers)) == False)
+    )
     modal = (
         xwalk.filter(stayed)
         .group_by("fox_section")
