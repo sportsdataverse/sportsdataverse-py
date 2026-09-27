@@ -5093,6 +5093,12 @@ class CFBPlayProcess(object):
         # clause booked it as receiving / rushing yards (O3). The guards still read the
         # whole text, so the "intercepted" -> 0 branches below still fire.
         _gain_text = _espn_text.before_turnover("cleaned_text")
+        # A run's stated loss is read up to the turnover first, and past it only when the text
+        # carries it nowhere else: 2023 files some fumbled runs twice ("run for 7 yds ... fumbled,
+        # ... rush middle for 7 yards loss ..."), the loss only in the second copy (43 rows).
+        _rush_loss_yards = pl.coalesce(
+            _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE), pl.col("cleaned_text").str.extract(_FOR_N_YARDS_LOSS_RE)
+        ).cast(pl.Int32)
         play_df = play_df.with_columns(
             # Rush yardage reads cleaned_text (direction word stripped) so
             # "rush middle for 5 yards" -> "rush for 5 yards" matches; raw `text`
@@ -5109,7 +5115,7 @@ class CFBPlayProcess(object):
             .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
             # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
-            .then(-1 * _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE).cast(pl.Int32))
+            .then(-1 * _rush_loss_yards)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
@@ -5154,7 +5160,9 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("pass") == True)
                 .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
-                .and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)),
+                # up to the turnover only: a review's "(Original Play: ... pass complete ... for 3
+                # yards loss)" after a sack's fumble is not this play's catch (401856783)
+                .and_(_gain_text.str.contains(_FOR_N_YARDS_LOSS_RE)),
             )
             .then(-1 * _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE).cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))

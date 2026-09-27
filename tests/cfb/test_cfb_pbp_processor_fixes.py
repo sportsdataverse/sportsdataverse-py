@@ -42,6 +42,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
   twice, on the safety and on the free kick, and takes the second two back at the next score).
 * ``summary_401752744_trimmed.json.gz`` -- Oklahoma @ South Carolina, 2025 (South Carolina concedes
   a safety down 7-24 in the fourth).
+* ``summary_401520349_trimmed.json.gz`` -- Massachusetts @ Army, 2023 (a fumbled run filed in two text
+  formats, the loss stated only in the second copy, after the first copy's fumble).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``; the
 ``*_trimmed.json.gz`` ones keep only the keys the processor reads.
@@ -686,3 +688,13 @@ def test_a_safety_keeps_wp_after_with_the_conceding_team():
     assert safety["wp_before"] < 0.05
     assert safety["wp_after"] < 0.05
     assert abs(safety["wpa"]) < 0.05
+
+
+def test_a_yards_loss_stated_after_the_turnover_clause_is_still_read():
+    # 2023 files some fumbled runs twice in one text: the classic copy ("Champ Harris run for 7 yds
+    # ... fumbled, recovered by ...") and then the vendor copy ("rush middle for 7 yards loss").
+    # The guard saw the loss in the whole text, but the reader only reads up to the first fumble,
+    # so yds_rushed came out null (48 rows in 2023). Oracle: the spot, own 29 -> own 36.
+    row = _row(_trimmed_plays(401520349), "Champ Harris run for 7 yds to the MASS 36")
+    assert (row["start.yardsToEndzone"], row["end.yardsToEndzone"]) == (29, 36)
+    assert row["yds_rushed"] == -7
