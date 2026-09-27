@@ -16,7 +16,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [PFF Developer API (api.pff.com, API key)](reference/pff_api) | 68 | `https://api.pff.com` |
 | [Dataset loaders](reference/loaders) | 25 | nflverse data releases / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 177 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 178 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -74,6 +74,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_pfr_advstats`](reference/additional#load_pfr_advstats) | [`load_pfr_advstats`](https://nflreadr.nflverse.com/reference/load_pfr_advstats.html) |
 | [`load_player_stats`](reference/additional#load_player_stats) | [`load_player_stats`](https://nflreadr.nflverse.com/reference/load_player_stats.html) |
 | [`load_players`](reference/additional#load_players) | [`load_players`](https://nflreadr.nflverse.com/reference/load_players.html) |
+| [`load_rosters`](reference/additional#load_rosters) | [`load_rosters`](https://nflreadr.nflverse.com/reference/load_rosters.html) |
 | [`load_rosters_weekly`](reference/additional#load_rosters_weekly) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
 | [`load_schedules`](reference/additional#load_schedules) | [`load_schedules`](https://nflreadr.nflverse.com/reference/load_schedules.html) |
 | [`load_snap_counts`](reference/additional#load_snap_counts) | [`load_snap_counts`](https://nflreadr.nflverse.com/reference/load_snap_counts.html) |

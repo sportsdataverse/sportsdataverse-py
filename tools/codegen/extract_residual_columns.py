@@ -4,31 +4,58 @@ entry, no R-dict match). Input for description authoring + the coverage test."""
 
 from __future__ import annotations
 
+import functools
 import glob
 import json
 import os
 
-from tools.codegen.generate import _manual_col_desc, _r_col_desc
+from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCHEMA_DIR = os.path.join(ROOT, "tools", "codegen", "schemas")
 
 
-def _league_of(path: str) -> str | None:
-    """Best-effort league slug from a schema path.
+@functools.lru_cache(maxsize=1)
+def _flat_leagues() -> dict[str, str]:
+    """``{returns_schema: league prefix}`` over the flat-API endpoint YAMLs.
 
-    Handles two cases:
+    A flat family's reference page renders each table with ``_return_table(returns_schema,
+    <FLAT_APIS prefix>)``, so that prefix is the league its R-dict fallback text resolves with.
+    No returns_schema is referenced from two leagues, so the map is exact.
+    """
+    import yaml
+
+    out: dict[str, str] = {}
+    for stem, prefix in FLAT_APIS:
+        p = ENDPOINTS / f"{stem}.yaml"
+        if p.exists():
+            for ep in (yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("endpoints") or []:
+                if ep.get("returns_schema"):
+                    out.setdefault(ep["returns_schema"], prefix)
+    return out
+
+
+def _league_of(path: str) -> str | None:
+    """League the docs render a schema's fallback text with (best effort).
+
+    Handles three cases:
     * ``schemas/autodoc/<league>/...``  → return ``<league>``
     * ``schemas/<name>/<league>.yaml``  where ``<name>`` is NOT ``autodoc`` or ``native``
       (e.g. ``schemas/news/nfl.yaml``, ``schemas/standings/nba.yaml``) → return file stem
       (the stem is the league slug, matching how ``_return_table`` passes ``league.prefix``).
+    * ``schemas/native/<stem>/<name>.yaml`` → the ``FLAT_APIS`` league of the endpoints that
+      return it (``native/pff/*`` → ``nfl``). The path names an API family, not a league, and
+      reading ``None`` here gave the check the cross-sport ``_merged`` text where the page shows
+      the league's own (e.g. nflreadr's "as reported by NFL.com" on PFF tables).
 
-    Top-level files (e.g. ``schemas/scoreboard.yaml``, depth==1) and ``native/<stem>/``
-    subdirs (stem is an API family, not a league) remain ``None``.
+    Top-level files (e.g. ``schemas/scoreboard.yaml``, depth==1) and native schemas no endpoint
+    returns remain ``None``.
     """
     rel = os.path.relpath(path, SCHEMA_DIR).replace("\\", "/").split("/")
     if rel[0] == "autodoc" and len(rel) >= 2:
         return rel[1]
+    if rel[0] == "native":
+        return _flat_leagues().get(os.path.splitext("/".join(rel))[0])
     # schemas/<name>/<league>.yaml — two-segment relative path, <name> not autodoc/native
     if len(rel) == 2 and rel[0] not in ("autodoc", "native"):
         stem = os.path.splitext(rel[1])[0]
