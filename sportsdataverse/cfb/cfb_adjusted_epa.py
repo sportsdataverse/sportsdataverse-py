@@ -431,6 +431,8 @@ def cfb_adjusted_epa_by_game(
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
+    if ridge_lambda <= 0:  # week 1 has no prior fit, so the check in _fit_team_strengths may never run
+        raise ValueError(f"ridge_lambda must be > 0, got {ridge_lambda}")
     base, clean = _prepare(plays, _ADJ_BY_GAME_REQUIRED, _FIT_WP)
     # Bowls restart at week 1 with seasonType 3: order the postseason after every
     # regular-season week, or each week-w fit sees bowl games played months later.

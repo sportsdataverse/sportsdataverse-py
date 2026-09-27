@@ -271,3 +271,10 @@ def test_by_game_keeps_postseason_out_of_regular_season_fits() -> None:
     assert got["adj_off_epa"].to_list() == pytest.approx(without.sort(key)["adj_off_epa"].to_list(), nan_ok=True)
     # ...and the bowl itself is adjusted with every regular-season week behind it.
     assert with_bowl.filter(pl.col("game_id") == "999")["adj_off_epa"].is_not_null().all()
+
+
+def test_by_game_rejects_nonpositive_lambda_even_with_only_week_one() -> None:
+    # Week 1 has no prior fit, so the check inside the fit never ran (CodeRabbit, #598).
+    week1 = _synthetic_pbp().filter(pl.col("week") == 1)
+    with pytest.raises(ValueError, match="ridge_lambda"):
+        cfb_adjusted_epa_by_game(week1, ridge_lambda=0.0)

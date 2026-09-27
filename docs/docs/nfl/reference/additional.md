@@ -8865,10 +8865,10 @@ League-agnostic (column names are arguments): builds the full
 offense/defense-indicator + intercept + home design and solves the
 ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only team
 coefficients are penalised; the intercept (and, unless
-`penalize_home`, the home term) is free. Moved verbatim (T7.2) from
-`sportsdataverse.nfl.nfl_ratings` -- NFL is currently the sole
-adopter of this exact dense-design encoding (CFB's ridge is the
-genuinely different `dropped_level_ridge`).
+`penalize_home`, the home term) is free. Moved (T7.2) from
+`sportsdataverse.nfl.nfl_ratings`. Callers: NFL ratings, and CFB
+adjusted EPA (`cfb_adjusted_epa._fit_team_strengths`, via `hfa_col`);
+`cfb_ratings` uses the different `dropped_level_ridge`.
 
 **Parameters**
 
@@ -8881,7 +8881,7 @@ genuinely different `dropped_level_ridge`).
 | `resp_col` | `str` |  | Numeric response column (e.g. `epa`). |
 | `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
-| `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. |
+| `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. Must not contain nulls (raises `ValueError`). |
 
 **Returns**
 
