@@ -320,6 +320,7 @@ def test_referee_assignments_invalid_date_raises_before_request(monkeypatch, bad
         {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{}]}}},
         {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{"game_date": "06/13/2026", "official": "A Ref"}]}}},
         {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{"replaycenter_official": " "}]}}},
+        {"wnba": {"Table": {"rows": []}, "Table1": {"rows": [{"replaycenter_official": " "}]}}},
     ],
 )
 def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypatch, payload):
