@@ -571,6 +571,26 @@ def test_rush_yardage_stated_before_a_fumble_survives():
     assert loss["yds_rushed"] == -1
 
 
+def test_vendor_yards_loss_is_a_negative_gain():
+    # ESPN's 2025 text states the loss after the number: "rush middle for 3 yards loss", "caught at
+    # ARK23, for 3 yards loss". The "rush for N" / "for N" readers matched first and stored +3 --
+    # 2,224 rushes and 582 receptions in the published 2025 season. Oracle: the field-position
+    # change (one row is a turnover on downs, so its end spot is on the other side's scale).
+    plays = _plays(401752746).filter(
+        pl.col("text").str.contains(r"for \d+ yards? loss") & (pl.col("type.text") != "Penalty")
+    )
+    same_side = pl.col("start.team.id") == pl.col("end.team.id")
+    moved = (
+        pl.when(same_side)
+        .then(pl.col("start.yardsToEndzone") - pl.col("end.yardsToEndzone"))
+        .otherwise(pl.col("start.yardsToEndzone") - (100 - pl.col("end.yardsToEndzone")))
+    )
+    got = plays.select(gain=pl.coalesce("yds_rushed", "yds_receiving"), moved=moved, rush="rush", line="line_yards")
+    assert got.height == 5  # four rushes, one of them "for 1 yard loss", and a reception
+    assert got["gain"].to_list() == got["moved"].to_list()
+    assert got.filter(pl.col("rush") == True).select((pl.col("line") == 1.2 * pl.col("gain")).all()).item()
+
+
 # --- N38: an admin row after a score carries the post-score EP, not the score's -------------------
 
 

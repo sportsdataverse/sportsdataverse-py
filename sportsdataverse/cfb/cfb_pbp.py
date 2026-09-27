@@ -154,6 +154,10 @@ def _repair_entities(text: str) -> str:
 #: does carry one ("to the 50 yard line") is recognised and refused.
 _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\s+line)?"
 
+#: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
+#: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
+_FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
+
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
@@ -5059,6 +5063,9 @@ class CFBPlayProcess(object):
             .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
             .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
+            .then(-1 * _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE).cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
@@ -5069,9 +5076,7 @@ class CFBPlayProcess(object):
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
-            # ESPN "N yds loss" / "N yds gain" phrasings (0.36-live port)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds loss")))
-            .then(-1 * _gain_text.str.extract(r"(?i)(\d+) y\w*ds loss").cast(pl.Int32))
+            # ESPN "N yds gain" phrasing (0.36-live port)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
             .then(_gain_text.str.extract(r"(?i)(\d+) y\w*ds gain").cast(pl.Int32))
             .when(
@@ -5102,6 +5107,12 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains(r"(?i)for a loss of")),
             )
             .then(-1 * _gain_text.str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
+            .when(
+                (pl.col("pass") == True)
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
+                .and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)),
+            )
+            .then(-1 * _gain_text.str.extract(_FOR_N_YARDS_LOSS_RE).cast(pl.Int32))
             .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))
             .then(_gain_text.str.extract(r"(?i)for (-?\d+)").cast(pl.Int32))
             .when(

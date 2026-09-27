@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
@@ -294,6 +295,17 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB losses written "for N yards loss" read as gains
+
+ESPN's 2025 text states a loss after the number: "rush middle for 4 yards loss", "caught at
+SAC18, for 1 yard loss". The "rush for N" and "for N" readers matched first and stored the loss
+as a gain, so `yds_rushed` was +N on 2,224 rushes and `yds_receiving` +N on 581 receptions in the
+published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The existing "yds loss"
+branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
+readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
+and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
+penalty residual `statYardage - yds_rushed` all move. The 2025 season needs a reprocess.
 
 ### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
 
