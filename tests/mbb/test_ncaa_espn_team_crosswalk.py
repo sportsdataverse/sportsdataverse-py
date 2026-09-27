@@ -154,7 +154,7 @@ REALIGNMENTS = [
     ("Southern California", "2023-24", "2024-25", "pac-12", "big-ten"),
     ("Texas", "2023-24", "2024-25", "big-12", "sec"),
     ("Oklahoma", "2023-24", "2024-25", "big-12", "sec"),
-    ("Lamar University", "2022-23", "2023-24", "wac", "southland"),  # ESPN had 2022-23 as Southland
+    ("Lamar University", "2021-22", "2022-23", "wac", "southland"),  # one WAC season, then back to the Southland
 ]
 
 

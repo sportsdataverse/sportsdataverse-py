@@ -4674,7 +4674,7 @@ season,ncaa_team_id,ncaa_team,ncaa_conference,conference_id,espn_team_id,espn_di
 2022-23,542358,LSU,SEC,wbb:sec,99,LSU Tigers,LSU,Tigers,LSU,Southeastern Conference,23,exact
 2022-23,542343,La Salle,Atlantic 10,wbb:atlantic-10,2325,La Salle Explorers,La Salle,Explorers,LAS,Atlantic 10 Conference,3,exact
 2022-23,542345,Lafayette,Patriot,wbb:patriot,322,Lafayette Leopards,Lafayette,Leopards,LAF,Patriot League,22,exact
-2022-23,542347,Lamar University,WAC,wbb:wac,2320,Lamar Cardinals,Lamar,Cardinals,LAM,Western Athletic Conference,30,dict
+2022-23,542347,Lamar University,Southland,wbb:southland,2320,Lamar Cardinals,Lamar,Cardinals,LAM,Southland Conference,25,dict
 2022-23,542348,Lehigh,Patriot,wbb:patriot,2329,Lehigh Mountain Hawks,Lehigh,Mountain Hawks,LEH,Patriot League,22,exact
 2022-23,542351,Liberty,ASUN,wbb:asun,2335,Liberty Flames,Liberty,Flames,LIB,ASUN Conference,46,exact
 2022-23,543536,Lindenwood,OVC,wbb:ovc,2815,Lindenwood Lions,Lindenwood,Lions,LIN,Ohio Valley Conference,20,exact
