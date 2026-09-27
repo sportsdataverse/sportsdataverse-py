@@ -417,7 +417,9 @@ Every function here follows the same error rules:
   or WAF block, any other non-200 status, or a 200 without the expected shape:
   - a body that is not a JSON object;
   - an L2M report whose `game` is not exactly one row (the parser reads one row,
-    so a second would vanish silently), or a liveData body without its `game` object;
+    so a second would vanish silently) or whose `l2m` / `stats` table is not a list
+    of records (an empty record would become a made-up all-null row), or a liveData
+    body without its `game` object;
   - a referee block whose `Table` / `Table1` rows are missing or malformed,
     including a row without `game_id`;
   - a listing page without its "Last Two Minute" marker, or whose report links

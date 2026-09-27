@@ -592,6 +592,36 @@ def test_l2m_body_without_its_game_row_is_asset_fetch_error(monkeypatch, body):
         nba_l2m("0042500405", raw=True)
 
 
+_L2M_GAME = [{"GameId": "0042500405"}]
+
+
+@pytest.mark.parametrize(
+    "tables",
+    [
+        {"l2m": "abc"},
+        {"l2m": {"PCTime": "01:00"}},
+        {"l2m": [{"PCTime": "01:00"}, 5]},
+        # An empty record would parse to a made-up all-null row (hoopR's twin check).
+        {"l2m": [{}]},
+        {"stats": [{}]},
+        {"stats": "abc"},
+    ],
+)
+def test_l2m_malformed_l2m_or_stats_table_is_asset_fetch_error(monkeypatch, tables):
+    _patch(monkeypatch, _Resp(200, json.dumps({"game": _L2M_GAME, **tables}), "application/json"))
+    with pytest.raises(AssetFetchError, match="malformed L2M"):
+        nba_l2m("0042500405")
+    with pytest.raises(AssetFetchError, match="malformed L2M"):
+        nba_l2m("0042500405", raw=True)
+
+
+@pytest.mark.parametrize("tables", [{"l2m": [], "stats": []}, {}, {"l2m": {}, "stats": {}}])
+def test_l2m_empty_or_absent_tables_are_still_a_report(monkeypatch, tables):
+    _patch(monkeypatch, _Resp(200, json.dumps({"game": _L2M_GAME, **tables}), "application/json"))
+    out = nba_l2m("0042500405")
+    assert out["game"].height == 1 and out["calls"].height == 0 and out["stats"].height == 0
+
+
 def test_listing_with_unreadable_report_links_is_asset_fetch_error(monkeypatch):
     # The page keeps its title but links reports in a new shape: a redesign, not an empty season.
     html = (

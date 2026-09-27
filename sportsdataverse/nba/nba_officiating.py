@@ -443,8 +443,9 @@ def nba_l2m(
             have none; a game that just ended may not be graded yet.
         AssetFetchError: The fetch failed (a transport error, a rate limit, an
             Akamai WAF block, or a 5xx that outlived the retry budget), or the 200
-            body is not a JSON object whose ``game`` is exactly one row -- an error
-            envelope or a changed schema, checked with ``raw=True`` too.
+            body is not a JSON object whose ``game`` is exactly one row, or its
+            ``l2m``/``stats`` table is not a list of records (empty is fine) -- an
+            error envelope or a changed schema, checked with ``raw=True`` too.
 
     Example:
         Fetch an L2M report for a playoff game::
@@ -488,6 +489,13 @@ def nba_l2m(
         raise AssetFetchError(
             f"official.nba.com returned the L2M report for game {got!r} when {gid} was requested ({url})"
         )
+    # The l2m/stats tables may be empty or absent, never another shape (as in hoopR):
+    # a string or an object would parse as an empty report, and an empty record ({})
+    # as a made-up all-null row.
+    for key in ("l2m", "stats"):
+        t = payload.get(key)
+        if not (t is None or t == {} or (isinstance(t, list) and all(isinstance(r, dict) and r for r in t))):
+            raise AssetFetchError(f"official.nba.com returned a malformed L2M {key!r} table for {url}")
     return payload if raw else parse_nba_l2m(payload, return_as_pandas=return_as_pandas)
 
 
