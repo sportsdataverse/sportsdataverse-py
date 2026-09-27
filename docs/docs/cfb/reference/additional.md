@@ -1518,12 +1518,13 @@ pbp = pl.DataFrame({"type.text": ["Pass Reception", "Punt Return"]})
 pbp.with_columns(canonical_play_type_expr())
 ```
 
-### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.035, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
+### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.075, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
 
 Season opponent-adjusted per-team EPA from a season's play-by-play.
 
 Fits one ridge of per-play `EPA` on offense-team, defense-team, and
-home-field indicators over the competitive (`0.1 <= wp_before <= 0.9`) pass
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the `0.05 <= wp_before_naive <= 0.95` pass
 and rush plays, nets each team's per-game raw EPA against the opponent's
 fitted strength, and averages to a season figure. In-sample/descriptive (the
 fit uses the whole season); for leak-free per-game values use
@@ -1534,7 +1535,7 @@ fit uses the whole season); for leak-free per-game values use
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float` | `0.035` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
+| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays). Must be > 0. Default 0.075, the owner's choice (see ADJ_EPA_LAMBDA`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
@@ -1549,23 +1550,23 @@ pbp = cfb.load_cfb_pbp(seasons=[2023])
 cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 ```
 
-### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.035, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
+### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.075, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
 
 Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
-For each week `w` the opponent-strength ridge is fit on competitive plays
+For each week `w` the opponent-strength ridge is fit on FIT_WP`-band plays
 from **weeks before `w` only**, then that week's games are adjusted with
 those as-of strengths -- so the value uses no future information and is valid
 as an in-season power-rating / model feature. Week 1 (no prior) yields null
-adjustments; not-yet-seen opponents fall back to the league baseline (with the
-heavy ridge penalty this is the intended early-season shrinkage to average).
+adjustments; not-yet-seen opponents fall back to the league baseline (an
+average team), and teams seen on few plays are shrunk most of the way there.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float` | `0.035` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
+| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays). Must be > 0. Default 0.075, the owner's choice (see ADJ_EPA_LAMBDA`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
