@@ -13151,12 +13151,18 @@ load_ncaa_mfb_schedule:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_team_stats:
   away_value: Team-stat value for the away team; each row is one stat category for one game, wide by side.
+  category: stats.ncaa.org box-score section the stat belongs to (Passing, Rushing, First Downs, Total Offense, Kicking,
+    Punt Returns, Kickoffs and KO Returns, Sacks, Passes Defended); not a CFBD category.
   home_value: Team-stat value for the home team; each row is one stat category for one game, wide by side.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_teams:
   academic_year: Academic year the team record covers (the ENDING year of the fall/spring split) -- distinct from `season`,
     which is the STARTING year.
+  division: stats.ncaa.org division code, 11 = FBS and 12 = FCS; not a conference division (the table has no conference column).
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  team_id: stats.ncaa.org team id. It is issued per season, so a school's id changes from year to year; it is not an ESPN
+    id.
+  team_name: School name as stats.ncaa.org lists it, without the mascot.
 load_ncaa_wbb_lineups:
   drb: Defensive rebounds by the lineup during the stint.
   duration_mins: Length of the stint in minutes.

@@ -2241,6 +2241,7 @@ loaders:
   url: ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet
   tag: ncaa_mfb_teams
   min_season: 2013
+  notes: "No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release)."
   example_args:
     seasons: 2024
 - fn: load_ncaa_mfb_team_stats

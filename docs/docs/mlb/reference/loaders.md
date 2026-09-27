@@ -648,7 +648,9 @@ load_ncaa_baseball_games(seasons=2024)
 
 ## `load_mlb_groups`
 
-Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_groups.parquet`:::caution Coverage
+Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_groups.parquet`
+
+:::caution Coverage
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. mlb:al-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year.
 :::
 
@@ -669,7 +671,9 @@ load_mlb_groups()
 
 ## `load_mlb_group_seasons`
 
-Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_seasons.parquet`:::caution Coverage
+Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_seasons.parquet`
+
+:::caution Coverage
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year.
 :::
 
@@ -693,7 +697,9 @@ load_mlb_group_seasons()
 
 ## `load_mlb_group_aliases`
 
-Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_aliases.parquet`:::caution Coverage
+Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_aliases.parquet`
+
+:::caution Coverage
 One season-less file: every name, abbreviation, slug and source id that a source (espn, mlb) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
@@ -716,7 +722,9 @@ load_mlb_group_aliases()
 
 ## `load_mlb_team_group_seasons`
 
-Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_team_group_seasons_{season}.parquet`:::caution Coverage
+Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_team_group_seasons_{season}.parquet`
+
+:::caution Coverage
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the MLB Stats API id; team_id_source names the id space. season is the calendar year; seasons 1901-2026.
 :::
 
@@ -742,7 +750,9 @@ load_mlb_team_group_seasons(seasons=2024)
 
 ## `load_ncaa_baseball_groups`
 
-Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_groups.parquet`:::caution Coverage
+Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_groups.parquet`
+
+:::caution Coverage
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. ncaa_baseball:acc) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year.
 :::
 
@@ -763,7 +773,9 @@ load_ncaa_baseball_groups()
 
 ## `load_ncaa_baseball_group_seasons`
 
-Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_seasons.parquet`:::caution Coverage
+Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_seasons.parquet`
+
+:::caution Coverage
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year.
 :::
 
@@ -787,7 +799,9 @@ load_ncaa_baseball_group_seasons()
 
 ## `load_ncaa_baseball_group_aliases`
 
-Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_aliases.parquet`:::caution Coverage
+Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_aliases.parquet`
+
+:::caution Coverage
 One season-less file: every name, abbreviation, slug and source id that a source (ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
@@ -810,7 +824,9 @@ load_ncaa_baseball_group_aliases()
 
 ## `load_ncaa_baseball_team_group_seasons`
 
-Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_team_group_seasons_{season}.parquet`:::caution Coverage
+Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_team_group_seasons_{season}.parquet`
+
+:::caution Coverage
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026.
 :::
 
