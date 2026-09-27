@@ -61,6 +61,7 @@ def _synthetic_pbp() -> pl.DataFrame:
                             "pass": 1,
                             "rush": 0,
                             "wp_before": 0.5,
+                            "wp_before_naive": 0.5,
                         }
                     )
     return pl.DataFrame(rows)
@@ -209,3 +210,12 @@ def test_real_2026_result_does_not_depend_on_which_team_id_sorts_first() -> None
     j = a.join(b, on="team_id")
     assert j.height == a.height
     assert (j["net_adj_epa"] - j["net_relabelled"]).abs().max() < 1e-9
+
+
+def test_strength_fit_reads_naive_wp_not_the_spread_aware_one() -> None:
+    # The spread-aware wp_before started 171 of 807 2025 FBS games outside a 10-90%
+    # band at 0-0 and gave 72 of them zero fit plays; the fit uses wp_before_naive.
+    plays = _plays_2026()
+    assert cfb_adjusted_epa(plays.drop("wp_before")).height > 100
+    with pytest.raises(KeyError, match="wp_before_naive"):
+        cfb_adjusted_epa(plays.drop("wp_before_naive"))

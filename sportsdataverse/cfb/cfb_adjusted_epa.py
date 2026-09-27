@@ -23,7 +23,14 @@ port of cfbfastR's ``adjust_epa`` / ``cfbfastR-cfb-data`` ``espn_cfb_15``.
 
 Required input columns (a cfbfastR-schema pbp frame): ``game_id``, ``pos_team``,
 ``pos_team_id``, ``def_pos_team_id``, ``home``, ``neutral_site``, ``EPA``,
-``pass``, ``rush``, ``wp_before`` (plus ``week`` for the by-game variant).
+``pass``, ``rush``, ``wp_before_naive`` (plus ``week`` for the by-game variant).
+
+Which plays fit the opponent strengths: ``0.05 <= wp_before_naive <= 0.95``, the
+score-and-clock win probability with no pregame spread. The spread-aware
+``wp_before`` put 171 of 807 2025 FBS games outside a 10-90% band at 0-0 and kept
+~11% of the plays in games with a 21+ point spread, so 72 games (the lopsided
+cross-conference ones that link the conferences) gave the fit nothing. A team's
+own per-game EPA still counts every play; only the strength fit is filtered.
 """
 
 from __future__ import annotations
@@ -84,15 +91,21 @@ __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 # and Washington State (raw 124th/123rd, both had played Washington) 1st and
 # 2nd. `_fit_team_strengths` keeps lambda but charges it in PLAYS: the penalty
 # is `lambda * _TEAM_SEASON_PLAYS` for every team, so a team shrinks toward the
-# league average by n_t / (n_t + ~15) -- the calibrated ~3% at a full season,
+# league average by n_t / (n_t + ~20) -- the calibrated ~3% at a full season,
 # 94% at 1 play.
 _RIDGE_LAMBDA = 0.035
 
-# Median competitive (0.1 <= wp_before <= 0.9) offensive pass/rush plays per FBS
-# team in a full FBS-vs-FBS season: 431 / 450.5 / 438 in 2019 / 2021 / 2022
-# (fixed from those seasons; 2023-2025 were held out to evaluate the change).
-# Anchors the penalty so a full season shrinks as the tuned lambda did.
-_TEAM_SEASON_PLAYS = 440.0
+# Median fit-band (`_FIT_WP`) offensive pass/rush plays per FBS team in a full
+# FBS-vs-FBS season: 595.5 / 571 / 564 in 2019 / 2021 / 2022 (fixed from those
+# seasons; 2023-2025 were held out to evaluate the change). Anchors the penalty
+# to a full team season. Was 440 under the old 0.1 <= wp_before <= 0.9 band.
+_TEAM_SEASON_PLAYS = 577.0
+
+# Plays that fit the opponent strengths: naive (score + clock, no spread) win
+# probability inside 5-95%. Keeps 70-74% of FBS-vs-FBS pass/rush plays in every
+# season 2014-2026 and no game gives the fit zero plays; `wp_before_naive` has no
+# nulls in 2014-2026 (a null row would be left out of the fit only).
+_FIT_WP = ("wp_before_naive", 0.05, 0.95)
 
 _REQUIRED_COLUMNS = (
     "game_id",
@@ -107,6 +120,9 @@ _REQUIRED_COLUMNS = (
     "wp_before",
 )
 _BY_GAME_REQUIRED = (*_REQUIRED_COLUMNS, "week")
+# `_REQUIRED_COLUMNS` / `_prepare` defaults stay on `wp_before` for `cfb_ratings`.
+_ADJ_REQUIRED = (*_REQUIRED_COLUMNS[:-1], _FIT_WP[0])
+_ADJ_BY_GAME_REQUIRED = (*_ADJ_REQUIRED, "week")
 
 _EMPTY_OFFENSE = pl.DataFrame(schema={"team_id": pl.Utf8, "adjmodelOff": pl.Float64})
 _EMPTY_DEFENSE = pl.DataFrame(schema={"team_id": pl.Utf8, "adjmodelDef": pl.Float64})
@@ -121,8 +137,12 @@ def _rank(col: str, *, descending: bool) -> pl.Expr:
     return pl.when(c.is_null()).then(null_trail).otherwise(base)
 
 
-def _prepare(plays: pl.DataFrame | pd.DataFrame, required: tuple[str, ...]) -> tuple[pl.DataFrame, pl.DataFrame]:
-    """Validate + build the ``base`` (EPA pass/rush) and ``clean`` (competitive + hfa) frames."""
+def _prepare(
+    plays: pl.DataFrame | pd.DataFrame,
+    required: tuple[str, ...],
+    fit_wp: tuple[str, float, float] = ("wp_before", 0.1, 0.9),
+) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Validate + build the ``base`` (EPA pass/rush) and ``clean`` (``fit_wp`` band + hfa) frames."""
     df = pl.from_pandas(plays) if not isinstance(plays, pl.DataFrame) else plays
     missing = [c for c in required if c not in df.columns]
     if missing:
@@ -132,7 +152,8 @@ def _prepare(plays: pl.DataFrame | pd.DataFrame, required: tuple[str, ...]) -> t
         def_pos_team_id=pl.col("def_pos_team_id").cast(pl.Utf8),
         game_id=pl.col("game_id").cast(pl.Utf8),
     )
-    clean = base.filter((pl.col("wp_before") >= 0.1) & (pl.col("wp_before") <= 0.9)).with_columns(
+    wp_col, lo, hi = fit_wp
+    clean = base.filter(pl.col(wp_col).is_between(lo, hi)).with_columns(
         hfa=pl.when(pl.col("neutral_site") == True)  # noqa: E712
         .then(pl.lit(0))
         .when(pl.col("pos_team") == pl.col("home"))
@@ -166,7 +187,7 @@ def _fit_team_strengths(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
 
     Every team gets its own offense and defense indicator (no reference level) and
     the same penalty ``ridge_lambda * _TEAM_SEASON_PLAYS`` in plays, so a team with
-    ``n`` competitive plays keeps about ``n / (n + penalty)`` of its signal and the
+    ``n`` fit-band plays keeps about ``n / (n + penalty)`` of its signal and the
     intercept is the average team. Replaces :func:`_fit_opponent_ridge` for
     adjusted EPA, where the standardized fit shrank every team by the same ~3% and
     pinned the first team id (as a string) to the intercept on both sides.
@@ -257,7 +278,7 @@ def cfb_adjusted_epa(
 
     Fits one ridge of per-play ``EPA`` on offense-team, defense-team, and
     home-field indicators (every team shrunk toward the league average by its own
-    play count) over the competitive (``0.1 <= wp_before <= 0.9``) pass
+    play count) over the ``0.05 <= wp_before_naive <= 0.95`` pass
     and rush plays, nets each team's per-game raw EPA against the opponent's
     fitted strength, and averages to a season figure. In-sample/descriptive (the
     fit uses the whole season); for leak-free per-game values use
@@ -268,7 +289,7 @@ def cfb_adjusted_epa(
             columns listed in the module docstring. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
             is shrunk toward the league average by ``n / (n + ridge_lambda *
-            440)`` for its ``n`` competitive plays (~3% at a full season, most
+            577)`` for its ``n`` fit plays (~3% at a full season, most
             of the way on a handful). Must be > 0. Default 0.035, tuned across
             2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
@@ -294,7 +315,7 @@ def cfb_adjusted_epa(
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
-    base, clean = _prepare(plays, _REQUIRED_COLUMNS)
+    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)
     offense, defense, _ = _fit_team_strengths(clean, ridge_lambda)
     opp = _adjust_games(base, offense, defense, fill_strength=None)
     team = (
@@ -341,7 +362,7 @@ def cfb_adjusted_epa_by_game(
 ) -> pl.DataFrame | pd.DataFrame:
     """Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
-    For each week ``w`` the opponent-strength ridge is fit on competitive plays
+    For each week ``w`` the opponent-strength ridge is fit on ``_FIT_WP``-band plays
     from **weeks before ``w`` only**, then that week's games are adjusted with
     those as-of strengths -- so the value uses no future information and is valid
     as an in-season power-rating / model feature. Week 1 (no prior) yields null
@@ -353,7 +374,7 @@ def cfb_adjusted_epa_by_game(
             module-docstring columns **plus** ``week``. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
             is shrunk toward the league average by ``n / (n + ridge_lambda *
-            440)`` for its ``n`` competitive plays (~3% at a full season, most
+            577)`` for its ``n`` fit plays (~3% at a full season, most
             of the way on a handful). Must be > 0. Default 0.035, tuned across
             2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
@@ -383,7 +404,7 @@ def cfb_adjusted_epa_by_game(
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
-    base, clean = _prepare(plays, _BY_GAME_REQUIRED)
+    base, clean = _prepare(plays, _ADJ_BY_GAME_REQUIRED, _FIT_WP)
     weeks = sorted(base.filter(pl.col("week").is_not_null())["week"].unique().to_list())
 
     parts: list[pl.DataFrame] = []
