@@ -432,6 +432,9 @@ from sportsdataverse.cfb import load_cfb_coach_tendencies as load_cfb_coach_tend
 from sportsdataverse.cfb import load_cfb_drives as load_cfb_drives  # noqa: F401
 from sportsdataverse.cfb import load_cfb_fpi_weekly as load_cfb_fpi_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_game_rosters as load_cfb_game_rosters  # noqa: F401
+from sportsdataverse.cfb import load_cfb_group_aliases as load_cfb_group_aliases  # noqa: F401
+from sportsdataverse.cfb import load_cfb_group_seasons as load_cfb_group_seasons  # noqa: F401
+from sportsdataverse.cfb import load_cfb_groups as load_cfb_groups  # noqa: F401
 from sportsdataverse.cfb import load_cfb_linescores as load_cfb_linescores  # noqa: F401
 from sportsdataverse.cfb import load_cfb_model_pbp as load_cfb_model_pbp  # noqa: F401
 from sportsdataverse.cfb import load_cfb_passing as load_cfb_passing  # noqa: F401
@@ -454,6 +457,7 @@ from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F4
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_group_seasons as load_cfb_team_group_seasons  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
@@ -745,6 +749,9 @@ __all__ = [
     "load_cfb_drives",
     "load_cfb_fpi_weekly",
     "load_cfb_game_rosters",
+    "load_cfb_group_aliases",
+    "load_cfb_group_seasons",
+    "load_cfb_groups",
     "load_cfb_linescores",
     "load_cfb_model_pbp",
     "load_cfb_passing",
@@ -767,6 +774,7 @@ __all__ = [
     "load_cfb_schedule",
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_box",
+    "load_cfb_team_group_seasons",
     "load_cfb_team_info",
     "load_cfb_team_summaries",
     "load_cfb_team_summaries_weekly",

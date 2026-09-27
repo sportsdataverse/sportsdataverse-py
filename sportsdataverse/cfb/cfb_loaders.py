@@ -81,6 +81,10 @@ __all__ = [
     "load_ncaa_mfb_player_stats",
     "load_ncaa_mfb_officials",
     "load_ncaa_mfb_linescore",
+    "load_cfb_groups",
+    "load_cfb_group_seasons",
+    "load_cfb_group_aliases",
+    "load_cfb_team_group_seasons",
 ]
 
 
@@ -7248,6 +7252,191 @@ def load_ncaa_mfb_linescore(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_ncaa_mfb_linescore: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_groups(return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |league       |String |
+        |group_id     |String |
+        |level        |String |
+        |first_season |Int32  |
+        |last_season  |Int32  |
+        |notes        |String |
+
+    Note:
+        One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. cfb:big-ten) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the fall 2025 season).
+
+    Example:
+        Quick start::
+
+            load_cfb_groups()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_groups: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_group_seasons(return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |league          |String |
+        |group_id        |String |
+        |season          |Int32  |
+        |level           |String |
+        |name            |String |
+        |short_name      |String |
+        |abbreviation    |String |
+        |parent_group_id |String |
+        |n_teams         |Int32  |
+
+    Note:
+        One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the fall 2025 season).
+
+    Example:
+        Quick start::
+
+            load_cfb_group_seasons()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_group_seasons: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_group_aliases(return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name   |type   |
+        |:----------|:------|
+        |league     |String |
+        |group_id   |String |
+        |source     |String |
+        |source_id  |String |
+        |name_kind  |String |
+        |value      |String |
+        |valid_from |Int32  |
+        |valid_to   |Int32  |
+
+    Note:
+        One season-less file: every name, abbreviation, slug and source id that a source (cfbd, espn, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
+
+    Example:
+        Quick start::
+
+            load_cfb_group_aliases()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_group_aliases: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_group_seasons(seasons, return_as_pandas: bool = False):
+    """Load cfb_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1869).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name       |type    |
+        |:--------------|:-------|
+        |league         |String  |
+        |season         |Int32   |
+        |team_id        |String  |
+        |team_id_source |String  |
+        |team_name      |String  |
+        |subdivision_id |String  |
+        |conference_id  |String  |
+        |division_id    |String  |
+        |source         |String  |
+        |sources_agree  |Boolean |
+        |notes          |String  |
+
+    Note:
+        One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the CFBD id; team_id_source names the id space. season is the STARTING year (2025 = the fall 2025 season); seasons 1869-2026. No 1871 asset.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1869.
+
+    Example:
+        Quick start::
+
+            load_cfb_team_group_seasons(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1869:
+            raise SeasonNotFoundError("season cannot be less than 1869")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_team_group_seasons: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
