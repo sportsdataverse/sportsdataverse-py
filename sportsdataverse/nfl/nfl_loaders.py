@@ -1086,7 +1086,10 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
             ``"sportsdataverse"`` / ``"sdv"`` returns the SDV-native
             ``nfl_rosters`` release built by
             :func:`sportsdataverse.nfl.build_nfl_rosters` from the **public NFL
-            Shield / ESPN** surface only. The SDV tier is a partial build: its
+            Shield / ESPN** surface, with cross-system IDs and ``college``
+            enriched by a best-effort join against the nflverse player master
+            (:func:`sportsdataverse.nfl.load_nfl_players`, on ``gsis_id``;
+            skipped if that load fails). The SDV tier is a partial build: its
             30 columns are a subset of nflverse's 36, and cross-system IDs are
             sparser pre-2016. It covers only the published seasons (rosters
             2022+). The default stays ``"nflverse"``. Any other value raises
@@ -1127,8 +1130,8 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
 
         See Also:
             * :func:`sportsdataverse.nfl.build_nfl_rosters` -- SDV-native rosters
-              built from the public NFL Shield API only (no nflverse dependency;
-              partial cross-system IDs)
+              built from the public NFL Shield API, cross-system IDs joined from
+              the nflverse player master (partial)
             * `nflverse`_ -- full data ecosystem (R + Python)
             * `nflreadpy`_ -- direct nflverse Python bindings
 
@@ -1201,7 +1204,8 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
         See Also:
             * :func:`sportsdataverse.nfl.load_nfl_rosters` -- season-level rosters
             * :func:`sportsdataverse.nfl.build_nfl_rosters` -- SDV-native rosters
-              built from the public NFL Shield API only (season-level)
+              built from the public NFL Shield API plus an nflverse player-master
+              join (season-level)
             * `nflverse`_ -- full data ecosystem (R + Python)
             * `nflreadpy`_ -- direct nflverse Python bindings
 
@@ -1281,7 +1285,9 @@ def load_nfl_players(return_as_pandas=False, *, source: str = "nflverse") -> pl.
             above. ``"sportsdataverse"`` / ``"sdv"`` returns the SDV-native
             ``nfl_players`` release built by
             :func:`sportsdataverse.nfl.build_nfl_players` from the **public NFL
-            Shield / ESPN-athletes** surface only. The SDV tier is a partial
+            Shield / ESPN-athletes** surface, with ``gsis_id`` and the other
+            cross-system IDs enriched by a best-effort join against the nflverse
+            player master. The SDV tier is a partial
             build: its columns are a subset of nflverse's and cross-system IDs
             are sparser (notably pre-2016), though ``espn_id`` is populated. The
             default stays ``"nflverse"``. Any other value raises ``ValueError``.

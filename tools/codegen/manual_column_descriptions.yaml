@@ -1368,17 +1368,24 @@ blocking_summary:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_offense: PFF overall offense grade, 0-100.
   grades_pass_block: PFF pass-blocking grade, 0-100.
   grades_run_block: PFF run-blocking grade, 0-100.
   hits_allowed: Quarterback hits allowed.
   hurries_allowed: Quarterback hurries allowed.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   non_spike_pass_block: Pass-blocking snaps excluding spike plays.
   non_spike_pass_block_percentage: Share of non-spike pass-play snaps spent pass blocking.
   pass_block_percent: Share of pass-play snaps spent pass blocking.
   pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressures_allowed: Total pressures allowed (sacks, hits, and hurries).
+  sacks_allowed: Sacks allowed by the player in pass protection.
   snap_counts_block: Total blocking snaps played.
   snap_counts_ce: Snaps aligned at center.
   snap_counts_lg: Snaps aligned at left guard.
@@ -1390,6 +1397,8 @@ blocking_summary:
   snap_counts_rt: Snaps aligned at right tackle.
   snap_counts_run_block: Run-blocking snaps played.
   snap_counts_te: Snaps aligned at tight end.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 boxscore:
   all_positions: All fielding positions played by the player during the game, as a list of position codes.
   game_status_is_current_batter: Indicates whether the player is currently at bat at the moment the boxscore was captured.
@@ -2722,6 +2731,8 @@ coverage_scheme:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   man_assists: Assisted tackles when in man coverage.
   man_avg_depth_of_target: Average depth of targets into the player's coverage, in yards downfield when in man coverage.
   man_catch_rate: Completion percentage allowed on targets into the player's coverage when in man coverage.
@@ -2751,7 +2762,13 @@ coverage_scheme:
   man_yards_after_catch: Yards after the catch allowed when in man coverage.
   man_yards_per_coverage_snap: Receiving yards allowed per coverage snap when in man coverage.
   man_yards_per_reception: Average yards allowed per reception when in man coverage.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   zone_assists: Assisted tackles when in zone coverage.
   zone_avg_depth_of_target: Average depth of targets into the player's coverage, in yards downfield when in zone coverage.
   zone_catch_rate: Completion percentage allowed on targets into the player's coverage when in zone coverage.
@@ -2782,6 +2799,7 @@ coverage_scheme:
   zone_yards_per_coverage_snap: Receiving yards allowed per coverage snap when in zone coverage.
   zone_yards_per_reception: Average yards allowed per reception when in zone coverage.
 coverage_summary:
+  assists: Assisted tackles credited to the player.
   avg_depth_of_target: Average depth of targets into the player's coverage, in yards downfield.
   catch_rate: Completion percentage allowed on targets into the player's coverage.
   coverage_percent: Share of pass-play snaps spent in coverage.
@@ -2793,22 +2811,36 @@ coverage_summary:
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
   forced_incompletes: Incompletions forced by the player's coverage, per PFF charting.
   forced_incompletion_rate: Share of targets into the player's coverage with a PFF-charted forced incompletion.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_coverage_defense: PFF coverage grade, 0-100.
   grades_defense: PFF overall defense grade, 0-100.
   grades_defense_penalty: PFF defensive penalty grade, 0-100.
   grades_pass_rush_defense: PFF pass-rush grade, 0-100.
   grades_run_defense: PFF run-defense grade, 0-100.
   grades_tackle: PFF tackling grade, 0-100.
+  interceptions: Interceptions made by the player in coverage.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   longest: Longest completion allowed, in yards.
   missed_tackle_rate: Share of tackle attempts the player missed.
   missed_tackles: Missed tackles.
   pass_break_ups: Passes broken up.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   qb_rating_against: NFL passer rating allowed on targets into the player's coverage.
+  receptions: Receptions allowed in the player's coverage.
   snap_counts_coverage: Coverage snaps played.
   snap_counts_pass_play: Pass-play snaps.
   stops: Stops, PFF's tackles that constitute a failed play for the offense.
+  tackles: Tackles made by the player, as charted by PFF.
+  targets: Passes thrown into the player's coverage (targets allowed).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   touchdowns: Touchdowns allowed into the player's coverage.
+  yards: Receiving yards allowed in the player's coverage.
+  yards_after_catch: Yards after the catch allowed in the player's coverage.
   yards_per_coverage_snap: Receiving yards allowed per coverage snap.
   yards_per_reception: Average yards allowed per reception.
 cumestatsplayer:
@@ -2893,6 +2925,7 @@ defense_summary:
   grades_pass_rush_defense: PFF pass-rush grade, 0-100.
   grades_run_defense: PFF run-defense grade (0-100).
   grades_tackle: PFF tackling grade, 0-100.
+  hits: Quarterback hits recorded by the player.
   hurries: Quarterback hurries recorded.
   interception_touchdowns: Touchdowns scored on interception returns.
   interceptions: Interceptions made in coverage.
@@ -2901,9 +2934,13 @@ defense_summary:
   missed_tackle_rate: Share of tackle attempts the player missed.
   missed_tackles: Missed tackles.
   pass_break_ups: Passes broken up.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Games with at least one qualifying snap in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   qb_rating_against: NFL passer rating allowed on targets into the player's coverage.
+  receptions: Receptions allowed in the player's coverage.
   sacks: Sacks credited.
   safeties: Safeties recorded by the player.
   snap_counts_box: Snaps aligned in the box.
@@ -2922,9 +2959,14 @@ defense_summary:
   snap_counts_slot: Snaps aligned in the slot.
   stops: Tackles that constitute an offensive failure ("stops").
   tackles: Total tackles made by the defender.
+  tackles_for_loss: Tackles for loss made by the player.
+  targets: Passes thrown into the player's coverage (targets allowed).
+  team: Team abbreviation the player is credited to for the range.
   team_name: Team abbreviation the player is credited to for the range.
   total_pressures: Total quarterback pressures (sacks + hits + hurries).
   touchdowns: Touchdowns allowed into the player's coverage.
+  yards: Receiving yards allowed in the player's coverage.
+  yards_after_catch: Yards after the catch allowed in the player's coverage.
   yards_per_reception: Average yards allowed per reception.
 draft_latest:
   next_up: Indicates whether this draft slot is the next pick to be made in the current draft.
@@ -4090,14 +4132,22 @@ field_goal_summary:
   forty_attempts: Field goals attempted from 40-49 yards.
   forty_made: Field goals made from 40-49 yards.
   forty_percent: Field-goal percentage from 40-49 yards.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_fgep_kicker: PFF field-goal and extra-point kicking grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   one_attempts: Field goals attempted from 1-19 yards.
   one_made: Field goals made from 1-19 yards.
   one_percent: Field-goal percentage from 1-19 yards.
   pat_attempts: Extra points attempted.
   pat_made: Extra points made.
   pat_percent: Extra-point percentage.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   thirty_attempts: Field goals attempted from 30-39 yards.
   thirty_made: Field goals made from 30-39 yards.
   thirty_percent: Field-goal percentage from 30-39 yards.
@@ -4714,6 +4764,9 @@ fox_wnba_teamnav:
   web_url: Site-relative foxsports.com path of the team page, shaped '/wnba/<city-nickname>-team'.
 franchise_groups:
   heirarchy: Nested hierarchy of franchise groupings as returned by the PFF API; the field name's spelling follows the source.
+  id: PFF id of the conference, division or tier group (e.g. 1 = AFC, 2 = AFC East).
+  name: Group name (e.g. "AFC", "AFC East"; NCAA groups such as "FBS" or "The American").
+  slug: URL-style slug of the group (e.g. "afc-east").
 franchisehistory:
   conf_titles: NBA or WNBA Stats value for conf titles in the franchisehistory result set.
   div_titles: NBA or WNBA Stats value for div titles in the franchisehistory result set.
@@ -5340,6 +5393,7 @@ injuries:
   id: ESPN numeric identifier for the athlete.
   injuries: 'Injury entries for the athlete (list of dicts, stringified): status, type, details, dates.'
 kicking_summary:
+  attempts: Kickoffs by the player.
   attempts_with_hangtime: Kickoffs with a PFF-recorded hangtime.
   average_distance: Average kickoff distance in yards.
   average_hangtime: Average kickoff hangtime in seconds.
@@ -5349,12 +5403,21 @@ kicking_summary:
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
   fair_catches: Kickoffs fair-caught by the return team.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_kickoff_kicker: PFF kickoff kicking grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   kicked_yards: Total kickoff yards.
   kicks_returned: Kickoffs returned by the opponent.
   onside_kicks: Onside kicks attempted.
+  penalties: Penalties charged to the player over the covered span.
   percent_returned: Percentage of the player's kickoffs that were returned.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  return_yards: Return yards gained by the return team on the player's kickoffs.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   total_hangtime: Total kickoff hangtime in seconds.
   touchbacks: Kickoffs resulting in touchbacks.
 landing:
@@ -16916,8 +16979,11 @@ offense_summary:
   grades_run: PFF rushing grade (0-100).
   grades_run_block: PFF run-blocking grade (0-100).
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Games with at least one qualifying snap in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   snap_counts_pass: Pass-play snaps spent as the passer, rather than blocking or running a route.
   snap_counts_pass_block: Pass-blocking snaps played.
   snap_counts_pass_route: Snaps spent running a pass route.
@@ -16926,6 +16992,7 @@ offense_summary:
   snap_counts_total: Total offensive snaps played.
   snap_counts_total_pass: Total pass-play snaps across passing, pass blocking, and route running.
   snap_counts_total_run: Total run-play snaps across rushing and run blocking.
+  team: Team abbreviation the player is credited to for the range.
   team_name: Team abbreviation the player is credited to for the range.
 ohl_game_corsi:
   corsi_against: Total shot attempts (goals, saves, missed shots, and blocked shots) directed against the player's team while
@@ -17289,17 +17356,26 @@ pass_blocking:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_pass_block: PFF pass-blocking grade, 0-100.
   hits_allowed: Quarterback hits allowed.
   hurries_allowed: Quarterback hurries allowed.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   non_spike_pass_block: Pass-blocking snaps excluding spike plays.
   non_spike_pass_block_percentage: Share of non-spike pass-play snaps spent pass blocking.
   pass_block_percent: Share of pass-play snaps spent pass blocking.
   pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressures_allowed: Total pressures allowed (sacks, hits, and hurries).
+  sacks_allowed: Sacks allowed by the player in pass protection.
   snap_counts_pass_block: Pass-blocking snaps played.
   snap_counts_pass_play: Pass-play snaps.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   true_pass_set_grades_pass_block: PFF pass-blocking grade on PFF-designated true pass sets, 0-100.
   true_pass_set_hits_allowed: Quarterback hits allowed on PFF-designated true pass sets.
   true_pass_set_hurries_allowed: Quarterback hurries allowed on PFF-designated true pass sets.
@@ -17318,16 +17394,26 @@ pass_rush_summary:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_pass_rush_defense: PFF pass-rush grade, 0-100.
+  hits: Quarterback hits recorded by the pass rusher.
   hurries: Quarterback hurries recorded.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   pass_rush_opp: Pass-rush snaps PFF counts as pressure opportunities.
   pass_rush_percent: Share of pass-play snaps spent rushing the passer.
   pass_rush_win_rate: Percentage of pass-rush snaps with a PFF-charted pass-rush win.
   pass_rush_wins: PFF-charted pass-rush wins.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   prp: PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks.
+  sacks: Sacks recorded by the pass rusher.
   snap_counts_pass_play: Pass-play snaps.
   snap_counts_pass_rush: Pass-rush snaps played.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   total_pressures: Total pressures generated (sacks, hits, and hurries).
   true_pass_set_batted_passes: Passes batted down at the line of scrimmage on PFF-designated true pass sets.
   true_pass_set_grades_pass_rush_defense: PFF pass-rush grade on PFF-designated true pass sets, 0-100.
@@ -17351,14 +17437,20 @@ passing_allowed_pressure:
   declined_penalties: Number of declined penalties committed by the player.
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  franchise_id: PFF franchise (team) id (integer join key).
   hits_allowed: Number of quarterback hits allowed on the player's dropbacks, as charted by PFF.
   hurries_allowed: Number of hurries allowed on the player's dropbacks, as charted by PFF.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   lg_percent: Share of allowed pressures attributed to left guard, expressed as a percentage.
   lt_percent: Share of allowed pressures attributed to left tackle, expressed as a percentage.
   ol_te_percent: Share of allowed pressures attributed to the offensive line and tight ends combined, expressed as a percentage.
   other_percent: Share of allowed pressures attributed to other players outside the listed blocking positions, expressed as
     a percentage.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressures_allowed: Total pressures allowed on the quarterback's dropbacks, as attributed by PFF.
   pressures_ce: Number of allowed pressures PFF attributes to center.
   pressures_lg: Number of allowed pressures PFF attributes to left guard.
@@ -17372,8 +17464,11 @@ passing_allowed_pressure:
   pressures_te: Number of allowed pressures PFF attributes to tight ends.
   rg_percent: Share of allowed pressures attributed to right guard, expressed as a percentage.
   rt_percent: Share of allowed pressures attributed to right tackle, expressed as a percentage.
+  sacks_allowed: Sacks allowed on the quarterback's dropbacks, as attributed by PFF.
   self_percent: Share of allowed pressures attributed to the quarterback himself, expressed as a percentage.
   te_percent: Share of allowed pressures attributed to tight ends, expressed as a percentage.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 passing_concept:
   comp_pct_diff: Difference in completion percentage between play-action and non-play-action attempts (PA minus non-PA), from
     the PFF passing-concept split.
@@ -17381,6 +17476,8 @@ passing_concept:
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   dropbacks: Number of dropbacks.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   no_screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF excluding screen passes.
   no_screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) excluding screen passes, as charted
     by PFF.
@@ -17545,7 +17642,11 @@ passing_concept:
   pa_twp_rate: Turnover-worthy plays as a percentage of qualifying attempts on play-action dropbacks, per PFF charting.
   pa_yards: Passing yards gained on play-action dropbacks.
   pa_ypa: Yards gained per pass attempt on play-action dropbacks.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on screen passes.
   screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on screen passes, as charted by PFF.
   screen_attempts: Number of pass attempts on screen passes.
@@ -17597,6 +17698,8 @@ passing_concept:
   screen_twp_rate: Turnover-worthy plays as a percentage of qualifying attempts on screen passes, per PFF charting.
   screen_yards: Passing yards gained on screen passes.
   screen_ypa: Yards gained per pass attempt on screen passes.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   ypa_diff: Difference in yards per attempt between play-action and non-play-action attempts (PA minus non-PA), from the PFF
     passing-concept split.
 passing_depth:
@@ -17905,6 +18008,8 @@ passing_depth:
   deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws.
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
@@ -18165,7 +18270,11 @@ passing_depth:
     charting.
   medium_yards: Passing yards gained on medium (10-19 air yards) throws.
   medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   right_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the right side of the field.
   right_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
@@ -18430,10 +18539,14 @@ passing_depth:
   short_twp_rate: Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting.
   short_yards: Passing yards gained on short (0-9 air yards) throws.
   short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 passing_detail_stats:
   accuracy_percent: Percentage of aimed passes charted as accurate by PFF.
   aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
+  attempts: Pass attempts thrown by the passer.
   avg_depth_of_target: Average depth of target in air yards.
+  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
   bats: Number of pass attempts batted down at the line of scrimmage.
   behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage.
   behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of
@@ -18743,6 +18856,7 @@ passing_detail_stats:
   comp_pct_diff: Difference in completion percentage between play-action and non-play-action attempts (PA minus non-PA), from
     the PFF passing-concept split.
   completion_percent: Percentage of pass attempts completed.
+  completions: Completed passes by the passer.
   deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws.
   deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as
     charted by PFF.
@@ -18787,12 +18901,18 @@ passing_detail_stats:
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   drop_rate: Percentage of catchable passes dropped by receivers.
   dropbacks: Number of dropbacks.
+  drops: Passes dropped by the passer's receivers.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  epa: Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.14, not a total).
+  first_downs: Passing first downs.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_hands_fumble: PFF hands (fumble) grade for the player, reflecting ball security (0-100).
   grades_offense: PFF overall offense grade for the player (0-100).
   grades_pass: PFF passing grade (0-100).
   grades_run: PFF rushing grade for the player (0-100).
   hit_as_threw: Number of attempts on which the passer was hit as he threw, as charted by PFF.
+  interceptions: Interceptions thrown.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
@@ -19305,7 +19425,10 @@ passing_detail_stats:
   pa_yards: Passing yards gained on play-action dropbacks.
   pa_ypa: Yards gained per pass attempt on play-action dropbacks.
   passing_snaps: Number of passing snaps played.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   positive_epa_percent: Percentage of dropbacks with positive expected points added.
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
   pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
@@ -19581,6 +19704,7 @@ passing_detail_stats:
   right_short_yards: Passing yards gained on short (0-9 air yards) throws to the right side of the field.
   right_short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws to the right side of the field.
   sack_percent: Percentage of dropbacks that ended in a sack.
+  sacks: Times the passer was sacked.
   scrambles: Number of scrambles.
   screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on screen passes.
   screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on screen passes, as charted by PFF.
@@ -19669,10 +19793,14 @@ passing_detail_stats:
   short_twp_rate: Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting.
   short_yards: Passing yards gained on short (0-9 air yards) throws.
   short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws.
+  spikes: Clock-stopping spike plays.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   thrown_aways: Number of intentional throwaways.
   touchdowns: Number of passing touchdowns thrown.
   turnover_worthy_plays: Number of turnover-worthy plays, plays PFF charts as deserving of a turnover.
   twp_rate: Turnover-worthy plays as a percentage of qualifying attempts, per PFF charting.
+  yards: Total passing yards gained.
   ypa: Yards gained per pass attempt.
   ypa_diff: Difference in yards per attempt between play-action and non-play-action attempts (PA minus non-PA), from the PFF
     passing-concept split.
@@ -19730,10 +19858,12 @@ passing_pressure:
   declined_penalties: Number of declined penalties committed by the player.
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_hands_fumble: PFF hands (fumble) grade for the player, reflecting ball security (0-100).
   grades_offense: PFF overall offense grade for the player (0-100).
   grades_pass: PFF passing grade (0-100).
   grades_run: PFF rushing grade for the player (0-100).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   no_blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when not blitzed.
   no_blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by
     PFF.
@@ -19845,7 +19975,11 @@ passing_pressure:
     PFF charting.
   no_pressure_yards: Passing yards gained from a clean pocket (no pressure).
   no_pressure_ypa: Yards gained per pass attempt from a clean pocket (no pressure).
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
   pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
     by PFF.
@@ -19899,11 +20033,14 @@ passing_pressure:
   pressure_twp_rate: Turnover-worthy plays as a percentage of qualifying attempts when under pressure, per PFF charting.
   pressure_yards: Passing yards gained when under pressure.
   pressure_ypa: Yards gained per pass attempt when under pressure.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 passing_summary:
   accuracy_percent: Charted accuracy percentage.
   aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
   attempts: Pass attempts thrown by the passer.
   avg_depth_of_target: Average depth of target in air yards.
+  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
   bats: Passes batted at the line.
   big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
   btt_rate: Big-time-throw rate.
@@ -19914,7 +20051,9 @@ passing_summary:
   draft_season: Draft class (year) of the player.
   drop_rate: Receiver drop rate on the quarterback's throws.
   dropbacks: Total quarterback dropbacks.
+  drops: Passes dropped by the passer's receivers.
   eligible_season: First eligible season for the player.
+  epa: Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.14, not a total).
   first_downs: Passing first downs.
   franchise_id: PFF franchise (team) id (integer join key).
   grades_hands_fumble: PFF hands (fumble) grade for the player, reflecting ball security (0-100).
@@ -19926,8 +20065,10 @@ passing_summary:
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   passing_snaps: Number of passing snaps played.
   penalties: Penalties charged.
+  player: Player's display name as PFF lists it.
   player_game_count: Games with at least one qualifying dropback in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   positive_epa_percent: Percentage of dropbacks with positive expected points added.
   pressure_to_sack_rate: Percentage of pressured dropbacks that ended in a sack.
   qb_rating: NFL passer rating.
@@ -19944,12 +20085,18 @@ passing_summary:
   yards: Total passing yards gained.
   ypa: Yards gained per pass attempt.
 pbes:
+  attempts: Pass plays the team's offensive line blocked on over the covered span, as counted by PFF (equal to pass_snaps
+    in the captured rows).
+  franchise_id: PFF franchise (team) id of the team whose offensive line the row describes (integer join key).
   hits_allowed: Quarterback hits allowed.
   hurries_allowed: Quarterback hurries allowed.
   pass_snaps: Pass-play snaps.
   pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks.
   player_game_count: Number of games the player appeared in over the covered span.
   pressures_allowed: Total pressures allowed (sacks, hits, and hurries).
+  sacks_allowed: Sacks allowed by the team's offensive line over the covered span.
+  season_id: Season (year) the row covers (e.g. 2022).
+  team_name: Abbreviation of the team whose offensive line the row describes (e.g. "ATL").
 pbp:
   details_assist1_player_id: NHL api-web player identifier for the primary (first) assist credited on a goal event in the
     play-by-play feed.
@@ -24922,9 +25069,13 @@ pressure_pairs:
   pressures: Sacks plus QB hits in the matchup.
   season: Season of the matchup aggregate.
 prps:
+  assists: Assisted tackles credited to the player.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  hits: Quarterback hits recorded by the pass rusher.
   hurries: Quarterback hurries recorded.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   lhs_assists: Assisted tackles when rushing from the left side.
   lhs_hits: Quarterback hits recorded when rushing from the left side.
   lhs_hurries: Quarterback hurries recorded when rushing from the left side.
@@ -24941,7 +25092,10 @@ prps:
   pass_rush_percent: Share of pass-play snaps spent rushing the passer.
   pass_rush_snaps: Pass-rush snaps played.
   pass_snaps: Pass-play snaps.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressures: Total pressures generated (sacks, hits, and hurries).
   prp: PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks.
   rhs_assists: Assisted tackles when rushing from the right side.
@@ -24956,28 +25110,45 @@ prps:
   rhs_sacks: Sacks recorded when rushing from the right side.
   rhs_stops: Stops, PFF's tackles that constitute a failed play for the offense when rushing from the right side.
   rhs_tackles: Tackles made when rushing from the right side.
+  sacks: Sacks recorded by the pass rusher.
   stops: Stops, PFF's tackles that constitute a failed play for the offense.
+  tackles: Tackles made by the player, as charted by PFF.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 punting_summary:
+  attempts: Punts by the player.
   attempts_with_hangtime: Punts with a PFF-recorded hangtime.
   average_hangtime: Average punt hangtime in seconds.
   average_net_yards: Average net punting yards per attempt.
   average_yards_per_attempt: Average gross punting yards per attempt.
   average_yards_per_return: Average return yards allowed per punt returned.
+  blocks: Punts that were blocked.
   declined_penalties: Penalties committed by the player that were declined.
   downeds: Punts downed by the coverage unit.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
   fair_catches: Punts fair-caught by the return team.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_punter: PFF punting grade, 0-100.
   inside_twenties: Punts downed inside the opponent 20-yard line.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   long: Longest punt in yards.
+  out_of_bounds: Punts that went out of bounds.
+  penalties: Penalties charged to the player over the covered span.
   percent_returned: Percentage of the player's punts that were returned.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  return_yards: Return yards gained by the return team on the player's punts.
   returns: Punts returned by the opponent.
   snaps: Punting snaps played.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   total_hangtime: Total punt hangtime in seconds.
   total_net_yards: Total net punting yards.
   touchbacks: Punts resulting in touchbacks.
+  yards: 'Gross punt yards: the summed distance of the player''s punts, before any return.'
 pwhl_game_corsi:
   corsi_against: Total shot attempts (on goal, missed, and blocked) directed against this team while at the tracked strength
     in the PWHL game.
@@ -25144,7 +25315,13 @@ receiving_concept:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   screen_avg_depth_of_target: Average depth of target in yards downfield on screen concepts.
   screen_avoided_tackles: Tackles avoided after the catch on screen concepts.
   screen_caught_percent: Percentage of targets caught on screen concepts.
@@ -25208,6 +25385,8 @@ receiving_concept:
   slot_yards_after_catch_per_reception: Average yards after the catch per reception when aligned in the slot.
   slot_yards_per_reception: Average yards per reception when aligned in the slot.
   slot_yprr: Yards per route run when aligned in the slot.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 receiving_depth:
   base_targets: Total targets from the facet's unsplit base row, across all depths and directions.
   behind_los_avg_depth_of_target: Average depth of target in yards downfield on passes thrown behind the line of scrimmage.
@@ -25492,6 +25671,8 @@ receiving_depth:
   deep_yprr: Yards per route run on deep passes (20 or more yards downfield).
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   left_behind_los_avg_depth_of_target: Average depth of target in yards downfield on passes thrown behind the line of scrimmage
     to the left third of the field.
   left_behind_los_avoided_tackles: Tackles avoided after the catch on passes thrown behind the line of scrimmage to the left
@@ -25739,7 +25920,11 @@ receiving_depth:
   medium_yards_after_catch_per_reception: Average yards after the catch per reception on medium passes (10-19 yards downfield).
   medium_yards_per_reception: Average yards per reception on medium passes (10-19 yards downfield).
   medium_yprr: Yards per route run on medium passes (10-19 yards downfield).
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   right_behind_los_avg_depth_of_target: Average depth of target in yards downfield on passes thrown behind the line of scrimmage
     to the right third of the field.
   right_behind_los_avoided_tackles: Tackles avoided after the catch on passes thrown behind the line of scrimmage to the right
@@ -25990,11 +26175,15 @@ receiving_depth:
   short_yards_after_catch_per_reception: Average yards after the catch per reception on short passes (0-9 yards downfield).
   short_yards_per_reception: Average yards per reception on short passes (0-9 yards downfield).
   short_yprr: Yards per route run on short passes (0-9 yards downfield).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 receiving_scheme:
   base_targets: Total targets from the facet's unsplit base row, across all coverage schemes.
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   man_avg_depth_of_target: Average depth of target in yards downfield against man coverage.
   man_avoided_tackles: Tackles avoided after the catch against man coverage.
   man_caught_percent: Percentage of targets caught against man coverage.
@@ -26026,7 +26215,13 @@ receiving_scheme:
   man_yards_after_catch_per_reception: Average yards after the catch per reception against man coverage.
   man_yards_per_reception: Average yards per reception against man coverage.
   man_yprr: Yards per route run against man coverage.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   zone_avg_depth_of_target: Average depth of target in yards downfield against zone coverage.
   zone_avoided_tackles: Tackles avoided after the catch against zone coverage.
   zone_caught_percent: Percentage of targets caught against zone coverage.
@@ -26070,6 +26265,8 @@ receiving_summary:
   drop_rate: Share of catchable targets the player dropped.
   drops: Dropped passes.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  epa: Expected points added per target to the player, as computed by PFF (an average such as -0.27, not a total).
+  first_downs: Receptions that converted a first down.
   franchise_id: PFF franchise (team) id (integer join key).
   fumbles: Fumbles by the player after the catch.
   grades_hands_drop: PFF hands/drop grade (0-100).
@@ -26079,13 +26276,17 @@ receiving_summary:
   grades_pass_route: PFF receiving/route grade (0-100).
   inline_rate: Share of receiving snaps aligned inline, tight to the formation.
   inline_snaps: Receiving snaps aligned inline, tight to the formation.
+  interceptions: Interceptions on passes targeting the player.
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   longest: Longest reception in yards.
   pass_block_rate: Share of pass-play snaps spent pass blocking.
   pass_blocks: Pass-play snaps spent pass blocking.
   pass_plays: Pass-play snaps.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Games with at least one qualifying snap in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   positive_epa_percent: Percentage of the player's targets producing positive expected points added.
   receptions: Passes caught by the receiver.
   route_rate: Share of pass-play snaps on which the player ran a route.
@@ -26094,6 +26295,7 @@ receiving_summary:
   slot_snaps: Receiving snaps aligned in the slot.
   targeted_qb_rating: NFL passer rating on throws targeting the player.
   targets: Times targeted.
+  team: Team abbreviation the player is credited to for the range.
   team_name: Team abbreviation the player is credited to for the range.
   touchdowns: Receiving touchdowns.
   wide_rate: Share of receiving snaps aligned out wide.
@@ -26148,9 +26350,11 @@ return_summary:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_kick_return: PFF kickoff-return grade, 0-100.
   grades_punt_return: PFF punt-return grade, 0-100.
   grades_return: PFF overall return grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   kickoff_attempts: Kickoff returns attempted.
   kickoff_fair_catches: Kickoffs fair-caught by the player.
   kickoff_long: Longest kickoff return in yards.
@@ -26158,7 +26362,11 @@ return_summary:
   kickoff_touchdowns: Kickoff returns scoring a touchdown.
   kickoff_yards: Total kickoff-return yards.
   kickoff_ypa: Average yards per kickoff return.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   punt_attempts: Punt returns attempted.
   punt_fair_catches: Punts fair-caught by the player.
   punt_long: Longest punt return in yards.
@@ -26166,49 +26374,76 @@ return_summary:
   punt_touchdowns: Punt returns scoring a touchdown.
   punt_yards: Total punt-return yards.
   punt_ypa: Average yards per punt return.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   total_attempts: Total return attempts, kickoffs and punts combined.
 run_blocking:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   gap_grades_run_block: PFF run-blocking grade on gap-scheme runs, 0-100.
   gap_run_block_percent: Share of run-play snaps spent run blocking on gap-scheme runs.
   gap_snap_counts_run_block: Run-blocking snaps played on gap-scheme runs.
   gap_snap_counts_run_block_percent: Share of the player's run-blocking snaps on gap-scheme runs.
   gap_snap_counts_run_play: Run-play snaps on gap-scheme runs.
   grades_run_block: PFF run-blocking grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   run_block_percent: Share of run-play snaps spent run blocking.
   snap_counts_run_block: Run-blocking snaps played.
   snap_counts_run_play: Run-play snaps.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   zone_grades_run_block: PFF run-blocking grade on zone-scheme runs, 0-100.
   zone_run_block_percent: Share of run-play snaps spent run blocking on zone-scheme runs.
   zone_snap_counts_run_block: Run-blocking snaps played on zone-scheme runs.
   zone_snap_counts_run_block_percent: Share of the player's run-blocking snaps on zone-scheme runs.
   zone_snap_counts_run_play: Run-play snaps on zone-scheme runs.
 run_defense_summary:
+  assists: Assisted tackles credited to the player.
   avg_depth_of_tackle: Average depth downfield, in yards, at which the player made his tackles on run plays.
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
   forced_fumbles: Fumbles forced by the player.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_coverage_defense: PFF coverage grade, 0-100.
   grades_defense: PFF overall defense grade, 0-100.
   grades_defense_penalty: PFF defensive penalty grade, 0-100.
   grades_pass_rush_defense: PFF pass-rush grade, 0-100.
   grades_run_defense: PFF run-defense grade, 0-100.
   grades_tackle: PFF tackling grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   missed_tackle_rate: Share of tackle attempts the player missed.
   missed_tackles: Missed tackles.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   run_stop_opp: Run-defense snaps PFF counts as run-stop opportunities.
   snap_counts_run: Run-defense snaps played.
   stop_percent: Percentage of run-stop opportunities converted into stops.
   stops: Stops, PFF's tackles that constitute a failed play for the offense.
+  tackles: Tackles made by the player, as charted by PFF.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 rushing_direction_stats:
   directions: Nested per-direction rushing splits (attempts and results by run direction) as returned by the PFF API.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  player: Player's display name as PFF lists it.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   total_attempts: Total rushing attempts across all run directions.
 rushing_summary:
   attempts: Rushing attempts (carries) by the runner.
@@ -26219,6 +26454,7 @@ rushing_summary:
   declined_penalties: Penalties committed by the player that were declined.
   designed_yards: Rushing yards gained on designed runs, excluding scrambles.
   draft_season: Season of the player's NFL draft class, per PFF.
+  drops: Passes dropped by the ball carrier.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
   elu_recv_mtf: Missed tackles forced as a receiver, an input to PFF's elusive rating.
   elu_rush_mtf: Missed tackles forced as a rusher, an input to PFF's elusive rating.
@@ -26239,12 +26475,19 @@ rushing_summary:
   grades_run_block: PFF run-blocking grade, 0-100.
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   longest: Longest run in yards.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Games with at least one qualifying snap in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  rec_yards: Receiving yards gained by the ball carrier (the rushing report also carries his receiving line).
+  receptions: Passes caught by the ball carrier.
   routes: Pass routes run by the player.
   run_plays: Run-play snaps.
   scramble_yards: Rushing yards gained on scrambles.
   scrambles: Quarterback scrambles.
+  targets: Passes thrown to the ball carrier (targets).
+  team: Team abbreviation the player is credited to for the range.
   team_name: Team abbreviation the player is credited to for the range.
   total_touches: Combined carries and receptions.
   touchdowns: Rushing touchdowns.
@@ -27433,14 +27676,28 @@ slot_coverages:
   coverage_snaps_per_target: Coverage snaps played per target into the player's coverage while covering the slot.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
+  interceptions: Interceptions made by the player while covering the slot.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   qb_rating_against: NFL passer rating allowed on targets into the player's coverage while covering the slot.
+  receptions: Receptions allowed in the player's coverage while covering the slot.
+  targets: Passes thrown into the player's coverage (targets allowed) while covering the slot.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
   touchdowns: Touchdowns allowed into the player's coverage while covering the slot.
+  yards: Receiving yards allowed in the player's coverage while covering the slot.
+  yards_after_catch: Yards after the catch allowed in the player's coverage while covering the slot.
   yards_per_coverage_snap: Receiving yards allowed per coverage snap while covering the slot.
 special_teams_summary:
+  assists: Assisted tackles credited to the player on special-teams plays.
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
   eligible_season: Season of the player's NFL draft eligibility, per PFF.
+  franchise_id: PFF franchise (team) id (integer join key).
   grades_fgep_defense: PFF grade on field-goal and extra-point defense, 0-100.
   grades_fgep_kicker: PFF field-goal and extra-point kicking grade, 0-100.
   grades_fgep_offense: PFF grade on the field-goal and extra-point protection unit, 0-100.
@@ -27451,14 +27708,22 @@ special_teams_summary:
   grades_punt_return: PFF punt-return grade, 0-100.
   grades_punter: PFF punting grade, 0-100.
   grades_special_teams_penalty: PFF special-teams penalty grade, 0-100.
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   missed_tackles: Missed tackles on special-teams plays.
+  penalties: Penalties charged to the player over the covered span.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in over the covered span.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   snap_counts_field_goal: Snaps on the field-goal and extra-point unit.
   snap_counts_field_goal_blocking: Snaps on the field-goal and extra-point block unit.
   snap_counts_kickoff: Snaps on the kickoff coverage unit.
   snap_counts_kickoff_return: Snaps on the kickoff return unit.
   snap_counts_punt_coverage: Snaps on the punt coverage unit.
   snap_counts_punt_return: Snaps on the punt return unit.
+  tackles: Tackles made by the player on special-teams plays.
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 sphl_standings:
   past_10: 'Record over the team''s most recent 10 games (feed header ''Past 10 Games'') as a hyphenated string: W-L-OTL-SOL
     when four parts are shipped (e.g. ''2-0-0-1''), W-L-OTL when three are (e.g. ''0-2-1'').'
@@ -28612,7 +28877,12 @@ team_overview:
   grades_run_block: Team-level PFF run-blocking grade, 0-100.
   grades_run_defense: Team-level PFF run-defense grade, 0-100.
   grades_tackle: Team-level PFF tackling grade, 0-100.
+  losses: Games the team lost over the covered span.
+  name: Full team name (e.g. "Arizona Cardinals").
+  points_allowed: Total points allowed by the team over the covered span.
   points_scored: Total points scored by the team over the covered span.
+  ties: Games the team tied over the covered span.
+  wins: Games the team won over the covered span.
 team_players:
   birth_country_code: Lowercase three-letter code for the player's country of birth, e.g. eng, wal, fra; populated in the
     soccer leagues and null in the US ones.
@@ -29555,12 +29825,15 @@ teamyearbyyearstats:
   po_wins: Playoff wins recorded by the team that season.
   pts_rank: League rank of the team's points scored for the season.
 time_in_pockets:
+  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
   avg_ttt_attempts: Average time from snap to release in seconds on dropbacks ending in a pass attempt.
   avg_ttt_sacks: Average time from snap to sack in seconds on dropbacks ending in a sack.
   avg_ttt_scrambles: Average time in the pocket in seconds on dropbacks ending in a scramble.
   draft_season: NFL season (year) in which the player was drafted, per PFF player metadata.
   dropbacks: Number of dropbacks.
   eligible_season: Season (year) of the player's NFL draft eligibility, per PFF player metadata.
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
   less_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on dropbacks with time in pocket under 2.5
     seconds.
   less_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on dropbacks with time in pocket under
@@ -29704,7 +29977,12 @@ time_in_pockets:
     or more, per PFF charting.
   more_yards: Passing yards gained on dropbacks with time in pocket of 2.5 seconds or more.
   more_ypa: Yards gained per pass attempt on dropbacks with time in pocket of 2.5 seconds or more.
+  player: Player's display name as PFF lists it.
   player_game_count: Number of games the player appeared in during the period covered.
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team abbreviation the player is credited to for the range.
 toa_sports:
   has_outrights: True for futures keys such as 'americanfootball_ncaaf_championship_winner' or 'americanfootball_nfl_super_bowl_winner',
     False for game leagues such as 'americanfootball_ncaaf'.
