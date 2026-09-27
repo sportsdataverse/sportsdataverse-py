@@ -40,6 +40,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
   kickoff after BGSU's tying touchdown).
 * ``summary_401752684_trimmed.json.gz`` -- South Florida @ Florida, 2025 (ESPN books USF's safety
   twice, on the safety and on the free kick, and takes the second two back at the next score).
+* ``summary_401752744_trimmed.json.gz`` -- Oklahoma @ South Carolina, 2025 (South Carolina concedes
+  a safety down 7-24 in the fourth).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``; the
 ``*_trimmed.json.gz`` ones keep only the keys the processor reads.
@@ -653,3 +655,14 @@ def test_points_the_feed_takes_back_are_not_kept():
     assert after["end.awayScore"].to_list()[:-1] == [15] * (after.height - 1)
     assert (td["start.homeScore"], td["start.awayScore"], td["end.homeScore"], td["end.awayScore"]) == (9, 15, 16, 15)
     assert (plays["end.awayScore"].diff().fill_null(0) >= 0).all()
+
+
+def test_a_safety_keeps_wp_after_with_the_conceding_team():
+    # wp_after is the start team's. On a safety the next row is the free kick, which the scorer
+    # receives, so its wp_before is flipped (#571). Before that the parquet published this
+    # safety, conceded by South Carolina down 7-24 at 4:22 of the fourth, as wp 0.002 -> 0.999.
+    plays = _trimmed_plays(401752744)
+    safety = _row(plays, "Matt Fuller run for a loss of 1 yard for a SAFETY")
+    assert safety["wp_before"] < 0.05
+    assert safety["wp_after"] < 0.05
+    assert abs(safety["wpa"]) < 0.05
