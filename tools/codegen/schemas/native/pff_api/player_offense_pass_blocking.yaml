@@ -1,4 +1,4 @@
 columns: []
 kind: dataframe
 note: player_detail
-schema: player_offense_pass_blocking
+schema: pff_api_player_offense_pass_blocking

@@ -123,11 +123,18 @@ def _v2_union(s2: dict, tid: str) -> List[dict]:
     return _cols(cols)
 
 
+def _schema_name(short: str) -> str:
+    """The ``schema:`` value -- the key column descriptions are looked up by. Bare slugs collide:
+    ``team_roster``/``team_schedule``/``team_stats``/``team_report`` are already ESPN, MLB, CBS,
+    NWSL and NHL schema names, and a shared key renders one family's text on the other's page."""
+    return f"pff_api_{short}"
+
+
 def _v2_schema(s2: dict, short: str, variants: List[str] | None, prefix: str) -> Dict[str, Any]:
     if variants is None:
-        return {"schema": short, "kind": "dataframe", "columns": _v2_union(s2, prefix)}
+        return {"schema": _schema_name(short), "kind": "dataframe", "columns": _v2_union(s2, prefix)}
     frames = [{"section": v, "columns": _v2_union(s2, f"{prefix}__{v}")} for v in variants]
-    return {"schema": short, "kind": "frames", "frames": [f for f in frames if f["columns"]]}
+    return {"schema": _schema_name(short), "kind": "frames", "frames": [f for f in frames if f["columns"]]}
 
 
 def _v1_schema(s1: dict, short: str, target: str, shape: Dict[str, str]) -> Dict[str, Any]:
@@ -142,9 +149,9 @@ def _v1_schema(s1: dict, short: str, target: str, shape: Dict[str, str]) -> Dict
                 cols.setdefault(c, real[0])
     if not cols:
         note = "player_detail" if "PlayerReportSummary" in shape.values() else "opaque"
-        return {"schema": short, "kind": "dataframe", "columns": [], "note": note}
+        return {"schema": _schema_name(short), "kind": "dataframe", "columns": [], "note": note}
     return {
-        "schema": short,
+        "schema": _schema_name(short),
         "kind": "dataframe",
         "columns": [{"name": snake(c), "type": _DTYPE.get(t, "character"), "description": ""} for c, t in cols.items()],
     }
