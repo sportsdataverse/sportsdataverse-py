@@ -175,7 +175,10 @@ def test_conference_columns_populated(crosswalks, league):
     assert df["ncaa_conference"].null_count() == 0
     missing = df.filter(pl.col("espn_team_id").is_not_null() & pl.col("conference_id").is_null())
     # WBB: "LIU" is aliased to the post-2019 merged LIU id for all seasons (10 rows, 2009-10..2018-19).
-    assert missing.height <= 10, missing.select("season", "ncaa_team", "espn_team_id").to_dicts()
+    # Any other gap in the groups table fails here.
+    expected = {("LIU", "112358", f"{y}-{(y + 1) % 100:02d}") for y in range(2009, 2019)} if league == "wbb" else set()
+    got = {(r["ncaa_team"], str(r["espn_team_id"]), r["season"]) for r in missing.iter_rows(named=True)}
+    assert got == expected, sorted(got ^ expected)
     both = df.filter(pl.col("conference_id").is_not_null())
     assert both["espn_conference_id"].null_count() == 0
     assert both["espn_conference_name"].null_count() == 0

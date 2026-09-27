@@ -7901,7 +7901,7 @@ DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the
 | `season` | character | Season year. |
 | `ncaa_team_id` | integer | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
 | `ncaa_team` | character | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi'). |
-| `ncaa_conference` | character | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id; falls back to the bundled stats.ncaa.org team-list label when the groups table has no row for the team. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
+| `ncaa_conference` | character | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
 | `espn_team_id` | character | ESPN team id (canonical key). |
 | `espn_display_name` | character | ESPN display name (school + mascot). |
 | `espn_location` | character | ESPN school/location only. |
