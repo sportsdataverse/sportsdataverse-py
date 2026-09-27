@@ -278,3 +278,91 @@ def test_by_game_rejects_nonpositive_lambda_even_with_only_week_one() -> None:
     week1 = _synthetic_pbp().filter(pl.col("week") == 1)
     with pytest.raises(ValueError, match="ridge_lambda"):
         cfb_adjusted_epa_by_game(week1, ridge_lambda=0.0)
+
+
+# --- method="pre598": the pre-#598 fit, kept bit for bit for nfl-data's NFL build ---
+
+_FIXTURE_DIR = _FIXTURE_2026.parent
+
+
+def _nfl_shaped_pbp() -> pl.DataFrame:
+    """nfl-data's input shape (python/nfl_team_summaries/input.py): nflfastR's ``wp``
+    as ``wp_before``, NO ``wp_before_naive`` and NO ``seasonType``, Int64 ESPN team
+    ids (string order != numeric order), Float64 pass/rush flags, continuous weeks."""
+    ids = [1, 2, 10, 12, 22, 33]
+    abbr = {1: "ATL", 2: "BUF", 10: "TEN", 12: "KC", 22: "ARI", 33: "BAL"}
+    rng = np.random.default_rng(598)
+    rows: list[dict[str, object]] = []
+    for week in range(1, 6):
+        order = [int(t) for t in rng.permutation(ids)]
+        for g in range(3):
+            home, away = order[2 * g], order[2 * g + 1]
+            for off, dfn in ((home, away), (away, home)):
+                for i in range(10):
+                    wp = float(rng.uniform())
+                    rows.append(
+                        {
+                            "game_id": f"2025_{week:02d}_{abbr[away]}_{abbr[home]}",
+                            "week": week,
+                            "pos_team": abbr[off],
+                            "pos_team_id": off,
+                            "def_pos_team_id": dfn,
+                            "home": abbr[home],
+                            "neutral_site": week == 3 and g == 0,
+                            "EPA": None if i == 9 else float(rng.normal(0.05 * (off % 7) - 0.1, 1.0)),
+                            "pass": float(i % 2),
+                            "rush": float(i % 2 == 0 and i != 8),
+                            "wp_before": None if i == 7 else wp,
+                        }
+                    )
+    return pl.DataFrame(rows)
+
+
+def _assert_matches_pre598_golden(got: pl.DataFrame, name: str, key: list[str]) -> None:
+    from polars.testing import assert_frame_equal
+
+    exp = pl.read_parquet(_FIXTURE_DIR / f"pre598_{name}.parquet")
+    assert_frame_equal(got.sort(key), exp.sort(key), check_exact=False, rel_tol=0.0, abs_tol=1e-12)
+
+
+@pytest.mark.parametrize(
+    ("frame", "name"), [(_plays_2026, "fbs2026"), (_nfl_shaped_pbp, "nfl_synthetic")], ids=["fbs2026", "nfl"]
+)
+def test_pre598_season_reproduces_the_pre_598_code(frame, name) -> None:
+    # Expected output: cfb_adjusted_epa(frame) run on sdv-py bd1987493^ (see the fixture README).
+    _assert_matches_pre598_golden(cfb_adjusted_epa(frame(), method="pre598"), f"season_{name}", ["team_id"])
+
+
+@pytest.mark.parametrize(
+    ("frame", "name"), [(_plays_2026, "fbs2026"), (_nfl_shaped_pbp, "nfl_synthetic")], ids=["fbs2026", "nfl"]
+)
+def test_pre598_by_game_reproduces_the_pre_598_code(frame, name) -> None:
+    got = cfb_adjusted_epa_by_game(frame(), method="pre598")
+    _assert_matches_pre598_golden(got, f"by_game_{name}", ["game_id", "team_id"])
+
+
+def test_pre598_by_game_orders_by_week_alone_like_the_pre_598_code() -> None:
+    # The #598 bowl fix is NOT applied under pre598: it would change output on any frame
+    # whose postseason restarts at week 1 (ESPN seasonType 3), so seasonType goes unread.
+    reg = _synthetic_pbp()
+    bowl = reg.filter(pl.col("game_id") == 1).with_columns(
+        game_id=pl.lit(999, dtype=pl.Int64), seasonType=pl.lit(3, dtype=pl.Int64), EPA=pl.col("EPA") + 5.0
+    )
+    plays = pl.concat([reg, bowl])
+    a = cfb_adjusted_epa_by_game(plays, method="pre598").sort(["game_id", "team_id"])
+    b = cfb_adjusted_epa_by_game(plays.drop("seasonType"), method="pre598").sort(["game_id", "team_id"])
+    assert a.equals(b)
+
+
+def test_default_method_still_requires_naive_wp() -> None:
+    nfl = _nfl_shaped_pbp()
+    with pytest.raises(KeyError, match="wp_before_naive"):
+        cfb_adjusted_epa(nfl)
+    with pytest.raises(KeyError, match="wp_before_naive"):
+        cfb_adjusted_epa_by_game(nfl)
+
+
+@pytest.mark.parametrize("fn", [cfb_adjusted_epa, cfb_adjusted_epa_by_game])
+def test_unknown_method_raises(fn) -> None:
+    with pytest.raises(ValueError, match="method"):
+        fn(_synthetic_pbp(), method="pre-598")

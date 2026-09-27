@@ -46,6 +46,7 @@ flowchart LR
 | `load_ncaa_baseball_group_seasons` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
 | `load_ncaa_baseball_group_aliases` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
 | `load_ncaa_baseball_team_group_seasons` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
+| `load_mlb_park_dimensions` | [mlb_parks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks) | — |
 
 ## `load_mlb_re24_matrix`
 
@@ -848,4 +849,41 @@ One row per team per season: the SDV subdivision, conference and division group 
 
 ```python
 load_ncaa_baseball_team_group_seasons(seasons=2024)
+```
+
+## `load_mlb_park_dimensions`
+
+Release: [mlb_parks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_parks/mlb_park_dimensions.parquet`
+
+:::caution Coverage
+One season-less file, seasons 2001 on: one row per MLB venue per season (regular-season, spring-training, neutral and international sites) from the MLB Stats API venues endpoint, with fence distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and coordinates as of that season. venue_id is a string (the MLB Stats API venue id, venue.id in game feeds); venue_name is the name in use that season. The API lags or misses some fence moves: cited corrections (Camden Yards, Petco Park, T-Mobile Park, Comerica Park, 2022 Rate Field and Progressive Field) are applied and described in notes, which is null on uncorrected rows.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("mlb"). |
+| `season` | Int32 | Season the row describes (calendar year, 2001 on). |
+| `venue_id` | String | MLB Stats API venue id (venue.id in MLB game feeds and schedules), published as a string. |
+| `venue_name` | String | Venue name as of that season (e.g. PacBell Park 2001-03, SBC Park 2004-05, AT&T Park 2006-18, Oracle Park 2019-), not today's name. |
+| `retro_park_id` | String | Retrosheet park id (e.g. "BOS07") from the MLB Stats API's cross-reference; null for most spring-training and minor-league parks. |
+| `left_line_ft` | Int32 | Distance in feet from home plate to the fence at the left-field foul pole. |
+| `left_ft` | Int32 | Distance in feet from home plate to the fence at MLB's left-field marker. |
+| `left_center_ft` | Int32 | Distance in feet from home plate to the fence at MLB's left-centre marker; a park may re-label which point this is (Oracle Park's reads 364 through 2019, then the 399 ft deep left-centre). |
+| `center_ft` | Int32 | Distance in feet from home plate to the fence in straightaway centre field. |
+| `right_center_ft` | Int32 | Distance in feet from home plate to the fence at MLB's right-centre marker. |
+| `right_ft` | Int32 | Distance in feet from home plate to the fence at MLB's right-field marker. |
+| `right_line_ft` | Int32 | Distance in feet from home plate to the fence at the right-field foul pole. |
+| `capacity` | Int32 | Seating capacity that season. |
+| `turf_type` | String | Playing surface: "Grass" or "Artificial Turf". |
+| `roof_type` | String | Roof: "Open", "Retractable" or "Dome". |
+| `azimuth_deg` | Float64 | MLB's azimuthAngle: degrees clockwise from north of the line from home plate to centre field (Fenway Park 45, Progressive Field 0). |
+| `elevation_ft` | Int32 | Elevation of the venue in feet above sea level. |
+| `latitude` | Float64 | Latitude of the venue in decimal degrees. |
+| `longitude` | Float64 | Longitude of the venue in decimal degrees. |
+| `notes` | String | Null unless a curated correction applies to the row; then which columns changed, from what to what, why, and the citation. |
+
+```python
+load_mlb_park_dimensions()
 ```
