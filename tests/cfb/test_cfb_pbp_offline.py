@@ -233,13 +233,18 @@ def _trimmed(game_id: int) -> dict:
       and its good two in one row typed "2pt Conversion".
     * ``summary_401525903_trimmed.json.gz`` -- Kansas @ Cincinnati, 2023. An untyped row repeats
       a touchdown's folded failed two after the kickoff.
+    * ``summary_401752854_trimmed.json.gz`` -- Oregon @ Penn State, 2025 week 5. Every first-half
+      play is echoed by a zero-yardage stub, and every second-half drive opens with a stale copy
+      of its own plays at the drive's start clock.
+    * ``summary_401761622_trimmed.json.gz`` -- Southern Miss @ Georgia Southern, 2025. Two real
+      plays share text and start state in the same quarter, on different drives.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
 
 
-def _offline_plays(game_id: int) -> pl.DataFrame:
-    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+def _offline_plays(game_id: int, odds_override=None) -> pl.DataFrame:
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False, odds_override=odds_override)
     proc.espn_cfb_pbp(summary=_trimmed(game_id))
     proc.run_processing_pipeline()
     return proc.plays_frame
@@ -304,6 +309,68 @@ def test_repeated_start_state_rows_all_survive():
     # only the quarter-end markers the pipeline drops downstream -- no real play
     assert all(text.startswith("End of the") for text in lost), lost
     assert plays.height == 217
+
+
+# persisted core-odds values (cfbfastR-cfb-raw/cfb/betting/json/{id}.json): the 2025 summaries
+# carry an empty pickcenter, and this keeps the run off the live odds endpoint
+_ODDS_401752854 = {"gameSpread": -4.5, "overUnder": 52.5, "homeFavorite": True, "gameSpreadAvailable": True}
+_ODDS_401761622 = {"gameSpread": 2.5, "overUnder": 60.5, "homeFavorite": False, "gameSpreadAvailable": True}
+
+
+def test_espn_stub_echoes_and_stale_drive_copies_collapse():
+    """401752854: each Oregon @ Penn State play survives once, at its own clock.
+
+    ESPN files the game twice over. In the first half every play is followed by an echo with
+    the same text but ``start.yardsToEndzone`` 0 and a zeroed end state, so the adjacent-copy
+    rule (which compares the start spot) never matched. In the second half each drive opens
+    with copies of its own plays stamped with the drive's start clock (Q4 15:00: the 29-yard
+    Dakorien Moore catch and the next three runs, filed again at 14:55, 14:23, 14:15, 13:00).
+    """
+    plays = _offline_plays(401752854, _ODDS_401752854)
+    for text, clock in (
+        ("Dante Moore pass complete to Dakorien Moore for 29 yds to the PSU 17 for a 1ST down", "14:55"),
+        ("Jayden Limar run for 3 yds to the PSU 14", "14:23"),
+        ("Dierre Hill Jr. run for a loss of 3 yards to the PSU 17", "14:15"),
+        ("Dante Moore run for 9 yds to the PSU 8", "13:00"),
+        ("Noah Whittington run for 6 yds to the ORE 31", "14:55"),
+    ):
+        assert plays.filter(pl.col("text") == text)["clock.displayValue"].to_list() == [clock], text
+    # no play is left twice inside its drive
+    key = ["drive.id", "period.number", "start.team.id", "start.down", "start.distance", "text"]
+    repeated = plays.filter(pl.col("type.text") != "Timeout").filter(pl.len().over(key) > 1)
+    assert repeated.height == 0, repeated.select(*key, "clock.displayValue")
+    # ESPN files the punts, kickoffs, a run and a missed field goal first as "Pass Completion";
+    # the stub echo or the later copy carries the real type, and that type is the one kept
+    assert "Pass Completion" not in plays["type.text"].to_list()
+    assert plays.filter(pl.col("text").str.contains(" punt for "))["type.text"].to_list() == ["Punt"] * 7
+    # the box score: Oregon 29 completions, Penn State 14
+    completions = plays.filter(pl.col("type.text").is_in(["Pass Reception", "Passing Touchdown"]))
+    assert completions.group_by("pos_team").len().sort("pos_team").rows() == [(213, 14), (2483, 29)]
+
+
+def test_real_plays_repeating_text_and_start_state_all_survive():
+    """Legit repeats stay: identical text and start state, later and at a lower clock.
+
+    401761622: "Jeffery Pittman run for 4 yds to the USM 29" from 1st and 10 at the 25 opens two
+    Southern Miss drives in Q3 (6:58 and 1:14). 401752854: Atticus Sappington's "kickoff for 65
+    yds for a touchback" from the 35 follows a Q2 touchdown, opens Q3 at 15:00, and follows the
+    touchdowns at 3:16 of Q3 and 12:25 of Q4.
+    """
+    plays = _offline_plays(401761622, _ODDS_401761622)
+    pittman = plays.filter(pl.col("text") == "Jeffery Pittman run for 4 yds to the USM 29")
+    assert pittman["clock.displayValue"].to_list() == ["6:58", "1:14"]
+    assert plays.height == 212
+
+    plays = _offline_plays(401752854, _ODDS_401752854)
+    kicks = plays.filter(
+        (pl.col("text") == "Atticus Sappington kickoff for 65 yds for a touchback") & (pl.col("type.text") == "Kickoff")
+    )
+    assert kicks.select("period.number", "clock.displayValue").rows() == [
+        (2, "3:42"),
+        (3, "15:00"),
+        (3, "3:16"),
+        (4, "12:25"),
+    ]
 
 
 def test_defensive_two_point_conversion_is_scored_as_a_try():

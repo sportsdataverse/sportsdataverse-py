@@ -1289,6 +1289,72 @@ def _place_tries_filed_after_the_kickoff(plays_df: pl.DataFrame) -> pl.DataFrame
     )
 
 
+def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Drop the play copies ESPN files that the adjacent-copy dedupe cannot see.
+
+    Each repeats a real play under a fresh ``id``; 401752854 (Oregon @ Penn State 2025) carries
+    all three:
+
+    * **Stub echo** -- the row after a play repeats its text, period and start down/distance
+      but carries ``start.yardsToEndzone`` 0 where the play has a spot (the echo's real spot
+      is in ``start.yardLine``; pre-2005 feeds, with no spot on any row, are not stubs).
+      The adjacent-copy rule compares the start spot, so the pair survived. The echo goes,
+      but its play type is kept: it corrects the original's (401752854 files its punts,
+      kickoffs, a run and a missed field goal first as "Pass Completion").
+    * **Stale drive copy** -- ESPN files a batch of a drive's plays at the drive's start clock
+      (or the period's), ahead of the same plays at their real clocks (Q4 15:00: four plays
+      that recur at 14:55, 14:23, 14:15, 13:00). A row is a copy when a later row in its drive
+      has the same period, start state and play type at a lower clock, and its clock is a
+      batch: at least two of its rows have such a twin with identical text. The batch's
+      reworded rows (a penalty in gamebook form, an incompletion naming no target) go with
+      it. A real play has no later twin in its own drive, and a replayed down twins at most
+      one row at a clock.
+    * **Copy across a marker** -- the same play (text, period, clock, start state) filed on
+      both sides of a timeout or end-of-period row, which the adjacent-copy rule never
+      compares. The first copy goes, as it does there.
+
+    Timeouts and end-of-period rows are never dropped, and neither is a play without a start
+    spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
+    """
+    state = ["drive.id", "period.number", "start.team.id", "start.down", "start.distance", "start.yardsToEndzone"]
+    if not {*state, "type.text", "text", "start.adj_TimeSecsRem"} <= set(plays_df.columns):
+        return plays_df
+    marker = pl.col("type.text").str.contains(r"(?i)^(?:timeout|end\b)").fill_null(False) | pl.col("text").str.contains(
+        r"(?i)^end of"
+    ).fill_null(False)
+    same_as_prev = [pl.col(c) == pl.col(c).shift(1) for c in ["text", *state[1:5]]]
+    zero_spot = (pl.col("start.yardsToEndzone") == 0) & (pl.col("start.yardsToEndzone").shift(1) != 0)
+    stub = (zero_spot & pl.all_horizontal(same_as_prev)).fill_null(False) & ~marker
+    df = plays_df.with_row_index("_pos").with_columns(_stub=stub)
+    retype = (pl.col("_stub").shift(-1) == True) & pl.col("type.text").shift(-1).is_not_null()
+    df = df.with_columns(
+        [
+            pl.when(retype).then(pl.col(c).shift(-1)).otherwise(pl.col(c)).alias(c)
+            for c in ("type.id", "type.text", "type.abbreviation")
+            if c in df.columns
+        ]
+    ).filter(pl.col("_stub") == False)
+    key = [*state, "type.text"]
+    # a play with no start spot (every row of a pre-2005 feed) has too little state to twin
+    rows = df.filter(~marker & (pl.col("start.yardsToEndzone") != 0)).select(
+        "_pos", *key, "text", _t="start.adj_TimeSecsRem"
+    )
+    twins = (
+        rows.join(rows.select(*key, _lpos="_pos", _ltext="text", _lt="_t"), on=key)
+        .filter((pl.col("_lpos") > pl.col("_pos")) & (pl.col("_lt") < pl.col("_t")))
+        .group_by("_pos", "period.number", "_t")
+        .agg(_exact=(pl.col("text") == pl.col("_ltext")).any())
+    )
+    stale = twins.filter(pl.col("_exact").sum().over("period.number", "_t") >= 2)["_pos"].to_list()
+    copy = ["text", "_t", *state[1:]]
+    echo = (
+        rows.filter(~pl.col("_pos").is_in(stale))
+        .filter(pl.all_horizontal([pl.col(c) == pl.col(c).shift(-1) for c in copy]).fill_null(False))["_pos"]
+        .to_list()
+    )
+    return df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -2012,7 +2078,7 @@ class CFBPlayProcess(object):
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
-        pbp_txt["plays"] = _sort_plays_ot_aware(pbp_txt["plays"])
+        pbp_txt["plays"] = _drop_espn_play_copies(_sort_plays_ot_aware(pbp_txt["plays"]))
 
         # Drop true duplicates only: the next row carries the same play id (a live
         # feed repeating the drive in progress) or is an identical copy -- same text,
