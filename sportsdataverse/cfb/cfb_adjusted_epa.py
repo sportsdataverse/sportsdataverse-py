@@ -334,13 +334,16 @@ def cfb_adjusted_epa(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             columns listed in the module docstring. One season at a time.
-        ridge_lambda: Ridge penalty per play of a full team season: each team
-            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
-            ``n`` fit plays and is shrunk toward the league average by the
-            rest (~7% at a full season, most of it on a handful of plays).
-            Must be > 0. ``None`` (default) means 0.075, the owner's choice
-            (see ``_ADJ_EPA_LAMBDA``); under ``method="pre598"`` it means
-            0.035, the old per-observation penalty.
+        ridge_lambda: Ridge penalty. Under ``method="current"`` it is per play
+            of a full team season: each team keeps
+            ``n / (n + ridge_lambda * 577)`` of its own signal for its ``n``
+            fit plays and is shrunk toward the league average by the rest
+            (~7% at a full season, most of it on a handful of plays); must be
+            > 0. Under ``method="pre598"`` it is passed unscaled to the old
+            standardized ridge (the per-observation penalty; no 577 scaling,
+            no positivity check). ``None`` (default) means 0.075 for
+            ``"current"`` (the owner's choice, ``_ADJ_EPA_LAMBDA``) and 0.035
+            for ``"pre598"``.
         method: ``"current"`` (default) or ``"pre598"``, the fit this function
             used before #598 (``0.1 <= wp_before <= 0.9`` band, standardized
             ridge with the first team id as the reference level, lambda
@@ -447,13 +450,16 @@ def cfb_adjusted_epa_by_game(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             module-docstring columns **plus** ``week``. One season at a time.
-        ridge_lambda: Ridge penalty per play of a full team season: each team
-            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
-            ``n`` fit plays and is shrunk toward the league average by the
-            rest (~7% at a full season, most of it on a handful of plays).
-            Must be > 0. ``None`` (default) means 0.075, the owner's choice
-            (see ``_ADJ_EPA_LAMBDA``); under ``method="pre598"`` it means
-            0.035, the old per-observation penalty.
+        ridge_lambda: Ridge penalty. Under ``method="current"`` it is per play
+            of a full team season: each team keeps
+            ``n / (n + ridge_lambda * 577)`` of its own signal for its ``n``
+            fit plays and is shrunk toward the league average by the rest
+            (~7% at a full season, most of it on a handful of plays); must be
+            > 0. Under ``method="pre598"`` it is passed unscaled to the old
+            standardized ridge (the per-observation penalty; no 577 scaling,
+            no positivity check). ``None`` (default) means 0.075 for
+            ``"current"`` (the owner's choice, ``_ADJ_EPA_LAMBDA``) and 0.035
+            for ``"pre598"``.
         method: ``"current"`` (default) or ``"pre598"``, the fit this function
             used before #598 (see :func:`cfb_adjusted_epa`). pre598 also keeps
             the old week order: it sorts by ``week`` alone and does not read
