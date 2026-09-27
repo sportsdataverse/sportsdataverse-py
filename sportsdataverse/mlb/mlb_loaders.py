@@ -46,6 +46,7 @@ __all__ = [
     "load_ncaa_baseball_group_seasons",
     "load_ncaa_baseball_group_aliases",
     "load_ncaa_baseball_team_group_seasons",
+    "load_mlb_park_dimensions",
 ]
 
 
@@ -1732,4 +1733,59 @@ def load_ncaa_baseball_team_group_seasons(seasons, return_as_pandas: bool = Fals
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_park_dimensions(return_as_pandas: bool = False):
+    """Load mlb_parks (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name        |type    |
+        |:---------------|:-------|
+        |league          |String  |
+        |season          |Int32   |
+        |venue_id        |String  |
+        |venue_name      |String  |
+        |retro_park_id   |String  |
+        |left_line_ft    |Int32   |
+        |left_ft         |Int32   |
+        |left_center_ft  |Int32   |
+        |center_ft       |Int32   |
+        |right_center_ft |Int32   |
+        |right_ft        |Int32   |
+        |right_line_ft   |Int32   |
+        |capacity        |Int32   |
+        |turf_type       |String  |
+        |roof_type       |String  |
+        |azimuth_deg     |Float64 |
+        |elevation_ft    |Int32   |
+        |latitude        |Float64 |
+        |longitude       |Float64 |
+        |notes           |String  |
+
+    Note:
+        One season-less file, seasons 2001 on: one row per MLB venue per season (regular-season, spring-training, neutral and international sites) from the MLB Stats API venues endpoint, with fence distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and coordinates as of that season. venue_id is a string (the MLB Stats API venue id, venue.id in game feeds); venue_name is the name in use that season. The API lags or misses some fence moves: cited corrections (Camden Yards, Petco Park, T-Mobile Park, Comerica Park, 2022 Rate Field and Progressive Field) are applied and described in notes, which is null on uncorrected rows.
+
+    Example:
+        Quick start::
+
+            load_mlb_park_dimensions()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_parks/mlb_park_dimensions.parquet"
+    )
+    if df is None:
+        cli_warn("load_mlb_park_dimensions: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

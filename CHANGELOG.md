@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
   - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
@@ -295,6 +296,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
+
+`load_mlb_park_dimensions()` reads the season-less `mlb_parks` release built by
+`sportsdataverse/sdv-reference-data`: one row per MLB venue per season, 2001 on
+(regular-season, spring-training, neutral and international sites), with fence
+distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and
+coordinates as of that season, from the MLB Stats API. `venue_id` stays a string (the
+API's `venue.id`). Cited corrections for fence moves the API lags or misses are applied
+and described in `notes`. Every column is described in the returns table.
 
 ### Added — conference and division reference tables for nine leagues (`{league}_groups`)
 
