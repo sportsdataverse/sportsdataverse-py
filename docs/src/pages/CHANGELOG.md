@@ -353,6 +353,13 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+The legacy PFF return tables (`pff_*`, and the `pff_api` `/v1` routes that reuse them) no longer
+borrow another source's column text: 277 columns that showed nflreadr/ESPN wording ("as reported
+by NFL.com", "ESPN franchise id", "Player ID (aka GSIS ID)") now describe PFF's own values —
+PFF team abbreviations and ids, per-target EPA, gross punt yards, one row per team line on the
+pass-blocking-efficiency table. The description check now resolves a flat family's fallback text
+with the league its page renders it with.
+
 ### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
 
 Three CFB-local regexes (`_VENDOR_FG_KICKER_RE`, `_VENDOR_KICKOFF_RETURNER_RE`,

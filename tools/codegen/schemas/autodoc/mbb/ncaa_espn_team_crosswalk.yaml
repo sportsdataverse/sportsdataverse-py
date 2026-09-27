@@ -37,3 +37,6 @@ columns:
 - name: match_method
   type: character
   description: ''
+- name: conference_id
+  type: character
+  description: ''

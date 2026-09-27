@@ -1214,7 +1214,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  min_season: 2025
+  min_season: 2002
   example_args:
     seasons: 2026
 - fn: load_wbb_player_crosswalk
@@ -2241,6 +2241,7 @@ loaders:
   url: ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet
   tag: ncaa_mfb_teams
   min_season: 2013
+  notes: "No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release)."
   example_args:
     seasons: 2024
 - fn: load_ncaa_mfb_team_stats
@@ -2371,3 +2372,260 @@ loaders:
   min_season: 2010
   example_args:
     seasons: 2024
+# --- {league}_groups: conference / division reference tables (sportsdataverse/
+# sdv-reference-data). Three season-less tables (groups, group_seasons,
+# group_aliases) plus one team_group_seasons asset per season. The season key is
+# the league's own (ENDING year for mbb / wbb / nba / nhl), so no {season + N}
+# offset. NCAA baseball lives under league: mlb. NFL entries are docs metadata
+# only: load_nfl_*groups* are hand-written in nfl_loaders.py. ---
+- fn: load_cfb_groups
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_groups.parquet
+  tag: cfb_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. cfb:big-ten) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the fall 2025 season)."
+- fn: load_cfb_group_seasons
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_group_seasons.parquet
+  tag: cfb_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the fall 2025 season)."
+- fn: load_cfb_group_aliases
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_group_aliases.parquet
+  tag: cfb_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (cfbd, espn, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_cfb_team_group_seasons
+  league: cfb
+  base: sdv_releases
+  url: cfb_groups/cfb_team_group_seasons_{season}.parquet
+  tag: cfb_groups
+  min_season: 1869
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the CFBD id; team_id_source names the id space. season is the STARTING year (2025 = the fall 2025 season); seasons 1869-2026. No 1871 asset."
+- fn: load_mbb_groups
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_groups.parquet
+  tag: mbb_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. mbb:big-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_mbb_group_seasons
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_group_seasons.parquet
+  tag: mbb_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season)."
+- fn: load_mbb_group_aliases
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_group_aliases.parquet
+  tag: mbb_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, kenpom, ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_mbb_team_group_seasons
+  league: mbb
+  base: sdv_releases
+  url: mbb_groups/mbb_team_group_seasons_{season}.parquet
+  tag: mbb_groups
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 2002-2027."
+- fn: load_wbb_groups
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_groups.parquet
+  tag: wbb_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. wbb:big-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wbb_group_seasons
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_group_seasons.parquet
+  tag: wbb_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season)."
+- fn: load_wbb_group_aliases
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_group_aliases.parquet
+  tag: wbb_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_wbb_team_group_seasons
+  league: wbb
+  base: sdv_releases
+  url: wbb_groups/wbb_team_group_seasons_{season}.parquet
+  tag: wbb_groups
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 2002-2027."
+- fn: load_nfl_groups
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_groups.parquet
+  tag: nfl_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nfl:afc-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the 2025-26 season)."
+- fn: load_nfl_group_seasons
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_group_seasons.parquet
+  tag: nfl_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the 2025-26 season)."
+- fn: load_nfl_group_aliases
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_group_aliases.parquet
+  tag: nfl_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, nflverse, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_nfl_team_group_seasons
+  league: nfl
+  base: sdv_releases
+  url: nfl_groups/nfl_team_group_seasons_{season}.parquet
+  tag: nfl_groups
+  min_season: 1970
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the STARTING year (2025 = the 2025-26 season); seasons 1970-2026."
+- fn: load_nba_groups
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_groups.parquet
+  tag: nba_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nba:atlantic) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_nba_group_seasons
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_group_seasons.parquet
+  tag: nba_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season)."
+- fn: load_nba_group_aliases
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_group_aliases.parquet
+  tag: nba_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, nba_stats, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_nba_team_group_seasons
+  league: nba
+  base: sdv_releases
+  url: nba_groups/nba_team_group_seasons_{season}.parquet
+  tag: nba_groups
+  min_season: 1971
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 1971-2027."
+- fn: load_wnba_groups
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_groups.parquet
+  tag: wnba_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. wnba:east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year."
+- fn: load_wnba_group_seasons
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_group_seasons.parquet
+  tag: wnba_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year."
+- fn: load_wnba_group_aliases
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_group_aliases.parquet
+  tag: wnba_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, sdv, wnba_stats) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_wnba_team_group_seasons
+  league: wnba
+  base: sdv_releases
+  url: wnba_groups/wnba_team_group_seasons_{season}.parquet
+  tag: wnba_groups
+  min_season: 1997
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the calendar year; seasons 1997-2026."
+- fn: load_mlb_groups
+  league: mlb
+  base: sdv_releases
+  url: mlb_groups/mlb_groups.parquet
+  tag: mlb_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. mlb:al-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year."
+- fn: load_mlb_group_seasons
+  league: mlb
+  base: sdv_releases
+  url: mlb_groups/mlb_group_seasons.parquet
+  tag: mlb_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year."
+- fn: load_mlb_group_aliases
+  league: mlb
+  base: sdv_releases
+  url: mlb_groups/mlb_group_aliases.parquet
+  tag: mlb_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, mlb) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_mlb_team_group_seasons
+  league: mlb
+  base: sdv_releases
+  url: mlb_groups/mlb_team_group_seasons_{season}.parquet
+  tag: mlb_groups
+  min_season: 1901
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the MLB Stats API id; team_id_source names the id space. season is the calendar year; seasons 1901-2026."
+- fn: load_nhl_groups
+  league: nhl
+  base: sdv_releases
+  url: nhl_groups/nhl_groups.parquet
+  tag: nhl_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nhl:metropolitan) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season)."
+- fn: load_nhl_group_seasons
+  league: nhl
+  base: sdv_releases
+  url: nhl_groups/nhl_group_seasons.parquet
+  tag: nhl_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season)."
+- fn: load_nhl_group_aliases
+  league: nhl
+  base: sdv_releases
+  url: nhl_groups/nhl_group_aliases.parquet
+  tag: nhl_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (espn, nhl) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_nhl_team_group_seasons
+  league: nhl
+  base: sdv_releases
+  url: nhl_groups/nhl_team_group_seasons_{season}.parquet
+  tag: nhl_groups
+  min_season: 1918
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the NHL id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 1918-2026. No 2005 asset (the 2004-05 lockout)."
+- fn: load_ncaa_baseball_groups
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_groups/ncaa_baseball_groups.parquet
+  tag: ncaa_baseball_groups
+  notes: "One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. ncaa_baseball:acc) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year."
+- fn: load_ncaa_baseball_group_seasons
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_groups/ncaa_baseball_group_seasons.parquet
+  tag: ncaa_baseball_groups
+  notes: "One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year."
+- fn: load_ncaa_baseball_group_aliases
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_groups/ncaa_baseball_group_aliases.parquet
+  tag: ncaa_baseball_groups
+  notes: "One season-less file: every name, abbreviation, slug and source id that a source (ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id."
+- fn: load_ncaa_baseball_team_group_seasons
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_groups/ncaa_baseball_team_group_seasons_{season}.parquet
+  tag: ncaa_baseball_groups
+  min_season: 2010
+  example_args:
+    seasons: 2024
+  notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026."
+# --- mlb_parks: MLB park dimensions (sportsdataverse/sdv-reference-data). One
+# season-less venue x season table; fences in feet at MLB's seven markers. ---
+- fn: load_mlb_park_dimensions
+  league: mlb
+  base: sdv_releases
+  url: mlb_parks/mlb_park_dimensions.parquet
+  tag: mlb_parks
+  notes: "One season-less file, seasons 2001 on: one row per MLB venue per season (regular-season, spring-training, neutral and international sites) from the MLB Stats API venues endpoint, with fence distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and coordinates as of that season. venue_id is a string (the MLB Stats API venue id, venue.id in game feeds); venue_name is the name in use that season. The API lags or misses some fence moves: cited corrections (Camden Yards, Petco Park, T-Mobile Park, Comerica Park, 2022 Rate Field and Progressive Field) are applied and described in notes, which is null on uncorrected rows."

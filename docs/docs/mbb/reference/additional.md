@@ -7356,7 +7356,7 @@ per-player tables, so neither is joined.
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch, or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -7458,7 +7458,7 @@ paid subscription and is not ported.
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard or per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
@@ -7697,11 +7697,11 @@ each join on the normalized school name after `BART_ALIAS` /
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
-| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_mbb_teams_all()`-shaped frame. `None` fetches live; pass an empty frame to skip Fox. |
-| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live. |
-| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season* when *season* is inside that bundled range. A season outside it -- 1999 or 2030, say -- falls back to the newest bundled season (2026) instead of returning no rows, mirroring the R builder's `max(kp_yrs)`, so for such a request the `kp_*` columns carry the newest bundled season's team and conference labels rather than *season*'s. Pass an empty frame to skip KenPom and get null `kp_*` columns. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched frame with `fox_team_id` / `fox_team_name` / `fox_section`. `None` fetches *season*'s conference standings live (`~sportsdataverse._crosswalk_basketball_sources.fox_season_teams`); Fox has none before 2017-18, so earlier seasons get null `fox_*`. Pass an empty frame to skip Fox. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live; Torvik starts in 2008, so earlier seasons get null `bart_*`. |
+| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the KenPom team/conference directory bundled with sdv-py (hoopR's `teams_links`, seasons 2002-2026), filtered to *season*. A season the bundle does not carry gets null `kp_*` columns -- never another season's labels. Pass an empty frame to skip KenPom. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-| `strict` | `bool` | `False` | Raise on the first failed per-conference ESPN group fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
+| `strict` | `bool` | `False` | Accepted for parity with the schedule and player crosswalks, which forward it; the team build has no per-item fetch loop to relax, so every source failure raises. |
 
 **Returns**
 
@@ -7714,7 +7714,7 @@ from sportsdataverse.mbb import mbb_team_crosswalk
 df = mbb_team_crosswalk(season=2026)
 print(df.shape)
 
-# Skip the slow Fox enumeration
+# Skip Fox
 
 import polars as pl
 df = mbb_team_crosswalk(season=2026, fox=pl.DataFrame())
@@ -7894,22 +7894,23 @@ equals `ncaa_{league}_team_ids()`.
 
 **Returns**
 
-DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `espn_team_id` (str, nullable -- ESPN ids are strings throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` / `espn_conference_id` (str, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"` or `"unmatched"`).
+DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `conference_id` (str, nullable -- the SDV group id, e.g. `"mbb:big-ten"`), `espn_team_id` (str, nullable -- ESPN ids are strings throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` / `espn_conference_id` (str, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"` or `"unmatched"`). The three conference columns and `ncaa_conference` are per season: Maryland is ACC in 2013-14 and Big Ten in 2014-15.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | character | Season year. |
 | `ncaa_team_id` | integer | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
 | `ncaa_team` | character | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi'). |
-| `ncaa_conference` | character | Conference for that season as stats.ncaa.org labels it (e.g. 'SEC', 'Sun Belt'); season-specific, and the label style can differ by league ('MWC' in men's rows, 'Mountain West' in women's). |
+| `ncaa_conference` | character | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
 | `espn_team_id` | character | ESPN team id (canonical key). |
 | `espn_display_name` | character | ESPN display name (school + mascot). |
 | `espn_location` | character | ESPN school/location only. |
 | `espn_mascot` | character | ESPN mascot/nickname. |
 | `espn_abbreviation` | character | ESPN abbreviation. |
-| `espn_conference_name` | character | Full ESPN conference name of the matched school (e.g. 'Southeastern Conference'), taken from one fixed snapshot (hoopR's 2023 ESPN table for men's, ESPN's 2025 season groups for women's) and repeated for every season, so it can disagree with ncaa_conference after realignment. Null when the school is missing from that snapshot (e.g. transitional or departed programs). |
-| `espn_conference_id` | character | ESPN conference (group) id as a string (e.g. '23' for the Southeastern Conference); comes from the same fixed snapshot as espn_conference_name, so it is not season-specific and is null on the same rows. |
+| `espn_conference_name` | character | Conference name for that season as the {mbb,wbb}_group_seasons table records it (e.g. 'Colonial Athletic Association' through 2022-23, 'Coastal Athletic Association' after). Null on the same rows as conference_id. |
+| `espn_conference_id` | character | ESPN conference (group) id for that season as a string (e.g. '23' for the Southeastern Conference). ESPN group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before 2008). Null on the same rows as conference_id. |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `conference_id` | character | SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season. |
 
 **Example**
 
@@ -7979,7 +7980,7 @@ game id needed by the play-by-play / box-score scrapers. Port of bigballR
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `date` | `Optional[str]` | `None` | `"MM/DD/YYYY"`. Defaults to yesterday (R default). |
-| `conference` | `str` | `'All'` | Conference name filter (e.g. `"ACC"`, `"Big Ten"`); case/punctuation-insensitive. Default `"All"`. Unknown names warn and fall back to all conferences (R behavior). |
+| `conference` | `str` | `'All'` | Conference name filter (e.g. `"ACC"`, `"Big Ten"`, `"Metro"` / `"MAAC"`); case/punctuation-insensitive, and both the current stats.ncaa.org label and bigballR's abbreviation work. Default `"All"` (every conference). Unknown names raise. |
 | `conference_id` | `Optional[int]` | `None` | Explicit stats.ncaa.org conference id; overrides *conference* when given (R's `conference.ID`). |
 | `fetcher` | `Optional[NcaaFetcher]` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch .NcaaFetcher` (tests pass an offline fake). `None` uses `NcaaFetcher.with_browser()` — the page is JS-rendered behind Akamai bm-verify, so the browser transport is the live default. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

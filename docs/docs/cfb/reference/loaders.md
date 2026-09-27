@@ -81,6 +81,10 @@ flowchart LR
 | `load_ncaa_mfb_player_stats` | [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_player_stats) | — |
 | `load_ncaa_mfb_officials` | [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_officials) | — |
 | `load_ncaa_mfb_linescore` | [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_linescore) | — |
+| `load_cfb_groups` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
+| `load_cfb_group_seasons` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
+| `load_cfb_group_aliases` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
+| `load_cfb_team_group_seasons` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 
 ## `load_cfb_pbp`
 
@@ -2028,6 +2032,16 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `passing_td_pct` | Float64 | Percentile position (0-100) of the player's passing touchdowns among qualifying players that season. |
 | `pass_int_pct` | Float64 | Percentile position (0-100) of the player's interceptions thrown among qualifying players that season. |
 | `sacked_pct` | Float64 | Percentile position (0-100) of the player's times sacked among qualifying players that season. |
+| `EPAplay_n` | Int64 | Sample size behind EPAplay: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where EPAplay is null. |
+| `yardsdropback_n` | Int64 | Sample size behind yardsdropback: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where yardsdropback is null. |
+| `comppct_n` | Int64 | Sample size behind comppct: the number of throws (including interceptions, excluding sacks) the passer's value is computed over. 0 where comppct is null. |
+| `success_n` | Int64 | Sample size behind success: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where success is null. nfl-data's nfl_passing table counts its success_n over dropbacks instead. |
+| `yardsplay_n` | Int64 | Sample size behind yardsplay: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where yardsplay is null. nfl-data's nfl_passing table counts its yardsplay_n over pass attempts instead: interceptions included, sacks still excluded. |
+| `detmer_n` | Int64 | Sample size behind detmer: the number of games the passer's value is computed over. 0 where detmer is null. |
+| `detmergame_n` | Int64 | Sample size behind detmergame: the number of games the passer's value is computed over. 0 where detmergame is null. |
+| `EPAgame_n` | Int64 | Sample size behind EPAgame: the number of games the passer's value is computed over. 0 where EPAgame is null. |
+| `yardsgame_n` | Int64 | Sample size behind yardsgame: the number of games the passer's value is computed over. 0 where yardsgame is null. |
+| `playsgame_n` | Int64 | Sample size behind playsgame: the number of games the passer's value is computed over. 0 where playsgame is null. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
@@ -2127,6 +2141,13 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `fumbles_pct` | Float64 | Percentile position (0-100) of the player's fumbles among qualifying players that season. |
 | `yardsplay_pct` | Float64 | Percentile position (0-100) of the player's yards per play among qualifying players that season. |
 | `yardsgame_pct` | Float64 | Percentile position (0-100) of the player's yards per game among qualifying players that season. |
+| `EPAplay_n` | Int64 | Sample size behind EPAplay: the number of targets the receiver's value is computed over. 0 where EPAplay is null. |
+| `success_n` | Int64 | Sample size behind success: the number of targets the receiver's value is computed over. 0 where success is null. |
+| `yardsplay_n` | Int64 | Sample size behind yardsplay: the number of targets the receiver's value is computed over. 0 where yardsplay is null. |
+| `catchpct_n` | Int64 | Sample size behind catchpct: the number of targets the receiver's value is computed over. 0 where catchpct is null. |
+| `EPAgame_n` | Int64 | Sample size behind EPAgame: the number of games the receiver's value is computed over. 0 where EPAgame is null. |
+| `yardsgame_n` | Int64 | Sample size behind yardsgame: the number of games the receiver's value is computed over. 0 where yardsgame is null. |
+| `playsgame_n` | Int64 | Sample size behind playsgame: the number of games the receiver's value is computed over. 0 where playsgame is null. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
@@ -2180,6 +2201,12 @@ Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-d
 | `fumbles_pct` | Float64 | Percentile position (0-100) of the player's fumbles among qualifying players that season. |
 | `yardsplay_pct` | Float64 | Percentile position (0-100) of the player's yards per play among qualifying players that season. |
 | `yardsgame_pct` | Float64 | Percentile position (0-100) of the player's yards per game among qualifying players that season. |
+| `EPAplay_n` | Int64 | Sample size behind EPAplay: the number of carries the rusher's value is computed over. 0 where EPAplay is null. |
+| `success_n` | Int64 | Sample size behind success: the number of carries the rusher's value is computed over. 0 where success is null. |
+| `yardsplay_n` | Int64 | Sample size behind yardsplay: the number of carries the rusher's value is computed over. 0 where yardsplay is null. |
+| `EPAgame_n` | Int64 | Sample size behind EPAgame: the number of games the rusher's value is computed over. 0 where EPAgame is null. |
+| `yardsgame_n` | Int64 | Sample size behind yardsgame: the number of games the rusher's value is computed over. 0 where yardsgame is null. |
+| `playsgame_n` | Int64 | Sample size behind playsgame: the number of games the rusher's value is computed over. 0 where playsgame is null. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
@@ -2198,6 +2225,23 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `division` | String | Division in the conference for the team. |
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
+| `passrate_off_n` | Int64 | Sample size behind passrate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_n` | Int64 | Sample size behind rushrate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_n` | Int64 | Sample size behind havoc_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_n` | Int64 | Sample size behind explosive_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_n` | Int64 | Sample size behind EPAplay_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_n` | Int64 | Sample size behind yardsplay_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_n` | Int64 | Sample size behind play_stuffed_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_n` | Int64 | Sample size behind success_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_n` | Int64 | Sample size behind red_zone_success_off: the number of red-zone plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_n` | Int64 | Sample size behind third_down_success_off: the number of third-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_n` | Int64 | Sample size behind third_down_distance_off: the number of third-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_n` | Int64 | Sample size behind late_down_success_off: the number of third- and fourth-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_n` | Int64 | Sample size behind early_down_EPA_off: the number of early-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `start_position_off_n` | Int64 | Sample size behind start_position_off: the number of plays with a known drive start it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off: the number of non-explosive plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_n` | Int64 | Sample size behind line_yards_off: the number of rushes it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_off_n` | Int64 | Sample size behind opportunity_rate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off` | UInt32 | Plays run, with the team on offense. |
 | `passrate_off` | Float64 | Share of plays that were pass plays, with the team on offense. |
 | `rushrate_off` | Float64 | Share of plays that were rush plays, with the team on offense. |
@@ -2217,7 +2261,16 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `start_position_off` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on offense. |
 | `nonExplosiveEpaPerPlay_off` | Float64 | EPA per play with explosive plays excluded, with the team on offense. |
 | `line_yards_off` | Float64 | Average line yards credited to the offensive line on rushes, with the team on offense. |
-| `opportunity_rate_off` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on offense. |
+| `opportunity_rate_off` | Float64 | Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on offense. |
+| `playsgame_off_n` | Int64 | Sample size behind playsgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_n` | Int64 | Sample size behind EPAgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_n` | Int64 | Sample size behind yardsgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_n` | Int64 | Sample size behind drivesgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_n` | Int64 | Sample size behind EPAdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_n` | Int64 | Sample size behind yardsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_n` | Int64 | Sample size behind playsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `turnovers_off_n` | Int64 | Sample size behind turnovers_off: the number of games it is computed over. |
+| `turnovers_off` | Float64 | Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt counts against the return team). Lower is better. |
 | `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
 | `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
 | `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
@@ -2246,12 +2299,30 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
 | `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
 | `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `turnovers_off_rank` | Float64 | National rank of turnovers_off, where 1 is best (fewest giveaways per game). |
 | `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
 | `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
 | `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
 | `nonExplosiveEpaPerPlay_off_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on offense, where 1 is best. |
 | `line_yards_off_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on offense, where 1 is best. |
-| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- opportunity-flagged rushes as a share of all plays with the team on offense, where 1 is best. |
+| `passrate_def_n` | Int64 | Sample size behind passrate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_n` | Int64 | Sample size behind rushrate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_n` | Int64 | Sample size behind havoc_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_n` | Int64 | Sample size behind explosive_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_n` | Int64 | Sample size behind EPAplay_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_n` | Int64 | Sample size behind yardsplay_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_n` | Int64 | Sample size behind play_stuffed_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_n` | Int64 | Sample size behind success_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_n` | Int64 | Sample size behind red_zone_success_def: the number of red-zone plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_n` | Int64 | Sample size behind third_down_success_def: the number of third-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_n` | Int64 | Sample size behind third_down_distance_def: the number of third-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_n` | Int64 | Sample size behind late_down_success_def: the number of third- and fourth-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_n` | Int64 | Sample size behind early_down_EPA_def: the number of early-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `start_position_def_n` | Int64 | Sample size behind start_position_def: the number of plays with a known drive start it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def: the number of non-explosive plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_n` | Int64 | Sample size behind line_yards_def: the number of rushes it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_def_n` | Int64 | Sample size behind opportunity_rate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def` | UInt32 | Plays run, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def` | Float64 | Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def` | Float64 | Share of plays that were rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -2271,7 +2342,16 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `start_position_def` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on defense (i.e. allowed to opponents). |
 | `nonExplosiveEpaPerPlay_def` | Float64 | EPA per play with explosive plays excluded, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def` | Float64 | Average line yards credited to the offensive line on rushes, with the team on defense (i.e. allowed to opponents). |
-| `opportunity_rate_def` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def` | Float64 | Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_n` | Int64 | Sample size behind playsgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_n` | Int64 | Sample size behind EPAgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_n` | Int64 | Sample size behind yardsgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_n` | Int64 | Sample size behind drivesgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_n` | Int64 | Sample size behind EPAdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_n` | Int64 | Sample size behind yardsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_n` | Int64 | Sample size behind playsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `turnovers_def_n` | Int64 | Sample size behind turnovers_def: the number of games it is computed over. |
+| `turnovers_def` | Float64 | Takeaways per game: the opponents' giveaways, counted the same way. Higher is better. |
 | `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
@@ -2300,12 +2380,13 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `turnovers_def_rank` | Float64 | National rank of turnovers_def, where 1 is best (most takeaways per game). |
 | `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `nonExplosiveEpaPerPlay_def_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `line_yards_def_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on defense (i.e. allowed to opponents), where 1 is best. |
-| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- opportunity-flagged rushes as a share of all plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `TEPA_margin` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. |
 | `EPAplay_margin` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. |
 | `EPAdrive_margin` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. |
@@ -2320,20 +2401,48 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
 | `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `explosive_margin` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. |
+| `turnover_margin` | Float64 | Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better. Spelled singular; there is no turnovers_margin column. |
+| `explosive_margin_rank` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `turnover_margin_rank` | Float64 | National rank of turnover_margin, 1 = largest margin. |
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
+| `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_pass_n` | Int64 | Sample size behind explosive_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_pass_n` | Int64 | Sample size behind EPAplay_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_pass_n` | Int64 | Sample size behind yardsplay_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_pass_n` | Int64 | Sample size behind play_stuffed_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_pass_n` | Int64 | Sample size behind success_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_pass_n` | Int64 | Sample size behind red_zone_success_off_pass: the number of red-zone plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_pass_n` | Int64 | Sample size behind third_down_success_off_pass: the number of third-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_pass_n` | Int64 | Sample size behind third_down_distance_off_pass: the number of third-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_pass_n` | Int64 | Sample size behind late_down_success_off_pass: the number of third- and fourth-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_pass_n` | Int64 | Sample size behind early_down_EPA_off_pass: the number of early-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_pass_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off_pass: the number of non-explosive plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_pass_n` | Int64 | Sample size behind line_yards_off_pass: the number of rushes it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. Always 0 here: line yards are credited only on rushes. |
+| `opportunity_rate_off_pass_n` | Int64 | Sample size behind opportunity_rate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off_pass` | UInt32 | Plays run on pass plays, with the team on offense. |
 | `passrate_off_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on offense. |
 | `rushrate_off_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on offense. |
@@ -2352,7 +2461,14 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `early_down_EPA_off_pass` | Float64 | EPA per early-down play on pass plays, with the team on offense. |
 | `nonExplosiveEpaPerPlay_off_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on offense. |
 | `line_yards_off_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on offense. |
-| `opportunity_rate_off_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on offense. |
+| `opportunity_rate_off_pass` | Float64 | Opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays, with the team on offense. |
+| `playsgame_off_pass_n` | Int64 | Sample size behind playsgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_pass_n` | Int64 | Sample size behind EPAgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_pass_n` | Int64 | Sample size behind yardsgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_pass_n` | Int64 | Sample size behind drivesgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_pass_n` | Int64 | Sample size behind EPAdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_pass_n` | Int64 | Sample size behind yardsdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_pass_n` | Int64 | Sample size behind playsdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsgame_off_pass` | Float64 | Plays run per game on pass plays, with the team on offense. |
 | `EPAdrive_off_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on offense. |
 | `EPAgame_off_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on offense. |
@@ -2385,7 +2501,23 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `rushrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on offense, where 1 is best. |
 | `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on offense, where 1 is best. |
 | `line_yards_off_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on offense, where 1 is best. |
-| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays with the team on offense, where 1 is best. |
+| `passrate_def_pass_n` | Int64 | Sample size behind passrate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_pass_n` | Int64 | Sample size behind rushrate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_pass_n` | Int64 | Sample size behind havoc_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_pass_n` | Int64 | Sample size behind explosive_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_pass_n` | Int64 | Sample size behind EPAplay_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_pass_n` | Int64 | Sample size behind yardsplay_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_pass_n` | Int64 | Sample size behind play_stuffed_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_pass_n` | Int64 | Sample size behind success_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_pass_n` | Int64 | Sample size behind red_zone_success_def_pass: the number of red-zone plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_pass_n` | Int64 | Sample size behind third_down_success_def_pass: the number of third-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_pass_n` | Int64 | Sample size behind third_down_distance_def_pass: the number of third-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_pass_n` | Int64 | Sample size behind late_down_success_def_pass: the number of third- and fourth-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_pass_n` | Int64 | Sample size behind early_down_EPA_def_pass: the number of early-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_pass_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def_pass: the number of non-explosive plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_pass_n` | Int64 | Sample size behind line_yards_def_pass: the number of rushes it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. Always 0 here: line yards are credited only on rushes. |
+| `opportunity_rate_def_pass_n` | Int64 | Sample size behind opportunity_rate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def_pass` | UInt32 | Plays run on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on defense (i.e. allowed to opponents). |
@@ -2404,7 +2536,14 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `early_down_EPA_def_pass` | Float64 | EPA per early-down play on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `nonExplosiveEpaPerPlay_def_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on defense (i.e. allowed to opponents). |
-| `opportunity_rate_def_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_pass` | Float64 | Opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass_n` | Int64 | Sample size behind playsgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_pass_n` | Int64 | Sample size behind EPAgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_pass_n` | Int64 | Sample size behind yardsgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_pass_n` | Int64 | Sample size behind drivesgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_pass_n` | Int64 | Sample size behind EPAdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_pass_n` | Int64 | Sample size behind yardsdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_pass_n` | Int64 | Sample size behind playsdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsgame_def_pass` | Float64 | Plays run per game on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on defense (i.e. allowed to opponents). |
@@ -2437,7 +2576,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `rushrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `line_yards_def_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
-| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `TEPA_margin_pass` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. |
 | `EPAplay_margin_pass` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. |
 | `EPAdrive_margin_pass` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. |
@@ -2450,6 +2589,22 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `EPAgame_margin_pass_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `success_margin_pass_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `yardsplay_margin_pass_rank` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `passrate_off_rush_n` | Int64 | Sample size behind passrate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_rush_n` | Int64 | Sample size behind rushrate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_rush_n` | Int64 | Sample size behind havoc_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_rush_n` | Int64 | Sample size behind explosive_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_rush_n` | Int64 | Sample size behind EPAplay_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_rush_n` | Int64 | Sample size behind yardsplay_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_rush_n` | Int64 | Sample size behind play_stuffed_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_rush_n` | Int64 | Sample size behind success_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_rush_n` | Int64 | Sample size behind red_zone_success_off_rush: the number of red-zone plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_rush_n` | Int64 | Sample size behind third_down_success_off_rush: the number of third-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_rush_n` | Int64 | Sample size behind third_down_distance_off_rush: the number of third-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_rush_n` | Int64 | Sample size behind late_down_success_off_rush: the number of third- and fourth-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_rush_n` | Int64 | Sample size behind early_down_EPA_off_rush: the number of early-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_rush_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off_rush: the number of non-explosive plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_rush_n` | Int64 | Sample size behind line_yards_off_rush: the number of rushes it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_off_rush_n` | Int64 | Sample size behind opportunity_rate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off_rush` | UInt32 | Plays run on rush plays, with the team on offense. |
 | `passrate_off_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on offense. |
 | `rushrate_off_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on offense. |
@@ -2469,6 +2624,13 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `nonExplosiveEpaPerPlay_off_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on offense. |
 | `line_yards_off_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on offense. |
 | `opportunity_rate_off_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on offense. |
+| `playsgame_off_rush_n` | Int64 | Sample size behind playsgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_rush_n` | Int64 | Sample size behind EPAgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_rush_n` | Int64 | Sample size behind yardsgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_rush_n` | Int64 | Sample size behind drivesgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_rush_n` | Int64 | Sample size behind EPAdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_rush_n` | Int64 | Sample size behind yardsdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_rush_n` | Int64 | Sample size behind playsdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsgame_off_rush` | Float64 | Plays run per game on rush plays, with the team on offense. |
 | `EPAdrive_off_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on offense. |
 | `EPAgame_off_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on offense. |
@@ -2502,6 +2664,22 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on offense, where 1 is best. |
 | `line_yards_off_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on offense, where 1 is best. |
 | `opportunity_rate_off_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on offense, where 1 is best. |
+| `passrate_def_rush_n` | Int64 | Sample size behind passrate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_rush_n` | Int64 | Sample size behind rushrate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_rush_n` | Int64 | Sample size behind havoc_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_rush_n` | Int64 | Sample size behind explosive_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_rush_n` | Int64 | Sample size behind EPAplay_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_rush_n` | Int64 | Sample size behind yardsplay_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_rush_n` | Int64 | Sample size behind play_stuffed_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_rush_n` | Int64 | Sample size behind success_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_rush_n` | Int64 | Sample size behind red_zone_success_def_rush: the number of red-zone plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_rush_n` | Int64 | Sample size behind third_down_success_def_rush: the number of third-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_rush_n` | Int64 | Sample size behind third_down_distance_def_rush: the number of third-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_rush_n` | Int64 | Sample size behind late_down_success_def_rush: the number of third- and fourth-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_rush_n` | Int64 | Sample size behind early_down_EPA_def_rush: the number of early-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_rush_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def_rush: the number of non-explosive plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_rush_n` | Int64 | Sample size behind line_yards_def_rush: the number of rushes it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_def_rush_n` | Int64 | Sample size behind opportunity_rate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def_rush` | UInt32 | Plays run on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -2521,6 +2699,13 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `nonExplosiveEpaPerPlay_def_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `opportunity_rate_def_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush_n` | Int64 | Sample size behind playsgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_rush_n` | Int64 | Sample size behind EPAgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_rush_n` | Int64 | Sample size behind yardsgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_rush_n` | Int64 | Sample size behind drivesgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_rush_n` | Int64 | Sample size behind EPAdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_rush_n` | Int64 | Sample size behind yardsdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_rush_n` | Int64 | Sample size behind playsdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsgame_def_rush` | Float64 | Plays run per game on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -2723,6 +2908,23 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `division` | String | Division in the conference for the team. |
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
+| `passrate_off_n` | Int64 | Sample size behind passrate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_n` | Int64 | Sample size behind rushrate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_n` | Int64 | Sample size behind havoc_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_n` | Int64 | Sample size behind explosive_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_n` | Int64 | Sample size behind EPAplay_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_n` | Int64 | Sample size behind yardsplay_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_n` | Int64 | Sample size behind play_stuffed_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_n` | Int64 | Sample size behind success_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_n` | Int64 | Sample size behind red_zone_success_off: the number of red-zone plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_n` | Int64 | Sample size behind third_down_success_off: the number of third-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_n` | Int64 | Sample size behind third_down_distance_off: the number of third-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_n` | Int64 | Sample size behind late_down_success_off: the number of third- and fourth-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_n` | Int64 | Sample size behind early_down_EPA_off: the number of early-down plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `start_position_off_n` | Int64 | Sample size behind start_position_off: the number of plays with a known drive start it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off: the number of non-explosive plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_n` | Int64 | Sample size behind line_yards_off: the number of rushes it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_off_n` | Int64 | Sample size behind opportunity_rate_off: the number of plays it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off` | UInt32 | Plays run, with the team on offense. |
 | `passrate_off` | Float64 | Share of plays that were pass plays, with the team on offense. |
 | `rushrate_off` | Float64 | Share of plays that were rush plays, with the team on offense. |
@@ -2742,7 +2944,16 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `start_position_off` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on offense. |
 | `nonExplosiveEpaPerPlay_off` | Float64 | EPA per play with explosive plays excluded, with the team on offense. |
 | `line_yards_off` | Float64 | Average line yards credited to the offensive line on rushes, with the team on offense. |
-| `opportunity_rate_off` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on offense. |
+| `opportunity_rate_off` | Float64 | Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on offense. |
+| `playsgame_off_n` | Int64 | Sample size behind playsgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_n` | Int64 | Sample size behind EPAgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_n` | Int64 | Sample size behind yardsgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_n` | Int64 | Sample size behind drivesgame_off: the number of games it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_n` | Int64 | Sample size behind EPAdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_n` | Int64 | Sample size behind yardsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_n` | Int64 | Sample size behind playsdrive_off: the number of drives it is computed over, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `turnovers_off_n` | Int64 | Sample size behind turnovers_off: the number of games it is computed over. |
+| `turnovers_off` | Float64 | Giveaways per game: interceptions and lost fumbles on every play, special teams included (a muffed punt counts against the return team). Lower is better. |
 | `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
 | `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
 | `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
@@ -2771,12 +2982,30 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
 | `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
 | `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `turnovers_off_rank` | Float64 | National rank of turnovers_off, where 1 is best (fewest giveaways per game). |
 | `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
 | `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
 | `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
 | `nonExplosiveEpaPerPlay_off_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on offense, where 1 is best. |
 | `line_yards_off_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on offense, where 1 is best. |
-| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- opportunity-flagged rushes as a share of all plays with the team on offense, where 1 is best. |
+| `passrate_def_n` | Int64 | Sample size behind passrate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_n` | Int64 | Sample size behind rushrate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_n` | Int64 | Sample size behind havoc_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_n` | Int64 | Sample size behind explosive_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_n` | Int64 | Sample size behind EPAplay_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_n` | Int64 | Sample size behind yardsplay_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_n` | Int64 | Sample size behind play_stuffed_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_n` | Int64 | Sample size behind success_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_n` | Int64 | Sample size behind red_zone_success_def: the number of red-zone plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_n` | Int64 | Sample size behind third_down_success_def: the number of third-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_n` | Int64 | Sample size behind third_down_distance_def: the number of third-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_n` | Int64 | Sample size behind late_down_success_def: the number of third- and fourth-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_n` | Int64 | Sample size behind early_down_EPA_def: the number of early-down plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `start_position_def_n` | Int64 | Sample size behind start_position_def: the number of plays with a known drive start it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def: the number of non-explosive plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_n` | Int64 | Sample size behind line_yards_def: the number of rushes it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_def_n` | Int64 | Sample size behind opportunity_rate_def: the number of plays it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def` | UInt32 | Plays run, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def` | Float64 | Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def` | Float64 | Share of plays that were rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -2796,7 +3025,16 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `start_position_def` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on defense (i.e. allowed to opponents). |
 | `nonExplosiveEpaPerPlay_def` | Float64 | EPA per play with explosive plays excluded, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def` | Float64 | Average line yards credited to the offensive line on rushes, with the team on defense (i.e. allowed to opponents). |
-| `opportunity_rate_def` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def` | Float64 | Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_n` | Int64 | Sample size behind playsgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_n` | Int64 | Sample size behind EPAgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_n` | Int64 | Sample size behind yardsgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_n` | Int64 | Sample size behind drivesgame_def: the number of games it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_n` | Int64 | Sample size behind EPAdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_n` | Int64 | Sample size behind yardsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_n` | Int64 | Sample size behind playsdrive_def: the number of drives it is computed over, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `turnovers_def_n` | Int64 | Sample size behind turnovers_def: the number of games it is computed over. |
+| `turnovers_def` | Float64 | Takeaways per game: the opponents' giveaways, counted the same way. Higher is better. |
 | `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
@@ -2825,12 +3063,13 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `turnovers_def_rank` | Float64 | National rank of turnovers_def, where 1 is best (most takeaways per game). |
 | `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `nonExplosiveEpaPerPlay_def_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `line_yards_def_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on defense (i.e. allowed to opponents), where 1 is best. |
-| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- opportunity-flagged rushes as a share of all plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `TEPA_margin` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. |
 | `EPAplay_margin` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. |
 | `EPAdrive_margin` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. |
@@ -2845,20 +3084,48 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
 | `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `explosive_margin` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. |
+| `turnover_margin` | Float64 | Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better. Spelled singular; there is no turnovers_margin column. |
+| `explosive_margin_rank` | Float64 | Margin in explosive-play rate -- the share of plays carrying the explosive flag: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `turnover_margin_rank` | Float64 | National rank of turnover_margin, 1 = largest margin. |
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
+| `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_pass_n` | Int64 | Sample size behind explosive_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_pass_n` | Int64 | Sample size behind EPAplay_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_pass_n` | Int64 | Sample size behind yardsplay_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_pass_n` | Int64 | Sample size behind play_stuffed_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_pass_n` | Int64 | Sample size behind success_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_pass_n` | Int64 | Sample size behind red_zone_success_off_pass: the number of red-zone plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_pass_n` | Int64 | Sample size behind third_down_success_off_pass: the number of third-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_pass_n` | Int64 | Sample size behind third_down_distance_off_pass: the number of third-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_pass_n` | Int64 | Sample size behind late_down_success_off_pass: the number of third- and fourth-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_pass_n` | Int64 | Sample size behind early_down_EPA_off_pass: the number of early-down plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_pass_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off_pass: the number of non-explosive plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_pass_n` | Int64 | Sample size behind line_yards_off_pass: the number of rushes it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. Always 0 here: line yards are credited only on rushes. |
+| `opportunity_rate_off_pass_n` | Int64 | Sample size behind opportunity_rate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off_pass` | UInt32 | Plays run on pass plays, with the team on offense. |
 | `passrate_off_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on offense. |
 | `rushrate_off_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on offense. |
@@ -2877,7 +3144,14 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `early_down_EPA_off_pass` | Float64 | EPA per early-down play on pass plays, with the team on offense. |
 | `nonExplosiveEpaPerPlay_off_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on offense. |
 | `line_yards_off_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on offense. |
-| `opportunity_rate_off_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on offense. |
+| `opportunity_rate_off_pass` | Float64 | Opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays, with the team on offense. |
+| `playsgame_off_pass_n` | Int64 | Sample size behind playsgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_pass_n` | Int64 | Sample size behind EPAgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_pass_n` | Int64 | Sample size behind yardsgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_pass_n` | Int64 | Sample size behind drivesgame_off_pass: the number of games it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_pass_n` | Int64 | Sample size behind EPAdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_pass_n` | Int64 | Sample size behind yardsdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_pass_n` | Int64 | Sample size behind playsdrive_off_pass: the number of drives it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsgame_off_pass` | Float64 | Plays run per game on pass plays, with the team on offense. |
 | `EPAdrive_off_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on offense. |
 | `EPAgame_off_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on offense. |
@@ -2910,7 +3184,23 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `rushrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on offense, where 1 is best. |
 | `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on offense, where 1 is best. |
 | `line_yards_off_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on offense, where 1 is best. |
-| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays with the team on offense, where 1 is best. |
+| `passrate_def_pass_n` | Int64 | Sample size behind passrate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_pass_n` | Int64 | Sample size behind rushrate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_pass_n` | Int64 | Sample size behind havoc_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_pass_n` | Int64 | Sample size behind explosive_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_pass_n` | Int64 | Sample size behind EPAplay_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_pass_n` | Int64 | Sample size behind yardsplay_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_pass_n` | Int64 | Sample size behind play_stuffed_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_pass_n` | Int64 | Sample size behind success_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_pass_n` | Int64 | Sample size behind red_zone_success_def_pass: the number of red-zone plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_pass_n` | Int64 | Sample size behind third_down_success_def_pass: the number of third-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_pass_n` | Int64 | Sample size behind third_down_distance_def_pass: the number of third-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_pass_n` | Int64 | Sample size behind late_down_success_def_pass: the number of third- and fourth-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_pass_n` | Int64 | Sample size behind early_down_EPA_def_pass: the number of early-down plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_pass_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def_pass: the number of non-explosive plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_pass_n` | Int64 | Sample size behind line_yards_def_pass: the number of rushes it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. Always 0 here: line yards are credited only on rushes. |
+| `opportunity_rate_def_pass_n` | Int64 | Sample size behind opportunity_rate_def_pass: the number of plays it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def_pass` | UInt32 | Plays run on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on defense (i.e. allowed to opponents). |
@@ -2929,7 +3219,14 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `early_down_EPA_def_pass` | Float64 | EPA per early-down play on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `nonExplosiveEpaPerPlay_def_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on defense (i.e. allowed to opponents). |
-| `opportunity_rate_def_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_pass` | Float64 | Opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass_n` | Int64 | Sample size behind playsgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_pass_n` | Int64 | Sample size behind EPAgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_pass_n` | Int64 | Sample size behind yardsgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_pass_n` | Int64 | Sample size behind drivesgame_def_pass: the number of games it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_pass_n` | Int64 | Sample size behind EPAdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_pass_n` | Int64 | Sample size behind yardsdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_pass_n` | Int64 | Sample size behind playsdrive_def_pass: the number of drives it is computed over on pass plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsgame_def_pass` | Float64 | Plays run per game on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on defense (i.e. allowed to opponents). |
@@ -2962,7 +3259,7 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `rushrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `line_yards_def_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
-| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate (always 0: only rushes carry the opportunity flag) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
 | `TEPA_margin_pass` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. |
 | `EPAplay_margin_pass` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. |
 | `EPAdrive_margin_pass` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. |
@@ -2975,6 +3272,22 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `EPAgame_margin_pass_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `success_margin_pass_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
 | `yardsplay_margin_pass_rank` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `passrate_off_rush_n` | Int64 | Sample size behind passrate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `rushrate_off_rush_n` | Int64 | Sample size behind rushrate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `havoc_off_rush_n` | Int64 | Sample size behind havoc_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `explosive_off_rush_n` | Int64 | Sample size behind explosive_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_off_rush_n` | Int64 | Sample size behind EPAplay_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_off_rush_n` | Int64 | Sample size behind yardsplay_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_off_rush_n` | Int64 | Sample size behind play_stuffed_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `success_off_rush_n` | Int64 | Sample size behind success_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_off_rush_n` | Int64 | Sample size behind red_zone_success_off_rush: the number of red-zone plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_off_rush_n` | Int64 | Sample size behind third_down_success_off_rush: the number of third-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_off_rush_n` | Int64 | Sample size behind third_down_distance_off_rush: the number of third-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_off_rush_n` | Int64 | Sample size behind late_down_success_off_rush: the number of third- and fourth-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_off_rush_n` | Int64 | Sample size behind early_down_EPA_off_rush: the number of early-down plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_off_rush_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_off_rush: the number of non-explosive plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `line_yards_off_rush_n` | Int64 | Sample size behind line_yards_off_rush: the number of rushes it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_off_rush_n` | Int64 | Sample size behind opportunity_rate_off_rush: the number of plays it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `plays_off_rush` | UInt32 | Plays run on rush plays, with the team on offense. |
 | `passrate_off_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on offense. |
 | `rushrate_off_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on offense. |
@@ -2994,6 +3307,13 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `nonExplosiveEpaPerPlay_off_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on offense. |
 | `line_yards_off_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on offense. |
 | `opportunity_rate_off_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on offense. |
+| `playsgame_off_rush_n` | Int64 | Sample size behind playsgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_off_rush_n` | Int64 | Sample size behind EPAgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_off_rush_n` | Int64 | Sample size behind yardsgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_off_rush_n` | Int64 | Sample size behind drivesgame_off_rush: the number of games it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_off_rush_n` | Int64 | Sample size behind EPAdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_off_rush_n` | Int64 | Sample size behind yardsdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_off_rush_n` | Int64 | Sample size behind playsdrive_off_rush: the number of drives it is computed over on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `playsgame_off_rush` | Float64 | Plays run per game on rush plays, with the team on offense. |
 | `EPAdrive_off_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on offense. |
 | `EPAgame_off_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on offense. |
@@ -3027,6 +3347,22 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on offense, where 1 is best. |
 | `line_yards_off_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on offense, where 1 is best. |
 | `opportunity_rate_off_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on offense, where 1 is best. |
+| `passrate_def_rush_n` | Int64 | Sample size behind passrate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `rushrate_def_rush_n` | Int64 | Sample size behind rushrate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `havoc_def_rush_n` | Int64 | Sample size behind havoc_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `explosive_def_rush_n` | Int64 | Sample size behind explosive_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAplay_def_rush_n` | Int64 | Sample size behind EPAplay_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsplay_def_rush_n` | Int64 | Sample size behind yardsplay_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `play_stuffed_def_rush_n` | Int64 | Sample size behind play_stuffed_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `success_def_rush_n` | Int64 | Sample size behind success_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `red_zone_success_def_rush_n` | Int64 | Sample size behind red_zone_success_def_rush: the number of red-zone plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_success_def_rush_n` | Int64 | Sample size behind third_down_success_def_rush: the number of third-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `third_down_distance_def_rush_n` | Int64 | Sample size behind third_down_distance_def_rush: the number of third-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `late_down_success_def_rush_n` | Int64 | Sample size behind late_down_success_def_rush: the number of third- and fourth-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `early_down_EPA_def_rush_n` | Int64 | Sample size behind early_down_EPA_def_rush: the number of early-down plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `nonExplosiveEpaPerPlay_def_rush_n` | Int64 | Sample size behind nonExplosiveEpaPerPlay_def_rush: the number of non-explosive plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `line_yards_def_rush_n` | Int64 | Sample size behind line_yards_def_rush: the number of rushes it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `opportunity_rate_def_rush_n` | Int64 | Sample size behind opportunity_rate_def_rush: the number of plays it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `plays_def_rush` | UInt32 | Plays run on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `passrate_def_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `rushrate_def_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -3046,6 +3382,13 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `nonExplosiveEpaPerPlay_def_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `line_yards_def_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `opportunity_rate_def_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush_n` | Int64 | Sample size behind playsgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAgame_def_rush_n` | Int64 | Sample size behind EPAgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsgame_def_rush_n` | Int64 | Sample size behind yardsgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `drivesgame_def_rush_n` | Int64 | Sample size behind drivesgame_def_rush: the number of games it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `EPAdrive_def_rush_n` | Int64 | Sample size behind EPAdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `yardsdrive_def_rush_n` | Int64 | Sample size behind yardsdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
+| `playsdrive_def_rush_n` | Int64 | Sample size behind playsdrive_def_rush: the number of drives it is computed over on rush plays, with the team on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0. |
 | `playsgame_def_rush` | Float64 | Plays run per game on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAdrive_def_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on defense (i.e. allowed to opponents). |
 | `EPAgame_def_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on defense (i.e. allowed to opponents). |
@@ -3109,7 +3452,9 @@ load_cfb_team_summaries_weekly(seasons=2024)
 
 ## `load_cfb_usage_players`
 
-Release: [espn_cfb_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet`
+
+:::caution Coverage
 position_group is null for seasons whose play-by-play carried no participant positions.
 :::
 
@@ -3169,7 +3514,9 @@ load_cfb_usage_players(seasons=2024)
 
 ## `load_cfb_usage_position_groups`
 
-Release: [espn_cfb_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants: rows exist only for seasons whose play-by-play carried player positions.
 :::
 
@@ -3227,7 +3574,9 @@ load_cfb_usage_position_groups(seasons=2024)
 
 ## `load_cfb_usage_tackles`
 
-Release: [espn_cfb_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants (tackler / assist ids); a season without them has no rows, and position_group is null when no participant carried a position.
 :::
 
@@ -3254,7 +3603,9 @@ load_cfb_usage_tackles(seasons=2024)
 
 ## `load_cfb_usage_position_group_tackles`
 
-Release: [espn_cfb_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`
+
+:::caution Coverage
 Needs ESPN play participants with player positions; a season without them has no rows.
 :::
 
@@ -3828,7 +4179,9 @@ load_cfb_team_tendencies(seasons=2024)
 
 ## `load_cfb_coach_tendencies`
 
-Release: [espn_cfb_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet`:::caution Coverage
+Release: [espn_cfb_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet`
+
+:::caution Coverage
 One row per (season, team, head coach). The coach comes from the producer's vendored CFBD coach roster (team-season attribution), so role is always "HC".
 :::
 
@@ -4109,7 +4462,9 @@ load_cfb_coach_tendencies(seasons=2024)
 
 ## `load_cfb_coach_careers`
 
-Release: [espn_cfb_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet`:::caution Coverage
+Release: [espn_cfb_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet`
+
+:::caution Coverage
 One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag.
 :::
 
@@ -5029,14 +5384,19 @@ load_ncaa_mfb_rosters(seasons=2024)
 ## `load_ncaa_mfb_teams`
 
 Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet`
+
+:::caution Coverage
+No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release).
+:::
+
 ### Returns
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | String | ESPN team id. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `team_id` | String | stats.ncaa.org team id. It is issued per season, so a school's id changes from year to year; it is not an ESPN id. |
+| `team_name` | String | School name as stats.ncaa.org lists it, without the mascot. |
 | `academic_year` | Int32 | Academic year the team record covers (the ENDING year of the fall/spring split) -- distinct from `season`, which is the STARTING year. |
-| `division` | Int32 | Division in the conference for the team. |
+| `division` | Int32 | stats.ncaa.org division code, 11 = FBS and 12 = FCS; not a conference division (the table has no conference column). |
 | `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
@@ -5051,7 +5411,7 @@ Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdatavers
 | col_name | type | description |
 |---|---|---|
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `category` | String | stats.ncaa.org box-score section the stat belongs to (Passing, Rushing, First Downs, Total Offense, Kicking, Punt Returns, Kickoffs and KO Returns, Sacks, Passes Defended); not a CFBD category. |
 | `stat` | String | Stat. |
 | `period` | String | Period (quarter) number. |
 | `away_team` | String | Away team name. |
@@ -5165,4 +5525,106 @@ Release: [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse
 
 ```python
 load_ncaa_mfb_linescore(seasons=2024)
+```
+
+## `load_cfb_groups`
+
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet`
+
+:::caution Coverage
+One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. cfb:big-ten) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the fall 2025 season).
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("cfb"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `first_season` | Int32 | First season in which the group had at least one member (STARTING year: 2025 = the fall 2025 season). |
+| `last_season` | Int32 | Last season in which the group had at least one member (STARTING year: 2025 = the fall 2025 season). |
+| `notes` | String | Builder notes on the group: the lineage decisions behind its group_id and any source caveats. |
+
+```python
+load_cfb_groups()
+```
+
+## `load_cfb_group_seasons`
+
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet`
+
+:::caution Coverage
+One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the fall 2025 season).
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("cfb"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `season` | Int32 | Season the row describes (STARTING year: 2025 = the fall 2025 season). |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `name` | String | Full name of the group as of that season -- the label in use then, not today's name. |
+| `short_name` | String | Short display name of the group as of that season. |
+| `abbreviation` | String | Abbreviation of the group as of that season. |
+| `parent_group_id` | String | group_id one level up as of that season (division -> conference -> subdivision -> league); null at the top level or where no higher group applied that season. |
+| `n_teams` | Int32 | Number of member teams in the group that season. |
+
+```python
+load_cfb_group_seasons()
+```
+
+## `load_cfb_group_aliases`
+
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet`
+
+:::caution Coverage
+One season-less file: every name, abbreviation, slug and source id that a source (cfbd, espn, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("cfb"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `source` | String | Source that uses this label or id (in this table: cfbd, espn, sdv); "sdv" marks SDV's own labels. |
+| `source_id` | String | The source's own id for the group (ESPN group id, NCAA conf_id, CFBD id, MLB division id) when it has one; null otherwise. |
+| `name_kind` | String | Kind of label in value: "name", "short_name", "abbreviation", "slug" or "code". |
+| `value` | String | The label exactly as the source writes it; match a source's conference or division label against it to reach group_id. |
+| `valid_from` | Int32 | First season the alias is valid for, inclusive (STARTING year: 2025 = the fall 2025 season); null = unbounded. |
+| `valid_to` | Int32 | Last season the alias is valid for, inclusive (STARTING year: 2025 = the fall 2025 season); null = unbounded (still in use). |
+
+```python
+load_cfb_group_aliases()
+```
+
+## `load_cfb_team_group_seasons`
+
+Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet`
+
+:::caution Coverage
+One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the CFBD id; team_id_source names the id space. season is the STARTING year (2025 = the fall 2025 season); seasons 1869-2026. No 1871 asset.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("cfb"); the prefix of every group_id in it. |
+| `season` | Int32 | Season of the membership (STARTING year: 2025 = the fall 2025 season). |
+| `team_id` | String | Team id as a string: the ESPN team id where ESPN covers the team, otherwise the league's own id; team_id_source says which. |
+| `team_id_source` | String | Id space of team_id (in this table: cfbd, espn). |
+| `team_name` | String | Team name as of that season, not today's. |
+| `subdivision_id` | String | SDV group_id of the team's subdivision that season (e.g. FBS / FCS, Division I); null where the league has no subdivision level. |
+| `conference_id` | String | SDV group_id of the team's conference that season; null where the team had no conference (an independent, or a season played without conferences). |
+| `division_id` | String | SDV group_id of the team's division that season; null where the level does not apply. |
+| `source` | String | Source the membership was taken from -- the most reliable per-season source for that era. |
+| `sources_agree` | Boolean | Whether a second source agreed on the membership; null when only one source covers the season. |
+| `notes` | String | Builder notes on the team-season, such as a source disagreement or which of several listed memberships was kept. |
+
+```python
+load_cfb_team_group_seasons(seasons=2024)
 ```

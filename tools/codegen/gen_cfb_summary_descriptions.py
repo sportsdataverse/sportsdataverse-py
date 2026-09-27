@@ -2,7 +2,7 @@
 
 The schema is a combinatorial grid, not 378 independent concepts:
 
-    {base}_{off|def|margin}[_{pass|rush}][_rank]
+    {base}_{off|def|margin}[_{pass|rush}][_rank|_n]
 
 Every base metric below is transcribed from the PRODUCER
 (cfbfastR-cfb-data/python/cfb_data_build/team_summaries.py::_summarize_team), so
@@ -53,7 +53,7 @@ BASES: dict[str, str] = {
     "explosive": "explosive-play rate -- the share of plays carrying the explosive flag",
     "play_stuffed": "stuffed-play rate -- the share of plays carrying the stuffed flag",
     "line_yards": "average line yards credited to the offensive line on rushes",
-    "opportunity_rate": "opportunity rate -- the share of rushes carrying the opportunity flag",
+    "opportunity_rate": "opportunity rate -- opportunity-flagged rushes as a share of all plays",
     "start_position": "average drive start position, measured in yards from the opponent goal line",
 }
 
@@ -63,12 +63,57 @@ SIDE = {
 }
 PHASE = {"pass": " on pass plays", "rush": " on rush plays"}
 
-_RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<rank>_rank)?$")
+# Bases whose meaning changes by phase split. opportunity_run is
+# (rush == 1) & (yds_rushed >= 4) and False -- not null -- on every other play,
+# so the producer's mean runs over ALL plays in the split, not over rushes.
+PHASE_NOUNS: dict[tuple[str, str | None], str] = {
+    ("opportunity_rate", "pass"): "opportunity rate (always 0: only rushes carry the opportunity flag)",
+    ("opportunity_rate", "rush"): "opportunity rate -- the share of rushes carrying the opportunity flag",
+}
+
+_RE = re.compile(r"^(?P<base>.+?)_(?P<side>off|def|margin)(?:_(?P<phase>pass|rush))?(?P<suffix>_rank|_n)?$")
+
+#: what a team-grid ``_n`` counts -- transcribed from cfbfastR-cfb-data
+#: team_summaries.py _TEAM_MEAN_SOURCES / _TEAM_RATIO_DENOMINATORS. It is the
+#: split's row count (or n_games/n_drives), computed inside the SAME
+#: group_by(team-side[, phase]) as the metric itself -- a team with zero rows
+#: in that split has no aggregate row at all, so every column including this
+#: one comes back null after the join to the full team roster (see the
+#: null-semantics sentence composed below).
+N_OF: dict[str, str] = {
+    "passrate": "plays",
+    "rushrate": "plays",
+    "havoc": "plays",
+    "explosive": "plays",
+    "EPAplay": "plays",
+    "yardsplay": "plays",
+    "play_stuffed": "plays",
+    "success": "plays",
+    "opportunity_rate": "plays",
+    "red_zone_success": "red-zone plays",
+    "third_down_success": "third-down plays",
+    "third_down_distance": "third-down plays",
+    "late_down_success": "third- and fourth-down plays",
+    "early_down_EPA": "early-down plays",
+    "start_position": "plays with a known drive start",
+    "nonExplosiveEpaPerPlay": "non-explosive plays",
+    "line_yards": "rushes",
+    "playsgame": "games",
+    "EPAgame": "games",
+    "yardsgame": "games",
+    "drivesgame": "games",
+    "EPAdrive": "drives",
+    "yardsdrive": "drives",
+    "playsdrive": "drives",
+}
 
 # Columns outside the {base}_{side} grid. Each is transcribed from its producer:
 #   adj_*/net/strength/valid_games -> sportsdataverse/cfb/cfb_adjusted_epa.py
 #   available/total_*_yards        -> team_summaries.py (drive aggregation)
 #   fbs_class                      -> team_summaries.py::prepare_for_write
+#   pts_per_opp_*                  -> team_summaries.py::_drives / _drive_owners
+#   turnovers_* / turnover_margin  -> team_summaries.py::_summarize_team, summaries_input.game_giveaways
+# explosive_margin(_rank) parses on the grid below (explosive_off - explosive_def).
 _ADJ = (
     "opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense "
     "team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across "
@@ -129,6 +174,49 @@ EXTRA: dict[str, str] = {
     "available_yards_pct_margin_rank": "National rank of available_yards_pct_margin, 1 = largest margin.",
 }
 
+# Five Factors (cfbfastR-cfb-data#103). Whole-team only: no _pass/_rush split.
+_PPO = (
+    "Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside "
+    "the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive "
+    "result, 7 for a touchdown, 3 for a field goal and 0 otherwise"
+)
+_TOV = (
+    "interceptions and lost fumbles on every play, special teams included (a muffed punt counts against "
+    "the return team)"
+)
+for _s, _who, _null, _best in (
+    ("off", "the team's own drives", "the team had", "most points per opportunity"),
+    ("def", "opponents' drives against the team's defense", "opponents had", "fewest points allowed per opportunity"),
+):
+    EXTRA |= {
+        f"pts_per_opp_{_s}": f"{_PPO}. Counted on {_who}. Null when {_null} no scoring opportunity.",
+        f"pts_per_opp_{_s}_rank": (
+            f"National rank of pts_per_opp_{_s}, where 1 is best ({_best}). "
+            f"Null when pts_per_opp_{_s} is null: unranked, not last."
+        ),
+        f"pts_per_opp_{_s}_n": (
+            f"Sample size behind pts_per_opp_{_s}: the number of scoring opportunities on {_who}. "
+            f"0 when there were none, and pts_per_opp_{_s} is then null."
+        ),
+        f"turnovers_{_s}_n": f"Sample size behind turnovers_{_s}: the number of games it is computed over.",
+    }
+EXTRA |= {
+    "pts_per_opp_margin": "pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better.",
+    "pts_per_opp_margin_rank": (
+        "National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: "
+        "unranked, not last."
+    ),
+    "turnovers_off": f"Giveaways per game: {_TOV}. Lower is better.",
+    "turnovers_def": "Takeaways per game: the opponents' giveaways, counted the same way. Higher is better.",
+    "turnovers_off_rank": "National rank of turnovers_off, where 1 is best (fewest giveaways per game).",
+    "turnovers_def_rank": "National rank of turnovers_def, where 1 is best (most takeaways per game).",
+    "turnover_margin": (
+        "Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is "
+        "better. Spelled singular; there is no turnovers_margin column."
+    ),
+    "turnover_margin_rank": "National rank of turnover_margin, 1 = largest margin.",
+}
+
 
 def _sentence_case(s: str) -> str:
     """Upper-case the first letter WITHOUT touching the rest.
@@ -145,10 +233,23 @@ def describe(col: str) -> str | None:
     m = _RE.match(col)
     if not m:
         return None
-    base, side, phase, rank = m["base"], m["side"], m["phase"], m["rank"]
+    base, side, phase, suffix = m["base"], m["side"], m["phase"], m["suffix"]
     if base not in BASES:
         return None
-    noun, ph = BASES[base], PHASE.get(phase or "", "")
+    noun, ph = PHASE_NOUNS.get((base, phase), BASES[base]), PHASE.get(phase or "", "")
+    rank = suffix == "_rank"
+
+    if suffix == "_n":
+        if side == "margin" or base not in N_OF:
+            return None
+        # line_yards is null on every non-rush play, so its pass split has nothing to average
+        always_0 = (
+            " Always 0 here: line yards are credited only on rushes." if (base, phase) == ("line_yards", "pass") else ""
+        )
+        return (
+            f"Sample size behind {col[:-2]}: the number of {N_OF[base]} it is computed over{ph}, {SIDE[side]}. "
+            f"Null when the team has no rows in that split; read it as 0.{always_0}"
+        )
 
     if side == "margin":
         if base == "start_position":

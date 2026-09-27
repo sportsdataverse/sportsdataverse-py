@@ -36,6 +36,12 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 
 * ``summary_400953391_trimmed.json.gz`` -- Army @ San Diego State, 2017 (a touchdown with a
   successful two-point conversion, followed by the SAME timeout row twice).
+* ``summary_401762835_trimmed.json.gz`` -- Toledo @ Bowling Green, 2025 (a one-row 14-21 on the
+  kickoff after BGSU's tying touchdown).
+* ``summary_401752684_trimmed.json.gz`` -- South Florida @ Florida, 2025 (ESPN books USF's safety
+  twice, on the safety and on the free kick, and takes the second two back at the next score).
+* ``summary_401752744_trimmed.json.gz`` -- Oklahoma @ South Carolina, 2025 (South Carolina concedes
+  a safety down 7-24 in the fourth).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``; the
 ``*_trimmed.json.gz`` ones keep only the keys the processor reads.
@@ -625,3 +631,58 @@ def test_timeout_after_a_score_does_not_inherit_the_realized_ep():
         .max()
         <= 7.0
     )
+
+
+# --- C29 follow-up: a repaired row anchors the next; points the feed takes back are not kept ------
+
+
+def _trimmed_plays(game_id: int) -> pl.DataFrame:
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    return proc.plays_frame.sort("game_play_number")
+
+
+def test_a_repaired_score_anchors_the_next_row():
+    # BGSU ties it 21-21 and ESPN shows 14-21 on the kickoff alone. The repair put the kickoff
+    # back at 21 but judged the next row against the feed's 14, so the glitch walked forward a
+    # row per pass and McMillian's go-ahead touchdown started from 14-21: WPA +0.54.
+    plays = _trimmed_plays(401762835)
+    tie = _row(plays, "RJ Garcia II pass complete to Cameron Pettaway for 73 yds")
+    go_ahead = _row(plays, "Chris McMillian run for 1 yd for a TD")
+    between = plays.filter(
+        pl.col("game_play_number").is_between(tie["game_play_number"], go_ahead["game_play_number"], closed="right")
+    )
+    assert between["start.homeScore"].to_list() == [21] * between.height
+    assert (go_ahead["start.homeScore"], go_ahead["end.homeScore"]) == (21, 28)
+    assert abs(go_ahead["wpa"]) < 0.3
+    assert (plays["end.homeScore"].diff().fill_null(0) >= 0).all()
+    assert (plays["end.awayScore"].diff().fill_null(0) >= 0).all()
+
+
+def test_points_the_feed_takes_back_are_not_kept():
+    # Florida's safety makes it 9-15. ESPN books the two points again on the free kick (9-17) and
+    # keeps them into the fourth quarter until Florida's touchdown, which it books 16-15: eleven
+    # rows had Florida down 8, not 6. The rise sat on a non-scoring row and the next row repeated
+    # it, so the repair kept it.
+    plays = _trimmed_plays(401752684)
+    safety = _row(plays, "Team Safety")
+    td = _row(plays, "Eugene Wilson III 4 Yd pass from DJ Lagway")
+    assert (safety["end.homeScore"], safety["end.awayScore"]) == (9, 15)
+    after = plays.filter(pl.col("game_play_number").is_between(safety["game_play_number"], td["game_play_number"]))
+    assert after["end.awayScore"].to_list()[:-1] == [15] * (after.height - 1)
+    assert (td["start.homeScore"], td["start.awayScore"], td["end.homeScore"], td["end.awayScore"]) == (9, 15, 16, 15)
+    assert (plays["end.awayScore"].diff().fill_null(0) >= 0).all()
+
+
+def test_a_safety_keeps_wp_after_with_the_conceding_team():
+    # wp_after is the start team's. On a safety the next row is the free kick, which the scorer
+    # receives, so its wp_before is flipped (#571). Before that the parquet published this
+    # safety, conceded by South Carolina down 7-24 at 4:22 of the fourth, as wp 0.002 -> 0.999.
+    plays = _trimmed_plays(401752744)
+    safety = _row(plays, "Matt Fuller run for a loss of 1 yard for a SAFETY")
+    assert safety["wp_before"] < 0.05
+    assert safety["wp_after"] < 0.05
+    assert abs(safety["wpa"]) < 0.05

@@ -9,8 +9,10 @@ a **season-keyed** crosswalk, which sdv-py bundles as CSV:
 - ``sportsdataverse/wbb/data/ncaa_espn_team_crosswalk_wbb.csv``
 
 Both are generated offline by ``tools/crosswalk/build_ncaa_espn_crosswalk.py``
-from three committed inputs -- the ESPN team reference tables, hoopR's
-cross-provider name dictionary, and a hand-curated alias table. The build is
+from four committed inputs -- the ESPN team reference tables, hoopR's
+cross-provider name dictionary, a hand-curated alias table, and the per-season
+conference membership captured from the ``{mbb,wbb}_groups`` sportsdataverse-data
+release (so every conference column follows realignment season by season). The build is
 deterministic: there is no fuzzy matching at runtime OR at build time, and a
 school that cannot be resolved is emitted with a null ``espn_team_id`` rather
 than dropped.
@@ -37,6 +39,7 @@ _SCHEMA: Dict[str, pl.DataType] = {
     "ncaa_team_id": pl.Int64,
     "ncaa_team": pl.Utf8,
     "ncaa_conference": pl.Utf8,
+    "conference_id": pl.Utf8,
     "espn_team_id": pl.Utf8,
     "espn_display_name": pl.Utf8,
     "espn_location": pl.Utf8,
@@ -65,12 +68,15 @@ def ncaa_espn_team_crosswalk(
     Returns:
         DataFrame with columns ``season`` (str, ``"YYYY-YY"``),
         ``ncaa_team_id`` (Int64 -- the season-specific stats.ncaa.org id),
-        ``ncaa_team`` / ``ncaa_conference`` (str), ``espn_team_id`` (str,
-        nullable -- ESPN ids are strings throughout sdv-py),
+        ``ncaa_team`` / ``ncaa_conference`` (str), ``conference_id`` (str,
+        nullable -- the SDV group id, e.g. ``"mbb:big-ten"``), ``espn_team_id``
+        (str, nullable -- ESPN ids are strings throughout sdv-py),
         ``espn_display_name`` / ``espn_location`` / ``espn_mascot`` /
         ``espn_abbreviation`` / ``espn_conference_name`` /
         ``espn_conference_id`` (str, nullable), and ``match_method`` (str --
-        ``"exact"``, ``"dict"``, ``"alias"`` or ``"unmatched"``).
+        ``"exact"``, ``"dict"``, ``"alias"`` or ``"unmatched"``). The three
+        conference columns and ``ncaa_conference`` are per season: Maryland is
+        ACC in 2013-14 and Big Ten in 2014-15.
 
     Raises:
         ValueError: If *league* is not ``"mbb"`` or ``"wbb"``.
