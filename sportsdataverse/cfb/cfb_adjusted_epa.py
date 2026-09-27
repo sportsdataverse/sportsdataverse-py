@@ -23,7 +23,8 @@ port of cfbfastR's ``adjust_epa`` / ``cfbfastR-cfb-data`` ``espn_cfb_15``.
 
 Required input columns (a cfbfastR-schema pbp frame): ``game_id``, ``pos_team``,
 ``pos_team_id``, ``def_pos_team_id``, ``home``, ``neutral_site``, ``EPA``,
-``pass``, ``rush``, ``wp_before_naive`` (plus ``week`` for the by-game variant).
+``pass``, ``rush``, ``wp_before_naive`` (plus ``week`` and ``seasonType`` for the
+by-game variant).
 
 Which plays fit the opponent strengths: ``0.05 <= wp_before_naive <= 0.95``, the
 score-and-clock win probability with no pregame spread. The spread-aware
@@ -95,22 +96,26 @@ __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 # adjusted EPA uses `_ADJ_EPA_LAMBDA` below.
 _RIDGE_LAMBDA = 0.035
 
-# Median fit-band (`_FIT_WP`) offensive pass/rush plays per FBS team in a full
-# FBS-vs-FBS season: 595.5 / 571 / 564 in 2019 / 2021 / 2022 (fixed from those
-# seasons; 2023-2025 were held out to evaluate the change). Anchors the penalty
-# to a full team season. Was 440 under the old 0.1 <= wp_before <= 0.9 band.
+# Fit-band (`_FIT_WP`) offensive pass/rush plays per FBS team in a full FBS-vs-FBS
+# season: the MEAN of the per-season medians 595.5 / 571 / 564 (2019 / 2021 / 2022)
+# is 576.8, rounded to 577. Anchors the penalty to a full team season. The old
+# 0.1 <= wp_before <= 0.9 band's 440 is the same statistic (431 / 450.5 / 438 ->
+# 439.8). Reproduce with tools/validation/cfb_adjusted_epa_eval.py.
 _TEAM_SEASON_PLAYS = 577.0
 
 # Adjusted-EPA penalty per play of a full team season: ~43 plays, so a team keeps
-# n / (n + 43) of its signal (~93% at a full season, ~2% at 1 play). Tuned on
-# 2019/2021/2022 only, for the owner's target that adjusted EPA/play ranks teams
-# at least as well as raw EPA/play from week 4 on (Spearman of the week-W order
-# against the season's final adjusted order). Every lambda in 0.035-0.3 met that
-# target on those seasons; 0.075 maximizes the worst week-4+ margin over raw
-# (+0.029) and sits within 0.003 of the best week-2-5 accuracy. Heavier shrinkage
-# moves full seasons further from the FPI-calibrated 0.035 (Spearman 0.984 vs the
-# published values on the train seasons), the trade the owner chose for early
-# weeks. Held-out 2023-2025 results are in sdv-py #598.
+# n / (n + 43) of its own signal (~93% at a full season, ~2% at 1 play). Owner's
+# choice, from a sweep on 2019/2021/2022. The sweep target is a CONSISTENCY check,
+# not accuracy: from week 4 on, the week-W adjusted order must agree with that
+# season's final ADJUSTED order at least as well as raw EPA/play does. That final
+# order is the method's own output, so the target is partly circular. Every lambda
+# in 0.025-0.3 met it on those seasons; 0.075 has the widest margin (+0.029).
+# Out of sample (week-W rating gap vs the rest of the season's per-game net EPA
+# margins, paired on the same games, game-clustered bootstrap) adjusted is NOT
+# better than raw EPA/play in weeks 3-6 of 2023-2025: worse in 2023 weeks 3-4,
+# a wash (95% CI spans 0) elsewhere; it clearly beats the pre-#598 method.
+# Heavier shrinkage moves full seasons further from the FPI-calibrated 0.035
+# (Spearman 0.984 vs the published values on the train seasons).
 _ADJ_EPA_LAMBDA = 0.075
 
 # Plays that fit the opponent strengths: naive (score + clock, no spread) win
@@ -134,7 +139,7 @@ _REQUIRED_COLUMNS = (
 _BY_GAME_REQUIRED = (*_REQUIRED_COLUMNS, "week")
 # `_REQUIRED_COLUMNS` / `_prepare` defaults stay on `wp_before` for `cfb_ratings`.
 _ADJ_REQUIRED = (*_REQUIRED_COLUMNS[:-1], _FIT_WP[0])
-_ADJ_BY_GAME_REQUIRED = (*_ADJ_REQUIRED, "week")
+_ADJ_BY_GAME_REQUIRED = (*_ADJ_REQUIRED, "week", "seasonType")
 
 _EMPTY_OFFENSE = pl.DataFrame(schema={"team_id": pl.Utf8, "adjmodelOff": pl.Float64})
 _EMPTY_DEFENSE = pl.DataFrame(schema={"team_id": pl.Utf8, "adjmodelDef": pl.Float64})
@@ -209,6 +214,11 @@ def _fit_team_strengths(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
 
     if ridge_lambda <= 0:
         raise ValueError(f"ridge_lambda must be > 0, got {ridge_lambda}")
+    if clean.height == 0:
+        raise ValueError(
+            f"cfb_adjusted_epa: no plays in the fit band ({_FIT_WP[1]} <= {_FIT_WP[0]} <= {_FIT_WP[2]}); "
+            f"is {_FIT_WP[0]} null or on another scale?"
+        )
     fit, intercept, _hfa = opponent_adjusted_ridge(
         clean.filter(pl.col("pos_team_id").is_not_null() & pl.col("def_pos_team_id").is_not_null()),
         off_col="pos_team_id",
@@ -300,11 +310,11 @@ def cfb_adjusted_epa(
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             columns listed in the module docstring. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
-            is shrunk toward the league average by ``n / (n + ridge_lambda *
-            577)`` for its ``n`` fit plays (~7% at a full season, most
-            of the way on a handful). Must be > 0. Default 0.075, tuned on
-            2019/2021/2022 so adjusted ranks teams at least as well as raw
-            EPA/play from week 4.
+            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
+            ``n`` fit plays and is shrunk toward the league average by the
+            rest (~7% at a full season, most of it on a handful of plays).
+            Must be > 0. Default 0.075, the owner's choice (see
+            ``_ADJ_EPA_LAMBDA``).
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -314,7 +324,8 @@ def cfb_adjusted_epa(
 
     Raises:
         KeyError: If ``plays`` is missing a required column.
-        ValueError: If ``ridge_lambda`` is not positive.
+        ValueError: If ``ridge_lambda`` is not positive, or no play falls in
+            the ``wp_before_naive`` fit band.
 
     Example:
         Quick start::
@@ -386,11 +397,11 @@ def cfb_adjusted_epa_by_game(
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             module-docstring columns **plus** ``week``. One season at a time.
         ridge_lambda: Ridge penalty per play of a full team season: each team
-            is shrunk toward the league average by ``n / (n + ridge_lambda *
-            577)`` for its ``n`` fit plays (~7% at a full season, most
-            of the way on a handful). Must be > 0. Default 0.075, tuned on
-            2019/2021/2022 so adjusted ranks teams at least as well as raw
-            EPA/play from week 4.
+            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
+            ``n`` fit plays and is shrunk toward the league average by the
+            rest (~7% at a full season, most of it on a handful of plays).
+            Must be > 0. Default 0.075, the owner's choice (see
+            ``_ADJ_EPA_LAMBDA``).
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -402,8 +413,10 @@ def cfb_adjusted_epa_by_game(
         null for week 1 (and any week with no prior fit).
 
     Raises:
-        KeyError: If ``plays`` is missing a required column (incl. ``week``).
-        ValueError: If ``ridge_lambda`` is not positive.
+        KeyError: If ``plays`` is missing a required column (incl. ``week``
+            and ``seasonType``).
+        ValueError: If ``ridge_lambda`` is not positive, or no play falls in
+            the ``wp_before_naive`` fit band.
 
     Example:
         Quick start::
@@ -419,16 +432,20 @@ def cfb_adjusted_epa_by_game(
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     base, clean = _prepare(plays, _ADJ_BY_GAME_REQUIRED, _FIT_WP)
-    weeks = sorted(base.filter(pl.col("week").is_not_null())["week"].unique().to_list())
+    # Bowls restart at week 1 with seasonType 3: order the postseason after every
+    # regular-season week, or each week-w fit sees bowl games played months later.
+    order = pl.col("week") + pl.when(pl.col("seasonType") == 3).then(100).otherwise(0)
+    base, clean = base.with_columns(_order=order), clean.with_columns(_order=order)
+    weeks = sorted(base.filter(pl.col("_order").is_not_null())["_order"].unique().to_list())
 
     parts: list[pl.DataFrame] = []
     for week in weeks:
-        prior = clean.filter(pl.col("week") < week)
+        prior = clean.filter(pl.col("_order") < week)
         if prior.height > 0 and prior["pos_team_id"].n_unique() >= 2 and prior["def_pos_team_id"].n_unique() >= 2:
             offense, defense, intercept = _fit_team_strengths(prior, ridge_lambda)
         else:
             offense, defense, intercept = _EMPTY_OFFENSE, _EMPTY_DEFENSE, None
-        wk = base.filter(pl.col("week") == week)
+        wk = base.filter(pl.col("_order") == week)
         parts.append(_adjust_games(wk, offense, defense, fill_strength=intercept))
 
     if parts:

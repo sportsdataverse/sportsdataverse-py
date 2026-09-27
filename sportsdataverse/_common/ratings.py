@@ -179,6 +179,11 @@ def opponent_adjusted_ridge(
     R[2 * n_t, 2 * n_t] = 0.0  # don't penalise intercept
     if not penalize_home:
         R[2 * n_t + 1, 2 * n_t + 1] = 0.0  # don't penalise HFA
+    if np.ptp(X[:, 2 * n_t + 1]) == 0:
+        # No home/away contrast (e.g. every game at a neutral site): the term is not
+        # identified and an unpenalised zero column makes X'X singular. Fit it at 0.
+        X[:, 2 * n_t + 1] = 0.0
+        R[2 * n_t + 1, 2 * n_t + 1] = 1.0
     beta = np.linalg.solve(X.T @ X + lam * R, X.T @ y)
     frame = pl.DataFrame(
         {

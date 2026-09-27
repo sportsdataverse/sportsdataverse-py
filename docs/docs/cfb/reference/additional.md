@@ -1535,7 +1535,7 @@ fit uses the whole season); for leak-free per-game values use
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team is shrunk toward the league average by `n / (n + ridge_lambda * 577)` for its `n` fit plays (~7% at a full season, most of the way on a handful). Must be > 0. Default 0.075, tuned on 2019/2021/2022 so adjusted ranks teams at least as well as raw EPA/play from week 4. |
+| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays). Must be > 0. Default 0.075, the owner's choice (see ADJ_EPA_LAMBDA`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
@@ -1566,7 +1566,7 @@ average team), and teams seen on few plays are shrunk most of the way there.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team is shrunk toward the league average by `n / (n + ridge_lambda * 577)` for its `n` fit plays (~7% at a full season, most of the way on a handful). Must be > 0. Default 0.075, tuned on 2019/2021/2022 so adjusted ranks teams at least as well as raw EPA/play from week 4. |
+| `ridge_lambda` | `float` | `0.075` | Ridge penalty per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays). Must be > 0. Default 0.075, the owner's choice (see ADJ_EPA_LAMBDA`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**

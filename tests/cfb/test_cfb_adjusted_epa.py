@@ -62,6 +62,7 @@ def _synthetic_pbp() -> pl.DataFrame:
                             "rush": 0,
                             "wp_before": 0.5,
                             "wp_before_naive": 0.5,
+                            "seasonType": 2,
                         }
                     )
     return pl.DataFrame(rows)
@@ -219,3 +220,54 @@ def test_strength_fit_reads_naive_wp_not_the_spread_aware_one() -> None:
     assert cfb_adjusted_epa(plays.drop("wp_before")).height > 100
     with pytest.raises(KeyError, match="wp_before_naive"):
         cfb_adjusted_epa(plays.drop("wp_before_naive"))
+
+
+def test_real_2026_golden_net_values() -> None:
+    # Pins the shipped fit end to end (band, penalty, 577-play anchor, no reference
+    # level): each of those reverted alone moves these values (see #598).
+    out = cfb_adjusted_epa(_plays_2026()).filter(pl.col("team_id").is_in(["103", "254", "328"])).sort("team_id")
+    assert out["team_id"].to_list() == ["103", "254", "328"]  # Boston College, Utah, Utah State
+    assert out["net_adj_epa"].to_list() == pytest.approx(
+        [-0.008144991395416745, 0.4916917971781684, -0.18059490002011247], abs=1e-6
+    )
+
+
+def test_fit_band_keeps_at_least_70_percent_of_plays() -> None:
+    # Owner rule for the fit band. It is a FULL-SEASON property (70-74% in 2014-2026);
+    # this 2026 weeks 1-4 fixture sits at 70.04%, and through-week snapshots can dip
+    # to ~64% (2026 week 1), which is why it is not a runtime error.
+    from sportsdataverse.cfb.cfb_adjusted_epa import _ADJ_REQUIRED, _FIT_WP, _prepare
+
+    base, clean = _prepare(_plays_2026(), _ADJ_REQUIRED, _FIT_WP)
+    assert clean.height / base.height >= 0.70
+
+
+def test_empty_fit_band_raises_instead_of_returning_no_rows() -> None:
+    plays = _plays_2026().with_columns(wp_before_naive=pl.lit(None, dtype=pl.Float64))
+    with pytest.raises(ValueError, match="no plays"):
+        cfb_adjusted_epa(plays)
+
+
+def test_all_neutral_site_frame_fits_without_a_home_term() -> None:
+    out = cfb_adjusted_epa(_synthetic_pbp().with_columns(neutral_site=pl.lit(True)))
+    assert out.height == 4
+    assert out["net_adj_epa"].is_finite().all()
+
+
+def test_by_game_keeps_postseason_out_of_regular_season_fits() -> None:
+    # Bowls restart at week 1 with seasonType 3. A walk-forward fit for week w must
+    # not see them: they are played after every regular-season week.
+    reg = _synthetic_pbp()
+    bowl = reg.filter(pl.col("game_id") == 1).with_columns(
+        game_id=pl.lit(999, dtype=pl.Int64),
+        week=pl.lit(1, dtype=pl.Int64),
+        seasonType=pl.lit(3, dtype=pl.Int64),
+        EPA=pl.col("EPA") + 5.0,
+    )
+    with_bowl = cfb_adjusted_epa_by_game(pl.concat([reg, bowl]))
+    without = cfb_adjusted_epa_by_game(reg)
+    key = ["game_id", "team_id"]
+    got = with_bowl.filter(pl.col("game_id") != "999").sort(key)
+    assert got["adj_off_epa"].to_list() == pytest.approx(without.sort(key)["adj_off_epa"].to_list(), nan_ok=True)
+    # ...and the bowl itself is adjusted with every regular-season week behind it.
+    assert with_bowl.filter(pl.col("game_id") == "999")["adj_off_epa"].is_not_null().all()
