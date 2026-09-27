@@ -5,7 +5,7 @@ from typing import List
 import polars as pl
 from tqdm import tqdm
 
-from sportsdataverse._codegen_runtime import _fetch_release_parquet
+from sportsdataverse._codegen_runtime import _as_season_list, _fetch_release_parquet
 from sportsdataverse._deprecation import warn_deprecated as _warn_deprecated
 from sportsdataverse.config import (
     NFL_BASE_URL,
@@ -3169,12 +3169,10 @@ def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = Fal
             * :func:`load_nfl_group_seasons` -- the groups' names as of each season
             * :func:`load_nfl_teams` -- nflverse team metadata
     """
-    if isinstance(seasons, int):
-        seasons = [seasons]
     frames: list[pl.DataFrame] = []
-    for i in seasons:
-        season_not_found_error(int(i), _NFL_GROUPS_FLOOR)
-        frames.append(_fetch_release_parquet(NFL_TEAM_GROUP_SEASONS_URL.format(season=int(i))))
+    for i in _as_season_list(seasons):
+        season_not_found_error(i, _NFL_GROUPS_FLOOR)
+        frames.append(_fetch_release_parquet(NFL_TEAM_GROUP_SEASONS_URL.format(season=i)))
     if not frames:
         data = pl.DataFrame()
     elif len(frames) == 1:

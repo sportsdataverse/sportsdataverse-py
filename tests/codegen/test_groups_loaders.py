@@ -103,3 +103,17 @@ def test_nfl_missing_season_raises_and_urls_match_config(monkeypatch):
     monkeypatch.setattr(mod, "_fetch_release_parquet", missing)
     with pytest.raises(NoDataError):
         mod.load_nfl_team_group_seasons(seasons=2024)
+
+
+def test_nfl_team_group_seasons_takes_a_string_season(monkeypatch):
+    from sportsdataverse.nfl import nfl_loaders as mod
+
+    seen = []
+
+    def fetch(url):
+        seen.append(url)
+        return pl.DataFrame({"season": [2024]})
+
+    monkeypatch.setattr(mod, "_fetch_release_parquet", fetch)
+    assert mod.load_nfl_team_group_seasons(seasons="2024").height == 1
+    assert seen == [mod.NFL_TEAM_GROUP_SEASONS_URL.format(season=2024)]
