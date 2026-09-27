@@ -28,13 +28,14 @@ _SCHEMAS = _ROOT / "tools" / "codegen" / "schemas" / "loader_schemas.yaml"
 
 # fn -> the season the schema was introspected from (a season each tag actually
 # publishes, so the live check reads a real asset rather than a 404).
+# The four summary tags pin 2025: published 2023 predates the _n sample-size columns.
 _DATASET_LOADERS = {
     "load_cfb_model_pbp": 2023,
-    "load_cfb_passing": 2023,
+    "load_cfb_passing": 2025,
     "load_cfb_percentiles": 2023,
-    "load_cfb_receiving": 2023,
-    "load_cfb_rushing": 2023,
-    "load_cfb_team_summaries": 2023,
+    "load_cfb_receiving": 2025,
+    "load_cfb_rushing": 2025,
+    "load_cfb_team_summaries": 2025,
 }
 
 
