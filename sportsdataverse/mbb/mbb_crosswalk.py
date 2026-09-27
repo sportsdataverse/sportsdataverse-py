@@ -18,6 +18,7 @@ Public surface:
 from __future__ import annotations
 
 import io
+import logging
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
@@ -35,10 +36,15 @@ from sportsdataverse._common_crosswalk_basketball import (
 from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
+    drop_unconfirmed_fox_sections,
     espn_team_directory,
+    fox_season_teams,
     require_source,
+    torvik_teams,
 )
 from sportsdataverse.mbb.mbb_ncaa_team_ids import _league_data_bytes
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "mbb_team_crosswalk",
@@ -250,25 +256,28 @@ _KP_TEAMS_CACHE: Dict[str, pl.DataFrame] = {}
 def _kenpom_teams(season: int) -> pl.DataFrame:
     """Bundled KenPom ``Team`` / ``Conf`` directory rows for *season*.
 
-    Port of the R builder's ``hoopR::teams_links`` lookup: filter to
-    ``Year == season``, falling back to the newest bundled year when the
-    requested season is outside the captured range (``mbb_crosswalk.R:349-354``).
+    Port of the R builder's ``hoopR::teams_links`` lookup, minus its fallback:
+    R substitutes the newest bundled year when *season* is outside the captured
+    range (``mbb_crosswalk.R:349-354``), which stamps another season's
+    conferences on this one. A season the bundle does not carry yields no rows,
+    so the crosswalk's ``kp_*`` columns stay null for it.
 
     Args:
         season: Season year (e.g. ``2026``).
 
     Returns:
-        ``pl.DataFrame`` with ``Team`` / ``Conf`` (both ``Utf8``).
+        ``pl.DataFrame`` with ``Team`` / ``Conf`` (both ``Utf8``); zero rows when
+        the bundle has no *season*.
     """
     if "all" not in _KP_TEAMS_CACHE:
         _KP_TEAMS_CACHE["all"] = pl.read_csv(
             io.BytesIO(_league_data_bytes("mbb", "kp_team_info.csv")),
             schema_overrides={"Team": pl.Utf8, "Conf": pl.Utf8, "Year": pl.Int32},
         )
-    kp = _KP_TEAMS_CACHE["all"]
-    years = kp["Year"].unique().to_list()
-    year = season if season in years else max(years)
-    return kp.filter(pl.col("Year") == year).select("Team", "Conf")
+    out = _KP_TEAMS_CACHE["all"].filter(pl.col("Year") == season).select("Team", "Conf")
+    if out.height == 0:
+        logger.warning("bundled KenPom directory has no season %s; kp_* columns stay null", season)
+    return out
 
 
 def _assemble_team_crosswalk(
@@ -499,26 +508,24 @@ def mbb_team_crosswalk(
     Args:
         season: Season year (e.g. ``2026``). Defaults to the most recent MBB
             season.
-        fox: Pre-fetched ``fox_mbb_teams_all()``-shaped frame. ``None`` fetches
-            live; pass an empty frame to skip Fox.
-        bart: Pre-fetched ``torvik_ratings()`` frame. ``None`` fetches live.
+        fox: Pre-fetched frame with ``fox_team_id`` / ``fox_team_name`` /
+            ``fox_section``. ``None`` fetches *season*'s conference standings
+            live (:func:`~sportsdataverse._crosswalk_basketball_sources.fox_season_teams`);
+            Fox has none before 2017-18, so earlier seasons get null ``fox_*``.
+            Pass an empty frame to skip Fox.
+        bart: Pre-fetched ``torvik_ratings()`` frame. ``None`` fetches live;
+            Torvik starts in 2008, so earlier seasons get null ``bart_*``.
         kenpom: KenPom teams frame with ``Team`` / ``Conf``. ``None`` (the
             default) uses the KenPom team/conference directory bundled with
             sdv-py (hoopR's ``teams_links``, seasons 2002-2026), filtered to
-            *season* when *season* is inside that bundled range. A season
-            outside it -- 1999 or 2030, say -- falls back to the newest
-            bundled season (2026) instead of returning no rows, mirroring
-            the R builder's ``max(kp_yrs)``, so for such a request the
-            ``kp_*`` columns carry the newest bundled season's team and
-            conference labels rather than *season*'s. Pass an empty frame to
-            skip KenPom and get null ``kp_*`` columns. No KenPom subscription
-            or credential is involved: the bundled data is the public
-            directory, not ratings.
+            *season*. A season the bundle does not carry gets null ``kp_*``
+            columns -- never another season's labels. Pass an empty frame to
+            skip KenPom. No KenPom subscription or credential is involved: the
+            bundled data is the public directory, not ratings.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-conference ESPN group fetch (a 404 is still
-            skipped) instead of skipping isolated failures. Default ``False`` matches the R
-            producers; a provider whose every item failed raises either way. An item
-            the host *answered* -- including a 404 -- counts as answered.
+        strict: Accepted for parity with the schedule and player crosswalks,
+            which forward it; the team build has no per-item fetch loop to
+            relax, so every source failure raises.
         **kwargs: Forwarded to the underlying HTTP calls.
 
     Returns:
@@ -526,31 +533,24 @@ def mbb_team_crosswalk(
         :data:`TEAM_COLUMNS`.
 
     Note:
-        sdv-py's ``espn_mbb_teams()`` ships no conference labels, so
-        ``espn_conference`` is reconstructed from ESPN's Core v2 season group
-        tree (see
-        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`),
-        the same walk the R producer does. There is no ``espn`` parameter --
-        the directory is always fetched here; when the upstream ESPN response
-        does carry ``conference_name``,
-        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_team_directory`
-        preserves it and the group walk is skipped.
+        Every source is read AS OF *season*. ``espn_conference`` is the
+        conference the team was in that season under that season's name, from
+        the SDV reference release (``mbb_groups``; see
+        :func:`~sportsdataverse._crosswalk_basketball_sources.sdv_conference_map`).
+        The ESPN team list itself is today's, so a team that was not in a
+        Division I conference that season has a null ``espn_conference``.
+        ``fox_section`` is that season's Fox conference, nulled where Fox lists
+        the team under a conference it had not joined yet (see
+        :func:`~sportsdataverse._crosswalk_basketball_sources.drop_unconfirmed_fox_sections`).
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could
-            not be produced (Fox or Torvik). Building on a missing source would
-            emit a well-formed crosswalk whose ``fox_*`` / ``bart_*`` columns
-            are silently all-null, so it fails here instead. Pass an explicit
-            empty frame (``fox=pl.DataFrame()``) to opt a source out. Also
-            raised, and propagated from
-            :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`,
-            when the ESPN conference walk resolves no teams at all -- the ESPN
-            directory is not opt-out-able.
-
-        CrosswalkSourceError: The ESPN conference group walk failed every
-            per-item fetch and answered none -- the signature of an unreachable
-            or rate-limited host -- or, with ``strict``, any one fetch failed.
-            Isolated failures are skipped and logged as a warning.
+            not be produced: Fox or Torvik failed, or returned no teams for a
+            season they cover, or the conference reference for *season* could
+            not be read. Building on a missing source would emit a well-formed
+            crosswalk whose columns are silently all-null, so it fails here
+            instead. Pass an explicit empty frame (``fox=pl.DataFrame()``) to
+            opt Fox, Torvik or KenPom out.
 
     Example:
         Quick start::
@@ -559,7 +559,7 @@ def mbb_team_crosswalk(
             df = mbb_team_crosswalk(season=2026)
             print(df.shape)
 
-        Skip the slow Fox enumeration::
+        Skip Fox::
 
             import polars as pl
             df = mbb_team_crosswalk(season=2026, fox=pl.DataFrame())
@@ -578,28 +578,18 @@ def mbb_team_crosswalk(
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
 
     season = int(season) if season is not None else most_recent_mbb_season()
-    espn = espn_team_directory("mbb", season=season, strict=strict, **kwargs)
+    espn = espn_team_directory("mbb", season=season, **kwargs)
     if fox is None:
-
-        def _fox() -> Any:
-            from sportsdataverse.mbb.mbb_fox_ext import fox_mbb_teams_all
-
-            return fox_mbb_teams_all(**kwargs)
-
-        fox = require_source("fox_mbb_teams_all()", _fox)
+        fox = require_source(f"fox_season_teams('mbb', {season})", lambda: fox_season_teams("mbb", season, **kwargs))
     if bart is None:
-        # The provider import lives inside the callable so a missing/broken
-        # torvik module surfaces as CrosswalkSourceError, and so a caller who
-        # supplied `bart` never pays for (or trips over) the import at all.
-        def _bart() -> Any:
-            from sportsdataverse.mbb.torvik import torvik_ratings
-
-            return torvik_ratings(year=season, **kwargs)
-
-        bart = require_source(f"torvik_ratings(year={season})", _bart)
+        # torvik_teams imports the provider itself, so a missing/broken torvik
+        # module surfaces as CrosswalkSourceError, and a caller who supplied
+        # `bart` never pays for (or trips over) the import at all.
+        bart = require_source(f"torvik_ratings(year={season})", lambda: torvik_teams("mbb", season, **kwargs))
     if kenpom is None:
         kenpom = _kenpom_teams(season)
     out = _assemble_team_crosswalk(espn, fox, bart, kenpom, season)
+    out = drop_unconfirmed_fox_sections(out)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -623,8 +613,7 @@ def mbb_schedule_crosswalk(
         season: Season year (e.g. ``2026``). Defaults to the most recent MBB
             season.
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-date ESPN scoreboard or per-conference
-            ESPN group fetch (a 404 is still
+        strict: Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
@@ -634,7 +623,7 @@ def mbb_schedule_crosswalk(
         ``pl.DataFrame`` (or pandas) with :data:`SCHEDULE_COLUMNS`.
 
     Raises:
-        CrosswalkSourceError: The per-date ESPN scoreboard or the conference walk failed every
+        CrosswalkSourceError: The per-date ESPN scoreboard failed every
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.
@@ -686,8 +675,7 @@ def mbb_player_crosswalk(
             season.
         min_confidence: Jaro-Winkler floor for fuzzy matches (R default 0.92).
         return_as_pandas: Return pandas instead of polars.
-        strict: Raise on the first failed per-team ESPN or Fox roster fetch, or
-            per-conference ESPN group fetch (a 404 is still
+        strict: Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still
             skipped) instead of skipping isolated failures. Default ``False`` matches the R
             producers; a provider whose every item failed raises either way. An item
             the host *answered* -- including a 404 -- counts as answered.
@@ -697,7 +685,7 @@ def mbb_player_crosswalk(
         ``pl.DataFrame`` (or pandas), one row per ESPN athlete, 17 columns.
 
     Raises:
-        CrosswalkSourceError: The per-team ESPN or Fox rosters or the conference walk failed every
+        CrosswalkSourceError: The per-team ESPN or Fox rosters failed every
             per-item fetch and answered none -- the signature of an unreachable
             or rate-limited host -- or, with ``strict``, any one fetch failed.
             Isolated failures are skipped and logged as a warning.
