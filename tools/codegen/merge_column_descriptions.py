@@ -31,22 +31,28 @@ for k, cols in new.items():
             added += 1
     cur[k] = have
 
+
+def dump(k):
+    return yaml.safe_dump({k: dict(sorted(cur[k].items()))}, sort_keys=False, allow_unicode=True, width=120)
+
+
+# Rewrite each merged block WHERE IT ALREADY SITS, so the diff is only the added
+# entries; a loader new to the file goes before load_contracts: as before.
 lines = p.read_text(encoding="utf-8").splitlines(keepends=True)
 KEY = re.compile(r"^[A-Za-z_]\w*:\s*$")
-out, i = [], 0
+out, i, placed = [], 0, set()
 while i < len(lines):
     k = lines[i].rstrip()[:-1] if KEY.match(lines[i]) else None
     if k in new:
+        if cur.get(k):
+            out.append(dump(k))
+        placed.add(k)
         i += 1
         while i < len(lines) and not KEY.match(lines[i]):
             i += 1
         continue
     out.append(lines[i])
     i += 1
-block = "".join(
-    yaml.safe_dump({k: dict(sorted(cur[k].items()))}, sort_keys=False, allow_unicode=True, width=120)
-    for k in sorted(new)
-    if cur.get(k)
-)
+block = "".join(dump(k) for k in sorted(new) if k not in placed and cur.get(k))
 p.write_text("".join(out).replace("\nload_contracts:", "\n" + block + "load_contracts:", 1), encoding="utf-8")
 print(f"additively merged: +{added} new entries across {len(new)} loaders")

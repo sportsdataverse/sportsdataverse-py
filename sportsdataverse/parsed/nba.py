@@ -245,6 +245,9 @@ from sportsdataverse.nba import load_lebron_daily as load_lebron_daily  # noqa: 
 from sportsdataverse.nba import load_lebron_season as load_lebron_season  # noqa: F401
 from sportsdataverse.nba import load_nba_draft as load_nba_draft  # noqa: F401
 from sportsdataverse.nba import load_nba_game_rosters as load_nba_game_rosters  # noqa: F401
+from sportsdataverse.nba import load_nba_group_aliases as load_nba_group_aliases  # noqa: F401
+from sportsdataverse.nba import load_nba_group_seasons as load_nba_group_seasons  # noqa: F401
+from sportsdataverse.nba import load_nba_groups as load_nba_groups  # noqa: F401
 from sportsdataverse.nba import load_nba_officials as load_nba_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_pbp as load_nba_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_player_boxscore as load_nba_player_boxscore  # noqa: F401
@@ -279,6 +282,7 @@ from sportsdataverse.nba import load_nba_stats_team_boxscores as load_nba_stats_
 from sportsdataverse.nba import load_nba_stats_team_season_stats as load_nba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_team_crosswalk as load_nba_team_crosswalk  # noqa: F401
+from sportsdataverse.nba import load_nba_team_group_seasons as load_nba_team_group_seasons  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_rapm_ryan_davis as load_rapm_ryan_davis  # noqa: F401
 from sportsdataverse.nba import luck_adjusted_response as luck_adjusted_response  # noqa: F401
@@ -613,6 +617,9 @@ __all__ = [
     "load_lebron_season",
     "load_nba_draft",
     "load_nba_game_rosters",
+    "load_nba_group_aliases",
+    "load_nba_group_seasons",
+    "load_nba_groups",
     "load_nba_officials",
     "load_nba_pbp",
     "load_nba_player_boxscore",
@@ -647,6 +654,7 @@ __all__ = [
     "load_nba_stats_team_season_stats",
     "load_nba_team_boxscore",
     "load_nba_team_crosswalk",
+    "load_nba_team_group_seasons",
     "load_nba_team_season_stats",
     "load_rapm_ryan_davis",
     "luck_adjusted_response",
