@@ -869,7 +869,9 @@ def nba_referee_assignments(
                 and all(isinstance(r, dict) for r in b[t]["rows"])
                 for t in ("Table", "Table1")
             )
-            and all(r.get("game_id") for r in b["Table"]["rows"])
+            # A real game id, 10 digits once a numeric id is zero-padded (the
+            # documented game_id contract): "not-an-id" or an 11-digit value is not.
+            and all(re.fullmatch(r"\d{10}", _l2m_gid(r.get("game_id")) or "") for r in b["Table"]["rows"])
         )
 
     # raw=True hands back all three leagues, so all three must be well-formed.

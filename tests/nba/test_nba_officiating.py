@@ -640,3 +640,22 @@ def test_l2m_numeric_game_id_matches_after_padding(monkeypatch):
     payload = {"game": [{"GameId": 42500405}], "l2m": [], "stats": []}
     _patch(monkeypatch, _Resp(200, json.dumps(payload), "application/json"))
     assert nba_l2m("0042500405", raw=True)["game"][0]["GameId"] == 42500405
+
+
+_OK_BLOCK = {"Table": {"rows": []}, "Table1": {"rows": []}}
+
+
+@pytest.mark.parametrize("bad", ["not-an-id", "12345678901", "4.2e7", 42500405.5, True, ""])
+def test_referee_row_game_id_must_be_ten_digits(monkeypatch, bad):
+    wnba = {"Table": {"rows": [{"game_id": bad, "official1": "A Ref"}]}, "Table1": {"rows": []}}
+    payload = {"nba": _OK_BLOCK, "gl": _OK_BLOCK, "wnba": wnba}
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13", league="wnba")
+
+
+def test_referee_row_numeric_game_id_is_padded(monkeypatch):
+    wnba = {"Table": {"rows": [{"game_id": 1022600097, "official1": "A Ref"}]}, "Table1": {"rows": []}}
+    payload = {"nba": _OK_BLOCK, "gl": _OK_BLOCK, "wnba": wnba}
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    assert nba_referee_assignments("2026-06-13", league="wnba")["officials"]["game_id"].to_list() == ["1022600097"]
