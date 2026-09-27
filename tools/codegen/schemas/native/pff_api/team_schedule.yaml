@@ -54,4 +54,4 @@ columns:
   name: opponent_elo_rank
   type: integer
 kind: dataframe
-schema: team_schedule
+schema: pff_api_team_schedule

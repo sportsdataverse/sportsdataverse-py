@@ -4616,4 +4616,4 @@ frames:
     type: integer
   section: kickoffs
 kind: frames
-schema: team_report
+schema: pff_api_team_report

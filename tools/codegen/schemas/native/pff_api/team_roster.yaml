@@ -51,4 +51,4 @@ columns:
   name: snap_pct
   type: numeric
 kind: dataframe
-schema: team_roster
+schema: pff_api_team_roster
