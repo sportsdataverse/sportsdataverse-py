@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
   - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
   - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
@@ -297,6 +298,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB losses written "for N yards loss" read as gains
+
+ESPN's 2025 text states a loss after the number: "rush middle for 4 yards loss", "caught at
+SAC18, for 1 yard loss". The "rush for N" and "for N" readers matched first and stored the loss
+as a gain, so `yds_rushed` was +N on 2,224 rushes and `yds_receiving` +N on 581 receptions in the
+published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The existing "yds loss"
+branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
+readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
+and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
+penalty residual `statYardage - yds_rushed` all move. A run filed twice in one 2023 text
+("run for 7 yds ... fumbled ... rush middle for 7 yards loss") reads the loss from the second copy
+(43 rows). The 2023 and 2025 seasons and 2026 to date need a reprocess (2022 has one rush and one
+reception).
 
 ### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
 
