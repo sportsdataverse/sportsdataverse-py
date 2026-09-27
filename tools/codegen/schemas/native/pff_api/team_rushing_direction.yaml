@@ -45,4 +45,4 @@ columns:
   name: fumbles
   type: integer
 kind: dataframe
-schema: team_rushing_direction
+schema: pff_api_team_rushing_direction
