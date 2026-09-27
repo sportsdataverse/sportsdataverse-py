@@ -9,6 +9,7 @@ official.nba.com is S3 behind Akamai Bot Manager: a browser User-Agent is requir
 from __future__ import annotations
 
 import datetime as _dt
+import json as _json
 import re
 from typing import Any, Literal, Union, overload
 
@@ -60,8 +61,9 @@ def _official_get(url: str, *, params: dict | None = None, proxy: dict | None = 
         The successful (200) ``requests.Response``.
 
     Raises:
-        NoDataError: The response is a 403 with an S3 ``AccessDenied`` XML body --
-            official.nba.com's way of saying no report exists for the request.
+        NoDataError: The response is a 404 (raised by ``download()``), or a 403 with
+            an S3 ``AccessDenied`` XML body -- official.nba.com's way of saying no
+            report exists for the request.
         AssetFetchError: The response is any other non-200 status, including an
             Akamai WAF block (403 HTML) or a 5xx that outlived the retry budget;
             also raised (chained via ``from exc``) when ``download()`` exhausts
@@ -208,10 +210,30 @@ NBA_REFEREE_REPLAY_SCHEMA = pl.Schema(
 
 
 def _gid(game_id: str | int) -> str:
-    """Zero-pad a game ID to 10 digits; a non-integral number is rejected, never truncated."""
-    if isinstance(game_id, float) and not game_id.is_integer():
-        raise ValueError(f"game_id must be an integer id, got {game_id!r}")
-    return str(int(game_id)).zfill(10)
+    """Zero-pad a caller-supplied game id to 10 digits, checked before it builds a URL.
+
+    The one id check for every fetcher here and in :mod:`sportsdataverse.nba.nba_live`.
+    Accepts one non-negative integer id: an int, an integral float, or an all-digit
+    string. Anything else -- a bool, a negative or fractional number, a string with a
+    sign, space, underscore or other non-digit -- raises ``ValueError``; ``int()`` would
+    turn it into another game's id or a nonsense URL whose 403 reads as "no data".
+    """
+    if isinstance(game_id, float) and game_id.is_integer():
+        game_id = int(game_id)
+    s = str(game_id)  # str(True) == "True", so a bool fails the digit check too
+    if not (s.isascii() and s.isdigit()):
+        raise ValueError(f"game_id must be a non-negative integer id, got {game_id!r}")
+    return s.zfill(10)
+
+
+def _as_dict(x: Any) -> dict[str, Any]:
+    """*x* when it is a dict, else ``{}`` -- keeps the parsers' no-raise contract on malformed envelopes."""
+    return x if isinstance(x, dict) else {}
+
+
+def _records(x: Any) -> list[dict[str, Any]]:
+    """The dict elements of *x* when it is a list, else ``[]``."""
+    return [r for r in x if isinstance(r, dict)] if isinstance(x, list) else []
 
 
 def _l2m_gid(raw: Any) -> str | None:
@@ -235,11 +257,30 @@ def _l2m_gid(raw: Any) -> str | None:
     return s.zfill(10) if s.isdigit() else s
 
 
+def _text(v: Any) -> Any:
+    """One cell for :func:`_frame`'s fallback: text, nested values as JSON; dates and ``None`` kept."""
+    if v is None or isinstance(v, (str, _dt.date)):
+        return v
+    return _json.dumps(v) if isinstance(v, (dict, list)) else str(v)
+
+
 def _frame(rows: list[dict[str, Any]], schema: pl.Schema) -> pl.DataFrame:
-    """Create a polars DataFrame from rows with explicit schema; empty rows carry schema."""
+    """Build a frame with *schema* from row dicts; no rows still carry the schema.
+
+    Never raises on a cell of the wrong type (``""`` or ``"abc"`` in an id column, an
+    object where text belongs), per the parser contract: the rows are rebuilt as text
+    (nested values as JSON strings, dates kept) under a Utf8 schema and cast back, so a
+    value that cannot convert becomes null. Real payloads never take that path.
+    """
     if not rows:
         return pl.DataFrame(schema=schema)
-    return pl.DataFrame(rows, schema=schema, strict=False)
+    try:
+        return pl.DataFrame(rows, schema=schema, strict=False)
+    except (TypeError, ValueError, pl.exceptions.PolarsError):
+        # ponytail: a float-typed id ("12.0") also nulls on this path; the feeds send ints.
+        text = pl.Schema({k: (d if d == pl.Date else pl.Utf8) for k, d in schema.items()})
+        rows = [{k: _text(v) for k, v in r.items()} for r in rows]
+        return pl.DataFrame(rows, schema=text, strict=False).cast(schema, strict=False)
 
 
 def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> dict[str, Any]:
@@ -253,7 +294,7 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
 
     Args:
         payload: The JSON payload (dict) from official.nba.com L2M endpoint, or
-            ``None`` (treated as an empty payload).
+            ``None`` (treated as an empty payload, as is any other non-object).
         return_as_pandas: If True, return pandas DataFrames instead of polars.
 
     Returns:
@@ -263,8 +304,10 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
         zero-row DataFrames.
 
     Raises:
-        This function does not raise. Empty or malformed payloads produce zero-row
-        DataFrames with the documented schemas; missing fields become nulls.
+        This function does not raise. An empty or malformed payload (not an object,
+        rows that are not objects) yields zero-row DataFrames with the documented
+        schemas; a missing field, or a cell of the wrong type, becomes null (an object
+        or list in a text column is kept as its JSON text).
 
     Example:
         Parse a real L2M report::
@@ -289,8 +332,10 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
-    payload = payload or {}
-    game_rows = payload.get("game") or []
+    payload = _as_dict(payload)
+    game = payload.get("game")
+    # A lone object is read as the one game row, as hoopR's parser does.
+    game_rows = [game] if isinstance(game, dict) else _records(game)
     g = game_rows[0] if game_rows else {}
     gid = _l2m_gid(g.get("GameId"))
     calls = _frame(
@@ -311,14 +356,14 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
                 "pos_end": r.get("posEnd"),
                 "pos_team_id": r.get("posTeamId"),
             }
-            for r in payload.get("l2m") or []
+            for r in _records(payload.get("l2m"))
         ],
         L2M_CALLS_SCHEMA,
     )
     t = pl.col("pc_time").str.replace(r"^(\d+):(\d+):(\d+)$", "${1}:${2}.${3}")
     ct = pl.col("call_type").str.replace_all(r"\s+", " ").str.strip_chars()
     calls = calls.with_columns(
-        period=pl.col("period_name").str.extract(r"(\d+)", 1).cast(pl.Int64),
+        period=pl.col("period_name").str.extract(r"(\d+)", 1).cast(pl.Int64, strict=False),
         seconds_remaining=t.str.extract(r"^(\d+):", 1).cast(pl.Float64) * 60
         + t.str.extract(r":(\d+(?:\.\d+)?)\.?$", 1).cast(pl.Float64),
         call=ct.str.extract(r"^([^:]+):", 1).str.strip_chars().str.to_uppercase(),
@@ -358,7 +403,7 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
                 "home": s.get("home"),
                 "away": s.get("away"),
             }
-            for s in payload.get("stats") or []
+            for s in _records(payload.get("stats"))
         ],
         L2M_STATS_SCHEMA,
     )
@@ -389,10 +434,17 @@ def nba_l2m(
         :func:`parse_nba_l2m`.
 
     Raises:
-        NoDataError: The game has no L2M report (common for regular-season games,
-            games that did not reach the final two minutes, or very recent games).
-        AssetFetchError: The fetch failed (network error, rate limit, or Akamai
-            WAF block).
+        ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
+            negative or fractional number, or a string that is not all digits
+            (checked before any request).
+        NoDataError: The game has no L2M report (a 404, or S3's ``AccessDenied``
+            403). Only games within 3 points (5 before 2017-18) at some point in the
+            last two minutes of the fourth quarter or overtime get one, so most games
+            have none; a game that just ended may not be graded yet.
+        AssetFetchError: The fetch failed (a transport error, a rate limit, an
+            Akamai WAF block, or a 5xx that outlived the retry budget), or the 200
+            body is not a JSON object whose ``game`` is exactly one row -- an error
+            envelope or a changed schema, checked with ``raw=True`` too.
 
     Example:
         Fetch an L2M report for a playoff game::
@@ -421,10 +473,19 @@ def nba_l2m(
     """
     url = _L2M_URL.format(gid=_gid(game_id))
     payload = _official_json(_official_get(url, proxy=proxy), url)
+    # Every report carries exactly one game row. Anything else is an error envelope or
+    # a changed schema -- a failed fetch, never an empty report -- and a second row
+    # would otherwise be dropped silently by the parser, which reads the first. Checked
+    # before the raw return too, so a capture job never stores it.
+    game = payload.get("game")
+    if not (isinstance(game, list) and len(game) == 1 and isinstance(game[0], dict)):
+        raise AssetFetchError(f"official.nba.com returned an L2M body without exactly one game row for {url}")
     return payload if raw else parse_nba_l2m(payload, return_as_pandas=return_as_pandas)
 
 
-def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
+def parse_nba_l2m_games(
+    html: str | bytes | None, season: int, *, return_as_pandas: bool = False
+) -> Union[pl.DataFrame, pd.DataFrame]:
     """Parse an NBA season's Last Two Minute games listing from the HTML index page.
 
     Extracts game IDs and matchup labels from the L2M season index page
@@ -433,8 +494,10 @@ def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
     by appearance on the page.
 
     Args:
-        html: The HTML content of the L2M season listing page.
+        html: The HTML content of the L2M season listing page. Bytes are decoded as
+            UTF-8; ``None`` is read as an empty page.
         season: The NBA season (end year), used to populate the ``season`` column.
+        return_as_pandas: If True, return a pandas DataFrame instead of polars.
 
     Returns:
         A DataFrame with schema ``{"game_id": Utf8, "season": Int32, "season_type": Utf8, "label": Utf8}``,
@@ -442,8 +505,8 @@ def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
         a zero-row frame with the documented schema.
 
     Raises:
-        This function does not raise. HTML with no report links yields a zero-row
-        frame with the documented schema.
+        This function does not raise. HTML with no report links (or no HTML) yields a
+        zero-row frame with the documented schema.
 
     Example:
         Parse a real season listing::
@@ -461,10 +524,12 @@ def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
+    if isinstance(html, bytes):
+        html = html.decode("utf-8", "replace")
     seen: dict[str, str] = {}
-    for gid, label in _LISTING_RE.findall(html):
+    for gid, label in _LISTING_RE.findall(html if isinstance(html, str) else ""):
         seen.setdefault(gid, label.strip())
-    return pl.DataFrame(
+    df = pl.DataFrame(
         {
             "game_id": list(seen),
             "season": [season] * len(seen),
@@ -473,20 +538,21 @@ def parse_nba_l2m_games(html: str, season: int) -> pl.DataFrame:
         },
         schema={"game_id": pl.Utf8, "season": pl.Int32, "season_type": pl.Utf8, "label": pl.Utf8},
     )
+    return df.to_pandas() if return_as_pandas else df
 
 
 @overload
 def nba_l2m_games(
-    season: int, *, return_as_pandas: Literal[False] = False, proxy: dict | None = None
+    season: int | str, *, return_as_pandas: Literal[False] = False, proxy: dict | None = None
 ) -> pl.DataFrame: ...
 
 
 @overload
-def nba_l2m_games(season: int, *, return_as_pandas: Literal[True], proxy: dict | None = None) -> pd.DataFrame: ...
+def nba_l2m_games(season: int | str, *, return_as_pandas: Literal[True], proxy: dict | None = None) -> pd.DataFrame: ...
 
 
 def nba_l2m_games(
-    season: int, *, return_as_pandas: bool = False, proxy: dict | None = None
+    season: int | str, *, return_as_pandas: bool = False, proxy: dict | None = None
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch the list of games with Last Two Minute reports for an NBA season.
 
@@ -497,7 +563,8 @@ def nba_l2m_games(
     reports is planned but does not exist yet.
 
     Args:
-        season: The NBA season (end year), e.g., 2026 for the 2025-26 season.
+        season: The NBA season (end year) as a 4-digit int or string, e.g. 2026 for
+            the 2025-26 season.
         return_as_pandas: If True, return a pandas DataFrame instead of polars.
         proxy: Optional proxy dict passed through to the HTTP layer.
 
@@ -508,12 +575,17 @@ def nba_l2m_games(
         one row per unique game ID in page order.
 
     Raises:
-        NoDataError: The official.nba.com page cannot be found (very unlikely).
+        ValueError: ``season`` is not a 4-digit year (an int or an all-digit
+            string), checked before any request.
+        NoDataError: official.nba.com has no listing page for that season (a 404,
+            or S3's ``AccessDenied`` 403) -- e.g. a future season, or one from
+            before the L2M program began.
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai
             WAF block), or a 200 response that is missing the expected "Last Two
             Minute" page marker (an Akamai interstitial, a blank body, or a
-            redesigned page) -- checked here, not in :func:`parse_nba_l2m_games`,
-            so the parser itself never raises.
+            redesigned page), or that links reports in a shape the parser does not
+            read (a redesigned page) -- checked here, not in
+            :func:`parse_nba_l2m_games`, so the parser itself never raises.
 
     Example:
         Fetch the 2025-26 season L2M games::
@@ -538,7 +610,11 @@ def nba_l2m_games(
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _atlhawksfanatic/L2M: https://github.com/atlhawksfanatic/L2M
     """
-    span = f"{season - 1}-{str(season)[-2:]}"
+    # str(True) is "True" and str(2026.0) is "2026.0", so both fail here too.
+    if not re.fullmatch(r"[0-9]{4}", str(season)):
+        raise ValueError(f"season must be a 4-digit end year such as 2026, got {season!r}")
+    year = int(season)
+    span = f"{year - 1}-{str(year)[-2:]}"
     url = _LISTING_URL.format(span=span)
     html = _official_get(url, proxy=proxy).text
     if not _LISTING_MARKER_RE.search(html):
@@ -547,14 +623,21 @@ def nba_l2m_games(
             f"'Last Two Minute' marker (Akamai interstitial, blank body, or a "
             f"redesigned page) at {url}"
         )
-    df = parse_nba_l2m_games(html, season)
-    return df.to_pandas() if return_as_pandas else df
+    # Report links that the regex cannot read mean a redesign, not an empty season.
+    if "L2MReport" in html and not _LISTING_RE.search(html):
+        raise AssetFetchError(
+            f"official.nba.com L2M listing page for {span} links reports in an "
+            f"unrecognized shape (a redesigned page) at {url}"
+        )
+    return parse_nba_l2m_games(html, year, return_as_pandas=return_as_pandas)
 
 
-def _mdy(s: str | None) -> _dt.date | None:
-    """Parse a date string in MM/DD/YYYY format; ``None`` when missing or malformed (the parser contract)."""
+def _mdy(s: Any) -> _dt.date | None:
+    """Parse a date string in MM/DD/YYYY format; ``None`` when missing, not a string, or malformed (the parser contract)."""
+    if not isinstance(s, str) or not s:
+        return None
     try:
-        return _dt.datetime.strptime(s, "%m/%d/%Y").date() if s else None
+        return _dt.datetime.strptime(s, "%m/%d/%Y").date()
     except ValueError:
         return None
 
@@ -583,16 +666,18 @@ def _season_end_year(s: str, league: str) -> int | None:
 def _table_rows(block: Any, table: str) -> list[dict[str, Any]]:
     """The row dicts of ``block[table]["rows"]``; any malformed level yields ``[]`` (parser contract)."""
     t = block.get(table) if isinstance(block, dict) else None
-    rows = t.get("rows") if isinstance(t, dict) else None
-    return [r for r in rows if isinstance(r, dict)] if isinstance(rows, list) else []
+    return _records(t.get("rows") if isinstance(t, dict) else None)
 
 
-def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[str, pl.DataFrame]:
+def parse_nba_referee_assignments(
+    payload: dict, league: str = "nba", *, return_as_pandas: bool = False
+) -> dict[str, Any]:
     """Parse NBA referee assignment payload into tidy DataFrames.
 
     Parses the raw referee assignment JSON from official.nba.com into two related
-    tables: officials (long format, one row per game × crew slot) and replay center
-    (one replay center official per game per league).
+    tables: officials (long format, one row per game × filled crew slot -- an empty
+    slot yields no row) and replay center (one row per replay-center official per
+    date per league; the feed ties these to a date, not a game, so there is no game key).
 
     The ``crew_position`` column contains the feed's slot order (1–4); slot 1 is
     inferred to be the crew chief from that order, as the NBA does not label roles
@@ -603,6 +688,7 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
     Args:
         payload: The JSON payload (dict) from official.nba.com referee assignments endpoint.
         league: The league to extract ("nba", "gl", or "wnba"). Defaults to "nba".
+        return_as_pandas: If True, return pandas DataFrames instead of polars.
 
     Returns:
         A dict with two keys: ``"officials"`` (NBA_REFEREE_ASSIGN_SCHEMA, 14 columns) and
@@ -610,7 +696,9 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
         with the specified schema. Empty payloads return zero-row DataFrames.
 
     Raises:
-        ValueError: If an unknown league is specified.
+        ValueError: If an unknown league is specified. Nothing else raises: a malformed
+            payload or row is skipped, and a cell of the wrong type (a non-string date,
+            ``""`` in an id column, an object where text belongs) becomes null.
 
     Example:
         Parse referee assignments::
@@ -664,10 +752,11 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
         }
         for r in _table_rows(block, "Table1")
     ]
-    return {
+    out = {
         "officials": _frame(rows, NBA_REFEREE_ASSIGN_SCHEMA),
         "replay_center": _frame(replay, NBA_REFEREE_REPLAY_SCHEMA),
     }
+    return {k: v.to_pandas() for k, v in out.items()} if return_as_pandas else out
 
 
 def nba_referee_assignments(
@@ -680,11 +769,12 @@ def nba_referee_assignments(
 ) -> dict[str, Any]:
     """Fetch and parse NBA referee assignments for a given date from official.nba.com.
 
-    Retrieves the referee crew assignments and replay center officials for all games
-    on a given date across NBA, G-League, and WNBA. The ``crew_position`` column (1–4)
-    represents the feed's slot order; slot 1 is inferred to be the crew chief. The
-    ``season`` column converts from the feed's format to an END year: START+1 for
-    NBA/G-League (two-calendar-year seasons) and START unchanged for WNBA.
+    Retrieves one league's referee crew assignments and replay-center officials for a
+    date: NBA, G-League or WNBA, picked by ``league`` (``raw=True`` returns all three
+    leagues' blocks). The ``crew_position`` column (1–4) represents the feed's slot
+    order; slot 1 is inferred to be the crew chief. The ``season`` column converts
+    from the feed's format to an END year: START+1 for NBA/G-League
+    (two-calendar-year seasons) and START unchanged for WNBA.
 
     Args:
         date: The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date).
@@ -701,10 +791,14 @@ def nba_referee_assignments(
     Raises:
         ValueError: If league is not "nba", "gl", or "wnba", or date is not a valid
             "YYYY-MM-DD" date (checked before any request).
+        NoDataError: official.nba.com answered 404, or 403 with S3's ``AccessDenied``
+            body. A date without games is not this: it comes back as a 200 with empty
+            ``rows`` (see the Note).
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF
-            block), or the league's ``Table``/``Table1`` rows are missing or malformed
-            (a row without ``game_id`` included). With ``raw=True`` all three leagues
-            are checked, since the whole payload is returned.
+            block), the 200 body is not a JSON object, or the league's
+            ``Table``/``Table1`` rows are missing or malformed (a row without
+            ``game_id`` included). With ``raw=True`` all three leagues are checked,
+            since the whole payload is returned.
 
     Note:
         A date with no games for the requested league is not an error -- the endpoint
@@ -778,5 +872,4 @@ def nba_referee_assignments(
         )
     if raw:
         return payload  # full three-league {nba, gl, wnba} payload
-    out = parse_nba_referee_assignments(payload, league)
-    return {k: v.to_pandas() for k, v in out.items()} if return_as_pandas else out
+    return parse_nba_referee_assignments(payload, league, return_as_pandas=return_as_pandas)

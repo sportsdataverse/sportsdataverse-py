@@ -48,9 +48,13 @@ def wnba_live_pbp(
         in :func:`sportsdataverse.nba.nba_live.parse_nba_live_pbp`.
 
     Raises:
+        ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
+            negative or fractional number, or a string that is not all digits
+            (checked before any request).
         NoDataError: The game has no liveData play-by-play object.
         AssetFetchError: The fetch failed (network error, rate limit, or a
-            bot-check block).
+            bot-check block), or the 200 body is not a JSON object carrying the
+            liveData ``game`` object -- checked with ``raw=True`` too.
         ImportError: curl_cffi is not installed -- required for the live
             transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
@@ -96,9 +100,13 @@ def wnba_live_boxscore(
         documented in :func:`sportsdataverse.nba.nba_live.parse_nba_live_boxscore`.
 
     Raises:
+        ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
+            negative or fractional number, or a string that is not all digits
+            (checked before any request).
         NoDataError: The game has no liveData boxscore object.
         AssetFetchError: The fetch failed (network error, rate limit, or a
-            bot-check block).
+            bot-check block), or the 200 body is not a JSON object carrying the
+            liveData ``game`` object -- checked with ``raw=True`` too.
         ImportError: curl_cffi is not installed -- required for the live
             transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 

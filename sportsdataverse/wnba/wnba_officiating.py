@@ -33,7 +33,15 @@ def wnba_referee_assignments(
         If ``raw=True``, returns the full three-league JSON payload instead.
 
     Raises:
-        AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF block).
+        ValueError: ``date`` is not a valid "YYYY-MM-DD" date (checked before any
+            request).
+        NoDataError: official.nba.com answered 404, or 403 with S3's ``AccessDenied``
+            body. A date without WNBA games is not this (see the Note).
+        AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF
+            block), the 200 body is not a JSON object, or the ``wnba`` block's
+            ``Table``/``Table1`` rows are missing or malformed (a row without
+            ``game_id`` included). With ``raw=True`` all three leagues (nba, gl and
+            wnba) are checked, since the whole payload is returned.
 
     Note:
         A date with no WNBA games is not an error -- the endpoint always returns a

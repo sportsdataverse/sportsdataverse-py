@@ -2,6 +2,7 @@ import datetime as dt
 import json
 from pathlib import Path
 
+import pandas as pd
 import polars as pl
 import pytest
 import requests
@@ -10,6 +11,10 @@ from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_officiating as mod
 from sportsdataverse.nba.nba_officiating import (
     L2M_CALLS_SCHEMA,
+    L2M_GAME_SCHEMA,
+    L2M_STATS_SCHEMA,
+    NBA_REFEREE_ASSIGN_SCHEMA,
+    NBA_REFEREE_REPLAY_SCHEMA,
     nba_l2m,
     nba_referee_assignments,
     parse_nba_l2m,
@@ -185,7 +190,7 @@ def test_assignments_nba_long_format():
 def test_assignments_empty_league_keeps_schema():
 
     out = parse_nba_referee_assignments(_assign(), "gl")
-    assert out["officials"].height == 0 and "official_id" in out["officials"].columns
+    assert out["officials"].height == 0 and out["officials"].schema == NBA_REFEREE_ASSIGN_SCHEMA
 
 
 def test_assignments_wnba_rows():
@@ -222,8 +227,29 @@ def test_connection_error_is_asset_fetch_error(monkeypatch):
         raise requests.exceptions.ConnectionError("connection reset")
 
     monkeypatch.setattr(mod, "download", raising_download)
-    with pytest.raises(AssetFetchError):
+    with pytest.raises(AssetFetchError, match="fetch failed"):
         mod._official_get("https://official.nba.com/l2m/json/0042500405.json")
+
+
+@pytest.mark.parametrize(
+    ("status", "body", "call", "blocked"),
+    [
+        (403, "<html>Access Denied</html>", lambda: nba_l2m("0042500405"), True),
+        (503, "", lambda: nba_referee_assignments("2026-06-13"), True),
+        (200, '{"message": "error"}', lambda: nba_referee_assignments("2026-06-13"), False),
+        (200, '{"code": "rest_forbidden"}', lambda: nba_l2m("0042500405"), False),
+        (200, "<html>not json</html>", lambda: nba_l2m("0042500405"), False),
+        (200, "<html>verify you are human</html>", lambda: mod.nba_l2m_games(2026), False),
+    ],
+)
+def test_only_failed_fetches_say_fetch_failed(monkeypatch, status, body, call, blocked):
+    # tests/nba/test_nba_officiating_live.py skips an AssetFetchError only when it says
+    # "fetch failed" (a transport error or a non-200 status); schema drift must not say
+    # it, so drift fails the live run instead of reading as an IP block.
+    _patch(monkeypatch, _Resp(status, body, "text/html"))
+    with pytest.raises(AssetFetchError) as err:
+        call()
+    assert ("fetch failed" in str(err.value)) is blocked
 
 
 def test_l2m_non_json_200_body_is_asset_fetch_error(monkeypatch):
@@ -296,6 +322,10 @@ def test_referee_assignments_missing_league_block_is_asset_fetch_error(monkeypat
     # The live feed carries every league's Table/Table1 block, each with a rows list,
     # on every date (zero rows on a day without games), so anything else is a failed
     # fetch, not an empty day -- including under raw=True, which a capture job stores.
+    # nba and gl are well-formed, so the wnba block is the only defect: the raw=True
+    # half fails if wnba is dropped from the three-league check.
+    ok = {"Table": {"rows": []}, "Table1": {"rows": []}}
+    payload = {"nba": ok, "gl": ok, **payload}
     monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
     with pytest.raises(AssetFetchError):
         nba_referee_assignments("2026-06-13", league="wnba")
@@ -411,3 +441,183 @@ def test_parse_referee_assignments_tolerates_malformed_rows():
     assert out["officials"]["season"][0] is None
     assert out["replay_center"].height == 0
     assert parse_nba_referee_assignments(["not", "a", "dict"], "nba")["officials"].height == 0
+
+
+# ---------------------------------------------------------------------------
+# Parser contract: malformed input never raises (self-review findings 1-2)
+# ---------------------------------------------------------------------------
+
+_L2M_SCHEMAS = {"calls": L2M_CALLS_SCHEMA, "game": L2M_GAME_SCHEMA, "stats": L2M_STATS_SCHEMA}
+_MALFORMED_L2M = [
+    ["x"],
+    "x",
+    {"game": "x"},
+    {"game": [1]},
+    {"game": {"GameId": "0042500405"}},
+    {"l2m": [1]},
+    {"l2m": {"a": 1}},
+    {"stats": ["x"]},
+    {"l2m": [{"posTeamId": ""}]},
+    {"l2m": [{"posID": "abc"}]},
+    {"l2m": [{"Comment": {"a": 1}}]},
+    {"l2m": [{"Comment": ["a"]}]},
+    {"l2m": [{"PeriodName": "Q99999999999999999999"}]},
+    {"game": [{"GameId": "0042500405", "HomeTeamScore": "", "HomeTeamId": 10**30}]},
+    {"stats": [{"stats_name": "Calls", "home": "", "away": "-"}]},
+]
+
+
+@pytest.mark.parametrize("payload", _MALFORMED_L2M)
+def test_malformed_l2m_payloads_never_raise(payload):
+    out = parse_nba_l2m(payload)
+    assert {k: v.schema for k, v in out.items()} == _L2M_SCHEMAS
+
+
+def test_l2m_bad_cells_become_null_and_good_cells_survive():
+    p = _payload()
+    p["l2m"][0].update(posTeamId="", Comment={"note": "x"})
+    p["game"][0]["HomeTeamScore"] = ""
+    out = parse_nba_l2m(p)
+    first = out["calls"].row(0, named=True)
+    assert first["pos_team_id"] is None and first["comment"] == '{"note": "x"}'
+    assert (first["pos_id"], first["period"], first["game_id"]) == (p["l2m"][0]["posID"], 4, "0042500405")
+    game = out["game"].row(0, named=True)
+    assert game["home_score"] is None and game["away_score"] == p["game"][0]["VisitorTeamScore"]
+    assert game["game_date"].isoformat() == "2026-06-13"
+
+
+def test_l2m_fetch_with_a_bad_cell_parses_instead_of_raising(monkeypatch):
+    p = _payload()
+    p["l2m"][0]["posTeamId"] = ""
+    _patch(monkeypatch, _Resp(200, json.dumps(p), "application/json"))
+    assert nba_l2m("0042500405")["calls"]["pos_team_id"][0] is None
+
+
+_REF_ROW = {
+    "game_id": "0042500405",
+    "game_date": "06/13/2026",
+    "season": "42025",
+    "official1": "Scott Foster",
+    "official1_code": 1162,
+    "home_team_id": 1610612759,
+}
+_REPLAY_ROW = {"game_date": "06/13/2026", "official_code": 1627541, "replaycenter_official": "John Goble"}
+
+
+@pytest.mark.parametrize(
+    ("row", "replay", "table", "col", "expected"),
+    [
+        ({"game_date": 20260613}, {}, "officials", "game_date", None),
+        ({}, {"game_date": 6132026}, "replay_center", "game_date", None),
+        ({"official1_code": ""}, {}, "officials", "official_id", None),
+        ({"home_team_id": ""}, {}, "officials", "home_team_id", None),
+        ({}, {"official_code": ""}, "replay_center", "official_id", None),
+        ({"official1": {"name": "A Ref"}}, {}, "officials", "official_name", '{"name": "A Ref"}'),
+    ],
+)
+def test_referee_bad_cells_become_null_in_parser_and_fetcher(monkeypatch, row, replay, table, col, expected):
+    ok = {"Table": {"rows": []}, "Table1": {"rows": []}}
+    block = {"Table": {"rows": [{**_REF_ROW, **row}]}, "Table1": {"rows": [{**_REPLAY_ROW, **replay}]}}
+    payload = {"nba": block, "gl": ok, "wnba": ok}
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    for out in (parse_nba_referee_assignments(payload, "nba"), nba_referee_assignments("2026-06-13")):
+        assert out["officials"].schema == NBA_REFEREE_ASSIGN_SCHEMA
+        assert out["replay_center"].schema == NBA_REFEREE_REPLAY_SCHEMA
+        assert out[table][col][0] == expected
+        assert out["officials"]["game_id"][0] == "0042500405"  # the good cells survive
+
+
+# ---------------------------------------------------------------------------
+# Caller arguments are checked before any request (findings 7, 11)
+# ---------------------------------------------------------------------------
+
+
+def _no_request(url, **kw):
+    raise AssertionError(f"no request expected, got {url}")
+
+
+@pytest.mark.parametrize(
+    "gid", [True, False, -1, "-1", -42500405.0, "4_2500405", " 42500405", "+42500405", "", "abc", "٤٢٥٠٠٤٠٥"]
+)
+def test_bad_game_id_is_value_error_before_request(monkeypatch, gid):
+    # int() would read "4_2500405", " 42500405" and "+42500405" as game 42500405,
+    # True as game 1, and -1 as the URL "-000000001" whose 403 reads as "no report".
+    monkeypatch.setattr(mod, "_official_get", _no_request)
+    with pytest.raises(ValueError, match="integer id"):
+        nba_l2m(gid)
+
+
+@pytest.mark.parametrize("season", [26, "26", 2026.0, "2026.0", True, " 2026", "2026 ", "20266", "abcd", None])
+def test_l2m_games_bad_season_is_value_error_before_request(monkeypatch, season):
+    monkeypatch.setattr(mod, "_official_get", _no_request)
+    with pytest.raises(ValueError, match="4-digit"):
+        mod.nba_l2m_games(season)
+
+
+def test_l2m_games_accepts_a_digit_string_season(monkeypatch):
+    seen = {}
+
+    def fake_get(url, **kw):
+        seen["url"] = url
+        return _Resp(200, "<html><title>2025-26 NBA Officiating Last Two Minute Reports</title></html>", "text/html")
+
+    monkeypatch.setattr(mod, "_official_get", fake_get)
+    df = mod.nba_l2m_games("2026")
+    assert seen["url"] == "https://official.nba.com/2025-26-nba-officiating-last-two-minute-reports/"
+    assert df.height == 0 and df.schema["season"] == pl.Int32
+
+
+# ---------------------------------------------------------------------------
+# A 200 without the expected shape is a failed fetch (finding 8, listing NIT)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"code": "rest_forbidden", "message": "Sorry, you are not allowed", "data": {"status": 401}},
+        {"game": [], "l2m": [], "stats": []},
+        {"game": {"GameId": "0042500405"}},
+        {"game": [1]},
+        {"l2m": [{"PeriodName": "Q4"}]},
+        # Two game rows: the parser reads the first, so the second would vanish silently.
+        {"game": [{"GameId": "0042500405"}, {"GameId": "0042500404"}], "l2m": [], "stats": []},
+    ],
+)
+def test_l2m_body_without_its_game_row_is_asset_fetch_error(monkeypatch, body):
+    _patch(monkeypatch, _Resp(200, json.dumps(body), "application/json"))
+    with pytest.raises(AssetFetchError, match="game row"):
+        nba_l2m("0042500405")
+    with pytest.raises(AssetFetchError, match="game row"):
+        nba_l2m("0042500405", raw=True)
+
+
+def test_listing_with_unreadable_report_links_is_asset_fetch_error(monkeypatch):
+    # The page keeps its title but links reports in a new shape: a redesign, not an empty season.
+    html = (
+        "<html><title>2025-26 NBA Officiating Last Two Minute Reports</title>"
+        "<a href='/L2MReport.html?game=0042500405'>Knicks 94, Spurs 90</a></html>"
+    )
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, html, "text/html"))
+    with pytest.raises(AssetFetchError, match="unrecognized shape"):
+        mod.nba_l2m_games(2026)
+
+
+# ---------------------------------------------------------------------------
+# Parser NITs: bytes/None listing input, pandas output
+# ---------------------------------------------------------------------------
+
+
+def test_parse_listing_accepts_bytes_and_none():
+    html = (FIX / "l2m_listing_2025-26.html").read_text(encoding="utf-8")
+    assert parse_nba_l2m_games(html.encode("utf-8"), 2026).height == 415
+    empty = parse_nba_l2m_games(None, 2026)
+    assert empty.height == 0 and empty.columns == ["game_id", "season", "season_type", "label"]
+
+
+def test_parsers_return_pandas_on_request():
+    html = (FIX / "l2m_listing_2025-26.html").read_text(encoding="utf-8")
+    assert isinstance(parse_nba_l2m_games(html, 2026, return_as_pandas=True), pd.DataFrame)
+    out = parse_nba_referee_assignments(_assign(), "nba", return_as_pandas=True)
+    assert all(isinstance(v, pd.DataFrame) for v in out.values())
+    assert out["officials"].shape == (4, 14)

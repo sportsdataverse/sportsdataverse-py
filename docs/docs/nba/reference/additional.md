@@ -3631,7 +3631,7 @@ payload = nba_l2m("0042500405", raw=True)
 print(payload["game"])
 ```
 
-### `nba_l2m_games(season: 'int', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_l2m_games}
+### `nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_l2m_games}
 
 Fetch the list of games with Last Two Minute reports for an NBA season.
 
@@ -3645,7 +3645,7 @@ reports is planned but does not exist yet.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | The NBA season (end year), e.g., 2026 for the 2025-26 season. |
+| `season` | `int \| str` |  | The NBA season (end year) as a 4-digit int or string, e.g. 2026 for the 2025-26 season. |
 | `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
 | `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
 
@@ -3812,12 +3812,12 @@ If `raw=True`, the raw JSON dict. Otherwise, a DataFrame as documented in `parse
 | `clock` | character | ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS. |
 | `time_actual` | character | Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time. |
 | `action_type` | character | Action category from the feed, lower-cased, e.g. 2pt, 3pt, foul, substitution, or turnover. |
-| `sub_type` | character | Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket. |
+| `sub_type` | character | Action sub-type as the feed writes it, e.g. personal or offensive for a foul, Jump Shot or Layup for a 2pt/3pt shot, 1 of 2 for a free throw. |
 | `team_id` | integer | NBA/WNBA team id of the team associated with the action, when applicable. |
 | `person_id` | integer | NBA/WNBA player id of the primary person involved in the action, when applicable. |
 | `official_id` | integer | Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season. |
-| `x_legacy` | double | Shot or event x-coordinate in the legacy stats.nba.com coordinate system. |
-| `y_legacy` | double | Shot or event y-coordinate in the legacy stats.nba.com coordinate system. |
+| `x_legacy` | double | Shot x-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
+| `y_legacy` | double | Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
 | `description` | character | Long-form human-readable description of the action, as shown on NBA.com's live scoreboard. |
 
 **Example**
@@ -4297,11 +4297,12 @@ positions = frame if frame is not None else nba_stats_playerindex(season="2023-2
 
 Fetch and parse NBA referee assignments for a given date from official.nba.com.
 
-Retrieves the referee crew assignments and replay center officials for all games
-on a given date across NBA, G-League, and WNBA. The `crew_position` column (1–4)
-represents the feed's slot order; slot 1 is inferred to be the crew chief. The
-`season` column converts from the feed's format to an END year: START+1 for
-NBA/G-League (two-calendar-year seasons) and START unchanged for WNBA.
+Retrieves one league's referee crew assignments and replay-center officials for a
+date: NBA, G-League or WNBA, picked by `league` (`raw=True` returns all three
+leagues' blocks). The `crew_position` column (1–4) represents the feed's slot
+order; slot 1 is inferred to be the crew chief. The `season` column converts
+from the feed's format to an END year: START+1 for NBA/G-League
+(two-calendar-year seasons) and START unchanged for WNBA.
 
 **Parameters**
 
@@ -4325,9 +4326,9 @@ If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dic
 | `officials.season` | integer | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
 | `officials.season_type` | character | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
 | `officials.game_code` | character | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
-| `officials.home_team_id` | integer | 10-digit NBA team id of the home team. |
+| `officials.home_team_id` | integer | 10-digit team id of the home team. |
 | `officials.home_team_abbr` | character | Three-letter abbreviation of the home team. |
-| `officials.away_team_id` | integer | 10-digit NBA team id of the away team. |
+| `officials.away_team_id` | integer | 10-digit team id of the away team. |
 | `officials.away_team_abbr` | character | Three-letter abbreviation of the away team. |
 | `officials.crew_position` | integer | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
 | `officials.official_id` | integer | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |

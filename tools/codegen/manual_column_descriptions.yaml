@@ -15952,11 +15952,11 @@ nba_live_pbp:
   official_id: Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season.
   period: 'Period of the game: 1-4 for quarters, 5+ for overtime periods.'
   person_id: NBA/WNBA player id of the primary person involved in the action, when applicable.
-  sub_type: Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket.
+  sub_type: Action sub-type as the feed writes it, e.g. personal or offensive for a foul, Jump Shot or Layup for a 2pt/3pt shot, 1 of 2 for a free throw.
   team_id: NBA/WNBA team id of the team associated with the action, when applicable.
   time_actual: Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time.
-  x_legacy: Shot or event x-coordinate in the legacy stats.nba.com coordinate system.
-  y_legacy: Shot or event y-coordinate in the legacy stats.nba.com coordinate system.
+  x_legacy: Shot x-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
+  y_legacy: Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
 nba_l2m_games:
   game_id: 10-digit NBA game id (zero-padded), parsed from the season listing page's report link.
   label: Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)".
@@ -16019,14 +16019,14 @@ nba_player_crosswalk:
     match.
 nba_referee_assignments:
   officials.away_team_abbr: Three-letter abbreviation of the away team.
-  officials.away_team_id: 10-digit NBA team id of the away team.
+  officials.away_team_id: 10-digit team id of the away team.
   officials.crew_position: Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not
     label roles.
   officials.game_code: League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations.
   officials.game_date: Game date parsed from the feed's MM/DD/YYYY format.
   officials.game_id: 10-digit game id (zero-padded) for the assigned game.
   officials.home_team_abbr: Three-letter abbreviation of the home team.
-  officials.home_team_id: 10-digit NBA team id of the home team.
+  officials.home_team_id: 10-digit team id of the home team.
   officials.jersey_num: Official's jersey number as a string, from the feed's official{n}_JNum field.
   officials.league: 'League the assignment belongs to: nba, gl (G League), or wnba.'
   officials.official_id: Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's
@@ -26455,21 +26455,21 @@ wnba_live_pbp:
   official_id: Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season.
   period: 'Period of the game: 1-4 for quarters, 5+ for overtime periods.'
   person_id: NBA/WNBA player id of the primary person involved in the action, when applicable.
-  sub_type: Action sub-type detail from the feed, e.g. Personal for a personal foul or Jump Shot for a made basket.
+  sub_type: Action sub-type as the feed writes it, e.g. personal or offensive for a foul, Jump Shot or Layup for a 2pt/3pt shot, 1 of 2 for a free throw.
   team_id: NBA/WNBA team id of the team associated with the action, when applicable.
   time_actual: Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time.
-  x_legacy: Shot or event x-coordinate in the legacy stats.nba.com coordinate system.
-  y_legacy: Shot or event y-coordinate in the legacy stats.nba.com coordinate system.
+  x_legacy: Shot x-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
+  y_legacy: Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
 wnba_referee_assignments:
   officials.away_team_abbr: Three-letter abbreviation of the away team.
-  officials.away_team_id: 10-digit NBA team id of the away team.
+  officials.away_team_id: 10-digit team id of the away team.
   officials.crew_position: Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not
     label roles.
   officials.game_code: League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations.
   officials.game_date: Game date parsed from the feed's MM/DD/YYYY format.
   officials.game_id: 10-digit game id (zero-padded) for the assigned game.
   officials.home_team_abbr: Three-letter abbreviation of the home team.
-  officials.home_team_id: 10-digit NBA team id of the home team.
+  officials.home_team_id: 10-digit team id of the home team.
   officials.jersey_num: Official's jersey number as a string, from the feed's official{n}_JNum field.
   officials.league: 'League the assignment belongs to: nba, gl (G League), or wnba.'
   officials.official_id: Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's

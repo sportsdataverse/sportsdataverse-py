@@ -2,16 +2,20 @@
 
 ``cdn.nba.com``/``cdn.wnba.com`` serve the same static liveData JSON that powers
 NBA.com's live scoreboard: per-whistle referee ids (``officialId``, populated on
-every foul since 2019-20), wall-clock timestamps (``timeActual``), and shot/foul
-locations (``xLegacy``/``yLegacy``).
+every foul since 2019-20), wall-clock timestamps (``timeActual``), and shot
+coordinates (``xLegacy``/``yLegacy``, on 2pt/3pt shots only); fouls and blocks carry
+a court zone (``area``/``areaDetail``) instead.
 
 **Transport note (Task 5 spike, 2026-09-26):** plain HTTP
 (:func:`sportsdataverse.dl_utils.download`) with hoopR's ``.nba_cdn_headers()``-
 equivalent browser headers (Chrome UA, ``Origin``/``Referer: https://www.nba.com``)
 returned a 403 HTML "Access Denied" body for both ``cdn.nba.com`` and
-``cdn.wnba.com``. This module therefore routes through
-:func:`sportsdataverse.nba.nba_stats_runtime._curl_transport` (curl_cffi, Chrome
-TLS impersonation) instead, which returned 200 JSON for both hosts. See
+``cdn.wnba.com``. The refusal is header- and protocol-based, not a TLS fingerprint:
+a later probe matrix (2026-09-26) got 200 JSON from plain ``requests`` carrying a
+full Chrome header set, and the 403 page for a client's default headers. This module
+routes through :func:`sportsdataverse.nba.nba_stats_runtime._curl_transport`
+(curl_cffi Chrome impersonation, the same transport as stats.nba.com), which sends
+a browser-consistent request and returned 200 JSON for both hosts. See
 ``tests/nba/fixtures/nba_live/README.md`` / ``tests/wnba/fixtures/wnba_live/README.md``
 for the capture record.
 
@@ -32,7 +36,7 @@ import polars as pl
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.nba.nba_officiating import _l2m_gid
+from sportsdataverse.nba.nba_officiating import _as_dict, _gid, _l2m_gid, _records
 from sportsdataverse.nba.nba_stats_runtime import _curl_transport
 
 __all__ = [
@@ -124,13 +128,6 @@ NBA_LIVE_GAME_CORE_SCHEMA = pl.Schema(
 )
 
 
-def _gid(game_id: str | int) -> str:
-    """Zero-pad a game ID to 10 digits; a non-integral number is rejected, never truncated."""
-    if isinstance(game_id, float) and not game_id.is_integer():
-        raise ValueError(f"game_id must be an integer id, got {game_id!r}")
-    return str(int(game_id)).zfill(10)
-
-
 def _is_id_col(name: str) -> bool:
     """True for join-key id columns (``official_id``/``person_id``/``team_id``/``*_person_id``)."""
     return bool(_ID_COL_RE.search(name))
@@ -190,13 +187,14 @@ def _fetch_live(
     ``SDV_PY_NBA_STATS_BACKOFF`` (seconds, multiplied by the attempt number,
     default ``1.5``). A transport exception (other than ``ImportError``), a
     throttle/5xx status ({408, 429, 500, 502, 503, 504}), or a 200 response whose
-    body is not a non-empty JSON object are all retried; a 404 or a 403 carrying
-    the S3 ``<Code>AccessDenied</Code>`` marker is never retried -- it is a
-    definitive "no data".
+    body is not a JSON object carrying the liveData ``game`` object are all retried;
+    a 404 or a 403 carrying the S3 ``<Code>AccessDenied</Code>`` marker is never
+    retried -- it is a definitive "no data".
 
     Args:
         kind: ``"playbyplay"`` or ``"boxscore"``.
-        game_id: NBA/WNBA game ID (int or str). Zero-padded to 10 digits.
+        game_id: NBA/WNBA game ID (int or str). Zero-padded to 10 digits; checked by
+            :func:`sportsdataverse.nba.nba_officiating._gid` before any request.
         league: ``"nba"`` (``cdn.nba.com``) or ``"wnba"`` (``cdn.wnba.com``).
         proxy: Optional proxy dict in the ``requests`` ``proxies=`` shape
             (``{"https": "http://host:port"}``); the ``https`` entry (falling back
@@ -209,12 +207,15 @@ def _fetch_live(
         The parsed JSON payload (dict).
 
     Raises:
+        ValueError: ``game_id`` is not one non-negative integer id (a bool, a
+            negative or fractional number, or a string that is not all digits).
         NoDataError: 404, or a 403 whose body carries the S3
             ``<Code>AccessDenied</Code>`` marker -- no liveData object exists for
             this game (too old, or not yet started). Never retried.
         AssetFetchError: A WAF/bot-check block (403 HTML), a throttle/5xx status,
-            or a 200 whose body is not a non-empty JSON object, once the retry
-            budget above is exhausted; also raised (chained via ``from exc``)
+            or a 200 whose body is not a JSON object carrying the liveData ``game``
+            object (an error envelope or a changed schema), once the retry budget
+            above is exhausted; also raised (chained via ``from exc``)
             once a transport exception (a curl_cffi timeout, connection error, or
             TLS failure) exhausts the same budget -- it never escapes as a bare
             exception, it is always reclassified into the error vocabulary.
@@ -259,7 +260,9 @@ def _fetch_live(
             if not is_last:
                 _sleep(backoff * (attempt + 1))
                 continue
-            raise AssetFetchError(f"{host} liveData {kind} transport error for game {_gid(game_id)}: {exc}") from exc
+            raise AssetFetchError(
+                f"{host} liveData {kind} fetch failed (transport error) for game {_gid(game_id)}: {exc}"
+            ) from exc
 
         if status == 404 or (status == 403 and "<Code>AccessDenied</Code>" in text[:500]):
             raise NoDataError(f"{host} has no liveData {kind} for game {_gid(game_id)}")
@@ -270,22 +273,24 @@ def _fetch_live(
                 payload = _json.loads(text)
             except _json.JSONDecodeError:
                 payload = None
-        if status == 200 and isinstance(payload, dict) and payload:
+        # Every liveData body carries a `game` object; a 200 without one is an error
+        # envelope or a changed schema, never an empty game (checked for raw=True too).
+        if status == 200 and isinstance(payload, dict) and isinstance(payload.get("game"), dict):
             return payload
 
         if status != 200 and status not in _RETRYABLE_STATUSES:
             raise AssetFetchError(f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)}")
 
-        # Retryable: a throttle/5xx status, or a 200 with an empty/non-dict body
-        # (H2) -- both a transient failure mode, never silently treated as "no
+        # Retryable: a throttle/5xx status, or a 200 without the liveData `game`
+        # object (H2) -- both a transient failure mode, never silently treated as "no
         # data" the way an unguarded `dict(json.loads(blank_or_bad_text))` would.
         if not is_last:
             _sleep(backoff * (attempt + 1))
             continue
         if status == 200:
             raise AssetFetchError(
-                f"{host} liveData {kind} returned a 200 with an empty or non-JSON-object "
-                f"body for game {_gid(game_id)} after exhausting the retry budget"
+                f"{host} liveData {kind} returned a 200 whose body is not a liveData JSON "
+                f"object (no `game` object) for game {_gid(game_id)} after exhausting the retry budget"
             )
         raise AssetFetchError(
             f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)} "
@@ -297,16 +302,6 @@ def _fetch_live(
     raise AssetFetchError(f"{host} liveData {kind} fetch failed for game {_gid(game_id)}")
 
 
-def _as_dict(x: Any) -> dict[str, Any]:
-    """*x* when it is a dict, else ``{}`` -- keeps the parsers' no-raise contract on malformed envelopes."""
-    return x if isinstance(x, dict) else {}
-
-
-def _records(x: Any) -> list[dict[str, Any]]:
-    """The dict elements of *x* when it is a list, else ``[]``."""
-    return [r for r in x if isinstance(r, dict)] if isinstance(x, list) else []
-
-
 def _stringify(v: Any) -> Any:
     """Recursively turn every non-dict leaf into a string (lists as JSON), keeping ``None``."""
     if isinstance(v, dict):
@@ -316,24 +311,35 @@ def _stringify(v: Any) -> Any:
     return _json.dumps(v) if isinstance(v, list) else str(v)
 
 
+def _flatten(records: list[dict[str, Any]]) -> pl.DataFrame:
+    """One ``pl.json_normalize`` + snake_case rename + id-column Int64 cast pass."""
+    # infer_schema_length=None: default 100-row inference silently drops fields that
+    # first appear later (e.g. block_person_id first seen ~action 110 on real captures).
+    df = pl.json_normalize(records, separator="_", infer_schema_length=None)
+    names: dict[str, str] = {}
+    for c in df.columns:
+        names.setdefault(underscore(c), c)
+    if len(names) < df.width:
+        # Two keys snake-case to one name (personId and person_id): keep the first. Only
+        # then -- select/drop would zero the height of a 1-row, 0-column frame.
+        df = df.select(list(names.values()))
+    df = df.rename({c: n for n, c in names.items()})
+    id_cols = [c for c in df.columns if _is_id_col(c)]
+    return df.with_columns([pl.col(c).cast(pl.Int64, strict=False) for c in id_cols]) if id_cols else df
+
+
 def _normalize(records: list[dict[str, Any]]) -> pl.DataFrame:
     """``pl.json_normalize`` + snake_case rename + id-column Int64 cast, or an empty frame."""
     if not records:
         return pl.DataFrame()
-    # infer_schema_length=None: default 100-row inference silently drops fields that
-    # first appear later (e.g. block_person_id first seen ~action 110 on real captures).
     try:
-        df = pl.json_normalize(records, separator="_", infer_schema_length=None)
+        return _flatten(records)
     except (TypeError, ValueError, pl.exceptions.PolarsError):
-        # Type-inconsistent values (a list mixing ints and strings, one key typed two
-        # ways): stringify the leaves rather than raise, per the parser contract. Real
-        # captures never take this path, so their dtypes are unchanged.
-        df = pl.json_normalize([_stringify(r) for r in records], separator="_", infer_schema_length=None)
-    df = df.rename({c: underscore(c) for c in df.columns})
-    id_cols = [c for c in df.columns if _is_id_col(c)]
-    if id_cols:
-        df = df.with_columns([pl.col(c).cast(pl.Int64, strict=False) for c in id_cols])
-    return df
+        # A cell of an unexpected type (a list mixing ints and strings, a list or object
+        # id, one key typed two ways): flatten stringified leaves rather than raise, per
+        # the parser contract, so an id that cannot cast is null. Real captures never
+        # take this path, so their dtypes are unchanged.
+        return _flatten([_stringify(r) for r in records])
 
 
 def _ensure_core_schema(df: pl.DataFrame, schema: pl.Schema) -> pl.DataFrame:
@@ -347,7 +353,8 @@ def _ensure_core_schema(df: pl.DataFrame, schema: pl.Schema) -> pl.DataFrame:
     *schema* column it's missing is added as a typed null, and any it already has
     is cast to the schema's dtype so two frames built from different payloads
     (e.g. one side of a boxscore with 0 players, the other with 12) always share
-    a common, ``pl.concat``-safe core schema.
+    a common, ``pl.concat``-safe core schema. A list or struct where a scalar
+    belongs cannot cast, so it is replaced by a typed null too.
 
     Args:
         df: The frame to backfill (from :func:`_normalize` or a downstream helper).
@@ -367,7 +374,9 @@ def _ensure_core_schema(df: pl.DataFrame, schema: pl.Schema) -> pl.DataFrame:
     if df.height == 0:
         return pl.DataFrame(schema=schema)
     exprs = [
-        pl.col(name).cast(dtype, strict=False) if name in df.columns else pl.lit(None, dtype=dtype).alias(name)
+        pl.col(name).cast(dtype, strict=False)
+        if name in df.columns and not df.schema[name].is_nested()
+        else pl.lit(None, dtype=dtype).alias(name)
         for name, dtype in schema.items()
     ]
     return df.with_columns(exprs)
@@ -396,7 +405,9 @@ def parse_nba_live_pbp(payload: dict[str, Any], *, return_as_pandas: bool = Fals
 
     Raises:
         This function does not raise. Empty or malformed payloads produce a
-        zero-row DataFrame carrying :data:`NBA_LIVE_PBP_CORE_SCHEMA`.
+        zero-row DataFrame carrying :data:`NBA_LIVE_PBP_CORE_SCHEMA`; a cell of the
+        wrong type (a list or object where a scalar belongs, a non-numeric id)
+        becomes null, or its JSON text in a string column.
 
     Example:
         Parse a real capture::
@@ -450,7 +461,9 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
 
     Raises:
         This function does not raise. Empty or malformed payloads produce
-        zero-row, core-schema DataFrames for every key.
+        zero-row, core-schema DataFrames for every key; a cell of the wrong type (a
+        list or object where a scalar belongs, a non-numeric id) becomes null, or its
+        JSON text in a string column.
 
     Example:
         Parse a real capture::
@@ -481,10 +494,14 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
         df = _with_gid(_normalize([flat] if flat else []))
         return _ensure_core_schema(df, NBA_LIVE_TEAM_CORE_SCHEMA)
 
+    def _team_id(v: Any) -> pl.Expr:
+        # A list or object teamId cannot cast to Int64: null, not an error.
+        return pl.lit(None if isinstance(v, (dict, list)) else v).cast(pl.Int64, strict=False)
+
     def _players_frame(team: dict[str, Any]) -> pl.DataFrame:
         df = _normalize(_records(team.get("players")))
         if df.height:
-            df = df.with_columns(pl.lit(team.get("teamId")).cast(pl.Int64, strict=False).alias("team_id"))
+            df = df.with_columns(_team_id(team.get("teamId")).alias("team_id"))
         df = _with_gid(df)
         return _ensure_core_schema(df, NBA_LIVE_PLAYERS_CORE_SCHEMA)
 
@@ -492,11 +509,11 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
     home_team = _as_dict(g.get("homeTeam"))
     away_team = _as_dict(g.get("awayTeam"))
 
-    game_df = _normalize([game_meta] if game_meta else [])
+    game_df = _with_gid(_normalize([game_meta] if game_meta else []))
     if game_df.height:
         game_df = game_df.with_columns(
-            pl.lit(home_team.get("teamId")).cast(pl.Int64, strict=False).alias("home_team_id"),
-            pl.lit(away_team.get("teamId")).cast(pl.Int64, strict=False).alias("away_team_id"),
+            _team_id(home_team.get("teamId")).alias("home_team_id"),
+            _team_id(away_team.get("teamId")).alias("away_team_id"),
         )
 
     out = {
@@ -538,10 +555,14 @@ def nba_live_pbp(
         in :func:`parse_nba_live_pbp`.
 
     Raises:
+        ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
+            negative or fractional number, or a string that is not all digits
+            (checked before any request).
         NoDataError: The game has no liveData play-by-play object (too old, or
             not yet started).
         AssetFetchError: The fetch failed (network error, rate limit, or a
-            bot-check block).
+            bot-check block), or the 200 body is not a JSON object carrying the
+            liveData ``game`` object -- checked with ``raw=True`` too.
         ImportError: curl_cffi is not installed -- required for the live
             transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 
@@ -591,10 +612,14 @@ def nba_live_boxscore(
         documented in :func:`parse_nba_live_boxscore`.
 
     Raises:
+        ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
+            negative or fractional number, or a string that is not all digits
+            (checked before any request).
         NoDataError: The game has no liveData boxscore object (too old, or not
             yet started).
         AssetFetchError: The fetch failed (network error, rate limit, or a
-            bot-check block).
+            bot-check block), or the 200 body is not a JSON object carrying the
+            liveData ``game`` object -- checked with ``raw=True`` too.
         ImportError: curl_cffi is not installed -- required for the live
             transport (``pip install curl_cffi`` / ``sportsdataverse[all]``).
 

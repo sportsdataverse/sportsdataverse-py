@@ -9,13 +9,17 @@ from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba import nba_live as mod
 from sportsdataverse.nba.nba_live import (
+    NBA_LIVE_GAME_CORE_SCHEMA,
+    NBA_LIVE_OFFICIALS_CORE_SCHEMA,
     NBA_LIVE_PBP_CORE_SCHEMA,
     NBA_LIVE_PLAYERS_CORE_SCHEMA,
+    NBA_LIVE_TEAM_CORE_SCHEMA,
     nba_live_boxscore,
     nba_live_pbp,
     parse_nba_live_boxscore,
     parse_nba_live_pbp,
 )
+from sportsdataverse.wnba.wnba_live import wnba_live_boxscore, wnba_live_pbp
 
 FIX = Path(__file__).parent / "fixtures" / "nba_live"
 PBP_PAYLOAD = json.loads((FIX / "playbyplay_0022500001.json").read_text())
@@ -357,14 +361,115 @@ _MALFORMED_LIVE = [
     {"game": {"gameId": "abc", "actions": [{"actionNumber": 1}]}},
     {"game": {"homeTeam": [], "awayTeam": "x", "officials": {}}},
     {"game": {"homeTeam": {"teamId": "abc", "players": [1, {"personId": 5}]}, "officials": [1]}},
+    # Wrong-typed cells inside well-formed rows (self-review finding 3).
+    {"game": {"gameId": "0022500001", "actions": [{"personId": [1, 2]}]}},
+    {"game": {"gameId": "0022500001", "actions": [{"clock": [1], "description": ["a"], "period": {"q": 4}}]}},
+    {"game": {"gameId": "0022500001", "actions": [{"personId": 1, "person_id": 2}]}},
+    {"game": {"gameId": "0022500001", "actions": [{"personId": 1}, {"personId": [1]}]}},
+    {
+        "game": {
+            "gameId": "0022500001",
+            "gameStatus": [3],
+            "officials": [{"personId": [1]}],
+            "homeTeam": {"teamId": [1], "score": {"q": 1}, "players": [{"personId": [5], "name": ["x"]}]},
+            "awayTeam": {"teamId": {"id": 2}, "players": [{"personId": 6, "person_id": 7}]},
+        }
+    },
 ]
+_BOX_CORE = {
+    "game": NBA_LIVE_GAME_CORE_SCHEMA,
+    "officials": NBA_LIVE_OFFICIALS_CORE_SCHEMA,
+    "home_players": NBA_LIVE_PLAYERS_CORE_SCHEMA,
+    "away_players": NBA_LIVE_PLAYERS_CORE_SCHEMA,
+    "home_team": NBA_LIVE_TEAM_CORE_SCHEMA,
+    "away_team": NBA_LIVE_TEAM_CORE_SCHEMA,
+}
+
+
+def _core(df, schema):
+    return {name: df.schema.get(name) for name in schema}
 
 
 @pytest.mark.parametrize("payload", _MALFORMED_LIVE)
 def test_malformed_live_payloads_never_raise(payload):
-    # The parsers document that malformed envelopes produce core-schema frames.
+    # The parsers document that malformed envelopes and wrong-typed cells produce
+    # frames carrying every core column at its declared dtype.
     pbp = parse_nba_live_pbp(payload)
-    assert set(NBA_LIVE_PBP_CORE_SCHEMA.names()) <= set(pbp.columns)
+    assert _core(pbp, NBA_LIVE_PBP_CORE_SCHEMA) == dict(NBA_LIVE_PBP_CORE_SCHEMA)
     box = parse_nba_live_boxscore(payload)
-    assert set(box) == {"game", "officials", "home_players", "away_players", "home_team", "away_team"}
-    assert set(NBA_LIVE_PLAYERS_CORE_SCHEMA.names()) <= set(box["home_players"].columns)
+    assert set(box) == set(_BOX_CORE)
+    for key, schema in _BOX_CORE.items():
+        assert _core(box[key], schema) == dict(schema), key
+
+
+@pytest.mark.parametrize(
+    ("action", "col"),
+    [({"personId": [1, 2]}, "person_id"), ({"clock": [1]}, "clock"), ({"description": ["a"]}, "description")],
+)
+def test_wrong_typed_live_cell_is_null(action, col):
+    pbp = parse_nba_live_pbp({"game": {"gameId": "0022500001", "actions": [{"actionNumber": 3, **action}]}})
+    assert pbp.select("action_number", col).row(0) == (3, None)
+
+
+def test_colliding_and_list_ids_keep_the_rows():
+    # personId and person_id snake-case to one column: the first key wins.
+    pbp = parse_nba_live_pbp({"game": {"gameId": "0022500001", "actions": [{"personId": 7, "person_id": 8}]}})
+    assert pbp["person_id"].to_list() == [7]
+    box = parse_nba_live_boxscore(
+        {"game": {"gameId": "0022500001", "homeTeam": {"teamId": [1], "players": [{"personId": 5}]}}}
+    )
+    assert box["home_players"].select("team_id", "person_id").row(0) == (None, 5)
+    assert box["game"]["home_team_id"].to_list() == [None]
+
+
+def test_boxscore_game_table_game_id_is_zero_padded_like_the_rest():
+    box = parse_nba_live_boxscore({"game": {"gameId": 22500001, "gameStatus": 3, "officials": [{"personId": 1}]}})
+    assert box["game"]["game_id"].to_list() == ["0022500001"] == box["officials"]["game_id"].to_list()
+
+
+# ---------------------------------------------------------------------------
+# Fetch contract: bad ids, bodies without `game`, and the "fetch failed" marker
+# ---------------------------------------------------------------------------
+
+_LIVE_FETCHERS = [nba_live_pbp, nba_live_boxscore, wnba_live_pbp, wnba_live_boxscore]
+
+
+@pytest.mark.parametrize("gid", [True, -1, "-1", "4_2500405", " 22500001", "+22500001", "abc", 22500001.5])
+@pytest.mark.parametrize("fetch", _LIVE_FETCHERS)
+def test_bad_game_id_is_value_error_before_any_request(monkeypatch, fetch, gid):
+    transport, calls = _sequence_transport((200, json.dumps(PBP_PAYLOAD)))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(ValueError, match="integer id"):
+        fetch(gid)
+    assert calls["n"] == 0
+
+
+@pytest.mark.parametrize("body", ['{"code": "rest_forbidden"}', '{"game": []}', '{"game": "x"}', '{"meta": {"v": 1}}'])
+@pytest.mark.parametrize("fetch", _LIVE_FETCHERS)
+def test_200_without_the_game_object_is_asset_fetch_error(monkeypatch, fetch, body):
+    transport, _ = _fake_transport(200, body)
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError, match="no `game` object"):
+        fetch("0022500001")
+    with pytest.raises(AssetFetchError, match="no `game` object"):
+        fetch("0022500001", raw=True)
+
+
+@pytest.mark.parametrize(
+    ("response", "blocked"),
+    [
+        (TimeoutError("curl_cffi timed out"), True),
+        ((403, "<html>captcha</html>"), True),
+        ((503, ""), True),
+        ((200, "<html>akamai interstitial</html>"), False),
+        ((200, '{"code": "rest_forbidden"}'), False),
+    ],
+)
+def test_only_failed_fetches_say_fetch_failed(monkeypatch, response, blocked):
+    # tests/nba/test_nba_officiating_live.py skips only an AssetFetchError that says
+    # "fetch failed"; a 200 with the wrong body is drift and must fail the live run.
+    transport, _ = _sequence_transport(response)
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(AssetFetchError) as err:
+        nba_live_pbp("0022500001")
+    assert ("fetch failed" in str(err.value)) is blocked
