@@ -574,10 +574,17 @@ def _season_end_year(s: str, league: str) -> int | None:
     2025 represents the 2026 end year. WNBA plays single-year seasons, so season code
     2026 represents the 2026 season.
     """
-    if len(s) != 5:
+    if len(s) != 5 or not s[1:].isdigit():
         return None
     start_year = int(s[1:])
     return start_year + 1 if league in ("nba", "gl") else start_year
+
+
+def _table_rows(block: Any, table: str) -> list[dict[str, Any]]:
+    """The row dicts of ``block[table]["rows"]``; any malformed level yields ``[]`` (parser contract)."""
+    t = block.get(table) if isinstance(block, dict) else None
+    rows = t.get("rows") if isinstance(t, dict) else None
+    return [r for r in rows if isinstance(r, dict)] if isinstance(rows, list) else []
 
 
 def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[str, pl.DataFrame]:
@@ -623,9 +630,9 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
     """
     if league not in ("nba", "gl", "wnba"):
         raise ValueError(f"league must be 'nba', 'gl' or 'wnba', got {league!r}")
-    block = payload.get(league) or {}
+    block = payload.get(league) if isinstance(payload, dict) else None
     rows = []
-    for g in (block.get("Table") or {}).get("rows") or []:
+    for g in _table_rows(block, "Table"):
         s = str(g.get("season") or "")
         for k in range(1, 5):
             if not g.get(f"official{k}"):
@@ -633,7 +640,7 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
             rows.append(
                 {
                     "league": league,
-                    "game_id": _gid(g["game_id"]),
+                    "game_id": _l2m_gid(g.get("game_id")),
                     "game_date": _mdy(g.get("game_date")),
                     "season": _season_end_year(s, league),
                     "season_type": _SEASON_TYPES.get(s[:1]),
@@ -655,7 +662,7 @@ def parse_nba_referee_assignments(payload: dict, league: str = "nba") -> dict[st
             "official_id": r.get("official_code"),
             "official_name": r.get("replaycenter_official"),
         }
-        for r in (block.get("Table1") or {}).get("rows") or []
+        for r in _table_rows(block, "Table1")
     ]
     return {
         "officials": _frame(rows, NBA_REFEREE_ASSIGN_SCHEMA),
@@ -695,7 +702,9 @@ def nba_referee_assignments(
         ValueError: If league is not "nba", "gl", or "wnba", or date is not a valid
             "YYYY-MM-DD" date (checked before any request).
         AssetFetchError: The fetch failed (network error, rate limit, or Akamai WAF
-            block), or the response lacks the league's ``Table``/``Table1`` block.
+            block), or the league's ``Table``/``Table1`` rows are missing or malformed
+            (a row without ``game_id`` included). With ``raw=True`` all three leagues
+            are checked, since the whole payload is returned.
 
     Note:
         A date with no games for the requested league is not an error -- the endpoint
@@ -743,19 +752,29 @@ def nba_referee_assignments(
         raise ValueError(f"date must be a valid 'YYYY-MM-DD' date, got {date!r}") from None
     resp = _official_get(_ASSIGN_URL, params={"date": day}, proxy=proxy)
     payload = _official_json(resp, f"{_ASSIGN_URL}?date={day}")
+
     # The feed carries nba, gl and wnba blocks, each with Table and Table1 holding a
     # ``rows`` list, on every date (zero rows on a day without games), so anything
     # else is an error envelope or a changed schema -- never an empty day. Checked
     # before the raw return too, so a raw capture never stores an error envelope.
-    block = payload.get(league)
-    if not isinstance(block, dict) or not all(
-        isinstance(block.get(t), dict)
-        and isinstance(block[t].get("rows"), list)
-        and all(isinstance(r, dict) for r in block[t]["rows"])
-        for t in ("Table", "Table1")
-    ):
+    def _valid(lg: str) -> bool:
+        b = payload.get(lg)
+        return (
+            isinstance(b, dict)
+            and all(
+                isinstance(b.get(t), dict)
+                and isinstance(b[t].get("rows"), list)
+                and all(isinstance(r, dict) for r in b[t]["rows"])
+                for t in ("Table", "Table1")
+            )
+            and all(r.get("game_id") for r in b["Table"]["rows"])
+        )
+
+    # raw=True hands back all three leagues, so all three must be well-formed.
+    bad = [lg for lg in (("nba", "gl", "wnba") if raw else (league,)) if not _valid(lg)]
+    if bad:
         raise AssetFetchError(
-            f"official.nba.com referee assignments for {day}: no {league!r} Table/Table1 rows in the response"
+            f"official.nba.com referee assignments for {day}: malformed or missing {bad} Table/Table1 rows"
         )
     if raw:
         return payload  # full three-league {nba, gl, wnba} payload

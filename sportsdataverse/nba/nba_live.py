@@ -32,6 +32,7 @@ import polars as pl
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.nba.nba_officiating import _l2m_gid
 from sportsdataverse.nba.nba_stats_runtime import _curl_transport
 
 __all__ = [
@@ -296,13 +297,38 @@ def _fetch_live(
     raise AssetFetchError(f"{host} liveData {kind} fetch failed for game {_gid(game_id)}")
 
 
+def _as_dict(x: Any) -> dict[str, Any]:
+    """*x* when it is a dict, else ``{}`` -- keeps the parsers' no-raise contract on malformed envelopes."""
+    return x if isinstance(x, dict) else {}
+
+
+def _records(x: Any) -> list[dict[str, Any]]:
+    """The dict elements of *x* when it is a list, else ``[]``."""
+    return [r for r in x if isinstance(r, dict)] if isinstance(x, list) else []
+
+
+def _stringify(v: Any) -> Any:
+    """Recursively turn every non-dict leaf into a string (lists as JSON), keeping ``None``."""
+    if isinstance(v, dict):
+        return {k: _stringify(x) for k, x in v.items()}
+    if v is None:
+        return None
+    return _json.dumps(v) if isinstance(v, list) else str(v)
+
+
 def _normalize(records: list[dict[str, Any]]) -> pl.DataFrame:
     """``pl.json_normalize`` + snake_case rename + id-column Int64 cast, or an empty frame."""
     if not records:
         return pl.DataFrame()
     # infer_schema_length=None: default 100-row inference silently drops fields that
     # first appear later (e.g. block_person_id first seen ~action 110 on real captures).
-    df = pl.json_normalize(records, separator="_", infer_schema_length=None)
+    try:
+        df = pl.json_normalize(records, separator="_", infer_schema_length=None)
+    except (TypeError, ValueError, pl.exceptions.PolarsError):
+        # Type-inconsistent values (a list mixing ints and strings, one key typed two
+        # ways): stringify the leaves rather than raise, per the parser contract. Real
+        # captures never take this path, so their dtypes are unchanged.
+        df = pl.json_normalize([_stringify(r) for r in records], separator="_", infer_schema_length=None)
     df = df.rename({c: underscore(c) for c in df.columns})
     id_cols = [c for c in df.columns if _is_id_col(c)]
     if id_cols:
@@ -390,11 +416,11 @@ def parse_nba_live_pbp(payload: dict[str, Any], *, return_as_pandas: bool = Fals
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    game = (payload or {}).get("game") or {}
-    actions = game.get("actions") or []
-    df = _normalize(actions)
-    if df.height and game.get("gameId"):
-        df = df.with_columns(pl.lit(_gid(game["gameId"])).alias("game_id"))
+    game = _as_dict(_as_dict(payload).get("game"))
+    df = _normalize(_records(game.get("actions")))
+    gid = _l2m_gid(game.get("gameId") or None)
+    if df.height and gid:
+        df = df.with_columns(pl.lit(gid).alias("game_id"))
     df = _ensure_core_schema(df, NBA_LIVE_PBP_CORE_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
@@ -444,8 +470,8 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
             .. _hoopR: https://hoopR.sportsdataverse.org
             .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    g = (payload or {}).get("game") or {}
-    gid = _gid(g["gameId"]) if g.get("gameId") else None
+    g = _as_dict(_as_dict(payload).get("game"))
+    gid = _l2m_gid(g.get("gameId") or None)
 
     def _with_gid(df: pl.DataFrame) -> pl.DataFrame:
         return df.with_columns(pl.lit(gid).alias("game_id")) if df.height and gid else df
@@ -456,27 +482,27 @@ def parse_nba_live_boxscore(payload: dict[str, Any], *, return_as_pandas: bool =
         return _ensure_core_schema(df, NBA_LIVE_TEAM_CORE_SCHEMA)
 
     def _players_frame(team: dict[str, Any]) -> pl.DataFrame:
-        df = _normalize(team.get("players") or [])
+        df = _normalize(_records(team.get("players")))
         if df.height:
-            df = df.with_columns(pl.lit(team.get("teamId")).cast(pl.Int64).alias("team_id"))
+            df = df.with_columns(pl.lit(team.get("teamId")).cast(pl.Int64, strict=False).alias("team_id"))
         df = _with_gid(df)
         return _ensure_core_schema(df, NBA_LIVE_PLAYERS_CORE_SCHEMA)
 
     game_meta = {k: v for k, v in g.items() if k not in ("officials", "homeTeam", "awayTeam", "arena")}
-    home_team = g.get("homeTeam") or {}
-    away_team = g.get("awayTeam") or {}
+    home_team = _as_dict(g.get("homeTeam"))
+    away_team = _as_dict(g.get("awayTeam"))
 
     game_df = _normalize([game_meta] if game_meta else [])
     if game_df.height:
         game_df = game_df.with_columns(
-            pl.lit(home_team.get("teamId")).cast(pl.Int64).alias("home_team_id"),
-            pl.lit(away_team.get("teamId")).cast(pl.Int64).alias("away_team_id"),
+            pl.lit(home_team.get("teamId")).cast(pl.Int64, strict=False).alias("home_team_id"),
+            pl.lit(away_team.get("teamId")).cast(pl.Int64, strict=False).alias("away_team_id"),
         )
 
     out = {
         "game": _ensure_core_schema(game_df, NBA_LIVE_GAME_CORE_SCHEMA),
         "officials": _ensure_core_schema(
-            _with_gid(_normalize(g.get("officials") or [])), NBA_LIVE_OFFICIALS_CORE_SCHEMA
+            _with_gid(_normalize(_records(g.get("officials")))), NBA_LIVE_OFFICIALS_CORE_SCHEMA
         ),
         "home_players": _players_frame(home_team),
         "away_players": _players_frame(away_team),

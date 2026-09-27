@@ -383,3 +383,31 @@ def test_fractional_game_id_is_rejected_not_truncated(monkeypatch, gid):
     with pytest.raises(ValueError, match="integer id"):
         nba_live._gid(gid)
     assert nba_live._gid(42500405.0) == "0042500405"
+
+
+def test_referee_assignments_row_without_game_id_is_asset_fetch_error(monkeypatch):
+    payload = {"nba": {"Table": {"rows": [{"official1": "A Ref", "season": "22025"}]}, "Table1": {"rows": []}}}
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13")
+
+
+def test_referee_assignments_raw_requires_all_three_leagues(monkeypatch):
+    ok = {"Table": {"rows": []}, "Table1": {"rows": []}}
+    payload = {"wnba": ok}  # well-formed for the requested league only
+    monkeypatch.setattr(mod, "_official_get", lambda url, **kw: _Resp(200, json.dumps(payload), "application/json"))
+    assert nba_referee_assignments("2026-06-13", league="wnba")["officials"].height == 0
+    with pytest.raises(AssetFetchError):
+        nba_referee_assignments("2026-06-13", league="wnba", raw=True)
+
+
+def test_parse_referee_assignments_tolerates_malformed_rows():
+    # The parser itself never raises: no game_id -> null, odd season code -> null,
+    # non-dict rows and a non-dict payload are skipped.
+    payload = {"nba": {"Table": {"rows": [{"official1": "A Ref", "season": "2X025"}, 7]}, "Table1": {"rows": ["x"]}}}
+    out = parse_nba_referee_assignments(payload, "nba")
+    assert out["officials"].height == 1
+    assert out["officials"]["game_id"][0] is None
+    assert out["officials"]["season"][0] is None
+    assert out["replay_center"].height == 0
+    assert parse_nba_referee_assignments(["not", "a", "dict"], "nba")["officials"].height == 0

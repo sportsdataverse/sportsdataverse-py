@@ -343,3 +343,28 @@ def test_200_html_then_valid_json_recovers(monkeypatch):
     df = nba_live_pbp("0022500001")
     assert df.height == len(PBP_PAYLOAD["game"]["actions"])
     assert calls["n"] == 2
+
+
+_MALFORMED_LIVE = [
+    None,
+    [],
+    "x",
+    {"game": []},
+    {"game": "x"},
+    {"game": {"actions": {}}},
+    {"game": {"actions": {"a": 1}}},
+    {"game": {"actions": [1, "x", None]}},
+    {"game": {"gameId": "abc", "actions": [{"actionNumber": 1}]}},
+    {"game": {"homeTeam": [], "awayTeam": "x", "officials": {}}},
+    {"game": {"homeTeam": {"teamId": "abc", "players": [1, {"personId": 5}]}, "officials": [1]}},
+]
+
+
+@pytest.mark.parametrize("payload", _MALFORMED_LIVE)
+def test_malformed_live_payloads_never_raise(payload):
+    # The parsers document that malformed envelopes produce core-schema frames.
+    pbp = parse_nba_live_pbp(payload)
+    assert set(NBA_LIVE_PBP_CORE_SCHEMA.names()) <= set(pbp.columns)
+    box = parse_nba_live_boxscore(payload)
+    assert set(box) == {"game", "officials", "home_players", "away_players", "home_team", "away_team"}
+    assert set(NBA_LIVE_PLAYERS_CORE_SCHEMA.names()) <= set(box["home_players"].columns)
