@@ -517,6 +517,8 @@ _REPLAY_ROW = {"game_date": "06/13/2026", "official_code": 1627541, "replaycente
         ({"home_team_id": ""}, {}, "officials", "home_team_id", None),
         ({}, {"official_code": ""}, "replay_center", "official_id", None),
         ({"official1": {"name": "A Ref"}}, {}, "officials", "official_name", '{"name": "A Ref"}'),
+        # A non-scalar replay-center name still names the official: the row is kept.
+        ({}, {"replaycenter_official": ["X", "Y"]}, "replay_center", "official_name", '["X", "Y"]'),
     ],
 )
 def test_referee_bad_cells_become_null_in_parser_and_fetcher(monkeypatch, row, replay, table, col, expected):

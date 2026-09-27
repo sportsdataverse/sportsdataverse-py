@@ -882,9 +882,12 @@ def nba_referee_assignments(
             # documented game_id contract): "not-an-id" or an 11-digit value is not.
             and all(re.fullmatch(r"\d{10}", _l2m_gid(r.get("game_id")) or "") for r in b["Table"]["rows"])
             # A replay-center row names its official (every real row does): an empty
-            # record or a renamed field would otherwise parse to a row of nulls.
+            # record, a missing, null or blank name, or a renamed field would otherwise
+            # parse to a row of nulls. A non-scalar name keeps its row, as in hoopR/wehoop.
             and all(
-                isinstance(r.get("replaycenter_official"), str) and r["replaycenter_official"].strip()
+                r.get("replaycenter_official").strip()
+                if isinstance(r.get("replaycenter_official"), str)
+                else r.get("replaycenter_official") not in (None, [], {})
                 for r in b["Table1"]["rows"]
             )
         )
