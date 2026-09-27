@@ -3465,6 +3465,8 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |EPAdrive_off_n                       |Int64   |
         |yardsdrive_off_n                     |Int64   |
         |playsdrive_off_n                     |Int64   |
+        |turnovers_off_n                      |Int64   |
+        |turnovers_off                        |Float64 |
         |playsgame_off                        |Float64 |
         |EPAdrive_off                         |Float64 |
         |EPAgame_off                          |Float64 |
@@ -3493,6 +3495,7 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_off_rank         |Float64 |
         |start_position_off_rank              |Float64 |
         |havoc_off_rank                       |Float64 |
+        |turnovers_off_rank                   |Float64 |
         |explosive_off_rank                   |Float64 |
         |passrate_off_rank                    |Float64 |
         |rushrate_off_rank                    |Float64 |
@@ -3543,6 +3546,8 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |EPAdrive_def_n                       |Int64   |
         |yardsdrive_def_n                     |Int64   |
         |playsdrive_def_n                     |Int64   |
+        |turnovers_def_n                      |Int64   |
+        |turnovers_def                        |Float64 |
         |playsgame_def                        |Float64 |
         |EPAdrive_def                         |Float64 |
         |EPAgame_def                          |Float64 |
@@ -3571,6 +3576,7 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_def_rank         |Float64 |
         |start_position_def_rank              |Float64 |
         |havoc_def_rank                       |Float64 |
+        |turnovers_def_rank                   |Float64 |
         |explosive_def_rank                   |Float64 |
         |passrate_def_rank                    |Float64 |
         |rushrate_def_rank                    |Float64 |
@@ -3591,20 +3597,32 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |yardsplay_margin_rank                |Float64 |
         |start_position_margin                |Float64 |
         |start_position_margin_rank           |Float64 |
+        |explosive_margin                     |Float64 |
+        |turnover_margin                      |Float64 |
+        |explosive_margin_rank                |Float64 |
+        |turnover_margin_rank                 |Float64 |
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
+        |pts_per_opp_off_n                    |Int64   |
         |available_yards_pct_off              |Float64 |
+        |pts_per_opp_off                      |Float64 |
         |available_yards_pct_off_rank         |Float64 |
+        |pts_per_opp_off_rank                 |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
+        |pts_per_opp_def_n                    |Int64   |
         |available_yards_pct_def              |Float64 |
+        |pts_per_opp_def                      |Float64 |
         |available_yards_pct_def_rank         |Float64 |
+        |pts_per_opp_def_rank                 |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
+        |pts_per_opp_margin                   |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
+        |pts_per_opp_margin_rank              |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |
@@ -4229,6 +4247,8 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |EPAdrive_off_n                       |Int64   |
         |yardsdrive_off_n                     |Int64   |
         |playsdrive_off_n                     |Int64   |
+        |turnovers_off_n                      |Int64   |
+        |turnovers_off                        |Float64 |
         |playsgame_off                        |Float64 |
         |EPAdrive_off                         |Float64 |
         |EPAgame_off                          |Float64 |
@@ -4257,6 +4277,7 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_off_rank         |Float64 |
         |start_position_off_rank              |Float64 |
         |havoc_off_rank                       |Float64 |
+        |turnovers_off_rank                   |Float64 |
         |explosive_off_rank                   |Float64 |
         |passrate_off_rank                    |Float64 |
         |rushrate_off_rank                    |Float64 |
@@ -4307,6 +4328,8 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |EPAdrive_def_n                       |Int64   |
         |yardsdrive_def_n                     |Int64   |
         |playsdrive_def_n                     |Int64   |
+        |turnovers_def_n                      |Int64   |
+        |turnovers_def                        |Float64 |
         |playsgame_def                        |Float64 |
         |EPAdrive_def                         |Float64 |
         |EPAgame_def                          |Float64 |
@@ -4335,6 +4358,7 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_def_rank         |Float64 |
         |start_position_def_rank              |Float64 |
         |havoc_def_rank                       |Float64 |
+        |turnovers_def_rank                   |Float64 |
         |explosive_def_rank                   |Float64 |
         |passrate_def_rank                    |Float64 |
         |rushrate_def_rank                    |Float64 |
@@ -4355,20 +4379,32 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |yardsplay_margin_rank                |Float64 |
         |start_position_margin                |Float64 |
         |start_position_margin_rank           |Float64 |
+        |explosive_margin                     |Float64 |
+        |turnover_margin                      |Float64 |
+        |explosive_margin_rank                |Float64 |
+        |turnover_margin_rank                 |Float64 |
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
+        |pts_per_opp_off_n                    |Int64   |
         |available_yards_pct_off              |Float64 |
+        |pts_per_opp_off                      |Float64 |
         |available_yards_pct_off_rank         |Float64 |
+        |pts_per_opp_off_rank                 |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
+        |pts_per_opp_def_n                    |Int64   |
         |available_yards_pct_def              |Float64 |
+        |pts_per_opp_def                      |Float64 |
         |available_yards_pct_def_rank         |Float64 |
+        |pts_per_opp_def_rank                 |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
+        |pts_per_opp_margin                   |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
+        |pts_per_opp_margin_rank              |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |

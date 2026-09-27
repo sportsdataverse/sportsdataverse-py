@@ -5432,6 +5432,10 @@ load_cfb_team_summaries:
   type: Int64
 - name: playsdrive_off_n
   type: Int64
+- name: turnovers_off_n
+  type: Int64
+- name: turnovers_off
+  type: Float64
 - name: playsgame_off
   type: Float64
 - name: EPAdrive_off
@@ -5487,6 +5491,8 @@ load_cfb_team_summaries:
 - name: start_position_off_rank
   type: Float64
 - name: havoc_off_rank
+  type: Float64
+- name: turnovers_off_rank
   type: Float64
 - name: explosive_off_rank
   type: Float64
@@ -5588,6 +5594,10 @@ load_cfb_team_summaries:
   type: Int64
 - name: playsdrive_def_n
   type: Int64
+- name: turnovers_def_n
+  type: Int64
+- name: turnovers_def
+  type: Float64
 - name: playsgame_def
   type: Float64
 - name: EPAdrive_def
@@ -5644,6 +5654,8 @@ load_cfb_team_summaries:
   type: Float64
 - name: havoc_def_rank
   type: Float64
+- name: turnovers_def_rank
+  type: Float64
 - name: explosive_def_rank
   type: Float64
 - name: passrate_def_rank
@@ -5684,21 +5696,41 @@ load_cfb_team_summaries:
   type: Float64
 - name: start_position_margin_rank
   type: Float64
+- name: explosive_margin
+  type: Float64
+- name: turnover_margin
+  type: Float64
+- name: explosive_margin_rank
+  type: Float64
+- name: turnover_margin_rank
+  type: Float64
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
   type: Int64
+- name: pts_per_opp_off_n
+  type: Int64
 - name: available_yards_pct_off
   type: Float64
+- name: pts_per_opp_off
+  type: Float64
 - name: available_yards_pct_off_rank
+  type: Float64
+- name: pts_per_opp_off_rank
   type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
   type: Int64
+- name: pts_per_opp_def_n
+  type: Int64
 - name: available_yards_pct_def
   type: Float64
+- name: pts_per_opp_def
+  type: Float64
 - name: available_yards_pct_def_rank
+  type: Float64
+- name: pts_per_opp_def_rank
   type: Float64
 - name: total_available_yards_margin
   type: Float64
@@ -5706,11 +5738,15 @@ load_cfb_team_summaries:
   type: Int64
 - name: available_yards_pct_margin
   type: Float64
+- name: pts_per_opp_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
   type: Float64
 - name: available_yards_pct_margin_rank
+  type: Float64
+- name: pts_per_opp_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64
@@ -6479,6 +6515,10 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: playsdrive_off_n
   type: Int64
+- name: turnovers_off_n
+  type: Int64
+- name: turnovers_off
+  type: Float64
 - name: playsgame_off
   type: Float64
 - name: EPAdrive_off
@@ -6534,6 +6574,8 @@ load_cfb_team_summaries_weekly:
 - name: start_position_off_rank
   type: Float64
 - name: havoc_off_rank
+  type: Float64
+- name: turnovers_off_rank
   type: Float64
 - name: explosive_off_rank
   type: Float64
@@ -6635,6 +6677,10 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: playsdrive_def_n
   type: Int64
+- name: turnovers_def_n
+  type: Int64
+- name: turnovers_def
+  type: Float64
 - name: playsgame_def
   type: Float64
 - name: EPAdrive_def
@@ -6691,6 +6737,8 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: havoc_def_rank
   type: Float64
+- name: turnovers_def_rank
+  type: Float64
 - name: explosive_def_rank
   type: Float64
 - name: passrate_def_rank
@@ -6731,21 +6779,41 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: start_position_margin_rank
   type: Float64
+- name: explosive_margin
+  type: Float64
+- name: turnover_margin
+  type: Float64
+- name: explosive_margin_rank
+  type: Float64
+- name: turnover_margin_rank
+  type: Float64
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
   type: Int64
+- name: pts_per_opp_off_n
+  type: Int64
 - name: available_yards_pct_off
   type: Float64
+- name: pts_per_opp_off
+  type: Float64
 - name: available_yards_pct_off_rank
+  type: Float64
+- name: pts_per_opp_off_rank
   type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
   type: Int64
+- name: pts_per_opp_def_n
+  type: Int64
 - name: available_yards_pct_def
   type: Float64
+- name: pts_per_opp_def
+  type: Float64
 - name: available_yards_pct_def_rank
+  type: Float64
+- name: pts_per_opp_def_rank
   type: Float64
 - name: total_available_yards_margin
   type: Float64
@@ -6753,11 +6821,15 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: available_yards_pct_margin
   type: Float64
+- name: pts_per_opp_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
   type: Float64
 - name: available_yards_pct_margin_rank
+  type: Float64
+- name: pts_per_opp_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64

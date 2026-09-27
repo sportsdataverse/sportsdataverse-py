@@ -36,12 +36,13 @@ def declared_n() -> dict[str, list[str]]:
 def test_every_declared_n_column_is_described(manual, declared_n):
     missing = [f"{t}.{c}" for t, cols in declared_n.items() for c in cols if not (manual.get(t) or {}).get(c)]
     assert not missing, missing
-    assert len(declared_n["load_cfb_team_summaries"]) == 140
+    # 140 + the four Five Factors counts (cfbfastR-cfb-data#103)
+    assert len(declared_n["load_cfb_team_summaries"]) == 144
 
 
 def test_weekly_n_texts_equal_team_summaries(manual, declared_n):
     weekly = declared_n["load_cfb_team_summaries_weekly"]
-    assert len(weekly) == 140
+    assert len(weekly) == 144
     season, week = manual["load_cfb_team_summaries"], manual["load_cfb_team_summaries_weekly"]
     assert {c: week[c] for c in weekly} == {c: season[c] for c in weekly}
 
