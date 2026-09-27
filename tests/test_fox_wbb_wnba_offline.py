@@ -74,6 +74,11 @@ def test_parse_teams_title_case_keeps_apostrophes():
     assert fox_layout._title_case("ST. JOHN'S RED STORM") == "St. John's Red Storm"
 
 
+def test_parse_teams_title_case_lowercases_after_a_digit():
+    """R's str_to_title leaves a letter after a digit lowercase; str.title() capitalizes it."""
+    assert fox_layout._title_case("CHARLOTTE 49ERS") == "Charlotte 49ers"
+
+
 def test_parse_teams_title_case_matches_r_str_to_title_boundaries():
     # &, -, ( and ) are word boundaries for R's stringr::str_to_title (ICU
     # word-break rules) -- verified against the real Fox payload + the
