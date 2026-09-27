@@ -14,8 +14,7 @@ Two entry points:
   point-in-time**: each week is adjusted using opponent strengths fit only on
   *prior* weeks. Leak-free, so the values are valid as in-season power-rating or
   model inputs (week 1 has no prior, so its adjustments are null; not-yet-seen
-  opponents fall back to the league baseline, which with the heavy ridge penalty
-  is the intended early-season shrinkage toward average).
+  opponents fall back to the league baseline, i.e. an average team).
 
 Neither is a bundled model artifact (unlike the EP/WP/QBR ``.ubj`` files): the
 ridge is fit *in-sample on team dummies*, so the coefficients *are* that window's
@@ -76,7 +75,24 @@ __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 # which agree with each other at 0.967-0.990: the old default scored rho 0.794
 # with a mean rank error of 20 places; the tuned value scores ~0.96 with ~8.
 # See tests/cfb/test_ridge_lambda_calibration.py.
+#
+# That tuning ran on the standardized fit (`dropped_level_ridge`), where a team
+# with n_t plays is penalized by ~lambda * n_t: its own data weight scales the
+# same way, so EVERY team shrank by the same 1/(1+lambda) ~ 3%, whether it
+# rested on 500 plays or 1. In-season that is the whole board: 2026 week 4 rated
+# Washington's offense +2.2 EPA/play from 9 competitive plays and put Utah State
+# and Washington State (raw 124th/123rd, both had played Washington) 1st and
+# 2nd. `_fit_team_strengths` keeps lambda but charges it in PLAYS: the penalty
+# is `lambda * _TEAM_SEASON_PLAYS` for every team, so a team shrinks toward the
+# league average by n_t / (n_t + ~15) -- the calibrated ~3% at a full season,
+# 94% at 1 play.
 _RIDGE_LAMBDA = 0.035
+
+# Median competitive (0.1 <= wp_before <= 0.9) offensive pass/rush plays per FBS
+# team in a full FBS-vs-FBS season: 431 / 450.5 / 438 in 2019 / 2021 / 2022
+# (fixed from those seasons; 2023-2025 were held out to evaluate the change).
+# Anchors the penalty so a full season shrinks as the tuned lambda did.
+_TEAM_SEASON_PLAYS = 440.0
 
 _REQUIRED_COLUMNS = (
     "game_id",
@@ -145,6 +161,35 @@ def _fit_opponent_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
     return dropped_level_ridge(clean, ridge_lambda)
 
 
+def _fit_team_strengths(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.DataFrame, pl.DataFrame, float]:
+    """Offense/defense strengths shrunk toward the league average by each team's own sample.
+
+    Every team gets its own offense and defense indicator (no reference level) and
+    the same penalty ``ridge_lambda * _TEAM_SEASON_PLAYS`` in plays, so a team with
+    ``n`` competitive plays keeps about ``n / (n + penalty)`` of its signal and the
+    intercept is the average team. Replaces :func:`_fit_opponent_ridge` for
+    adjusted EPA, where the standardized fit shrank every team by the same ~3% and
+    pinned the first team id (as a string) to the intercept on both sides.
+    ``cfb_ratings`` still uses :func:`_fit_opponent_ridge`. Same return shape.
+    """
+    from sportsdataverse._common.ratings import opponent_adjusted_ridge
+
+    if ridge_lambda <= 0:
+        raise ValueError(f"ridge_lambda must be > 0, got {ridge_lambda}")
+    fit, intercept, _hfa = opponent_adjusted_ridge(
+        clean.filter(pl.col("pos_team_id").is_not_null() & pl.col("def_pos_team_id").is_not_null()),
+        off_col="pos_team_id",
+        def_col="def_pos_team_id",
+        home_col="home",
+        resp_col="EPA",
+        lam=ridge_lambda * _TEAM_SEASON_PLAYS,
+        hfa_col="hfa",
+    )
+    offense = fit.select("team_id", adjmodelOff=pl.col("off_coef") + intercept)
+    defense = fit.select("team_id", adjmodelDef=pl.col("def_coef") + intercept)
+    return offense, defense, intercept
+
+
 def _adjust_games(
     base: pl.DataFrame,
     offense: pl.DataFrame,
@@ -211,7 +256,8 @@ def cfb_adjusted_epa(
     """Season opponent-adjusted per-team EPA from a season's play-by-play.
 
     Fits one ridge of per-play ``EPA`` on offense-team, defense-team, and
-    home-field indicators over the competitive (``0.1 <= wp_before <= 0.9``) pass
+    home-field indicators (every team shrunk toward the league average by its own
+    play count) over the competitive (``0.1 <= wp_before <= 0.9``) pass
     and rush plays, nets each team's per-game raw EPA against the opponent's
     fitted strength, and averages to a season figure. In-sample/descriptive (the
     fit uses the whole season); for leak-free per-game values use
@@ -220,8 +266,11 @@ def cfb_adjusted_epa(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             columns listed in the module docstring. One season at a time.
-        ridge_lambda: Ridge penalty, per observation (``alpha = ridge_lambda *
-            n_plays``); default 0.02, tuned across 2021-2025 vs ESPN FPI.
+        ridge_lambda: Ridge penalty per play of a full team season: each team
+            is shrunk toward the league average by ``n / (n + ridge_lambda *
+            440)`` for its ``n`` competitive plays (~3% at a full season, most
+            of the way on a handful). Must be > 0. Default 0.035, tuned across
+            2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -230,8 +279,8 @@ def cfb_adjusted_epa(
         ``def_strength_faced``, ``net_adj_epa`` and their ``*_rank`` columns.
 
     Raises:
-        ImportError: If ``scikit-learn`` is not installed.
         KeyError: If ``plays`` is missing a required column.
+        ValueError: If ``ridge_lambda`` is not positive.
 
     Example:
         Quick start::
@@ -246,7 +295,7 @@ def cfb_adjusted_epa(
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     base, clean = _prepare(plays, _REQUIRED_COLUMNS)
-    offense, defense, _ = _fit_opponent_ridge(clean, ridge_lambda)
+    offense, defense, _ = _fit_team_strengths(clean, ridge_lambda)
     opp = _adjust_games(base, offense, defense, fill_strength=None)
     team = (
         opp.group_by("pos_team_id")
@@ -296,14 +345,17 @@ def cfb_adjusted_epa_by_game(
     from **weeks before ``w`` only**, then that week's games are adjusted with
     those as-of strengths -- so the value uses no future information and is valid
     as an in-season power-rating / model feature. Week 1 (no prior) yields null
-    adjustments; not-yet-seen opponents fall back to the league baseline (with the
-    heavy ridge penalty this is the intended early-season shrinkage to average).
+    adjustments; not-yet-seen opponents fall back to the league baseline (an
+    average team), and teams seen on few plays are shrunk most of the way there.
 
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             module-docstring columns **plus** ``week``. One season at a time.
-        ridge_lambda: Ridge penalty, per observation (``alpha = ridge_lambda *
-            n_plays``); default 0.02, tuned across 2021-2025 vs ESPN FPI.
+        ridge_lambda: Ridge penalty per play of a full team season: each team
+            is shrunk toward the league average by ``n / (n + ridge_lambda *
+            440)`` for its ``n`` competitive plays (~3% at a full season, most
+            of the way on a handful). Must be > 0. Default 0.035, tuned across
+            2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -315,8 +367,8 @@ def cfb_adjusted_epa_by_game(
         null for week 1 (and any week with no prior fit).
 
     Raises:
-        ImportError: If ``scikit-learn`` is not installed.
         KeyError: If ``plays`` is missing a required column (incl. ``week``).
+        ValueError: If ``ridge_lambda`` is not positive.
 
     Example:
         Quick start::
@@ -338,7 +390,7 @@ def cfb_adjusted_epa_by_game(
     for week in weeks:
         prior = clean.filter(pl.col("week") < week)
         if prior.height > 0 and prior["pos_team_id"].n_unique() >= 2 and prior["def_pos_team_id"].n_unique() >= 2:
-            offense, defense, intercept = _fit_opponent_ridge(prior, ridge_lambda)
+            offense, defense, intercept = _fit_team_strengths(prior, ridge_lambda)
         else:
             offense, defense, intercept = _EMPTY_OFFENSE, _EMPTY_DEFENSE, None
         wk = base.filter(pl.col("week") == week)

@@ -9,6 +9,8 @@ clean rankings, the pandas option, and the missing-column guard.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 import pytest
@@ -163,3 +165,47 @@ def test_by_game_return_as_pandas() -> None:
 def test_by_game_requires_week() -> None:
     with pytest.raises(KeyError):
         cfb_adjusted_epa_by_game(_synthetic_pbp().drop("week"))
+
+
+# --- Real-data regressions (2026 FBS-vs-FBS, weeks 1-4; see tests/fixtures/cfb_adjusted_epa/README.md) ---
+
+_FIXTURE_2026 = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_adjusted_epa" / "fbs_plays_2026_wk1_4.parquet"
+
+
+def _plays_2026() -> pl.DataFrame:
+    return pl.read_parquet(_FIXTURE_2026)
+
+
+def test_real_2026_opponents_rated_from_a_handful_of_plays_do_not_dominate() -> None:
+    # Live board 2026-09-26: Utah State #1 (+1.43 net adj vs -0.37 raw) and Washington
+    # State #2 (+1.24 vs -0.36), each off 2 FBS games. Both had played Washington, whose
+    # offense the fit rated +2.2 EPA/play above baseline from 9 competitive plays: with
+    # standardized dummies and alpha = lambda * n, every team is shrunk by the same ~3%
+    # however few plays it rests on. A team's average opponent can't be more extreme
+    # than the most extreme team in football (full-season strengths sit within ~0.4 of
+    # the baseline), so 0.5 is a generous ceiling.
+    out = cfb_adjusted_epa(_plays_2026())
+    for col in ("off_strength_faced", "def_strength_faced"):
+        spread = (out[col] - out[col].median()).abs().max()
+        assert spread < 0.5, f"{col} spans {spread:.2f} EPA/play from the median"
+    top10 = out.filter(pl.col("net_adj_epa_rank") <= 10)["team_id"].to_list()
+    assert "328" not in top10  # Utah State: raw net 124th of 135
+    assert "265" not in top10  # Washington State: raw net 123rd of 135
+
+
+def test_real_2026_result_does_not_depend_on_which_team_id_sorts_first() -> None:
+    # The fit used to drop the first team id (as a STRING) as the reference level, and a
+    # ridge pins that team to the intercept: Boston College ("103") was rated exactly
+    # league-baseline on both sides every season, mis-adjusting every opponent it played.
+    plays = _plays_2026()
+    first = min(plays["pos_team_id"].cast(pl.Utf8).min(), plays["def_pos_team_id"].cast(pl.Utf8).min())
+    relabelled = plays.with_columns(
+        pl.col(c).cast(pl.Utf8).replace(first, "zzz_relabelled") for c in ("pos_team_id", "def_pos_team_id")
+    )
+    a = cfb_adjusted_epa(plays).select("team_id", "net_adj_epa")
+    b = cfb_adjusted_epa(relabelled).select(
+        pl.col("team_id").replace("zzz_relabelled", first), pl.col("net_adj_epa").alias("net_relabelled")
+    )
+    j = a.join(b, on="team_id")
+    assert j.height == a.height
+    assert (j["net_adj_epa"] - j["net_relabelled"]).abs().max() < 1e-9

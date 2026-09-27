@@ -110,6 +110,7 @@ def opponent_adjusted_ridge(
     resp_col: str,
     lam: float,
     penalize_home: bool = False,
+    hfa_col: str | None = None,
 ) -> tuple[pl.DataFrame, float, float]:
     """Ridge-regress ``resp_col`` on offense + defense team indicators + HFA.
 
@@ -133,6 +134,9 @@ def opponent_adjusted_ridge(
         lam: Ridge penalty applied to the team coefficients.
         penalize_home: Also penalise the home-field coefficient
             (default False).
+        hfa_col: Numeric column used as the home regressor as-is (e.g. CFB's
+            ``+1`` home offense / ``0`` neutral site / ``-1`` away), in place
+            of the ``off_col == home_col`` indicator, which then goes unused.
 
     Returns:
         A ``(frame, intercept, home_coef)`` tuple: ``frame`` has one row per
@@ -166,8 +170,10 @@ def opponent_adjusted_ridge(
     X[np.arange(n), oi] = 1.0
     X[np.arange(n), n_t + di] = 1.0
     X[:, 2 * n_t] = 1.0  # intercept
-    is_home = (off == plays[home_col].cast(pl.Utf8)).to_numpy().astype(float)
-    X[:, 2 * n_t + 1] = is_home  # HFA (offense is home)
+    if hfa_col is not None:
+        X[:, 2 * n_t + 1] = plays[hfa_col].cast(pl.Float64).to_numpy()
+    else:
+        X[:, 2 * n_t + 1] = (off == plays[home_col].cast(pl.Utf8)).to_numpy().astype(float)  # HFA (offense is home)
     y = plays[resp_col].cast(pl.Float64).to_numpy()
     R = np.eye(p)
     R[2 * n_t, 2 * n_t] = 0.0  # don't penalise intercept

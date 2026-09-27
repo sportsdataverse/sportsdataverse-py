@@ -1523,7 +1523,8 @@ pbp.with_columns(canonical_play_type_expr())
 Season opponent-adjusted per-team EPA from a season's play-by-play.
 
 Fits one ridge of per-play `EPA` on offense-team, defense-team, and
-home-field indicators over the competitive (`0.1 <= wp_before <= 0.9`) pass
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the competitive (`0.1 <= wp_before <= 0.9`) pass
 and rush plays, nets each team's per-game raw EPA against the opponent's
 fitted strength, and averages to a season figure. In-sample/descriptive (the
 fit uses the whole season); for leak-free per-game values use
@@ -1534,7 +1535,7 @@ fit uses the whole season); for leak-free per-game values use
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float` | `0.035` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
+| `ridge_lambda` | `float` | `0.035` | Ridge penalty per play of a full team season: each team is shrunk toward the league average by `n / (n + ridge_lambda * 440)` for its `n` competitive plays (~3% at a full season, most of the way on a handful). Must be > 0. Default 0.035, tuned across 2021-2025 vs ESPN FPI. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
@@ -1557,15 +1558,15 @@ For each week `w` the opponent-strength ridge is fit on competitive plays
 from **weeks before `w` only**, then that week's games are adjusted with
 those as-of strengths -- so the value uses no future information and is valid
 as an in-season power-rating / model feature. Week 1 (no prior) yields null
-adjustments; not-yet-seen opponents fall back to the league baseline (with the
-heavy ridge penalty this is the intended early-season shrinkage to average).
+adjustments; not-yet-seen opponents fall back to the league baseline (an
+average team), and teams seen on few plays are shrunk most of the way there.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float` | `0.035` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
+| `ridge_lambda` | `float` | `0.035` | Ridge penalty per play of a full team season: each team is shrunk toward the league average by `n / (n + ridge_lambda * 440)` for its `n` competitive plays (~3% at a full season, most of the way on a handful). Must be > 0. Default 0.035, tuned across 2021-2025 vs ESPN FPI. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**

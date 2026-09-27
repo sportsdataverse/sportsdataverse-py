@@ -8811,7 +8811,7 @@ sched = nfl_week_games(season=2024, season_type="REG", week=1)
 sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
-### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
+### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
 
 Ridge-regress `resp_col` on offense + defense team indicators + HFA.
 
@@ -8835,6 +8835,7 @@ genuinely different `dropped_level_ridge`).
 | `resp_col` | `str` |  | Numeric response column (e.g. `epa`). |
 | `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
+| `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. |
 
 **Returns**
 
