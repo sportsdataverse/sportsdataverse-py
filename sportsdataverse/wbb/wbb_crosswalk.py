@@ -38,6 +38,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     drop_unconfirmed_fox_sections,
     espn_team_directory,
     fox_season_teams,
+    next_season_movers,
     require_source,
     torvik_teams,
 )
@@ -387,7 +388,7 @@ def wbb_team_crosswalk(
         The ESPN team list itself is today's, so a team that was not in a
         Division I conference that season has a null ``espn_conference``.
         ``fox_section`` is that season's Fox conference, nulled where Fox lists
-        the team under a conference it had not joined yet (see
+        the team under the conference it moved to the next season (see
         :func:`~sportsdataverse._crosswalk_basketball_sources.drop_unconfirmed_fox_sections`).
 
     Raises:
@@ -434,7 +435,8 @@ def wbb_team_crosswalk(
         # supplied `bart` never pays for (or trips over) the import at all.
         bart = require_source(f"bart_wbb_ratings(year={season})", lambda: torvik_teams("wbb", season, **kwargs))
     out = _assemble_team_crosswalk(espn, fox, bart, season)
-    out = drop_unconfirmed_fox_sections(out)
+    if out["fox_section"].is_not_null().any():
+        out = drop_unconfirmed_fox_sections(out, next_season_movers("wbb", season))
     return out.to_pandas() if return_as_pandas else out
 
 
