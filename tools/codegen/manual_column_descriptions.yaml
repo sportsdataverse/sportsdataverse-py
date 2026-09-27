@@ -11591,6 +11591,32 @@ load_mlb_oaa:
   oaa: 'Outs above average: outs the fielder actually recorded minus what a per-position catch-probability logistic expected
     from the same batted-ball trajectories, summed across their opportunities.'
   opportunities: Balls in play charged to this fielder at this position, the sample the oaa sum runs over.
+load_mlb_park_dimensions:
+  league: League code of the table ("mlb").
+  season: Season the row describes (calendar year, 2001 on).
+  venue_id: MLB Stats API venue id (venue.id in MLB game feeds and schedules), published as a string.
+  venue_name: Venue name as of that season (e.g. PacBell Park 2001-03, SBC Park 2004-05, AT&T Park 2006-18, Oracle Park 2019-),
+    not today's name.
+  retro_park_id: Retrosheet park id (e.g. "BOS07") from the MLB Stats API's cross-reference; null for most spring-training
+    and minor-league parks.
+  left_line_ft: Distance in feet from home plate to the fence at the left-field foul pole.
+  left_ft: Distance in feet from home plate to the fence at MLB's left-field marker.
+  left_center_ft: Distance in feet from home plate to the fence at MLB's left-centre marker; a park may re-label which point
+    this is (Oracle Park's reads 364 through 2019, then the 399 ft deep left-centre).
+  center_ft: Distance in feet from home plate to the fence in straightaway centre field.
+  right_center_ft: Distance in feet from home plate to the fence at MLB's right-centre marker.
+  right_ft: Distance in feet from home plate to the fence at MLB's right-field marker.
+  right_line_ft: Distance in feet from home plate to the fence at the right-field foul pole.
+  capacity: Seating capacity that season.
+  turf_type: 'Playing surface: "Grass" or "Artificial Turf".'
+  roof_type: 'Roof: "Open", "Retractable" or "Dome".'
+  azimuth_deg: 'MLB''s azimuthAngle: degrees clockwise from north of the line from home plate to centre field (Fenway Park
+    45, Progressive Field 0).'
+  elevation_ft: Elevation of the venue in feet above sea level.
+  latitude: Latitude of the venue in decimal degrees.
+  longitude: Longitude of the venue in decimal degrees.
+  notes: Null unless a curated correction applies to the row; then which columns changed, from what to what, why, and the
+    citation.
 load_mlb_pbp:
   game_pk: statsapi game identifier; the join key to every other MLB release.
   at_bat_index: Zero-based index of the plate appearance within the game; joins to mlb_pitches and mlb_runners.
