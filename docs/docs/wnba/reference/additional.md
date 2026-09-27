@@ -1722,7 +1722,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `officials.person_id` | integer | NBA/WNBA person id of the on-court official. |
 | `officials.name` | character | Official's display name. |
 | `officials.jersey_num` | character | Official's jersey number as a string. |
-| `officials.assignment` | character | Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot. |
+| `officials.assignment` | character | Crew role label from the feed (OFFICIAL1, OFFICIAL2 or OFFICIAL3, listed in no fixed order). |
 | `officials.name_i` | character | Official's first initial and last name, e.g. K. Fahy. |
 | `officials.first_name` | character | Official's first name as the feed writes it. |
 | `officials.family_name` | character | Official's last name as the feed writes it. |
@@ -1748,8 +1748,8 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `home_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
 | `home_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
 | `home_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
-| `home_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
-| `home_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
+| `home_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls excluded. |
+| `home_players.statistics_fouls_technical` | integer | Technical fouls charged to the player; a defensive three-seconds technical is charged to the team (the team row's statistics_fouls_team_technical), even when the play-by-play names the player. |
 | `home_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
 | `home_players.statistics_free_throws_made` | integer | Free throws the player made. |
 | `home_players.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |
@@ -1797,8 +1797,8 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `away_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
 | `away_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
 | `away_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
-| `away_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
-| `away_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
+| `away_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls excluded. |
+| `away_players.statistics_fouls_technical` | integer | Technical fouls charged to the player; a defensive three-seconds technical is charged to the team (the team row's statistics_fouls_team_technical), even when the play-by-play names the player. |
 | `away_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
 | `away_players.statistics_free_throws_made` | integer | Free throws the player made. |
 | `away_players.statistics_free_throws_percentage` | double | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |

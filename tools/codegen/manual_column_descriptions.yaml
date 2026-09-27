@@ -17055,7 +17055,7 @@ nba_live_boxscore:
   away_players.statistics_field_goals_percentage: Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot.
   away_players.statistics_fouls_drawn: Fouls opponents committed on the player.
   away_players.statistics_fouls_offensive: Offensive fouls committed, also counted in statistics_fouls_personal.
-  away_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead.
+  away_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls excluded.
   away_players.statistics_fouls_technical: Technical fouls charged to the player.
   away_players.statistics_free_throws_attempted: Free-throw attempts by the player.
   away_players.statistics_free_throws_made: Free throws the player made.
@@ -17150,7 +17150,7 @@ nba_live_boxscore:
   away_team.team_city: Team's location label, e.g. Oklahoma City or Houston.
   away_team.team_id: NBA/WNBA team id of the side (home or away).
   away_team.team_name: Team nickname, e.g. Thunder or Rockets.
-  away_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  away_team.team_tricode: Three-letter team code, e.g. OKC or HOU.
   away_team.timeouts_remaining: Timeouts the team has left as of the capture (at the end of the game on a final).
   game.attendance: Reported attendance figure for the game, when published by the feed.
   game.away_team_id: NBA/WNBA team id of the away team, taken from the payload's awayTeam object.
@@ -17191,7 +17191,7 @@ nba_live_boxscore:
   home_players.statistics_field_goals_percentage: Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot.
   home_players.statistics_fouls_drawn: Fouls opponents committed on the player.
   home_players.statistics_fouls_offensive: Offensive fouls committed, also counted in statistics_fouls_personal.
-  home_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead.
+  home_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls excluded.
   home_players.statistics_fouls_technical: Technical fouls charged to the player.
   home_players.statistics_free_throws_attempted: Free-throw attempts by the player.
   home_players.statistics_free_throws_made: Free throws the player made.
@@ -17286,9 +17286,9 @@ nba_live_boxscore:
   home_team.team_city: Team's location label, e.g. Oklahoma City or Houston.
   home_team.team_id: NBA/WNBA team id of the side (home or away).
   home_team.team_name: Team nickname, e.g. Thunder or Rockets.
-  home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
+  home_team.team_tricode: Three-letter team code, e.g. OKC or HOU.
   home_team.timeouts_remaining: Timeouts the team has left as of the capture (at the end of the game on a final).
-  officials.assignment: Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot.
+  officials.assignment: Crew role label from the feed (OFFICIAL1, OFFICIAL2 or OFFICIAL3, listed in no fixed order), or ALTERNATE for the extra official listed in playoff games.
   officials.family_name: Official's last name as the feed writes it.
   officials.first_name: Official's first name as the feed writes it.
   officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.
@@ -31742,8 +31742,8 @@ wnba_live_boxscore:
   away_players.statistics_field_goals_percentage: Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot.
   away_players.statistics_fouls_drawn: Fouls opponents committed on the player.
   away_players.statistics_fouls_offensive: Offensive fouls committed, also counted in statistics_fouls_personal.
-  away_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead.
-  away_players.statistics_fouls_technical: Technical fouls charged to the player.
+  away_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls excluded.
+  away_players.statistics_fouls_technical: Technical fouls charged to the player; a defensive three-seconds technical is charged to the team (the team row's statistics_fouls_team_technical), even when the play-by-play names the player.
   away_players.statistics_free_throws_attempted: Free-throw attempts by the player.
   away_players.statistics_free_throws_made: Free throws the player made.
   away_players.statistics_free_throws_percentage: Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none.
@@ -31878,8 +31878,8 @@ wnba_live_boxscore:
   home_players.statistics_field_goals_percentage: Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot.
   home_players.statistics_fouls_drawn: Fouls opponents committed on the player.
   home_players.statistics_fouls_offensive: Offensive fouls committed, also counted in statistics_fouls_personal.
-  home_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead.
-  home_players.statistics_fouls_technical: Technical fouls charged to the player.
+  home_players.statistics_fouls_personal: Personal fouls committed, offensive fouls included; technical fouls excluded.
+  home_players.statistics_fouls_technical: Technical fouls charged to the player; a defensive three-seconds technical is charged to the team (the team row's statistics_fouls_team_technical), even when the play-by-play names the player.
   home_players.statistics_free_throws_attempted: Free-throw attempts by the player.
   home_players.statistics_free_throws_made: Free throws the player made.
   home_players.statistics_free_throws_percentage: Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none.
@@ -31975,7 +31975,7 @@ wnba_live_boxscore:
   home_team.team_name: Team nickname, e.g. Sun or Fever.
   home_team.team_tricode: Three-letter team code, e.g. LAS or NYL.
   home_team.timeouts_remaining: Timeouts the team has left as of the capture (at the end of the game on a final).
-  officials.assignment: Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot.
+  officials.assignment: Crew role label from the feed (OFFICIAL1, OFFICIAL2 or OFFICIAL3, listed in no fixed order).
   officials.family_name: Official's last name as the feed writes it.
   officials.first_name: Official's first name as the feed writes it.
   officials.game_id: 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked.

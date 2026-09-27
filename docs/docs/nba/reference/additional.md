@@ -3757,7 +3757,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `officials.person_id` | integer | NBA/WNBA person id of the on-court official. |
 | `officials.name` | character | Official's display name. |
 | `officials.jersey_num` | character | Official's jersey number as a string. |
-| `officials.assignment` | character | Crew role label from the feed, e.g. OFFICIAL1/OFFICIAL2/OFFICIAL3 (uppercase) or a replay-center slot. |
+| `officials.assignment` | character | Crew role label from the feed (OFFICIAL1, OFFICIAL2 or OFFICIAL3, listed in no fixed order), or ALTERNATE for the extra official listed in playoff games. |
 | `officials.name_i` | character | Official's first initial and last name, e.g. Z. Zarba. |
 | `officials.first_name` | character | Official's first name as the feed writes it. |
 | `officials.family_name` | character | Official's last name as the feed writes it. |
@@ -3783,7 +3783,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `home_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
 | `home_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
 | `home_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
-| `home_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
+| `home_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls excluded. |
 | `home_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
 | `home_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
 | `home_players.statistics_free_throws_made` | integer | Free throws the player made. |
@@ -3832,7 +3832,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `away_players.statistics_field_goals_percentage` | double | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
 | `away_players.statistics_fouls_offensive` | integer | Offensive fouls committed, also counted in statistics_fouls_personal. |
 | `away_players.statistics_fouls_drawn` | integer | Fouls opponents committed on the player. |
-| `away_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls are counted in statistics_fouls_technical instead. |
+| `away_players.statistics_fouls_personal` | integer | Personal fouls committed, offensive fouls included; technical fouls excluded. |
 | `away_players.statistics_fouls_technical` | integer | Technical fouls charged to the player. |
 | `away_players.statistics_free_throws_attempted` | integer | Free-throw attempts by the player. |
 | `away_players.statistics_free_throws_made` | integer | Free throws the player made. |
@@ -3861,7 +3861,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `away_players.not_playing_description` | character | Free-text detail for not_playing_reason, for an injury the body part and the injury, e.g. "Left Knee; Contusion" (sometimes with a trailing space); null when none is given, as on INACTIVE_GLEAGUE_TWOWAY. The column is present only when a player on that side has one. |
 | `home_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
 | `home_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
-| `home_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
+| `home_team.team_tricode` | character | Three-letter team code, e.g. OKC or HOU. |
 | `home_team.score` | integer | Team's current or final score. |
 | `home_team.team_name` | character | Team nickname, e.g. Thunder or Rockets. |
 | `home_team.team_city` | character | Team's location label, e.g. Oklahoma City or Houston. |
@@ -3931,7 +3931,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `home_team.statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
 | `away_team.game_id` | character | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
 | `away_team.team_id` | integer | NBA/WNBA team id of the side (home or away). |
-| `away_team.team_tricode` | character | Three-letter team code, e.g. LAS or NYL. |
+| `away_team.team_tricode` | character | Three-letter team code, e.g. OKC or HOU. |
 | `away_team.score` | integer | Team's current or final score. |
 | `away_team.team_name` | character | Team nickname, e.g. Thunder or Rockets. |
 | `away_team.team_city` | character | Team's location label, e.g. Oklahoma City or Houston. |
