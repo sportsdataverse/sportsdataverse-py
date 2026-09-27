@@ -5157,6 +5157,10 @@ load_cfb_schedule:
   type: Int64
 - name: playoff_bowl_name
   type: String
+- name: home_rank
+  type: Int64
+- name: away_rank
+  type: Int64
 load_cfb_schedule_crosswalk:
 - name: matchup_key
   type: String
