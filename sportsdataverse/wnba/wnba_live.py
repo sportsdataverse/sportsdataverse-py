@@ -44,8 +44,15 @@ def wnba_live_pbp(
         proxy: Optional proxy dict passed through to the HTTP layer.
 
     Returns:
-        If ``raw=True``, the raw JSON dict. Otherwise, a DataFrame as documented
-        in :func:`sportsdataverse.nba.nba_live.parse_nba_live_pbp`.
+        If ``raw=True``, the raw JSON dict. Otherwise, a DataFrame with one row per
+        action, parsed by :func:`sportsdataverse.nba.nba_live.parse_nba_live_pbp`. Its
+        13 core columns (``game_id``, ``action_number``, ``period``, ``clock``,
+        ``time_actual``, ``action_type``, ``sub_type``, ``team_id``, ``person_id``,
+        ``official_id``, ``x_legacy``, ``y_legacy``, ``description``) are guaranteed
+        on every frame, even a zero-row one, at their declared dtypes. Every other
+        liveData action field is passed through, snake-cased, when the payload
+        carries it, so an event-specific column such as ``block_person_id`` or
+        ``foul_drawn_person_id`` is present only when the game had that event.
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a

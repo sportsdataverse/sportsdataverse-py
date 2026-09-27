@@ -1766,12 +1766,12 @@ the same per-whistle referee ids (`official_id`) and wall-clock timestamps
 
 **Returns**
 
-If `raw=True`, the raw JSON dict. Otherwise, a DataFrame as documented in `sportsdataverse.nba.nba_live.parse_nba_live_pbp`.
+If `raw=True`, the raw JSON dict. Otherwise, a DataFrame with one row per action, parsed by `sportsdataverse.nba.nba_live.parse_nba_live_pbp`. Its 13 core columns (`game_id`, `action_number`, `period`, `clock`, `time_actual`, `action_type`, `sub_type`, `team_id`, `person_id`, `official_id`, `x_legacy`, `y_legacy`, `description`) are guaranteed on every frame, even a zero-row one, at their declared dtypes. Every other liveData action field is passed through, snake-cased, when the payload carries it, so an event-specific column such as `block_person_id` or `foul_drawn_person_id` is present only when the game had that event.
 
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId. |
-| `action_number` | integer | Sequential action number within the game from the liveData feed's actionNumber field, ordering plays chronologically. |
+| `action_number` | integer | Action id from the liveData feed's actionNumber field, assigned in the order actions are logged rather than strictly in game order (an action logged late gets a higher number than plays that followed it); sort by order_number for game order. |
 | `period` | integer | Period of the game: 1-4 for quarters, 5+ for overtime periods. |
 | `clock` | character | ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS. |
 | `time_actual` | character | Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time. |
@@ -1779,10 +1779,54 @@ If `raw=True`, the raw JSON dict. Otherwise, a DataFrame as documented in `sport
 | `sub_type` | character | Action sub-type as the feed writes it, e.g. personal or offensive for a foul, Jump Shot or Layup for a 2pt/3pt shot, 1 of 2 for a free throw. |
 | `team_id` | integer | NBA/WNBA team id of the team associated with the action, when applicable. |
 | `person_id` | integer | NBA/WNBA player id of the primary person involved in the action, when applicable. |
-| `official_id` | integer | Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season. |
+| `official_id` | integer | Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season, and also on whistled turnovers and violations such as traveling, out-of-bounds, or kicked ball (null on live-ball turnovers like a bad pass). |
 | `x_legacy` | double | Shot x-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
 | `y_legacy` | double | Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
 | `description` | character | Long-form human-readable description of the action, as shown on NBA.com's live scoreboard. |
+| `period_type` | character | Period kind from the feed, REGULAR for the four quarters and OVERTIME for an overtime period. |
+| `possession` | integer | Team id of the team with the ball as of the action (on a rebound or steal, the team that gained it); 0 on game and period start/end rows. |
+| `score_home` | character | Home team's running score after the action, stored as a string. |
+| `score_away` | character | Away team's running score after the action, stored as a string. |
+| `order_number` | integer | The feed's sort key for the action (actions ship in this order); sorting by it gives game order even where action_number does not, since an action logged late is slotted in at its place in the game. |
+| `edited` | character | UTC timestamp (ISO-8601, whole seconds) of the feed's last edit to the action, never earlier than time_actual. |
+| `qualifiers` | list | List of context tags on the action, e.g. pointsinthepaint, fastbreak, 2ndchance, or fromturnover on a shot, 2freethrow or inpenalty on a foul, and team on a team rebound or turnover; empty when none apply. |
+| `descriptor` | character | Extra detail on sub_type, e.g. driving or step back on a shot, shooting or loose ball on a foul, bad pass on a turnover, heldball or startperiod on a jump ball; null when absent. |
+| `is_target_score_last_period` | logical | Feed flag for a last period played to a target score instead of the game clock (the Elam-ending format); False on every action of a regular game. |
+| `team_tricode` | character | Three-letter code of the team in team_id, e.g. CON or IND. |
+| `player_name` | character | Last name of the action's primary player (person_id) as the feed writes it, e.g. Boston; null on team and administrative actions. |
+| `player_name_i` | character | First initial and last name of the action's primary player (person_id), e.g. A. Boston; null on team and administrative actions. |
+| `person_ids_filter` | list | List of every player id on the action, i.e. person_id plus any assist, block, steal, foul-drawn, or jump-ball participant; empty when no player is involved. |
+| `is_field_goal` | integer | Field-goal attempt flag, 1 on a 2pt/3pt shot and 0 on every other action. |
+| `shot_result` | character | Made or Missed; set on 2pt/3pt shots and free throws. |
+| `shot_distance` | double | Shot distance from the basket in feet; set on 2pt/3pt shots. |
+| `x` | double | Shot location along the court's length on a 0-100 scale from the left baseline; populated only on 2pt/3pt shots, like x_legacy. |
+| `y` | double | Shot location across the court's width on a 0-100 scale, 50 at the baskets' centerline; populated only on 2pt/3pt shots, like y_legacy. |
+| `side` | character | Court half of the shot, left or right (left where x is below 50); populated only on 2pt/3pt shots. |
+| `area` | character | Court zone of the action, e.g. Restricted Area, In The Paint (Non-RA), Mid-Range, Left Corner 3, Right Corner 3, or Above the Break 3; set on 2pt/3pt shots and also on fouls, blocks, steals, turnovers, and most rebounds, which carry no x/y coordinates. |
+| `area_detail` | character | Second zone label for the same actions as area; the WNBA feed writes zone names like those in area (e.g. Mid-Range, Left Corner 3), not always the same zone as area on a given action. |
+| `points_total` | integer | Scorer's running point total in the game, including this basket; set on made shots and made free throws. |
+| `assist_person_id` | integer | Player id credited with the assist on a made 2pt/3pt shot; null on unassisted and missed shots. |
+| `assist_player_name_initial` | character | First initial and last name of the player credited with the assist on a made 2pt/3pt shot, e.g. A. Edwards. |
+| `assist_total` | integer | Assisting player's running assist total in the game, including this assist. |
+| `shot_action_number` | integer | On a rebound, the action_number of the missed shot or free throw being rebounded. |
+| `rebound_total` | integer | Rebounder's running rebound total in the game, including this rebound (rebound_offensive_total plus rebound_defensive_total); null on a team rebound. |
+| `rebound_offensive_total` | integer | Rebounder's running offensive-rebound total in the game as of this rebound; null on a team rebound. |
+| `rebound_defensive_total` | integer | Rebounder's running defensive-rebound total in the game as of this rebound; null on a team rebound. |
+| `foul_drawn_person_id` | integer | Player id of the opponent who drew the foul; null when no player drew it (e.g. a technical foul). |
+| `foul_drawn_player_name` | character | Last name of the opponent who drew the foul; null when no player drew it (e.g. a technical foul). |
+| `foul_personal_total` | integer | Fouling player's running personal-foul count in the game as of this foul (a technical foul leaves it unchanged); null on a team foul. |
+| `foul_technical_total` | integer | Fouling player's running technical-foul count in the game as of this foul; null on a team foul. |
+| `turnover_total` | integer | Player's running turnover count in the game, including this turnover; null on a team turnover. |
+| `steal_person_id` | integer | Player id credited with the steal, on the turnover row it forced; the steal is also logged as its own steal action. |
+| `steal_player_name` | character | Last name of the player credited with the steal, on the turnover row it forced. |
+| `block_person_id` | integer | Player id credited with the block, on the blocked (missed) shot's row; the block is also logged as its own block action. |
+| `block_player_name` | character | Last name of the player credited with the block, on the blocked (missed) shot's row. |
+| `jump_ball_won_person_id` | integer | Player id of the jumper who won the tip on a jump ball. |
+| `jump_ball_won_player_name` | character | Last name of the jumper who won the tip on a jump ball. |
+| `jump_ball_lost_person_id` | integer | Player id of the jumper who lost the tip on a jump ball. |
+| `jump_ball_lost_player_name` | character | Last name of the jumper who lost the tip on a jump ball. |
+| `jump_ball_recoverd_person_id` | integer | Player id of the player who recovered the tip on a jump ball, null when a team recovered it; the column keeps the feed's own spelling (jumpBallRecoverdPersonId). |
+| `jump_ball_recovered_name` | character | First initial and last name of the player who recovered the tip on a jump ball, e.g. L. Lacan, or a team label when a team recovered it. |
 
 **Example**
 

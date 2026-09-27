@@ -4,6 +4,7 @@ from pathlib import Path
 
 import polars as pl
 import pytest
+import yaml
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -143,6 +144,32 @@ def test_pbp_block_person_id_present_and_int64_on_both_fixtures():
         assert "block_person_id" in df.columns, fixture_path
         assert df.schema["block_person_id"] == pl.Int64, fixture_path
         assert df["block_person_id"].null_count() < df.height, fixture_path
+
+
+_AUTODOC = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "schemas" / "autodoc"
+_DOC_TYPE = {"Int64": "integer", "Float64": "double", "String": "character", "Boolean": "logical"}
+
+
+@pytest.mark.parametrize(
+    ("fixture_path", "schema_path"),
+    [
+        (FIX / "playbyplay_0022500001.json", _AUTODOC / "nba" / "nba_live_pbp.yaml"),
+        (
+            Path(__file__).parent.parent / "wnba" / "fixtures" / "wnba_live" / "playbyplay_1022600097.json",
+            _AUTODOC / "wnba" / "wnba_live_pbp.yaml",
+        ),
+    ],
+    ids=["nba", "wnba"],
+)
+def test_pbp_returns_table_documents_every_capture_column(fixture_path, schema_path):
+    """The hand-authored Returns table lists the core columns first, then every other
+    column a real capture produces, at the captured dtype -- none left undocumented."""
+    df = parse_nba_live_pbp(json.loads(fixture_path.read_text()))
+    doc = {c["name"]: c["type"] for c in yaml.safe_load(schema_path.read_text(encoding="utf-8"))["columns"]}
+    assert list(doc)[: len(NBA_LIVE_PBP_CORE_SCHEMA)] == NBA_LIVE_PBP_CORE_SCHEMA.names()
+    assert set(doc) == set(df.columns)
+    for name, dtype in df.schema.items():
+        assert doc[name] == ("list" if isinstance(dtype, pl.List) else _DOC_TYPE[str(dtype)]), name
 
 
 def test_pbp_official_id_survives_when_first_occurrence_moves_past_row_100():
