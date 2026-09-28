@@ -226,28 +226,28 @@ cols = ['full_name', 'jersey', 'position_abbreviation', 'height', 'weight', 'age
  if roster is not None and roster.height else 'roster unavailable')
 ```
 
-    ✅ roster 2 — 16 rows
+    ✅ roster 2 — 21 rows
 
 
 
 
 
     shape: (10, 6)
-    ┌──────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
-    │ full_name        ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
-    │ ---              ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
-    │ str              ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
-    ╞══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
-    │ Chris Cenac Jr.  ┆ 12     ┆ F                     ┆ 83.0   ┆ 240.0  ┆ 19  │
-    │ Mike Conley      ┆ 45     ┆ G                     ┆ 73.0   ┆ 175.0  ┆ 38  │
-    │ Luka Garza       ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
-    │ Paul George      ┆ 13     ┆ F                     ┆ 80.0   ┆ 220.0  ┆ 36  │
-    │ …                ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
-    │ Sam Hauser       ┆ 30     ┆ F                     ┆ 79.0   ┆ 217.0  ┆ 28  │
-    │ Dillon Mitchell  ┆ null   ┆ F                     ┆ 80.0   ┆ 210.0  ┆ 22  │
-    │ Payton Pritchard ┆ 11     ┆ G                     ┆ 73.0   ┆ 195.0  ┆ 28  │
-    │ Neemias Queta    ┆ 88     ┆ C                     ┆ 84.0   ┆ 248.0  ┆ 27  │
-    └──────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
+    ┌─────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
+    │ full_name       ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
+    │ ---             ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
+    │ str             ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
+    ╞═════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
+    │ Devin Carter    ┆ 99     ┆ G                     ┆ 74.0   ┆ 188.0  ┆ 24  │
+    │ Chris Cenac Jr. ┆ 12     ┆ F                     ┆ 83.0   ┆ 240.0  ┆ 19  │
+    │ Mike Conley     ┆ 45     ┆ G                     ┆ 73.0   ┆ 175.0  ┆ 38  │
+    │ Tucker DeVries  ┆ 26     ┆ F                     ┆ 79.0   ┆ 210.0  ┆ 23  │
+    │ …               ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
+    │ Hugo Gonzalez   ┆ 28     ┆ G                     ┆ 78.0   ┆ 205.0  ┆ 20  │
+    │ Hayden Gray     ┆ 44     ┆ G                     ┆ 76.0   ┆ 190.0  ┆ 23  │
+    │ Ron Harper Jr.  ┆ 8      ┆ G                     ┆ 77.0   ┆ 233.0  ┆ 26  │
+    │ Sam Hauser      ┆ 30     ┆ F                     ┆ 80.0   ┆ 221.0  ┆ 28  │
+    └─────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
 
 
 
@@ -371,8 +371,8 @@ out
     │ Anthony Edwards         ┆ MIN               ┆ 71  ┆ 27.8 ┆ 5.1  ┆ 3.6  │
     │ …                       ┆ …                 ┆ …   ┆ …    ┆ …    ┆ …    │
     │ Giannis Antetokounmpo   ┆ MIL               ┆ 36  ┆ 27.6 ┆ 9.8  ┆ 5.4  │
-    │ Donovan Mitchell        ┆ CLE               ┆ 88  ┆ 27.5 ┆ 4.6  ┆ 5.1  │
     │ Nikola Jokic            ┆ DEN               ┆ 71  ┆ 27.5 ┆ 12.9 ┆ 10.6 │
+    │ Donovan Mitchell        ┆ CLE               ┆ 88  ┆ 27.5 ┆ 4.6  ┆ 5.1  │
     │ Lauri Markkanen         ┆ UTAH              ┆ 42  ┆ 26.7 ┆ 6.9  ┆ 2.1  │
     └─────────────────────────┴───────────────────┴─────┴──────┴──────┴──────┘
 
@@ -418,8 +418,8 @@ out
     ╞═══════════════════╪═════╪═════════╪═════════╪══════╡
     │ OKC               ┆ 97  ┆ 118.5   ┆ 108.0   ┆ 10.5 │
     │ STARS             ┆ 3   ┆ 41.3    ┆ 32.7    ┆ 8.6  │
-    │ SA                ┆ 106 ┆ 118.2   ┆ 110.2   ┆ 8.0  │
     │ NY                ┆ 102 ┆ 116.4   ┆ 108.4   ┆ 8.0  │
+    │ SA                ┆ 106 ┆ 118.2   ┆ 110.2   ┆ 8.0  │
     │ …                 ┆ …   ┆ …       ┆ …       ┆ …    │
     │ HOU               ┆ 88  ┆ 114.1   ┆ 109.4   ┆ 4.7  │
     │ DEN               ┆ 88  ┆ 121.1   ┆ 116.6   ┆ 4.5  │
@@ -522,8 +522,8 @@ out
     │ Jalen Johnson        ┆ ATL               ┆ 51             │
     │ …                    ┆ …                 ┆ …              │
     │ Rudy Gobert          ┆ MIN               ┆ 37             │
-    │ Alperen Sengun       ┆ HOU               ┆ 37             │
     │ Donovan Clingan      ┆ POR               ┆ 37             │
+    │ Alperen Sengun       ┆ HOU               ┆ 37             │
     │ Bam Adebayo          ┆ MIA               ┆ 35             │
     └──────────────────────┴───────────────────┴────────────────┘
 
@@ -713,7 +713,7 @@ else:
 out
 ```
 
-    ✅ injuries — 27 rows
+    ✅ injuries — 26 rows
 
 
 
@@ -725,15 +725,15 @@ out
     │ ---                   ┆ ---            │
     │ str                   ┆ i64            │
     ╞═══════════════════════╪════════════════╡
-    │ Memphis Grizzlies     ┆ 6              │
-    │ Oklahoma City Thunder ┆ 6              │
-    │ Miami Heat            ┆ 5              │
-    │ Toronto Raptors       ┆ 5              │
+    │ Memphis Grizzlies     ┆ 7              │
+    │ Oklahoma City Thunder ┆ 5              │
+    │ Atlanta Hawks         ┆ 4              │
+    │ Dallas Mavericks      ┆ 4              │
     │ …                     ┆ …              │
-    │ Dallas Mavericks      ┆ 3              │
-    │ Houston Rockets       ┆ 3              │
-    │ LA Clippers           ┆ 3              │
-    │ Orlando Magic         ┆ 3              │
+    │ Golden State Warriors ┆ 3              │
+    │ Phoenix Suns          ┆ 3              │
+    │ Toronto Raptors       ┆ 3              │
+    │ Chicago Bulls         ┆ 2              │
     └───────────────────────┴────────────────┘
 
 
@@ -878,8 +878,8 @@ cols = ['athlete_display_name', 'team_abbreviation', 'starter', 'jersey', 'posit
     │ Spencer Dinwiddie    ┆ LAL               ┆ true    ┆ 26     │
     │ …                    ┆ …                 ┆ …       ┆ …      │
     │ Cam Reddish          ┆ LAL               ┆ false   ┆ 5      │
-    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ null   │
-    │ Max Christie         ┆ LAL               ┆ false   ┆ 00     │
+    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ 11     │
+    │ Max Christie         ┆ LAL               ┆ false   ┆ 0      │
     │ Harry Giles III      ┆ LAL               ┆ false   ┆ 20     │
     └──────────────────────┴───────────────────┴─────────┴────────┘
 

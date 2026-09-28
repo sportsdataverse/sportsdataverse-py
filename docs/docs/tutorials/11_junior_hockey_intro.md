@@ -156,14 +156,14 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
     │ ---              ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
     │ str              ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
     ╞══════════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
-    │ Brantford        ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Brantford        ┆ 5            ┆ 5    ┆ 0      ┆ 0         ┆ 10     ┆ 29        ┆ 10            │
     │ Bulldogs         ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    │ Peterborough     ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Petes            ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    │ Ottawa 67's      ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Oshawa Generals  ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Kingston         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Oshawa Generals  ┆ 5            ┆ 3    ┆ 2      ┆ 0         ┆ 6      ┆ 17        ┆ 17            │
+    │ Kingston         ┆ 5            ┆ 2    ┆ 3      ┆ 0         ┆ 4      ┆ 19        ┆ 26            │
     │ Frontenacs       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Ottawa 67's      ┆ 3            ┆ 1    ┆ 1      ┆ 1         ┆ 3      ┆ 11        ┆ 16            │
+    │ Peterborough     ┆ 5            ┆ 1    ┆ 4      ┆ 0         ┆ 2      ┆ 16        ┆ 23            │
+    │ Petes            ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
     └──────────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
 
 
@@ -195,28 +195,28 @@ out
 
 
 
-    shape: (5, 7)
-    ┌──────────────────┬─────────┬───────────┬───────────────┬────────────┬──────────┬─────────────────┐
-    │ team_name        ┆ team_id ┆ team_code ┆ team_nickname ┆ team_label ┆ division ┆ team_logo       │
-    │ ---              ┆ ---     ┆ ---       ┆ ---           ┆ ---        ┆ ---      ┆ ---             │
-    │ str              ┆ str     ┆ str       ┆ str           ┆ str        ┆ str      ┆ str             │
-    ╞══════════════════╪═════════╪═══════════╪═══════════════╪════════════╪══════════╪═════════════════╡
-    │ Brandon Wheat    ┆ 201     ┆ BDN       ┆ Wheat Kings   ┆ Brandon    ┆ 1        ┆ https://assets. │
-    │ Kings            ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
-    │ Calgary Hitmen   ┆ 202     ┆ CGY       ┆ Hitmen        ┆ Calgary    ┆ 3        ┆ https://assets. │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
-    │ Edmonton Oil     ┆ 228     ┆ EDM       ┆ Oil Kings     ┆ Edmonton   ┆ 3        ┆ https://assets. │
-    │ Kings            ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
-    │ Everett          ┆ 226     ┆ EVT       ┆ Silvertips    ┆ Everett    ┆ 6        ┆ https://assets. │
-    │ Silvertips       ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
-    │ Kamloops Blazers ┆ 203     ┆ KAM       ┆ Blazers       ┆ Kamloops   ┆ 2        ┆ https://assets. │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
-    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
-    └──────────────────┴─────────┴───────────┴───────────────┴────────────┴──────────┴─────────────────┘
+    shape: (5, 45)
+    ┌───────┬───────────┬────────┬────────────┬───┬─────┬───────────────┬───────────────┬──────────────┐
+    │ id    ┆ person_id ┆ active ┆ first_name ┆ … ┆ w   ┆ draft_status  ┆ name          ┆ player_image │
+    │ ---   ┆ ---       ┆ ---    ┆ ---        ┆   ┆ --- ┆ ---           ┆ ---           ┆ ---          │
+    │ str   ┆ str       ┆ str    ┆ str        ┆   ┆ str ┆ str           ┆ str           ┆ str          │
+    ╞═══════╪═══════════╪════════╪════════════╪═══╪═════╪═══════════════╪═══════════════╪══════════════╡
+    │ 30237 ┆ 10958     ┆ 1      ┆ Joffrey    ┆ … ┆ 201 ┆ 2025 by BDN   ┆ Joffrey Chan  ┆ https://asse │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ ts.leaguesta │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ t.com/…      │
+    │ 29719 ┆ 10362     ┆ 1      ┆ Cameron    ┆ … ┆ 205 ┆ 2023 by BDN   ┆ Cameron       ┆ https://asse │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆ Allard        ┆ ts.leaguesta │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ t.com/…      │
+    │ 29601 ┆ 10219     ┆ 1      ┆ Brady      ┆ … ┆ 190 ┆ 2025 by ANA,  ┆ Brady Turko   ┆ https://asse │
+    │       ┆           ┆        ┆            ┆   ┆     ┆ 2022 by BDN   ┆               ┆ ts.leaguesta │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ t.com/…      │
+    │ 30235 ┆ 10956     ┆ 1      ┆ Cruz       ┆ … ┆ 165 ┆ 2025 by BDN   ┆ Cruz Jim      ┆ https://asse │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ ts.leaguesta │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ t.com/…      │
+    │ 29444 ┆ 10016     ┆ 1      ┆ Jaxon      ┆ … ┆ 190 ┆ 2023 by BDN   ┆ Jaxon         ┆ https://asse │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆ Jacobson      ┆ ts.leaguesta │
+    │       ┆           ┆        ┆            ┆   ┆     ┆               ┆               ┆ t.com/…      │
+    └───────┴───────────┴────────┴────────────┴───┴─────┴───────────────┴───────────────┴──────────────┘
 
 
 
@@ -276,8 +276,6 @@ pl.DataFrame(rows)
 
 
     ✅ ohl schedule
-
-
     ✅ whl season
 
 
@@ -328,7 +326,23 @@ cols = ["rank", "name", "team_code", "position", "stat_formatted", "type_formatt
 
 
 
-    'leaders unavailable (offseason?)'
+    shape: (10, 6)
+    ┌──────┬───────────────────┬───────────┬──────────┬────────────────┬────────────────┐
+    │ rank ┆ name              ┆ team_code ┆ position ┆ stat_formatted ┆ type_formatted │
+    │ ---  ┆ ---               ┆ ---       ┆ ---      ┆ ---            ┆ ---            │
+    │ i64  ┆ str               ┆ str       ┆ str      ┆ str            ┆ str            │
+    ╞══════╪═══════════════════╪═══════════╪══════════╪════════════════╪════════════════╡
+    │ 1    ┆ Mathys Dubé       ┆ Rim       ┆ C        ┆ 9              ┆ Points         │
+    │ 2    ┆ Philippe Veilleux ┆ VdO       ┆ LW       ┆ 9              ┆ Points         │
+    │ 3    ┆ Nathan Quinn      ┆ Que       ┆ C        ┆ 8              ┆ Points         │
+    │ 4    ┆ Eliot Ogonowski   ┆ Rou       ┆ LW       ┆ 8              ┆ Points         │
+    │ 5    ┆ Quinn Kennedy     ┆ Hal       ┆ C        ┆ 8              ┆ Points         │
+    │ 1    ┆ James Scantlebury ┆ Que       ┆ C        ┆ 5              ┆ Goals          │
+    │ 2    ┆ Niko Tournas      ┆ Mon       ┆ RW       ┆ 5              ┆ Goals          │
+    │ 3    ┆ Matthew Frost     ┆ NFL       ┆ LW       ┆ 5              ┆ Goals          │
+    │ 4    ┆ Mathys Dubé       ┆ Rim       ┆ C        ┆ 4              ┆ Goals          │
+    │ 5    ┆ Nathan Quinn      ┆ Que       ┆ C        ┆ 4              ┆ Goals          │
+    └──────┴───────────────────┴───────────┴──────────┴────────────────┴────────────────┘
 
 
 
@@ -402,10 +416,29 @@ out
     ✅ WHL leaders
 
 
+    ✅ WHL stats for Hunter Laing
 
 
 
-    'leaders unavailable to source a player_id'
+
+
+    shape: (5, 7)
+    ┌───────────────────┬──────────────────┬──────────────┬───────┬─────────┬────────┬───────────┐
+    │ season_name       ┆ team_name        ┆ games_played ┆ goals ┆ assists ┆ points ┆ stat_type │
+    │ ---               ┆ ---              ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---       │
+    │ str               ┆ str              ┆ str          ┆ str   ┆ str     ┆ str    ┆ str       │
+    ╞═══════════════════╪══════════════════╪══════════════╪═══════╪═════════╪════════╪═══════════╡
+    │ 2026 - 27 Regular ┆ Saskatoon Blades ┆ 4            ┆ 5     ┆ 4       ┆ 9      ┆ regular   │
+    │ Season            ┆                  ┆              ┆       ┆         ┆        ┆           │
+    │ 2025 - 26 Regular ┆ Saskatoon Blades ┆ 62           ┆ 24    ┆ 31      ┆ 55     ┆ regular   │
+    │ Season            ┆                  ┆              ┆       ┆         ┆        ┆           │
+    │ 2024 - 25 Regular ┆ Prince George    ┆ 36           ┆ 10    ┆ 12      ┆ 22     ┆ regular   │
+    │ Season            ┆ Cougars          ┆              ┆       ┆         ┆        ┆           │
+    │ 2024 - 25 Regular ┆ Saskatoon Blades ┆ 28           ┆ 15    ┆ 11      ┆ 26     ┆ regular   │
+    │ Season            ┆                  ┆              ┆       ┆         ┆        ┆           │
+    │ 2023 - 24 Regular ┆ Prince George    ┆ 66           ┆ 11    ┆ 14      ┆ 25     ┆ regular   │
+    │ Season            ┆ Cougars          ┆              ┆       ┆         ┆        ┆           │
+    └───────────────────┴──────────────────┴──────────────┴───────┴─────────┴────────┴───────────┘
 
 
 
@@ -613,7 +646,15 @@ out
 
 
 
-    'roster empty for this team/season'
+    shape: (2, 2)
+    ┌────────┬─────────┐
+    │ shoots ┆ players │
+    │ ---    ┆ ---     │
+    │ str    ┆ u32     │
+    ╞════════╪═════════╡
+    │ L      ┆ 18      │
+    │ R      ┆ 7       │
+    └────────┴─────────┘
 
 
 
@@ -647,10 +688,10 @@ out
 
        season_id               season_name  season_yr game_type_label
     0         94    2026-27 Regular Season       2027         regular
-    1         92  2026 Calder Cup Playoffs       2026        playoffs
-    2         91   2026 All-Star Challenge       2026         regular
-    3         90    2025-26 Regular Season       2026         regular
-    4         88  2025 Calder Cup Playoffs       2025        playoffs
+    1         93            2026 Preseason       2026       preseason
+    2         92  2026 Calder Cup Playoffs       2026        playoffs
+    3         91   2026 All-Star Challenge       2026         regular
+    4         90    2025-26 Regular Season       2026         regular
 
 
 

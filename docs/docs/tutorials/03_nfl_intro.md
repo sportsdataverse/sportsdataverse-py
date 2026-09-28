@@ -867,14 +867,14 @@ rush_lb
     │ ---                 ┆ ---         ┆ ---     ┆ ---      ┆ ---     ┆ ---      │
     │ str                 ┆ str         ┆ i32     ┆ f64      ┆ i32     ┆ f64      │
     ╞═════════════════════╪═════════════╪═════════╪══════════╪═════════╪══════════╡
-    │ Saquon Barkley      ┆ PHI         ┆ 345     ┆ 2005.0   ┆ 13      ┆ 34.1     │
+    │ Saquon Barkley      ┆ PHI         ┆ 345     ┆ 2005.0   ┆ 13      ┆ 37.3     │
     │ Derrick Henry       ┆ BAL         ┆ 325     ┆ 1921.0   ┆ 16      ┆ 40.6     │
-    │ Bijan Robinson      ┆ ATL         ┆ 304     ┆ 1456.0   ┆ 14      ┆ 16.9     │
-    │ Jonathan Taylor     ┆ IND         ┆ 303     ┆ 1431.0   ┆ 11      ┆ -21.0    │
+    │ Bijan Robinson      ┆ ATL         ┆ 304     ┆ 1456.0   ┆ 14      ┆ 17.9     │
+    │ Jonathan Taylor     ┆ IND         ┆ 303     ┆ 1431.0   ┆ 11      ┆ -22.9    │
     │ Jahmyr Gibbs        ┆ DET         ┆ 250     ┆ 1412.0   ┆ 16      ┆ 35.1     │
-    │ Josh Jacobs         ┆ GB          ┆ 301     ┆ 1329.0   ┆ 15      ┆ -18.3    │
+    │ Josh Jacobs         ┆ GB          ┆ 301     ┆ 1329.0   ┆ 15      ┆ -20.2    │
     │ Kyren Williams      ┆ LA          ┆ 316     ┆ 1299.0   ┆ 14      ┆ -23.5    │
-    │ Chuba Hubbard       ┆ CAR         ┆ 250     ┆ 1195.0   ┆ 10      ┆ 9.7      │
+    │ Chuba Hubbard       ┆ CAR         ┆ 250     ┆ 1195.0   ┆ 10      ┆ 10.7     │
     │ Aaron Jones         ┆ MIN         ┆ 255     ┆ 1138.0   ┆ 5       ┆ -13.4    │
     │ Bucky Irving        ┆ TB          ┆ 207     ┆ 1122.0   ┆ 8       ┆ 20.9     │
     └─────────────────────┴─────────────┴─────────┴──────────┴─────────┴──────────┘
@@ -1104,7 +1104,7 @@ rec_out
       player_display_name recent_team  rec  rec_yds  yards_per_rec  catch_rate
     0       Ja'Marr Chase         CIN  127   1708.0           13.4        72.6
     1    Justin Jefferson         MIN  103   1533.0           14.9        66.9
-    2        Brian Thomas         JAX   87   1282.0           14.7        65.4
+    2    Brian Thomas Jr.         JAX   87   1282.0           14.7        65.4
     3        Drake London         ATL  100   1271.0           12.7        63.3
     4   Amon-Ra St. Brown         DET  115   1263.0           11.0        81.6
     5         Jerry Jeudy         CLE   90   1229.0           13.7        62.1
@@ -1235,7 +1235,7 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 
 
 
-    {'current_season': 2025, 'current_week': 22, 'most_recent_season': 2025}
+    {'current_season': 2026, 'current_week': 4, 'most_recent_season': 2026}
 
 
 

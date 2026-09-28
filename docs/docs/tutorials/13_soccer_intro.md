@@ -932,6 +932,8 @@ pl.DataFrame(rows)
 
 
     ✅ La Liga standings
+
+
     ✅ Bundesliga standings
 
 
