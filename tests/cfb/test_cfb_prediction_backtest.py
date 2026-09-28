@@ -16,10 +16,11 @@ Two further problems, invisible while the gate passed:
   number answered a different question than its name implied.
 * Nothing measured error against ACTUAL OUTCOMES at all.
 
-This gate uses 2024, which neither the old constants (fit on 2023) nor the new
-ones (fit walk-forward by `cfb_higher_models.fit_pregame` in cfbfastR-cfb-data)
-were fitted to. Every floor is derived from a measured value with headroom --
-never chosen to make a change pass, per the binding "never lower a gate" rule.
+This gate uses 2024. The constants are fit by `cfb_higher_models.fit_pregame`
+in cfbfastR-cfb-data on 2014-2023 only (`--holdout 2024 2025`), so the fit never
+saw it. (The 2026-08-03 fit ran on 2014-2025, 2024 included.) Every floor is
+derived from a measured value with headroom -- never chosen to make a change
+pass, per the binding "never lower a gate" rule.
 
 AS-OF CONSTRUCTION
 ------------------
@@ -57,10 +58,10 @@ _BURN_IN_WEEK = 5  # weeks 1-4 rest on too few games to rate
 # Floors: MEASURED on this fixture, then given headroom. The measured value is
 # recorded beside each so a future change can see exactly what moved.
 _MIN_GAMES = 500  # measured 557
-_MARGIN_MAE_FLOOR = 14.65  # measured 13.32 (superseded constants: 14.49)
-_BRIER_FLOOR = 0.2298  # measured 0.2090
-_ACCURACY_FLOOR = 0.6089  # measured 0.6409
-_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.83 -- AGREEMENT, not accuracy
+_MARGIN_MAE_FLOOR = 14.65  # measured 13.35 (2026-08-03 constants 13.32, superseded 14.49)
+_BRIER_FLOOR = 0.2298  # measured 0.2090 (2026-08-03 constants 0.2090)
+_ACCURACY_FLOOR = 0.6089  # measured 0.6481 (2026-08-03 constants 0.6409)
+_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.79 (was 5.83) -- AGREEMENT, not accuracy
 
 
 def _asof_predictions() -> pl.DataFrame:
@@ -236,7 +237,7 @@ def test_win_prob_discriminates_favorites_from_dogs() -> None:
     dog_rate = float(dogs["y"].mean())
     fav_rate = float(favs["y"].mean())
     assert dog_rate < 0.5 < fav_rate, (dog_rate, fav_rate)
-    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.255
+    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.271 (was 0.255)
 
 
 _PRIOR_PACE = pl.read_parquet(_FIX / "prior_pace_2023.parquet")
