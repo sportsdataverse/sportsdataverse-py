@@ -16,14 +16,32 @@ allowed while the group's DEFENSE was on the field):
   play count (``sec_per_play``), and the same on situation-neutral drives
   (``sec_per_play_neutral``); ``pace_coverage`` is the share of drives with
   a usable clock, so a season whose clock is sparse can be excluded.
-* run / pass -- ``pass_rate`` overall, ``pass_rate_neutral`` (win probability
-  20-80%, first four quarters, outside the last two minutes of a half),
-  by down (``pass_rate_d1..d4``), early / standard / passing downs, and by
-  score state (``pass_rate_leading`` / ``_tied`` / ``_trailing``), each with
-  its play count.
+* run / pass -- ``pass_rate`` overall and on every split below.
+* splits (:data:`SPLITS`) -- situation-neutral (win probability 20-80%, first
+  four quarters, outside the last two minutes of a half), by down
+  (``d1..d4``), early / standard / passing downs, score state at the snap
+  (``leading`` / ``tied`` / ``trailing`` from ``pos_score_diff_start``, else
+  ``pos_score_diff``), half, third down by distance (``d3_short`` 1-3,
+  ``d3_medium`` 4-6, ``d3_long`` 7+), ``red_zone`` (20 or fewer yards to the end
+  zone; ``rz_play`` only when that distance is missing), field zone
+  (``own_half`` / ``opp_half``: 50+ / under 50 yards to the end zone) and
+  ``one_score`` (within 8 at the snap). Each split ``s`` carries ``plays_s``,
+  ``passes_s``, ``epa_s``, ``successes_s`` and the rates ``pass_rate_s``,
+  ``epa_per_play_s``, ``success_rate_s``. The ``def_`` twins read the split
+  from the OFFENSE's side (``def_plays_leading`` is snaps the opponent took
+  while ahead).
+* game context (optional, :data:`CONTEXTS`) -- when the plays carry a Boolean
+  ``ctx_{c}`` column (``home``, ``away``, ``neutral_site``, ``vs_ranked``,
+  ``after_bye``, ``opener``, ``one_score_game``), the split ``c`` plus
+  ``games_{c}`` and, with ``ctx_win``, ``wins_{c}`` / ``win_rate_{c}``. The
+  defense reads ``def_ctx_{c}`` / ``def_ctx_win``: the DEFENDING team's
+  context. An absent column emits nothing; the data-repo wrappers join them.
+  A null value is not true. An all-null column is fine when it is Boolean, but
+  a ``Null``-dtype column (``pl.lit(None)``) raises ``TypeError``: build
+  ``ctx_*`` as Boolean even when no value is known.
 * efficiency -- EPA per play, success rate, yards per play, explosive rate,
-  with rush / pass splits; early-down EPA; third downs converted and over
-  expected (the league's bundled distance curve).
+  with rush / pass splits; third downs converted and over expected (the
+  league's bundled distance curve).
 * finishing -- red-zone and scoring-opportunity trips, touchdown rate,
   conversion rate (TD or FG), points per trip; scripted (first two drives
   of each half) vs non-scripted EPA per play, success rate, points per drive.
@@ -61,6 +79,43 @@ from sportsdataverse.football.usage_box import load_third_down_curve
 
 __all__ = ["aggregate_tendencies", "tendencies"]
 
+#: play-level splits: each emits ``plays_`` / ``passes_`` / ``epa_`` / ``successes_{s}``
+#: and the three rates below (the first thirteen are the shipped names, in order)
+SPLITS: tuple[str, ...] = (
+    "neutral",
+    "d1",
+    "d2",
+    "d3",
+    "d4",
+    "early_down",
+    "standard_down",
+    "passing_down",
+    "leading",
+    "tied",
+    "trailing",
+    "first_half",
+    "second_half",
+    "d3_short",
+    "d3_medium",
+    "d3_long",
+    "red_zone",
+    "own_half",
+    "opp_half",
+    "one_score",
+)
+#: game-context splits, each read from an optional Boolean ``ctx_{c}`` input column
+#: (``def_ctx_{c}`` for the defense: the DEFENDING team's context); ``ctx_win`` adds wins
+CONTEXTS: tuple[str, ...] = ("home", "away", "neutral_site", "vs_ranked", "after_bye", "opener", "one_score_game")
+
+
+def _split_rates(s: str) -> tuple[tuple[str, str, str], ...]:
+    return (
+        (f"pass_rate_{s}", f"passes_{s}", f"plays_{s}"),
+        (f"epa_per_play_{s}", f"epa_{s}", f"plays_{s}"),
+        (f"success_rate_{s}", f"successes_{s}", f"plays_{s}"),
+    )
+
+
 #: (rate column, numerator count, denominator count) -- the contract that lets
 #: careers be summed then re-rated
 RATES: tuple[tuple[str, str, str], ...] = (
@@ -71,27 +126,14 @@ RATES: tuple[tuple[str, str, str], ...] = (
     ("sec_per_play_neutral", "drive_seconds_neutral", "drive_plays_neutral"),
     ("pace_coverage", "drives_with_clock", "drives"),
     ("pass_rate", "passes", "plays"),
-    ("pass_rate_neutral", "passes_neutral", "plays_neutral"),
-    ("pass_rate_d1", "passes_d1", "plays_d1"),
-    ("pass_rate_d2", "passes_d2", "plays_d2"),
-    ("pass_rate_d3", "passes_d3", "plays_d3"),
-    ("pass_rate_d4", "passes_d4", "plays_d4"),
-    ("pass_rate_early_down", "passes_early_down", "plays_early_down"),
-    ("pass_rate_standard_down", "passes_standard_down", "plays_standard_down"),
-    ("pass_rate_passing_down", "passes_passing_down", "plays_passing_down"),
-    ("pass_rate_leading", "passes_leading", "plays_leading"),
-    ("pass_rate_tied", "passes_tied", "plays_tied"),
-    ("pass_rate_trailing", "passes_trailing", "plays_trailing"),
-    ("pass_rate_first_half", "passes_first_half", "plays_first_half"),
-    ("pass_rate_second_half", "passes_second_half", "plays_second_half"),
     ("epa_per_play", "epa", "plays"),
     ("epa_per_rush", "epa_rush", "rushes"),
     ("epa_per_pass", "epa_pass", "passes"),
-    ("epa_per_play_early_down", "epa_early_down", "plays_early_down"),
-    ("epa_per_play_neutral", "epa_neutral", "plays_neutral"),
     ("success_rate", "successes", "plays"),
     ("success_rate_rush", "successes_rush", "rushes"),
     ("success_rate_pass", "successes_pass", "passes"),
+    *(r for s in SPLITS for r in _split_rates(s)),
+    *(r for c in CONTEXTS for r in (*_split_rates(c), (f"win_rate_{c}", f"wins_{c}", f"games_{c}"))),
     ("ypp", "yards", "plays"),
     ("ypp_rush", "yards_rush", "rushes"),
     ("ypp_pass", "yards_pass", "passes"),
@@ -179,6 +221,12 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
     down = _col(df, "start.down", "down")
     dist = _col(df, "start.distance", "distance")
     period = _col(df, "period", "period.number")
+
+    def first(*cols: str) -> pl.Expr:
+        """Per row, the first non-null of the columns present."""
+        have = [f(c) for c in cols if c in df.columns]
+        return pl.coalesce(have) if have else pl.lit(None, dtype=pl.Float64)
+
     exprs: list[pl.Expr] = [
         b("scrimmage_play").alias("t_scrimmage"),
         b("penalty_no_play").alias("t_no_play"),
@@ -190,18 +238,20 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         b("EPA_explosive").alias("t_explosive"),
         b("first_down_created").alias("t_first_down"),
         b("touchdown").alias("t_touchdown"),
-        b("rz_play").alias("t_rz"),
         b("scoring_opp").alias("t_so"),
         b("standard_down").alias("t_standard_down"),
         b("passing_down").alias("t_passing_down"),
         f("EPA").alias("t_epa"),
         f("statYardage").alias("t_yards"),
         f("wp_before").alias("t_wp"),
-        f("pos_score_diff").alias("t_score_diff"),
+        # the score at the snap; pos_score_diff is the score AFTER the play, so a touchdown
+        # that flips the lead would count its own EPA as "leading"
+        first("pos_score_diff_start", "pos_score_diff").alias("t_score_diff"),
         f("go_boost").alias("t_go_boost"),
         (pl.col(down).cast(pl.Int64, strict=False) if down else pl.lit(None, dtype=pl.Int64)).alias("t_down"),
         (pl.col(dist).cast(pl.Float64, strict=False) if dist else pl.lit(None, dtype=pl.Float64)).alias("t_distance"),
         (pl.col(period).cast(pl.Int64, strict=False) if period else pl.lit(None, dtype=pl.Int64)).alias("t_period"),
+        first("start.yardsToEndzone", "yards_to_goal", "yardline_100").alias("t_ytg"),
         (
             pl.col("fourth_down_recommendation").cast(pl.Utf8)
             if "fourth_down_recommendation" in df.columns
@@ -236,6 +286,9 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         t_half=half,
         t_neutral=neutral,
         t_standing=(pl.col("t_scrimmage") & ~pl.col("t_no_play")),
+        # red zone from yards to go: NFL rz_play reads ESPN's absolute yardLine, which is the
+        # wrong end of the field for one team a game; the flag only fills a missing distance
+        t_rz=pl.coalesce(pl.col("t_ytg") <= 20, b("rz_play")),
         t_leading=(pl.col("t_score_diff") > 0).fill_null(False),
         t_tied=(pl.col("t_score_diff") == 0).fill_null(False),
         t_trailing=(pl.col("t_score_diff") < 0).fill_null(False),
@@ -293,15 +346,32 @@ def _drive_frame(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
     )
 
 
-def _offense_counts(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
+def _offense_counts(df: pl.DataFrame, keys: list[str], ctx: str = "ctx_") -> pl.DataFrame:
+    """Play counts per group; ``ctx`` is the context-column prefix this side reads."""
     p = df.filter(pl.col("t_standing"))
     rush, pas = pl.col("t_rush"), pl.col("t_pass")
+    down, dist, ytg = pl.col("t_down"), pl.col("t_distance"), pl.col("t_ytg")
 
     def _n(mask: pl.Expr) -> pl.Expr:
         return mask.sum()
 
     def _split(name: str, mask: pl.Expr) -> list[pl.Expr]:
-        return [_n(mask).alias(f"plays_{name}"), _n(mask & pas).alias(f"passes_{name}")]
+        return [
+            _n(mask).alias(f"plays_{name}"),
+            _n(mask & pas).alias(f"passes_{name}"),
+            pl.col("t_epa").filter(mask).sum().alias(f"epa_{name}"),
+            _n(mask & pl.col("t_success")).alias(f"successes_{name}"),
+        ]
+
+    context: list[pl.Expr] = []
+    for c in CONTEXTS:
+        if f"{ctx}{c}" not in p.columns:
+            continue
+        m = pl.col(f"{ctx}{c}").fill_null(False)
+        context += [*_split(c, m), pl.col("game_id").filter(m).n_unique().alias(f"games_{c}")]
+        if f"{ctx}win" in p.columns:
+            won = m & pl.col(f"{ctx}win").fill_null(False)
+            context.append(pl.col("game_id").filter(won).n_unique().alias(f"wins_{c}"))
 
     aggs: list[pl.Expr] = [
         pl.col("game_id").n_unique().alias("games"),
@@ -311,8 +381,6 @@ def _offense_counts(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         pl.col("t_epa").sum().alias("epa"),
         pl.col("t_epa").filter(rush).sum().alias("epa_rush"),
         pl.col("t_epa").filter(pas).sum().alias("epa_pass"),
-        pl.col("t_epa").filter(pl.col("t_early_down")).sum().alias("epa_early_down"),
-        pl.col("t_epa").filter(pl.col("t_neutral")).sum().alias("epa_neutral"),
         _n(pl.col("t_success")).alias("successes"),
         _n(pl.col("t_success") & rush).alias("successes_rush"),
         _n(pl.col("t_success") & pas).alias("successes_pass"),
@@ -329,10 +397,10 @@ def _offense_counts(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         .otherwise(None)
         .alias("third_down_expected"),
         *_split("neutral", pl.col("t_neutral")),
-        *_split("d1", pl.col("t_down") == 1),
-        *_split("d2", pl.col("t_down") == 2),
-        *_split("d3", pl.col("t_down") == 3),
-        *_split("d4", pl.col("t_down") == 4),
+        *_split("d1", down == 1),
+        *_split("d2", down == 2),
+        *_split("d3", down == 3),
+        *_split("d4", down == 4),
         *_split("early_down", pl.col("t_early_down")),
         *_split("standard_down", pl.col("t_standard_down")),
         *_split("passing_down", pl.col("t_passing_down")),
@@ -341,6 +409,14 @@ def _offense_counts(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         *_split("trailing", pl.col("t_trailing")),
         *_split("first_half", pl.col("t_half") == 1),
         *_split("second_half", pl.col("t_half") == 2),
+        *_split("d3_short", (down == 3) & (dist <= 3)),
+        *_split("d3_medium", (down == 3) & dist.is_between(3, 6, closed="right")),
+        *_split("d3_long", (down == 3) & (dist > 6)),
+        *_split("red_zone", pl.col("t_rz")),
+        *_split("own_half", ytg >= 50),
+        *_split("opp_half", ytg < 50),
+        *_split("one_score", pl.col("t_score_diff").abs() <= 8),
+        *context,
     ]
     return p.group_by(keys, maintain_order=True).agg(aggs)
 
@@ -441,7 +517,9 @@ def tendencies(
     Args:
         plays: plays in the released ``espn_{league}_pbp`` shape (any number
             of games / seasons), optionally with extra grouping columns joined
-            on (a ``coach`` on the offense side, a ``def_coach`` on the defense).
+            on (a ``coach`` on the offense side, a ``def_coach`` on the defense)
+            and Boolean game-context columns (``ctx_{c}`` / ``def_ctx_{c}``,
+            ``c`` in :data:`CONTEXTS` or ``win``).
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         group_cols: the offense grouping (a team-season by default).
         def_group_cols: the defense grouping, one column per ``group_cols``
@@ -451,9 +529,15 @@ def tendencies(
         third_down_curve: override the bundled curve.
 
     Returns:
-        One row per group with the volume, pace, run-pass, efficiency,
-        finishing and fourth-down columns (counts and rates) and their
-        ``def_``-prefixed defense-allowed twins. Empty input -> empty frame.
+        One row per group with the volume, pace, run-pass, split, efficiency,
+        finishing and fourth-down columns (counts and rates), the game-context
+        columns for each context column present, and their ``def_``-prefixed
+        defense-allowed twins. Empty input -> empty frame.
+
+    Raises:
+        ValueError: a grouping column is missing.
+        TypeError: a ``ctx_*`` / ``def_ctx_*`` column is not Boolean, including an
+            all-null ``Null``-dtype column (never cast).
 
     Example:
         Quick start::
@@ -468,6 +552,9 @@ def tendencies(
     missing = [k for k in [*keys, *dkeys, "game_id"] if k not in plays.columns]
     if missing:
         raise ValueError(f"plays lack grouping columns: {missing}")
+    for c, dtype in plays.schema.items():
+        if c.startswith(("ctx_", "def_ctx_")) and dtype != pl.Boolean:
+            raise TypeError(f"context column {c!r} must be Boolean, got {dtype}")
     curve = third_down_curve
     if curve is None:
         try:
@@ -484,7 +571,9 @@ def tendencies(
     off = _apply_rates(off)
 
     # defense-allowed: the same offense aggregations grouped by the defending key
-    d_off = _join_all([_offense_counts(df, dkeys), _drive_counts(_drive_frame(df, dkeys), dkeys)], dkeys)
+    d_off = _join_all(
+        [_offense_counts(df, dkeys, ctx="def_ctx_"), _drive_counts(_drive_frame(df, dkeys), dkeys)], dkeys
+    )
     if d_off.height:
         d_off = d_off.rename({c: f"def_{c}" for c in d_off.columns if c not in dkeys})
         d_off = _apply_rates(d_off, prefix="def_")
