@@ -642,23 +642,26 @@ def load_cfb_ratings(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name    |type    |
-        |:-----------|:-------|
-        |season      |Int64   |
-        |team_id     |Int64   |
-        |adj_off_epa |Float64 |
-        |adj_def_epa |Float64 |
-        |adj_st_epa  |Float64 |
-        |adj_net     |Float64 |
-        |fei_off     |Float64 |
-        |fei_def     |Float64 |
-        |fei_net     |Float64 |
-        |games       |Int64   |
-        |off_pace    |Float64 |
-        |off_rank    |Int64   |
-        |def_rank    |Int64   |
-        |net_rank    |Int64   |
-        |net_z       |Float64 |
+        |col_name     |type    |
+        |:------------|:-------|
+        |season       |Int64   |
+        |team_id      |Int64   |
+        |adj_off_epa  |Float64 |
+        |adj_def_epa  |Float64 |
+        |adj_st_epa   |Float64 |
+        |adj_net      |Float64 |
+        |fei_off      |Float64 |
+        |fei_def      |Float64 |
+        |fei_net      |Float64 |
+        |games        |Int64   |
+        |off_pace     |Float64 |
+        |off_rank     |Int64   |
+        |def_rank     |Int64   |
+        |net_rank     |Int64   |
+        |net_z        |Float64 |
+        |fei_off_rank |Int64   |
+        |fei_def_rank |Int64   |
+        |fei_net_rank |Int64   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
