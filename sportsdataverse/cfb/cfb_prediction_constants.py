@@ -164,14 +164,19 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
     # (24.6578 / 3.0365 / 18.7894, curve 10.62 / 26.06 / 42.00 / 54.49) were
     # fit on that leaked frame and on every season through 2025, 2024 included.
     #
-    # Same serving formula (games-played slope + hfa_points), scored on
-    # identical leak-free 2024-2025 holdout games (n=1,202):
+    # `margin_sd` is the residual sd of the games-played CURVE's margin (the
+    # formula served here), not the flat fit's 18.97, which priced WP ~5% wide.
+    #
+    # Same serving formula, scored on identical 2024-2025 games (n=1,202). A
+    # NEAR-holdout: the fit never saw these seasons, but sdv-py #598's
+    # adjusted-EPA shrinkage was tuned on 2023-2025.
     #     previous constants   MAE 13.29  brier 0.2040  slope 1.04  (had SEEN 2024-25)
-    #     this refit           MAE 13.32  brier 0.2043  slope 1.02
-    #     paired dMAE +0.03, 95% game-bootstrap CI [-0.01, +0.06]: a tie. The
-    #     refit's gain is a leak-free, reproducible fit on a clean holdout.
+    #     this refit           MAE 13.32  brier 0.2039  slope 1.02  max_cal_err 0.081
+    #     paired dMAE +0.03 [-0.01, +0.06], dBrier -0.0001 [-0.0008, +0.0005]
+    #     (2,000 game bootstraps): a statistical tie. What the refit buys is a
+    #     leak-free, reproducible fit with 2024 genuinely out of its training.
     # Walk-forward 2016-2025 (each season fit only on earlier ones), n=5,724:
-    #     refit + attenuation  MAE 13.87  brier 0.2093  slope 0.99  max_cal_err 0.194
+    #     refit + attenuation  MAE 13.87  brier 0.2090  slope 0.99  max_cal_err 0.163
     #
     # The 2026-08-03 refit's reasoning still holds: as-of ratings are noisier
     # than full-season ones, so the slope attenuates and grows with games
@@ -180,7 +185,7 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
     "modern": PredictConfig(
         hfa_epa=0.01848,  # retained for back-compat; the fit uses hfa_points
         hfa_points=2.7936,
-        margin_sd=18.9727,
+        margin_sd=18.1043,
         net_points_scale=23.6945,
         # TOTALS ARE UNTOUCHED BY THIS REFIT, deliberately. `predict_total`
         # parameterises as `intercept + scale*sum4 + pace_scale*game_pace`

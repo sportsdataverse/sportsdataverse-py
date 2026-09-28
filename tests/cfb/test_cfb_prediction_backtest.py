@@ -59,9 +59,15 @@ _BURN_IN_WEEK = 5  # weeks 1-4 rest on too few games to rate
 # recorded beside each so a future change can see exactly what moved.
 _MIN_GAMES = 500  # measured 557
 _MARGIN_MAE_FLOOR = 14.65  # measured 13.35 (2026-08-03 constants 13.32, superseded 14.49)
-_BRIER_FLOOR = 0.2298  # measured 0.2090 (2026-08-03 constants 0.2090)
+_BRIER_FLOOR = 0.2298  # measured 0.2087 (2026-08-03 constants 0.2090)
 _ACCURACY_FLOOR = 0.6089  # measured 0.6481 (2026-08-03 constants 0.6409)
 _SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.79 (was 5.83) -- AGREEMENT, not accuracy
+#: Calibration slope of actual ~ predicted margin. MEASURED 0.926 on this
+#: fixture, game-bootstrap 95% CI [0.791, 1.067] (2,000 resamples, seed 0);
+#: the band is that CI with 0.05 headroom each side. A scale error is what the
+#: MAE floor cannot see: the superseded 44.5367 constants score slope 0.592
+#: (predictions ~1.7x too wide) and still clear MAE 14.65.
+_CAL_SLOPE_BAND = (0.74, 1.12)
 
 
 def _asof_predictions() -> pl.DataFrame:
@@ -129,6 +135,26 @@ def test_margin_mae_within_floor() -> None:
     """Expected margin tracks ACTUAL margins -- the thing a forecast is for."""
     v = float(mae(_PREDS["exp_margin"].to_numpy(), _PREDS["actual_margin"].to_numpy()))
     assert v <= _MARGIN_MAE_FLOOR, v
+
+
+def _cal_slope(pred: np.ndarray) -> float:
+    return float(np.polyfit(pred, _PREDS["actual_margin"].to_numpy(), 1)[0])
+
+
+def test_margin_calibration_slope_within_band() -> None:
+    """Predicted margins are on the right SCALE, not just close on average."""
+    v = _cal_slope(_PREDS["exp_margin"].to_numpy())
+    assert _CAL_SLOPE_BAND[0] <= v <= _CAL_SLOPE_BAND[1], v
+
+
+def test_calibration_band_rejects_the_superseded_scale() -> None:
+    """Guard the guard: the 1.7x-too-wide constants must fall outside the band."""
+    old = 44.5367 * (
+        _PREDS["home_adj_net"].to_numpy()
+        - _PREDS["away_adj_net"].to_numpy()
+        + np.where(_PREDS["neutral_site"].to_numpy(), 0.0, 2 * 0.01848)
+    )
+    assert not _CAL_SLOPE_BAND[0] <= _cal_slope(old) <= _CAL_SLOPE_BAND[1]
 
 
 def test_win_prob_brier_within_floor() -> None:
