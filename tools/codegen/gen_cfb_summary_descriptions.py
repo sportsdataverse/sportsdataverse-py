@@ -130,13 +130,26 @@ EXTRA: dict[str, str] = {
     "adj_off_epa_rank": "National rank of the team's adj_off_epa, where 1 is best.",
     "adj_def_epa_rank": "National rank of the team's adj_def_epa, where 1 is best (fewest EPA allowed).",
     "net_adj_epa_rank": "National rank of the team's net_adj_epa, 1 = largest net adjusted EPA.",
+    # cfb_adjusted_epa: off_ = mean(adjmodelOff), joined on the offense the DEFENSE faced;
+    # def_ = mean(adjmodelDef), the EPA/play the opposing defenses allow -- so lower is tougher.
     "off_strength_faced": (
-        "Average opponent-defense strength the team's offense faced, taken as the mean of the "
-        "ridge's defensive coefficients across its opponents. Higher means a tougher slate."
+        "Average strength of the opposing offenses the team's defense faced: the mean over its games of each "
+        "opponent's ridge-fitted offensive EPA per play. Higher means a tougher slate. Null when the team has "
+        "fewer than two valid games."
     ),
     "def_strength_faced": (
-        "Average opponent-offense strength the team's defense faced, taken as the mean of the "
-        "ridge's offensive coefficients across its opponents. Higher means a tougher slate."
+        "Average strength of the opposing defenses the team's offense faced: the mean over its games of the "
+        "EPA per play each opponent's defense is fitted to allow. Lower means a tougher slate. Null when the "
+        "team has fewer than two valid games."
+    ),
+    "off_strength_faced_rank": (
+        "National rank of off_strength_faced, where 1 = toughest slate (the strongest opposing offenses). Ties "
+        "share the average rank. Null when off_strength_faced is null: unranked, not last."
+    ),
+    "def_strength_faced_rank": (
+        "National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses, i.e. "
+        "the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: "
+        "unranked, not last."
     ),
     "valid_games": (
         "Number of the team's games that produced both an offensive and a defensive adjusted-EPA "
@@ -215,6 +228,48 @@ EXTRA |= {
         "better. Spelled singular; there is no turnovers_margin column."
     ),
     "turnover_margin_rank": "National rank of turnover_margin, 1 = largest margin.",
+}
+
+# Drive efficiency (CFBE-1d). Whole-team only. Same owner rule and drive.result scoring as pts_per_opp.
+_PPD = (
+    "Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an "
+    "FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it "
+    "when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a "
+    'field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") '
+    'scores 0, but a return or defensive touchdown on a drive ESPN labels plain "TD" is credited to the '
+    "drive's owner, the team that gave it up"
+)
+for _s, _who, _null, _best, _dir in (
+    ("off", "the team's own drives", "the team owned", "most points per drive", "Higher"),
+    (
+        "def",
+        "opponents' drives against the team's defense",
+        "opponents owned",
+        "fewest points allowed per drive",
+        "Lower",
+    ),
+):
+    EXTRA |= {
+        f"pts_per_drive_{_s}": f"{_PPD}. Counted on {_who}. {_dir} is better. Null when {_null} no drive.",
+        f"pts_per_drive_{_s}_rank": (
+            f"National rank of pts_per_drive_{_s}, where 1 is best ({_best}). Ties share the average rank. "
+            f"Null when pts_per_drive_{_s} is null: unranked, not last."
+        ),
+        f"pts_per_drive_{_s}_n": (
+            f"Sample size behind pts_per_drive_{_s}: the number of {_who} it is computed over. 0 when there were "
+            f"none, and pts_per_drive_{_s} is then null. Can sit slightly below drives_{_s}, which also counts "
+            "drive ids holding only a stray snap."
+        ),
+    }
+EXTRA |= {
+    "pts_per_drive_margin": (
+        "pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive. "
+        "Null when either side is null. Higher is better."
+    ),
+    "pts_per_drive_margin_rank": (
+        "National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null when "
+        "pts_per_drive_margin is null: unranked, not last."
+    ),
 }
 
 

@@ -8773,8 +8773,12 @@ load_cfb_team_summaries:
   available_yards_pct_off: Share of available yards the team's offense actually gained (total_gained_yards_off divided by
     total_available_yards_off). Higher is better.
   available_yards_pct_off_rank: National rank of the team's offensive available-yards share, where 1 is best.
-  def_strength_faced: Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive
-    coefficients across its opponents. Higher means a tougher slate.
+  def_strength_faced: 'Average strength of the opposing defenses the team''s offense faced: the mean over its games of the
+    EPA per play each opponent''s defense is fitted to allow. Lower means a tougher slate. Null when the team has fewer than
+    two valid games.'
+  def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
+    i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
+    last.'
   drives_def: Offensive drives, with the team on defense (i.e. allowed to opponents).
   drives_def_pass: Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents).
   drives_def_rush: Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents).
@@ -9023,8 +9027,11 @@ load_cfb_team_summaries:
     0.'
   nonExplosiveEpaPerPlay_off_rush_rank: National rank of the team's EPA per play with explosive plays excluded on rush plays
     with the team on offense, where 1 is best.
-  off_strength_faced: Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive
-    coefficients across its opponents. Higher means a tougher slate.
+  off_strength_faced: 'Average strength of the opposing offenses the team''s defense faced: the mean over its games of each
+    opponent''s ridge-fitted offensive EPA per play. Higher means a tougher slate. Null when the team has fewer than two valid
+    games.'
+  off_strength_faced_rank: 'National rank of off_strength_faced, where 1 = toughest slate (the strongest opposing offenses).
+    Ties share the average rank. Null when off_strength_faced is null: unranked, not last.'
   opportunity_rate_def: Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on defense (i.e.
     allowed to opponents).
   opportunity_rate_def_n: 'Sample size behind opportunity_rate_def: the number of plays it is computed over, with the team
@@ -9191,6 +9198,32 @@ load_cfb_team_summaries:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
+  pts_per_drive_def: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+    game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
+    its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
+    as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
+    plain "TD" is credited to the drive''s owner, the team that gave it up. Counted on opponents'' drives against the team''s
+    defense. Lower is better. Null when opponents owned no drive.'
+  pts_per_drive_def_n: 'Sample size behind pts_per_drive_def: the number of opponents'' drives against the team''s defense
+    it is computed over. 0 when there were none, and pts_per_drive_def is then null. Can sit slightly below drives_def, which
+    also counts drive ids holding only a stray snap.'
+  pts_per_drive_def_rank: 'National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share
+    the average rank. Null when pts_per_drive_def is null: unranked, not last.'
+  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive.
+    Null when either side is null. Higher is better.'
+  pts_per_drive_margin_rank: 'National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null
+    when pts_per_drive_margin is null: unranked, not last.'
+  pts_per_drive_off: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+    game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
+    its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
+    as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
+    plain "TD" is credited to the drive''s owner, the team that gave it up. Counted on the team''s own drives. Higher is better.
+    Null when the team owned no drive.'
+  pts_per_drive_off_n: 'Sample size behind pts_per_drive_off: the number of the team''s own drives it is computed over. 0
+    when there were none, and pts_per_drive_off is then null. Can sit slightly below drives_off, which also counts drive ids
+    holding only a stray snap.'
+  pts_per_drive_off_rank: 'National rank of pts_per_drive_off, where 1 is best (most points per drive). Ties share the average
+    rank. Null when pts_per_drive_off is null: unranked, not last.'
   pts_per_opp_def: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
     opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
     3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no
@@ -9701,8 +9734,12 @@ load_cfb_team_summaries_weekly:
   available_yards_pct_off: Share of available yards the team's offense actually gained (total_gained_yards_off divided by
     total_available_yards_off). Higher is better.
   available_yards_pct_off_rank: National rank of the team's offensive available-yards share, where 1 is best.
-  def_strength_faced: Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive
-    coefficients across its opponents. Higher means a tougher slate.
+  def_strength_faced: 'Average strength of the opposing defenses the team''s offense faced: the mean over its games of the
+    EPA per play each opponent''s defense is fitted to allow. Lower means a tougher slate. Null when the team has fewer than
+    two valid games.'
+  def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
+    i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
+    last.'
   drives_def: Offensive drives, with the team on defense (i.e. allowed to opponents).
   drives_def_pass: Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents).
   drives_def_rush: Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents).
@@ -9951,8 +9988,11 @@ load_cfb_team_summaries_weekly:
     0.'
   nonExplosiveEpaPerPlay_off_rush_rank: National rank of the team's EPA per play with explosive plays excluded on rush plays
     with the team on offense, where 1 is best.
-  off_strength_faced: Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive
-    coefficients across its opponents. Higher means a tougher slate.
+  off_strength_faced: 'Average strength of the opposing offenses the team''s defense faced: the mean over its games of each
+    opponent''s ridge-fitted offensive EPA per play. Higher means a tougher slate. Null when the team has fewer than two valid
+    games.'
+  off_strength_faced_rank: 'National rank of off_strength_faced, where 1 = toughest slate (the strongest opposing offenses).
+    Ties share the average rank. Null when off_strength_faced is null: unranked, not last.'
   opportunity_rate_def: Opportunity rate -- opportunity-flagged rushes as a share of all plays, with the team on defense (i.e.
     allowed to opponents).
   opportunity_rate_def_n: 'Sample size behind opportunity_rate_def: the number of plays it is computed over, with the team
@@ -10119,6 +10159,32 @@ load_cfb_team_summaries_weekly:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
+  pts_per_drive_def: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+    game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
+    its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
+    as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
+    plain "TD" is credited to the drive''s owner, the team that gave it up. Counted on opponents'' drives against the team''s
+    defense. Lower is better. Null when opponents owned no drive.'
+  pts_per_drive_def_n: 'Sample size behind pts_per_drive_def: the number of opponents'' drives against the team''s defense
+    it is computed over. 0 when there were none, and pts_per_drive_def is then null. Can sit slightly below drives_def, which
+    also counts drive ids holding only a stray snap.'
+  pts_per_drive_def_rank: 'National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share
+    the average rank. Null when pts_per_drive_def is null: unranked, not last.'
+  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive.
+    Null when either side is null. Higher is better.'
+  pts_per_drive_margin_rank: 'National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null
+    when pts_per_drive_margin is null: unranked, not last.'
+  pts_per_drive_off: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+    game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
+    its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
+    as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
+    plain "TD" is credited to the drive''s owner, the team that gave it up. Counted on the team''s own drives. Higher is better.
+    Null when the team owned no drive.'
+  pts_per_drive_off_n: 'Sample size behind pts_per_drive_off: the number of the team''s own drives it is computed over. 0
+    when there were none, and pts_per_drive_off is then null. Can sit slightly below drives_off, which also counts drive ids
+    holding only a stray snap.'
+  pts_per_drive_off_rank: 'National rank of pts_per_drive_off, where 1 is best (most points per drive). Ties share the average
+    rank. Null when pts_per_drive_off is null: unranked, not last.'
   pts_per_opp_def: Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the
     opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown,
     3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no

@@ -2413,25 +2413,33 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
 | `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
+| `pts_per_drive_off_n` | Int64 | Sample size behind pts_per_drive_off: the number of the team's own drives it is computed over. 0 when there were none, and pts_per_drive_off is then null. Can sit slightly below drives_off, which also counts drive ids holding only a stray snap. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
 | `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
+| `pts_per_drive_off` | Float64 | Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels plain "TD" is credited to the drive's owner, the team that gave it up. Counted on the team's own drives. Higher is better. Null when the team owned no drive. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
 | `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
+| `pts_per_drive_off_rank` | Float64 | National rank of pts_per_drive_off, where 1 is best (most points per drive). Ties share the average rank. Null when pts_per_drive_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
 | `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
+| `pts_per_drive_def_n` | Int64 | Sample size behind pts_per_drive_def: the number of opponents' drives against the team's defense it is computed over. 0 when there were none, and pts_per_drive_def is then null. Can sit slightly below drives_def, which also counts drive ids holding only a stray snap. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
 | `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
+| `pts_per_drive_def` | Float64 | Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels plain "TD" is credited to the drive's owner, the team that gave it up. Counted on opponents' drives against the team's defense. Lower is better. Null when opponents owned no drive. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
 | `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
+| `pts_per_drive_def_rank` | Float64 | National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share the average rank. Null when pts_per_drive_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
 | `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
+| `pts_per_drive_margin` | Float64 | pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
 | `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
+| `pts_per_drive_margin_rank` | Float64 | National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null when pts_per_drive_margin is null: unranked, not last. |
 | `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
@@ -2760,12 +2768,14 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `valid_games` | UInt32 | Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below two valid games are dropped from the adjusted ratings. |
 | `adj_off_epa` | Float64 | Offensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. |
 | `adj_def_epa` | Float64 | Defensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. Lower is better -- it is EPA allowed. |
-| `off_strength_faced` | Float64 | Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive coefficients across its opponents. Higher means a tougher slate. |
-| `def_strength_faced` | Float64 | Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive coefficients across its opponents. Higher means a tougher slate. |
+| `off_strength_faced` | Float64 | Average strength of the opposing offenses the team's defense faced: the mean over its games of each opponent's ridge-fitted offensive EPA per play. Higher means a tougher slate. Null when the team has fewer than two valid games. |
+| `def_strength_faced` | Float64 | Average strength of the opposing defenses the team's offense faced: the mean over its games of the EPA per play each opponent's defense is fitted to allow. Lower means a tougher slate. Null when the team has fewer than two valid games. |
 | `net_adj_epa` | Float64 | Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better. |
 | `adj_off_epa_rank` | Float64 | National rank of the team's adj_off_epa, where 1 is best. |
 | `adj_def_epa_rank` | Float64 | National rank of the team's adj_def_epa, where 1 is best (fewest EPA allowed). |
 | `net_adj_epa_rank` | Float64 | National rank of the team's net_adj_epa, 1 = largest net adjusted EPA. |
+| `off_strength_faced_rank` | Float64 | National rank of off_strength_faced, where 1 = toughest slate (the strongest opposing offenses). Ties share the average rank. Null when off_strength_faced is null: unranked, not last. |
+| `def_strength_faced_rank` | Float64 | National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses, i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not last. |
 
 ```python
 load_cfb_team_summaries(seasons=2024)
@@ -3096,25 +3106,33 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
 | `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
 | `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
+| `pts_per_drive_off_n` | Int64 | Sample size behind pts_per_drive_off: the number of the team's own drives it is computed over. 0 when there were none, and pts_per_drive_off is then null. Can sit slightly below drives_off, which also counts drive ids holding only a stray snap. |
 | `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
 | `pts_per_opp_off` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on the team's own drives. Null when the team had no scoring opportunity. |
+| `pts_per_drive_off` | Float64 | Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels plain "TD" is credited to the drive's owner, the team that gave it up. Counted on the team's own drives. Higher is better. Null when the team owned no drive. |
 | `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
 | `pts_per_opp_off_rank` | Float64 | National rank of pts_per_opp_off, where 1 is best (most points per opportunity). Null when pts_per_opp_off is null: unranked, not last. |
+| `pts_per_drive_off_rank` | Float64 | National rank of pts_per_drive_off, where 1 is best (most points per drive). Ties share the average rank. Null when pts_per_drive_off is null: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
 | `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
 | `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
+| `pts_per_drive_def_n` | Int64 | Sample size behind pts_per_drive_def: the number of opponents' drives against the team's defense it is computed over. 0 when there were none, and pts_per_drive_def is then null. Can sit slightly below drives_def, which also counts drive ids holding only a stray snap. |
 | `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
 | `pts_per_opp_def` | Float64 | Points per scoring opportunity. A scoring opportunity is a drive with a run or pass snap at or inside the opponent 40, charged only to the drive's owner (ESPN's drive team); it scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. Counted on opponents' drives against the team's defense. Null when opponents had no scoring opportunity. |
+| `pts_per_drive_def` | Float64 | Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels plain "TD" is credited to the drive's owner, the team that gave it up. Counted on opponents' drives against the team's defense. Lower is better. Null when opponents owned no drive. |
 | `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
 | `pts_per_opp_def_rank` | Float64 | National rank of pts_per_opp_def, where 1 is best (fewest points allowed per opportunity). Null when pts_per_opp_def is null: unranked, not last. |
+| `pts_per_drive_def_rank` | Float64 | National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share the average rank. Null when pts_per_drive_def is null: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
 | `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
 | `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
+| `pts_per_drive_margin` | Float64 | pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive. Null when either side is null. Higher is better. |
 | `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
 | `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
 | `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
 | `pts_per_opp_margin_rank` | Float64 | National rank of pts_per_opp_margin, 1 = largest margin. Null when pts_per_opp_margin is null: unranked, not last. |
+| `pts_per_drive_margin_rank` | Float64 | National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null when pts_per_drive_margin is null: unranked, not last. |
 | `passrate_off_pass_n` | Int64 | Sample size behind passrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `rushrate_off_pass_n` | Int64 | Sample size behind rushrate_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
 | `havoc_off_pass_n` | Int64 | Sample size behind havoc_off_pass: the number of plays it is computed over on pass plays, with the team on offense. Null when the team has no rows in that split; read it as 0. |
@@ -3443,12 +3461,14 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `valid_games` | UInt32 | Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below two valid games are dropped from the adjusted ratings. |
 | `adj_off_epa` | Float64 | Offensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. |
 | `adj_def_epa` | Float64 | Defensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. Lower is better -- it is EPA allowed. |
-| `off_strength_faced` | Float64 | Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive coefficients across its opponents. Higher means a tougher slate. |
-| `def_strength_faced` | Float64 | Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive coefficients across its opponents. Higher means a tougher slate. |
+| `off_strength_faced` | Float64 | Average strength of the opposing offenses the team's defense faced: the mean over its games of each opponent's ridge-fitted offensive EPA per play. Higher means a tougher slate. Null when the team has fewer than two valid games. |
+| `def_strength_faced` | Float64 | Average strength of the opposing defenses the team's offense faced: the mean over its games of the EPA per play each opponent's defense is fitted to allow. Lower means a tougher slate. Null when the team has fewer than two valid games. |
 | `net_adj_epa` | Float64 | Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better. |
 | `adj_off_epa_rank` | Float64 | National rank of the team's adj_off_epa, where 1 is best. |
 | `adj_def_epa_rank` | Float64 | National rank of the team's adj_def_epa, where 1 is best (fewest EPA allowed). |
 | `net_adj_epa_rank` | Float64 | National rank of the team's net_adj_epa, 1 = largest net adjusted EPA. |
+| `off_strength_faced_rank` | Float64 | National rank of off_strength_faced, where 1 = toughest slate (the strongest opposing offenses). Ties share the average rank. Null when off_strength_faced is null: unranked, not last. |
+| `def_strength_faced_rank` | Float64 | National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses, i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not last. |
 | `through_week` | Int32 | Regular-season week this cumulative snapshot covers -- the row reflects the team's state through the end of that week. One asset holds every week, so filter on this column. |
 
 ```python
