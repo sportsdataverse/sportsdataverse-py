@@ -8462,6 +8462,7 @@ load_cfb_schedule:
     is the column that is null most often, because FBS schools schedule opponents ESPN leaves unclassified.
   away_id: 'ESPN team id of the away team. Same role as home_id: the join key to every other team-level CFB table.'
   away_points: Final points scored by the away team. Null until the game is played.
+  away_rank: ESPN's displayed Top-25 rank (1-25) of the away team; same poll, timing and nulls as home_rank.
   away_team: School name of the away team as ESPN spells it. Display text only -- join on away_id.
   away_winner: True when the away team won; same ESPN-flag-then-derived-from-score handling and the same nulls as home_winner.
   completed: True once the game has been played to a final. False covers both a future game and one that was cancelled or
@@ -8494,6 +8495,9 @@ load_cfb_schedule:
     than on home_team, which is a display string.
   home_points: Final points scored by the home team. Null until the game is played, so filter on completed before summing
     or differencing scores.
+  home_rank: ESPN's displayed Top-25 rank (1-25) of the home team -- the AP poll until that season's CFP ranking (BCS standings
+    through 2013) is released -- at kickoff for a completed game and as of the last raw capture for an unplayed one. Null
+    when the team is unranked, for every season before 2004, and in games with no FBS team.
   home_team: School name of the home team as ESPN spells it. Display text only -- spellings drift across seasons and endpoints,
     so join on home_id.
   home_winner: True when the home team won. Taken from ESPN's winner flag where it is set and otherwise derived from the final

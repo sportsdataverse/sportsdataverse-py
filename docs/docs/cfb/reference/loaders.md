@@ -855,6 +855,8 @@ Release: [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `playoff_home_seed` | Int64 | Seed the home team entered the playoff with. Null outside the playoff and for the seasons before seeding was published. |
 | `playoff_away_seed` | Int64 | Seed the away team entered the playoff with; same nulls as playoff_home_seed. |
 | `playoff_bowl_name` | String | Bowl hosting the playoff game (e.g. "Rose Bowl") -- the reliable way to attribute a playoff game to a bowl site, rather than parsing notes. |
+| `home_rank` | Int64 | ESPN's displayed Top-25 rank (1-25) of the home team -- the AP poll until that season's CFP ranking (BCS standings through 2013) is released -- at kickoff for a completed game and as of the last raw capture for an unplayed one. Null when the team is unranked, for every season before 2004, and in games with no FBS team. |
+| `away_rank` | Int64 | ESPN's displayed Top-25 rank (1-25) of the away team; same poll, timing and nulls as home_rank. |
 
 ```python
 load_cfb_schedule(seasons=2024)
