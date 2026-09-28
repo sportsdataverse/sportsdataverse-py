@@ -618,6 +618,9 @@ Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `def_rank` | Int64 | Dense rank of adj_def_epa in ascending order, so rank 1 is the season's stingiest defense. |
 | `net_rank` | Int64 | Dense rank of adj_net in descending order, so rank 1 is the season's strongest overall team. |
 | `net_z` | Float64 | adj_net restated as a z-score against the mean and standard deviation of adj_net across the rated teams that season. |
+| `fei_off_rank` | Int64 | Dense rank of fei_off in descending order, so rank 1 is the season's most efficient drive offense. |
+| `fei_def_rank` | Int64 | Dense rank of fei_def in ascending order, so rank 1 is the season's stingiest drive defense. |
+| `fei_net_rank` | Int64 | Dense rank of fei_net in descending order, so rank 1 is the season's strongest overall drive-efficiency team. |
 
 ```python
 load_cfb_ratings(seasons=2024)

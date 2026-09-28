@@ -8169,10 +8169,13 @@ load_cfb_ratings:
     on that unit''s league mean and summed across the three units.'
   def_rank: Dense rank of adj_def_epa in ascending order, so rank 1 is the season's stingiest defense.
   fei_def: Drive-level defensive rating from the same per-drive ridge fit, on the same scale as fei_off.
+  fei_def_rank: Dense rank of fei_def in ascending order, so rank 1 is the season's stingiest drive defense.
   fei_net: fei_off minus fei_def, the team's overall drive-efficiency rating, with the ridge's dropped reference team pinned
     at zero.
+  fei_net_rank: Dense rank of fei_net in descending order, so rank 1 is the season's strongest overall drive-efficiency team.
   fei_off: Drive-level offensive rating from a ridge fit on per-drive EPA, the Fremeau-style drive-efficiency counterpart
     to adj_off_epa.
+  fei_off_rank: Dense rank of fei_off in descending order, so rank 1 is the season's most efficient drive offense.
   net_rank: Dense rank of adj_net in descending order, so rank 1 is the season's strongest overall team.
   net_z: adj_net restated as a z-score against the mean and standard deviation of adj_net across the rated teams that season.
   off_pace: 'Tempo measure: scrimmage plays (pass plus rush) per game, centering near 65 and used as the pace input to the

@@ -4582,6 +4582,12 @@ load_cfb_ratings:
   type: Int64
 - name: net_z
   type: Float64
+- name: fei_off_rank
+  type: Int64
+- name: fei_def_rank
+  type: Int64
+- name: fei_net_rank
+  type: Int64
 load_cfb_ratings_weekly:
 - name: season
   type: Int64

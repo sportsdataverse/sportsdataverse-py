@@ -410,6 +410,9 @@ _RATINGS_COLUMNS = [
     "def_rank",
     "net_rank",
     "net_z",
+    "fei_off_rank",
+    "fei_def_rank",
+    "fei_net_rank",
 ]
 
 _RATINGS_SCHEMA: dict[str, pl.PolarsDataType] = {
@@ -428,6 +431,9 @@ _RATINGS_SCHEMA: dict[str, pl.PolarsDataType] = {
     "def_rank": pl.Int64,
     "net_rank": pl.Int64,
     "net_z": pl.Float64,
+    "fei_off_rank": pl.Int64,
+    "fei_def_rank": pl.Int64,
+    "fei_net_rank": pl.Int64,
 }
 
 
@@ -540,6 +546,11 @@ def test_cfb_ratings_full_schema_and_ranks(monkeypatch: pytest.MonkeyPatch) -> N
     assert b["net_rank"] == 2
     # adj_net is off-minus-def only -- special teams must NOT be folded in.
     assert a["adj_net"] == pytest.approx(a["adj_off_epa"] - a["adj_def_epa"])
+    # FEI ranks follow the adj_* convention: off/net descending, def ASCENDING
+    # (fei_def is drive EPA allowed, so the stingier defense ranks 1).
+    assert a["fei_def"] < b["fei_def"]
+    assert (a["fei_off_rank"], a["fei_def_rank"], a["fei_net_rank"]) == (1, 1, 1)
+    assert (b["fei_off_rank"], b["fei_def_rank"], b["fei_net_rank"]) == (2, 2, 2)
 
 
 def test_cfb_ratings_as_of_date_drops_later_games(monkeypatch: pytest.MonkeyPatch) -> None:
