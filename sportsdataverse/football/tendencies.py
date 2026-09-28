@@ -19,20 +19,26 @@ allowed while the group's DEFENSE was on the field):
 * run / pass -- ``pass_rate`` overall and on every split below.
 * splits (:data:`SPLITS`) -- situation-neutral (win probability 20-80%, first
   four quarters, outside the last two minutes of a half), by down
-  (``d1..d4``), early / standard / passing downs, score state (``leading`` /
-  ``tied`` / ``trailing``), half, third down by distance (``d3_short`` 1-3,
-  ``d3_medium`` 4-6, ``d3_long`` 7+), ``red_zone``, field zone (``own_half`` /
-  ``opp_half``: 50+ / under 50 yards to the end zone) and ``one_score``
-  (within 8). Each split ``s`` carries ``plays_s``, ``passes_s``, ``epa_s``,
-  ``successes_s`` and the rates ``pass_rate_s``, ``epa_per_play_s``,
-  ``success_rate_s``. The ``def_`` twins read the split from the OFFENSE's
-  side (``def_plays_leading`` is snaps the opponent took while ahead).
+  (``d1..d4``), early / standard / passing downs, score state at the snap
+  (``leading`` / ``tied`` / ``trailing`` from ``pos_score_diff_start``, else
+  ``pos_score_diff``), half, third down by distance (``d3_short`` 1-3,
+  ``d3_medium`` 4-6, ``d3_long`` 7+), ``red_zone`` (20 or fewer yards to the end
+  zone; ``rz_play`` only when that distance is missing), field zone
+  (``own_half`` / ``opp_half``: 50+ / under 50 yards to the end zone) and
+  ``one_score`` (within 8 at the snap). Each split ``s`` carries ``plays_s``,
+  ``passes_s``, ``epa_s``, ``successes_s`` and the rates ``pass_rate_s``,
+  ``epa_per_play_s``, ``success_rate_s``. The ``def_`` twins read the split
+  from the OFFENSE's side (``def_plays_leading`` is snaps the opponent took
+  while ahead).
 * game context (optional, :data:`CONTEXTS`) -- when the plays carry a Boolean
   ``ctx_{c}`` column (``home``, ``away``, ``neutral_site``, ``vs_ranked``,
   ``after_bye``, ``opener``, ``one_score_game``), the split ``c`` plus
   ``games_{c}`` and, with ``ctx_win``, ``wins_{c}`` / ``win_rate_{c}``. The
   defense reads ``def_ctx_{c}`` / ``def_ctx_win``: the DEFENDING team's
   context. An absent column emits nothing; the data-repo wrappers join them.
+  A null value is not true. An all-null column is fine when it is Boolean, but
+  a ``Null``-dtype column (``pl.lit(None)``) raises ``TypeError``: build
+  ``ctx_*`` as Boolean even when no value is known.
 * efficiency -- EPA per play, success rate, yards per play, explosive rate,
   with rush / pass splits; third downs converted and over expected (the
   league's bundled distance curve).
@@ -215,7 +221,12 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
     down = _col(df, "start.down", "down")
     dist = _col(df, "start.distance", "distance")
     period = _col(df, "period", "period.number")
-    ytg = [c for c in ("start.yardsToEndzone", "yards_to_goal", "yardline_100") if c in df.columns]
+
+    def first(*cols: str) -> pl.Expr:
+        """Per row, the first non-null of the columns present."""
+        have = [f(c) for c in cols if c in df.columns]
+        return pl.coalesce(have) if have else pl.lit(None, dtype=pl.Float64)
+
     exprs: list[pl.Expr] = [
         b("scrimmage_play").alias("t_scrimmage"),
         b("penalty_no_play").alias("t_no_play"),
@@ -227,23 +238,20 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         b("EPA_explosive").alias("t_explosive"),
         b("first_down_created").alias("t_first_down"),
         b("touchdown").alias("t_touchdown"),
-        b("rz_play").alias("t_rz"),
         b("scoring_opp").alias("t_so"),
         b("standard_down").alias("t_standard_down"),
         b("passing_down").alias("t_passing_down"),
         f("EPA").alias("t_epa"),
         f("statYardage").alias("t_yards"),
         f("wp_before").alias("t_wp"),
-        f("pos_score_diff").alias("t_score_diff"),
+        # the score at the snap; pos_score_diff is the score AFTER the play, so a touchdown
+        # that flips the lead would count its own EPA as "leading"
+        first("pos_score_diff_start", "pos_score_diff").alias("t_score_diff"),
         f("go_boost").alias("t_go_boost"),
         (pl.col(down).cast(pl.Int64, strict=False) if down else pl.lit(None, dtype=pl.Int64)).alias("t_down"),
         (pl.col(dist).cast(pl.Float64, strict=False) if dist else pl.lit(None, dtype=pl.Float64)).alias("t_distance"),
         (pl.col(period).cast(pl.Int64, strict=False) if period else pl.lit(None, dtype=pl.Int64)).alias("t_period"),
-        (
-            pl.coalesce([pl.col(c).cast(pl.Float64, strict=False) for c in ytg])
-            if ytg
-            else pl.lit(None, dtype=pl.Float64)
-        ).alias("t_ytg"),
+        first("start.yardsToEndzone", "yards_to_goal", "yardline_100").alias("t_ytg"),
         (
             pl.col("fourth_down_recommendation").cast(pl.Utf8)
             if "fourth_down_recommendation" in df.columns
@@ -278,6 +286,9 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         t_half=half,
         t_neutral=neutral,
         t_standing=(pl.col("t_scrimmage") & ~pl.col("t_no_play")),
+        # red zone from yards to go: NFL rz_play reads ESPN's absolute yardLine, which is the
+        # wrong end of the field for one team a game; the flag only fills a missing distance
+        t_rz=pl.coalesce(pl.col("t_ytg") <= 20, b("rz_play")),
         t_leading=(pl.col("t_score_diff") > 0).fill_null(False),
         t_tied=(pl.col("t_score_diff") == 0).fill_null(False),
         t_trailing=(pl.col("t_score_diff") < 0).fill_null(False),
@@ -525,7 +536,8 @@ def tendencies(
 
     Raises:
         ValueError: a grouping column is missing.
-        TypeError: a ``ctx_*`` / ``def_ctx_*`` column is not Boolean (never cast).
+        TypeError: a ``ctx_*`` / ``def_ctx_*`` column is not Boolean, including an
+            all-null ``Null``-dtype column (never cast).
 
     Example:
         Quick start::

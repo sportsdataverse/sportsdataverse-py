@@ -55,7 +55,10 @@ SPLIT_PHRASES: dict[str, str] = {
     "d3_short": "on third down with 3 or fewer yards to go",
     "d3_medium": "on third down with 4 to 6 yards to go",
     "d3_long": "on third down with 7 or more yards to go",
-    "red_zone": "in the red zone (the play-by-play rz_play flag)",
+    "red_zone": (
+        "in the red zone (20 or fewer yards from the opponent end zone; the play-by-play rz_play flag only "
+        "when that distance is missing)"
+    ),
     "own_half": "snapped in the offense's own half (50 or more yards from the opponent end zone)",
     "opp_half": "snapped in the opponent's half (fewer than 50 yards from the opponent end zone)",
     "one_score": "snapped with the offense within 8 points either way",

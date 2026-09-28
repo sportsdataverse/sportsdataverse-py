@@ -3948,7 +3948,7 @@ Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdat
 | `passes_standard_down` | UInt32 | Pass plays on standard downs (see plays_standard_down). |
 | `plays_passing_down` | UInt32 | Plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `passes_passing_down` | UInt32 | Pass plays on passing downs (see plays_passing_down). |
-| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `passes_leading` | UInt32 | Pass plays snapped with the offense ahead. |
 | `plays_tied` | UInt32 | Plays snapped with the score tied. |
 | `passes_tied` | UInt32 | Pass plays snapped with the score tied. |
@@ -4086,7 +4086,7 @@ Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdat
 | `def_passes_standard_down` | UInt32 | Defense-allowed twin of passes_standard_down -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays on standard downs (see plays_standard_down). |
 | `def_plays_passing_down` | UInt32 | Defense-allowed twin of plays_passing_down -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `def_passes_passing_down` | UInt32 | Defense-allowed twin of passes_passing_down -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays on passing downs (see plays_passing_down). |
-| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `def_passes_leading` | UInt32 | Defense-allowed twin of passes_leading -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays snapped with the offense ahead. |
 | `def_plays_tied` | UInt32 | Defense-allowed twin of plays_tied -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays snapped with the score tied. |
 | `def_passes_tied` | UInt32 | Defense-allowed twin of passes_tied -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays snapped with the score tied. |
@@ -4231,7 +4231,7 @@ One row per (season, team, head coach). The coach comes from the producer's vend
 | `passes_standard_down` | UInt32 | Pass plays on standard downs (see plays_standard_down). |
 | `plays_passing_down` | UInt32 | Plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `passes_passing_down` | UInt32 | Pass plays on passing downs (see plays_passing_down). |
-| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `passes_leading` | UInt32 | Pass plays snapped with the offense ahead. |
 | `plays_tied` | UInt32 | Plays snapped with the score tied. |
 | `passes_tied` | UInt32 | Pass plays snapped with the score tied. |
@@ -4369,7 +4369,7 @@ One row per (season, team, head coach). The coach comes from the producer's vend
 | `def_passes_standard_down` | UInt32 | Defense-allowed twin of passes_standard_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on standard downs (see plays_standard_down). |
 | `def_plays_passing_down` | UInt32 | Defense-allowed twin of plays_passing_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `def_passes_passing_down` | UInt32 | Defense-allowed twin of passes_passing_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on passing downs (see plays_passing_down). |
-| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `def_passes_leading` | UInt32 | Defense-allowed twin of passes_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays snapped with the offense ahead. |
 | `def_plays_tied` | UInt32 | Defense-allowed twin of plays_tied -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the score tied. |
 | `def_passes_tied` | UInt32 | Defense-allowed twin of passes_tied -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays snapped with the score tied. |
@@ -4515,7 +4515,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `passes_standard_down` | UInt32 | Pass plays on standard downs (see plays_standard_down). |
 | `plays_passing_down` | UInt32 | Plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `passes_passing_down` | UInt32 | Pass plays on passing downs (see plays_passing_down). |
-| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `plays_leading` | UInt32 | Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `passes_leading` | UInt32 | Pass plays snapped with the offense ahead. |
 | `plays_tied` | UInt32 | Plays snapped with the score tied. |
 | `passes_tied` | UInt32 | Pass plays snapped with the score tied. |
@@ -4596,7 +4596,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `def_passes_standard_down` | UInt32 | Defense-allowed twin of passes_standard_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on standard downs (see plays_standard_down). |
 | `def_plays_passing_down` | UInt32 | Defense-allowed twin of plays_passing_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged passing_down on the play-by-play: second down with 8 or more to go, or third / fourth down with 5 or more to go. |
 | `def_passes_passing_down` | UInt32 | Defense-allowed twin of passes_passing_down -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on passing downs (see plays_passing_down). |
-| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff > 0). |
+| `def_plays_leading` | UInt32 | Defense-allowed twin of plays_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score before the play). |
 | `def_passes_leading` | UInt32 | Defense-allowed twin of passes_leading -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays snapped with the offense ahead. |
 | `def_plays_tied` | UInt32 | Defense-allowed twin of plays_tied -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays snapped with the score tied. |
 | `def_passes_tied` | UInt32 | Defense-allowed twin of passes_tied -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays snapped with the score tied. |
