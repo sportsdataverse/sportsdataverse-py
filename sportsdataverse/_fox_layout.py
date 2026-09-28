@@ -238,9 +238,10 @@ def _title_case(name: str) -> str:
     ``str_to_title`` does (``A&T`` -> ``A&T``, ``(OH)`` -> ``(Oh)``,
     ``MARYLAND-EASTERN`` -> ``Maryland-Eastern``) -- but it also
     (re-)capitalizes the letter right after an apostrophe (``ST. JOHN'S`` ->
-    ``St. John'S``), which R does not. Undo just that one artifact.
+    ``St. John'S``), and the letter right after a digit (``CHARLOTTE 49ERS`` ->
+    ``Charlotte 49Ers``), which R does not. Undo just those two artifacts.
     """
-    return re.sub(r"(?<=[A-Za-z]')[A-Z]", lambda m: m.group(0).lower(), name.lower().title())
+    return re.sub(r"(?<=[A-Za-z]')[A-Z]|(?<=[0-9])[A-Z]", lambda m: m.group(0).lower(), name.lower().title())
 
 
 def parse_teams(raw: Dict[str, Any]) -> List[Dict[str, Any]]:

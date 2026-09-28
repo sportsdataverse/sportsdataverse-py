@@ -5157,6 +5157,10 @@ load_cfb_schedule:
   type: Int64
 - name: playoff_bowl_name
   type: String
+- name: home_rank
+  type: Int64
+- name: away_rank
+  type: Int64
 load_cfb_schedule_crosswalk:
 - name: matchup_key
   type: String
@@ -10014,6 +10018,47 @@ load_mlb_oaa:
   type: Float64
 - name: season
   type: Int64
+load_mlb_park_dimensions:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: venue_id
+  type: String
+- name: venue_name
+  type: String
+- name: retro_park_id
+  type: String
+- name: left_line_ft
+  type: Int32
+- name: left_ft
+  type: Int32
+- name: left_center_ft
+  type: Int32
+- name: center_ft
+  type: Int32
+- name: right_center_ft
+  type: Int32
+- name: right_ft
+  type: Int32
+- name: right_line_ft
+  type: Int32
+- name: capacity
+  type: Int32
+- name: turf_type
+  type: String
+- name: roof_type
+  type: String
+- name: azimuth_deg
+  type: Float64
+- name: elevation_ft
+  type: Int32
+- name: latitude
+  type: Float64
+- name: longitude
+  type: Float64
+- name: notes
+  type: String
 load_mlb_pbp:
 - name: game_pk
   type: Int64

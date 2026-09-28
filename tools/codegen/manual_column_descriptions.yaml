@@ -8462,6 +8462,7 @@ load_cfb_schedule:
     is the column that is null most often, because FBS schools schedule opponents ESPN leaves unclassified.
   away_id: 'ESPN team id of the away team. Same role as home_id: the join key to every other team-level CFB table.'
   away_points: Final points scored by the away team. Null until the game is played.
+  away_rank: ESPN's displayed Top-25 rank (1-25) of the away team; same poll, timing and nulls as home_rank.
   away_team: School name of the away team as ESPN spells it. Display text only -- join on away_id.
   away_winner: True when the away team won; same ESPN-flag-then-derived-from-score handling and the same nulls as home_winner.
   completed: True once the game has been played to a final. False covers both a future game and one that was cancelled or
@@ -8494,6 +8495,9 @@ load_cfb_schedule:
     than on home_team, which is a display string.
   home_points: Final points scored by the home team. Null until the game is played, so filter on completed before summing
     or differencing scores.
+  home_rank: ESPN's displayed Top-25 rank (1-25) of the home team -- the AP poll until that season's CFP ranking (BCS standings
+    through 2013) is released -- at kickoff for a completed game and as of the last raw capture for an unplayed one. Null
+    when the team is unranked, for every season before 2004, and in games with no FBS team.
   home_team: School name of the home team as ESPN spells it. Display text only -- spellings drift across seasons and endpoints,
     so join on home_id.
   home_winner: True when the home team won. Taken from ESPN's winner flag where it is set and otherwise derived from the final
@@ -11591,6 +11595,32 @@ load_mlb_oaa:
   oaa: 'Outs above average: outs the fielder actually recorded minus what a per-position catch-probability logistic expected
     from the same batted-ball trajectories, summed across their opportunities.'
   opportunities: Balls in play charged to this fielder at this position, the sample the oaa sum runs over.
+load_mlb_park_dimensions:
+  league: League code of the table ("mlb").
+  season: Season the row describes (calendar year, 2001 on).
+  venue_id: MLB Stats API venue id (venue.id in MLB game feeds and schedules), published as a string.
+  venue_name: Venue name as of that season (e.g. PacBell Park 2001-03, SBC Park 2004-05, AT&T Park 2006-18, Oracle Park 2019-),
+    not today's name.
+  retro_park_id: Retrosheet park id (e.g. "BOS07") from the MLB Stats API's cross-reference; null for most spring-training
+    and minor-league parks.
+  left_line_ft: Distance in feet from home plate to the fence at the left-field foul pole.
+  left_ft: Distance in feet from home plate to the fence at MLB's left-field marker.
+  left_center_ft: Distance in feet from home plate to the fence at MLB's left-centre marker; a park may re-label which point
+    this is (Oracle Park's reads 364 through 2019, then the 399 ft deep left-centre).
+  center_ft: Distance in feet from home plate to the fence in straightaway centre field.
+  right_center_ft: Distance in feet from home plate to the fence at MLB's right-centre marker.
+  right_ft: Distance in feet from home plate to the fence at MLB's right-field marker.
+  right_line_ft: Distance in feet from home plate to the fence at the right-field foul pole.
+  capacity: Seating capacity that season.
+  turf_type: 'Playing surface: "Grass" or "Artificial Turf".'
+  roof_type: 'Roof: "Open", "Retractable" or "Dome".'
+  azimuth_deg: 'MLB''s azimuthAngle: degrees clockwise from north of the line from home plate to centre field (Fenway Park
+    45, Progressive Field 0).'
+  elevation_ft: Elevation of the venue in feet above sea level.
+  latitude: Latitude of the venue in decimal degrees.
+  longitude: Longitude of the venue in decimal degrees.
+  notes: Null unless a curated correction applies to the row; then which columns changed, from what to what, why, and the
+    citation.
 load_mlb_pbp:
   game_pk: statsapi game identifier; the join key to every other MLB release.
   at_bat_index: Zero-based index of the plate appearance within the game; joins to mlb_pitches and mlb_runners.

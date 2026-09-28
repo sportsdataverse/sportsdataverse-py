@@ -315,6 +315,7 @@ from sportsdataverse.mlb import load_mlb_group_aliases as load_mlb_group_aliases
 from sportsdataverse.mlb import load_mlb_group_seasons as load_mlb_group_seasons  # noqa: F401
 from sportsdataverse.mlb import load_mlb_groups as load_mlb_groups  # noqa: F401
 from sportsdataverse.mlb import load_mlb_oaa as load_mlb_oaa  # noqa: F401
+from sportsdataverse.mlb import load_mlb_park_dimensions as load_mlb_park_dimensions  # noqa: F401
 from sportsdataverse.mlb import load_mlb_pbp as load_mlb_pbp  # noqa: F401
 from sportsdataverse.mlb import load_mlb_pitches as load_mlb_pitches  # noqa: F401
 from sportsdataverse.mlb import load_mlb_re24_matrix as load_mlb_re24_matrix  # noqa: F401
@@ -579,6 +580,7 @@ __all__ = [
     "load_mlb_group_seasons",
     "load_mlb_groups",
     "load_mlb_oaa",
+    "load_mlb_park_dimensions",
     "load_mlb_pbp",
     "load_mlb_pitches",
     "load_mlb_re24_matrix",

@@ -32,6 +32,13 @@ score-and-clock win probability with no pregame spread. The spread-aware
 ~11% of the plays in games with a 21+ point spread, so 72 games (the lopsided
 cross-conference ones that link the conferences) gave the fit nothing. A team's
 own per-game EPA still counts every play; only the strength fit is filtered.
+
+``method="pre598"`` keeps the fit these functions used before sportsdataverse-py
+#598, unchanged, for nfl-data's NFL team summaries: ``0.1 <= wp_before <= 0.9``,
+the standardized dropped-reference-level ridge at lambda 0.035, and weeks ordered
+by ``week`` alone. It reads ``wp_before`` instead of ``wp_before_naive`` and does
+not need ``seasonType``. #598 was validated on CFB only; pre598 is not validated
+for NFL either and stays only for continuity until NFL is.
 """
 
 from __future__ import annotations
@@ -152,6 +159,15 @@ def _rank(col: str, *, descending: bool) -> pl.Expr:
     n_nonnull = c.is_not_null().sum()
     null_trail = (n_nonnull + c.is_null().cum_sum()).cast(pl.Float64)
     return pl.when(c.is_null()).then(null_trail).otherwise(base)
+
+
+def _method_lambda(method: str, ridge_lambda: float | None) -> float:
+    """Validate ``method``; ``ridge_lambda`` or that method's default (0.035 pre598, 0.075 current)."""
+    if method not in ("current", "pre598"):
+        raise ValueError(f"cfb_adjusted_epa: method must be 'current' or 'pre598', got {method!r}")
+    if ridge_lambda is not None:
+        return ridge_lambda
+    return _RIDGE_LAMBDA if method == "pre598" else _ADJ_EPA_LAMBDA
 
 
 def _prepare(
@@ -280,20 +296,29 @@ def _adjust_games(
 
 @overload
 def cfb_adjusted_epa(
-    plays: pl.DataFrame | pd.DataFrame, *, ridge_lambda: float = ..., return_as_pandas: Literal[False] = ...
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    method: Literal["current", "pre598"] = ...,
+    return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 
 
 @overload
 def cfb_adjusted_epa(
-    plays: pl.DataFrame | pd.DataFrame, *, ridge_lambda: float = ..., return_as_pandas: Literal[True]
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    method: Literal["current", "pre598"] = ...,
+    return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
 
 def cfb_adjusted_epa(
     plays: pl.DataFrame | pd.DataFrame,
     *,
-    ridge_lambda: float = _ADJ_EPA_LAMBDA,
+    ridge_lambda: float | None = None,
+    method: Literal["current", "pre598"] = "current",
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Season opponent-adjusted per-team EPA from a season's play-by-play.
@@ -309,12 +334,22 @@ def cfb_adjusted_epa(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             columns listed in the module docstring. One season at a time.
-        ridge_lambda: Ridge penalty per play of a full team season: each team
-            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
-            ``n`` fit plays and is shrunk toward the league average by the
-            rest (~7% at a full season, most of it on a handful of plays).
-            Must be > 0. Default 0.075, the owner's choice (see
-            ``_ADJ_EPA_LAMBDA``).
+        ridge_lambda: Ridge penalty. Under ``method="current"`` it is per play
+            of a full team season: each team keeps
+            ``n / (n + ridge_lambda * 577)`` of its own signal for its ``n``
+            fit plays and is shrunk toward the league average by the rest
+            (~7% at a full season, most of it on a handful of plays); must be
+            > 0. Under ``method="pre598"`` it is passed unscaled to the old
+            standardized ridge (the per-observation penalty; no 577 scaling,
+            no positivity check). ``None`` (default) means 0.075 for
+            ``"current"`` (the owner's choice, ``_ADJ_EPA_LAMBDA``) and 0.035
+            for ``"pre598"``.
+        method: ``"current"`` (default) or ``"pre598"``, the fit this function
+            used before #598 (``0.1 <= wp_before <= 0.9`` band, standardized
+            ridge with the first team id as the reference level, lambda
+            0.035). pre598 reads ``wp_before`` instead of ``wp_before_naive``.
+            It exists for nfl-data's NFL team summaries, is not validated for
+            NFL either, and is kept only for continuity until NFL is validated.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -324,8 +359,9 @@ def cfb_adjusted_epa(
 
     Raises:
         KeyError: If ``plays`` is missing a required column.
-        ValueError: If ``ridge_lambda`` is not positive, or no play falls in
-            the ``wp_before_naive`` fit band.
+        ValueError: If ``method`` is unknown, or (``"current"``) if
+            ``ridge_lambda`` is not positive or no play falls in the
+            ``wp_before_naive`` fit band.
 
     Example:
         Quick start::
@@ -334,13 +370,22 @@ def cfb_adjusted_epa(
             pbp = cfb.load_cfb_pbp(seasons=[2023])
             cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 
+        NFL team summaries (the pre-#598 method; reads wp_before)::
+
+            cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
+
     See Also:
         * `cfbfastR`_ -- the R implementation this ports (``adjust_epa``).
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
-    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)
-    offense, defense, _ = _fit_team_strengths(clean, ridge_lambda)
+    lam = _method_lambda(method, ridge_lambda)
+    if method == "pre598":
+        base, clean = _prepare(plays, _REQUIRED_COLUMNS)
+        offense, defense, _ = _fit_opponent_ridge(clean, lam)
+    else:
+        base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)
+        offense, defense, _ = _fit_team_strengths(clean, lam)
     opp = _adjust_games(base, offense, defense, fill_strength=None)
     team = (
         opp.group_by("pos_team_id")
@@ -368,20 +413,29 @@ def cfb_adjusted_epa(
 
 @overload
 def cfb_adjusted_epa_by_game(
-    plays: pl.DataFrame | pd.DataFrame, *, ridge_lambda: float = ..., return_as_pandas: Literal[False] = ...
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    method: Literal["current", "pre598"] = ...,
+    return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 
 
 @overload
 def cfb_adjusted_epa_by_game(
-    plays: pl.DataFrame | pd.DataFrame, *, ridge_lambda: float = ..., return_as_pandas: Literal[True]
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    method: Literal["current", "pre598"] = ...,
+    return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
 
 def cfb_adjusted_epa_by_game(
     plays: pl.DataFrame | pd.DataFrame,
     *,
-    ridge_lambda: float = _ADJ_EPA_LAMBDA,
+    ridge_lambda: float | None = None,
+    method: Literal["current", "pre598"] = "current",
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
@@ -396,12 +450,23 @@ def cfb_adjusted_epa_by_game(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             module-docstring columns **plus** ``week``. One season at a time.
-        ridge_lambda: Ridge penalty per play of a full team season: each team
-            keeps ``n / (n + ridge_lambda * 577)`` of its own signal for its
-            ``n`` fit plays and is shrunk toward the league average by the
-            rest (~7% at a full season, most of it on a handful of plays).
-            Must be > 0. Default 0.075, the owner's choice (see
-            ``_ADJ_EPA_LAMBDA``).
+        ridge_lambda: Ridge penalty. Under ``method="current"`` it is per play
+            of a full team season: each team keeps
+            ``n / (n + ridge_lambda * 577)`` of its own signal for its ``n``
+            fit plays and is shrunk toward the league average by the rest
+            (~7% at a full season, most of it on a handful of plays); must be
+            > 0. Under ``method="pre598"`` it is passed unscaled to the old
+            standardized ridge (the per-observation penalty; no 577 scaling,
+            no positivity check). ``None`` (default) means 0.075 for
+            ``"current"`` (the owner's choice, ``_ADJ_EPA_LAMBDA``) and 0.035
+            for ``"pre598"``.
+        method: ``"current"`` (default) or ``"pre598"``, the fit this function
+            used before #598 (see :func:`cfb_adjusted_epa`). pre598 also keeps
+            the old week order: it sorts by ``week`` alone and does not read
+            ``seasonType``, so postseason games that restart at week 1 are fit
+            with (and leak into) the regular season, exactly as before. It
+            exists for nfl-data's NFL team summaries, is not validated for NFL
+            either, and is kept only for continuity until NFL is validated.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -413,10 +478,11 @@ def cfb_adjusted_epa_by_game(
         null for week 1 (and any week with no prior fit).
 
     Raises:
-        KeyError: If ``plays`` is missing a required column (incl. ``week``
-            and ``seasonType``).
-        ValueError: If ``ridge_lambda`` is not positive, or no play falls in
-            the ``wp_before_naive`` fit band.
+        KeyError: If ``plays`` is missing a required column (incl. ``week``,
+            and ``seasonType`` unless ``method="pre598"``).
+        ValueError: If ``method`` is unknown, or (``"current"``) if
+            ``ridge_lambda`` is not positive or no play falls in the
+            ``wp_before_naive`` fit band.
 
     Example:
         Quick start::
@@ -431,12 +497,18 @@ def cfb_adjusted_epa_by_game(
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
-    if ridge_lambda <= 0:  # week 1 has no prior fit, so the check in _fit_team_strengths may never run
-        raise ValueError(f"ridge_lambda must be > 0, got {ridge_lambda}")
-    base, clean = _prepare(plays, _ADJ_BY_GAME_REQUIRED, _FIT_WP)
-    # Bowls restart at week 1 with seasonType 3: order the postseason after every
-    # regular-season week, or each week-w fit sees bowl games played months later.
-    order = pl.col("week") + pl.when(pl.col("seasonType") == 3).then(100).otherwise(0)
+    lam = _method_lambda(method, ridge_lambda)
+    if method == "pre598":
+        # The pre-#598 walk-forward, unchanged: no lambda check, weeks by `week` alone.
+        base, clean = _prepare(plays, _BY_GAME_REQUIRED)
+        fit, order = _fit_opponent_ridge, pl.col("week")
+    else:
+        if lam <= 0:  # week 1 has no prior fit, so the check in _fit_team_strengths may never run
+            raise ValueError(f"ridge_lambda must be > 0, got {lam}")
+        base, clean = _prepare(plays, _ADJ_BY_GAME_REQUIRED, _FIT_WP)
+        # Bowls restart at week 1 with seasonType 3: order the postseason after every
+        # regular-season week, or each week-w fit sees bowl games played months later.
+        fit, order = _fit_team_strengths, pl.col("week") + pl.when(pl.col("seasonType") == 3).then(100).otherwise(0)
     base, clean = base.with_columns(_order=order), clean.with_columns(_order=order)
     weeks = sorted(base.filter(pl.col("_order").is_not_null())["_order"].unique().to_list())
 
@@ -444,7 +516,7 @@ def cfb_adjusted_epa_by_game(
     for week in weeks:
         prior = clean.filter(pl.col("_order") < week)
         if prior.height > 0 and prior["pos_team_id"].n_unique() >= 2 and prior["def_pos_team_id"].n_unique() >= 2:
-            offense, defense, intercept = _fit_team_strengths(prior, ridge_lambda)
+            offense, defense, intercept = fit(prior, lam)
         else:
             offense, defense, intercept = _EMPTY_OFFENSE, _EMPTY_DEFENSE, None
         wk = base.filter(pl.col("_order") == week)

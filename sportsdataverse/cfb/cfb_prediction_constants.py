@@ -47,14 +47,13 @@ class RatingsConfig:
 class PredictConfig:
     """Era-specific coefficients for the CFB game-outcome prediction model.
 
-    ``net_points_scale``, ``margin_sd``, ``total_intercept``, ``total_scale`` and
-    ``total_pace_scale`` are **fitted (in-sample) on the 2023 backtest** by
-    ``dev/cfb_prediction/fit_pregame.py``; ``hfa_epa`` is the ratings ridge's own
-    home-field coefficient (also 2023). The ratings that feed the fit use a
-    leakage-free week-by-week as-of boundary, but these coefficients are fit
-    on the same 2023 games the backtest gate then scores -- so the gate is an
-    in-sample regression guard, not an out-of-sample generalization result (a 2024
-    holdout is a documented follow-up). See :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
+    ``net_points_scale``, ``hfa_points``, ``margin_sd`` and ``slope_by_games`` are
+    fitted on as-of ratings (week W from the ``through_week == W - 1`` snapshot)
+    by ``cfb_higher_models.fit_pregame`` in cfbfastR-cfb-data, on 2014-2023 only,
+    so the 2024 backtest gate scores a season the fit never saw. The totals trio
+    is fitted separately (see ``CFB_CONSTANTS``); ``hfa_epa`` is the ratings
+    ridge's own home-field coefficient. See
+    :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
     the ratings engine is on an EPA-per-play scale, so ``net_points_scale`` is the
     fitted EPA/play -> points conversion (without it the rating differential is
     negligible next to a points-scale HFA and the model is near-constant).
@@ -131,7 +130,7 @@ class PredictConfig:
     #: refit. A control confirms it is the BLEND doing the work: last season's
     #: pace ALONE ties raw (+0.002), so this is not "last year is better data".
     pace_blend_k: float = 6.0
-    hfa_points: float = 3.0365
+    hfa_points: float = 2.7936
     #: Points per unit of rating differential, BY GAMES PLAYED. See
     #: :func:`cfb_game_predict.predict_margin`. A single slope is wrong because
     #: an as-of rating built on two games is a far noisier predictor than one
@@ -139,40 +138,55 @@ class PredictConfig:
     #: noise. Keys are "lo-hi" games-played buckets.
     slope_by_games: dict[str, float] = field(
         default_factory=lambda: {
-            "0-3": 10.6201,
-            "4-5": 26.0576,
-            "6-7": 42.0032,
-            "8-20": 54.4874,
+            "0-3": 9.1185,
+            "4-5": 29.7368,
+            "6-7": 41.7733,
+            "8-20": 55.1520,
         }
     )
 
 
 CFB_CONSTANTS: dict[str, PredictConfig] = {
-    # Refit 2026-08-03 by `cfb_higher_models.fit_pregame` in cfbfastR-cfb-data
-    # (TRACKED code -- the previously cited `dev/cfb_prediction/fit_pregame.py`
-    # existed nowhere, on disk or in git, so the old numbers could not be
-    # reproduced or refreshed). Fitted walk-forward on 2014-2025, 6,790 games,
-    # against the corrected corpus.
+    # Refit 2026-09-27 by `cfb_higher_models.fit_pregame` in cfbfastR-cfb-data:
+    #     python -m cfb_model_build.cfb_higher_models fit-pregame \
+    #         --seasons 2014 ... 2025 --holdout 2024 2025
+    # Fitted on 2014-2023 (5,673 as-of games); 2024-2025 are held out, so the
+    # 2024 gate in tests/cfb/test_cfb_prediction_backtest.py is out-of-sample.
+    # The fit's output, holdout partition and scores are committed there as
+    # `models/pregame_fit.json`.
     #
-    # WHY THE OLD VALUES WERE WRONG. net_points_scale=44.5367 was fit against
-    # FULL-SEASON ratings and applied to AS-OF ratings. As-of ratings are the
-    # same quantity measured with more noise, and OLS slopes attenuate toward
-    # zero when the predictor is noisy -- so the correct multiplier is smaller,
-    # and it is not one number. The old claim (brier 0.1416, spread MAE 3.23)
-    # was an in-sample fit on full-season ratings; measured out-of-sample the
-    # shipped constants delivered MAE 15.17 with a calibration slope of 0.55,
-    # i.e. predictions stretched nearly 2x wider than reality.
+    # WHY IT WAS REFIT. The weekly team summaries the fit selects rows and
+    # games-played buckets from carried every bowl and CFP game in every
+    # through-week snapshot (ESPN restarts postseason weeks at 1). Fixed in
+    # cfbfastR-cfb-data #100, republished 2004-2026. Fit against
+    # `cfb_ratings_weekly` as republished 2026-09-27 by cfbfastR-cfb-data #105
+    # (snapshots now include each week's last kickoff day). The previous values
+    # (24.6578 / 3.0365 / 18.7894, curve 10.62 / 26.06 / 42.00 / 54.49) were
+    # fit on that leaked frame and on every season through 2025, 2024 included.
     #
-    # Measured on the corrected corpus, leakage-free (week W from ratings
-    # through W-1), n=5,655:
-    #     shipped                 MAE 15.17  slope 0.55  max_cal_err 0.309
-    #     refit, flat slope       MAE 14.62  slope 0.94  max_cal_err 0.448
-    #     refit + attenuation     MAE 14.01  slope 0.97  max_cal_err 0.198
+    # `margin_sd` is the residual sd of the games-played CURVE's margin (the
+    # formula served here), not the flat fit's 18.97, which priced WP ~5% wide.
+    #
+    # Same serving formula, scored on identical 2024-2025 games (n=1,202). A
+    # NEAR-holdout: the fit never saw these seasons, but sdv-py #598's
+    # adjusted-EPA shrinkage was tuned on 2023-2025.
+    #     previous constants   MAE 13.29  brier 0.2040  slope 1.04  (had SEEN 2024-25)
+    #     this refit           MAE 13.32  brier 0.2039  slope 1.02  max_cal_err 0.081
+    #     paired dMAE +0.03 [-0.01, +0.06], dBrier -0.0001 [-0.0008, +0.0005]
+    #     (2,000 game bootstraps): a statistical tie. What the refit buys is a
+    #     leak-free, reproducible fit with 2024 genuinely out of its training.
+    # Walk-forward 2016-2025 (each season fit only on earlier ones), n=5,724:
+    #     refit + attenuation  MAE 13.87  brier 0.2090  slope 0.99  max_cal_err 0.163
+    #
+    # The 2026-08-03 refit's reasoning still holds: as-of ratings are noisier
+    # than full-season ones, so the slope attenuates and grows with games
+    # played (`slope_by_games`). `net_points_scale` is the flat slope over all
+    # games, the fallback when games played is unknown.
     "modern": PredictConfig(
         hfa_epa=0.01848,  # retained for back-compat; the fit uses hfa_points
-        hfa_points=3.0365,
-        margin_sd=18.7894,
-        net_points_scale=24.6578,
+        hfa_points=2.7936,
+        margin_sd=18.1043,
+        net_points_scale=23.6945,
         # TOTALS ARE UNTOUCHED BY THIS REFIT, deliberately. `predict_total`
         # parameterises as `intercept + scale*sum4 + pace_scale*game_pace`
         # where sum4 is FOUR ratings (both offences AND both defences) and
@@ -199,10 +213,10 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
         quality_win_threshold=0.0,
         bubble_adj_net=0.0,
         slope_by_games={
-            "0-3": 10.6201,
-            "4-5": 26.0576,
-            "6-7": 42.0032,
-            "8-20": 54.4874,
+            "0-3": 9.1185,
+            "4-5": 29.7368,
+            "6-7": 41.7733,
+            "8-20": 55.1520,
         },
     ),
 }
