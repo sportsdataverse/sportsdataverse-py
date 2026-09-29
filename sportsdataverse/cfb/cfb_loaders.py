@@ -3609,25 +3609,33 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
         |pts_per_opp_off_n                    |Int64   |
+        |pts_per_drive_off_n                  |Int64   |
         |available_yards_pct_off              |Float64 |
         |pts_per_opp_off                      |Float64 |
+        |pts_per_drive_off                    |Float64 |
         |available_yards_pct_off_rank         |Float64 |
         |pts_per_opp_off_rank                 |Float64 |
+        |pts_per_drive_off_rank               |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
         |pts_per_opp_def_n                    |Int64   |
+        |pts_per_drive_def_n                  |Int64   |
         |available_yards_pct_def              |Float64 |
         |pts_per_opp_def                      |Float64 |
+        |pts_per_drive_def                    |Float64 |
         |available_yards_pct_def_rank         |Float64 |
         |pts_per_opp_def_rank                 |Float64 |
+        |pts_per_drive_def_rank               |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
         |pts_per_opp_margin                   |Float64 |
+        |pts_per_drive_margin                 |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
         |pts_per_opp_margin_rank              |Float64 |
+        |pts_per_drive_margin_rank            |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |
@@ -3962,6 +3970,8 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |adj_off_epa_rank                     |Float64 |
         |adj_def_epa_rank                     |Float64 |
         |net_adj_epa_rank                     |Float64 |
+        |off_strength_faced_rank              |Float64 |
+        |def_strength_faced_rank              |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -4391,25 +4401,33 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
         |pts_per_opp_off_n                    |Int64   |
+        |pts_per_drive_off_n                  |Int64   |
         |available_yards_pct_off              |Float64 |
         |pts_per_opp_off                      |Float64 |
+        |pts_per_drive_off                    |Float64 |
         |available_yards_pct_off_rank         |Float64 |
         |pts_per_opp_off_rank                 |Float64 |
+        |pts_per_drive_off_rank               |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
         |pts_per_opp_def_n                    |Int64   |
+        |pts_per_drive_def_n                  |Int64   |
         |available_yards_pct_def              |Float64 |
         |pts_per_opp_def                      |Float64 |
+        |pts_per_drive_def                    |Float64 |
         |available_yards_pct_def_rank         |Float64 |
         |pts_per_opp_def_rank                 |Float64 |
+        |pts_per_drive_def_rank               |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
         |pts_per_opp_margin                   |Float64 |
+        |pts_per_drive_margin                 |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
         |pts_per_opp_margin_rank              |Float64 |
+        |pts_per_drive_margin_rank            |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |
@@ -4744,6 +4762,8 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |adj_off_epa_rank                     |Float64 |
         |adj_def_epa_rank                     |Float64 |
         |net_adj_epa_rank                     |Float64 |
+        |off_strength_faced_rank              |Float64 |
+        |def_strength_faced_rank              |Float64 |
         |through_week                         |Int32   |
 
     Raises:
