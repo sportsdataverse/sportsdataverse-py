@@ -9198,7 +9198,7 @@ load_cfb_team_summaries:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
-  pts_per_drive_def: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+  pts_per_drive_def: 'Drive-result points per drive, attributed to the drive''s owner (not always points the team scored or allowed; see the return-touchdown note). A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
     game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
     its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
     as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
@@ -9209,11 +9209,11 @@ load_cfb_team_summaries:
     also counts drive ids holding only a stray snap.'
   pts_per_drive_def_rank: 'National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share
     the average rank. Null when pts_per_drive_def is null: unranked, not last.'
-  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive.
+  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: attributed drive-result points per owned drive minus those per opponents'' owned drive.
     Null when either side is null. Higher is better.'
   pts_per_drive_margin_rank: 'National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null
     when pts_per_drive_margin is null: unranked, not last.'
-  pts_per_drive_off: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+  pts_per_drive_off: 'Drive-result points per drive, attributed to the drive''s owner (not always points the team scored or allowed; see the return-touchdown note). A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
     game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
     its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
     as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
@@ -10159,7 +10159,7 @@ load_cfb_team_summaries_weekly:
     the team on offense. Null when the team has no rows in that split; read it as 0.'
   playsgame_off_rush_rank: National rank of the team's plays run per game on rush plays with the team on offense, where 1
     is best.
-  pts_per_drive_def: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+  pts_per_drive_def: 'Drive-result points per drive, attributed to the drive''s owner (not always points the team scored or allowed; see the return-touchdown note). A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
     game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
     its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
     as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels
@@ -10170,11 +10170,11 @@ load_cfb_team_summaries_weekly:
     also counts drive ids holding only a stray snap.'
   pts_per_drive_def_rank: 'National rank of pts_per_drive_def, where 1 is best (fewest points allowed per drive). Ties share
     the average rank. Null when pts_per_drive_def is null: unranked, not last.'
-  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive.
+  pts_per_drive_margin: 'pts_per_drive_off minus pts_per_drive_def: attributed drive-result points per owned drive minus those per opponents'' owned drive.
     Null when either side is null. Higher is better.'
   pts_per_drive_margin_rank: 'National rank of pts_per_drive_margin, 1 = largest margin. Ties share the average rank. Null
     when pts_per_drive_margin is null: unranked, not last.'
-  pts_per_drive_off: 'Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
+  pts_per_drive_off: 'Drive-result points per drive, attributed to the drive''s owner (not always points the team scored or allowed; see the return-touchdown note). A drive is one with at least one run or pass snap (kneel-downs excluded) in an FBS-vs-FBS
     game, charged only to its owner: ESPN''s drive team, or the team with the most snaps in it when that label fits none of
     its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a field goal and 0 otherwise. A drive ESPN labels
     as a return touchdown ("INT TD", "PUNT RETURN TD") scores 0, but a return or defensive touchdown on a drive ESPN labels

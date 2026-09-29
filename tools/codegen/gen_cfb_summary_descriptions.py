@@ -232,7 +232,7 @@ EXTRA |= {
 
 # Drive efficiency (CFBE-1d). Whole-team only. Same owner rule and drive.result scoring as pts_per_opp.
 _PPD = (
-    "Points per drive. A drive is one with at least one run or pass snap (kneel-downs excluded) in an "
+    "Drive-result points per drive, attributed to the drive's owner (not always points the team scored or allowed; see the return-touchdown note). A drive is one with at least one run or pass snap (kneel-downs excluded) in an "
     "FBS-vs-FBS game, charged only to its owner: ESPN's drive team, or the team with the most snaps in it "
     "when that label fits none of its snaps. It scores its ESPN drive result, 7 for a touchdown, 3 for a "
     'field goal and 0 otherwise. A drive ESPN labels as a return touchdown ("INT TD", "PUNT RETURN TD") '
@@ -263,7 +263,7 @@ for _s, _who, _null, _best, _dir in (
     }
 EXTRA |= {
     "pts_per_drive_margin": (
-        "pts_per_drive_off minus pts_per_drive_def: points scored per drive minus points allowed per drive. "
+        "pts_per_drive_off minus pts_per_drive_def: attributed drive-result points per owned drive minus those per opponents' owned drive. "
         "Null when either side is null. Higher is better."
     ),
     "pts_per_drive_margin_rank": (
