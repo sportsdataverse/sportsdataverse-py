@@ -136,9 +136,12 @@ def _is_id_col(name: str) -> bool:
 def _cdn_headers(league: str = "nba") -> dict[str, str]:
     """Build the browser-mimicking headers cdn.nba.com/cdn.wnba.com require.
 
-    Without a Chrome User-Agent plus a matching ``Origin``/``Referer``, the CDN
+    Without a browser request plus a matching ``Origin``/``Referer``, the CDN
     returns an "Access Denied" HTML page instead of JSON -- mirrors hoopR's
-    ``.nba_cdn_headers()`` / wehoop's ``.wnba_cdn_headers()``.
+    ``.nba_cdn_headers()`` / wehoop's ``.wnba_cdn_headers()``. There is no
+    ``User-Agent`` here: curl_cffi's Chrome impersonation sends one that matches
+    its ``sec-ch-ua`` client hints, and an explicit one (Chrome/120 against
+    impersonated Chrome 146, measured) made the two disagree.
 
     Args:
         league: ``"nba"`` or ``"wnba"``. Selects the ``Origin``/``Referer`` host.
@@ -155,10 +158,6 @@ def _cdn_headers(league: str = "nba") -> dict[str, str]:
     """
     is_wnba = league == "wnba"
     return {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        ),
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "en-US,en;q=0.9",
         "Origin": "https://www.wnba.com" if is_wnba else "https://www.nba.com",

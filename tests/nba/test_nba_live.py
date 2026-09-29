@@ -241,7 +241,8 @@ def test_nba_live_pbp_uses_curl_transport_and_nba_cdn_headers(monkeypatch):
     monkeypatch.setattr(mod, "_curl_transport", transport)
     df = nba_live_pbp("0022500001")
     assert "cdn.nba.com" in seen["url"]
-    assert "Mozilla/5.0" in seen["headers"]["User-Agent"]
+    # curl_cffi's impersonation supplies a User-Agent that matches its client hints.
+    assert "User-Agent" not in seen["headers"]
     assert seen["headers"]["Origin"] == "https://www.nba.com"
     assert df.height == len(PBP_PAYLOAD["game"]["actions"])
 
