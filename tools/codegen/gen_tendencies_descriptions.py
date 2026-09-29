@@ -37,6 +37,9 @@ _NEUTRAL = (
     "in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, "
     "outside the final two minutes of a half)"
 )
+#: the score-state splits read the score at the snap, not after the play (a touchdown that
+#: flips the lead no longer counts its own play as "leading")
+_AT_SNAP = "the score at the snap, before the play; pos_score_diff where the start score is missing"
 #: split -> the phrase that finishes "Plays ..." (``_offense_counts`` masks)
 SPLIT_PHRASES: dict[str, str] = {
     "neutral": _NEUTRAL,
@@ -47,21 +50,21 @@ SPLIT_PHRASES: dict[str, str] = {
     "early_down": "on first or second down",
     "standard_down": "on standard downs (the play-by-play standard_down flag)",
     "passing_down": "on passing downs (the play-by-play passing_down flag)",
-    "leading": "snapped with the offense ahead on the scoreboard",
-    "tied": "snapped with the score tied",
-    "trailing": "snapped with the offense behind on the scoreboard",
+    "leading": f"snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, {_AT_SNAP})",
+    "tied": f"snapped with the score tied (pos_score_diff_start == 0, {_AT_SNAP})",
+    "trailing": f"snapped with the offense behind on the scoreboard (pos_score_diff_start < 0, {_AT_SNAP})",
     "first_half": "in the first two quarters",
     "second_half": "in the third and fourth quarters (overtime belongs to neither half)",
     "d3_short": "on third down with 3 or fewer yards to go",
     "d3_medium": "on third down with 4 to 6 yards to go",
     "d3_long": "on third down with 7 or more yards to go",
     "red_zone": (
-        "in the red zone (20 or fewer yards from the opponent end zone; the play-by-play rz_play flag only "
-        "when that distance is missing)"
+        "in the red zone (20 or fewer yards from the opponent end zone, read from yards to goal rather than "
+        "the absolute yard line; the play-by-play rz_play flag only when that distance is missing)"
     ),
     "own_half": "snapped in the offense's own half (50 or more yards from the opponent end zone)",
     "opp_half": "snapped in the opponent's half (fewer than 50 yards from the opponent end zone)",
-    "one_score": "snapped with the offense within 8 points either way",
+    "one_score": f"snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, {_AT_SNAP})",
 }
 #: context -> its games, as a plural noun (the definitions are the wrappers')
 CONTEXT_GAMES: dict[str, str] = {
