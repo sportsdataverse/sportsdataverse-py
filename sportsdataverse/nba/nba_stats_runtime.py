@@ -44,12 +44,11 @@ def stats_headers(host: str = "stats.nba.com") -> dict:
             print(h["Referer"])  # "https://www.wnba.com/"
     """
     is_wnba = "wnba" in host
+    # No User-Agent: curl_cffi's Chrome impersonation sends one that matches its
+    # sec-ch-ua client hints. An explicit Chrome/120 UA against impersonated
+    # Chrome 146 (measured with curl_cffi 0.15.0) made the two disagree.
     return {
         "Host": host,
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-        ),
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "en-US,en;q=0.9",
         "Referer": "https://www.wnba.com/" if is_wnba else "https://www.nba.com/",

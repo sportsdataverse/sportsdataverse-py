@@ -5,6 +5,8 @@ def test_stats_headers_token_and_host():
     h = stats_headers("stats.nba.com")
     assert h["x-nba-stats-token"] == "true" and h["Host"] == "stats.nba.com"
     assert "nba.com" in h["Referer"]
+    # curl_cffi's impersonation supplies a User-Agent that matches its client hints.
+    assert "User-Agent" not in h
 
 
 def test_get_builds_url_strips_none_and_pads_gameid():
