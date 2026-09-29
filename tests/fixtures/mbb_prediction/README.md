@@ -18,7 +18,7 @@ under `dev/`).
 
 **ID convention:** every team / game id is `Utf8` (cast from the raw ESPN
 integer via `pl.col(id).cast(pl.Int64).cast(pl.Utf8)`), so joins across
-fixtures and against the ratings engine never hit a dtype mismatch.
+fixtures and against the ratings engine never hit a dtype mismatch. The two `shell_game_*_2011` files are the exception: they keep ESPN's raw `Int32` ids (`game_id`, `home_id`, `away_id`, `team_id`) on purpose, so the regression test also exercises `mbb_team_ratings`' own boundary cast to `Utf8`. Cast them the same way before joining them to the other fixtures.
 
 | File | Rows | Source | Notes |
 |---|---:|---|---|
