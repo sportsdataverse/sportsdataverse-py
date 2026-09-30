@@ -354,10 +354,13 @@ def _drive_owners(df: pl.DataFrame) -> pl.DataFrame:
         .group_by("game_id", "t_drive")
         .agg(t_owner=pl.col("pos_team").sort_by(["espn", "n", "first"], descending=[True, True, False]).first())
     )
+    # row order restored explicitly (join's maintain_order needs a newer polars than the floor)
     return (
-        df.join(owner, on=["game_id", "t_drive"], how="left", maintain_order="left")
+        df.with_row_index("_row")
+        .join(owner, on=["game_id", "t_drive"], how="left")
+        .sort("_row")
         .with_columns(t_own_drive=(pl.col("pos_team") == pl.col("t_owner")).fill_null(True))
-        .drop("t_owner")
+        .drop("t_owner", "_row")
     )
 
 
@@ -383,7 +386,8 @@ def _drive_frame(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
             pts=pl.col("t_drive_pts").first(),
             clock_seconds=pl.col("t_drive_seconds").first(),
             clock_plays=pl.col("t_drive_plays").first(),
-            owned=pl.col("t_own_drive").all(),
+            # any: a group holding both offenses (a league-wide key) still clocks a shared drive once
+            owned=pl.col("t_own_drive").any(),
         )
         .sort([*keys, "game_id", "half", "first_play"])
     )
