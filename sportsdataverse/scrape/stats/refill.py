@@ -41,6 +41,7 @@ from pathlib import Path
 from typing import Optional
 
 from .league_config import LeagueConfig
+from .periods import STORE_YEAR_OFFSET
 from .proxy import ProxyHealth, RoundRobin, load_proxies
 from .season_capture import payload_path, plan_season, write_payload
 from .session_transport import SessionTransport
@@ -93,7 +94,9 @@ def main(cfg: LeagueConfig, argv: "Optional[list[str]]" = None, *, default_root:
     overrides it, exactly as the sweep resolves the root.
     """
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("seasons", nargs="?", default=None, help="START:END (default: all found)")
+    ap.add_argument(
+        "seasons", nargs="?", default=None, help="LO:HI store dir years, i.e. END years (default: all found)"
+    )
     ap.add_argument("--check", action="store_true", help="census only; no deletes, no network")
     ap.add_argument("--endpoint", default=None, help="restrict to one endpoint")
     ap.add_argument(
@@ -159,9 +162,14 @@ def main(cfg: LeagueConfig, argv: "Optional[list[str]]" = None, *, default_root:
     refilled = still_empty = failed = 0
     for season in sorted(empty):
         wanted = empty[season]
+        # ``season`` is the store DIR year (the END year); the API is asked for
+        # the year capture_season passed it, i.e. minus the league's store offset
+        # (NBA dir 2026 = API 2025 = "2025-26"). Without the shift a refill
+        # refetches the NEXT season into this one's directory.
+        api_season = season - STORE_YEAR_OFFSET.get(cfg.league_id, 0)
         # Reuse the sweep's own plan so kwargs are built exactly as a normal
         # capture builds them -- no second, drifting copy of the matrix.
-        for endpoint, variant, kwargs in plan_season(season, stats, cfg.stats_prefix, cfg.league_id):
+        for endpoint, variant, kwargs in plan_season(api_season, stats, cfg.stats_prefix, cfg.league_id):
             if (endpoint, variant) not in wanted:
                 continue
             path = payload_path(root, endpoint, season, variant)
