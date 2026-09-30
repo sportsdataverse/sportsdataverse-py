@@ -13378,10 +13378,9 @@ load_cfb_usage_position_group_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the position group''s share of the defense''s tackle points; null when
-    the defense has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the position group''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the position group in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_cfb_usage_position_groups:
   epa: Play EPA summed over the position group's rushes and targets.
   epa_per_opportunity: epa / opportunities; null with no opportunities.
@@ -13616,10 +13615,9 @@ load_cfb_usage_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the player''s share of the defense''s tackle points; null when the defense
-    has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the player''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the player in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_cfb_usage_teams:
   completions: Completed passes among the standing scrimmage plays.
   epa: Play EPA summed over the standing scrimmage plays.
@@ -19940,10 +19938,9 @@ load_nfl_usage_position_group_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the position group''s share of the defense''s tackle points; null when
-    the defense has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the position group''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play''s defense and is shared); null when the defense has none.'
   tackles: Solo tackles credited to the position group in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_position_groups:
   epa: Play EPA summed over the position group's rushes and targets.
   epa_per_opportunity: epa / opportunities; null with no opportunities.
@@ -20178,10 +20175,9 @@ load_nfl_usage_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the player''s share of the defense''s tackle points; null when the defense
-    has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the player''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play''s defense and is shared); null when the defense has none.'
   tackles: Solo tackles credited to the player in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_teams:
   completions: Completed passes among the standing scrimmage plays.
   epa: Play EPA summed over the standing scrimmage plays.
