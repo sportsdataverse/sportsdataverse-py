@@ -302,7 +302,7 @@
 
 ## Unreleased
 
-### Changed — CFB "situation-neutral" reads the score-and-clock win probability
+### Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)
 
 The neutral split in `football.tendencies` (win probability 20–80%, regulation, outside the last
 two minutes of a half) read `wp_before`, which carries the pregame line, so a heavy favorite's
@@ -312,7 +312,10 @@ points between the two WPs. Per the owner's decision (2026-09-30), CFB now reads
 `wp_before_naive` (score, clock and field position only), the same model adjusted EPA's
 garbage-time rule uses; the band and the clock rules are unchanged. This moves every `*_neutral`
 column (`plays_` / `passes_` / `epa_` / `successes_neutral`, their rates and `def_` twins) and
-`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL keeps `wp_before` for now.
+`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL follows (owner, same
+day) so both leagues' "neutral pass rate" mean the same thing: it reads its `wp_before_naive`
+(nflfastR's spread-free `wp`) under the same band and clock rules. In 2025's Raiders–Texans game
+(401772805) the pregame line left 19 of 102 snaps neutral; the score-and-clock WP leaves 93.
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
