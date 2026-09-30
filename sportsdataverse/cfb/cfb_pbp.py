@@ -4213,8 +4213,8 @@ class CFBPlayProcess(object):
                 # The offence's own fumble recovered for the score: "Keenan Reynolds rush for no
                 # gain, fumbled, recovered by Navy Jake Zuzek in the end zone for a TOUCHDOWN"
                 # (typed "Rush"; also "Pass Completion", "Fumble Recovery (Own)"). The rush and
-                # pass touchdown rules leave out every fumble, so the row kept its scrimmage
-                # type and realised the model's end state instead of the touchdown.
+                # pass touchdown rules leave out every fumble, so the row kept its
+                # scrimmage type and realised the model's end state instead of the touchdown.
                 .when(
                     offence_scored_td
                     & (pl.col("fumble_vec") == True)  # noqa: E712

@@ -9,6 +9,7 @@
   - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
   - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
+  - [Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData](#added--nba-officiating-data-last-two-minute-reports-referee-assignments-and-cdn-livedata)
   - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
   - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
   - [Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`](#changed--cfb_returning_production-measures-defense-from-play-participants-and-weights-it-into-overall_returning)
@@ -417,6 +418,78 @@ by NFL.com", "ESPN franchise id", "Player ID (aka GSIS ID)") now describe PFF's 
 PFF team abbreviations and ids, per-target EPA, gross punt yards, one row per team line on the
 pass-blocking-efficiency table. The description check now resolves a flat family's fallback text
 with the league its page renders it with.
+
+### Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData
+
+New module `sportsdataverse.nba.nba_officiating` reads official.nba.com:
+
+- `nba_l2m(game_id)` returns one game's Last Two Minute report as three frames:
+  - `calls`: one row per graded action, with the decision normalized to
+    CC / CNC / IC / INC. A blank or "Undetectable" grade stays `null`, never INC.
+  - `game`: one row of game metadata.
+  - `stats`: the report's calls / errors-in-favor / possessions-in-favor block.
+- `nba_l2m_games(season)` lists every game that has a report, from the season index
+  page. JSON reports exist only from 2019-01-01.
+- `nba_referee_assignments(date, league="nba"|"gl"|"wnba")` returns:
+  - `officials`: one row per game and filled crew slot (an empty slot has no row).
+    `crew_position` is the feed's order; slot 1 as crew chief is inferred, not labelled.
+  - `replay_center`: one row per replay-center official for the date and league.
+    The feed ties these to a date, not a game, so there is no game key.
+
+  `wnba_referee_assignments()` is the WNBA shim.
+
+official.nba.com needs a browser User-Agent: the default libcurl/curl UA gets an
+Akamai 403. Its 403s mean two different things, and the module keeps them apart:
+
+- An S3 `AccessDenied` body means the game has no report. It raises `NoDataError`.
+- An Akamai HTML page means the fetch was blocked. It raises `AssetFetchError`.
+
+New `sportsdataverse.nba.nba_live` / `sportsdataverse.wnba.wnba_live` wrap the
+cdn.nba.com / cdn.wnba.com liveData feeds: `nba_live_pbp()` / `nba_live_boxscore()`,
+plus the WNBA twins.
+
+- The play-by-play carries `official_id` on every foul (2019-20 on) and wall-clock
+  `time_actual`; it joins to `nba_referee_assignments()` on `official_id`. Only
+  2pt/3pt shots carry coordinates (`x_legacy` / `y_legacy`); fouls and blocks carry
+  a court zone (`area` / `area_detail`).
+- The cdn refuses requests carrying a plain client's default headers (a 403 page),
+  so these use the same curl_cffi Chrome impersonation as stats.nba.com, which
+  sends a browser-consistent request.
+- Every frame carries a typed core column set, even for a game with no actions.
+- Late-first-seen fields are kept, because schema inference scans every row.
+
+Every function here follows the same error rules:
+
+- A bad argument raises `ValueError` before any request: a `game_id` that is not
+  one non-negative integer id of at most 10 digits (a bool, a negative or fractional
+  number, a string that is not all digits, or a longer id), a `season` that is not a 4-digit year, a `date` that is
+  not one valid `YYYY-MM-DD`, or an unknown `league`.
+- "No data" raises `NoDataError`: a 404, or S3's `AccessDenied` 403. That covers a
+  game without an L2M report or a liveData object, and a season without a listing page.
+- A failed fetch raises `AssetFetchError`. That means a transport error, an Akamai
+  or WAF block, any other non-200 status, or a 200 without the expected shape:
+  - a body that is not a JSON object;
+  - an L2M report whose `game` is not exactly one row (the parser reads one row,
+    so a second would vanish silently) or whose `l2m` / `stats` table is not a list
+    of records (an empty record would become a made-up all-null row), or a liveData
+    body without its `game` object;
+  - a referee block whose `Table` / `Table1` rows are missing or malformed,
+    including a `Table` row without `game_id` or a `Table1` (replay-center) row
+    without a `replaycenter_official` name;
+  - a listing page without its "Last Two Minute" marker, or whose report links
+    the parser cannot read.
+
+  `raw=True` runs the same checks. On the referee feed it checks all three
+  leagues, since it returns the whole payload.
+- The liveData fetch retries throttles, 5xx and transport errors on the
+  `SDV_PY_NBA_STATS_RETRIES` / `SDV_PY_NBA_STATS_BACKOFF` budget that `nba_stats_*`
+  uses (default: no retry). A missing curl_cffi raises `ImportError` and is never
+  retried.
+- The parsers never raise. A malformed envelope gives zero-row frames with the
+  documented schema, and a cell of the wrong type becomes null (an object or list in
+  a text column is kept as JSON text).
+
+Port of atlhawksfanatic/L2M's scraping logic (MIT).
 
 ### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
 

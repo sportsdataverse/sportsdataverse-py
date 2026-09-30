@@ -5,6 +5,8 @@ from sportsdataverse.wnba.wnba_draft import *
 from sportsdataverse.wnba.wnba_espn_ext import *
 from sportsdataverse.wnba.wnba_fox_ext import *
 from sportsdataverse.wnba.wnba_game_officials import *
+from sportsdataverse.wnba.wnba_officiating import *
+from sportsdataverse.wnba.wnba_live import *
 from sportsdataverse.wnba.wnba_player_core import *
 from sportsdataverse.wnba.wnba_game_rosters import *
 from sportsdataverse.wnba.wnba_loaders import *

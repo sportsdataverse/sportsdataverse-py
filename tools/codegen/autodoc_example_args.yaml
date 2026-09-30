@@ -94,12 +94,27 @@ nba:
   espn_nba_player_stats: {athlete_id: 3059318, season: 2024}
   espn_nba_schedule: {}
   espn_nba_teams: {}
+  # official.nba.com L2M + referee assignments (dict-of-frame returns; capture
+  # cannot introspect these live -- see schemas/autodoc/nba/nba_l2m*.yaml and
+  # nba_referee_assignments.yaml, all `hand_authored: true`). Kept here anyway
+  # so a future capture-step upgrade for dict returns has real args ready.
+  nba_l2m: {game_id: "0042500405"}
+  nba_l2m_games: {season: 2026}
+  nba_referee_assignments: {date: "2026-06-13"}
+  # cdn.nba.com liveData (nba_live_boxscore is dict-of-frame -> hand_authored).
+  nba_live_pbp: {game_id: "0022500001"}
+  nba_live_boxscore: {game_id: "0022500001"}
 
 wnba:
   espn_wnba_game_officials: {game_id: 401620308}
   espn_wnba_player_stats: {athlete_id: 2529137, season: 2024}
   espn_wnba_schedule: {}
   espn_wnba_teams: {}
+  # official.nba.com referee assignments (dict-of-frame -> hand_authored).
+  wnba_referee_assignments: {date: "2026-06-13"}
+  # cdn.wnba.com liveData (wnba_live_boxscore is dict-of-frame -> hand_authored).
+  wnba_live_pbp: {game_id: "1022600097"}
+  wnba_live_boxscore: {game_id: "1022600097"}
 
 mbb:
   espn_mbb_game_rosters: {game_id: 401715624}
