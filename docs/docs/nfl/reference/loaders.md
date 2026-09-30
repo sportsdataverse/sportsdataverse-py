@@ -1121,8 +1121,8 @@ Release: [espn_nfl_usage_players](https://github.com/sportsdataverse/sportsdatav
 | `pos_team_id` | Int64 | ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
-| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `rushes` | Int64 | Rushing attempts on which the player was the rusher, on standing scrimmage plays (plays nullified by penalty are excluded). |
 | `targets` | Int64 | Pass targets on which the player was the receiver, complete or not, on standing scrimmage plays. |
 | `receptions` | Int64 | Targets the player caught (completed passes). |
@@ -1240,17 +1240,17 @@ Built from ESPN play participants (tackler / assist ids), which the NFL feed car
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the defending team, as carried on the released play-by-play. |
+| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
-| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `tackles` | Int64 | Solo tackles credited to the player in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the player in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the player's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the player's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_nfl_usage_tackles(seasons=2024)
@@ -1269,15 +1269,15 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the defending team, as carried on the released play-by-play. |
+| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
 | `tackles` | Int64 | Solo tackles credited to the position group in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the position group in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the position group's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the position group's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_nfl_usage_position_group_tackles(seasons=2024)
@@ -1397,7 +1397,7 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 | `pos_team_id` | Int64 | ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
 | `kickoffs` | Int64 | Kickoffs by the kicker that stood (kicks nullified by penalty are excluded). |
 | `kickoff_yards` | Float64 | Kickoff distance summed over the kickoffs (yds_kickoff). |
 | `kickoff_touchbacks` | Int64 | Kickoffs that resulted in a touchback. |
@@ -1447,7 +1447,7 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 | `pos_team_id` | Int64 | ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
 | `punts` | Int64 | Punts by the punter that stood (punts nullified by penalty are excluded). |
 | `punt_yards` | Float64 | Gross punt distance summed over the punts (yds_punted). |
 | `punt_touchbacks` | Int64 | Punts that resulted in a touchback. |
@@ -1488,7 +1488,7 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 | `pos_team_id` | Int64 | ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
 | `kick_returns` | Int64 | Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught). |
 | `kick_return_yards` | Float64 | Kickoff return yards summed over the returns (yds_kickoff_return). |
 | `kick_return_tds` | Int64 | Kickoff returns that scored a touchdown. |
@@ -1523,7 +1523,7 @@ Published from 2007 (no block participants earlier); a season with no asset rais
 | `def_pos_team_id` | Int64 | ESPN team id of the team that made the block (the defense on the kick). |
 | `def_pos_team` | String | Display name of the team that made the block (the defense on the kick). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
 | `punt_blocks` | Int64 | Punts the player blocked (credited as the punt_block_player on the play). |
 | `fg_blocks` | Int64 | Field-goal attempts the player blocked (credited as the fg_block_player on the play). |
 | `blocks` | Int64 | punt_blocks plus fg_blocks. |
@@ -1625,10 +1625,10 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
 | `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `plays_neutral` | UInt32 | Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
-| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `plays_d1` | UInt32 | Plays on first down. |
 | `passes_d1` | UInt32 | Pass plays on first down. |
 | `epa_d1` | Float64 | Play EPA summed over the plays on first down. |
@@ -1751,7 +1751,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -1790,7 +1790,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `success_rate_pass` | Float64 | successes_pass / passes. Null when the denominator is 0. |
 | `pass_rate_neutral` | Float64 | passes_neutral / plays_neutral: pass rate in situation-neutral situations. Null when the denominator is 0. |
 | `epa_per_play_neutral` | Float64 | epa_neutral / plays_neutral. Null when the denominator is 0. |
-| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
+| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
 | `pass_rate_d1` | Float64 | passes_d1 / plays_d1: pass rate on first down. Null when the denominator is 0. |
 | `epa_per_play_d1` | Float64 | epa_d1 / plays_d1: EPA per play on first down. Null when the denominator is 0. |
 | `success_rate_d1` | Float64 | successes_d1 / plays_d1: success rate on first down. Null when the denominator is 0. |
@@ -1920,10 +1920,10 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this team's defense was on the field: third-down scrimmage plays. |
 | `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this team's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this team's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
-| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `def_plays_d1` | UInt32 | Defense-allowed twin of plays_d1 -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays on first down. |
 | `def_passes_d1` | UInt32 | Defense-allowed twin of passes_d1 -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays on first down. |
 | `def_epa_d1` | Float64 | Defense-allowed twin of epa_d1 -- the same measure over the opposing offenses' plays while this team's defense was on the field: play EPA summed over the plays on first down. |
@@ -2076,7 +2076,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `def_success_rate_pass` | Float64 | Defense-allowed twin of success_rate_pass: successes_pass / passes. Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_neutral` | Float64 | Defense-allowed twin of pass_rate_neutral: passes_neutral / plays_neutral: pass rate in situation-neutral situations. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_neutral` | Float64 | Defense-allowed twin of epa_per_play_neutral: epa_neutral / plays_neutral. Computed from the def_ counts; null when the denominator is 0. |
-| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
+| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_d1` | Float64 | Defense-allowed twin of pass_rate_d1: passes_d1 / plays_d1: pass rate on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_d1` | Float64 | Defense-allowed twin of epa_per_play_d1: epa_d1 / plays_d1: EPA per play on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_success_rate_d1` | Float64 | Defense-allowed twin of success_rate_d1: successes_d1 / plays_d1: success rate on first down. Computed from the def_ counts; null when the denominator is 0. |
@@ -2222,10 +2222,10 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
 | `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `plays_neutral` | UInt32 | Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
-| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `plays_d1` | UInt32 | Plays on first down. |
 | `passes_d1` | UInt32 | Pass plays on first down. |
 | `epa_d1` | Float64 | Play EPA summed over the plays on first down. |
@@ -2348,7 +2348,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -2387,7 +2387,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `success_rate_pass` | Float64 | successes_pass / passes. Null when the denominator is 0. |
 | `pass_rate_neutral` | Float64 | passes_neutral / plays_neutral: pass rate in situation-neutral situations. Null when the denominator is 0. |
 | `epa_per_play_neutral` | Float64 | epa_neutral / plays_neutral. Null when the denominator is 0. |
-| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
+| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
 | `pass_rate_d1` | Float64 | passes_d1 / plays_d1: pass rate on first down. Null when the denominator is 0. |
 | `epa_per_play_d1` | Float64 | epa_d1 / plays_d1: EPA per play on first down. Null when the denominator is 0. |
 | `success_rate_d1` | Float64 | successes_d1 / plays_d1: success rate on first down. Null when the denominator is 0. |
@@ -2517,10 +2517,10 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down scrimmage plays. |
 | `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this coach's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
-| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `def_plays_d1` | UInt32 | Defense-allowed twin of plays_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays on first down. |
 | `def_passes_d1` | UInt32 | Defense-allowed twin of passes_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on first down. |
 | `def_epa_d1` | Float64 | Defense-allowed twin of epa_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over the plays on first down. |
@@ -2673,7 +2673,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `def_success_rate_pass` | Float64 | Defense-allowed twin of success_rate_pass: successes_pass / passes. Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_neutral` | Float64 | Defense-allowed twin of pass_rate_neutral: passes_neutral / plays_neutral: pass rate in situation-neutral situations. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_neutral` | Float64 | Defense-allowed twin of epa_per_play_neutral: epa_neutral / plays_neutral. Computed from the def_ counts; null when the denominator is 0. |
-| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
+| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_d1` | Float64 | Defense-allowed twin of pass_rate_d1: passes_d1 / plays_d1: pass rate on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_d1` | Float64 | Defense-allowed twin of epa_per_play_d1: epa_d1 / plays_d1: EPA per play on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_success_rate_d1` | Float64 | Defense-allowed twin of success_rate_d1: successes_d1 / plays_d1: success rate on first down. Computed from the def_ counts; null when the denominator is 0. |
@@ -2820,10 +2820,10 @@ One season-less file: every published coach_tendencies season summed per head co
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
 | `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `plays_neutral` | UInt32 | Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
-| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `epa_neutral` | Float64 | Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `successes_neutral` | UInt32 | Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `plays_d1` | UInt32 | Plays on first down. |
 | `passes_d1` | UInt32 | Pass plays on first down. |
 | `epa_d1` | Float64 | Play EPA summed over the plays on first down. |
@@ -2946,7 +2946,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -2989,10 +2989,10 @@ One season-less file: every published coach_tendencies season summed per head co
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down scrimmage plays. |
 | `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this coach's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
-| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
-| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
-| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
+| `def_epa_neutral` | Float64 | Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
+| `def_successes_neutral` | UInt32 | Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). |
 | `def_plays_d1` | UInt32 | Defense-allowed twin of plays_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays on first down. |
 | `def_passes_d1` | UInt32 | Defense-allowed twin of passes_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays on first down. |
 | `def_epa_d1` | Float64 | Defense-allowed twin of epa_d1 -- the same measure over the opposing offenses' plays while this coach's defense was on the field: play EPA summed over the plays on first down. |
@@ -3145,7 +3145,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `success_rate_pass` | Float64 | successes_pass / passes. Null when the denominator is 0. |
 | `pass_rate_neutral` | Float64 | passes_neutral / plays_neutral: pass rate in situation-neutral situations. Null when the denominator is 0. |
 | `epa_per_play_neutral` | Float64 | epa_neutral / plays_neutral. Null when the denominator is 0. |
-| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
+| `success_rate_neutral` | Float64 | successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is 0. |
 | `pass_rate_d1` | Float64 | passes_d1 / plays_d1: pass rate on first down. Null when the denominator is 0. |
 | `epa_per_play_d1` | Float64 | epa_d1 / plays_d1: EPA per play on first down. Null when the denominator is 0. |
 | `success_rate_d1` | Float64 | successes_d1 / plays_d1: success rate on first down. Null when the denominator is 0. |
@@ -3271,7 +3271,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `def_success_rate_pass` | Float64 | Defense-allowed twin of success_rate_pass: successes_pass / passes. Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_neutral` | Float64 | Defense-allowed twin of pass_rate_neutral: passes_neutral / plays_neutral: pass rate in situation-neutral situations. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_neutral` | Float64 | Defense-allowed twin of epa_per_play_neutral: epa_neutral / plays_neutral. Computed from the def_ counts; null when the denominator is 0. |
-| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
+| `def_success_rate_neutral` | Float64 | Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Computed from the def_ counts; null when the denominator is 0. |
 | `def_pass_rate_d1` | Float64 | Defense-allowed twin of pass_rate_d1: passes_d1 / plays_d1: pass rate on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_epa_per_play_d1` | Float64 | Defense-allowed twin of epa_per_play_d1: epa_d1 / plays_d1: EPA per play on first down. Computed from the def_ counts; null when the denominator is 0. |
 | `def_success_rate_d1` | Float64 | Defense-allowed twin of success_rate_d1: successes_d1 / plays_d1: success rate on first down. Computed from the def_ counts; null when the denominator is 0. |
@@ -3482,3 +3482,4 @@ One row per team per season: the SDV subdivision, conference and division group 
 ```python
 load_nfl_team_group_seasons(seasons=2024)
 ```
+
