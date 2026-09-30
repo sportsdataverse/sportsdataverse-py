@@ -7197,7 +7197,7 @@ load_cfb_coach_careers:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -8366,7 +8366,7 @@ load_cfb_coach_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -12753,7 +12753,7 @@ load_cfb_team_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -16667,7 +16667,7 @@ load_nfl_coach_careers:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -17785,7 +17785,7 @@ load_nfl_coach_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -19415,7 +19415,7 @@ load_nfl_team_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
