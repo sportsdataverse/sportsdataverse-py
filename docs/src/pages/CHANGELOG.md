@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +301,21 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards
+
+`yds_receiving` was read only from "complete to ... for N" text (or the touchdown form "N Yd pass
+from"), so a completion written any other way had no receiving yards and its passer's box line
+lost them. ESPN's 2025 feed writes "Preston Stone pass to Cam Porter for 4 yds" (no "complete"):
+Stone's line in 401752817 read 21 completions for 15 yards. ESPN's 2024 feed writes "pass complete
+to X for a 1ST down" with no yardage at all (874 rows in 38 games). Such a completion now takes
+ESPN's `statYardage`, which equals the stated gain on every 2025 "pass to" row and the change in
+field position on every 2024 row. The completion flag keeps incompletions and sacks out, and a
+play with a penalty or a fumble is left alone. Every season has a few such rows (2004: 1,342
+touchdown rows with no text; 2019: 47; 2021–2023: 25–32 each; 2025: 83 in the release), so
+passing / receiving yards, yards per attempt and the box scores move wherever they occur. Two
+related gaps remain (see the PR): a reversed-order text ("to X for 20 yds ..., Stone pass") files
+the passer as TEAM, and a completion lost on a fumble is typed as the recovery with `pass=False`.
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
