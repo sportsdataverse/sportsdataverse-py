@@ -129,6 +129,8 @@ def test_parser_derives_season_type_from_game_id(league: str) -> None:
         "3": "All-Star",
         "4": "Playoffs",
         "5": "Play-In Game",
+        "6": "NBA Cup",
+        "9": "International",
     }
     for game_id, described in zip(df["game_id"].to_list(), df["season_type_description"].to_list()):
         assert described == labels.get(str(game_id)[2:3])

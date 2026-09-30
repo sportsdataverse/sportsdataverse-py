@@ -450,7 +450,7 @@ GET /stats/boxscorehustlev2
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `GameID` | `gameid` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
 
 ### Returns
 
@@ -901,7 +901,7 @@ GET /stats/boxscoresummaryv3
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `GameID` | `gameid` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
 
 ### Returns
 

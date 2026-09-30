@@ -518,7 +518,7 @@ def nba_stats_boxscorefourfactorsv3(
 
 
 def nba_stats_boxscorehustlev2(
-    gameid: Optional[str] = "0022200021",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -530,7 +530,7 @@ def nba_stats_boxscorehustlev2(
     Example URL: https://stats.nba.com/stats/boxscorehustlev2
 
     Args:
-        gameid: GameID query parameter.
+        game_id: GameID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -544,7 +544,7 @@ def nba_stats_boxscorehustlev2(
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
-        "GameID": gameid,
+        "GameID": game_id,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -788,7 +788,7 @@ def nba_stats_boxscoresummaryv2(
 
 
 def nba_stats_boxscoresummaryv3(
-    gameid: Optional[str] = "1022200034",
+    game_id: Optional[str] = "1022200034",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -800,7 +800,7 @@ def nba_stats_boxscoresummaryv3(
     Example URL: https://stats.nba.com/stats/boxscoresummaryv3
 
     Args:
-        gameid: GameID query parameter.
+        game_id: GameID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -814,7 +814,7 @@ def nba_stats_boxscoresummaryv3(
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
-        "GameID": gameid,
+        "GameID": game_id,
     }
     _params.update(_caller_params)
     raw = _get(
