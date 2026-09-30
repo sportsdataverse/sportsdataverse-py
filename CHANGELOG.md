@@ -3,6 +3,9 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
+  - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
+  - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +303,55 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate
+
+The bundled `cfb/models/qbr_model.ubj` is replaced. The old model was fitted on features
+that serving never computes: plays were grouped by passer name, so QB runs never reached
+`rush_epa`, and the booster had no split on it. Overtime games were dropped, and penalty
+plays were handled differently. The new model is trained on the published `adv_passing`
+rows, which are exactly what `create_box_score` scores. Its labels are ESPN game QBR,
+committed with provenance in cfbfastR-cfb-data. It also drops `spread`: `qbr_vars` is now
+the five EPA aggregates plus `era0..era3`. On identical plays, the old model gave a
+14-point favourite's QB about 10 points more than a 14-point underdog's.
+
+On the frozen, never-trained-on holdout (2026 weeks 1–4, 541 QB-games) the RMSE against
+ESPN raw QBR fell from 14.19 to 11.74. The correlation rose from 0.864 to 0.914 (0.660 to
+0.759 against Total QBR). The paired squared-error change is −63.5, with a 95%
+game-clustered CI of [−84.2, −43.6]. Keeping the spread would have scored 11.49; the
+pre-registered tolerance for dropping it was 0.30. The bundle now carries
+`qbr_model.gate.json`, the trainer's gate record, and `tests/cfb/test_qbr_model_gate.py`
+fails if `qbr_model.ubj` is not the candidate that passed it. Every `exp_qbr` changes;
+published `adv_passing` / pbp box scores keep the old values until they are reprocessed.
+The box score still emits a `spread` column.
+
+### Fixed — a tackle is credited to the tackler's own team
+
+The usage box credited every tackler on a play to the play's defense, so a punting team's
+coverage tackles and an offense's tackles after an interception or fumble landed in the
+opponent's tackle table: 2,945 of 113,407 CFB tackle credits in 2025 (punts, punt returns,
+interception returns, fumble recoveries), and every FBS team's season table listed opposing
+players (Indiana's Jeff Utzinger under Miami in the 2025 title game). `create_usage_box` now reads
+each tackler's team from the game roster (`rosters`, which the CFB processor and the cfb-data build
+already pass) and files the credit under that team; a tackler the roster doesn't list stays with the
+play's defense, as before (NFL, which passes no roster, is unchanged). Raw tackle and assist counts
+are unchanged; `def_pos_team` in the `tackles` / `position_group_tackles` sections now means the
+tackler's team. `adv_tackles`, `adv_position_group_tackles` and their `usage_*` season tables need a
+rebuild.
+
+### Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown
+
+The football tendencies and usage box read "touchdown" as any touchdown on the play, so a third
+down that ended in an interception or fumble returned for a score counted as the offense's
+conversion: 816 of 115,222 CFB third-down conversions in 2014–2025 (640 interception-return, 129
+fumble-return and 47 fumble-recovery touchdowns; 58 in 2025 across 40 FBS offenses). The same flag
+fed fourth-down conversions (13 of 2,081 in 2025), a ball carrier's `touchdowns` / `fd_or_td` when
+his fumble was returned for a score, red-zone and scoring-opportunity touchdowns, and the drive
+touchdown behind `rz_tds` / `so_tds`. A touchdown now counts only when it is not a
+`defense_score_play`, in `football.tendencies`, `football.usage_box` and `fit_third_down_curve`
+(both leagues). Team / coach tendencies, coach careers and the usage tables need a rebuild; the
+bundled third-down curves should be refit on the reprocessed play-by-play (today's release no
+longer reproduces them exactly, so a refit now would mix in unrelated data changes).
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
