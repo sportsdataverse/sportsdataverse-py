@@ -84,3 +84,15 @@ def test_position_groups_share_the_same_rule(box):
     players = pl.from_dicts(box["tackles"]).filter(pl.col("position_group").is_not_null())
     want = players.group_by("def_pos_team").agg(pl.col("scrimmage_tackle_points").sum())
     assert sums.sort("def_pos_team").equals(want.sort("def_pos_team"))
+
+
+def test_a_season_mixing_legacy_rows_shares_on_every_credit(box):
+    """Rows built before ``scrimmage_tackle_points`` existed can't split their credits, so a
+    season that mixes them with newer rows shares on every credit for all of its rows."""
+    new = pl.from_dicts(box["tackles"]).with_columns(season=pl.lit(2025))
+    legacy = new.drop("scrimmage_tackle_points", "team_scrimmage_tackle_points")
+    season = aggregate_usage_box("tackles", [legacy, new])
+    team = season.group_by("def_pos_team").agg(team=pl.col("tackle_points").sum())
+    j = season.join(team, on="def_pos_team")
+    assert ((j["tackle_share"] - j["tackle_points"] / j["team"]).abs() < 1e-12).all()
+    assert season.equals(aggregate_usage_box("tackles", [legacy, legacy]).select(season.columns))
