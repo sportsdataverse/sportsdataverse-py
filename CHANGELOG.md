@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
   - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
   - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
   - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
@@ -304,6 +305,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a season usage table keeps one row per player
+
+`aggregate_usage_box` summed per-game rows on `(team, player_id, player_name, position_group)`, so
+a player whose position group was missing in some games (a roster gap) or whose name changed
+split into several season rows: 177 CFB player ids in 2025 (763 in 2014), and 121 FBS players'
+main row undercounted targets (Danny Scudero, San Jose State: 160 targets published as 106 + 54).
+Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
+frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
+special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
 
 ### Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate
 
