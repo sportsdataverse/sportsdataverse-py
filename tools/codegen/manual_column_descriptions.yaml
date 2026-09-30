@@ -19929,8 +19929,8 @@ load_nfl_usage_players:
   touches: Rushes plus receptions.
 load_nfl_usage_position_group_tackles:
   assists: Assisted tackles credited to the position group in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
-  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the play's defense. The NFL build passes no game roster, so every tackle stays with the play's defense, including kickoff / punt coverage tackles and tackles after a turnover.
+  def_pos_team_id: ESPN team id of the play's defense (the NFL build passes no game roster, so a tackle is not moved to the tackler's own team); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
@@ -20163,8 +20163,8 @@ load_nfl_usage_st_team:
     play-by-play carries.
 load_nfl_usage_tackles:
   assists: Assisted tackles credited to the player in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
-  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the play's defense. The NFL build passes no game roster, so every tackle stays with the play's defense, including kickoff / punt coverage tackles and tackles after a turnover.
+  def_pos_team_id: ESPN team id of the play's defense (the NFL build passes no game roster, so a tackle is not moved to the tackler's own team); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
