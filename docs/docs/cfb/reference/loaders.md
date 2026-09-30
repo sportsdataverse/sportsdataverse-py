@@ -6655,4 +6655,3 @@ One row per team per season: the SDV subdivision, conference and division group 
 ```python
 load_cfb_team_group_seasons(seasons=2024)
 ```
-
