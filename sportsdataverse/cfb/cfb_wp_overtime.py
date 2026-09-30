@@ -31,10 +31,13 @@ The correction is only valid for the boosters it was fitted against: the card pi
 their sha256, and a test fails when either is swapped, so a WP retrain (above all one
 that stops dropping overtime games) must refit or retire this module.
 
-``ponytail:`` the overtime rules are those of the first overtime periods (a kicked
-extra point after a touchdown, no two-point shootout). Since 2019/2021 later periods
-force two-point tries; model them when overtime decisions past the second period
-matter.
+A two-point shootout period (2019-20 from the fifth overtime, 2021+ from the third) is
+one attempt each: :func:`ot_shootout_wp` values an attempt's result by the other team's
+single attempt, not a drive from the 25.
+
+``ponytail:`` a possession period still assumes a kicked extra point after a touchdown,
+but some force a two-point try (the second from 2021, the third and fourth in 2019-20,
+every one past the second before 2019). Model them when decisions there matter.
 """
 
 from __future__ import annotations
@@ -60,6 +63,8 @@ __all__ = [
     "ot_first_team",
     "ot_live_wp",
     "ot_possession_over_wp",
+    "ot_shootout_attempt_wp",
+    "ot_shootout_wp",
     "ot_touchdown_wp",
     "reach_overtime_prob",
     "regulation_final_wp",
@@ -207,6 +212,24 @@ def ot_possession_over_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt
     """
     m, t = _f(margin), _f(tie)
     return np.asarray(np.where(second, _g(m, t), 1.0 - _answer(-m, 1.0 - t)), dtype=float)
+
+
+def ot_shootout_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
+    """Win probability once a two-point shootout attempt has ended at ``margin`` (points counted).
+
+    The second attempt ends the period; the first leaves the other team one attempt of
+    its own, not a drive from the 25.
+    """
+    m, t = _f(margin), _f(tie)
+    p = _params()["p_2pt"]
+    other = p * _g(-m + 2, 1.0 - t) + (1 - p) * _g(-m, 1.0 - t)
+    return np.asarray(np.where(second, _g(m, t), 1.0 - other), dtype=float)
+
+
+def ot_shootout_attempt_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
+    """Win probability before a two-point shootout attempt at ``margin``: make or miss."""
+    m, p = _f(margin), _params()["p_2pt"]
+    return np.asarray(p * ot_shootout_wp(m + 2, tie, second) + (1 - p) * ot_shootout_wp(m, tie, second), dtype=float)
 
 
 def ot_touchdown_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:

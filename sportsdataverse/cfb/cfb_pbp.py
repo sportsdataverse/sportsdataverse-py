@@ -361,6 +361,8 @@ from sportsdataverse.cfb.cfb_wp_overtime import (
     infer_second_possession as _infer_second,
     ot_first_team as _ot_first_team,
     ot_possession_over_wp as _ot_possession_over_wp,
+    ot_shootout_attempt_wp as _ot_shootout_attempt_wp,
+    ot_shootout_wp as _ot_shootout_wp,
     ot_touchdown_wp as _ot_touchdown_wp,
     tie_value as _tie_value,
 )
@@ -511,6 +513,64 @@ _DEFENSIVE_TRY_RETURN = (
 )
 
 
+def _ot_no_touchdown_before(columns) -> pl.Expr:
+    """Overtime rows whose last play (dead-ball rows skipped) was not a touchdown.
+
+    A try row there is a two-point shootout attempt (2019-26), not a touchdown's try. A
+    touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the end
+    zone for a TD", typed "Rush", 322802005 in overtime) counts by its text.
+    """
+    dead = pl.col("type.text").is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
+
+    def last(col: str) -> pl.Expr:
+        return pl.when(dead).then(None).otherwise(pl.col(col)).forward_fill().shift(1)
+
+    last_td = last("type.text").str.contains("(?i)touchdown").fill_null(False)
+    if "td_play" in columns:
+        last_td = last_td | (last("td_play") == True).fill_null(False)  # noqa: E712
+    return (pl.col("period.number") >= 5) & ~last_td
+
+
+def _ot_shootout_state_wp(play_df, naive: bool):
+    """Two-point shootout attempts: ``(mask, wp_before, wp_after)`` for the row's team.
+
+    The booster scored an attempt's placeholder start (the 3) as a live overtime snap, and
+    its end as a finished possession that hands the other team a drive from the 25: a made
+    first attempt read -0.40 (401282146). In a shootout the other team gets one attempt.
+    Which attempt of the period a row is comes from the row order: ESPN often files the
+    second attempt under the first team (the fill copies it; 17 of 31 pairs 2019-26), and
+    then the value is the other team's, restated for the team on the row.
+    """
+    if not {"period.number", "end.homeScore", "end.awayScore", "homeTeamId"}.issubset(play_df.columns):
+        return None
+    team = pl.col("start.pos_team.id")
+    home = pl.when(team == pl.col("homeTeamId")).then(1.0).otherwise(-1.0)
+    f = (
+        play_df.select(
+            (_ot_no_touchdown_before(play_df.columns) & pl.col("type.text").is_in(_TRY_TYPES))
+            .fill_null(False)
+            .alias("mask"),
+            pl.col("period.number"),
+            team.alias("team"),
+            pl.col("pos_score_diff_start").cast(pl.Float64).alias("m0"),
+            (home * (pl.col("end.homeScore").cast(pl.Float64) - pl.col("end.awayScore").cast(pl.Float64))).alias("m1"),
+            pl.col("start.pos_team_spread").cast(pl.Float64).alias("spread"),
+        )
+        .with_columns(
+            second=pl.col("mask") & (pl.col("mask").cast(pl.Int32).cum_sum().over("period.number") >= 2),
+            first_team=pl.col("team").filter(pl.col("mask")).first().over("period.number"),
+        )
+        .with_columns(flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False))
+    )
+    flip, second = f["flip"].to_numpy(), f["second"].to_numpy()
+    sign = np.where(flip, -1.0, 1.0)
+    tie = _tie_value(None, n=f.height) if naive else _tie_value(f["spread"].to_numpy())
+    tie = np.where(flip, 1.0 - tie, tie)
+    before = _ot_shootout_attempt_wp(sign * f["m0"].to_numpy(), tie, second)
+    after = _ot_shootout_wp(sign * f["m1"].to_numpy(), tie, second)
+    return f["mask"].to_numpy(), np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
+
+
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
     """Apply the win-probability game-logic derivation to a set of raw model
     predictions, writing suffixed output columns. With ``suffix=""`` this emits
@@ -602,12 +662,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
     # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
     if "period.number" in play_df.columns:
-        # a touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the
-        # end zone for a TD", typed "Rush", 322802005 in overtime) counts by its text
-        last_td = _last_play("type.text").str.contains("(?i)touchdown").fill_null(False)
-        if "td_play" in play_df.columns:
-            last_td = last_td | (_last_play("td_play") == True).fill_null(False)  # noqa: E712
-        takes_over = takes_over & ~((pl.col("period.number") >= 5) & ~last_td)
+        takes_over = takes_over & ~_ot_no_touchdown_before(play_df.columns)
     # A try hands over the same way: its wp_after is the next row's wp_before, restated for
     # the try's team. After a try the next row is the kickoff (or the penalty walked off on
     # it), whose wp_before is the receiver's touchback view; a try that ends a half hands to
@@ -7859,9 +7914,15 @@ class CFBPlayProcess(object):
 
         # Overtime end states that are not a live snap (a touchdown, a made kick, a try):
         # the booster scored them as a regulation snap with no clock left.
-        for naive, arr in ((False, WP_end), (True, WP_end_naive)):
+        # Two-point shootout attempts are valued by the shootout rule, start and end.
+        for naive, start, end in ((False, WP_start, WP_end), (True, WP_start_naive, WP_end_naive)):
             ot_mask, ot_wp = _ot_end_state_wp(play_df, naive=naive)
-            arr[ot_mask] = ot_wp[ot_mask]
+            end[ot_mask] = ot_wp[ot_mask]
+            shootout = _ot_shootout_state_wp(play_df, naive=naive)
+            if shootout is not None:
+                so_mask, so_before, so_after = shootout
+                start[so_mask] = so_before[so_mask]
+                end[so_mask] = so_after[so_mask]
 
         # ---- derive wp_before / wp_after / wpa (+ home/away/def) for each model ----
         # The spread surface keeps the canonical un-suffixed column names; the
@@ -9444,6 +9505,10 @@ class CFBPlayProcess(object):
             if tcol in play_df.columns:
                 pat_mask = pat_mask | pl.col(tcol).cast(pl.Utf8).str.contains(r"(?i)extra point|two.?point")
                 break
+        # a two-point shootout attempt is not a choice: there is no kick to weigh it against
+        if {"period.number", "type.text"}.issubset(play_df.columns):
+            shootout = _ot_no_touchdown_before(play_df.columns) & pl.col("type.text").is_in(_TRY_TYPES)
+            pat_mask = pat_mask & ~shootout.fill_null(False)
         plays = play_df.with_row_index("__twopt_row_idx")
         pat = _with_ot_second(plays).filter(pat_mask)
         if pat.height == 0:

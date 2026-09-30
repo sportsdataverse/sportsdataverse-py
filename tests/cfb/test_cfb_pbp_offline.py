@@ -740,12 +740,24 @@ def test_an_overtime_shootout_attempt_is_not_handed_a_touchdowns_board() -> None
     empty and the fill copies the previous one's, so consecutive attempts of different teams
     handed over to each other (17 of 31 pairs, 2019-26). An attempt in overtime with no
     touchdown before it starts from its own state.
+
+    This test used to pin ``wp_before > 0.9`` and ``|wpa| < 0.05``. Both came from the
+    regulation booster, which never saw an overtime game and read a tied overtime state as
+    a walk-off (2022-25 overtime snaps: 0.94 predicted, 0.50 won). Under the shootout rule
+    the attempt is a coin flip weighted by the pregame line, and a make is worth a lot: the
+    other team must now convert its own attempt (46%) or lose. Scored as a possession that
+    hands the other team a drive from the 25, the same make read as -0.40.
     """
-    plays = _offline_plays(401282146)
+    plays = _offline_plays(401282146).sort("game_play_number")
     first = plays.filter(pl.col("type.text") == "Two Point Pass").row(0, named=True)
-    assert first["period"] == 7
-    assert abs(first["wpa"]) < 0.05, first["wpa"]
-    assert first["wp_before"] > 0.9
+    assert first["period"] == 7 and first["pos_score_diff_start"] == 0
+    assert first["end.pos_score_diff"] == 2  # good
+    prev = plays.filter(pl.col("game_play_number") < first["game_play_number"]).row(-1, named=True)
+    assert abs(first["wp_before"] - prev["wp_after"]) > 0.05  # its own state, not the field goal's end
+    assert 0.4 < first["wp_before"] < 0.75  # a coin flip; Alabama was favoured by 21
+    assert 0.15 < first["wpa"] < 0.4
+    assert first["wp_after"] < 0.95  # Auburn still has its attempt
+    assert first["two_pt_recommendation"] is None  # no kick to weigh it against (was "kick_xp")
 
 
 def test_an_overtime_try_after_a_touchdown_typed_as_the_play_hands_over() -> None:

@@ -333,6 +333,13 @@ made field goals missed the next row by more than 5 points, up to 50 late in the
 (Louisville's tying kick in 401754554 published WPA +30.9%). In overtime a touchdown row that
 carries its own try (2014 on) ends the possession at the realised margin.
 
+In a two-point shootout (2019-20 from the fifth overtime, 2021 on from the third) an attempt is
+valued by the shootout rule: a make leaves the other team one attempt of its own, not a drive from
+the 25. Alabama's first attempt at Auburn (401282146) reads 0.59 -> 0.85; scored as a possession it
+read -0.40. ESPN often files the second attempt under the first team, so the row order decides
+which attempt a row is. A shootout attempt is not a two-point decision (there is no kick to weigh),
+and its `two_pt_*` columns are null.
+
 Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a little (most in
 close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
 `fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
