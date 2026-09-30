@@ -1201,9 +1201,13 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
         & (prev("end.down") == pl.col("start.down"))
         & (prev_text.str.extract(_SPOT_RE, 1) == text.str.extract(_SPOT_RE, 1))
     )
-    # same offense, previous snap started "Goal": the series is still goal-to-go
+    # same offense, previous snap started "Goal": the series is still goal-to-go --
+    # unless its end text says otherwise. In the finals that end text is empty (119)
+    # or also reads "Goal" at another spot (45), never a non-goal down, but a
+    # conflicting one must not be overridden.
     series_goal = (
         base
+        & (prev_text.is_null() | (prev_text == "") | prev_text.str.contains(r"(?i)goal"))
         & prev("start.downDistanceText").cast(pl.String).str.contains(r"(?i)goal")
         & (prev("start.team.id") == pl.col("start.team.id"))
         if "start.team.id" in plays.columns

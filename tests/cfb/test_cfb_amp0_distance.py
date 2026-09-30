@@ -243,3 +243,22 @@ def test_repair_amp0_distance_end_state_wins_over_series():
         ]
     )
     assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, 7]
+
+
+@pytest.mark.parametrize(
+    ("prev_end", "expected"),
+    [
+        # the previous snap's end reads "Goal" at another spot: still goal-to-go (45 in the finals)
+        ("2nd & Goal at TULN 12", 15),
+        # a non-goal end text would contradict the series: leave it (0 in the finals)
+        ("2nd & 7 at TULN 12", 0),
+    ],
+)
+def test_repair_amp0_distance_series_respects_a_conflicting_end(prev_end, expected):
+    df = _series_frame(
+        [
+            ("Rush", "2653", 1, 10, 10, "1st & Goal at TULN 10", 2, 0, prev_end),
+            ("Rush", "2653", 2, 0, 15, "2nd & 0 at TULN 15", 3, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]
