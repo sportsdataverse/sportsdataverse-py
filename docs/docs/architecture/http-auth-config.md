@@ -178,6 +178,11 @@ impersonation instead of the shared `requests`-based `download()`.
 | stats.ncaa.org (`ncaa_mbb_*`/`ncaa_wbb_*`/`cfb_ncaa_*`/college baseball) | `mbb/mbb_ncaa_fetch.py` | via the shared NCAA transport | **Yes** — `SDV_PY_NCAA_IMPERSONATE` (default `"chrome"`) | See §8 for the full `NcaaFetchConfig` surface |
 | 247Sports (recruiting DB + site-pages) | `cfb/sports247_runtime.py`, `sports247_site_pages_runtime.py` | fixed headers | No — hardcoded `"chrome"` | `SDV_PY_247_RETRIES`/`_DELAY`/`_BACKOFF` (pacing only, see §9) |
 
+`stats_headers()` carries no `User-Agent`: curl_cffi's Chrome impersonation
+sends one that matches its `sec-ch-ua` client hints. An explicit Chrome/120 User-Agent against impersonated Chrome 146 made
+the two disagree, so a `headers=` override for these hosts should leave
+`User-Agent` out too.
+
 ## 7. API keys
 
 | Source | Kwarg | Env var |
