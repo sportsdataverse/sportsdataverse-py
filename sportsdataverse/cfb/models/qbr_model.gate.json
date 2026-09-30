@@ -1,0 +1,124 @@
+{
+  "prereg": "models/qbr/PREREG_xqbr_retrain.md",
+  "created_at": "2026-09-30T06:20:41+00:00",
+  "holdout": {
+    "season": 2026,
+    "season_type": 2,
+    "weeks": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "holdout_labels": 550,
+    "holdout_matched": 541,
+    "match_rate": 0.9836363636363636,
+    "train_match_rate_by_season": {
+      "2004": 0.6694,
+      "2005": 0.8335,
+      "2006": 0.8633,
+      "2007": 0.8882,
+      "2008": 0.9589,
+      "2009": 0.9679,
+      "2010": 0.9711,
+      "2011": 0.9714,
+      "2012": 0.9775,
+      "2013": 0.9994,
+      "2014": 0.9776,
+      "2015": 0.9883,
+      "2016": 0.9765,
+      "2017": 0.9927,
+      "2018": 0.9939,
+      "2019": 0.9963,
+      "2020": 0.9882,
+      "2021": 0.9513,
+      "2022": 0.9578,
+      "2023": 0.9912,
+      "2024": 0.9785,
+      "2025": 0.9965
+    }
+  },
+  "train_seasons": [
+    2004,
+    2025
+  ],
+  "n_train": 32323,
+  "join": {
+    "adv_rows": 61655,
+    "no_athlete_id": 4433,
+    "ambiguous_dropped": 379
+  },
+  "gate": "95% game-clustered bootstrap upper bound of mean(SE_arm - SE_incumbent) < 0 (B=2000, seed=0)",
+  "spread_cost_tolerance_rmse": 0.3,
+  "labels_sha256": "dff528db00bec86d7589f6f91614ccef061775814d53e88828fdeb03d6d30570",
+  "adv_passing_sha256": {
+    "2004": "446c72cd0f58c62473499a0b96c3eb47b803d44ef2a722ac979b004ccc6173c7",
+    "2005": "74995d7417ada2094908bf891443f77648d1c8f07f5791d5bf81d4294bfc7129",
+    "2006": "bcf4d7cf516d5c410e000a4a7b34446698b0b3fd058db4647f9c70ed0f866650",
+    "2007": "2286d33a503613ffc20f2cd98565325aa921004951a4c5abfa6eaab71be2f47f",
+    "2008": "72bd64267c9ec81eec36b3f855c2151b35d676f3c507e2d7ecacd52bcd026097",
+    "2009": "3e604734c4bf873da88b82ab11c4ab93e2a9445dfe11156ad19b3e018430b060",
+    "2010": "101a23d4bcd4ebc50892ff0553af998acf51d23395db2143eb3fe6679d4f74e4",
+    "2011": "cfb4c08cd0b5dec4ac0fd8a4f602a0422dc2bba4f91fe44a4f6a9615ed1563ce",
+    "2012": "9f20ca90916e599e00c4067be797f09301096b61388e6e40ddf768ab07fc4a4c",
+    "2013": "66ab22c0028fe16d67b3a28f918b35f8e36bb3d9e9461738c297fbddd536fdea",
+    "2014": "82205b3befb290304748228c6aa5dcb193a75639b93b83d53802da808efea45d",
+    "2015": "e186b60e72ae8a8e3e33d7c7de3c8ca48b10372b0bcf5e7db6c19533ebdfe088",
+    "2016": "18b0915a7e7131b73eedee89a51c08282b8f9d2f332fced57f3174ad19838c1e",
+    "2017": "483eb852624a57e2912508378dab73efc9d5461d96314e0561230ee2a7f40101",
+    "2018": "b6f54120debbc05d6a6db6695eaaa2bd7b3429a91f09cfc0d84f422107af56f8",
+    "2019": "9485c025ed4172d0becf83f1078822870fa32e73ed07f3e5023d8ca8b40130f3",
+    "2020": "b2ea9635cf84df32e04aede45ea6b4c418c4d9b585c18185d86925a652915433",
+    "2021": "4bc5f8a3e364f3ce167bfc75816f0d119121b57b9c6e8552c6132c0afb4c0a8c",
+    "2022": "52a972fc3b4fa29d2c0dda374be5604101f9203ffbe75ef735131fe69c768543",
+    "2023": "09cccb6bd93472713c16d0cd3612367c488e6f1f4c91441b3e0b87df2177e0fd",
+    "2024": "665d18323ccbc74a2effb6c4b3b65ff6432803aae3e321478398bc000ea033e8",
+    "2025": "a651fb79ca8b8a950a7d6a6bd6afe5a0bada793e236e690e55bf888999b96788",
+    "2026": "85d9af10fba9585286d587cd25c2662b50e77f68c0235db6dbf8e3fe47f008bb"
+  },
+  "incumbent_sha256": "2abfde6836a27ca46ea301e8dbf8a7c4eb4b9c00dbb54548056cb78bf23f1714",
+  "versions": {
+    "xgboost": "3.2.0",
+    "polars": "1.41.2",
+    "sportsdataverse": null
+  },
+  "arms": {
+    "incumbent": {
+      "rmse": 14.186126190650695,
+      "mae": 11.240367787063233,
+      "r": 0.8638748664959975,
+      "bias": -3.672740742977798,
+      "r_total_qbr": 0.6595415653408708,
+      "max_abs_gap_to_published_exp_qbr": 3.7963867214330094e-06
+    },
+    "spread": {
+      "rmse": 11.487055170200215,
+      "mae": 8.580238769192793,
+      "r": 0.915319414410897,
+      "bias": -3.441938637090038,
+      "r_total_qbr": 0.7272380935640896,
+      "delta_mse": -69.29373981384214,
+      "ci_lo": -87.0377876890369,
+      "ci_hi": -53.47928244829053,
+      "n": 541,
+      "n_games": 318,
+      "passed": true
+    },
+    "no_spread": {
+      "rmse": 11.737458521661415,
+      "mae": 8.913091172540916,
+      "r": 0.9136047734770759,
+      "bias": -3.945863127653788,
+      "r_total_qbr": 0.7594204387664683,
+      "delta_mse": -63.47824374934347,
+      "ci_lo": -84.24662943023924,
+      "ci_hi": -43.58949800908576,
+      "n": 541,
+      "n_games": 318,
+      "passed": true
+    }
+  },
+  "chosen": "no_spread",
+  "passed": true,
+  "candidate_sha256": "0e8726fe6addfb140d6e5e18d36d10d9ec1ffb52568c6f7042cb4943f399e96b"
+}

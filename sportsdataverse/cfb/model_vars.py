@@ -263,8 +263,11 @@ end_change_vec = [
 ]
 kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recovery Touchdown"]
 
-# QBR model features. The base 6 EPA/spread aggregates plus the one-hot rule-era
-# dummies (era0..era3, cuts 2006/2013/2020 -> 2004-06 / 2007-13 / 2014-20 / 2021+),
-# which materially improved QBR out-of-fold (LOSO RMSE 17.9 -> 17.4). Order MUST match
-# the trained qbr_model.ubj feature_names.
-qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread", "era0", "era1", "era2", "era3"]
+# QBR (xQBR) model features, in the booster's order (a test pins them to the card): the
+# five weighted EPA aggregates the box score computes per QB-game, plus the one-hot
+# rule-era dummies (cuts 2006/2013/2020). There is no `spread`. The 2026-09-30 retrain
+# (cfbfastR-cfb-data models/qbr/PREREG_xqbr_retrain.md) found that dropping it costs
+# 0.25 RMSE against ESPN QBR, and keeping it gave a big favourite's QB ~10 more points
+# on identical plays. The box score still emits `spread` as a column; the model
+# no longer reads it.
+qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
