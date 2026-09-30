@@ -1363,6 +1363,10 @@ _SUM_KEYS = {
     "st_blocks": ["def_pos_team", "player_id", "player_name"],
     "st_team": ["pos_team"],
 }
+#: identity columns a season row CARRIES but does not key on: a player is his team and
+#: id, so a game with no position group (a roster gap) or a renamed player does not
+#: split his season; each takes its most frequent non-null value
+_PLAYER_LABELS = ("player_name", "position_group")
 _RATE_COLS = {
     "fd_td_rate",
     "explosive_rate",
@@ -1431,16 +1435,30 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
     if not keep:
         return pl.DataFrame()
     df = pl.concat(keep, how="diagonal_relaxed")
-    keys = [k for k in _SUM_KEYS[section] if k in df.columns]
+    ident = [k for k in _SUM_KEYS[section] if k in df.columns]
     if "season" in df.columns:
-        keys = ["season", *keys]
-    drop = {"game_id", "week", "nflverse_game_id", "season_type", *_RATE_COLS, "team_tackle_points"}
+        ident = ["season", *ident]
+    labels = [c for c in _PLAYER_LABELS if c in ident and "player_id" in ident]
+    keys = [k for k in ident if k not in labels]
+    carried: list[pl.Expr] = []
+    if labels:
+        # an id-less row is keyed on its name, so two unnamed-id players never merge
+        name = pl.col("player_name").cast(pl.Utf8) if "player_name" in df.columns else pl.lit(None, dtype=pl.Utf8)
+        df = df.with_columns(_player=pl.coalesce(pl.col("player_id").cast(pl.Utf8), pl.lit("name:") + name))
+        keys = [("_player" if k == "player_id" else k) for k in keys]
+        carried = [pl.col("player_id").drop_nulls().first()] + [
+            pl.col(c).drop_nulls().mode().sort().first().alias(c) for c in labels
+        ]
+    drop = {"game_id", "week", "nflverse_game_id", "season_type", *_RATE_COLS, "team_tackle_points", *ident}
     numeric = [c for c in df.columns if c not in keys and c not in drop and df.schema[c].is_numeric()]
     longs = [c for c in numeric if c.endswith("_long")]  # a season long is a max, not a sum
     sums = [c for c in numeric if c not in longs]
     g = df.group_by(keys, maintain_order=True).agg(
-        [pl.col(c).sum() for c in sums] + [pl.col(c).max() for c in longs] + [pl.len().alias("games")]
+        carried + [pl.col(c).sum() for c in sums] + [pl.col(c).max() for c in longs] + [pl.len().alias("games")]
     )
+    if labels:
+        g = g.select(*ident, pl.exclude(*ident, "_player"))
+        keys = [k for k in ident if k not in labels]
 
     def _rate(num: str, den: str) -> pl.Expr:
         return pl.when(pl.col(den) > 0).then(pl.col(num) / pl.col(den)).otherwise(None)

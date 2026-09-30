@@ -13324,12 +13324,11 @@ load_cfb_usage_players:
   opportunities: Rushes plus targets -- the denominator of the per-opportunity rates.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs",
     "Georgia Bulldogs").
   pos_team_id: ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   receiving_yards: Yards gained on the player's receptions (yds_receiving, falling back to statYardage); an incomplete target
     adds 0.
   receptions: Targets the player caught (completed passes).
@@ -13447,7 +13446,7 @@ load_cfb_usage_st_blocks:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   punt_blocks: Punts the player blocked (credited as the punt_block_player on the play).
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -13482,7 +13481,7 @@ load_cfb_usage_st_kickers:
   kickoffs: Kickoffs by the kicker that stood (kicks nullified by penalty are excluded).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on
@@ -13497,7 +13496,7 @@ load_cfb_usage_st_punters:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on
@@ -13537,7 +13536,7 @@ load_cfb_usage_st_returners:
   kick_returns: Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets
@@ -13610,9 +13609,8 @@ load_cfb_usage_tackles:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
@@ -19886,12 +19884,11 @@ load_nfl_usage_players:
   opportunities: Rushes plus targets -- the denominator of the per-opportunity rates.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs",
     "Georgia Bulldogs").
   pos_team_id: ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   receiving_yards: Yards gained on the player's receptions (yds_receiving, falling back to statYardage); an incomplete target
     adds 0.
   receptions: Targets the player caught (completed passes).
@@ -20009,7 +20006,7 @@ load_nfl_usage_st_blocks:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   punt_blocks: Punts the player blocked (credited as the punt_block_player on the play).
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -20044,7 +20041,7 @@ load_nfl_usage_st_kickers:
   kickoffs: Kickoffs by the kicker that stood (kicks nullified by penalty are excluded).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on
@@ -20059,7 +20056,7 @@ load_nfl_usage_st_punters:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on
@@ -20099,7 +20096,7 @@ load_nfl_usage_st_returners:
   kick_returns: Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets
@@ -20172,9 +20169,8 @@ load_nfl_usage_tackles:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.

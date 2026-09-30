@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +301,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a season usage table keeps one row per player
+
+`aggregate_usage_box` summed per-game rows on `(team, player_id, player_name, position_group)`, so
+a player whose position group was missing in some games (a roster gap) or whose name changed
+split into several season rows: 177 CFB player ids in 2025 (763 in 2014), and 121 FBS players'
+main row undercounted targets (Danny Scudero, San Jose State: 160 targets published as 106 + 54).
+Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
+frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
+special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
