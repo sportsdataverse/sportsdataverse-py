@@ -1498,6 +1498,10 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
     if not keep:
         return pl.DataFrame()
     df = pl.concat(keep, how="diagonal_relaxed")
+    if "scrimmage_tackle_points" in df.columns and df["scrimmage_tackle_points"].null_count():
+        # rows built before scrimmage_tackle_points existed can't split their credits: a season
+        # mixing them with newer rows aggregates as the old rows do, sharing on every credit
+        df = df.drop("scrimmage_tackle_points")
     keys = [k for k in _SUM_KEYS[section] if k in df.columns]
     if "season" in df.columns:
         keys = ["season", *keys]
