@@ -1154,10 +1154,11 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     spot -- tells them apart: goal-to-go becomes the yards to the goal, as the
     "Goal" rewrite that runs just before this does, and a lost distance becomes the
     previous end distance, capped at the yards to the goal (the line to gain cannot
-    lie past the goal line). When the previous snap has no usable end state -- a
+    lie past the goal line). When the end state does not resolve the row -- a
     penalty that backs a goal-to-go series up often carries none ("1st & 0 at TULN
-    15" after "1st & Goal at TULN 10") -- its START text decides: a series that
-    started "Goal" with the same offense stays goal-to-go until possession changes.
+    15" after "1st & Goal at TULN 10") -- the previous snap's START text decides: a
+    series that started "Goal" with the same offense stays goal-to-go until
+    possession changes.
     Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
     goal-to-go by end state, 24 lost distances, 164 goal-to-go by series (63
     confirmed by the row's own end or the next down reading "Goal", one contradicted
@@ -1193,6 +1194,7 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
         & pl.col("start.down").is_between(1, 4)
         & pl.col("start.yardsToEndzone").is_between(1, 99)
         & (pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two[- ]point|2pt") == False)  # noqa: E712
+        & (pl.col("type.text").is_in(_TRY_TYPES) == False)  # noqa: E712
     )
     amp0 = (
         base
@@ -1603,6 +1605,7 @@ def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
     sdd = plays_df["start.downDistanceText"].cast(pl.Utf8).to_list()
     edd = plays_df["end.downDistanceText"].cast(pl.Utf8).to_list()
     typ = plays_df["type.text"].cast(pl.Utf8).fill_null("").to_list()
+    ids = plays_df["id"].to_list() if "id" in plays_df.columns else [None] * plays_df.height
     per = (
         plays_df["period.number"].cast(pl.Int32, strict=False).fill_null(0).to_list()
         if "period.number" in plays_df.columns
@@ -1622,10 +1625,19 @@ def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
             and k is not None
             and not admin.search(typ[r])
         ):
-            j = next((x for x in range(i - 2, -1, -1) if drv[order[x]] == drv[r]), None)
+            j = next(
+                (x for x in range(i - 2, -1, -1) if drv[order[x]] == drv[r] and not admin.search(typ[order[x]])),
+                None,
+            )
             if j is not None and _dd_key(edd[order[j]]) == k and _dd_key(edd[prev]) != k:
+                # carry its own try rows (not a later drive's -- 323080276 alternates two
+                # drives, and a PAT of the drive in front would land before its touchdown)
+                # and a same-id drives.current copy, so the later dedupe sees them adjacent
                 end = i + 1
-                while end < len(order) and typ[order[end]] in _TRY_TYPES:
+                while end < len(order) and (
+                    (typ[order[end]] in _TRY_TYPES and drv[order[end]] != drv[prev])
+                    or (ids[r] is not None and ids[order[end]] == ids[r])
+                ):
                     end += 1
                 block = order[i:end]
                 del order[i:end]

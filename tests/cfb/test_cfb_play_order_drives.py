@@ -49,7 +49,7 @@ def _run(monkeypatch, game_id: int) -> pl.DataFrame:
     [
         # prev_id: the last play of the moved row's own drive
         (400548134, 400548134101886613, 400548134101849916, "4th & 0 at KENT 14", 14),
-        (400787459, 400787459102977201, None, "4th & 0 at GASO 11", 11),
+        (400787459, 400787459102977201, 400787459102975702, "4th & 0 at GASO 11", 11),
         (400763571, 400763571101946705, 400763571101936109, "3rd & 0 at IU 14", 14),
     ],
 )
@@ -139,3 +139,30 @@ def test_reunite_carries_a_try_row_with_its_touchdown():
 def test_reunite_is_a_no_op_without_the_drive_column():
     df = _frame([(1, 1, "Rush", 1, "1st & 10 at A 25", None)]).drop("drive.id")
     assert cfb_pbp_mod._reunite_drive_rows(df).equals(df)
+
+
+def test_reunite_leaves_the_next_drives_try_behind():
+    # 323080276 shape: id order alternates two drives. The drive-1 row moves back to
+    # its drive; drive 3's PAT, filed right after it, belongs to drive 3's touchdown
+    # and must stay there rather than land before it.
+    rows = [
+        (1, 1, "Rush", 1, "1st & Goal at IU 4", "2nd & Goal at IU 2"),
+        (2, 3, "Rushing Touchdown", 1, "1st & Goal at MD 3", None),
+        (3, 1, "Rushing Touchdown", 1, "2nd & Goal at IU 2", None),
+        (4, 3, "Extra Point Good", 1, None, None),
+    ]
+    out = cfb_pbp_mod._reunite_drive_rows(_frame(rows))
+    assert out["id"].to_list() == [1, 3, 2, 4]
+
+
+def test_reunite_carries_a_same_id_copy():
+    # a drives.current copy repeats the moved row's id; it moves too, so the later
+    # same-id dedupe still sees the copies side by side
+    rows = [
+        (1, 1, "Pass Incompletion", 1, "3rd & Goal at KENT 14", "4th & Goal at KENT 14"),
+        (2, 3, "Rush", 1, "3rd & 3 at ARMY 10", "4th & 3 at ARMY 10"),
+        (4, 1, "Field Goal Good", 1, "4th & 0 at KENT 14", None),
+        (4, 4, "Field Goal Good", 1, "4th & 0 at KENT 14", None),
+    ]
+    out = cfb_pbp_mod._reunite_drive_rows(_frame(rows))
+    assert out["id"].to_list() == [1, 4, 4, 2]

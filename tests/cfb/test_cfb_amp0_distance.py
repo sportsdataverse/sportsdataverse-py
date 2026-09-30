@@ -219,6 +219,8 @@ def _series_frame(rows: list[tuple]) -> pl.DataFrame:
         ("202", "1st & Goal at TULN 10", 0),
         # the previous snap did not start goal-to-go: nothing to read
         ("2653", "1st & 10 at TULN 30", 0),
+        # no offense id on the previous snap: nothing to read
+        (None, "1st & Goal at TULN 10", 0),
     ],
 )
 def test_repair_amp0_distance_same_series(prev_team, prev_start, expected):
@@ -229,3 +231,15 @@ def test_repair_amp0_distance_same_series(prev_team, prev_start, expected):
         ]
     )
     assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]
+
+
+def test_repair_amp0_distance_end_state_wins_over_series():
+    # the previous snap started "Goal" but ended with a real distance at the same spot:
+    # the end state is the better evidence (lost-distance branch), not the series
+    df = _series_frame(
+        [
+            ("Rush", "2653", 1, 10, 10, "1st & Goal at TULN 10", 2, 7, "2nd & 7 at TULN 15"),
+            ("Rush", "2653", 2, 0, 15, "2nd & 0 at TULN 15", 3, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, 7]
