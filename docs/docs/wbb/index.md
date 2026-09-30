@@ -28,6 +28,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 
 | `sportsdataverse.wbb` (Python) | `wehoop` (R) |
 |---|---|
+| [`bart_wbb_ratings`](reference/bart_wbb#bart_wbb_ratings) | [`bart_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/bart_wbb_ratings.html) |
 | [`espn_wbb_award`](reference/core#espn_wbb_award) | [`espn_wbb_award`](https://wehoop.sportsdataverse.org/reference/espn_wbb_award.html) |
 | [`espn_wbb_calendar`](reference/site#espn_wbb_calendar) | [`espn_wbb_calendar`](https://wehoop.sportsdataverse.org/reference/espn_wbb_calendar.html) |
 | [`espn_wbb_coach`](reference/core#espn_wbb_coach) | [`espn_wbb_coach`](https://wehoop.sportsdataverse.org/reference/espn_wbb_coach.html) |
@@ -93,11 +94,47 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wbb_teams`](reference/additional#espn_wbb_teams) | [`espn_wbb_teams`](https://wehoop.sportsdataverse.org/reference/espn_wbb_teams.html) |
 | [`espn_wbb_tournaments`](reference/core#espn_wbb_tournaments) | [`espn_wbb_tournaments`](https://wehoop.sportsdataverse.org/reference/espn_wbb_tournaments.html) |
 | [`espn_wbb_venues`](reference/core#espn_wbb_venues) | [`espn_wbb_venues`](https://wehoop.sportsdataverse.org/reference/espn_wbb_venues.html) |
+| [`fox_wbb_boxscore`](reference/additional#fox_wbb_boxscore) | [`fox_wbb_boxscore`](https://wehoop.sportsdataverse.org/reference/fox_wbb_boxscore.html) |
+| [`fox_wbb_league_leaders`](reference/additional#fox_wbb_league_leaders) | [`fox_wbb_league_leaders`](https://wehoop.sportsdataverse.org/reference/fox_wbb_league_leaders.html) |
+| [`fox_wbb_odds`](reference/additional#fox_wbb_odds) | [`fox_wbb_odds`](https://wehoop.sportsdataverse.org/reference/fox_wbb_odds.html) |
+| [`fox_wbb_pbp`](reference/additional#fox_wbb_pbp) | [`fox_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/fox_wbb_pbp.html) |
+| [`fox_wbb_standings`](reference/additional#fox_wbb_standings) | [`fox_wbb_standings`](https://wehoop.sportsdataverse.org/reference/fox_wbb_standings.html) |
+| [`fox_wbb_team_gamelog`](reference/additional#fox_wbb_team_gamelog) | [`fox_wbb_team_gamelog`](https://wehoop.sportsdataverse.org/reference/fox_wbb_team_gamelog.html) |
+| [`fox_wbb_team_roster`](reference/additional#fox_wbb_team_roster) | [`fox_wbb_team_roster`](https://wehoop.sportsdataverse.org/reference/fox_wbb_team_roster.html) |
+| [`fox_wbb_team_stats`](reference/additional#fox_wbb_team_stats) | [`fox_wbb_team_stats`](https://wehoop.sportsdataverse.org/reference/fox_wbb_team_stats.html) |
+| [`fox_wbb_teams`](reference/additional#fox_wbb_teams) | [`fox_wbb_teams`](https://wehoop.sportsdataverse.org/reference/fox_wbb_teams.html) |
+| [`fox_wbb_teams_all`](reference/additional#fox_wbb_teams_all) | [`fox_wbb_teams_all`](https://wehoop.sportsdataverse.org/reference/fox_wbb_teams_all.html) |
+| [`load_ncaa_wbb_lineups`](reference/loaders#load_ncaa_wbb_lineups) | [`load_ncaa_wbb_lineups`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_lineups.html) |
+| [`load_ncaa_wbb_matchup_stints`](reference/loaders#load_ncaa_wbb_matchup_stints) | [`load_ncaa_wbb_matchup_stints`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_matchup_stints.html) |
+| [`load_ncaa_wbb_pbp`](reference/loaders#load_ncaa_wbb_pbp) | [`load_ncaa_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_pbp.html) |
+| [`load_ncaa_wbb_player_box`](reference/loaders#load_ncaa_wbb_player_box) | [`load_ncaa_wbb_player_box`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_player_box.html) |
+| [`load_ncaa_wbb_possessions`](reference/loaders#load_ncaa_wbb_possessions) | [`load_ncaa_wbb_possessions`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_possessions.html) |
+| [`load_ncaa_wbb_rapm`](reference/loaders#load_ncaa_wbb_rapm) | [`load_ncaa_wbb_rapm`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_rapm.html) |
+| [`load_ncaa_wbb_rapm_within_team`](reference/loaders#load_ncaa_wbb_rapm_within_team) | [`load_ncaa_wbb_rapm_within_team`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_rapm_within_team.html) |
+| [`load_ncaa_wbb_rosters`](reference/loaders#load_ncaa_wbb_rosters) | [`load_ncaa_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_rosters.html) |
+| [`load_ncaa_wbb_schedule`](reference/loaders#load_ncaa_wbb_schedule) | [`load_ncaa_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_schedule.html) |
+| [`load_ncaa_wbb_shots`](reference/loaders#load_ncaa_wbb_shots) | [`load_ncaa_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_shots.html) |
+| [`load_ncaa_wbb_team_box`](reference/loaders#load_ncaa_wbb_team_box) | [`load_ncaa_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_team_box.html) |
+| [`load_ncaa_wbb_team_ids`](reference/loaders#load_ncaa_wbb_team_ids) | [`load_ncaa_wbb_team_ids`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_team_ids.html) |
+| [`load_ncaa_wbb_team_rosters`](reference/loaders#load_ncaa_wbb_team_rosters) | [`load_ncaa_wbb_team_rosters`](https://wehoop.sportsdataverse.org/reference/load_ncaa_wbb_team_rosters.html) |
 | [`load_wbb_game_rosters`](reference/loaders#load_wbb_game_rosters) | [`load_wbb_game_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_game_rosters.html) |
+| [`load_wbb_group_aliases`](reference/loaders#load_wbb_group_aliases) | [`load_wbb_group_aliases`](https://wehoop.sportsdataverse.org/reference/load_wbb_group_aliases.html) |
+| [`load_wbb_group_seasons`](reference/loaders#load_wbb_group_seasons) | [`load_wbb_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_group_seasons.html) |
+| [`load_wbb_groups`](reference/loaders#load_wbb_groups) | [`load_wbb_groups`](https://wehoop.sportsdataverse.org/reference/load_wbb_groups.html) |
 | [`load_wbb_officials`](reference/loaders#load_wbb_officials) | [`load_wbb_officials`](https://wehoop.sportsdataverse.org/reference/load_wbb_officials.html) |
 | [`load_wbb_pbp`](reference/loaders#load_wbb_pbp) | [`load_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_wbb_pbp.html) |
+| [`load_wbb_player_core`](reference/loaders#load_wbb_player_core) | [`load_wbb_player_core`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_core.html) |
+| [`load_wbb_player_crosswalk`](reference/loaders#load_wbb_player_crosswalk) | [`load_wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_crosswalk.html) |
+| [`load_wbb_player_value`](reference/loaders#load_wbb_player_value) | [`load_wbb_player_value`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_value.html) |
+| [`load_wbb_ratings`](reference/loaders#load_wbb_ratings) | [`load_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/load_wbb_ratings.html) |
 | [`load_wbb_rosters`](reference/loaders#load_wbb_rosters) | [`load_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_rosters.html) |
 | [`load_wbb_schedule`](reference/loaders#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
+| [`load_wbb_schedule_crosswalk`](reference/loaders#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
+| [`load_wbb_team_crosswalk`](reference/loaders#load_wbb_team_crosswalk) | [`load_wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_crosswalk.html) |
+| [`load_wbb_team_group_seasons`](reference/loaders#load_wbb_team_group_seasons) | [`load_wbb_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_group_seasons.html) |
 | [`most_recent_wbb_season`](reference/additional#most_recent_wbb_season) | [`most_recent_wbb_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wbb_season.html) |
+| [`wbb_player_crosswalk`](reference/additional#wbb_player_crosswalk) | [`wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_player_crosswalk.html) |
+| [`wbb_schedule_crosswalk`](reference/additional#wbb_schedule_crosswalk) | [`wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_schedule_crosswalk.html) |
+| [`wbb_team_crosswalk`](reference/additional#wbb_team_crosswalk) | [`wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_team_crosswalk.html) |
