@@ -792,14 +792,19 @@ def test_ep_between_is_not_folded_across_a_score() -> None:
 
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)
     # locate by text, not position: the late-insert reorder moved a Q1 TD that ESPN
-    # had filed at the end of this game, shifting every later game_play_number by one
-    row = plays.filter(
-        pl.col("text").str.contains("CJ Dippre for 6 yds to the ALA 31") & (pl.col("lag_scoringPlay") == True)  # noqa: E712
-    )
-    assert row.height == 1
+    # had filed at the end of this game, shifting every later game_play_number by one.
+    # ESPN also gave the kickoff after Etienne's TD a LOWER id than the TD, so id order
+    # used to run kickoff -> TD -> Dippre; _reunite_drive_rows (sportsdataverse-py#637)
+    # restores TD -> kickoff -> Dippre, so the play that follows the score is the kickoff.
+    texts = plays["text"].to_list()
+    td = next(i for i, t in enumerate(texts) if "Trevor Etienne 7 Yd Run" in (t or ""))
+    ko = plays.row(td + 1, named=True)
+    assert "Peyton Woodring kickoff" in ko["text"], "fixture drifted; the kickoff should follow the Etienne TD"
+    assert ko["lag_scoringPlay"] is True
+    assert ko["EP_between"] == 0.0, "the fold must not cross a score"
+    row = plays.filter(pl.col("text").str.contains("CJ Dippre for 6 yds to the ALA 31"))
+    assert row.height >= 1
     r = row.row(0, named=True)
-    assert r["lag_scoringPlay"] is True, "fixture drifted; the Etienne TD should precede this play"
-    assert r["EP_between"] == 0.0, "the fold must not cross a score"
     assert abs(r["EPA"]) < 4, f"a 6-yard completion with a flag is not an 8-point play (got {r['EPA']})"
 
 

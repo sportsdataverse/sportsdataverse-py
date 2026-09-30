@@ -67,10 +67,9 @@ def _play(df: pl.DataFrame, play_id: int) -> dict:
         (401752671, 401752671102948901, "3rd & 0 at LSU 14", 14),
         # a lost distance: the previous snap ended "2nd & 18 at UWA 21"
         (400559176, 400559176102897711, "2nd & 0 at UWA 21", 18),
-        # KNOWN GAP, pinned so a change is noticed: really goal-to-go (the previous
-        # snap started "1st & Goal at TULN 10" and a penalty backed it up), but that
-        # penalty row carries no end state, so this rule has nothing to read.
-        (400547673, 400547673104976905, "1st & 0 at TULN 15", 0),
+        # the previous snap (a penalty with no end state) started "1st & Goal at
+        # TULN 10" for the same offense: the series is still goal-to-go
+        (400547673, 400547673104976905, "1st & 0 at TULN 15", 15),
     ],
 )
 def test_amp0_distance_follows_the_previous_snap(monkeypatch, game_id, play_id, text, expected):
@@ -194,3 +193,72 @@ def test_repair_amp0_distance_survives_an_all_null_end_text():
     )
     assert df.schema["end.downDistanceText"] == pl.Null
     assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, 0]
+
+
+def _series_frame(rows: list[tuple]) -> pl.DataFrame:
+    cols = [
+        "type.text",
+        "start.team.id",
+        "start.down",
+        "start.distance",
+        "start.yardsToEndzone",
+        "start.downDistanceText",
+        "end.down",
+        "end.distance",
+        "end.downDistanceText",
+    ]
+    return pl.DataFrame(rows, schema=cols, orient="row")
+
+
+@pytest.mark.parametrize(
+    ("prev_team", "prev_start", "expected"),
+    [
+        # 400547673: a penalty with no end state backs "1st & Goal at TULN 10" up to the 15
+        ("2653", "1st & Goal at TULN 10", 15),
+        # a different offense (possession changed): nothing to read
+        ("202", "1st & Goal at TULN 10", 0),
+        # the previous snap did not start goal-to-go: nothing to read
+        ("2653", "1st & 10 at TULN 30", 0),
+        # no offense id on the previous snap: nothing to read
+        (None, "1st & Goal at TULN 10", 0),
+    ],
+)
+def test_repair_amp0_distance_same_series(prev_team, prev_start, expected):
+    df = _series_frame(
+        [
+            ("Penalty", prev_team, 1, 10, 10, prev_start, 1, 0, None),
+            ("Rush", "2653", 1, 0, 15, "1st & 0 at TULN 15", 2, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]
+
+
+def test_repair_amp0_distance_end_state_wins_over_series():
+    # the previous snap started "Goal" but ended with a real distance at the same spot:
+    # the end state is the better evidence (lost-distance branch), not the series
+    df = _series_frame(
+        [
+            ("Rush", "2653", 1, 10, 10, "1st & Goal at TULN 10", 2, 7, "2nd & 7 at TULN 15"),
+            ("Rush", "2653", 2, 0, 15, "2nd & 0 at TULN 15", 3, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, 7]
+
+
+@pytest.mark.parametrize(
+    ("prev_end", "expected"),
+    [
+        # the previous snap's end reads "Goal" at another spot: still goal-to-go (45 in the finals)
+        ("2nd & Goal at TULN 12", 15),
+        # a non-goal end text would contradict the series: leave it (0 in the finals)
+        ("2nd & 7 at TULN 12", 0),
+    ],
+)
+def test_repair_amp0_distance_series_respects_a_conflicting_end(prev_end, expected):
+    df = _series_frame(
+        [
+            ("Rush", "2653", 1, 10, 10, "1st & Goal at TULN 10", 2, 0, prev_end),
+            ("Rush", "2653", 2, 0, 15, "2nd & 0 at TULN 15", 3, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]

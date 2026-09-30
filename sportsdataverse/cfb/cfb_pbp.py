@@ -1154,10 +1154,15 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     spot -- tells them apart: goal-to-go becomes the yards to the goal, as the
     "Goal" rewrite that runs just before this does, and a lost distance becomes the
     previous end distance, capped at the yards to the goal (the line to gain cannot
-    lie past the goal line). Anything else stays 0 -- including a penalty that
-    backs a goal-to-go series up when that row carries no end state, which needs a
-    same-series rule on the previous snap's START text (follow-up). Across 2,472 such rows in the 2014-2026 finals: 2,127
-    goal-to-go, 24 lost distances, 321 left at 0.
+    lie past the goal line). When the end state does not resolve the row -- a
+    penalty that backs a goal-to-go series up often carries none ("1st & 0 at TULN
+    15" after "1st & Goal at TULN 10") -- the previous snap's START text decides: a
+    series that started "Goal" with the same offense stays goal-to-go until
+    possession changes.
+    Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
+    goal-to-go by end state, 24 lost distances, 164 goal-to-go by series (63
+    confirmed by the row's own end or the next down reading "Goal", one contradicted
+    -- a broken "at SYR 0" row), 157 left at 0.
 
     The spot is compared as text: on field-goal rows ``start.yardsToEndzone`` runs
     one yard deeper than the text ("4th & 0 at SYR 13" with 14), so a numeric match
@@ -1183,14 +1188,30 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     # column Null, and str.extract on a Null column raises.
     text = pl.col("start.downDistanceText").cast(pl.String)
     prev_text = prev("end.downDistanceText").cast(pl.String)
-    amp0 = (
+    base = (
         (pl.col("start.distance") == 0)
         & text.str.contains(_AMP0_RE)
         & pl.col("start.down").is_between(1, 4)
         & pl.col("start.yardsToEndzone").is_between(1, 99)
         & (pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two[- ]point|2pt") == False)  # noqa: E712
+        & (pl.col("type.text").is_in(_TRY_TYPES) == False)  # noqa: E712
+    )
+    amp0 = (
+        base
         & (prev("end.down") == pl.col("start.down"))
         & (prev_text.str.extract(_SPOT_RE, 1) == text.str.extract(_SPOT_RE, 1))
+    )
+    # same offense, previous snap started "Goal": the series is still goal-to-go --
+    # unless its end text says otherwise. In the finals that end text is empty (119)
+    # or also reads "Goal" at another spot (45), never a non-goal down, but a
+    # conflicting one must not be overridden.
+    series_goal = (
+        base
+        & (prev_text.is_null() | (prev_text == "") | prev_text.str.contains(r"(?i)goal"))
+        & prev("start.downDistanceText").cast(pl.String).str.contains(r"(?i)goal")
+        & (prev("start.team.id") == pl.col("start.team.id"))
+        if "start.team.id" in plays.columns
+        else pl.lit(False)
     )
     return plays.with_columns(
         pl.when(amp0 & prev_text.str.contains(r"(?i)goal"))
@@ -1201,6 +1222,8 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
                 plays.schema["start.distance"], strict=False
             )
         )
+        .when(series_goal)
+        .then(pl.col("start.yardsToEndzone"))
         .otherwise(pl.col("start.distance"))
         .alias("start.distance"),
     )
@@ -1549,6 +1572,86 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     return df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
 
 
+_DD_SPOT_RE = re.compile(r"at (.+)$")
+
+
+def _dd_key(text) -> tuple | None:
+    """Down and spot of an ESPN down-and-distance text: "4th & 0 at KENT 14" -> ("4th", "KENT 14")."""
+    if not isinstance(text, str) or not text:
+        return None
+    m = _DD_SPOT_RE.search(text)
+    return (text.split(" ", 1)[0], m.group(1)) if m else None
+
+
+def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Move a row the id sort filed inside a LATER drive back to the end of its own drive.
+
+    ESPN's ids and sequence numbers are not always chronological across drives, and its clock
+    stamps repeat, so ``_reorder_late_inserts`` cannot see these: a field goal that ended one
+    drive carries an id past the next drive's plays (400548134: Army's "4th & 0 at KENT 14"
+    field goal after Kent State's next drive; 400787459; 400763571 -- sportsdataverse-py#637).
+    ESPN's drive list still has it in the right drive, but the drive list alone is not an
+    order either: a catch-all first "drive" collects kickoffs from across the game and some
+    feeds misfile plays between drives, so sorting by it is worse than id order overall.
+
+    A row moves only on evidence: it sits after a row of a later drive (ESPN's ``drive.id``
+    rises in drive-list order -- 1,346 of 1,346 sampled games), its start down-and-distance text has the same
+    down and spot as the end text of the last earlier row of its own drive, and not the end
+    text of the row it follows. It moves -- with any try rows right after it -- to just after
+    that row. Admin rows and overtime (which ``_sort_plays_ot_aware`` orders separately) never
+    move. On a 5,562-game sample of 2004-2026 finals: 705 rows moved, +672 plays whose start
+    matches the previous snap's end, and no game with fewer such matches.
+    """
+    need = {"drive.id", "start.downDistanceText", "end.downDistanceText", "type.text"}
+    if not need <= set(plays_df.columns) or plays_df.height < 3:
+        return plays_df
+    drv = plays_df["drive.id"].cast(pl.Int64, strict=False).to_list()
+    sdd = plays_df["start.downDistanceText"].cast(pl.Utf8).to_list()
+    edd = plays_df["end.downDistanceText"].cast(pl.Utf8).to_list()
+    typ = plays_df["type.text"].cast(pl.Utf8).fill_null("").to_list()
+    ids = plays_df["id"].to_list() if "id" in plays_df.columns else [None] * plays_df.height
+    per = (
+        plays_df["period.number"].cast(pl.Int32, strict=False).fill_null(0).to_list()
+        if "period.number" in plays_df.columns
+        else [0] * plays_df.height
+    )
+    admin = re.compile(_ADMIN_ROW_RE)
+    order = list(range(plays_df.height))
+    i = 1
+    while i < len(order):
+        r, prev = order[i], order[i - 1]
+        k = _dd_key(sdd[r])
+        if (
+            drv[r] is not None
+            and drv[prev] is not None
+            and drv[r] < drv[prev]
+            and per[r] < 5
+            and k is not None
+            and not admin.search(typ[r])
+        ):
+            j = next(
+                (x for x in range(i - 2, -1, -1) if drv[order[x]] == drv[r] and not admin.search(typ[order[x]])),
+                None,
+            )
+            if j is not None and _dd_key(edd[order[j]]) == k and _dd_key(edd[prev]) != k:
+                # carry its own try rows (not a later drive's -- 323080276 alternates two
+                # drives, and a PAT of the drive in front would land before its touchdown)
+                # and a same-id drives.current copy, so the later dedupe sees them adjacent
+                end = i + 1
+                while end < len(order) and (
+                    (typ[order[end]] in _TRY_TYPES and drv[order[end]] != drv[prev])
+                    or (ids[r] is not None and ids[order[end]] == ids[r])
+                ):
+                    end += 1
+                block = order[i:end]
+                del order[i:end]
+                order[j + 1 : j + 1] = block
+                i += len(block)
+                continue
+        i += 1
+    return plays_df if order == list(range(plays_df.height)) else plays_df[order]
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -1564,8 +1667,8 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     # drives.previous copy, so the same-id dedupe keeps the fresher one
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
-        return plays_df
-    plays_df = _place_tries_filed_after_the_kickoff(_reorder_late_inserts(plays_df))
+        return _reunite_drive_rows(plays_df)
+    plays_df = _place_tries_filed_after_the_kickoff(_reunite_drive_rows(_reorder_late_inserts(plays_df)))
     period = pl.col("period.number").cast(pl.Int32, strict=False)
     ot = plays_df.filter(period >= 5)
     if ot.height == 0:
