@@ -49,10 +49,14 @@ _REGULATION_ERAS: dict[str, tuple[tuple[int, int, int], ...]] = {
     "10": ((2006, 4, 600), (0, 2, 1200)),
 }
 
-#: Season-directory year relative to the game id's two-digit start year: an NBA
-#: season spans two calendar years (store keys the END year); a WNBA season is
-#: one calendar year.
-_GAME_ID_YEAR_OFFSET = {"00": 1, "10": 0}
+#: Store directory year relative to a season's START year, per league: an NBA
+#: season spans two calendar years and the whole store keys the END year
+#: (1996-97 -> 1997); a WNBA season is one calendar year. Used for BOTH halves:
+#: per-game dirs (from the game id's start year, :func:`season_of`) and
+#: season-level dirs (from the API season, ``season_capture.capture_season``),
+#: so the two can never key the same season differently again -- until
+#: 2026-09-30 the season-level half was filed under the START year.
+STORE_YEAR_OFFSET = {"00": 1, "10": 0}
 
 
 def regulation_shape(season: int, league_id: str) -> tuple[int, int]:
@@ -111,4 +115,4 @@ def season_of(game_id: str, league_id: str) -> int:
     gid = str(game_id).zfill(10)
     yy = int(gid[3:5])
     start = 1900 + yy if yy >= 90 else 2000 + yy
-    return start + _GAME_ID_YEAR_OFFSET[league_id]
+    return start + STORE_YEAR_OFFSET[league_id]

@@ -142,7 +142,7 @@ aces = safe('Aces roster', lambda: wnba.espn_wnba_team_roster(team_id=17, season
     │ str        ┆ str              ┆ str    ┆ str                   ┆ str            ┆ i64 │
     ╞════════════╪══════════════════╪════════╪═══════════════════════╪════════════════╪═════╡
     │ 4433633    ┆ Kierstan Bell    ┆ 1      ┆ F                     ┆ 6' 1"          ┆ 26  │
-    │ 3916514    ┆ Kalani Brown     ┆ 21     ┆ C                     ┆ 6' 7"          ┆ 29  │
+    │ 3916514    ┆ Kalani Brown     ┆ 20     ┆ C                     ┆ 6' 7"          ┆ 29  │
     │ 4281190    ┆ Dana Evans       ┆ 11     ┆ G                     ┆ 5' 6"          ┆ 28  │
     │ 2529122    ┆ Chelsea Gray     ┆ 12     ┆ G                     ┆ 5' 11"         ┆ 33  │
     │ 4609797    ┆ Ta'Niya Latson   ┆ 5      ┆ G                     ┆ 5' 8"          ┆ 22  │
@@ -186,21 +186,7 @@ out
 
 
 
-    shape: (3, 9)
-    ┌───────────┬────────────┬────────────┬────────────┬───┬────────────┬──────────┬──────────┬────────┐
-    │ id        ┆ home_displ ┆ away_displ ┆ home_score ┆ … ┆ status_typ ┆ home_pts ┆ away_pts ┆ margin │
-    │ ---       ┆ ay_name    ┆ ay_name    ┆ ---        ┆   ┆ e_descript ┆ ---      ┆ ---      ┆ ---    │
-    │ str       ┆ ---        ┆ ---        ┆ str        ┆   ┆ ion        ┆ i64      ┆ i64      ┆ i64    │
-    │           ┆ str        ┆ str        ┆            ┆   ┆ ---        ┆          ┆          ┆        │
-    │           ┆            ┆            ┆            ┆   ┆ str        ┆          ┆          ┆        │
-    ╞═══════════╪════════════╪════════════╪════════════╪═══╪════════════╪══════════╪══════════╪════════╡
-    │ 401726990 ┆ Minnesota  ┆ New York   ┆ 77         ┆ … ┆ Final      ┆ 77       ┆ 80       ┆ 3      │
-    │           ┆ Lynx       ┆ Liberty    ┆            ┆   ┆            ┆          ┆          ┆        │
-    │ 401726991 ┆ Minnesota  ┆ New York   ┆ 82         ┆ … ┆ Final      ┆ 82       ┆ 80       ┆ 2      │
-    │           ┆ Lynx       ┆ Liberty    ┆            ┆   ┆            ┆          ┆          ┆        │
-    │ 401726992 ┆ New York   ┆ Minnesota  ┆ 67         ┆ … ┆ Final      ┆ 67       ┆ 62       ┆ 5      │
-    │           ┆ Liberty    ┆ Lynx       ┆            ┆   ┆            ┆          ┆          ┆        │
-    └───────────┴────────────┴────────────┴────────────┴───┴────────────┴──────────┴──────────┴────────┘
+    'schedule unavailable'
 
 
 
@@ -611,8 +597,8 @@ double_doubles
     │ ---                  ┆ ---               ┆ ---            ┆ ---            │
     │ str                  ┆ str               ┆ u32            ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
-    │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
     │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
+    │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
     │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
     │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
     │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
@@ -845,21 +831,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ G   ┆ C   ┆ F   │
+    │ team_abbreviation ┆ G   ┆ F   ┆ C   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 7   ┆ 1   ┆ 4   │
-    │ CHI               ┆ 9   ┆ 2   ┆ 3   │
-    │ CONNECTICU        ┆ 8   ┆ 2   ┆ 5   │
-    │ DALLAS            ┆ 7   ┆ 1   ┆ 6   │
-    │ IND               ┆ 8   ┆ 2   ┆ 3   │
+    │ ATL               ┆ 7   ┆ 4   ┆ 1   │
+    │ CHI               ┆ 9   ┆ 3   ┆ 2   │
+    │ CONNECTICU        ┆ 8   ┆ 5   ┆ 2   │
+    │ DALLAS            ┆ 7   ┆ 6   ┆ 1   │
+    │ IND               ┆ 8   ┆ 3   ┆ 2   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 5   ┆ 1   ┆ 8   │
-    │ NY                ┆ 8   ┆ 2   ┆ 5   │
-    │ PHX               ┆ 7   ┆ 1   ┆ 7   │
-    │ SEA               ┆ 6   ┆ 3   ┆ 5   │
-    │ WSH               ┆ 9   ┆ 2   ┆ 3   │
+    │ MIN               ┆ 5   ┆ 8   ┆ 1   │
+    │ NY                ┆ 8   ┆ 5   ┆ 2   │
+    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
+    │ SEA               ┆ 6   ┆ 5   ┆ 3   │
+    │ WSH               ┆ 9   ┆ 3   ┆ 2   │
     └───────────────────┴─────┴─────┴─────┘
 
 

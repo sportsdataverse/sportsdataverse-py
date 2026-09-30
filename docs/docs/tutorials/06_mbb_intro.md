@@ -343,14 +343,14 @@ out
     │ Solo Ball        ┆ 1      ┆ 6' 4"          ┆ 200 lbs        │
     │ Silas Demary Jr. ┆ 2      ┆ 6' 4"          ┆ 195 lbs        │
     │ Rrezon Elezaj    ┆ 10     ┆ 7' 1"          ┆ 225 lbs        │
-    │ Jacob Furphy     ┆ 7      ┆ 6' 6"          ┆ 205 lbs        │
     │ Dwayne Koroma    ┆ 4      ┆ 6' 8"          ┆ 212 lbs        │
+    │ Alec Millender   ┆ 9      ┆ 6' 1"          ┆ 190 lbs        │
     │ …                ┆ …      ┆ …              ┆ …              │
-    │ Uroš Paunovic    ┆ 77     ┆ 6' 3"          ┆ 190 lbs        │
     │ Eric Reibe       ┆ 12     ┆ 7' 1"          ┆ 260 lbs        │
     │ Jacob Ross       ┆ 13     ┆ 6' 5"          ┆ 195 lbs        │
     │ Jayden Ross      ┆ 23     ┆ 6' 7"          ┆ 205 lbs        │
     │ Malachi Smith    ┆ 0      ┆ 6' 1"          ┆ 180 lbs        │
+    │ Jaylin Stewart   ┆ 3      ┆ 6' 7"          ┆ 225 lbs        │
     └──────────────────┴────────┴────────────────┴────────────────┘
 
 
@@ -833,10 +833,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6          Saint Thomas              UNCO              19
-    7         Fardaws Aimaq               CAL              19
-    8           Riley Minix              MORE              19
-    9       Yaxel Lendeborg               UAB              19
+    6         Fardaws Aimaq               CAL              19
+    7       Yaxel Lendeborg               UAB              19
+    8          Saint Thomas              UNCO              19
+    9           Riley Minix              MORE              19
 
 
 

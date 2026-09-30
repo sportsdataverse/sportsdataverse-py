@@ -1262,20 +1262,16 @@ def nba_raw_store_season_frame(
     ``hoopR-nba-stats-data`` model producer -- runs clone-free in CI against the
     same committed tree the per-game compile reads.
 
-    .. warning::
-        The store's two halves use **different season keys**, and mixing them
-        silently yields another season's data rather than an error. The per-game
-        half (:func:`_through_raw_store`) is keyed by season **END** year, because
-        it derives the directory from the game id. This season-level half is keyed
-        by the season's **START** year, because the sweep files each capture under
-        the year it passed to the API -- so ``leaguegamelog/2023/`` holds 2023-24
-        while ``playbyplayv3/2024/`` holds that same 2023-24 season. A caller
-        working in end years must subtract one before calling this.
+    .. note::
+        Both halves of the store key the season **END** year (2024 = 2023-24):
+        ``leaguegamelog/2024/`` and ``playbyplayv3/2024/`` hold the same season.
+        Until 2026-09-30 this season-level half was filed under the START year,
+        so a caller that still subtracts one reads the previous season -- silently.
 
     Args:
         endpoint: stats.nba.com endpoint slug (the store subdirectory).
-        season: Season **START** year (2023 = 2023-24) -- the key this half of the
-            store is filed under; see the warning above.
+        season: Season **END** year (2024 = 2023-24) -- the key both halves of
+            the store are filed under.
         variant: Capture variant slug, or ``None`` for an unparameterized capture.
         result_set: Named result set to return when the payload carries several;
             defaults to the first frame that parses.

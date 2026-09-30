@@ -5553,6 +5553,23 @@ class CFBPlayProcess(object):
             .then(pl.col("statYardage"))
             .otherwise(None),
         )
+        # A completion whose text states no gain the readers above know -- 2025's "X pass to Y
+        # for 4 yds" (no "complete"), 2024's "pass complete to Y for a 1ST down" (no yardage at
+        # all) -- takes ESPN's statYardage: it equals the stated gain on all 79 such 2025 rows and
+        # the field-position change on all 874 such 2024 rows. The completion flag keeps
+        # incompletions and sacks out; a play with a penalty or a fumble is left alone, since its
+        # statYardage can carry the enforcement or the return.
+        play_df = play_df.with_columns(
+            yds_receiving=pl.coalesce(
+                pl.col("yds_receiving"),
+                pl.when(
+                    (pl.col("pass") == True)  # noqa: E712
+                    & (pl.col("completion") == True)  # noqa: E712
+                    & pl.col("penalty_detail").is_null()
+                    & (pl.col("fumble_vec").fill_null(False) == False)  # noqa: E712
+                ).then(pl.col("statYardage").cast(pl.Int32)),
+            )
+        )
         # The 2025 vendor template writes special teams in the NFL-like jersey style
         # -- "#43 M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards
         # to the TEX48 (#81 N.Townsend), out of bounds", "#49 M.Diomede kickoff 65

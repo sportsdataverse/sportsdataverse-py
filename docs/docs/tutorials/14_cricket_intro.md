@@ -573,11 +573,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Miller, de Kock, Coetzee in So… ┆ 2026-09-07T11:21:09Z ┆ HeadlineNews │
-    │ Fatima Sana penalised for send… ┆ 2026-09-07T11:14:19Z ┆ HeadlineNews │
-    │ PCB to investigate conduct and… ┆ 2026-09-07T11:03:24Z ┆ HeadlineNews │
-    │ Kevin Pietersen makes shock En… ┆ 2026-09-07T10:53:35Z ┆ HeadlineNews │
-    │ Sowter heads for Surrey follow… ┆ 2026-09-07T10:38:31Z ┆ HeadlineNews │
+    │ The spectacle of a sixy Kohli … ┆ 2026-09-28T17:06:18Z ┆ Story        │
+    │ Leicestershire fight on as eig… ┆ 2026-09-28T17:03:34Z ┆ HeadlineNews │
+    │ Ireland appoint Ed Joyce as hi… ┆ 2026-09-28T16:50:40Z ┆ HeadlineNews │
+    │ Tom Westley steps down as Esse… ┆ 2026-09-28T16:28:57Z ┆ HeadlineNews │
+    │ WPL 2027: RCB release Grace Ha… ┆ 2026-09-28T15:00:10Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 

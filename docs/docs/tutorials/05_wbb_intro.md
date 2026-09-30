@@ -653,22 +653,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name   ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                    ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                    ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 4898987    ┆ Catherine Gilwee       ┆ Vermont                 ┆ 37    ┆ 0            ┆ null │
-    │ 4433772    ┆ Sallie Schutz          ┆ Davidson                ┆ 26    ┆ 0            ┆ null │
-    │ 5177221    ┆ Ann Zachariah          ┆ Colorado St             ┆ 31    ┆ 0            ┆ null │
-    │ 5174406    ┆ Danna Grenald          ┆ Clemson                 ┆ 31    ┆ 0            ┆ null │
-    │ 5109802    ┆ Annie Watson           ┆ Akron                   ┆ 29    ┆ 0            ┆ null │
-    │ 5178107    ┆ Ellie Magestro-Kennedy ┆ Wright St               ┆ 33    ┆ 0            ┆ null │
-    │ 4704065    ┆ Dominique Camp         ┆ Syracuse                ┆ 32    ┆ 0            ┆ null │
-    │ 4398831    ┆ Jenna Brown            ┆ Notre Dame              ┆ 35    ┆ 0            ┆ null │
-    │ 5177220    ┆ Avree Antony           ┆ Colorado St             ┆ 31    ┆ 0            ┆ null │
-    │ 5175439    ┆ Saniyah Shelton        ┆ E Kentucky              ┆ 34    ┆ 0            ┆ null │
-    └────────────┴────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 4596343    ┆ Demeara Hinds        ┆ Wake Forest             ┆ 32    ┆ 0            ┆ null │
+    │ 5178514    ┆ McKenna Macon        ┆ W Michigan              ┆ 30    ┆ 0            ┆ null │
+    │ 4714498    ┆ Allie Palmieri       ┆ UMass                   ┆ 32    ┆ 0            ┆ null │
+    │ 4900386    ┆ Debbie Reese         ┆ South Alabama           ┆ 32    ┆ 0            ┆ null │
+    │ 4433532    ┆ Kiya Dorroh          ┆ UT Martin               ┆ 33    ┆ 0            ┆ null │
+    │ 4702867    ┆ Vanessa de Jesus     ┆ Duke                    ┆ 34    ┆ 0            ┆ null │
+    │ 5178483    ┆ Hilary Behrens       ┆ S Dakota St             ┆ 33    ┆ 0            ┆ null │
+    │ 5181593    ┆ Michaela Bosmans     ┆ North Texas             ┆ 32    ┆ 0            ┆ null │
+    │ 5175916    ┆ Susana Yepes         ┆ Oregon St               ┆ 35    ┆ 0            ┆ null │
+    │ 4433737    ┆ Mir McLean           ┆ Virginia                ┆ 32    ┆ 0            ┆ null │
+    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -794,10 +794,10 @@ three_pt
     │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
-    │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
+    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
+    │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
     │ 213     ┆ Penn State Lady Lions          ┆ 35    ┆ 294 ┆ 787  ┆ 37.4      │
     └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
@@ -937,12 +937,12 @@ dd
     │ 4433402    ┆ Angel Reese          ┆ LSU                     ┆ 27             │
     │ 4705101    ┆ Macy McGlone         ┆ E Illinois              ┆ 26             │
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
-    │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
-    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
+    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
     │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
-    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -985,8 +985,8 @@ defense
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
+    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
     └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
 
