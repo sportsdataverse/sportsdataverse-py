@@ -3491,7 +3491,7 @@ position_group is null for seasons whose play-by-play carried no participant pos
 | `pos_team_id` | Int64 | ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `rushes` | Int64 | Rushing attempts on which the player was the rusher, on standing scrimmage plays (plays nullified by penalty are excluded). |
 | `targets` | Int64 | Pass targets on which the player was the receiver, complete or not, on standing scrimmage plays. |
@@ -3613,7 +3613,7 @@ Needs ESPN play participants (tackler / assist ids); a season without them has n
 | `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
 | `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `tackles` | Int64 | Solo tackles credited to the player in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the player in the play participants (assisted_by_player_ids). |
@@ -3752,7 +3752,7 @@ Release: [espn_cfb_usage_st_kickers](https://github.com/sportsdataverse/sportsda
 | `pos_team_id` | Int64 | ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `kickoffs` | Int64 | Kickoffs by the kicker that stood (kicks nullified by penalty are excluded). |
 | `kickoff_yards` | Float64 | Kickoff distance summed over the kickoffs (yds_kickoff). |
 | `kickoff_touchbacks` | Int64 | Kickoffs that resulted in a touchback. |
@@ -3797,7 +3797,7 @@ Release: [espn_cfb_usage_st_punters](https://github.com/sportsdataverse/sportsda
 | `pos_team_id` | Int64 | ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `punts` | Int64 | Punts by the punter that stood (punts nullified by penalty are excluded). |
 | `punt_yards` | Float64 | Gross punt distance summed over the punts (yds_punted). |
 | `punt_touchbacks` | Int64 | Punts that resulted in a touchback. |
@@ -3833,7 +3833,7 @@ Release: [espn_cfb_usage_st_returners](https://github.com/sportsdataverse/sports
 | `pos_team_id` | Int64 | ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `kick_returns` | Int64 | Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught). |
 | `kick_return_yards` | Float64 | Kickoff return yards summed over the returns (yds_kickoff_return). |
 | `kick_return_tds` | Int64 | Kickoff returns that scored a touchdown. |
@@ -3863,7 +3863,7 @@ Release: [espn_cfb_usage_st_blocks](https://github.com/sportsdataverse/sportsdat
 | `def_pos_team_id` | Int64 | ESPN team id of the team that made the block (the defense on the kick). |
 | `def_pos_team` | String | Display name of the team that made the block (the defense on the kick). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `punt_blocks` | Int64 | Punts the player blocked (credited as the punt_block_player on the play). |
 | `fg_blocks` | Int64 | Field-goal attempts the player blocked (credited as the fg_block_player on the play). |
 | `blocks` | Int64 | punt_blocks plus fg_blocks. |
