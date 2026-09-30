@@ -1140,6 +1140,10 @@ _ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
 
 #: ESPN's down-and-distance text for a ``start.distance`` of 0 that is not labelled
 #: "Goal", and the "at <spot>" tail both texts share.
+#: Play types after which the next snap starts a new series.
+_POSSESSION_END_RE = (
+    r"(?i)touchdown|field goal|punt|safety|interception|fumble recovery \(opponent\)|turnover|downs|kickoff"
+)
 _AMP0_RE = r"& 0 at"
 _SPOT_RE = r"at (.+)$"
 
@@ -1159,10 +1163,12 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     15" after "1st & Goal at TULN 10") -- the previous snap's START text decides: a
     series that started "Goal" with the same offense stays goal-to-go until
     possession changes.
-    Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
-    goal-to-go by end state, 24 lost distances, 164 goal-to-go by series (63
-    confirmed by the row's own end or the next down reading "Goal", one contradicted
-    -- a broken "at SYR 0" row), 157 left at 0.
+    The series must still be the same one -- same period, no possession-ending
+    previous snap, no down reset -- or a team opening an overtime period would inherit
+    its own goal line. Anything else stays 0. Across 2,472 such rows in the 2014-2026
+    finals: 2,127 goal-to-go by end state, 24 lost distances, 150 goal-to-go by
+    series (63 confirmed by the row's own end or the next down reading "Goal"), the
+    rest left at 0.
 
     The spot is compared as text: on field-goal rows ``start.yardsToEndzone`` runs
     one yard deeper than the text ("4th & 0 at SYR 13" with 14), so a numeric match
@@ -1210,7 +1216,14 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
         & (prev_text.is_null() | (prev_text == "") | prev_text.str.contains(r"(?i)goal"))
         & prev("start.downDistanceText").cast(pl.String).str.contains(r"(?i)goal")
         & (prev("start.team.id") == pl.col("start.team.id"))
-        if "start.team.id" in plays.columns
+        # ...and the series is still the same one: same period, the previous snap did
+        # not end the possession, and the down did not reset. ESPN files overtime
+        # possessions under one drive, so a team opening OT2 after closing OT1 would
+        # otherwise inherit its own goal line ("1st & 0 at OHIO 25" -> 25, 400869264).
+        & (prev("period.number") == pl.col("period.number"))
+        & (prev("type.text").cast(pl.String).str.contains(_POSSESSION_END_RE) == False)  # noqa: E712
+        & (pl.col("start.down") >= prev("start.down"))
+        if {"start.team.id", "period.number"} <= set(plays.columns)
         else pl.lit(False)
     )
     return plays.with_columns(
