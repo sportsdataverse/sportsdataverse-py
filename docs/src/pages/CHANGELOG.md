@@ -4,6 +4,10 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
+  - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
+  - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
+  - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
+  - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
   - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
   - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
@@ -347,6 +351,64 @@ Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a li
 close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
 `fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
 Float32; the published parquet was already Float64).
+
+### Fixed — pace counts regulation drives once, for the drive's own offense
+
+`sec_per_play` in `football.tendencies` summed ESPN's drive clock over every drive with a
+parseable `drive.timeElapsed`, overtime included. Overtime has no game clock: ESPN files its
+drives as 0:00 (86 of 89 in 2025), so they added plays and no seconds, and one North Texas OT drive
+(401762461) carried 15:00 over 3 plays. Separately, an ESPN drive id holding standing snaps by both
+offenses (51 ids in 28 games in 2025) handed each offense the whole drive clock and play count.
+A drive now carries a clock only in regulation and only for its owner: the offense ESPN names as
+the drive team, else the one with the most standing snaps (the rule cfb-data's `team_summaries`
+uses). In 2025, 75 of 136 FBS teams' `sec_per_play` move, by at most 0.71 s (North Texas 27th →
+16th), and 10 teams' `sec_per_play_neutral` move by at most 0.58 s. `drives_with_clock`,
+`drive_seconds`, `drive_plays` and `pace_coverage` change with them; drive counts, finishing and
+scripting are unchanged.
+
+### Fixed — a season usage table keeps one row per player
+
+`aggregate_usage_box` summed per-game rows on `(team, player_id, player_name, position_group)`, so
+a player whose position group was missing in some games (a roster gap) or whose name changed
+split into several season rows: 177 CFB player ids in 2025 (763 in 2014), and 121 FBS players'
+main row undercounted targets (Danny Scudero, San Jose State: 160 targets published as 106 + 54).
+Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
+frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
+special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
+
+### Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate
+
+The bundled `cfb/models/qbr_model.ubj` is replaced. The old model was fitted on features
+that serving never computes: plays were grouped by passer name, so QB runs never reached
+`rush_epa`, and the booster had no split on it. Overtime games were dropped, and penalty
+plays were handled differently. The new model is trained on the published `adv_passing`
+rows, which are exactly what `create_box_score` scores. Its labels are ESPN game QBR,
+committed with provenance in cfbfastR-cfb-data. It also drops `spread`: `qbr_vars` is now
+the five EPA aggregates plus `era0..era3`. On identical plays, the old model gave a
+14-point favourite's QB about 10 points more than a 14-point underdog's.
+
+On the frozen, never-trained-on holdout (2026 weeks 1–4, 541 QB-games) the RMSE against
+ESPN raw QBR fell from 14.19 to 11.74. The correlation rose from 0.864 to 0.914 (0.660 to
+0.759 against Total QBR). The paired squared-error change is −63.5, with a 95%
+game-clustered CI of [−84.2, −43.6]. Keeping the spread would have scored 11.49; the
+pre-registered tolerance for dropping it was 0.30. The bundle now carries
+`qbr_model.gate.json`, the trainer's gate record, and `tests/cfb/test_qbr_model_gate.py`
+fails if `qbr_model.ubj` is not the candidate that passed it. Every `exp_qbr` changes;
+published `adv_passing` / pbp box scores keep the old values until they are reprocessed.
+The box score still emits a `spread` column.
+
+### Changed — tackle share counts only the defense's own scrimmage snaps
+
+Tackle share divided a player's tackle points by his team's across every play, special teams
+included: kickoff and punt coverage made up 6,590 of 113,407 CFB credits in 2025 (5.8%), with
+22 more on plays a penalty wiped out. Per the owner's decision (2026-09-30) the share now counts
+only the defense's own standing scrimmage snaps: two new columns,
+`scrimmage_tackle_points` and `team_scrimmage_tackle_points`, carry its numerator and
+denominator, and `tackle_share` is their ratio (per game, per position group and per season in
+`aggregate_usage_box`). `tackles`, `assists`, `tackle_points` and `team_tackle_points` still count
+every credit, special teams and the offense's tackles after a turnover included. Rows built before
+this change still share on every credit. The two new columns are declared in the loader schemas
+after the tackle tables are republished.
 
 ### Fixed — a tackle is credited to the tackler's own team
 

@@ -3491,8 +3491,8 @@ position_group is null for seasons whose play-by-play carried no participant pos
 | `pos_team_id` | Int64 | ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
-| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
+| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `rushes` | Int64 | Rushing attempts on which the player was the rusher, on standing scrimmage plays (plays nullified by penalty are excluded). |
 | `targets` | Int64 | Pass targets on which the player was the receiver, complete or not, on standing scrimmage plays. |
 | `receptions` | Int64 | Targets the player caught (completed passes). |
@@ -3613,14 +3613,14 @@ Needs ESPN play participants (tackler / assist ids); a season without them has n
 | `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
 | `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
-| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
+| `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
 | `tackles` | Int64 | Solo tackles credited to the player in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the player in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the player's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the player's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_cfb_usage_tackles(seasons=2024)
@@ -3646,8 +3646,8 @@ Needs ESPN play participants with player positions; a season without them has no
 | `assists` | Int64 | Assisted tackles credited to the position group in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the position group's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the position group's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_cfb_usage_position_group_tackles(seasons=2024)
@@ -3752,7 +3752,7 @@ Release: [espn_cfb_usage_st_kickers](https://github.com/sportsdataverse/sportsda
 | `pos_team_id` | Int64 | ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `kickoffs` | Int64 | Kickoffs by the kicker that stood (kicks nullified by penalty are excluded). |
 | `kickoff_yards` | Float64 | Kickoff distance summed over the kickoffs (yds_kickoff). |
 | `kickoff_touchbacks` | Int64 | Kickoffs that resulted in a touchback. |
@@ -3797,7 +3797,7 @@ Release: [espn_cfb_usage_st_punters](https://github.com/sportsdataverse/sportsda
 | `pos_team_id` | Int64 | ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `punts` | Int64 | Punts by the punter that stood (punts nullified by penalty are excluded). |
 | `punt_yards` | Float64 | Gross punt distance summed over the punts (yds_punted). |
 | `punt_touchbacks` | Int64 | Punts that resulted in a touchback. |
@@ -3833,7 +3833,7 @@ Release: [espn_cfb_usage_st_returners](https://github.com/sportsdataverse/sports
 | `pos_team_id` | Int64 | ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets on team_id. |
 | `pos_team` | String | Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas City Chiefs", "Georgia Bulldogs"). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `kick_returns` | Int64 | Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught). |
 | `kick_return_yards` | Float64 | Kickoff return yards summed over the returns (yds_kickoff_return). |
 | `kick_return_tds` | Int64 | Kickoff returns that scored a touchdown. |
@@ -3863,7 +3863,7 @@ Release: [espn_cfb_usage_st_blocks](https://github.com/sportsdataverse/sportsdat
 | `def_pos_team_id` | Int64 | ESPN team id of the team that made the block (the defense on the kick). |
 | `def_pos_team` | String | Display name of the team that made the block (the defense on the kick). |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
-| `player_name` | String | Player display name, as carried on the play-by-play participants. |
+| `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it). |
 | `punt_blocks` | Int64 | Punts the player blocked (credited as the punt_block_player on the play). |
 | `fg_blocks` | Int64 | Field-goal attempts the player blocked (credited as the fg_block_player on the play). |
 | `blocks` | Int64 | punt_blocks plus fg_blocks. |
@@ -4087,7 +4087,7 @@ Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdat
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -4704,7 +4704,7 @@ One row per (season, team, head coach). The coach comes from the producer's vend
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -5322,7 +5322,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
