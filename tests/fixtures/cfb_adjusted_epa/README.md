@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [cfb_adjusted_epa fixtures — provenance](#cfb_adjusted_epa-fixtures--provenance)
+  - [`pre598_*.parquet` — expected output of the pre-#598 method](#pre598_parquet--expected-output-of-the-pre-598-method)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # cfb_adjusted_epa fixtures — provenance
 
 | file | rows | source | notes |
