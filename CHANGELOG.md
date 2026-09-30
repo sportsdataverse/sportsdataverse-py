@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
-  - [Changed — CFB "situation-neutral" reads the score-and-clock win probability](#changed--cfb-situation-neutral-reads-the-score-and-clock-win-probability)
+  - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
   - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
   - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
   - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
