@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
   - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
@@ -301,6 +302,19 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Changed — tackle share counts only the defense's own scrimmage snaps
+
+Tackle share divided a player's tackle points by his team's across every play, special teams
+included: kickoff and punt coverage made up 6,590 of 113,407 CFB credits in 2025 (5.8%), with
+22 more on plays a penalty wiped out. Per the owner's decision (2026-09-30) the share now counts
+only the defense's own standing scrimmage snaps: two new columns,
+`scrimmage_tackle_points` and `team_scrimmage_tackle_points`, carry its numerator and
+denominator, and `tackle_share` is their ratio (per game, per position group and per season in
+`aggregate_usage_box`). `tackles`, `assists`, `tackle_points` and `team_tackle_points` still count
+every credit, special teams and the offense's tackles after a turnover included. Rows built before
+this change still share on every credit. The two new columns are declared in the loader schemas
+after the tackle tables are republished.
 
 ### Fixed — a tackle is credited to the tackler's own team
 

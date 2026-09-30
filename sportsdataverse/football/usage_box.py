@@ -23,7 +23,11 @@ third-down conversions vs expected (the league's distance curve).
 roster is supplied.
 
 ``tackles`` -- one row per (def_pos_team, tackler): tackles, assists,
-**tackle share** = (tackles + 0.5 assists) / team total, position group.
+``tackle_points`` (tackles + 0.5 assists, every credit), position group and
+**tackle share** = ``scrimmage_tackle_points`` / the defense's total: tackle
+points on the defense's own standing scrimmage snaps, so kickoff, punt and
+field-goal coverage, plays a penalty wiped out and the offense's tackles after
+a turnover are counted but not shared.
 ``def_pos_team`` is the TACKLER's team: the game roster's (``rosters``), so a
 punt-coverage tackle or a tackle after a turnover stays with the tackler's own
 side; the play's defense when no roster lists him. Needs the participants
@@ -456,10 +460,20 @@ def _tackle_rows(
             for c in list_cols
         ]
     )
+
+    def flag(c: str) -> pl.Expr:
+        # without the column: every play is a scrimmage play that stood (the old behavior)
+        return (
+            pl.col(c).cast(pl.Boolean, strict=False).fill_null(False)
+            if c in plays.columns
+            else pl.lit(c == "scrimmage_play")
+        )
+
     base = plays.select(
         pl.col("id").cast(pl.Int64, strict=False).alias("play_id"),
         pl.col("def_pos_team"),
         pl.col("pos_team"),
+        (flag("scrimmage_play") & ~flag("penalty_no_play")).alias("standing"),
     ).join(decoded.with_columns(pl.col("play_id").cast(pl.Int64, strict=False)), on="play_id", how="inner")
     parts = []
     for col, kind in (("tackler_player_ids", "tackle"), ("assisted_by_player_ids", "assist")):
@@ -470,6 +484,7 @@ def _tackle_rows(
             "play_id",
             "def_pos_team",
             "pos_team",
+            "standing",
             pl.col(col).alias("ids"),
             (pl.col(names_col) if names_col in base.columns else pl.lit([], dtype=pl.List(pl.Utf8))).alias("names"),
         ).filter(pl.col("ids").list.len() > 0)
@@ -495,22 +510,30 @@ def _tackle_rows(
     on_offense = (roster_team == pl.col("pos_team").cast(pl.Utf8)).fill_null(False)
     long = long.with_columns(
         on_offense=on_offense,
+        # the tackle-share credits: the defense's own standing scrimmage snaps (no kickoff,
+        # punt or field-goal coverage, nothing a penalty wiped out, no offense after a turnover)
+        scrimmage=pl.col("standing") & ~on_offense,
         def_pos_team=pl.when(on_offense).then(pl.col("pos_team")).otherwise(pl.col("def_pos_team")),
         position_group=pl.col("player_id").map_elements(lambda pid: positions.get(pid), return_dtype=pl.Utf8),
-    ).drop("pos_team")
+    ).drop("pos_team", "standing")
     return long
 
 
 def _tackle_agg(long: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
+    points = pl.when(pl.col("kind") == "tackle").then(1.0).otherwise(0.5)
     g = long.group_by(keys, maintain_order=True).agg(
         tackles=(pl.col("kind") == "tackle").sum(),
         assists=(pl.col("kind") == "assist").sum(),
+        scrimmage_tackle_points=points.filter(pl.col("scrimmage")).sum(),
     )
     g = g.with_columns(tackle_points=pl.col("tackles") + 0.5 * pl.col("assists"))
-    team = g.group_by("def_pos_team").agg(team_tackle_points=pl.col("tackle_points").sum())
+    team = g.group_by("def_pos_team").agg(
+        team_tackle_points=pl.col("tackle_points").sum(),
+        team_scrimmage_tackle_points=pl.col("scrimmage_tackle_points").sum(),
+    )
     return g.join(team, on="def_pos_team", how="left").with_columns(
-        tackle_share=pl.when(pl.col("team_tackle_points") > 0)
-        .then(pl.col("tackle_points") / pl.col("team_tackle_points"))
+        tackle_share=pl.when(pl.col("team_scrimmage_tackle_points") > 0)
+        .then(pl.col("scrimmage_tackle_points") / pl.col("team_scrimmage_tackle_points"))
         .otherwise(None)
     )
 
@@ -1472,7 +1495,15 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
     keys = [k for k in _SUM_KEYS[section] if k in df.columns]
     if "season" in df.columns:
         keys = ["season", *keys]
-    drop = {"game_id", "week", "nflverse_game_id", "season_type", *_RATE_COLS, "team_tackle_points"}
+    drop = {
+        "game_id",
+        "week",
+        "nflverse_game_id",
+        "season_type",
+        *_RATE_COLS,
+        "team_tackle_points",
+        "team_scrimmage_tackle_points",
+    }
     numeric = [c for c in df.columns if c not in keys and c not in drop and df.schema[c].is_numeric()]
     longs = [c for c in numeric if c.endswith("_long")]  # a season long is a max, not a sum
     sums = [c for c in numeric if c not in longs]
@@ -1505,9 +1536,18 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
     if {"tackles", "assists"} <= have:
         g = g.with_columns(tackle_points=pl.col("tackles") + 0.5 * pl.col("assists"))
         team_key = [k for k in keys if k != "player_id" and k != "player_name" and k != "position_group"]
-        team = g.group_by(team_key).agg(team_tackle_points=pl.col("tackle_points").sum())
+        # rows built before scrimmage_tackle_points existed share on every credit, as they did
+        share = "scrimmage_tackle_points" if "scrimmage_tackle_points" in have else "tackle_points"
+        team = g.group_by(team_key).agg(
+            team_tackle_points=pl.col("tackle_points").sum(), team_share_points=pl.col(share).sum()
+        )
         g = g.join(team, on=team_key, how="left")
-        exprs.append(_rate("tackle_points", "team_tackle_points").alias("tackle_share"))
+        if share != "tackle_points":
+            g = g.rename({"team_share_points": "team_scrimmage_tackle_points"})
+            exprs.append(_rate(share, "team_scrimmage_tackle_points").alias("tackle_share"))
+        else:
+            g = g.drop("team_share_points")
+            exprs.append(_rate("tackle_points", "team_tackle_points").alias("tackle_share"))
     if {"drives", "plays", "points"} <= have:
         exprs += [
             _rate("epa", "plays").alias("epa_per_play"),
