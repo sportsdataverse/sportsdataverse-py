@@ -336,6 +336,11 @@ const config: Config = {
           ],
         },
         {
+          label: 'Data status',
+          href: 'https://sportsdataverse.org/status',
+          position: 'right',
+        },
+        {
           label: 'GitHub',
           href: 'https://github.com/sportsdataverse/sportsdataverse-py/',
           position: 'right',
