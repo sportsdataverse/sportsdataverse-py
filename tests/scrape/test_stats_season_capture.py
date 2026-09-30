@@ -35,6 +35,18 @@ def _run(root, answer, *, refresh):
     return sc.capture_season(2026, root, fetch, SimpleNamespace(), "wnba_stats", "10", refresh=refresh)
 
 
+def test_nba_files_season_level_captures_under_the_end_year(tmp_path, plan):
+    """NBA asks the API for the START year (2025 = 2025-26) but files the payload under
+    the END year, beside ``playbyplayv3/2026/``; WNBA (calendar year) is unshifted."""
+    fetch = lambda _endpoint, _kwargs: _gamelog("1")  # noqa: E731 - one-line stand-in transport
+    assert sc.capture_season(2025, tmp_path, fetch, SimpleNamespace(), "nba_stats", "00") == (1, 0, 0)
+    assert (tmp_path / "leaguegamelog" / "2026" / "regular-season.json").exists()
+    assert not (tmp_path / "leaguegamelog" / "2025").exists()
+
+    assert sc.capture_season(2026, tmp_path / "w", fetch, SimpleNamespace(), "wnba_stats", "10") == (1, 0, 0)
+    assert (tmp_path / "w" / "leaguegamelog" / "2026" / "regular-season.json").exists()
+
+
 def test_resume_skips_existing_but_refresh_refetches(tmp_path, plan):
     """Resume ignores a newer answer for an existing file; refresh lands it."""
     path = sc.payload_path(tmp_path, "leaguegamelog", 2026, "regular-season")

@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Any
 
 from .endpoints import discover, season_variants, slug
+from .periods import STORE_YEAR_OFFSET
 
 __all__ = [
     "capture_season",
@@ -198,6 +199,12 @@ def capture_season(
 ) -> tuple[int, int, int]:
     """Fetch every season-level payload for ``season``. Returns (written, skipped, failed).
 
+    ``season`` is the year the API is asked for -- NBA reads it as the START year
+    (2025 -> "2025-26"). Payloads are FILED under the store year, the season's END
+    year: ``season + STORE_YEAR_OFFSET[league_id]`` (NBA +1, WNBA 0), the same key
+    the per-game half uses, so ``leaguegamelog/2026/`` holds 2025-26 beside
+    ``playbyplayv3/2026/``.
+
     ``fetch(endpoint, kwargs)`` performs one call and returns the raw payload; the
     caller supplies it so proxy rotation and transport stay in the scraper and this
     module stays offline-testable.
@@ -262,10 +269,13 @@ def capture_season(
         written += 1
         return payload
 
+    # ``season`` is what the API is asked for (NBA: the START year, "2025-26" for
+    # 2025); the store keys the END year, so the directory is shifted per league.
+    store_year = season + STORE_YEAR_OFFSET.get(league_id, 0)
     for endpoint, variant, kwargs in plan_season(season, module, prefix, league_id):
         if endpoint in skip_endpoints:  # parked, or below its season floor
             continue
-        path = payload_path(root, endpoint, season, variant)
+        path = payload_path(root, endpoint, store_year, variant)
         fresh = _capture(path, endpoint, kwargs, f"{endpoint}[{variant}]")
         if _is_team_source(endpoint, kwargs):
             # Never downgrade to None: a later matching variant that failed with
@@ -277,7 +287,7 @@ def capture_season(
     if hasattr(module, f"{prefix}_commonteamroster"):
         for team_id in _ids_from(team_source, "TEAM_ID"):
             _capture(
-                payload_path(root, "commonteamroster", season, team_id),
+                payload_path(root, "commonteamroster", store_year, team_id),
                 "commonteamroster",
                 {"season": str(season), "team_id": team_id, "league_id": league_id},
                 f"commonteamroster[{team_id}]",

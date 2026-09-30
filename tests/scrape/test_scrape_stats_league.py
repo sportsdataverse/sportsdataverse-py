@@ -8,6 +8,7 @@ and the refill census. All offline.
 
 import importlib
 import json
+from types import SimpleNamespace
 
 import pytest
 
@@ -172,6 +173,28 @@ def test_store_root_env_override(tmp_path, monkeypatch) -> None:
     assert refill.store_root(league_config.NBA, tmp_path / "unused") == tmp_path
     monkeypatch.delenv(league_config.NBA.store_env)
     assert refill.store_root(league_config.NBA, tmp_path / "d") == tmp_path / "d"
+
+
+def test_refill_asks_the_api_for_the_dir_year_minus_the_store_offset(tmp_path, monkeypatch) -> None:
+    """NBA dir 2026 holds 2025-26, so its refetch must ask the API for 2025 -- asking
+    for 2026 would refill 2026-27 into the 2025-26 directory."""
+    target = tmp_path / "leagueleaders" / "2026" / "playoffs_pergame.json"
+    target.parent.mkdir(parents=True)
+    target.write_text("{}")
+    asked: list[int] = []
+
+    def plan(season, *_a):
+        asked.append(season)
+        return iter([("leagueleaders", "playoffs_pergame", {"season": str(season)})])
+
+    payload = {"resultSets": [{"name": "LeagueLeaders", "headers": ["X"], "rowSet": [[1]]}]}
+    stats = SimpleNamespace(nba_stats_leagueleaders=lambda **_k: payload)
+    monkeypatch.setattr(refill, "plan_season", plan)
+    monkeypatch.setattr(refill, "load_proxies", lambda: [])
+    monkeypatch.setattr(refill.importlib, "import_module", lambda _name: stats)
+    assert refill.main(league_config.NBA, ["--allow-direct"], default_root=tmp_path) == 0
+    assert asked == [2025]
+    assert json.loads(target.read_text()) == payload
 
 
 def test_refill_check_mode_is_offline(tmp_path, capsys) -> None:

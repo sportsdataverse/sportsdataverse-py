@@ -151,11 +151,11 @@ def _leaguegamelog_raw() -> dict:
 
 
 def test_season_index_from_store_filesystem(tmp_path):
-    """Discovery takes an END year but must read the START-year directory: the
-    store's season-level captures are filed under the year passed to the API,
-    while the per-game half uses the end year. Getting this wrong compiles a
-    season from the NEXT season's games and raises nothing."""
-    p = tmp_path / "leaguegamelog" / "2023" / "regular-season.json"  # 2023-24
+    """Discovery takes an END year and reads the END-year directory: since the
+    2026-09-30 re-key both halves of the store key the END year. Getting this
+    wrong compiles a season from a neighbouring season's games and raises
+    nothing."""
+    p = tmp_path / "leaguegamelog" / "2024" / "regular-season.json"  # 2023-24
     p.parent.mkdir(parents=True)
     p.write_text(json.dumps(_leaguegamelog_raw()), encoding="utf-8")
     idx = nsc._season_index_from_store(2024, "Regular Season", str(tmp_path))
@@ -169,7 +169,7 @@ def test_season_index_reads_the_matching_season_not_its_neighbour(tmp_path):
     present, discovery for 2024 (=2023-24) must return the 2023-24 ids, and the
     ids it returns must live in the per-game directory for that same season --
     i.e. the two halves of the store agree."""
-    for year, gid in (("2023", "0022300001"), ("2024", "0022400001")):
+    for year, gid in (("2024", "0022300001"), ("2025", "0022400001")):
         p = tmp_path / "leaguegamelog" / year / "regular-season.json"
         p.parent.mkdir(parents=True)
         p.write_text(
@@ -195,8 +195,8 @@ def test_season_index_reads_the_matching_season_not_its_neighbour(tmp_path):
 
 
 def test_season_index_from_store_url(monkeypatch):
-    # END-year 2024 -> START-year directory 2023 (season-level store convention)
-    served = {"https://cdn/x/leaguegamelog/2023/playoffs.json": _leaguegamelog_raw()}
+    # END-year 2024 -> END-year directory 2024 (both store halves, since 2026-09-30)
+    served = {"https://cdn/x/leaguegamelog/2024/playoffs.json": _leaguegamelog_raw()}
     monkeypatch.setattr(npo, "_http_get_json", lambda url, **k: served.get(url))
     idx = nsc._season_index_from_store(2024, "Playoffs", "https://cdn/x")
     assert idx is not None and idx.height == 2
