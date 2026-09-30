@@ -23,9 +23,15 @@ third-down conversions vs expected (the league's distance curve).
 roster is supplied.
 
 ``tackles`` -- one row per (def_pos_team, tackler): tackles, assists,
-**tackle share** = (tackles + 0.5 assists) / team total, position group.
-Needs the participants frame (``tackler_player_ids`` /
-``assisted_by_player_ids``); empty without it.
+``tackle_points`` (tackles + 0.5 assists, every credit), position group and
+**tackle share** = ``scrimmage_tackle_points`` / the defense's total: tackle
+points on the defense's own standing scrimmage snaps, so kickoff, punt and
+field-goal coverage, plays a penalty wiped out and the offense's tackles after
+a turnover are counted but not shared.
+``def_pos_team`` is the TACKLER's team: the game roster's (``rosters``), so a
+punt-coverage tackle or a tackle after a turnover stays with the tackler's own
+side; the play's defense when no roster lists him. Needs the participants
+frame (``tackler_player_ids`` / ``assisted_by_player_ids``); empty without it.
 
 ``position_group_tackles`` -- tackles summed per (def_pos_team, group).
 
@@ -61,8 +67,10 @@ punts) and blocks made (``*_blocks_by``) and suffered.
 Conventions: only ``scrimmage_play`` rows that were not nullified by a
 penalty count for the usage sections (special teams rows that stood count
 for the ``st_*`` sections); drive points come from ``drive.result`` (TD 7, FG 3) so a
-field goal counts even though its row is a special-teams play; "converted"
-on third down is a first down or a touchdown.
+field goal counts even though its row is a special-teams play; a touchdown
+is the offense's own (a pick-six or fumble-return score, ``defense_score_play``,
+is the defense's and counts nowhere here); "converted" on third down is a
+first down or such a touchdown.
 
 Example:
     From a processed game::
@@ -129,8 +137,9 @@ _DRIVE_PTS = (
 def fit_third_down_curve(plays: pl.DataFrame) -> pl.DataFrame:
     """Fit P(convert | yards to go) on third down from released plays.
 
-    Conversion is a first down or a touchdown on a third-down scrimmage play
-    that stood (no nullifying penalty). Rates by distance are smoothed with a
+    Conversion is a first down or an offensive touchdown (not a
+    ``defense_score_play`` return) on a third-down scrimmage play that stood
+    (no nullifying penalty). Rates by distance are smoothed with a
     count-weighted non-increasing isotonic regression and reported on the
     1..25 grid (25 = 25 or more).
 
@@ -138,7 +147,8 @@ def fit_third_down_curve(plays: pl.DataFrame) -> pl.DataFrame:
         plays: plays in the released ``espn_{league}_pbp`` shape (any
             number of seasons). Needs ``down`` / ``distance`` (or
             ``start.down`` / ``start.distance``), ``scrimmage_play``,
-            ``first_down_created``, ``touchdown``.
+            ``first_down_created``, ``touchdown`` (and ``defense_score_play``
+            when present).
 
     Returns:
         ``distance: Int64 (1..25), rate: Float64, n: Int64``.
@@ -230,6 +240,7 @@ def _standing_scrimmage(plays: pl.DataFrame) -> pl.DataFrame:
         ("EPA_success", pl.Boolean),
         ("rz_play", pl.Boolean),
         ("scoring_opp", pl.Boolean),
+        ("defense_score_play", pl.Boolean),
     ):
         exprs.append(
             (pl.col(c).cast(dt, strict=False).fill_null(False) if c in df.columns else pl.lit(False)).alias(f"u_{c}")
@@ -240,7 +251,8 @@ def _standing_scrimmage(plays: pl.DataFrame) -> pl.DataFrame:
                 f"u_{c}"
             )
         )
-    df = df.with_columns(exprs)
+    # the offense's own touchdown: a pick-six or fumble-return score is the defense's
+    df = df.with_columns(exprs).with_columns(u_touchdown=pl.col("u_touchdown") & ~pl.col("u_defense_score_play"))
     return df.with_columns(
         converted=(pl.col("u_first_down_created") | pl.col("u_touchdown")),
         fd_or_td=(pl.col("u_first_down_created") | pl.col("u_touchdown")),
@@ -419,8 +431,19 @@ def _decode_list_cell(v: Any) -> Optional[list[str]]:
     return []
 
 
-def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dict[str, Any]) -> pl.DataFrame:
-    """Long (play, tackler, kind) rows from the participants' tackler / assist lists."""
+def _tackle_rows(
+    participants: pl.DataFrame,
+    plays: pl.DataFrame,
+    positions: dict[str, Any],
+    teams: Optional[dict[str, str]] = None,
+) -> pl.DataFrame:
+    """Long (play, tackler, kind) rows from the participants' tackler / assist lists.
+
+    ``def_pos_team`` is the TACKLER's team: the play's offense when the game
+    roster (``teams``: athlete id -> team id) lists him there -- a punt-coverage
+    tackle, a tackle after an interception or fumble -- else the play's defense
+    (also when the roster doesn't list him). ``on_offense`` flags the former.
+    """
     need = {"play_id"}
     if participants is None or participants.height == 0 or not need <= set(participants.columns):
         return pl.DataFrame()
@@ -443,10 +466,20 @@ def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dic
             for c in list_cols
         ]
     )
+
+    def flag(c: str) -> pl.Expr:
+        # without the column: every play is a scrimmage play that stood (the old behavior)
+        return (
+            pl.col(c).cast(pl.Boolean, strict=False).fill_null(False)
+            if c in plays.columns
+            else pl.lit(c == "scrimmage_play")
+        )
+
     base = plays.select(
         pl.col("id").cast(pl.Int64, strict=False).alias("play_id"),
         pl.col("def_pos_team"),
         pl.col("pos_team"),
+        (flag("scrimmage_play") & ~flag("penalty_no_play")).alias("standing"),
     ).join(decoded.with_columns(pl.col("play_id").cast(pl.Int64, strict=False)), on="play_id", how="inner")
     parts = []
     for col, kind in (("tackler_player_ids", "tackle"), ("assisted_by_player_ids", "assist")):
@@ -456,6 +489,8 @@ def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dic
         rows = base.select(
             "play_id",
             "def_pos_team",
+            "pos_team",
+            "standing",
             pl.col(col).alias("ids"),
             (pl.col(names_col) if names_col in base.columns else pl.lit([], dtype=pl.List(pl.Utf8))).alias("names"),
         ).filter(pl.col("ids").list.len() > 0)
@@ -477,22 +512,34 @@ def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dic
     if not parts:
         return pl.DataFrame()
     long = pl.concat(parts, how="diagonal_relaxed").filter(pl.col("player_id").is_not_null())
+    roster_team = pl.col("player_id").replace_strict(teams or {}, default=None, return_dtype=pl.Utf8)
+    on_offense = (roster_team == pl.col("pos_team").cast(pl.Utf8)).fill_null(False)
     long = long.with_columns(
-        position_group=pl.col("player_id").map_elements(lambda pid: positions.get(pid), return_dtype=pl.Utf8)
-    )
+        on_offense=on_offense,
+        # the tackle-share credits: the defense's own standing scrimmage snaps (no kickoff,
+        # punt or field-goal coverage, nothing a penalty wiped out, no offense after a turnover)
+        scrimmage=pl.col("standing") & ~on_offense,
+        def_pos_team=pl.when(on_offense).then(pl.col("pos_team")).otherwise(pl.col("def_pos_team")),
+        position_group=pl.col("player_id").map_elements(lambda pid: positions.get(pid), return_dtype=pl.Utf8),
+    ).drop("pos_team", "standing")
     return long
 
 
 def _tackle_agg(long: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
+    points = pl.when(pl.col("kind") == "tackle").then(1.0).otherwise(0.5)
     g = long.group_by(keys, maintain_order=True).agg(
         tackles=(pl.col("kind") == "tackle").sum(),
         assists=(pl.col("kind") == "assist").sum(),
+        scrimmage_tackle_points=points.filter(pl.col("scrimmage")).sum(),
     )
     g = g.with_columns(tackle_points=pl.col("tackles") + 0.5 * pl.col("assists"))
-    team = g.group_by("def_pos_team").agg(team_tackle_points=pl.col("tackle_points").sum())
+    team = g.group_by("def_pos_team").agg(
+        team_tackle_points=pl.col("tackle_points").sum(),
+        team_scrimmage_tackle_points=pl.col("scrimmage_tackle_points").sum(),
+    )
     return g.join(team, on="def_pos_team", how="left").with_columns(
-        tackle_share=pl.when(pl.col("team_tackle_points") > 0)
-        .then(pl.col("tackle_points") / pl.col("team_tackle_points"))
+        tackle_share=pl.when(pl.col("team_scrimmage_tackle_points") > 0)
+        .then(pl.col("scrimmage_tackle_points") / pl.col("team_scrimmage_tackle_points"))
         .otherwise(None)
     )
 
@@ -1170,16 +1217,20 @@ def _special_teams(plays: pl.DataFrame) -> dict[str, pl.DataFrame]:
 _POSITION_FROM_HREF = re.compile(r"/positions/(\d+)")
 
 
-def _roster_positions(rosters: Any) -> dict[str, Any]:
-    """athlete id -> position group from a game roster.
+def _id_str(v: Any) -> str:
+    # a roster frame that widened ids to float must still key "4432712", not "4432712.0"
+    return str(int(v)) if isinstance(v, float) and v.is_integer() else str(v)
+
+
+def _roster_records(rosters: Any) -> list[tuple[str, dict[str, Any]]]:
+    """``(athlete id, record)`` for every roster row that names an athlete.
 
     Accepts a polars / pandas frame, a list of athlete records or the stored
-    ``{"data": [...]}`` envelope. Only ``athlete_id`` and ``position_id`` (else
-    the id inside ``position_href``) are read, row by row, so a roster whose
+    ``{"data": [...]}`` envelope. Fields are read row by row, so a roster whose
     other columns mix types can never cost the box.
     """
     if rosters is None:
-        return {}
+        return []
     if hasattr(rosters, "to_dicts"):
         rows = rosters.to_dicts()
     elif hasattr(rosters, "to_dict"):
@@ -1188,20 +1239,31 @@ def _roster_positions(rosters: Any) -> dict[str, Any]:
         rows = rosters.get("data") or []
     else:
         rows = rosters
+    return [
+        (_id_str(r["athlete_id"]), r) for r in rows or [] if isinstance(r, dict) and r.get("athlete_id") is not None
+    ]
+
+
+def _roster_positions(rosters: Any) -> dict[str, Any]:
+    """athlete id -> position group from a game roster (``position_id``, else the id inside ``position_href``)."""
     out: dict[str, Any] = {}
-    for rec in rows or []:
-        if not isinstance(rec, dict) or rec.get("athlete_id") is None:
-            continue
+    for pid, rec in _roster_records(rosters):
         pos = rec.get("position_id")
         if pos is None:
             m = _POSITION_FROM_HREF.search(str(rec.get("position_href") or ""))
             pos = m.group(1) if m else None
         grp = position_group(pos)
-        raw_id = rec["athlete_id"]
-        # a roster frame that widened ids to float must still key "4432712", not "4432712.0"
-        pid = str(int(raw_id)) if isinstance(raw_id, float) and raw_id.is_integer() else str(raw_id)
         if grp and pid not in out:
             out[pid] = grp
+    return out
+
+
+def _roster_teams(rosters: Any) -> dict[str, str]:
+    """athlete id -> the team id (as a string) the game roster lists him under."""
+    out: dict[str, str] = {}
+    for pid, rec in _roster_records(rosters):
+        if rec.get("team_id") is not None:
+            out.setdefault(pid, _id_str(rec["team_id"]))
     return out
 
 
@@ -1261,11 +1323,12 @@ def create_usage_box(
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         third_down_curve: override the bundled curve (``distance``, ``rate``).
         rosters: the game roster -- a frame, a list of athlete records or the
-            stored ``{"data": [...]}`` envelope, read for ``athlete_id`` and
-            ``position_id`` (else ``position_href``). Fills the
+            stored ``{"data": [...]}`` envelope, read for ``athlete_id``,
+            ``team_id`` and ``position_id`` (else ``position_href``). Fills the
             position group of any athlete the participants carry no
             ``{type}_position_id`` for -- e.g. participants stored before that
-            column existed; a participant's own position always wins.
+            column existed; a participant's own position always wins. Its
+            ``team_id`` credits each tackle to the tackler's own team.
 
     Returns:
         ``{section: [row, ...]}`` for every name in :data:`SECTIONS`; a
@@ -1317,7 +1380,11 @@ def create_usage_box(
     else:
         player, group = pl.DataFrame(), pl.DataFrame()
 
-    tackles_long = _tackle_rows(participants, plays, positions) if participants is not None else pl.DataFrame()
+    tackles_long = (
+        _tackle_rows(participants, plays, positions, _roster_teams(rosters))
+        if participants is not None
+        else pl.DataFrame()
+    )
     if tackles_long.height:
         tackles = _tackle_agg(tackles_long, ["def_pos_team", "player_id"])
         names = tackles_long.group_by("player_id").agg(
@@ -1449,7 +1516,16 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
         carried = [pl.col("player_id").drop_nulls().first()] + [
             pl.col(c).drop_nulls().mode().sort().first().alias(c) for c in labels
         ]
-    drop = {"game_id", "week", "nflverse_game_id", "season_type", *_RATE_COLS, "team_tackle_points", *ident}
+    drop = {
+        "game_id",
+        "week",
+        "nflverse_game_id",
+        "season_type",
+        *_RATE_COLS,
+        "team_tackle_points",
+        "team_scrimmage_tackle_points",
+        *ident,
+    }
     numeric = [c for c in df.columns if c not in keys and c not in drop and df.schema[c].is_numeric()]
     longs = [c for c in numeric if c.endswith("_long")]  # a season long is a max, not a sum
     sums = [c for c in numeric if c not in longs]
@@ -1485,9 +1561,18 @@ def aggregate_usage_box(section: str, frames: list[pl.DataFrame]) -> pl.DataFram
     if {"tackles", "assists"} <= have:
         g = g.with_columns(tackle_points=pl.col("tackles") + 0.5 * pl.col("assists"))
         team_key = [k for k in keys if k != "player_id" and k != "player_name" and k != "position_group"]
-        team = g.group_by(team_key).agg(team_tackle_points=pl.col("tackle_points").sum())
+        # rows built before scrimmage_tackle_points existed share on every credit, as they did
+        share = "scrimmage_tackle_points" if "scrimmage_tackle_points" in have else "tackle_points"
+        team = g.group_by(team_key).agg(
+            team_tackle_points=pl.col("tackle_points").sum(), team_share_points=pl.col(share).sum()
+        )
         g = g.join(team, on=team_key, how="left")
-        exprs.append(_rate("tackle_points", "team_tackle_points").alias("tackle_share"))
+        if share != "tackle_points":
+            g = g.rename({"team_share_points": "team_scrimmage_tackle_points"})
+            exprs.append(_rate(share, "team_scrimmage_tackle_points").alias("tackle_share"))
+        else:
+            g = g.drop("team_share_points")
+            exprs.append(_rate("tackle_points", "team_tackle_points").alias("tackle_share"))
     if {"drives", "plays", "points"} <= have:
         exprs += [
             _rate("epa", "plays").alias("epa_per_play"),
