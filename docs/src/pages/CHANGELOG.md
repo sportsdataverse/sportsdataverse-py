@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Changed — CFB "situation-neutral" reads the score-and-clock win probability](#changed--cfb-situation-neutral-reads-the-score-and-clock-win-probability)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +301,18 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Changed — CFB "situation-neutral" reads the score-and-clock win probability
+
+The neutral split in `football.tendencies` (win probability 20–80%, regulation, outside the last
+two minutes of a half) read `wp_before`, which carries the pregame line, so a heavy favorite's
+tied first quarter was not neutral: in 2025 only 64.1% of tied first-quarter FBS snaps counted,
+433 of 1,739 team-games had no neutral snap at all, and 25 teams' neutral pass rate moved 3+
+points between the two WPs. Per the owner's decision (2026-09-30), CFB now reads
+`wp_before_naive` (score, clock and field position only), the same model adjusted EPA's
+garbage-time rule uses; the band and the clock rules are unchanged. This moves every `*_neutral`
+column (`plays_` / `passes_` / `epa_` / `successes_neutral`, their rates and `def_` twins) and
+`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL keeps `wp_before` for now.
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 

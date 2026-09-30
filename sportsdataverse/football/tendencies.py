@@ -18,7 +18,8 @@ allowed while the group's DEFENSE was on the field):
   a usable clock, so a season whose clock is sparse can be excluded.
 * run / pass -- ``pass_rate`` overall and on every split below.
 * splits (:data:`SPLITS`) -- situation-neutral (win probability 20-80%, first
-  four quarters, outside the last two minutes of a half), by down
+  four quarters, outside the last two minutes of a half; the CFB win
+  probability is the score-and-clock ``wp_before_naive``, NFL's ``wp_before``), by down
   (``d1..d4``), early / standard / passing downs, score state at the snap
   (``leading`` / ``tied`` / ``trailing`` from ``pos_score_diff_start``, else
   ``pos_score_diff``), half, third down by distance (``d3_short`` 1-3,
@@ -194,6 +195,10 @@ _DRIVE_PTS = (
     .fill_null(0.0)
 )
 _SCRIPTED_DRIVES_PER_HALF = 2
+#: the win probability "situation-neutral" reads, per league: CFB uses the
+#: score-and-clock model (no pregame line), as adjusted EPA's garbage-time rule
+#: does, so a heavy favorite's tied first quarter is neutral; NFL keeps ``wp_before``
+_NEUTRAL_WP: dict[str, str] = {"cfb": "wp_before_naive"}
 
 
 def _col(df: pl.DataFrame, *names: str) -> Optional[str]:
@@ -213,7 +218,7 @@ def _clock_seconds(expr: pl.Expr) -> pl.Expr:
     )
 
 
-def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame:
+def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame], wp_col: str = "wp_before") -> pl.DataFrame:
     """Type and flag every play once; the aggregations only read the ``t_*`` columns."""
     df = plays
     b = lambda c: pl.col(c).cast(pl.Boolean, strict=False).fill_null(False) if c in df.columns else pl.lit(False)  # noqa: E731
@@ -243,7 +248,7 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         b("passing_down").alias("t_passing_down"),
         f("EPA").alias("t_epa"),
         f("statYardage").alias("t_yards"),
-        f("wp_before").alias("t_wp"),
+        f(wp_col).alias("t_wp"),
         # the score at the snap; pos_score_diff is the score AFTER the play, so a touchdown
         # that flips the lead would count its own EPA as "leading"
         first("pos_score_diff_start", "pos_score_diff").alias("t_score_diff"),
@@ -520,7 +525,9 @@ def tendencies(
             on (a ``coach`` on the offense side, a ``def_coach`` on the defense)
             and Boolean game-context columns (``ctx_{c}`` / ``def_ctx_{c}``,
             ``c`` in :data:`CONTEXTS` or ``win``).
-        league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
+        league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve and
+            the win probability the neutral split reads (CFB ``wp_before_naive``,
+            NFL ``wp_before``).
         group_cols: the offense grouping (a team-season by default).
         def_group_cols: the defense grouping, one column per ``group_cols``
             entry in the same order; each is renamed onto its offense twin so
@@ -561,7 +568,7 @@ def tendencies(
             curve = load_third_down_curve(league)
         except (FileNotFoundError, OSError, ValueError):
             curve = None
-    df = _prepare(plays, curve)
+    df = _prepare(plays, curve, _NEUTRAL_WP.get(league, "wp_before"))
 
     off = _join_all(
         [_offense_counts(df, keys), _fourth_counts(df, keys), _drive_counts(_drive_frame(df, keys), keys)], keys
