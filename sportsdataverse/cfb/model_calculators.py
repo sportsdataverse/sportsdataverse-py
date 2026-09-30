@@ -492,7 +492,7 @@ def calculate_qbr(df, *, season=None, return_as_pandas=False):
     through untouched.
 
     Args:
-        df: Frame carrying ``qbr_epa``, ``sack_epa``, ``pass_epa``, ``rush_epa``, ``pen_epa``, ``spread``, plus either a ``season`` column or the
+        df: Frame carrying ``qbr_epa``, ``sack_epa``, ``pass_epa``, ``rush_epa``, ``pen_epa``, plus either a ``season`` column or the
             ``season`` argument when the model consumes an era feature.
         season: Season used to derive era columns when ``df`` has none.
         return_as_pandas: Return a pandas DataFrame instead of polars.
