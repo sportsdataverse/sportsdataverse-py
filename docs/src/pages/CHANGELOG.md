@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
   - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
@@ -301,6 +302,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a tackle is credited to the tackler's own team
+
+The usage box credited every tackler on a play to the play's defense, so a punting team's
+coverage tackles and an offense's tackles after an interception or fumble landed in the
+opponent's tackle table: 2,945 of 113,407 CFB tackle credits in 2025 (punts, punt returns,
+interception returns, fumble recoveries), and every FBS team's season table listed opposing
+players (Indiana's Jeff Utzinger under Miami in the 2025 title game). `create_usage_box` now reads
+each tackler's team from the game roster (`rosters`, which the CFB processor and the cfb-data build
+already pass) and files the credit under that team; a tackler the roster doesn't list stays with the
+play's defense, as before (NFL, which passes no roster, is unchanged). Raw tackle and assist counts
+are unchanged; `def_pos_team` in the `tackles` / `position_group_tackles` sections now means the
+tackler's team. `adv_tackles`, `adv_position_group_tackles` and their `usage_*` season tables need a
+rebuild.
 
 ### Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown
 
