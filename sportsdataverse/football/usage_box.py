@@ -63,8 +63,10 @@ punts) and blocks made (``*_blocks_by``) and suffered.
 Conventions: only ``scrimmage_play`` rows that were not nullified by a
 penalty count for the usage sections (special teams rows that stood count
 for the ``st_*`` sections); drive points come from ``drive.result`` (TD 7, FG 3) so a
-field goal counts even though its row is a special-teams play; "converted"
-on third down is a first down or a touchdown.
+field goal counts even though its row is a special-teams play; a touchdown
+is the offense's own (a pick-six or fumble-return score, ``defense_score_play``,
+is the defense's and counts nowhere here); "converted" on third down is a
+first down or such a touchdown.
 
 Example:
     From a processed game::
@@ -131,8 +133,9 @@ _DRIVE_PTS = (
 def fit_third_down_curve(plays: pl.DataFrame) -> pl.DataFrame:
     """Fit P(convert | yards to go) on third down from released plays.
 
-    Conversion is a first down or a touchdown on a third-down scrimmage play
-    that stood (no nullifying penalty). Rates by distance are smoothed with a
+    Conversion is a first down or an offensive touchdown (not a
+    ``defense_score_play`` return) on a third-down scrimmage play that stood
+    (no nullifying penalty). Rates by distance are smoothed with a
     count-weighted non-increasing isotonic regression and reported on the
     1..25 grid (25 = 25 or more).
 
@@ -140,7 +143,8 @@ def fit_third_down_curve(plays: pl.DataFrame) -> pl.DataFrame:
         plays: plays in the released ``espn_{league}_pbp`` shape (any
             number of seasons). Needs ``down`` / ``distance`` (or
             ``start.down`` / ``start.distance``), ``scrimmage_play``,
-            ``first_down_created``, ``touchdown``.
+            ``first_down_created``, ``touchdown`` (and ``defense_score_play``
+            when present).
 
     Returns:
         ``distance: Int64 (1..25), rate: Float64, n: Int64``.
@@ -232,6 +236,7 @@ def _standing_scrimmage(plays: pl.DataFrame) -> pl.DataFrame:
         ("EPA_success", pl.Boolean),
         ("rz_play", pl.Boolean),
         ("scoring_opp", pl.Boolean),
+        ("defense_score_play", pl.Boolean),
     ):
         exprs.append(
             (pl.col(c).cast(dt, strict=False).fill_null(False) if c in df.columns else pl.lit(False)).alias(f"u_{c}")
@@ -242,7 +247,8 @@ def _standing_scrimmage(plays: pl.DataFrame) -> pl.DataFrame:
                 f"u_{c}"
             )
         )
-    df = df.with_columns(exprs)
+    # the offense's own touchdown: a pick-six or fumble-return score is the defense's
+    df = df.with_columns(exprs).with_columns(u_touchdown=pl.col("u_touchdown") & ~pl.col("u_defense_score_play"))
     return df.with_columns(
         converted=(pl.col("u_first_down_created") | pl.col("u_touchdown")),
         fd_or_td=(pl.col("u_first_down_created") | pl.col("u_touchdown")),
