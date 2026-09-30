@@ -27,6 +27,10 @@ Two corrections turn that into P(win | state), both fitted by
   callers pass it when they know it; otherwise a non-zero margin implies the second
   possession and a tie implies the first.
 
+The correction is only valid for the boosters it was fitted against: the card pins
+their sha256, and a test fails when either is swapped, so a WP retrain (above all one
+that stops dropping overtime games) must refit or retire this module.
+
 ``ponytail:`` the overtime rules are those of the first overtime periods (a kicked
 extra point after a touchdown, no two-point shootout). Since 2019/2021 later periods
 force two-point tries; model them when overtime decisions past the second period
@@ -35,20 +39,25 @@ matter.
 
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import Any, Optional
 
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
+import polars as pl
 from xgboost import Booster, DMatrix
 
 from sportsdataverse._xgb import xgb_threads as _xgb_threads
-from sportsdataverse.cfb.model_cards import _MODEL_DIR, card_features, load_model_card
+from sportsdataverse.cfb.model_cards import _MODEL_DIR, load_model_card
 
 __all__ = [
-    "Q_FEATURES",
+    "DRIVE_DESIGN_COLUMNS",
+    "NOT_A_SNAP",
     "adjust_wp",
+    "drive_design",
     "infer_second_possession",
+    "ot_first_team",
     "ot_live_wp",
     "ot_possession_over_wp",
     "ot_touchdown_wp",
@@ -57,20 +66,64 @@ __all__ = [
     "tie_value",
 ]
 
-Q_FEATURES = card_features("wp_ot_reach")
-_OT = load_model_card("wp_ot_reach")["overtime"]
-_SPREAD_SLOPE = float(_OT["spread_slope"])
-_P_XP = float(_OT["p_extra_point"])
-_P_2PT = float(_OT["p_two_point"])
-_DRIVE_COEF = np.asarray(_OT["drive_model"]["coef"], dtype=float)
-_DRIVE_INTERCEPT = np.asarray(_OT["drive_model"]["intercept"], dtype=float)
+_CARD = "wp_ot_reach"
+#: Row types that don't say who has the ball: ESPN credits a stoppage or a flag to
+#: either team (a period can open with "Timeout <the other team>").
+NOT_A_SNAP = ("Timeout", "End Period", "Penalty")
+#: The drive model's design, in the card's coefficient order (see :func:`drive_design`).
+DRIVE_DESIGN_COLUMNS = [
+    "ytg/25",
+    "(ytg/25)^2",
+    "down==2",
+    "down==3",
+    "down==4",
+    "log1p(distance)",
+    "(down==4)*log1p(distance)",
+]
 
-q_model = Booster({"nthread": _xgb_threads()})
-q_model.load_model(str(_MODEL_DIR / "wp_ot_reach.ubj"))
+
+@lru_cache(maxsize=1)
+def _params() -> dict[str, Any]:
+    card = load_model_card(_CARD)
+    ot = card["overtime"]
+    return {
+        "features": list(card["features"]),
+        "slope": float(ot["spread_slope"]),
+        "p_xp": float(ot["p_extra_point"]),
+        "p_2pt": float(ot["p_two_point"]),
+        "coef": np.asarray(ot["drive_model"]["coef"], dtype=float),
+        "intercept": np.asarray(ot["drive_model"]["intercept"], dtype=float),
+        "bound": float(ot.get("live_bound", 0.0)),
+    }
+
+
+@lru_cache(maxsize=1)
+def _q_model() -> Booster:
+    booster = Booster({"nthread": _xgb_threads()})
+    booster.load_model(str(_MODEL_DIR / f"{_CARD}.ubj"))
+    return booster
 
 
 def _f(x: npt.ArrayLike) -> np.ndarray:
     return np.asarray(x, dtype=float)
+
+
+def ot_first_team(columns: Any, keys: Optional[list[str]] = None) -> pl.Expr:
+    """The team with the first snap of each overtime period (null in regulation).
+
+    Args:
+        columns: The frame's column names (``start.down`` / ``type.text`` are used when
+            present).
+        keys: Grouping columns; defaults to ``game_id`` (when present) and ``period``.
+    """
+    cols = set(columns)
+    keys = keys or [c for c in ("game_id",) if c in cols] + ["period"]
+    snap = pl.lit(True)
+    if "start.down" in cols:
+        snap = snap & pl.col("start.down").is_between(1, 4)
+    if "type.text" in cols:
+        snap = snap & ~pl.col("type.text").is_in(NOT_A_SNAP).fill_null(False)
+    return pl.col("start.pos_team.id").filter(snap).first().over(keys)
 
 
 def tie_value(spread: Optional[npt.ArrayLike] = None, n: Optional[int] = None) -> np.ndarray:
@@ -81,12 +134,12 @@ def tie_value(spread: Optional[npt.ArrayLike] = None, n: Optional[int] = None) -
     if spread is None:
         return np.full(n or 0, 0.5)
     s = np.nan_to_num(_f(spread), nan=0.0)
-    return np.asarray(1.0 / (1.0 + np.exp(-_SPREAD_SLOPE * s)), dtype=float)
+    return np.asarray(1.0 / (1.0 + np.exp(-_params()["slope"] * s)), dtype=float)
 
 
 def reach_overtime_prob(X: pd.DataFrame) -> np.ndarray:
     """P(the game reaches overtime | regulation state), on a WP feature frame."""
-    return np.asarray(q_model.predict(DMatrix(X[Q_FEATURES].astype(float))), dtype=float)
+    return np.asarray(_q_model().predict(DMatrix(X[_params()["features"]].astype(float))), dtype=float)
 
 
 def infer_second_possession(second: Optional[npt.ArrayLike], diff: npt.ArrayLike) -> np.ndarray:
@@ -102,36 +155,46 @@ def infer_second_possession(second: Optional[npt.ArrayLike], diff: npt.ArrayLike
     return np.asarray(np.where(np.isnan(s), fallback, s > 0), dtype=bool)
 
 
-def _drive_probs(ytg: npt.ArrayLike, down: npt.ArrayLike, distance: npt.ArrayLike) -> np.ndarray:
-    """(n, 3) P(touchdown, field goal, no score) for the current overtime drive."""
+def drive_design(ytg: npt.ArrayLike, down: npt.ArrayLike, distance: npt.ArrayLike) -> np.ndarray:
+    """The overtime drive model's design matrix (:data:`DRIVE_DESIGN_COLUMNS`), shared with the fit."""
     y, dn, dist = np.broadcast_arrays(_f(ytg), _f(down), _f(distance))
     y = np.clip(y, 1, 99) / 25.0
     ld = np.log1p(np.clip(dist, 1, 99))
-    X = np.column_stack([y, y**2, dn == 2, dn == 3, dn == 4, ld, (dn == 4) * ld]).astype(float)
-    z = X @ _DRIVE_COEF.T + _DRIVE_INTERCEPT
+    return np.column_stack([y, y**2, dn == 2, dn == 3, dn == 4, ld, (dn == 4) * ld]).astype(float)
+
+
+def _drive_probs(ytg: npt.ArrayLike, down: npt.ArrayLike, distance: npt.ArrayLike) -> np.ndarray:
+    """(n, 3) P(touchdown, field goal, no score) for the current overtime drive."""
+    p = _params()
+    z = drive_design(ytg, down, distance) @ p["coef"].T + p["intercept"]
     z = np.exp(z - z.max(axis=1, keepdims=True))
     return np.asarray(z / z.sum(axis=1, keepdims=True), dtype=float)
 
 
-_P25 = _drive_probs([25], [1], [10])[0]
+def _p25() -> np.ndarray:
+    """Drive outcome from a fresh overtime possession: 1st and 10 at the 25."""
+    return _drive_probs([25], [1], [10])[0]
 
 
 def _g(margin: np.ndarray, tie: Any) -> np.ndarray:
-    """Win probability once both teams have had the ball: ahead, behind, or level."""
-    return np.asarray((margin > 0).astype(float) + tie * (margin == 0), dtype=float)
+    """Win probability once both teams have had the ball: ahead, behind, or level (NaN stays NaN)."""
+    v = (margin > 0).astype(float) + tie * (margin == 0)
+    return np.asarray(np.where(np.isnan(margin), np.nan, v), dtype=float)
 
 
 def _after_td(margin: np.ndarray, tie: Any) -> np.ndarray:
     """Second team's touchdown at ``margin`` (six counted): the better of kick and go for two."""
-    kick = _P_XP * _g(margin + 1, tie) + (1 - _P_XP) * _g(margin, tie)
-    two = _P_2PT * _g(margin + 2, tie) + (1 - _P_2PT) * _g(margin, tie)
+    p = _params()
+    kick = p["p_xp"] * _g(margin + 1, tie) + (1 - p["p_xp"]) * _g(margin, tie)
+    two = p["p_2pt"] * _g(margin + 2, tie) + (1 - p["p_2pt"]) * _g(margin, tie)
     return np.asarray(np.maximum(kick, two), dtype=float)
 
 
 def _answer(need: np.ndarray, tie_other: Any) -> np.ndarray:
     """The other team's win probability, second in the period, from its 25 at ``need``."""
+    p25 = _p25()
     return np.asarray(
-        _P25[0] * _after_td(need + 6, tie_other) + _P25[1] * _g(need + 3, tie_other) + _P25[2] * _g(need, tie_other),
+        p25[0] * _after_td(need + 6, tie_other) + p25[1] * _g(need + 3, tie_other) + p25[2] * _g(need, tie_other),
         dtype=float,
     )
 
@@ -149,7 +212,8 @@ def ot_possession_over_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt
 def ot_touchdown_wp(margin: npt.ArrayLike, tie: npt.ArrayLike, second: npt.ArrayLike) -> np.ndarray:
     """Win probability right after a touchdown, ``margin`` being the margin before it."""
     m, t = _f(margin), _f(tie)
-    first = _P_XP * (1.0 - _answer(-(m + 7), 1.0 - t)) + (1 - _P_XP) * (1.0 - _answer(-(m + 6), 1.0 - t))
+    p_xp = _params()["p_xp"]
+    first = p_xp * (1.0 - _answer(-(m + 7), 1.0 - t)) + (1 - p_xp) * (1.0 - _answer(-(m + 6), 1.0 - t))
     return np.asarray(np.where(second, _after_td(m + 6, t), first), dtype=float)
 
 
@@ -161,15 +225,21 @@ def ot_live_wp(
     tie: npt.ArrayLike,
     second: npt.ArrayLike,
 ) -> np.ndarray:
-    """Win probability of the team with the ball at a live overtime snap."""
+    """Win probability of the team with the ball at a live overtime snap.
+
+    Bounded to ``[live_bound, 1 - live_bound]`` (card): the rules make some snaps
+    certain, but ESPN's overtime feed has possession and score errors that turn a
+    certain call into a miss, so the bound is fitted on 2004-21 like everything else.
+    """
     m = _f(margin)
     p = _drive_probs(ytg, down, distance)
-    return np.asarray(
+    v = (
         p[:, 0] * ot_touchdown_wp(m, tie, second)
         + p[:, 1] * ot_possession_over_wp(m + 3, tie, second)
-        + p[:, 2] * ot_possession_over_wp(m, tie, second),
-        dtype=float,
+        + p[:, 2] * ot_possession_over_wp(m, tie, second)
     )
+    b = _params()["bound"]
+    return np.asarray(np.clip(v, b, 1.0 - b), dtype=float)
 
 
 def regulation_final_wp(

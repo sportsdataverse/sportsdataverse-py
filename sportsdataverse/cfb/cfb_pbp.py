@@ -359,6 +359,7 @@ from sportsdataverse.cfb.model_cards import card_features as _card_features
 from sportsdataverse.cfb.cfb_wp_overtime import (
     adjust_wp as _adjust_wp,
     infer_second_possession as _infer_second,
+    ot_first_team as _ot_first_team,
     ot_possession_over_wp as _ot_possession_over_wp,
     ot_touchdown_wp as _ot_touchdown_wp,
     tie_value as _tie_value,
@@ -380,18 +381,11 @@ logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
 
-def _ot_period_first_team(play_df) -> pl.Expr:
-    """The team with the first snap of each overtime period (null in regulation)."""
-    keys = [c for c in ("game_id",) if c in play_df.columns] + ["period"]
-    snap = pl.col("start.down").is_between(1, 4) if "start.down" in play_df.columns else pl.lit(True)
-    return pl.col("start.pos_team.id").filter(snap).first().over(keys)
-
-
 def _ot_second(play_df, team_col: str):
     """Per row: is ``team_col`` second in its overtime period? Null where unknown."""
     if not {"period", "start.pos_team.id", team_col}.issubset(play_df.columns):
         return None
-    first = _ot_period_first_team(play_df)
+    first = _ot_first_team(play_df.columns)
     return play_df.select(
         pl.when((pl.col("period") >= 5) & first.is_not_null()).then(pl.col(team_col) != first).alias("s")
     )["s"].to_numpy()
@@ -434,15 +428,22 @@ def _ot_end_state_wp(play_df, naive: bool):
 
     Within a possession the chain keeps the end-state prediction, and in overtime
     that end state is often not a live snap -- a touchdown, a made kick, a try. The
-    overtime rules value them: a touchdown (with the try to come) or a finished
-    possession at the end margin. Possession changes borrow the next row instead.
+    overtime rules value them: a finished possession at the end margin, or a
+    touchdown whose try is still to come. Since 2014 ESPN puts the try on the
+    touchdown row (``pointAfterAttempt``, and the end margin moves 7 or 8), and then
+    the realised margin is what the possession ended at. Possession changes borrow
+    the next row instead.
     """
     kept = (pl.col("start.pos_team.id") == pl.col("end.pos_team.id")).fill_null(False)
     live = pl.col("end.down").is_between(1, 4) & pl.col("end.yardsToEndzone").is_between(1, 99)
     touchdown = pl.col("type.text").str.contains("(?i)touchdown") | (pl.col("td_play") == True)  # noqa: E712
+    try_on_row = (pl.col("end.pos_score_diff") - pl.col("pos_score_diff_start")) >= 7
+    if "pointAfterAttempt.text" in play_df.columns:
+        attempt = pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars()
+        try_on_row = try_on_row | (attempt.is_not_null() & (attempt != "") & (attempt != "Not Available"))
     f = play_df.select(
         ((pl.col("period") >= 5) & kept & ~live.fill_null(False)).alias("mask"),
-        touchdown.fill_null(False).alias("td"),
+        (touchdown & ~try_on_row).fill_null(False).alias("td"),
         pl.col("pos_score_diff_start").cast(pl.Float64),
         pl.col("end.pos_score_diff").cast(pl.Float64),
         pl.col("start.pos_team_spread").cast(pl.Float64),

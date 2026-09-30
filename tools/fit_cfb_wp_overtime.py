@@ -6,7 +6,7 @@ drops every game that reached overtime (cfbfastR-cfb-data
 ``model_training/ingest.py::clean_plays``, ``max_per > 4``). They therefore estimate
 P(win | state, game settled in regulation): a tied game with 20 seconds left is
 learned only from games somebody won in regulation, and an overtime state is pure
-extrapolation. This script fits the three pieces that turn that into P(win | state):
+extrapolation. This script fits what turns that into P(win | state):
 
 * ``wp_ot_reach.ubj`` -- P(game reaches overtime | regulation state), an XGBoost
   binary model on the regulation rows of EVERY game (label: the game went to OT).
@@ -15,21 +15,28 @@ extrapolation. This script fits the three pieces that turn that into P(win | sta
 * ``overtime.drive_model`` -- P(touchdown / field goal / no score) for the current
   overtime possession, a multinomial logistic on (yards to goal, down, distance),
   which :mod:`sportsdataverse.cfb.cfb_wp_overtime` rolls through the overtime rules.
+* ``overtime.live_bound`` -- the floor/ceiling on a live overtime snap's value.
 
-Seasons: fit on 2004-2021, early stopping on 2019-2021 held out of a 2004-2018 fit,
-report on 2022-2025 (disjoint). Everything is written to the model card, which the
-runtime reads; no constant is restated in code.
+Seasons: fit on 2004-2021 (early stopping on 2019-2021 held out of a 2004-2018 fit),
+report on 2022-2025. Everything is written to the model card, which the runtime
+reads, and the holdout is scored through the runtime itself, so the metrics are the
+shipped code's. The card also pins the sha256 of the boosters it corrects.
+
+**Refit whenever ``wp_spread.ubj`` or ``wp_naive.ubj`` changes** (the pin test in
+``tests/cfb/test_cfb_wp_endgame.py`` fails until you do). If a retrain keeps the
+overtime games, this correction double-counts overtime and should be retired.
 
 Usage::
 
     uv run python -m tools.fit_cfb_wp_overtime --pbp-root /mnt/sdv_repos/cfbfastR-cfb-data/cfb \
-        --report /tmp/wp_overtime_report.md
+        --report /tmp/wp_overtime_report.md --fixture-dir tests/cfb/fixtures/wp_overtime
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 from pathlib import Path
 
@@ -39,12 +46,16 @@ import xgboost as xgb
 from scipy.optimize import minimize_scalar
 from sklearn.linear_model import LogisticRegression
 
+from sportsdataverse.cfb import cfb_wp_overtime as rt
+from sportsdataverse.cfb.model_cards import load_model_card
 from sportsdataverse.cfb.model_vars import wp_final_names, wp_naive_final_names, wp_start_columns
 
 MODEL_DIR = Path("sportsdataverse/cfb/models")
 TRAIN = (2004, 2021)
 EARLY_STOP_FIT, EARLY_STOP_VALID = (2004, 2018), (2019, 2021)
 HOLDOUT = (2022, 2025)
+#: The boosters this correction is fitted against (their sha256 goes in the card).
+CORRECTS = ("wp_spread.ubj", "wp_naive.ubj")
 
 #: WP-booster feature name -> published pbp column. The q model reads a subset of the
 #: WP feature frame so the scorers can evaluate it on the frame they already built.
@@ -73,14 +84,18 @@ Q_PARAMS = {
 DRIVE_CLASSES = ["touchdown", "field_goal", "no_score"]
 #: Try conversion rates: the rates the try board in cfb_pbp.__process_wpa pins.
 P_XP, P_2PT = 0.92, 0.46
-
-
-def drive_features(ytg, down, distance) -> np.ndarray:
-    """The drive model's design matrix; mirrored by cfb_wp_overtime._drive_features."""
-    ytg = np.asarray(ytg, dtype=float) / 25.0
-    down = np.asarray(down, dtype=float)
-    ld = np.log1p(np.asarray(distance, dtype=float))
-    return np.column_stack([ytg, ytg**2, down == 2, down == 3, down == 4, ld, (down == 4) * ld]).astype(float)
+#: Candidate bounds for a live overtime snap, chosen by 2004-21 log loss.
+BOUNDS = (0.0, 0.01, 0.02, 0.03, 0.05, 0.08, 0.10)
+#: What was compared on 2022-25 while the method was designed (recorded, not hidden).
+CAVEATS = [
+    "The regulation boosters being corrected were trained on 2004-2025, so the 2022-25 holdout is "
+    "out of sample only for the correction (q, the spread slope, the drive model, the bound).",
+    "During development the drive model's C (0.01-10), known vs inferred possession order and the "
+    "try rates were compared on 2022-25 before the design was fixed; C = 1.0 is sklearn's default "
+    "and the try rates are the ones cfb_pbp already pins.",
+    "Overtime labels are noisy: ESPN's overtime feed has possession and score errors, so about 15% "
+    "of live overtime snaps carry a margin their possession order cannot have.",
+]
 
 
 def load_states(root: Path, seasons: range) -> pl.DataFrame:
@@ -120,10 +135,8 @@ def load_states(root: Path, seasons: range) -> pl.DataFrame:
                 won=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
                 .then(pl.col("home_winner"))
                 .otherwise(~pl.col("home_winner")),
-                first_team=pl.col("start.pos_team.id")
-                .filter(pl.col("start.down").is_between(1, 4))
-                .first()
-                .over("game_id", "period"),
+                # the same first-team rule the pbp uses (stoppages and flags don't count)
+                first_team=rt.ot_first_team(f.columns, ["game_id", "period"]),
                 drive_td=pl.col("type.text")
                 .str.contains("(?i)touchdown")
                 .any()
@@ -162,6 +175,31 @@ def scores(p: np.ndarray, y: np.ndarray) -> dict:
     }
 
 
+def brier_delta_ci(game: np.ndarray, before: np.ndarray, after: np.ndarray, y: np.ndarray, n_boot: int = 400) -> dict:
+    """Game-clustered bootstrap 95% interval for Brier(after) - Brier(before)."""
+    _, idx = np.unique(game, return_inverse=True)
+    d = np.bincount(idx, weights=(after - y) ** 2 - (before - y) ** 2)
+    n = np.bincount(idx)
+    rng = np.random.default_rng(0)
+    draws = rng.integers(0, len(n), size=(n_boot, len(n)))
+    boot = d[draws].sum(1) / n[draws].sum(1)
+    return {
+        "delta": round(float(d.sum() / n.sum()), 6),
+        "ci95": [round(float(np.quantile(boot, 0.025)), 6), round(float(np.quantile(boot, 0.975)), 6)],
+    }
+
+
+def ot_inputs(f: pl.DataFrame) -> tuple:
+    return (
+        f["pos_score_diff_start"].to_numpy(),
+        f["start.down"].to_numpy(),
+        f["start.distance"].to_numpy(),
+        f["start.yardsToEndzone"].to_numpy(),
+        rt.tie_value(f["start.pos_team_spread"].to_numpy()),
+        f["ot_second"].to_numpy(),
+    )
+
+
 def calibration_table(f: pl.DataFrame, before: str, after: str) -> pl.DataFrame:
     return (
         f.with_columns(
@@ -184,19 +222,22 @@ def calibration_table(f: pl.DataFrame, before: str, after: str) -> pl.DataFrame:
             y=pl.col("won").cast(pl.Float64),
         )
         .group_by("t", "d")
-        .agg(
-            n=pl.len(),
-            won=pl.col("y").mean(),
-            before=pl.col(before).mean(),
-            after=pl.col(after).mean(),
-        )
+        .agg(n=pl.len(), won=pl.col("y").mean(), before=pl.col(before).mean(), after=pl.col(after).mean())
         .with_columns(gap_before=pl.col("before") - pl.col("won"), gap_after=pl.col("after") - pl.col("won"))
         .sort("t", "d")
     )
 
 
+def _reload(card_path: Path, card: dict) -> None:
+    """Write the card and make the runtime re-read it."""
+    card_path.write_text(json.dumps(card, indent=2) + "\n", encoding="utf-8")
+    load_model_card.cache_clear()
+    rt._params.cache_clear()
+    rt._q_model.cache_clear()
+
+
 def fit(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.DataFrame) -> None:
-    """Fit the three pieces on 2004-2021 and write the booster + card (metrics come after)."""
+    """Fit on 2004-2021 and write the booster + card (holdout metrics come after)."""
     # --- tie value: P(win | OT reached) = sigmoid(slope * pos_team_spread), one row per OT game -----
     games = (
         regulation.filter(pl.col("reached_ot") & pl.col("start.pos_team_spread").is_not_null())
@@ -224,12 +265,11 @@ def fit(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.DataFra
     rounds = probe.best_iteration + 1
     q_model = xgb.train(params, q_matrix(between(regulation, TRAIN)), num_boost_round=rounds)
 
-    # --- OT drive outcome: multinomial logistic, C fixed a priori (no tuning on the holdout) ------
+    # --- OT drive outcome: multinomial logistic, C = sklearn's default -----------------------------
     ot_train = between(overtime, TRAIN)
     label = np.where(ot_train["drive_td"].to_numpy(), 0, np.where(ot_train["drive_fg"].to_numpy(), 1, 2))
-    drive = LogisticRegression(C=1.0, max_iter=5000).fit(
-        drive_features(ot_train["start.yardsToEndzone"], ot_train["start.down"], ot_train["start.distance"]), label
-    )
+    design = rt.drive_design(ot_train["start.yardsToEndzone"], ot_train["start.down"], ot_train["start.distance"])
+    drive = LogisticRegression(C=1.0, max_iter=5000).fit(design, label)
 
     args.out.mkdir(parents=True, exist_ok=True)
     q_model.save_model(str(args.out / "wp_ot_reach.ubj"))
@@ -249,39 +289,41 @@ def fit(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.DataFra
         "source": "cfbfastR-cfb-data cfb/pbp/parquet/play_by_play_{season}.parquet (published)",
         "trained_date": dt.date.today().isoformat(),
         "fitting_script": "tools/fit_cfb_wp_overtime.py",
+        "corrects": {name: hashlib.sha256((args.out / name).read_bytes()).hexdigest() for name in CORRECTS},
         "overtime": {
             "spread_slope": round(slope, 6),
             "spread_slope_training_games": between(games, TRAIN).height,
             "p_extra_point": P_XP,
             "p_two_point": P_2PT,
+            "possession_order": f"first snap of the period that is not one of {list(rt.NOT_A_SNAP)}",
             "drive_model": {
                 "classes": DRIVE_CLASSES,
-                "features": [
-                    "ytg/25",
-                    "(ytg/25)^2",
-                    "down==2",
-                    "down==3",
-                    "down==4",
-                    "log1p(distance)",
-                    "(down==4)*log1p(distance)",
-                ],
+                "features": rt.DRIVE_DESIGN_COLUMNS,
                 "coef": np.round(drive.coef_, 6).tolist(),
                 "intercept": np.round(drive.intercept_, 6).tolist(),
                 "training_rows": ot_train.height,
             },
+            "live_bound": 0.0,
         },
+        "caveats": CAVEATS,
     }
-    (args.out / "wp_ot_reach.card.json").write_text(json.dumps(card, indent=2) + "\n", encoding="utf-8")
+    card_path = args.out / "wp_ot_reach.card.json"
+    _reload(card_path, card)
+    # the runtime reproduces the fitted drive model (the design is shared, not copied)
+    check = rt._drive_probs(ot_train["start.yardsToEndzone"], ot_train["start.down"], ot_train["start.distance"])
+    assert np.allclose(check, drive.predict_proba(design), atol=1e-4), "runtime drive model != fitted"
+
+    # --- live bound: chosen on 2004-21 overtime snaps, through the runtime ----------------------
+    raw = rt.ot_live_wp(*ot_inputs(ot_train))  # bound 0.0 while choosing
+    y = ot_train["won"].cast(pl.Float64).to_numpy()
+    losses = {b: scores(np.clip(raw, b, 1 - b), y)["logloss"] for b in BOUNDS}
+    card["overtime"]["live_bound"] = min(losses, key=losses.get)
+    card["overtime"]["live_bound_train_logloss"] = {str(k): v for k, v in losses.items()}
+    _reload(card_path, card)
 
 
 def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.DataFrame) -> None:
-    """Score the 2022-25 holdout with the SHIPPED runtime, and write the metrics into the card.
-
-    Imported only now: the runtime reads the card and booster this script just wrote, so the
-    gate measures the code that ships, not a copy of its algebra.
-    """
-    from sportsdataverse.cfb import cfb_wp_overtime as rt
-
+    """Score the 2022-25 holdout with the SHIPPED runtime, and write the metrics into the card."""
     hold = between(regulation, HOLDOUT).filter((pl.col("scrimmage_play") == True) & pl.col("wp_before").is_not_null())  # noqa: E712
     X = hold.select([pl.col(src).alias(name) for src, name in zip(wp_start_columns, wp_final_names)])
     X_naive = X.select(wp_naive_final_names)
@@ -291,20 +333,10 @@ def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.Da
         q=pl.Series(rt.reach_overtime_prob(X.to_pandas())),
     )
     oth = between(overtime, HOLDOUT)
-    oth = oth.with_columns(
-        wp_after_fix=pl.Series(
-            rt.ot_live_wp(
-                oth["pos_score_diff_start"].to_numpy(),
-                oth["start.down"].to_numpy(),
-                oth["start.distance"].to_numpy(),
-                oth["start.yardsToEndzone"].to_numpy(),
-                rt.tie_value(oth["start.pos_team_spread"].to_numpy()),
-                oth["ot_second"].to_numpy(),
-            )
-        )
-    )
+    oth = oth.with_columns(wp_after_fix=pl.Series(rt.ot_live_wp(*ot_inputs(oth))))
 
     y_reg = hold["won"].cast(pl.Float64).to_numpy()
+    game = hold["game_id"].to_numpy()
     q4 = (hold["period"] == 4).to_numpy()
     tied_late = q4 & (hold["pos_score_diff_start"] == 0).to_numpy() & (hold["start.adj_TimeSecsRem"] <= 120).to_numpy()
     y_ot = oth["won"].cast(pl.Float64).to_numpy()
@@ -313,10 +345,15 @@ def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.Da
         "regulation": {
             "before": scores(before, y_reg),
             "after": scores(after, y_reg),
+            "brier_delta": brier_delta_ci(game, before, after, y_reg),
             "naive_before": scores(hold["wp_before_naive"].to_numpy(), y_reg),
             "naive_after": scores(hold["wp_naive_after_fix"].to_numpy(), y_reg),
         },
-        "q4": {"before": scores(before[q4], y_reg[q4]), "after": scores(after[q4], y_reg[q4])},
+        "q4": {
+            "before": scores(before[q4], y_reg[q4]),
+            "after": scores(after[q4], y_reg[q4]),
+            "brier_delta": brier_delta_ci(game[q4], before[q4], after[q4], y_reg[q4]),
+        },
         "tied_last_2m": {
             "before": scores(before[tied_late], y_reg[tied_late]),
             "after": scores(after[tied_late], y_reg[tied_late]),
@@ -336,6 +373,27 @@ def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.Da
     card["holdout_metrics"] = metrics
     card_path.write_text(json.dumps(card, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(metrics, indent=2))
+
+    if args.fixture_dir:
+        # the holdout rows the endgame test re-scores through the runtime (tied late + overtime)
+        args.fixture_dir.mkdir(parents=True, exist_ok=True)
+        hold.filter(pl.Series(tied_late)).select(
+            "season", "game_id", "game_play_number", *wp_start_columns, "wp_before", "wp_before_naive", "won"
+        ).write_parquet(args.fixture_dir / "tied_last_2m_2022_2025.parquet")
+        oth.select(
+            "season",
+            "game_id",
+            "game_play_number",
+            "period",
+            "pos_score_diff_start",
+            "start.down",
+            "start.distance",
+            "start.yardsToEndzone",
+            "start.pos_team_spread",
+            "ot_second",
+            "wp_before",
+            "won",
+        ).write_parquet(args.fixture_dir / "overtime_2022_2025.parquet")
 
     if args.report:
         # Overtime labels are noisy per play (ESPN possession errors), so also score whole
@@ -377,6 +435,7 @@ def main() -> None:
     ap.add_argument("--pbp-root", type=Path, default=Path("/mnt/sdv_repos/cfbfastR-cfb-data/cfb"))
     ap.add_argument("--out", type=Path, default=MODEL_DIR)
     ap.add_argument("--report", type=Path, default=None, help="write the calibration tables here (markdown)")
+    ap.add_argument("--fixture-dir", type=Path, default=None, help="write the holdout rows the tests re-score")
     ap.add_argument("--nthread", type=int, default=8)
     ap.add_argument("--skip-fit", action="store_true", help="re-score the holdout with the committed artifacts")
     args = ap.parse_args()

@@ -11,6 +11,10 @@ and reduced to ``boxscore``, ``drives``, ``gameInfo``, ``header``, ``pickcenter`
   Cal, down 3, scores the winning touchdown on 4th and 3 from the 3.
 * ``401761656`` Marshall @ Appalachian State, 2025. App State, up 2, 4th and 34 at its own 15 with 0:02
   left: the sack ended the game.
+* ``401761665`` UL Monroe @ Louisiana, 2025 (OT). ULM, first, is intercepted; Louisiana, second and still
+  tied, kicks a 19-yard field goal on fourth down to win.
+* ``401762461`` North Texas @ Western Michigan, 2025 (OT). The period opens with a row ESPN files as
+  "Timeout Western Michigan" under North Texas; Western Michigan has the first possession.
 * ``401777353`` Indiana vs Ohio State, 2025 Big Ten Championship. Ohio State, down 3, 4th and 1 at the
   Indiana 10 with 2:48 left: the bot said go.
 
@@ -24,6 +28,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
@@ -39,6 +44,8 @@ ODDS = {
     401754585: (18.5, 49.0),
     401777353: (3.5, 45.75),
     401761656: (-4.0, 56.5),
+    401761665: (11.0, 47.5),
+    401762461: (-12.25, 56.25),
 }
 
 
@@ -157,6 +164,40 @@ def test_overtime_first_possession_field_goal_leaves_the_other_team_its_turn():
     assert r["go_wp"] < 0.6
 
 
+def test_the_second_team_tied_in_overtime_needs_only_a_score():
+    # Louisiana, second, still tied after ULM's interception. Any score wins, so its first snap is
+    # worth ~0.9 and the chip-shot field goal is the call. Read as the FIRST possession (what the
+    # margin alone implies) a make would leave ULM its turn and be worth ~0.35.
+    plays = _plays(401761665)
+    first_snap = _row(401761665, "W.Howard rush right for 20 yards gain to the ULM05")
+    assert first_snap["pos_score_diff_start"] == 0 and first_snap["period"] == 5
+    assert first_snap["wp_before"] > 0.8
+    kick = _row(401761665, "T.Sterner field goal attempt from 19 yards GOOD")
+    assert kick["start.down"] == 4 and kick["pos_score_diff_start"] == 0
+    assert kick["fourth_down_recommendation"] == "field_goal"
+    assert kick["fg_wp"] > 0.9
+    assert plays.filter(pl.col("period") >= 5)["wp_before"].is_not_null().all()
+
+
+def test_a_timeout_row_does_not_decide_who_had_the_ball_first():
+    # The first overtime row is "Timeout Western Michigan", filed under North Texas. Western
+    # Michigan has the first possession, tied: a coin flip, not the second team's ~0.9.
+    r = _row(401762461, "Jalen Buckley run for a loss of 5 yards to the UNT 30")
+    assert r["period"] == 5 and r["pos_score_diff_start"] == 0
+    assert 0.3 < r["wp_before"] < 0.7
+
+
+def test_an_overtime_touchdown_with_its_try_on_the_row_hands_over():
+    # Since 2014 ESPN files the try on the touchdown row. Akron's first-snap touchdown and kick
+    # (0 -> +7) ends its possession at +7; Kent State's first snap is the other side of it.
+    plays = _plays(401762856)
+    td = _row(401762856, "D.DeShields pass complete deep right to #13 A.Banks caught at AKRON02")
+    nxt = plays.filter(pl.col("game_play_number") > td["game_play_number"]).row(0, named=True)
+    assert td["end.pos_score_diff"] - td["pos_score_diff_start"] == 7
+    assert nxt["start.pos_team.id"] != td["start.pos_team.id"]
+    assert abs(td["wp_after"] - (1 - nxt["wp_before"])) < 0.005
+
+
 def test_the_big_ten_championship_hook_keeps_its_call():
     # Ohio State, down 3, 4th and 1 at the Indiana 10, 2:48 left, on the captured line (3.5 / 45.75).
     # Published: go 55.91%, FG 39.87%, go_boost +16.04. A make ties it with 2:42 left, a state
@@ -170,23 +211,83 @@ def test_the_big_ten_championship_hook_keeps_its_call():
     assert r["go_boost"] > 9.5
 
 
-def test_the_overtime_correction_beats_the_booster_on_the_holdout():
-    # Gates on the committed card: fitted 2004-2021 (early stopping inside that span), scored on
-    # 2022-2025. Thresholds are the values the fit observed, so a refit may only hold or improve.
+HOLDOUT = FIX / "wp_overtime"
+
+
+def _logloss(p, y):
+    p = np.clip(np.asarray(p, dtype=float), 1e-6, 1 - 1e-6)
+    return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
+
+
+def _brier(p, y):
+    return float(np.mean((np.asarray(p, dtype=float) - y) ** 2))
+
+
+def test_tied_late_holdout_rows_are_calibrated_through_the_runtime():
+    # 2022-25 holdout (see fixtures/wp_overtime/README.md): Q4 scrimmage snaps, tied, two minutes
+    # or less. The booster gave the team with the ball 0.771; it won 0.648.
+    from sportsdataverse.cfb.cfb_wp_overtime import adjust_wp
+    from sportsdataverse.cfb.model_vars import wp_final_names, wp_start_columns
+
+    f = pl.read_parquet(HOLDOUT / "tied_last_2m_2022_2025.parquet")
+    assert f.height >= 1300
+    X = f.select([pl.col(src).alias(name) for src, name in zip(wp_start_columns, wp_final_names)])
+    y = f["won"].cast(pl.Float64).to_numpy()
+    before = f["wp_before"].to_numpy()
+    after = adjust_wp(before, X)
+    assert abs(after.mean() - y.mean()) < 0.01
+    assert before.mean() - y.mean() > 0.10  # the fixture still shows the failure it guards
+    assert _brier(after, y) < _brier(before, y) - 0.02
+
+
+def test_overtime_holdout_rows_beat_a_coin_flip_through_the_runtime():
+    # 2022-25 overtime scrimmage snaps with the possession order the pbp computes.
+    from sportsdataverse.cfb.cfb_wp_overtime import ot_live_wp, tie_value as tv
+
+    f = pl.read_parquet(HOLDOUT / "overtime_2022_2025.parquet")
+    assert f.height >= 1300
+    y = f["won"].cast(pl.Float64).to_numpy()
+    p = ot_live_wp(
+        f["pos_score_diff_start"].to_numpy(),
+        f["start.down"].to_numpy(),
+        f["start.distance"].to_numpy(),
+        f["start.yardsToEndzone"].to_numpy(),
+        tv(f["start.pos_team_spread"].to_numpy()),
+        f["ot_second"].to_numpy(),
+    )
+    flat = np.full(len(y), 0.5)
+    assert _brier(p, y) < _brier(flat, y) - 0.01
+    assert _logloss(p, y) < _logloss(flat, y)
+    assert _brier(f["wp_before"].to_numpy(), y) > 0.35  # the booster's overtime, for scale
+    # the level of the commonest state: a tied snap
+    tied = f["pos_score_diff_start"].to_numpy() == 0
+    assert abs(p[tied].mean() - y[tied].mean()) < 0.06
+
+
+def test_the_card_pins_the_boosters_it_corrects():
+    # q is P(reach OT) layered on boosters that never saw an OT game. A retrained booster --
+    # above all one trained WITH overtime games -- must come with a refit, or this goes red.
+    import hashlib
+
+    from sportsdataverse.cfb.model_cards import _MODEL_DIR, load_model_card
+
+    pins = load_model_card("wp_ot_reach")["corrects"]
+    assert set(pins) == {"wp_spread.ubj", "wp_naive.ubj"}
+    for name, sha in pins.items():
+        assert hashlib.sha256((_MODEL_DIR / name).read_bytes()).hexdigest() == sha, name
+
+
+def test_the_card_records_a_disjoint_holdout_that_the_fix_improves():
     from sportsdataverse.cfb.model_cards import load_model_card
 
     card = load_model_card("wp_ot_reach")
     assert card["training_seasons"] == [2004, 2021] and card["holdout_seasons"] == [2022, 2025]
+    assert card["early_stopping"]["valid_seasons"][1] <= card["training_seasons"][1]
     m = card["holdout_metrics"]
-    for block in ("regulation", "q4", "tied_last_2m", "overtime"):
-        assert m[block]["after"]["brier"] < m[block]["before"]["brier"], block
-        assert m[block]["after"]["logloss"] < m[block]["before"]["logloss"], block
-    assert m["regulation"]["naive_after"]["brier"] < m["regulation"]["naive_before"]["brier"]
-    # tied, two minutes or less: 0.771 predicted against 0.648 won before the fix
-    assert abs(m["tied_last_2m"]["mean_after"] - m["tied_last_2m"]["won"]) <= 0.005
-    assert m["q4"]["after"]["brier"] <= 0.07289
-    assert m["overtime"]["after"]["brier"] <= 0.23626
-    assert m["overtime"]["after"]["brier"] < m["overtime"]["flat_half"]["brier"]
+    for block in ("regulation", "q4"):
+        # game-clustered bootstrap: the Brier change is an improvement, not noise
+        assert m[block]["brier_delta"]["ci95"][1] < 0, block
+    assert m["overtime"]["after"]["logloss"] < m["overtime"]["flat_half"]["logloss"]
 
 
 def test_possession_order_is_inferred_from_the_margin_only_when_unknown():

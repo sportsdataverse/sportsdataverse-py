@@ -313,7 +313,10 @@ won, and a tied overtime snap 0.94 against 0.50. New `cfb_wp_overtime` (fitted b
 regulation prediction with the overtime it may reach, `(1 - q) * wp + q * tie_value` (q from the new
 `wp_ot_reach` booster, the tie value a logistic in the pregame spread), and values overtime by its
 rules: the possession ends in a touchdown, a field goal or nothing, and the first team is answered
-by the second from the 25. Both the spread and the spread-free surfaces use it.
+by the second from the 25 (who had the ball first is read off the period's first snap that is not
+a timeout or a flag). Both the spread and the spread-free surfaces use it. The card pins the
+sha256 of `wp_spread.ubj` / `wp_naive.ubj`; retraining either (above all to keep overtime games)
+needs a refit of this correction, and a test fails until then.
 
 The fourth-down and two-point surfaces score the state a decision leads to. A state with no
 regulation time left after the play is now decided (win, loss, or overtime if level), and in
@@ -327,10 +330,13 @@ may, and without it a non-zero margin implies the second possession.
 A made field goal's `wp_after` now hands over to the kickoff that follows, as a try's does. It
 was the kicker's snap at the spot with the points counted, a team with the ball: 11% of 2025's
 made field goals missed the next row by more than 5 points, up to 50 late in the fourth
-(Louisville's tying kick in 401754554 published WPA +30.9%).
+(Louisville's tying kick in 401754554 published WPA +30.9%). In overtime a touchdown row that
+carries its own try (2014 on) ends the possession at the realised margin.
 
 Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a little (most in
-close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged.
+close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
+`fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
+Float32; the published parquet was already Float64).
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
