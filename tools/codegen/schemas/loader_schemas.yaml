@@ -865,10 +865,6 @@ load_cfb_coach_careers:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -897,53 +893,245 @@ load_cfb_coach_careers:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_vs_ranked
+  type: UInt32
+- name: passes_vs_ranked
+  type: UInt32
+- name: epa_vs_ranked
+  type: Float64
+- name: successes_vs_ranked
+  type: UInt32
+- name: games_vs_ranked
+  type: UInt32
+- name: wins_vs_ranked
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -1027,10 +1215,6 @@ load_cfb_coach_careers:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -1059,53 +1243,245 @@ load_cfb_coach_careers:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_vs_ranked
+  type: UInt32
+- name: def_passes_vs_ranked
+  type: UInt32
+- name: def_epa_vs_ranked
+  type: Float64
+- name: def_successes_vs_ranked
+  type: UInt32
+- name: def_games_vs_ranked
+  type: UInt32
+- name: def_wins_vs_ranked
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -1171,47 +1547,193 @@ load_cfb_coach_careers:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_vs_ranked
+  type: Float64
+- name: epa_per_play_vs_ranked
+  type: Float64
+- name: success_rate_vs_ranked
+  type: Float64
+- name: win_rate_vs_ranked
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -1285,47 +1807,193 @@ load_cfb_coach_careers:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_vs_ranked
+  type: Float64
+- name: def_epa_per_play_vs_ranked
+  type: Float64
+- name: def_success_rate_vs_ranked
+  type: Float64
+- name: def_win_rate_vs_ranked
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64
@@ -1398,10 +2066,6 @@ load_cfb_coach_tendencies:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -1430,53 +2094,245 @@ load_cfb_coach_tendencies:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_vs_ranked
+  type: UInt32
+- name: passes_vs_ranked
+  type: UInt32
+- name: epa_vs_ranked
+  type: Float64
+- name: successes_vs_ranked
+  type: UInt32
+- name: games_vs_ranked
+  type: UInt32
+- name: wins_vs_ranked
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -1560,47 +2416,193 @@ load_cfb_coach_tendencies:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_vs_ranked
+  type: Float64
+- name: epa_per_play_vs_ranked
+  type: Float64
+- name: success_rate_vs_ranked
+  type: Float64
+- name: win_rate_vs_ranked
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -1674,10 +2676,6 @@ load_cfb_coach_tendencies:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -1706,53 +2704,245 @@ load_cfb_coach_tendencies:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_vs_ranked
+  type: UInt32
+- name: def_passes_vs_ranked
+  type: UInt32
+- name: def_epa_vs_ranked
+  type: Float64
+- name: def_successes_vs_ranked
+  type: UInt32
+- name: def_games_vs_ranked
+  type: UInt32
+- name: def_wins_vs_ranked
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -1818,47 +3008,193 @@ load_cfb_coach_tendencies:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_vs_ranked
+  type: Float64
+- name: def_epa_per_play_vs_ranked
+  type: Float64
+- name: def_success_rate_vs_ranked
+  type: Float64
+- name: def_win_rate_vs_ranked
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64
@@ -4582,6 +5918,12 @@ load_cfb_ratings:
   type: Int64
 - name: net_z
   type: Float64
+- name: fei_off_rank
+  type: Int64
+- name: fei_def_rank
+  type: Int64
+- name: fei_net_rank
+  type: Int64
 load_cfb_ratings_weekly:
 - name: season
   type: Int64
@@ -5157,6 +6499,10 @@ load_cfb_schedule:
   type: Int64
 - name: playoff_bowl_name
   type: String
+- name: home_rank
+  type: Int64
+- name: away_rank
+  type: Int64
 load_cfb_schedule_crosswalk:
 - name: matchup_key
   type: String
@@ -5432,6 +6778,10 @@ load_cfb_team_summaries:
   type: Int64
 - name: playsdrive_off_n
   type: Int64
+- name: turnovers_off_n
+  type: Int64
+- name: turnovers_off
+  type: Float64
 - name: playsgame_off
   type: Float64
 - name: EPAdrive_off
@@ -5487,6 +6837,8 @@ load_cfb_team_summaries:
 - name: start_position_off_rank
   type: Float64
 - name: havoc_off_rank
+  type: Float64
+- name: turnovers_off_rank
   type: Float64
 - name: explosive_off_rank
   type: Float64
@@ -5588,6 +6940,10 @@ load_cfb_team_summaries:
   type: Int64
 - name: playsdrive_def_n
   type: Int64
+- name: turnovers_def_n
+  type: Int64
+- name: turnovers_def
+  type: Float64
 - name: playsgame_def
   type: Float64
 - name: EPAdrive_def
@@ -5644,6 +7000,8 @@ load_cfb_team_summaries:
   type: Float64
 - name: havoc_def_rank
   type: Float64
+- name: turnovers_def_rank
+  type: Float64
 - name: explosive_def_rank
   type: Float64
 - name: passrate_def_rank
@@ -5684,21 +7042,53 @@ load_cfb_team_summaries:
   type: Float64
 - name: start_position_margin_rank
   type: Float64
+- name: explosive_margin
+  type: Float64
+- name: turnover_margin
+  type: Float64
+- name: explosive_margin_rank
+  type: Float64
+- name: turnover_margin_rank
+  type: Float64
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
   type: Int64
+- name: pts_per_opp_off_n
+  type: Int64
+- name: pts_per_drive_off_n
+  type: Int64
 - name: available_yards_pct_off
   type: Float64
+- name: pts_per_opp_off
+  type: Float64
+- name: pts_per_drive_off
+  type: Float64
 - name: available_yards_pct_off_rank
+  type: Float64
+- name: pts_per_opp_off_rank
+  type: Float64
+- name: pts_per_drive_off_rank
   type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
   type: Int64
+- name: pts_per_opp_def_n
+  type: Int64
+- name: pts_per_drive_def_n
+  type: Int64
 - name: available_yards_pct_def
   type: Float64
+- name: pts_per_opp_def
+  type: Float64
+- name: pts_per_drive_def
+  type: Float64
 - name: available_yards_pct_def_rank
+  type: Float64
+- name: pts_per_opp_def_rank
+  type: Float64
+- name: pts_per_drive_def_rank
   type: Float64
 - name: total_available_yards_margin
   type: Float64
@@ -5706,11 +7096,19 @@ load_cfb_team_summaries:
   type: Int64
 - name: available_yards_pct_margin
   type: Float64
+- name: pts_per_opp_margin
+  type: Float64
+- name: pts_per_drive_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
   type: Float64
 - name: available_yards_pct_margin_rank
+  type: Float64
+- name: pts_per_opp_margin_rank
+  type: Float64
+- name: pts_per_drive_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64
@@ -6379,6 +7777,10 @@ load_cfb_team_summaries:
 - name: adj_def_epa_rank
   type: Float64
 - name: net_adj_epa_rank
+  type: Float64
+- name: off_strength_faced_rank
+  type: Float64
+- name: def_strength_faced_rank
   type: Float64
 load_cfb_team_summaries_weekly:
 - name: team_id
@@ -6479,6 +7881,10 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: playsdrive_off_n
   type: Int64
+- name: turnovers_off_n
+  type: Int64
+- name: turnovers_off
+  type: Float64
 - name: playsgame_off
   type: Float64
 - name: EPAdrive_off
@@ -6534,6 +7940,8 @@ load_cfb_team_summaries_weekly:
 - name: start_position_off_rank
   type: Float64
 - name: havoc_off_rank
+  type: Float64
+- name: turnovers_off_rank
   type: Float64
 - name: explosive_off_rank
   type: Float64
@@ -6635,6 +8043,10 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: playsdrive_def_n
   type: Int64
+- name: turnovers_def_n
+  type: Int64
+- name: turnovers_def
+  type: Float64
 - name: playsgame_def
   type: Float64
 - name: EPAdrive_def
@@ -6691,6 +8103,8 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: havoc_def_rank
   type: Float64
+- name: turnovers_def_rank
+  type: Float64
 - name: explosive_def_rank
   type: Float64
 - name: passrate_def_rank
@@ -6731,21 +8145,53 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: start_position_margin_rank
   type: Float64
+- name: explosive_margin
+  type: Float64
+- name: turnover_margin
+  type: Float64
+- name: explosive_margin_rank
+  type: Float64
+- name: turnover_margin_rank
+  type: Float64
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
   type: Int64
+- name: pts_per_opp_off_n
+  type: Int64
+- name: pts_per_drive_off_n
+  type: Int64
 - name: available_yards_pct_off
   type: Float64
+- name: pts_per_opp_off
+  type: Float64
+- name: pts_per_drive_off
+  type: Float64
 - name: available_yards_pct_off_rank
+  type: Float64
+- name: pts_per_opp_off_rank
+  type: Float64
+- name: pts_per_drive_off_rank
   type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
   type: Int64
+- name: pts_per_opp_def_n
+  type: Int64
+- name: pts_per_drive_def_n
+  type: Int64
 - name: available_yards_pct_def
   type: Float64
+- name: pts_per_opp_def
+  type: Float64
+- name: pts_per_drive_def
+  type: Float64
 - name: available_yards_pct_def_rank
+  type: Float64
+- name: pts_per_opp_def_rank
+  type: Float64
+- name: pts_per_drive_def_rank
   type: Float64
 - name: total_available_yards_margin
   type: Float64
@@ -6753,11 +8199,19 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: available_yards_pct_margin
   type: Float64
+- name: pts_per_opp_margin
+  type: Float64
+- name: pts_per_drive_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
   type: Float64
 - name: available_yards_pct_margin_rank
+  type: Float64
+- name: pts_per_opp_margin_rank
+  type: Float64
+- name: pts_per_drive_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64
@@ -7427,6 +8881,10 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: net_adj_epa_rank
   type: Float64
+- name: off_strength_faced_rank
+  type: Float64
+- name: def_strength_faced_rank
+  type: Float64
 - name: through_week
   type: Int32
 load_cfb_team_talent:
@@ -7465,10 +8923,6 @@ load_cfb_team_tendencies:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -7497,53 +8951,245 @@ load_cfb_team_tendencies:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_vs_ranked
+  type: UInt32
+- name: passes_vs_ranked
+  type: UInt32
+- name: epa_vs_ranked
+  type: Float64
+- name: successes_vs_ranked
+  type: UInt32
+- name: games_vs_ranked
+  type: UInt32
+- name: wins_vs_ranked
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -7627,47 +9273,193 @@ load_cfb_team_tendencies:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_vs_ranked
+  type: Float64
+- name: epa_per_play_vs_ranked
+  type: Float64
+- name: success_rate_vs_ranked
+  type: Float64
+- name: win_rate_vs_ranked
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -7741,10 +9533,6 @@ load_cfb_team_tendencies:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -7773,53 +9561,245 @@ load_cfb_team_tendencies:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_vs_ranked
+  type: UInt32
+- name: def_passes_vs_ranked
+  type: UInt32
+- name: def_epa_vs_ranked
+  type: Float64
+- name: def_successes_vs_ranked
+  type: UInt32
+- name: def_games_vs_ranked
+  type: UInt32
+- name: def_wins_vs_ranked
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -7885,47 +9865,193 @@ load_cfb_team_tendencies:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_vs_ranked
+  type: Float64
+- name: def_epa_per_play_vs_ranked
+  type: Float64
+- name: def_success_rate_vs_ranked
+  type: Float64
+- name: def_win_rate_vs_ranked
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64
@@ -9942,6 +12068,47 @@ load_mlb_oaa:
   type: Float64
 - name: season
   type: Int64
+load_mlb_park_dimensions:
+- name: league
+  type: String
+- name: season
+  type: Int32
+- name: venue_id
+  type: String
+- name: venue_name
+  type: String
+- name: retro_park_id
+  type: String
+- name: left_line_ft
+  type: Int32
+- name: left_ft
+  type: Int32
+- name: left_center_ft
+  type: Int32
+- name: center_ft
+  type: Int32
+- name: right_center_ft
+  type: Int32
+- name: right_ft
+  type: Int32
+- name: right_line_ft
+  type: Int32
+- name: capacity
+  type: Int32
+- name: turf_type
+  type: String
+- name: roof_type
+  type: String
+- name: azimuth_deg
+  type: Float64
+- name: elevation_ft
+  type: Int32
+- name: latitude
+  type: Float64
+- name: longitude
+  type: Float64
+- name: notes
+  type: String
 load_mlb_pbp:
 - name: game_pk
   type: Int64
@@ -16667,10 +18834,6 @@ load_nfl_coach_careers:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -16699,53 +18862,233 @@ load_nfl_coach_careers:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -16829,10 +19172,6 @@ load_nfl_coach_careers:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -16861,53 +19200,233 @@ load_nfl_coach_careers:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -16973,47 +19492,185 @@ load_nfl_coach_careers:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -17087,47 +19744,185 @@ load_nfl_coach_careers:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64
@@ -17200,10 +19995,6 @@ load_nfl_coach_tendencies:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -17232,53 +20023,233 @@ load_nfl_coach_tendencies:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -17362,47 +20333,185 @@ load_nfl_coach_tendencies:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -17476,10 +20585,6 @@ load_nfl_coach_tendencies:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -17508,53 +20613,233 @@ load_nfl_coach_tendencies:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -17620,47 +20905,185 @@ load_nfl_coach_tendencies:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64
@@ -19595,10 +23018,6 @@ load_nfl_team_tendencies:
   type: Float64
 - name: epa_pass
   type: Float64
-- name: epa_early_down
-  type: Float64
-- name: epa_neutral
-  type: Float64
 - name: successes
   type: UInt32
 - name: successes_rush
@@ -19627,53 +23046,233 @@ load_nfl_team_tendencies:
   type: UInt32
 - name: passes_neutral
   type: UInt32
+- name: epa_neutral
+  type: Float64
+- name: successes_neutral
+  type: UInt32
 - name: plays_d1
   type: UInt32
 - name: passes_d1
+  type: UInt32
+- name: epa_d1
+  type: Float64
+- name: successes_d1
   type: UInt32
 - name: plays_d2
   type: UInt32
 - name: passes_d2
   type: UInt32
+- name: epa_d2
+  type: Float64
+- name: successes_d2
+  type: UInt32
 - name: plays_d3
   type: UInt32
 - name: passes_d3
+  type: UInt32
+- name: epa_d3
+  type: Float64
+- name: successes_d3
   type: UInt32
 - name: plays_d4
   type: UInt32
 - name: passes_d4
   type: UInt32
+- name: epa_d4
+  type: Float64
+- name: successes_d4
+  type: UInt32
 - name: plays_early_down
   type: UInt32
 - name: passes_early_down
+  type: UInt32
+- name: epa_early_down
+  type: Float64
+- name: successes_early_down
   type: UInt32
 - name: plays_standard_down
   type: UInt32
 - name: passes_standard_down
   type: UInt32
+- name: epa_standard_down
+  type: Float64
+- name: successes_standard_down
+  type: UInt32
 - name: plays_passing_down
   type: UInt32
 - name: passes_passing_down
+  type: UInt32
+- name: epa_passing_down
+  type: Float64
+- name: successes_passing_down
   type: UInt32
 - name: plays_leading
   type: UInt32
 - name: passes_leading
   type: UInt32
+- name: epa_leading
+  type: Float64
+- name: successes_leading
+  type: UInt32
 - name: plays_tied
   type: UInt32
 - name: passes_tied
+  type: UInt32
+- name: epa_tied
+  type: Float64
+- name: successes_tied
   type: UInt32
 - name: plays_trailing
   type: UInt32
 - name: passes_trailing
   type: UInt32
+- name: epa_trailing
+  type: Float64
+- name: successes_trailing
+  type: UInt32
 - name: plays_first_half
   type: UInt32
 - name: passes_first_half
   type: UInt32
+- name: epa_first_half
+  type: Float64
+- name: successes_first_half
+  type: UInt32
 - name: plays_second_half
   type: UInt32
 - name: passes_second_half
+  type: UInt32
+- name: epa_second_half
+  type: Float64
+- name: successes_second_half
+  type: UInt32
+- name: plays_d3_short
+  type: UInt32
+- name: passes_d3_short
+  type: UInt32
+- name: epa_d3_short
+  type: Float64
+- name: successes_d3_short
+  type: UInt32
+- name: plays_d3_medium
+  type: UInt32
+- name: passes_d3_medium
+  type: UInt32
+- name: epa_d3_medium
+  type: Float64
+- name: successes_d3_medium
+  type: UInt32
+- name: plays_d3_long
+  type: UInt32
+- name: passes_d3_long
+  type: UInt32
+- name: epa_d3_long
+  type: Float64
+- name: successes_d3_long
+  type: UInt32
+- name: plays_red_zone
+  type: UInt32
+- name: passes_red_zone
+  type: UInt32
+- name: epa_red_zone
+  type: Float64
+- name: successes_red_zone
+  type: UInt32
+- name: plays_own_half
+  type: UInt32
+- name: passes_own_half
+  type: UInt32
+- name: epa_own_half
+  type: Float64
+- name: successes_own_half
+  type: UInt32
+- name: plays_opp_half
+  type: UInt32
+- name: passes_opp_half
+  type: UInt32
+- name: epa_opp_half
+  type: Float64
+- name: successes_opp_half
+  type: UInt32
+- name: plays_one_score
+  type: UInt32
+- name: passes_one_score
+  type: UInt32
+- name: epa_one_score
+  type: Float64
+- name: successes_one_score
+  type: UInt32
+- name: plays_home
+  type: UInt32
+- name: passes_home
+  type: UInt32
+- name: epa_home
+  type: Float64
+- name: successes_home
+  type: UInt32
+- name: games_home
+  type: UInt32
+- name: wins_home
+  type: UInt32
+- name: plays_away
+  type: UInt32
+- name: passes_away
+  type: UInt32
+- name: epa_away
+  type: Float64
+- name: successes_away
+  type: UInt32
+- name: games_away
+  type: UInt32
+- name: wins_away
+  type: UInt32
+- name: plays_neutral_site
+  type: UInt32
+- name: passes_neutral_site
+  type: UInt32
+- name: epa_neutral_site
+  type: Float64
+- name: successes_neutral_site
+  type: UInt32
+- name: games_neutral_site
+  type: UInt32
+- name: wins_neutral_site
+  type: UInt32
+- name: plays_after_bye
+  type: UInt32
+- name: passes_after_bye
+  type: UInt32
+- name: epa_after_bye
+  type: Float64
+- name: successes_after_bye
+  type: UInt32
+- name: games_after_bye
+  type: UInt32
+- name: wins_after_bye
+  type: UInt32
+- name: plays_opener
+  type: UInt32
+- name: passes_opener
+  type: UInt32
+- name: epa_opener
+  type: Float64
+- name: successes_opener
+  type: UInt32
+- name: games_opener
+  type: UInt32
+- name: wins_opener
+  type: UInt32
+- name: plays_one_score_game
+  type: UInt32
+- name: passes_one_score_game
+  type: UInt32
+- name: epa_one_score_game
+  type: Float64
+- name: successes_one_score_game
+  type: UInt32
+- name: games_one_score_game
+  type: UInt32
+- name: wins_one_score_game
   type: UInt32
 - name: fourth_decisions
   type: UInt32
@@ -19757,47 +23356,185 @@ load_nfl_team_tendencies:
   type: Float64
 - name: pass_rate
   type: Float64
-- name: pass_rate_neutral
-  type: Float64
-- name: pass_rate_d1
-  type: Float64
-- name: pass_rate_d2
-  type: Float64
-- name: pass_rate_d3
-  type: Float64
-- name: pass_rate_d4
-  type: Float64
-- name: pass_rate_early_down
-  type: Float64
-- name: pass_rate_standard_down
-  type: Float64
-- name: pass_rate_passing_down
-  type: Float64
-- name: pass_rate_leading
-  type: Float64
-- name: pass_rate_tied
-  type: Float64
-- name: pass_rate_trailing
-  type: Float64
-- name: pass_rate_first_half
-  type: Float64
-- name: pass_rate_second_half
-  type: Float64
 - name: epa_per_play
   type: Float64
 - name: epa_per_rush
   type: Float64
 - name: epa_per_pass
   type: Float64
-- name: epa_per_play_early_down
-  type: Float64
-- name: epa_per_play_neutral
-  type: Float64
 - name: success_rate
   type: Float64
 - name: success_rate_rush
   type: Float64
 - name: success_rate_pass
+  type: Float64
+- name: pass_rate_neutral
+  type: Float64
+- name: epa_per_play_neutral
+  type: Float64
+- name: success_rate_neutral
+  type: Float64
+- name: pass_rate_d1
+  type: Float64
+- name: epa_per_play_d1
+  type: Float64
+- name: success_rate_d1
+  type: Float64
+- name: pass_rate_d2
+  type: Float64
+- name: epa_per_play_d2
+  type: Float64
+- name: success_rate_d2
+  type: Float64
+- name: pass_rate_d3
+  type: Float64
+- name: epa_per_play_d3
+  type: Float64
+- name: success_rate_d3
+  type: Float64
+- name: pass_rate_d4
+  type: Float64
+- name: epa_per_play_d4
+  type: Float64
+- name: success_rate_d4
+  type: Float64
+- name: pass_rate_early_down
+  type: Float64
+- name: epa_per_play_early_down
+  type: Float64
+- name: success_rate_early_down
+  type: Float64
+- name: pass_rate_standard_down
+  type: Float64
+- name: epa_per_play_standard_down
+  type: Float64
+- name: success_rate_standard_down
+  type: Float64
+- name: pass_rate_passing_down
+  type: Float64
+- name: epa_per_play_passing_down
+  type: Float64
+- name: success_rate_passing_down
+  type: Float64
+- name: pass_rate_leading
+  type: Float64
+- name: epa_per_play_leading
+  type: Float64
+- name: success_rate_leading
+  type: Float64
+- name: pass_rate_tied
+  type: Float64
+- name: epa_per_play_tied
+  type: Float64
+- name: success_rate_tied
+  type: Float64
+- name: pass_rate_trailing
+  type: Float64
+- name: epa_per_play_trailing
+  type: Float64
+- name: success_rate_trailing
+  type: Float64
+- name: pass_rate_first_half
+  type: Float64
+- name: epa_per_play_first_half
+  type: Float64
+- name: success_rate_first_half
+  type: Float64
+- name: pass_rate_second_half
+  type: Float64
+- name: epa_per_play_second_half
+  type: Float64
+- name: success_rate_second_half
+  type: Float64
+- name: pass_rate_d3_short
+  type: Float64
+- name: epa_per_play_d3_short
+  type: Float64
+- name: success_rate_d3_short
+  type: Float64
+- name: pass_rate_d3_medium
+  type: Float64
+- name: epa_per_play_d3_medium
+  type: Float64
+- name: success_rate_d3_medium
+  type: Float64
+- name: pass_rate_d3_long
+  type: Float64
+- name: epa_per_play_d3_long
+  type: Float64
+- name: success_rate_d3_long
+  type: Float64
+- name: pass_rate_red_zone
+  type: Float64
+- name: epa_per_play_red_zone
+  type: Float64
+- name: success_rate_red_zone
+  type: Float64
+- name: pass_rate_own_half
+  type: Float64
+- name: epa_per_play_own_half
+  type: Float64
+- name: success_rate_own_half
+  type: Float64
+- name: pass_rate_opp_half
+  type: Float64
+- name: epa_per_play_opp_half
+  type: Float64
+- name: success_rate_opp_half
+  type: Float64
+- name: pass_rate_one_score
+  type: Float64
+- name: epa_per_play_one_score
+  type: Float64
+- name: success_rate_one_score
+  type: Float64
+- name: pass_rate_home
+  type: Float64
+- name: epa_per_play_home
+  type: Float64
+- name: success_rate_home
+  type: Float64
+- name: win_rate_home
+  type: Float64
+- name: pass_rate_away
+  type: Float64
+- name: epa_per_play_away
+  type: Float64
+- name: success_rate_away
+  type: Float64
+- name: win_rate_away
+  type: Float64
+- name: pass_rate_neutral_site
+  type: Float64
+- name: epa_per_play_neutral_site
+  type: Float64
+- name: success_rate_neutral_site
+  type: Float64
+- name: win_rate_neutral_site
+  type: Float64
+- name: pass_rate_after_bye
+  type: Float64
+- name: epa_per_play_after_bye
+  type: Float64
+- name: success_rate_after_bye
+  type: Float64
+- name: win_rate_after_bye
+  type: Float64
+- name: pass_rate_opener
+  type: Float64
+- name: epa_per_play_opener
+  type: Float64
+- name: success_rate_opener
+  type: Float64
+- name: win_rate_opener
+  type: Float64
+- name: pass_rate_one_score_game
+  type: Float64
+- name: epa_per_play_one_score_game
+  type: Float64
+- name: success_rate_one_score_game
+  type: Float64
+- name: win_rate_one_score_game
   type: Float64
 - name: ypp
   type: Float64
@@ -19871,10 +23608,6 @@ load_nfl_team_tendencies:
   type: Float64
 - name: def_epa_pass
   type: Float64
-- name: def_epa_early_down
-  type: Float64
-- name: def_epa_neutral
-  type: Float64
 - name: def_successes
   type: UInt32
 - name: def_successes_rush
@@ -19903,53 +23636,233 @@ load_nfl_team_tendencies:
   type: UInt32
 - name: def_passes_neutral
   type: UInt32
+- name: def_epa_neutral
+  type: Float64
+- name: def_successes_neutral
+  type: UInt32
 - name: def_plays_d1
   type: UInt32
 - name: def_passes_d1
+  type: UInt32
+- name: def_epa_d1
+  type: Float64
+- name: def_successes_d1
   type: UInt32
 - name: def_plays_d2
   type: UInt32
 - name: def_passes_d2
   type: UInt32
+- name: def_epa_d2
+  type: Float64
+- name: def_successes_d2
+  type: UInt32
 - name: def_plays_d3
   type: UInt32
 - name: def_passes_d3
+  type: UInt32
+- name: def_epa_d3
+  type: Float64
+- name: def_successes_d3
   type: UInt32
 - name: def_plays_d4
   type: UInt32
 - name: def_passes_d4
   type: UInt32
+- name: def_epa_d4
+  type: Float64
+- name: def_successes_d4
+  type: UInt32
 - name: def_plays_early_down
   type: UInt32
 - name: def_passes_early_down
+  type: UInt32
+- name: def_epa_early_down
+  type: Float64
+- name: def_successes_early_down
   type: UInt32
 - name: def_plays_standard_down
   type: UInt32
 - name: def_passes_standard_down
   type: UInt32
+- name: def_epa_standard_down
+  type: Float64
+- name: def_successes_standard_down
+  type: UInt32
 - name: def_plays_passing_down
   type: UInt32
 - name: def_passes_passing_down
+  type: UInt32
+- name: def_epa_passing_down
+  type: Float64
+- name: def_successes_passing_down
   type: UInt32
 - name: def_plays_leading
   type: UInt32
 - name: def_passes_leading
   type: UInt32
+- name: def_epa_leading
+  type: Float64
+- name: def_successes_leading
+  type: UInt32
 - name: def_plays_tied
   type: UInt32
 - name: def_passes_tied
+  type: UInt32
+- name: def_epa_tied
+  type: Float64
+- name: def_successes_tied
   type: UInt32
 - name: def_plays_trailing
   type: UInt32
 - name: def_passes_trailing
   type: UInt32
+- name: def_epa_trailing
+  type: Float64
+- name: def_successes_trailing
+  type: UInt32
 - name: def_plays_first_half
   type: UInt32
 - name: def_passes_first_half
   type: UInt32
+- name: def_epa_first_half
+  type: Float64
+- name: def_successes_first_half
+  type: UInt32
 - name: def_plays_second_half
   type: UInt32
 - name: def_passes_second_half
+  type: UInt32
+- name: def_epa_second_half
+  type: Float64
+- name: def_successes_second_half
+  type: UInt32
+- name: def_plays_d3_short
+  type: UInt32
+- name: def_passes_d3_short
+  type: UInt32
+- name: def_epa_d3_short
+  type: Float64
+- name: def_successes_d3_short
+  type: UInt32
+- name: def_plays_d3_medium
+  type: UInt32
+- name: def_passes_d3_medium
+  type: UInt32
+- name: def_epa_d3_medium
+  type: Float64
+- name: def_successes_d3_medium
+  type: UInt32
+- name: def_plays_d3_long
+  type: UInt32
+- name: def_passes_d3_long
+  type: UInt32
+- name: def_epa_d3_long
+  type: Float64
+- name: def_successes_d3_long
+  type: UInt32
+- name: def_plays_red_zone
+  type: UInt32
+- name: def_passes_red_zone
+  type: UInt32
+- name: def_epa_red_zone
+  type: Float64
+- name: def_successes_red_zone
+  type: UInt32
+- name: def_plays_own_half
+  type: UInt32
+- name: def_passes_own_half
+  type: UInt32
+- name: def_epa_own_half
+  type: Float64
+- name: def_successes_own_half
+  type: UInt32
+- name: def_plays_opp_half
+  type: UInt32
+- name: def_passes_opp_half
+  type: UInt32
+- name: def_epa_opp_half
+  type: Float64
+- name: def_successes_opp_half
+  type: UInt32
+- name: def_plays_one_score
+  type: UInt32
+- name: def_passes_one_score
+  type: UInt32
+- name: def_epa_one_score
+  type: Float64
+- name: def_successes_one_score
+  type: UInt32
+- name: def_plays_home
+  type: UInt32
+- name: def_passes_home
+  type: UInt32
+- name: def_epa_home
+  type: Float64
+- name: def_successes_home
+  type: UInt32
+- name: def_games_home
+  type: UInt32
+- name: def_wins_home
+  type: UInt32
+- name: def_plays_away
+  type: UInt32
+- name: def_passes_away
+  type: UInt32
+- name: def_epa_away
+  type: Float64
+- name: def_successes_away
+  type: UInt32
+- name: def_games_away
+  type: UInt32
+- name: def_wins_away
+  type: UInt32
+- name: def_plays_neutral_site
+  type: UInt32
+- name: def_passes_neutral_site
+  type: UInt32
+- name: def_epa_neutral_site
+  type: Float64
+- name: def_successes_neutral_site
+  type: UInt32
+- name: def_games_neutral_site
+  type: UInt32
+- name: def_wins_neutral_site
+  type: UInt32
+- name: def_plays_after_bye
+  type: UInt32
+- name: def_passes_after_bye
+  type: UInt32
+- name: def_epa_after_bye
+  type: Float64
+- name: def_successes_after_bye
+  type: UInt32
+- name: def_games_after_bye
+  type: UInt32
+- name: def_wins_after_bye
+  type: UInt32
+- name: def_plays_opener
+  type: UInt32
+- name: def_passes_opener
+  type: UInt32
+- name: def_epa_opener
+  type: Float64
+- name: def_successes_opener
+  type: UInt32
+- name: def_games_opener
+  type: UInt32
+- name: def_wins_opener
+  type: UInt32
+- name: def_plays_one_score_game
+  type: UInt32
+- name: def_passes_one_score_game
+  type: UInt32
+- name: def_epa_one_score_game
+  type: Float64
+- name: def_successes_one_score_game
+  type: UInt32
+- name: def_games_one_score_game
+  type: UInt32
+- name: def_wins_one_score_game
   type: UInt32
 - name: def_drives
   type: UInt32
@@ -20015,47 +23928,185 @@ load_nfl_team_tendencies:
   type: Float64
 - name: def_pass_rate
   type: Float64
-- name: def_pass_rate_neutral
-  type: Float64
-- name: def_pass_rate_d1
-  type: Float64
-- name: def_pass_rate_d2
-  type: Float64
-- name: def_pass_rate_d3
-  type: Float64
-- name: def_pass_rate_d4
-  type: Float64
-- name: def_pass_rate_early_down
-  type: Float64
-- name: def_pass_rate_standard_down
-  type: Float64
-- name: def_pass_rate_passing_down
-  type: Float64
-- name: def_pass_rate_leading
-  type: Float64
-- name: def_pass_rate_tied
-  type: Float64
-- name: def_pass_rate_trailing
-  type: Float64
-- name: def_pass_rate_first_half
-  type: Float64
-- name: def_pass_rate_second_half
-  type: Float64
 - name: def_epa_per_play
   type: Float64
 - name: def_epa_per_rush
   type: Float64
 - name: def_epa_per_pass
   type: Float64
-- name: def_epa_per_play_early_down
-  type: Float64
-- name: def_epa_per_play_neutral
-  type: Float64
 - name: def_success_rate
   type: Float64
 - name: def_success_rate_rush
   type: Float64
 - name: def_success_rate_pass
+  type: Float64
+- name: def_pass_rate_neutral
+  type: Float64
+- name: def_epa_per_play_neutral
+  type: Float64
+- name: def_success_rate_neutral
+  type: Float64
+- name: def_pass_rate_d1
+  type: Float64
+- name: def_epa_per_play_d1
+  type: Float64
+- name: def_success_rate_d1
+  type: Float64
+- name: def_pass_rate_d2
+  type: Float64
+- name: def_epa_per_play_d2
+  type: Float64
+- name: def_success_rate_d2
+  type: Float64
+- name: def_pass_rate_d3
+  type: Float64
+- name: def_epa_per_play_d3
+  type: Float64
+- name: def_success_rate_d3
+  type: Float64
+- name: def_pass_rate_d4
+  type: Float64
+- name: def_epa_per_play_d4
+  type: Float64
+- name: def_success_rate_d4
+  type: Float64
+- name: def_pass_rate_early_down
+  type: Float64
+- name: def_epa_per_play_early_down
+  type: Float64
+- name: def_success_rate_early_down
+  type: Float64
+- name: def_pass_rate_standard_down
+  type: Float64
+- name: def_epa_per_play_standard_down
+  type: Float64
+- name: def_success_rate_standard_down
+  type: Float64
+- name: def_pass_rate_passing_down
+  type: Float64
+- name: def_epa_per_play_passing_down
+  type: Float64
+- name: def_success_rate_passing_down
+  type: Float64
+- name: def_pass_rate_leading
+  type: Float64
+- name: def_epa_per_play_leading
+  type: Float64
+- name: def_success_rate_leading
+  type: Float64
+- name: def_pass_rate_tied
+  type: Float64
+- name: def_epa_per_play_tied
+  type: Float64
+- name: def_success_rate_tied
+  type: Float64
+- name: def_pass_rate_trailing
+  type: Float64
+- name: def_epa_per_play_trailing
+  type: Float64
+- name: def_success_rate_trailing
+  type: Float64
+- name: def_pass_rate_first_half
+  type: Float64
+- name: def_epa_per_play_first_half
+  type: Float64
+- name: def_success_rate_first_half
+  type: Float64
+- name: def_pass_rate_second_half
+  type: Float64
+- name: def_epa_per_play_second_half
+  type: Float64
+- name: def_success_rate_second_half
+  type: Float64
+- name: def_pass_rate_d3_short
+  type: Float64
+- name: def_epa_per_play_d3_short
+  type: Float64
+- name: def_success_rate_d3_short
+  type: Float64
+- name: def_pass_rate_d3_medium
+  type: Float64
+- name: def_epa_per_play_d3_medium
+  type: Float64
+- name: def_success_rate_d3_medium
+  type: Float64
+- name: def_pass_rate_d3_long
+  type: Float64
+- name: def_epa_per_play_d3_long
+  type: Float64
+- name: def_success_rate_d3_long
+  type: Float64
+- name: def_pass_rate_red_zone
+  type: Float64
+- name: def_epa_per_play_red_zone
+  type: Float64
+- name: def_success_rate_red_zone
+  type: Float64
+- name: def_pass_rate_own_half
+  type: Float64
+- name: def_epa_per_play_own_half
+  type: Float64
+- name: def_success_rate_own_half
+  type: Float64
+- name: def_pass_rate_opp_half
+  type: Float64
+- name: def_epa_per_play_opp_half
+  type: Float64
+- name: def_success_rate_opp_half
+  type: Float64
+- name: def_pass_rate_one_score
+  type: Float64
+- name: def_epa_per_play_one_score
+  type: Float64
+- name: def_success_rate_one_score
+  type: Float64
+- name: def_pass_rate_home
+  type: Float64
+- name: def_epa_per_play_home
+  type: Float64
+- name: def_success_rate_home
+  type: Float64
+- name: def_win_rate_home
+  type: Float64
+- name: def_pass_rate_away
+  type: Float64
+- name: def_epa_per_play_away
+  type: Float64
+- name: def_success_rate_away
+  type: Float64
+- name: def_win_rate_away
+  type: Float64
+- name: def_pass_rate_neutral_site
+  type: Float64
+- name: def_epa_per_play_neutral_site
+  type: Float64
+- name: def_success_rate_neutral_site
+  type: Float64
+- name: def_win_rate_neutral_site
+  type: Float64
+- name: def_pass_rate_after_bye
+  type: Float64
+- name: def_epa_per_play_after_bye
+  type: Float64
+- name: def_success_rate_after_bye
+  type: Float64
+- name: def_win_rate_after_bye
+  type: Float64
+- name: def_pass_rate_opener
+  type: Float64
+- name: def_epa_per_play_opener
+  type: Float64
+- name: def_success_rate_opener
+  type: Float64
+- name: def_win_rate_opener
+  type: Float64
+- name: def_pass_rate_one_score_game
+  type: Float64
+- name: def_epa_per_play_one_score_game
+  type: Float64
+- name: def_success_rate_one_score_game
+  type: Float64
+- name: def_win_rate_one_score_game
   type: Float64
 - name: def_ypp
   type: Float64

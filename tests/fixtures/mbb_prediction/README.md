@@ -18,12 +18,14 @@ under `dev/`).
 
 **ID convention:** every team / game id is `Utf8` (cast from the raw ESPN
 integer via `pl.col(id).cast(pl.Int64).cast(pl.Utf8)`), so joins across
-fixtures and against the ratings engine never hit a dtype mismatch.
+fixtures and against the ratings engine never hit a dtype mismatch. The two `shell_game_*_2011` files are the exception: they keep ESPN's raw `Int32` ids (`game_id`, `home_id`, `away_id`, `team_id`) on purpose, so the regression test also exercises `mbb_team_ratings`' own boundary cast to `Utf8`. Cast them the same way before joining them to the other fixtures.
 
 | File | Rows | Source | Notes |
 |---|---:|---|---|
 | `results_2024.parquet` | 6243 | `load_mbb_schedule([2024])` (ESPN, via sportsdataverse-data) | Completed games only (`status_type_completed`), deduped on `game_id`. Cols: `game_id, season, date, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
 | `team_box_2024.parquet` | 12480 | `load_mbb_team_boxscore([2024])` (ESPN) | Per-team possession inputs for the ratings engine. Cols: `game_id, season, game_date, team_id, opp_team_id, team_home_away, team_score, opp_score, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted`. |
+| `shell_game_schedule_2011.parquet` | 21 | `load_mbb_schedule([2011])` (ESPN), captured 2026-09-29 | Every 2011 game of New Orleans (`2443`) and Victory (`3129`), raw ESPN columns and dtypes (`game_id, season, date, game_date, home_id, away_id, neutral_site`). Regression slice for the zero-possession shell game `310573129`. |
+| `shell_game_team_box_2011.parquet` | 42 | `load_mbb_team_boxscore([2011])` (ESPN), captured 2026-09-29 | Both team rows of those 21 games (16 teams): `game_id, team_id, team_display_name, team_score, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted`. Game `310573129` ships a real score with FGA/OREB/TO/FTA all `0`. |
 | `torvik_2024.parquet` | 350 | barttorvik `https://barttorvik.com/2024_team_results.csv` | `adj_o`=adjoe, `adj_d`=adjde, `adj_em`=adjoe−adjde, `rank`. Keyed to ESPN `team_id` via a contracting normalizer + `St.`→`State`/`Saint` candidate keys + a small alias table (`dev/mbb_prediction/capture_oracle.py`). |
 | `espn_bpi_2024.parquet` | 362 | `espn_mbb_season_powerindex(2024, team_id=...)` (ESPN Core v2, one request per team) | End-of-season BPI per D1 team: `team_id, team, bpi, bpi_rank, bpi_offense, bpi_defense, sos, sos_rank, sor, sor_rank, wins, losses` (`sos`=BPI `sospast`, the SOS-to-date used by the Phase-4 gate). The season-level list endpoint is a fixed Top-25 leaderboard regardless of `limit`, hence per-team fetches. `team` name joined from the torvik fixture (null for the 12 torvik-unmatched). |
 | `espn_predictor_sample.parquet` | 313 | `espn_mbb_game_predictor(game_id)` (ESPN Core v2) | Pregame `home_win_prob` = home `gameProjection` / 100. Sampled every 20th completed game by date (stratified across the season); 0 of 313 sampled games missing predictor data. |

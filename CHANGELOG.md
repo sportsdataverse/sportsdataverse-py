@@ -3,6 +3,10 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
+  - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
+  - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
+  - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
   - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
   - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
   - [Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData](#added--nba-officiating-data-last-two-minute-reports-referee-assignments-and-cdn-livedata)
@@ -296,6 +300,55 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB plays ESPN files twice under new ids are dropped
+
+ESPN sometimes files a play again under a fresh play id, in three shapes the adjacent-copy
+dedupe could not see: a stub echo on the next row (same text and down/distance, no spot), a batch
+of a drive's plays filed at the drive's start clock ahead of the same plays at their real clocks,
+and the same play on both sides of a timeout or end-of-period row. `CFBPlayProcess` now drops
+them before that dedupe, keeping the echo's play type (401752854, Oregon @ Penn State 2025, files
+its punts, kickoffs and a missed field goal first as "Pass Completion"). That game goes from 281
+rows to 173, and its scrimmage plays now match the box score. Across the raw store the pass removes
+809 rows in 105 games in 2014–2026 and 727 in 156 games in 2007–2013. Feeds with no start spot
+(2004–2006) are left to the adjacent rule. Play counts, EPA/play and success rate move in the
+affected games, so every season with drops needs a reprocess.
+
+### Fixed — CFB losses written "for N yards loss" read as gains
+
+ESPN's 2025 text states a loss after the number: "rush middle for 4 yards loss", "caught at
+SAC18, for 1 yard loss". The "rush for N" and "for N" readers matched first and stored the loss
+as a gain, so `yds_rushed` was +N on 2,224 rushes and `yds_receiving` +N on 581 receptions in the
+published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The existing "yds loss"
+branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
+readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
+and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
+penalty residual `statYardage - yds_rushed` all move. A run filed twice in one 2023 text
+("run for 7 yds ... fumbled ... rush middle for 7 yards loss") reads the loss from the second copy
+(43 rows). The 2023 and 2025 seasons and 2026 to date need a reprocess (2022 has one rush and one
+reception).
+
+### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
+
+ESPN's 2025 feed writes a run as "rush right for 6 yards gain" (the rush flag on a
+fumble-typed row only read "run for") and files a fumble that goes out of bounds under a new
+`Fumble` type that neither flag listed. 466 of 1,401 FBS-vs-FBS scrimmage fumbles in 2025 came
+out with `rush` and `pass` both False (33 in 2024), 435 of them through these two gaps, so every
+pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed rows now read the
+2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
+2005–2013 feeds pick up the rush flag through the same pattern (~25 per season). A `Fumble`-typed pick whose returner
+fumbles out of bounds is typed "Interception Return" (3 rows in 2025–26), so the strip-sack rule no
+longer retypes it as a lost fumble.
+
+### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
+
+`load_mlb_park_dimensions()` reads the season-less `mlb_parks` release built by
+`sportsdataverse/sdv-reference-data`: one row per MLB venue per season, 2001 on
+(regular-season, spring-training, neutral and international sites), with fence
+distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and
+coordinates as of that season, from the MLB Stats API. `venue_id` stays a string (the
+API's `venue.id`). Cited corrections for fence moves the API lags or misses are applied
+and described in `notes`. Every column is described in the returns table.
 
 ### Added — conference and division reference tables for nine leagues (`{league}_groups`)
 

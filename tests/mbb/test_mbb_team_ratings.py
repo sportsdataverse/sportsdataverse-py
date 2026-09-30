@@ -420,3 +420,28 @@ def test_one_sided_shell_is_dropped_too():
         eff = raw_game_efficiency(sched, box)
     assert "SHELL" not in eff["game_id"].to_list()
     assert eff["off_eff"].max() < 200.0
+
+
+def test_real_2011_shell_game_does_not_poison_the_season(monkeypatch):
+    """Real ESPN slice, not a synthetic box: every 2011 game of New Orleans (2443) and
+    Victory (3129), including shell game 310573129 (score kept, FGA/OREB/TO/FTA all 0).
+    Without the drop, all 16 teams' adj_o/adj_d/adj_em/adj_em_z come out NaN -- the
+    published mbb_ratings_2011 before its 2026-09-08 rebuild, still in mbb.ratings."""
+    import importlib
+    from pathlib import Path
+
+    mod = importlib.import_module("sportsdataverse.mbb.mbb_team_ratings")
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
+    sched = pl.read_parquet(fix / "shell_game_schedule_2011.parquet")
+    box = pl.read_parquet(fix / "shell_game_team_box_2011.parquet")
+    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: sched)
+    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: box)
+
+    with pytest.warns(UserWarning, match="310573129"):
+        out = mod.mbb_team_ratings(2011)
+
+    assert out.height == box["team_id"].n_unique() == 16
+    for c in ("adj_o", "adj_d", "adj_em", "adj_tempo", "raw_o", "raw_d", "adj_em_z"):
+        assert out[c].is_finite().all(), f"{c} went non-finite"
+    games = dict(zip(out["team_id"].to_list(), out["games"].to_list()))
+    assert games["2443"] == 19 and games["3129"] == 2  # the shell game is gone, the rest kept

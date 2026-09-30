@@ -5,9 +5,9 @@ pregame numbers a betting/preview surface needs: expected margin, home win
 probability, and expected total points. Everything here is closed-form -- no
 model artifact, no fit at call time -- so the only tunables are the era config in
 :data:`cfb_prediction_constants.CFB_CONSTANTS` (``net_points_scale``, ``margin_sd``,
-``total_intercept``, ``total_scale``, ``total_pace_scale`` fitted on the 2023
-backtest by ``dev/cfb_prediction/fit_pregame.py``; ``hfa_epa`` is the ratings
-ridge's native home coefficient).
+``hfa_points``, ``slope_by_games`` fitted by ``cfb_higher_models.fit_pregame`` in
+cfbfastR-cfb-data; the totals trio fitted separately, see the constants module;
+``hfa_epa`` is the ratings ridge's native home coefficient).
 
 The win-probability model treats a game's realized margin as
 ``Normal(exp_margin, margin_sd**2)``: ``P(home wins) = P(margin > 0) =
@@ -48,12 +48,15 @@ _PREDICT_COLUMNS = [
 ]
 
 
-#: Spread of `adj_net` the fitted constants assume. MEASURED on the 2014-2025
-#: corpus the refit ran against (n=13,580 team-games): sd 0.2646, p05 -0.400,
-#: p95 +0.413. Not estimated from memory -- a first draft of this line guessed
-#: 0.1049, which would have made the gate fire at 2.5x on correct data. A
-#: mis-calibrated guard is worse than none: it teaches readers to ignore it.
-_FITTED_ADJ_NET_SD = 0.2646
+#: Spread of `adj_net` the fitted constants assume. MEASURED on the 2014-2023
+#: corpus the 2026-09-27 refit ran against (n=11,346 as-of team-games): sd
+#: 0.2633, printed by `cfb_higher_models.fit_pregame` (cfbfastR-cfb-data) and
+#: stored as `adj_net_sd` in its `models/pregame_fit.json`. The 2026-08-03 fit
+#: measured 0.2646 on 2014-2025. Not estimated from memory -- a first draft of
+#: this line guessed 0.1049, which would have made the gate fire at 2.5x on
+#: correct data. A mis-calibrated guard is worse than none: it teaches readers
+#: to ignore it.
+_FITTED_ADJ_NET_SD = 0.2633
 #: Tolerance before the ratings are considered to have moved out from under the
 #: constants. 1.6x is wide enough for ordinary season-to-season variation and
 #: far tighter than the ~1.9x drift that silently invalidated the previous fit.

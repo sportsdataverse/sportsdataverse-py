@@ -1214,7 +1214,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
-  min_season: 2025
+  min_season: 2002
   example_args:
     seasons: 2026
 - fn: load_wbb_player_crosswalk
@@ -2241,6 +2241,7 @@ loaders:
   url: ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet
   tag: ncaa_mfb_teams
   min_season: 2013
+  notes: "No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release)."
   example_args:
     seasons: 2024
 - fn: load_ncaa_mfb_team_stats
@@ -2620,3 +2621,11 @@ loaders:
   example_args:
     seasons: 2024
   notes: "One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026."
+# --- mlb_parks: MLB park dimensions (sportsdataverse/sdv-reference-data). One
+# season-less venue x season table; fences in feet at MLB's seven markers. ---
+- fn: load_mlb_park_dimensions
+  league: mlb
+  base: sdv_releases
+  url: mlb_parks/mlb_park_dimensions.parquet
+  tag: mlb_parks
+  notes: "One season-less file, seasons 2001 on: one row per MLB venue per season (regular-season, spring-training, neutral and international sites) from the MLB Stats API venues endpoint, with fence distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and coordinates as of that season. venue_id is a string (the MLB Stats API venue id, venue.id in game feeds); venue_name is the name in use that season. The API lags or misses some fence moves: cited corrections (Camden Yards, Petco Park, T-Mobile Park, Comerica Park, 2022 Rate Field and Progressive Field) are applied and described in notes, which is null on uncorrected rows."

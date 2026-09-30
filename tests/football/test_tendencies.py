@@ -1,4 +1,4 @@
-"""Team / coach tendencies on the real NFL fixture game and a synthetic frame."""
+"""Team / coach tendencies on real NFL / CFB fixture games and synthetic frames."""
 
 from __future__ import annotations
 
@@ -13,7 +13,8 @@ from sportsdataverse.football.play_participants import (
     athlete_lookup_from_summary,
     play_participants_from_items,
 )
-from sportsdataverse.football.tendencies import RATES, aggregate_tendencies, tendencies
+from sportsdataverse.football.tendencies import RATES, SPLITS, aggregate_tendencies, tendencies
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 from sportsdataverse.nfl import NFLPlayProcess
 
 FIX = Path(__file__).parent.parent / "nfl" / "fixtures"
@@ -130,3 +131,262 @@ def test_degrades_without_curve_or_clock(plays):
         aggregate_tendencies([t.with_columns(coach=pl.lit("X")), t], keys=("coach",))
     with pytest.raises(ValueError, match="grouping columns"):
         tendencies(plays.drop("season"), league="nfl")
+
+
+# ESPN spells the drive result out before 2014 (CFB) / 2005 (NFL); the offense's points
+# must not depend on the era's spelling. Return TDs are the other team's points.
+_DRIVE_RESULT_CASES = {
+    "TD": 7.0,
+    "RUSHING TD": 7.0,
+    "PASSING TD": 7.0,
+    "RUSHING TD TD": 7.0,
+    "PASSING TD TD": 7.0,
+    "RUSH TD": 7.0,
+    "PASSRECEPTION TD": 7.0,
+    "LATERAL TD": 7.0,
+    "FG": 3.0,
+    "FG GOOD": 3.0,
+    "MADE FG": 3.0,
+    "FIELDGOAL MADE FG": 3.0,
+    "INT TD": 0.0,
+    "INTERCEPTED PASS TD": 0.0,
+    "PUNT RETURN TD": 0.0,
+    "FUMBLE RETURN TD": 0.0,
+    "BLOCKED PUNT TD": 0.0,
+    "MISSED FG TD": 0.0,
+    "PUNT": 0.0,
+    "MISSED FG": 0.0,
+    "FG MISSED": 0.0,
+}
+
+
+def test_drive_points_read_every_era_spelling():
+    results = [*_DRIVE_RESULT_CASES, None]
+    plays = pl.DataFrame(
+        {
+            "season": 2005,
+            "game_id": 1,
+            "pos_team": [f"T{i}" for i in range(len(results))],
+            "def_pos_team": "OPP",
+            "drive.id": [str(i) for i in range(len(results))],
+            "drive.result": results,
+            "scrimmage_play": True,
+            "penalty_no_play": False,
+        }
+    )
+    t = tendencies(plays, league="cfb", third_down_curve=pl.DataFrame({"distance": [], "rate": []}))
+    got = dict(zip(t["pos_team"], t["drive_points"]))
+    want = {f"T{i}": _DRIVE_RESULT_CASES.get(r, 0.0) for i, r in enumerate(results)}
+    assert got == want
+    assert t.filter(pl.col("pos_team") == "T0")["pts_per_drive"][0] == 7.0
+
+
+def test_drive_points_on_a_2005_cfb_game():
+    """Boston College @ BYU, 2005 (20-3): "PASSING TD" / "FG GOOD" drives score the final."""
+    game_id = 252460252
+    summary = json.loads((Path(__file__).parent.parent / "cfb" / "fixtures" / f"summary_{game_id}.json").read_text())
+    proc = CFBPlayProcess(gameId=game_id)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    t = tendencies(proc.plays_frame, league="cfb")
+    points = dict(zip(t["pos_team"], t["drive_points"]))
+    assert points == {103: 20.0, 252: 3.0}  # BC: 2 PASSING TD + 2 FG GOOD; BYU: 1 FG GOOD
+    assert dict(zip(t["pos_team"], t["def_drive_points"])) == {103: 3.0, 252: 20.0}
+
+
+# --- IF-1: every split carries EPA and success; field-zone / third-down-distance / one-score splits
+
+
+def test_pre_existing_split_epa_is_unchanged(plays):
+    """Pinned from origin/main 6426286aa, before ``_split`` generated the EPA columns."""
+    t = tendencies(plays, league="nfl")
+    got = {r["pos_team"]: (r["epa_early_down"], r["epa_per_play_neutral"]) for r in t.to_dicts()}
+    want = {5: (-1.4621596468205098, -0.8858761638402939), 30: (13.574272631376516, 0.5800969863776118)}
+    for team, (early, neutral) in want.items():
+        assert abs(got[team][0] - early) < 1e-9 and abs(got[team][1] - neutral) < 1e-9, team
+
+
+def test_every_split_carries_epa_and_success(plays):
+    t = tendencies(plays, league="nfl")
+    for row in t.to_dicts():
+        assert abs(row["epa_leading"] + row["epa_tied"] + row["epa_trailing"] - row["epa"]) < 1e-9
+        assert row["successes_leading"] + row["successes_tied"] + row["successes_trailing"] == row["successes"]
+        assert row["plays_own_half"] + row["plays_opp_half"] == row["plays"]
+        assert row["plays_d3_short"] + row["plays_d3_medium"] + row["plays_d3_long"] == row["plays_d3"]
+        assert abs(row["epa_per_play_d1"] - row["epa_d1"] / row["plays_d1"]) < 1e-12
+        assert row["plays_one_score"] <= row["plays"] and row["plays_red_zone"] <= row["plays"]
+        for s in SPLITS:
+            for rate, num in (("pass_rate", "passes"), ("epa_per_play", "epa"), ("success_rate", "successes")):
+                assert (row[f"{rate}_{s}"] is None) == (row[f"plays_{s}"] == 0), (rate, s)
+                assert f"{num}_{s}" in row
+    rates = {r for r, _, _ in RATES}
+    assert {f"{r}_{s}" for s in SPLITS for r in ("pass_rate", "epa_per_play", "success_rate")} <= rates
+    # the names that shipped before the split families were generated
+    assert {"pass_rate_d1", "pass_rate_neutral", "epa_per_play_early_down", "epa_per_play_neutral"} <= rates
+
+
+def test_split_counts_recount_from_the_plays(plays):
+    """Per team, straight from the fixture's own yards-to-end-zone and score-at-the-snap columns.
+
+    ESPN's rz_play flag says team 30 had 1 red-zone snap; it read the absolute yard line.
+    """
+    snaps = plays.filter((pl.col("scrimmage_play") == True) & (pl.col("penalty_no_play") != True))
+    ytg, score = pl.col("start.yardsToEndzone"), pl.col("pos_score_diff_start")
+    recount = snaps.group_by("pos_team").agg(
+        plays=pl.len(),
+        red_zone=(ytg <= 20).sum(),
+        opp_half=(ytg < 50).sum(),
+        own_half=(ytg >= 50).sum(),
+        one_score=(score.abs() <= 8).sum(),
+        leading=(score > 0).sum(),
+        tied=(score == 0).sum(),
+        trailing=(score < 0).sum(),
+    )
+    pinned = {
+        5: {
+            "plays": 49,
+            "red_zone": 7,
+            "opp_half": 21,
+            "own_half": 28,
+            "one_score": 8,
+            "leading": 0,
+            "tied": 5,
+            "trailing": 44,
+        },
+        30: {
+            "plays": 56,
+            "red_zone": 3,
+            "opp_half": 26,
+            "own_half": 30,
+            "one_score": 17,
+            "leading": 48,
+            "tied": 8,
+            "trailing": 0,
+        },
+    }
+    assert {r.pop("pos_team"): r for r in recount.to_dicts()} == pinned
+    for row in tendencies(plays, league="nfl").to_dicts():
+        want = pinned[row["pos_team"]]
+        assert {k: row["plays" if k == "plays" else f"plays_{k}"] for k in want} == want, row["pos_team"]
+
+
+def test_split_boundaries_and_fallbacks():
+    """One team per snap: red zone at 20, own half from 50, one score at 8, the score before the play."""
+    n = 6
+    plays = pl.DataFrame(
+        {
+            "season": 2025,
+            "game_id": 1,
+            "pos_team": [f"T{i}" for i in range(n)],
+            "def_pos_team": "OPP",
+            "scrimmage_play": True,
+            "penalty_no_play": False,
+            "start.yardsToEndzone": [20, 21, 49, 50, None, None],
+            "rz_play": [False, True, False, False, True, False],  # read only when the distance is missing
+            "pos_score_diff_start": [8, -8, 9, -9, None, 0],
+            "pos_score_diff": [1, 1, 1, 1, 3, 7],  # the score AFTER the play: read only when the start is missing
+        }
+    )
+    t = tendencies(plays, league="nfl", third_down_curve=pl.DataFrame({"distance": [], "rate": []}))
+    t = t.sort("pos_team")
+    splits = ("red_zone", "opp_half", "own_half", "one_score", "leading", "tied", "trailing")
+    assert {s: t[f"plays_{s}"].to_list() for s in splits} == {
+        "red_zone": [1, 0, 0, 0, 1, 0],
+        "opp_half": [1, 1, 1, 0, 0, 0],
+        "own_half": [0, 0, 0, 1, 0, 0],
+        "one_score": [1, 1, 0, 0, 1, 1],
+        "leading": [1, 0, 1, 0, 1, 0],
+        "tied": [0, 0, 0, 0, 0, 1],
+        "trailing": [0, 1, 0, 1, 0, 0],
+    }
+
+
+def test_play_level_def_twins_read_the_offense_side(plays):
+    """``def_`` split columns keep the OFFENSE's situation; the perspective swap is the consumer's."""
+    t = tendencies(plays, league="nfl")
+    five, thirty = (t.filter(pl.col("pos_team") == k).row(0, named=True) for k in (5, 30))
+    assert abs(five["def_epa_leading"] - thirty["epa_leading"]) < 1e-9
+    assert abs(five["def_plays_opp_half"] - thirty["plays_opp_half"]) < 1e-9
+    for s in SPLITS:
+        for fam in ("plays", "passes", "epa", "successes"):
+            assert abs(five[f"def_{fam}_{s}"] - thirty[f"{fam}_{s}"]) < 1e-9, (fam, s)
+
+
+def test_split_counts_sum_into_careers(plays):
+    t = tendencies(plays, league="nfl")
+    two = aggregate_tendencies([t, t], keys=("pos_team",))
+    for k in (5, 30):
+        one, agg = (f.filter(pl.col("pos_team") == k).row(0, named=True) for f in (t, two))
+        assert agg["plays_opp_half"] == 2 * one["plays_opp_half"]
+        assert abs(agg["epa_per_play_opp_half"] - one["epa_per_play_opp_half"]) < 1e-9
+
+
+# --- IF-1: optional game-context splits from Boolean ctx_* / def_ctx_* columns
+
+
+def _with_context(plays: pl.DataFrame) -> pl.DataFrame:
+    """Team 5 is the home side and the winner; team 30 is away and lost."""
+    off, dfn = pl.col("pos_team") == 5, pl.col("def_pos_team") == 5
+    return plays.with_columns(
+        ctx_home=off,
+        def_ctx_home=dfn,
+        ctx_away=~off,
+        def_ctx_away=~dfn,
+        ctx_win=off,
+        def_ctx_win=dfn,
+    )
+
+
+def test_game_context_splits(plays):
+    t = tendencies(_with_context(plays), league="nfl")
+    five, thirty = (t.filter(pl.col("pos_team") == k).row(0, named=True) for k in (5, 30))
+    assert five["games_home"] == 1 and five["plays_home"] == five["plays"]
+    assert thirty["games_home"] == 0 and thirty["plays_home"] == 0 and thirty["win_rate_home"] is None
+    assert five["wins_home"] == 1 and five["win_rate_home"] == 1.0
+    assert thirty["games_away"] == 1 and thirty["wins_away"] == 0 and thirty["win_rate_away"] == 0.0
+    assert abs(five["epa_per_play_home"] - five["epa_per_play"]) < 1e-12
+    # the defense reads the DEFENDING team's context: team 5 defended at home and won
+    assert five["def_games_home"] == 1 and five["def_wins_home"] == 1 and five["def_plays_home"] == five["def_plays"]
+    assert thirty["def_games_home"] == 0 and thirty["def_games_away"] == 1 and thirty["def_win_rate_away"] == 0.0
+    # absent contexts emit nothing (no ctx_vs_ranked input, so no vs_ranked columns)
+    assert not [c for c in t.columns if "vs_ranked" in c or "after_bye" in c]
+    # careers sum the games / wins and re-rate them
+    two = aggregate_tendencies([t, t], keys=("pos_team",)).filter(pl.col("pos_team") == 5).row(0, named=True)
+    assert two["games_home"] == 2 and two["wins_home"] == 2 and two["win_rate_home"] == 1.0
+
+
+def test_no_context_columns_emit_nothing_and_change_nothing(plays):
+    base = tendencies(plays, league="nfl")
+    assert not [c for c in base.columns if c.startswith(("games_", "wins_", "def_games_", "def_wins_"))]
+    assert not [c for c in base.columns if "vs_ranked" in c or "win_rate" in c]
+    ctx = tendencies(_with_context(plays), league="nfl")
+    for c in base.columns:
+        assert ctx[c].equals(base[c], check_dtypes=True), c
+
+
+def test_a_null_context_is_not_true(plays):
+    """ctx_home null on every third down: team 5 loses exactly those snaps from home and keeps the game."""
+    third = pl.col("start.down") == 3
+    ctx = _with_context(plays).with_columns(
+        ctx_home=pl.when(third).then(None).otherwise(pl.col("ctx_home")),
+        def_ctx_home=pl.when(third).then(None).otherwise(pl.col("def_ctx_home")),
+    )
+    t = tendencies(ctx, league="nfl")
+    five, thirty = (t.filter(pl.col("pos_team") == k).row(0, named=True) for k in (5, 30))
+    assert five["plays_d3"] > 0 and thirty["plays_d3"] > 0
+    assert five["plays_home"] == five["plays"] - five["plays_d3"] and five["games_home"] == 1
+    assert thirty["plays_home"] == 0 and thirty["games_home"] == 0
+    assert five["def_plays_home"] == five["def_plays"] - five["def_plays_d3"] and thirty["def_games_home"] == 0
+
+
+def test_an_all_null_boolean_context_is_allowed_a_null_dtype_is_not(plays):
+    t = tendencies(plays.with_columns(ctx_home=pl.lit(None, dtype=pl.Boolean)), league="nfl")
+    assert t["games_home"].to_list() == [0, 0] and t["plays_home"].to_list() == [0, 0]
+    with pytest.raises(TypeError, match="ctx_home"):
+        tendencies(plays.with_columns(ctx_home=pl.lit(None)), league="nfl")
+
+
+@pytest.mark.parametrize("col", ["ctx_home", "def_ctx_win"])
+def test_a_non_boolean_context_column_raises(plays, col):
+    with pytest.raises(TypeError, match=col):
+        tendencies(plays.with_columns(pl.lit("true").alias(col)), league="nfl")

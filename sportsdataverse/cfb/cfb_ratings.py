@@ -79,6 +79,9 @@ _RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "def_rank": pl.Int64,
     "net_rank": pl.Int64,
     "net_z": pl.Float64,
+    "fei_off_rank": pl.Int64,
+    "fei_def_rank": pl.Int64,
+    "fei_net_rank": pl.Int64,
 }
 
 # `load_cfb_pbp` serves the published `espn_cfb_pbp` asset, which ships ESPN's
@@ -587,9 +590,13 @@ def cfb_ratings(
         rank on ``adj_off_epa`` descending), ``def_rank`` (Int64, dense rank
         on ``adj_def_epa`` **ascending** -- fewer EPA allowed ranks better),
         ``net_rank`` (Int64, dense rank on ``adj_net`` descending), ``net_z``
-        (Float64, z-score of ``adj_net``). Zero-row (correctly-typed) when
-        the requested season(s) have no published pbp/schedule asset, or when
-        ``as_of_date`` filters out every play.
+        (Float64, z-score of ``adj_net``), ``fei_off_rank`` (Int64, dense rank
+        on ``fei_off`` descending), ``fei_def_rank`` (Int64, dense rank on
+        ``fei_def`` **ascending** -- fewer drive EPA allowed ranks better),
+        ``fei_net_rank`` (Int64, dense rank on ``fei_net`` descending).
+        Zero-row (correctly-typed) when the requested season(s) have no
+        published pbp/schedule asset, or when ``as_of_date`` filters out every
+        play.
 
     Raises:
         KeyError: If the loaded plays frame is missing a required column.
@@ -689,6 +696,9 @@ def cfb_ratings(
             off_rank=pl.col("adj_off_epa").rank(method="dense", descending=True).cast(pl.Int64),
             def_rank=pl.col("adj_def_epa").rank(method="dense", descending=False).cast(pl.Int64),
             net_rank=pl.col("adj_net").rank(method="dense", descending=True).cast(pl.Int64),
+            fei_off_rank=pl.col("fei_off").rank(method="dense", descending=True).cast(pl.Int64),
+            fei_def_rank=pl.col("fei_def").rank(method="dense", descending=False).cast(pl.Int64),
+            fei_net_rank=pl.col("fei_net").rank(method="dense", descending=True).cast(pl.Int64),
         )
     )
 
@@ -716,5 +726,8 @@ def cfb_ratings(
         "def_rank",
         "net_rank",
         "net_z",
+        "fei_off_rank",
+        "fei_def_rank",
+        "fei_net_rank",
     )
     return out.to_pandas() if return_as_pandas else out
