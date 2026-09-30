@@ -7,6 +7,7 @@
   - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
   - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
   - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
+  - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
   - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
   - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
   - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
@@ -361,6 +362,27 @@ main row undercounted targets (Danny Scudero, San Jose State: 160 targets publis
 Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
 frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
 special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
+
+### Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate
+
+The bundled `cfb/models/qbr_model.ubj` is replaced. The old model was fitted on features
+that serving never computes: plays were grouped by passer name, so QB runs never reached
+`rush_epa`, and the booster had no split on it. Overtime games were dropped, and penalty
+plays were handled differently. The new model is trained on the published `adv_passing`
+rows, which are exactly what `create_box_score` scores. Its labels are ESPN game QBR,
+committed with provenance in cfbfastR-cfb-data. It also drops `spread`: `qbr_vars` is now
+the five EPA aggregates plus `era0..era3`. On identical plays, the old model gave a
+14-point favourite's QB about 10 points more than a 14-point underdog's.
+
+On the frozen, never-trained-on holdout (2026 weeks 1–4, 541 QB-games) the RMSE against
+ESPN raw QBR fell from 14.19 to 11.74. The correlation rose from 0.864 to 0.914 (0.660 to
+0.759 against Total QBR). The paired squared-error change is −63.5, with a 95%
+game-clustered CI of [−84.2, −43.6]. Keeping the spread would have scored 11.49; the
+pre-registered tolerance for dropping it was 0.30. The bundle now carries
+`qbr_model.gate.json`, the trainer's gate record, and `tests/cfb/test_qbr_model_gate.py`
+fails if `qbr_model.ubj` is not the candidate that passed it. Every `exp_qbr` changes;
+published `adv_passing` / pbp box scores keep the old values until they are reprocessed.
+The box score still emits a `spread` column.
 
 ### Changed — tackle share counts only the defense's own scrimmage snaps
 
