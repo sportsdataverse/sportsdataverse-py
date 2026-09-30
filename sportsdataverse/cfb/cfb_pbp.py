@@ -1012,6 +1012,65 @@ def _spot_from_text(txt, row):
 #: Rows that are not snaps and may sit between a play and the one that follows it.
 _ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
 
+#: ESPN's down-and-distance text for a ``start.distance`` of 0 that is not labelled
+#: "Goal", and the "at <spot>" tail both texts share.
+_AMP0_RE = r"& 0 at"
+_SPOT_RE = r"at (.+)$"
+
+
+def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
+    """Resolve ESPN's "& 0 at" downs from the previous snap's end state.
+
+    ESPN writes "& 0 at" for two different things: goal-to-go after the ball moved
+    back ("2nd & 0 at LSU 14" follows a sack that ended "2nd & Goal at LSU 14") and
+    a distance it simply lost ("2nd & 0 at UWA 21" follows a play that ended
+    "2nd & 18 at UWA 21"). The previous real snap's end state -- same down, same
+    spot -- tells them apart: goal-to-go becomes the yards to the goal, as the
+    "Goal" rule above does, and a lost distance becomes the previous end distance.
+    Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
+    goal-to-go, 24 lost distances, 321 left at 0.
+
+    The spot is compared as text: on field-goal rows ``start.yardsToEndzone`` runs
+    one yard deeper than the text ("4th & 0 at SYR 13" with 14), so a numeric match
+    misses them. The previous snap skips up to two admin rows (timeouts, period
+    ends), as the next-play lookups below do.
+    """
+    need = {"start.downDistanceText", "end.downDistanceText", "end.down", "end.distance"}
+    if not need.issubset(plays.columns):
+        return plays
+
+    def prev(col: str) -> pl.Expr:
+        return (
+            pl.when(pl.col("type.text").shift(1).str.contains(_ADMIN_ROW_RE))
+            .then(
+                pl.when(pl.col("type.text").shift(2).str.contains(_ADMIN_ROW_RE))
+                .then(pl.col(col).shift(3))
+                .otherwise(pl.col(col).shift(2)),
+            )
+            .otherwise(pl.col(col).shift(1))
+        )
+
+    text = pl.col("start.downDistanceText")
+    prev_text = prev("end.downDistanceText")
+    amp0 = (
+        (pl.col("start.distance") == 0)
+        & text.str.contains(_AMP0_RE)
+        & pl.col("start.down").is_between(1, 4)
+        & pl.col("start.yardsToEndzone").is_between(1, 99)
+        & ~pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two-point|2pt")
+        & (prev("end.down") == pl.col("start.down"))
+        & (prev_text.str.extract(_SPOT_RE, 1) == text.str.extract(_SPOT_RE, 1))
+    )
+    return plays.with_columns(
+        pl.when(amp0 & prev_text.str.contains(r"(?i)goal"))
+        .then(pl.col("start.yardsToEndzone"))
+        .when(amp0 & (prev("end.distance") > 0))
+        .then(prev("end.distance"))
+        .otherwise(pl.col("start.distance"))
+        .alias("start.distance"),
+    )
+
+
 _RETURN_RE = re.compile(r"(?i)\breturn")
 #: ...on a KICKOFF row specifically. Without this the resolver also fired on fumble
 #: recoveries, whose text carries "returned to the WEST 45" and matches _RETURN_RE.
@@ -2447,6 +2506,9 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("start.distance"))
                 .alias("start.distance"),
             )
+            # Before the end-state backfills below: they copy a play's end.distance
+            # from the next play's start.distance, which must already be resolved.
+            .pipe(_repair_amp0_distance)
             .with_columns(
                 pl.when((pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains(r"(?i)declined")))
                 .then(pl.col("start.yardsToEndzone"))
