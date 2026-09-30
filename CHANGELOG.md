@@ -4,6 +4,12 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
+  - [Changed — CFB "situation-neutral" reads the score-and-clock win probability](#changed--cfb-situation-neutral-reads-the-score-and-clock-win-probability)
+  - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
+  - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
+  - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
+  - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
+  - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -316,6 +322,86 @@ touchdown rows with no text; 2019: 47; 2021–2023: 25–32 each; 2025: 83 in th
 passing / receiving yards, yards per attempt and the box scores move wherever they occur. Two
 related gaps remain (see the PR): a reversed-order text ("to X for 20 yds ..., Stone pass") files
 the passer as TEAM, and a completion lost on a fumble is typed as the recovery with `pass=False`.
+
+### Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)
+
+The neutral split in `football.tendencies` (win probability 20–80%, regulation, outside the last
+two minutes of a half) read `wp_before`, which carries the pregame line, so a heavy favorite's
+tied first quarter was not neutral: in 2025 only 64.1% of tied first-quarter FBS snaps counted,
+433 of 1,739 team-games had no neutral snap at all, and 25 teams' neutral pass rate moved 3+
+points between the two WPs. Per the owner's decision (2026-09-30), CFB now reads
+`wp_before_naive` (score, clock and field position only), the same model adjusted EPA's
+garbage-time rule uses; the band and the clock rules are unchanged. This moves every `*_neutral`
+column (`plays_` / `passes_` / `epa_` / `successes_neutral`, their rates and `def_` twins) and
+`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL follows (owner, same
+day) so both leagues' "neutral pass rate" mean the same thing: it reads its `wp_before_naive`
+(nflfastR's spread-free `wp`) under the same band and clock rules. In 2025's Raiders–Texans game
+(401772805) the pregame line left 19 of 102 snaps neutral; the score-and-clock WP leaves 93.
+
+### Fixed — pace counts regulation drives once, for the drive's own offense
+
+`sec_per_play` in `football.tendencies` summed ESPN's drive clock over every drive with a
+parseable `drive.timeElapsed`, overtime included. Overtime has no game clock: ESPN files its
+drives as 0:00 (86 of 89 in 2025), so they added plays and no seconds, and one North Texas OT drive
+(401762461) carried 15:00 over 3 plays. Separately, an ESPN drive id holding standing snaps by both
+offenses (51 ids in 28 games in 2025) handed each offense the whole drive clock and play count.
+A drive now carries a clock only in regulation and only for its owner: the offense ESPN names as
+the drive team, else the one with the most standing snaps (the rule cfb-data's `team_summaries`
+uses). In 2025, 75 of 136 FBS teams' `sec_per_play` move, by at most 0.71 s (North Texas 27th →
+16th), and 10 teams' `sec_per_play_neutral` move by at most 0.58 s. `drives_with_clock`,
+`drive_seconds`, `drive_plays` and `pace_coverage` change with them; drive counts, finishing and
+scripting are unchanged.
+
+### Fixed — a season usage table keeps one row per player
+
+`aggregate_usage_box` summed per-game rows on `(team, player_id, player_name, position_group)`, so
+a player whose position group was missing in some games (a roster gap) or whose name changed
+split into several season rows: 177 CFB player ids in 2025 (763 in 2014), and 121 FBS players'
+main row undercounted targets (Danny Scudero, San Jose State: 160 targets published as 106 + 54).
+Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
+frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
+special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
+
+### Changed — tackle share counts only the defense's own scrimmage snaps
+
+Tackle share divided a player's tackle points by his team's across every play, special teams
+included: kickoff and punt coverage made up 6,590 of 113,407 CFB credits in 2025 (5.8%), with
+22 more on plays a penalty wiped out. Per the owner's decision (2026-09-30) the share now counts
+only the defense's own standing scrimmage snaps: two new columns,
+`scrimmage_tackle_points` and `team_scrimmage_tackle_points`, carry its numerator and
+denominator, and `tackle_share` is their ratio (per game, per position group and per season in
+`aggregate_usage_box`). `tackles`, `assists`, `tackle_points` and `team_tackle_points` still count
+every credit, special teams and the offense's tackles after a turnover included. Rows built before
+this change still share on every credit. The two new columns are declared in the loader schemas
+after the tackle tables are republished.
+
+### Fixed — a tackle is credited to the tackler's own team
+
+The usage box credited every tackler on a play to the play's defense, so a punting team's
+coverage tackles and an offense's tackles after an interception or fumble landed in the
+opponent's tackle table: 2,945 of 113,407 CFB tackle credits in 2025 (punts, punt returns,
+interception returns, fumble recoveries), and every FBS team's season table listed opposing
+players (Indiana's Jeff Utzinger under Miami in the 2025 title game). `create_usage_box` now reads
+each tackler's team from the game roster (`rosters`, which the CFB processor and the cfb-data build
+already pass) and files the credit under that team; a tackler the roster doesn't list stays with the
+play's defense, as before (NFL, which passes no roster, is unchanged). Raw tackle and assist counts
+are unchanged; `def_pos_team` in the `tackles` / `position_group_tackles` sections now means the
+tackler's team. `adv_tackles`, `adv_position_group_tackles` and their `usage_*` season tables need a
+rebuild.
+
+### Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown
+
+The football tendencies and usage box read "touchdown" as any touchdown on the play, so a third
+down that ended in an interception or fumble returned for a score counted as the offense's
+conversion: 816 of 115,222 CFB third-down conversions in 2014–2025 (640 interception-return, 129
+fumble-return and 47 fumble-recovery touchdowns; 58 in 2025 across 40 FBS offenses). The same flag
+fed fourth-down conversions (13 of 2,081 in 2025), a ball carrier's `touchdowns` / `fd_or_td` when
+his fumble was returned for a score, red-zone and scoring-opportunity touchdowns, and the drive
+touchdown behind `rz_tds` / `so_tds`. A touchdown now counts only when it is not a
+`defense_score_play`, in `football.tendencies`, `football.usage_box` and `fit_third_down_curve`
+(both leagues). Team / coach tendencies, coach careers and the usage tables need a rebuild; the
+bundled third-down curves should be refit on the reprocessed play-by-play (today's release no
+longer reproduces them exactly, so a refit now would mix in unrelated data changes).
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
