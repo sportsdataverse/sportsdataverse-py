@@ -248,7 +248,7 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: '0022200021'
-    name: gameid
+    name: game_id
     query_key: GameID
     type: str
   parser: parse_nba_stats_result_sets
@@ -354,7 +354,7 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: '1022200034'
-    name: gameid
+    name: game_id
     query_key: GameID
     type: str
   parser: parse_nba_stats_result_sets

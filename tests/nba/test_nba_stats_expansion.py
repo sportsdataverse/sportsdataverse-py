@@ -110,3 +110,30 @@ def test_result_sets_envelope_still_default():
     raw = {"resultSets": [{"name": "A", "headers": ["GAME_ID", "PTS"], "rowSet": [["1", 10], ["2", 12]]}]}
     df = parse_nba_stats_result_sets(raw)
     assert isinstance(df, pl.DataFrame) and df.height == 2 and df.columns == ["game_id", "pts"]
+
+
+def test_game_id_reaches_the_request_for_every_wrapper():
+    """Every per-game wrapper takes ``game_id``; ``gameid`` was swallowed by ``**kwargs``.
+
+    boxscoresummaryv3 / boxscorehustlev2 once named it ``gameid``, so a ``game_id=``
+    call silently fetched the default game for every id.
+    """
+    import inspect
+
+    for mod in (nba_stats, wnba_stats):
+        for name, fn in inspect.getmembers(mod, inspect.isfunction):
+            assert "gameid" not in inspect.signature(fn).parameters, name
+    for fn in (
+        nba_stats.nba_stats_boxscoresummaryv3,
+        nba_stats.nba_stats_boxscorehustlev2,
+        wnba_stats.wnba_stats_boxscoresummaryv3,
+        wnba_stats.wnba_stats_boxscorehustlev2,
+    ):
+        sent: dict = {}
+
+        def transport(url, params, headers, proxy_url, sent=sent):
+            sent.update(params)
+            return 200, "{}"
+
+        fn(game_id="0022501230", return_parsed=False, transport=transport)
+        assert sent["GameID"] == "0022501230", fn.__name__

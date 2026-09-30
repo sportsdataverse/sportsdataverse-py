@@ -233,6 +233,8 @@ _SEASON_TYPE_BY_ID = {
     "3": "All-Star",
     "4": "Playoffs",
     "5": "Play-In Game",
+    "6": "NBA Cup",  # Emirates NBA Cup Championship (2023-24+); not a regular-season game
+    "9": "International",  # Team USA summer 2004-06: Athens Olympics, 2006 FIBA Worlds + warm-ups
 }
 
 
