@@ -1369,7 +1369,7 @@ through untouched.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` |  |  | Frame carrying `qbr_epa`, `sack_epa`, `pass_epa`, `rush_epa`, `pen_epa`, `spread`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `df` |  |  | Frame carrying `qbr_epa`, `sack_epa`, `pass_epa`, `rush_epa`, `pen_epa`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
 | `season` |  | `None` | Season used to derive era columns when `df` has none. |
 | `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
 
