@@ -67,7 +67,9 @@ def _play(df: pl.DataFrame, play_id: int) -> dict:
         (401752671, 401752671102948901, "3rd & 0 at LSU 14", 14),
         # a lost distance: the previous snap ended "2nd & 18 at UWA 21"
         (400559176, 400559176102897711, "2nd & 0 at UWA 21", 18),
-        # nothing to go on (the previous row is a penalty with no end state)
+        # KNOWN GAP, pinned so a change is noticed: really goal-to-go (the previous
+        # snap started "1st & Goal at TULN 10" and a penalty backed it up), but that
+        # penalty row carries no end state, so this rule has nothing to read.
         (400547673, 400547673104976905, "1st & 0 at TULN 15", 0),
     ],
 )
@@ -82,3 +84,113 @@ def test_goal_text_rows_are_unchanged(monkeypatch):
     r = _play(_run(monkeypatch, 401752671), 401752671102945901)
     assert r["start.downDistanceText"] == "1st & Goal at LSU 4"
     assert r["start.distance"] == 4
+
+
+def _frame(rows: list[tuple]) -> pl.DataFrame:
+    cols = [
+        "type.text",
+        "start.down",
+        "start.distance",
+        "start.yardsToEndzone",
+        "start.downDistanceText",
+        "end.down",
+        "end.distance",
+        "end.downDistanceText",
+    ]
+    return pl.DataFrame(rows, schema=cols, orient="row")
+
+
+@pytest.mark.parametrize(
+    ("prev_rows", "row", "expected"),
+    [
+        # goal-to-go: previous end "Goal" at the same down and spot
+        (
+            [("Sack", 1, 4, 4, "1st & Goal at LSU 4", 2, 14, "2nd & Goal at LSU 14")],
+            ("Pass Incompletion", 2, 0, 14, "2nd & 0 at LSU 14", 3, 14, "3rd & Goal at LSU 14"),
+            14,
+        ),
+        # the same, with a timeout between the two snaps
+        (
+            [
+                ("Sack", 1, 4, 4, "1st & Goal at LSU 4", 2, 14, "2nd & Goal at LSU 14"),
+                ("Timeout", 2, 14, 14, None, 2, 14, None),
+            ],
+            ("Pass Incompletion", 2, 0, 14, "2nd & 0 at LSU 14", 3, 14, None),
+            14,
+        ),
+        # lost distance: previous end "2nd & 18 at UWA 21"
+        (
+            [("Rush", 1, 10, 23, "1st & 10 at UWA 23", 2, 18, "2nd & 18 at UWA 21")],
+            ("Rush", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None),
+            18,
+        ),
+        # a previous end distance past the goal line is capped at the yards to go
+        (
+            [("Rush", 1, 10, 30, "1st & 10 at TROY 30", 2, 48, "2nd & 48 at TROY 38")],
+            ("Rush", 2, 0, 38, "2nd & 0 at TROY 38", 3, 0, None),
+            38,
+        ),
+        # spot differs -> nothing to read
+        (
+            [("Rush", 1, 10, 23, "1st & 10 at UWA 23", 2, 18, "2nd & 18 at UWA 25")],
+            ("Rush", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None),
+            0,
+        ),
+        # down differs -> nothing to read
+        (
+            [("Rush", 1, 10, 23, "1st & 10 at UWA 23", 3, 18, "3rd & 18 at UWA 21")],
+            ("Rush", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None),
+            0,
+        ),
+        # previous end distance 0 without "Goal" -> nothing to read
+        (
+            [("Penalty", 1, 10, 10, "1st & Goal at TULN 10", 1, 0, None)],
+            ("Rush", 1, 0, 15, "1st & 0 at TULN 15", 2, 0, None),
+            0,
+        ),
+        # "Goal" end state that ESPN also encodes as distance 0: only the Goal
+        # branch can resolve it
+        (
+            [("Sack", 1, 4, 4, "1st & Goal at LSU 4", 2, 0, "2nd & Goal at LSU 14")],
+            ("Pass Incompletion", 2, 0, 14, "2nd & 0 at LSU 14", 3, 14, None),
+            14,
+        ),
+        # same spot and down, no "Goal", end distance missing -> nothing to read
+        (
+            [("Rush", 1, 10, 23, "1st & 10 at UWA 23", 2, None, "2nd & 0 at UWA 21")],
+            ("Rush", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None),
+            0,
+        ),
+        # kickoffs are never touched
+        (
+            [("Rush", 1, 10, 23, "1st & 10 at UWA 23", 2, 18, "2nd & 18 at UWA 21")],
+            ("Kickoff", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None),
+            0,
+        ),
+    ],
+)
+def test_repair_amp0_distance_branches(prev_rows, row, expected):
+    """Values are taken from the real plays above; each branch in isolation."""
+    out = cfb_pbp_mod._repair_amp0_distance(_frame([*prev_rows, row]))
+    assert out["start.distance"][-1] == expected
+    assert out["start.distance"].dtype == pl.Int64
+    # rows other than the "& 0 at" one are never touched
+    assert out["start.distance"][:-1].to_list() == [r[2] for r in prev_rows]
+
+
+def test_repair_amp0_distance_skips_payloads_without_end_text():
+    df = _frame([("Rush", 2, 0, 21, "2nd & 0 at UWA 21", 3, 0, None)]).drop("end.downDistanceText")
+    assert cfb_pbp_mod._repair_amp0_distance(df).equals(df)
+
+
+def test_repair_amp0_distance_survives_an_all_null_end_text():
+    """A payload that carries end.downDistanceText but never fills it types the
+    column Null; the repair must leave the frame alone rather than raise."""
+    df = _frame(
+        [
+            ("Penalty", 1, 10, 10, "1st & Goal at TULN 10", 1, 0, None),
+            ("Rush", 1, 0, 15, "1st & 0 at TULN 15", 2, 0, None),
+        ]
+    )
+    assert df.schema["end.downDistanceText"] == pl.Null
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, 0]

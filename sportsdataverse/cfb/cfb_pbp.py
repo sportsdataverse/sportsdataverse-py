@@ -1026,8 +1026,11 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     a distance it simply lost ("2nd & 0 at UWA 21" follows a play that ended
     "2nd & 18 at UWA 21"). The previous real snap's end state -- same down, same
     spot -- tells them apart: goal-to-go becomes the yards to the goal, as the
-    "Goal" rule above does, and a lost distance becomes the previous end distance.
-    Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
+    "Goal" rewrite that runs just before this does, and a lost distance becomes the
+    previous end distance, capped at the yards to the goal (the line to gain cannot
+    lie past the goal line). Anything else stays 0 -- including a penalty that
+    backs a goal-to-go series up when that row carries no end state, which needs a
+    same-series rule on the previous snap's START text (follow-up). Across 2,472 such rows in the 2014-2026 finals: 2,127
     goal-to-go, 24 lost distances, 321 left at 0.
 
     The spot is compared as text: on field-goal rows ``start.yardsToEndzone`` runs
@@ -1050,14 +1053,16 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
             .otherwise(pl.col(col).shift(1))
         )
 
-    text = pl.col("start.downDistanceText")
-    prev_text = prev("end.downDistanceText")
+    # Cast: a game whose payload carries the field but never fills it types the
+    # column Null, and str.extract on a Null column raises.
+    text = pl.col("start.downDistanceText").cast(pl.String)
+    prev_text = prev("end.downDistanceText").cast(pl.String)
     amp0 = (
         (pl.col("start.distance") == 0)
         & text.str.contains(_AMP0_RE)
         & pl.col("start.down").is_between(1, 4)
         & pl.col("start.yardsToEndzone").is_between(1, 99)
-        & ~pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two-point|2pt")
+        & (pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two[- ]point|2pt") == False)  # noqa: E712
         & (prev("end.down") == pl.col("start.down"))
         & (prev_text.str.extract(_SPOT_RE, 1) == text.str.extract(_SPOT_RE, 1))
     )
@@ -1065,7 +1070,11 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
         pl.when(amp0 & prev_text.str.contains(r"(?i)goal"))
         .then(pl.col("start.yardsToEndzone"))
         .when(amp0 & (prev("end.distance") > 0))
-        .then(prev("end.distance"))
+        .then(
+            pl.min_horizontal(prev("end.distance"), pl.col("start.yardsToEndzone")).cast(
+                plays.schema["start.distance"], strict=False
+            )
+        )
         .otherwise(pl.col("start.distance"))
         .alias("start.distance"),
     )
