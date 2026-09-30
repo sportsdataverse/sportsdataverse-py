@@ -82,6 +82,15 @@ from sportsdataverse.cfb.model_cards import card_features as _card_features
 from sportsdataverse.cfb.model_vars import (
     ep_class_to_score_mapping,
 )
+from sportsdataverse.cfb.cfb_wp_overtime import (
+    adjust_wp as _adjust_wp,
+    infer_second_possession as _infer_second,
+    ot_live_wp as _ot_live_wp,
+    ot_possession_over_wp as _ot_possession_over_wp,
+    ot_touchdown_wp as _ot_touchdown_wp,
+    regulation_final_wp as _regulation_final_wp,
+    tie_value as _tie_value,
+)
 
 __all__ = [
     "get_4th_down_probs",
@@ -122,6 +131,9 @@ _PBP_COLS = {
     "season": "season",
     "overUnder": "overUnder",
     "homeTeamSpread": "homeTeamSpread",
+    # optional: second possession of an overtime period (CFBPlayProcess passes it;
+    # without it a non-zero margin implies the second possession, a tie the first)
+    "ot_second": "ot_second_possession",
 }
 
 # --- bundled small models ---
@@ -210,11 +222,12 @@ FG_MODEL_AVAILABLE: bool = fg_model is not None
 #: Source columns of :data:`_PBP_COLS` the models cannot be scored without.
 #:
 #: ``overUnder`` / ``homeTeamSpread`` are excluded because :func:`_posteam_total`
-#: has a documented fallback for them. ``season`` is excluded because both model
+#: has a documented fallback for them, ``ot_second`` because it is inferred from the
+#: margin when absent. ``season`` is excluded because both model
 #: paths already raise their own, more specific error naming the era features it
 #: feeds -- see :func:`_require_season`.
 _REQUIRED_PBP_COLS = tuple(
-    src for short, src in _PBP_COLS.items() if short not in ("overUnder", "homeTeamSpread", "season")
+    src for short, src in _PBP_COLS.items() if short not in ("overUnder", "homeTeamSpread", "season", "ot_second")
 )
 
 
@@ -334,7 +347,22 @@ def _predict_wp(state: pd.DataFrame, ep: np.ndarray) -> np.ndarray:
             "period": state["period"].to_numpy().astype(float),
         }
     )[WP_SPREAD_FEATURES]
-    return _wp_model.predict(DMatrix(X))
+    # Every caller scores the state a decision LEADS to. The booster never saw a game
+    # that reached overtime (see cfb_wp_overtime), and a state with no regulation time
+    # left after the play is decided outright: a win, a loss, or overtime if level.
+    wp = _adjust_wp(_wp_model.predict(DMatrix(X)), X)
+    return _regulation_final_wp(
+        wp, pos_diff, adj, state["period"].to_numpy(), _tie_value(state["pos_team_spread"].to_numpy())
+    )
+
+
+def _ot_rows(st: pd.DataFrame):
+    """Overtime rows of ``st`` with their margin, tie value and possession order."""
+    ot = st["period"].to_numpy().astype(float) >= 5
+    margin = st["pos_score_diff_start"].to_numpy().astype(float)
+    tie = _tie_value(st["pos_team_spread"].to_numpy())
+    second = _infer_second(st["ot_second"].to_numpy() if "ot_second" in st.columns else None, margin)
+    return ot, margin, tie, second
 
 
 def _end_game_clamp(
@@ -587,6 +615,19 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
     wp = np.where(fail_lead & (adj < 80) & (new_def_to == 1), 0.0, wp)
     wp = np.where(fail_lead & (adj < 40) & (new_def_to == 2), 0.0, wp)
 
+    # Overtime has no clock, and a possession that ends -- stopped on downs, or a
+    # touchdown and its try -- hands the other team the ball at the 25 or ends the
+    # period. The regulation states built above (the opponent at the spot) don't exist.
+    ot, margin0, tie0, second0 = _ot_rows(st)
+    if ot.any():
+        m, w, sec = margin0[play_idx], tie0[play_idx], second0[play_idx]
+        ot_wp = np.where(
+            to_mask,
+            _ot_possession_over_wp(m, w, sec),
+            np.where(td_mask, _ot_touchdown_wp(m, w, sec), _ot_live_wp(m, 1, distance, ytg, w, sec)),
+        )
+        wp = np.where(ot[play_idx], ot_wp, wp)
+
     # step 6: aggregate
     res = pd.DataFrame({"play_idx": play_idx, "turnover": turnover, "prob": prob, "wp": wp})
     res["wt_wp"] = res["prob"] * res["wp"]
@@ -786,6 +827,11 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
         _end_game_clamp(wp, *clamp_args, value=1.0),
     )
 
+    # overtime: a punt only ends the possession (see get_go_wp)
+    ot, margin, tie, second = _ot_rows(st)
+    idx = supported["play_idx"].to_numpy()
+    wp = np.where(ot[idx], _ot_possession_over_wp(margin[idx], tie[idx], second[idx]), wp)
+
     agg = (
         pd.DataFrame({"play_idx": supported["play_idx"].to_numpy(), "wt_wp": pct * wp})
         .groupby("play_idx", as_index=False)["wt_wp"]
@@ -952,6 +998,11 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
         miss_state["period"].to_numpy().astype(float),
         miss_state["def_pos_team_timeouts_rem_before"].to_numpy().astype(float),
     )
+
+    # overtime: the kick ends the possession either way (see get_go_wp)
+    ot, margin, tie, second = _ot_rows(st)
+    wp_make = np.where(ot, _ot_possession_over_wp(margin + 3.0, tie, second), wp_make)
+    wp_miss = np.where(ot, _ot_possession_over_wp(margin, tie, second), wp_miss)
 
     fg_wp = make_prob * wp_make + (1.0 - make_prob) * wp_miss
     out = base.copy()

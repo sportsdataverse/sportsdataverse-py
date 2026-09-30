@@ -1,0 +1,177 @@
+{
+  "model_type": "wp_ot_reach",
+  "xgboost_version": "3.3.0",
+  "objective": "binary:logistic",
+  "features": [
+    "adj_TimeSecsRem",
+    "pos_score_diff_start",
+    "down",
+    "distance",
+    "yards_to_goal",
+    "pos_team_timeouts_rem_before",
+    "def_pos_team_timeouts_rem_before",
+    "period"
+  ],
+  "n_features": 8,
+  "label": "game reached overtime",
+  "training_seasons": [
+    2004,
+    2021
+  ],
+  "early_stopping": {
+    "fit_seasons": [
+      2004,
+      2018
+    ],
+    "valid_seasons": [
+      2019,
+      2021
+    ]
+  },
+  "holdout_seasons": [
+    2022,
+    2025
+  ],
+  "n_training_rows": 2448131,
+  "hyperparameters": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "eta": 0.05,
+    "max_depth": 5,
+    "min_child_weight": 50,
+    "subsample": 0.8,
+    "colsample_bytree": 0.9,
+    "tree_method": "hist",
+    "seed": 0
+  },
+  "num_boost_round": 348,
+  "source": "cfbfastR-cfb-data cfb/pbp/parquet/play_by_play_{season}.parquet (published)",
+  "trained_date": "2026-09-30",
+  "fitting_script": "tools/fit_cfb_wp_overtime.py",
+  "overtime": {
+    "spread_slope": 0.035248,
+    "spread_slope_training_games": 566,
+    "p_extra_point": 0.92,
+    "p_two_point": 0.46,
+    "drive_model": {
+      "classes": [
+        "touchdown",
+        "field_goal",
+        "no_score"
+      ],
+      "features": [
+        "ytg/25",
+        "(ytg/25)^2",
+        "down==2",
+        "down==3",
+        "down==4",
+        "log1p(distance)",
+        "(down==4)*log1p(distance)"
+      ],
+      "coef": [
+        [
+          -0.760997,
+          0.179789,
+          -0.265434,
+          -0.56185,
+          -0.91391,
+          -0.222133,
+          -0.075671
+        ],
+        [
+          0.089915,
+          -0.063152,
+          0.162615,
+          0.336974,
+          0.606519,
+          0.08115,
+          -0.005659
+        ],
+        [
+          0.671081,
+          -0.116637,
+          0.10282,
+          0.224876,
+          0.307391,
+          0.140983,
+          0.08133
+        ]
+      ],
+      "intercept": [
+        1.799547,
+        -0.622738,
+        -1.17681
+      ],
+      "training_rows": 7522
+    }
+  },
+  "holdout_metrics": {
+    "regulation": {
+      "before": {
+        "n": 480456,
+        "brier": 0.11295,
+        "logloss": 0.34643
+      },
+      "after": {
+        "n": 480456,
+        "brier": 0.11273,
+        "logloss": 0.34627
+      },
+      "naive_before": {
+        "n": 480456,
+        "brier": 0.13726,
+        "logloss": 0.41244
+      },
+      "naive_after": {
+        "n": 480456,
+        "brier": 0.13707,
+        "logloss": 0.41183
+      }
+    },
+    "q4": {
+      "before": {
+        "n": 120259,
+        "brier": 0.07367,
+        "logloss": 0.23066
+      },
+      "after": {
+        "n": 120259,
+        "brier": 0.07289,
+        "logloss": 0.22814
+      }
+    },
+    "tied_last_2m": {
+      "before": {
+        "n": 1339,
+        "brier": 0.24342,
+        "logloss": 0.72153
+      },
+      "after": {
+        "n": 1339,
+        "brier": 0.21476,
+        "logloss": 0.61882
+      },
+      "won": 0.6475,
+      "mean_before": 0.7709,
+      "mean_after": 0.6467
+    },
+    "overtime": {
+      "before": {
+        "n": 1328,
+        "brier": 0.38457,
+        "logloss": 1.31093
+      },
+      "after": {
+        "n": 1328,
+        "brier": 0.23626,
+        "logloss": 0.84462
+      },
+      "flat_half": {
+        "n": 1328,
+        "brier": 0.25,
+        "logloss": 0.69315
+      }
+    },
+    "q_logloss_holdout": 0.15771
+  }
+}

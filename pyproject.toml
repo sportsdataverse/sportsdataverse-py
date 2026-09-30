@@ -358,6 +358,7 @@ files = [
     "sportsdataverse/cfb/cfb_roster_talent.py",
     "sportsdataverse/cfb/cfb_resume.py",
     "sportsdataverse/cfb/cfb_season_odds.py",
+    "sportsdataverse/cfb/cfb_wp_overtime.py",
     "sportsdataverse/cfb/cfb_simulations.py",
     "sportsdataverse/cfb/cfb_standings.py",
     "sportsdataverse/cfb/cfb_tempo.py",

@@ -301,6 +301,37 @@
 
 ## Unreleased
 
+### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
+
+The regulation WP boosters were trained on a frame that drops every game that reached overtime
+(cfbfastR-cfb-data `clean_plays`), so they estimate P(win | state, settled in regulation). A tied
+game late in the fourth was learned only from games somebody won in regulation, and overtime was
+never seen: its clock reads 0, so it scored as the last snap of such a game. On the 2022–25
+holdout, tied with two minutes or less left, the team with the ball was given 0.77 against 0.65
+won, and a tied overtime snap 0.94 against 0.50. New `cfb_wp_overtime` (fitted by
+`tools/fit_cfb_wp_overtime.py` on 2004–21, read from `models/wp_ot_reach.card.json`) mixes each
+regulation prediction with the overtime it may reach, `(1 - q) * wp + q * tie_value` (q from the new
+`wp_ot_reach` booster, the tie value a logistic in the pregame spread), and values overtime by its
+rules: the possession ends in a touchdown, a field goal or nothing, and the first team is answered
+by the second from the 25. Both the spread and the spread-free surfaces use it.
+
+The fourth-down and two-point surfaces score the state a decision leads to. A state with no
+regulation time left after the play is now decided (win, loss, or overtime if level), and in
+overtime a punt, a kick or a failed try ends the possession instead of handing the opponent the
+ball at the spot. Georgia Tech's walk-off field goal (401754623) goes from "punt 91.7%" to FG
+68.9% vs punt 47.3%; a tied punt with 0:05 left (401762856) is overtime (56.4%, not 91.2%); Cal's
+overtime 4th and 3 at the 3, down 3 (401754585), is go 38.7% vs FG 32.8% (was FG 85.2%).
+`CFBPlayProcess` passes the overtime possession order as `ot_second_possession`; other callers
+may, and without it a non-zero margin implies the second possession.
+
+A made field goal's `wp_after` now hands over to the kickoff that follows, as a try's does. It
+was the kicker's snap at the spot with the points counted, a team with the ball: 11% of 2025's
+made field goals missed the next row by more than 5 points, up to 50 late in the fourth
+(Louisville's tying kick in 401754554 published WPA +30.9%).
+
+Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a little (most in
+close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged.
+
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
 ESPN sometimes files a play again under a fresh play id, in three shapes the adjacent-copy

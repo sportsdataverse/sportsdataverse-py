@@ -356,6 +356,13 @@ xpass_model = Booster({"nthread": _xgb_threads()})  # init model
 xpass_model.load_model(xpass_model_file)
 
 from sportsdataverse.cfb.model_cards import card_features as _card_features
+from sportsdataverse.cfb.cfb_wp_overtime import (
+    adjust_wp as _adjust_wp,
+    infer_second_possession as _infer_second,
+    ot_possession_over_wp as _ot_possession_over_wp,
+    ot_touchdown_wp as _ot_touchdown_wp,
+    tie_value as _tie_value,
+)
 
 # Feature orders come from each booster's published card, not restated here. The DMatrix
 # is built from a pandas frame whose columns are renamed to these exact
@@ -373,11 +380,39 @@ logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
 
+def _ot_period_first_team(play_df) -> pl.Expr:
+    """The team with the first snap of each overtime period (null in regulation)."""
+    keys = [c for c in ("game_id",) if c in play_df.columns] + ["period"]
+    snap = pl.col("start.down").is_between(1, 4) if "start.down" in play_df.columns else pl.lit(True)
+    return pl.col("start.pos_team.id").filter(snap).first().over(keys)
+
+
+def _ot_second(play_df, team_col: str):
+    """Per row: is ``team_col`` second in its overtime period? Null where unknown."""
+    if not {"period", "start.pos_team.id", team_col}.issubset(play_df.columns):
+        return None
+    first = _ot_period_first_team(play_df)
+    return play_df.select(
+        pl.when((pl.col("period") >= 5) & first.is_not_null()).then(pl.col(team_col) != first).alias("s")
+    )["s"].to_numpy()
+
+
+def _with_ot_second(play_df):
+    """``play_df`` plus ``ot_second_possession`` (the fourth-down and two-point surfaces read it)."""
+    second = _ot_second(play_df, "start.pos_team.id")
+    return play_df if second is None else play_df.with_columns(pl.Series("ot_second_possession", second))
+
+
 def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     """Project the WP feature columns, rename to the booster's feature names, and
     predict the start-touchback / start / end win-probabilities. Shared by the
     spread (13-feat) and naive (12-feat) models — the only differences are the
     column-source lists and feature-name list passed in.
+
+    The boosters were trained without any game that reached overtime; each
+    prediction goes through :func:`~sportsdataverse.cfb.cfb_wp_overtime.adjust_wp`,
+    which mixes in the overtime a regulation state may reach and values overtime
+    states by the overtime rules.
     """
     tb = play_df[tb_cols]
     tb.columns = names
@@ -386,10 +421,40 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     end = play_df[end_cols]
     end.columns = names
     return (
-        model.predict(DMatrix(tb)),
-        model.predict(DMatrix(start)),
-        model.predict(DMatrix(end)),
+        _adjust_wp(model.predict(DMatrix(tb)), tb).astype(np.float32),
+        _adjust_wp(model.predict(DMatrix(start)), start, second=_ot_second(play_df, "start.pos_team.id")).astype(
+            np.float32
+        ),
+        _adjust_wp(model.predict(DMatrix(end)), end, second=_ot_second(play_df, "end.pos_team.id")).astype(np.float32),
     )
+
+
+def _ot_end_state_wp(play_df, naive: bool):
+    """Overtime end states no snap follows from: ``(mask, wp)`` for the start team.
+
+    Within a possession the chain keeps the end-state prediction, and in overtime
+    that end state is often not a live snap -- a touchdown, a made kick, a try. The
+    overtime rules value them: a touchdown (with the try to come) or a finished
+    possession at the end margin. Possession changes borrow the next row instead.
+    """
+    kept = (pl.col("start.pos_team.id") == pl.col("end.pos_team.id")).fill_null(False)
+    live = pl.col("end.down").is_between(1, 4) & pl.col("end.yardsToEndzone").is_between(1, 99)
+    touchdown = pl.col("type.text").str.contains("(?i)touchdown") | (pl.col("td_play") == True)  # noqa: E712
+    f = play_df.select(
+        ((pl.col("period") >= 5) & kept & ~live.fill_null(False)).alias("mask"),
+        touchdown.fill_null(False).alias("td"),
+        pl.col("pos_score_diff_start").cast(pl.Float64),
+        pl.col("end.pos_score_diff").cast(pl.Float64),
+        pl.col("start.pos_team_spread").cast(pl.Float64),
+    )
+    tie = _tie_value(None, n=f.height) if naive else _tie_value(f["start.pos_team_spread"].to_numpy())
+    second = _infer_second(_ot_second(play_df, "start.pos_team.id"), f["pos_score_diff_start"].to_numpy())
+    wp = np.where(
+        f["td"].to_numpy(),
+        _ot_touchdown_wp(f["pos_score_diff_start"].to_numpy(), tie, second),
+        _ot_possession_over_wp(f["end.pos_score_diff"].to_numpy(), tie, second),
+    )
+    return f["mask"].to_numpy(), wp
 
 
 #: Standalone try rows. Their start state is a placeholder -- the touchdown's own snap
@@ -558,8 +623,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # the kickoff's wp_before as it will stand once the touchback overlay below has run
     kick_team = _next(team, skip_after_try)
     kick_wb = _next(pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)), skip_after_try)
+    # A made field goal hands over the same way: the kicking team kicks off next. Its own
+    # end state is the kicker's snap at the spot with the points counted -- a team that
+    # has the ball -- which the model read as possession: 11.0% of 2025's made field
+    # goals missed the next row's board by more than 5 points, up to 50 late in the
+    # fourth (Louisville's tying kick in 401754554 published +30.9%; the board says +3.4).
     try_to_kickoff = (
-        (t.is_in(_TRY_TYPES) | penalty_before_kick)
+        (t.is_in(_TRY_TYPES) | penalty_before_kick | (t == "Field Goal Good"))
         & _next(touchback_mask.fill_null(False), skip_after_try)
         & team.is_not_null()
         & kick_team.is_not_null()
@@ -7786,6 +7856,12 @@ class CFBPlayProcess(object):
             wp_naive_end_columns,
         )
 
+        # Overtime end states that are not a live snap (a touchdown, a made kick, a try):
+        # the booster scored them as a regulation snap with no clock left.
+        for naive, arr in ((False, WP_end), (True, WP_end_naive)):
+            ot_mask, ot_wp = _ot_end_state_wp(play_df, naive=naive)
+            arr[ot_mask] = ot_wp[ot_mask]
+
         # ---- derive wp_before / wp_after / wpa (+ home/away/def) for each model ----
         # The spread surface keeps the canonical un-suffixed column names; the
         # spread-free surface mirrors it under the ``_naive`` suffix.
@@ -7922,7 +7998,7 @@ class CFBPlayProcess(object):
             def _board_at(pos_pts: float, exp_pts: float, model=model, names=names, cols=cols):
                 ko = _view(pos_pts, exp_pts).select(cols)
                 ko.columns = names
-                return model.predict(DMatrix(ko))
+                return _adjust_wp(model.predict(DMatrix(ko)), ko).astype(np.float32)
 
             w0, w1, w2 = _board_at(0.0, 0.0), _board_at(1.0, 1.0), _board_at(2.0, 2.0)
             board = np.where(two, 0.46 * w2 + 0.54 * w0, 0.92 * w1 + 0.08 * w0).astype(np.float32)
@@ -9322,7 +9398,7 @@ class CFBPlayProcess(object):
         str_cols = {"fourth_down_recommendation"}
         if "start.down" not in play_df.columns:
             return play_df
-        fourth = play_df.filter(pl.col("start.down") == 4)
+        fourth = _with_ot_second(play_df).filter(pl.col("start.down") == 4)
         if fourth.height == 0:
             # stable schema: emit the decision columns as nulls
             return play_df.with_columns(
@@ -9368,7 +9444,7 @@ class CFBPlayProcess(object):
                 pat_mask = pat_mask | pl.col(tcol).cast(pl.Utf8).str.contains(r"(?i)extra point|two.?point")
                 break
         plays = play_df.with_row_index("__twopt_row_idx")
-        pat = plays.filter(pat_mask)
+        pat = _with_ot_second(plays).filter(pat_mask)
         if pat.height == 0:
             for c in decision_cols:
                 dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
@@ -9635,7 +9711,7 @@ class CFBPlayProcess(object):
         if existing:
             plays = plays.drop(existing)
         plays = plays.with_row_index("__fourth_row_idx")
-        fourth = plays.filter(pl.col("start.down") == 4)
+        fourth = _with_ot_second(plays).filter(pl.col("start.down") == 4)
 
         if fourth.height == 0:
             for c in decision_cols:
