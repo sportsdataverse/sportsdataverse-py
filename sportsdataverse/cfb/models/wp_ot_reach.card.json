@@ -1,0 +1,215 @@
+{
+  "model_type": "wp_ot_reach",
+  "xgboost_version": "3.3.0",
+  "objective": "binary:logistic",
+  "features": [
+    "adj_TimeSecsRem",
+    "pos_score_diff_start",
+    "down",
+    "distance",
+    "yards_to_goal",
+    "pos_team_timeouts_rem_before",
+    "def_pos_team_timeouts_rem_before",
+    "period"
+  ],
+  "n_features": 8,
+  "label": "game reached overtime",
+  "training_seasons": [
+    2004,
+    2021
+  ],
+  "early_stopping": {
+    "fit_seasons": [
+      2004,
+      2018
+    ],
+    "valid_seasons": [
+      2019,
+      2021
+    ]
+  },
+  "holdout_seasons": [
+    2022,
+    2025
+  ],
+  "n_training_rows": 2448131,
+  "hyperparameters": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "eta": 0.05,
+    "max_depth": 5,
+    "min_child_weight": 50,
+    "subsample": 0.8,
+    "colsample_bytree": 0.9,
+    "tree_method": "hist",
+    "seed": 0
+  },
+  "num_boost_round": 348,
+  "source": "cfbfastR-cfb-data cfb/pbp/parquet/play_by_play_{season}.parquet (published)",
+  "trained_date": "2026-09-30",
+  "fitting_script": "tools/fit_cfb_wp_overtime.py",
+  "corrects": {
+    "wp_spread.ubj": "486699334ef9dcdaadc71331b4acd5f14660a5f2d6cea8f1d4969d7092a22c32",
+    "wp_naive.ubj": "624ee14943302ed7f982e27257832e51e98a694da28bed007bcef389c2ceb897"
+  },
+  "overtime": {
+    "spread_slope": 0.035248,
+    "spread_slope_training_games": 566,
+    "p_extra_point": 0.92,
+    "p_two_point": 0.46,
+    "possession_order": "first snap of the period that is not one of ['Timeout', 'End Period', 'Penalty']",
+    "drive_model": {
+      "classes": [
+        "touchdown",
+        "field_goal",
+        "no_score"
+      ],
+      "features": [
+        "ytg/25",
+        "(ytg/25)^2",
+        "down==2",
+        "down==3",
+        "down==4",
+        "log1p(distance)",
+        "(down==4)*log1p(distance)"
+      ],
+      "coef": [
+        [
+          -0.760997,
+          0.179789,
+          -0.265434,
+          -0.56185,
+          -0.91391,
+          -0.222133,
+          -0.075671
+        ],
+        [
+          0.089915,
+          -0.063152,
+          0.162615,
+          0.336974,
+          0.606519,
+          0.08115,
+          -0.005659
+        ],
+        [
+          0.671081,
+          -0.116637,
+          0.10282,
+          0.224876,
+          0.307391,
+          0.140983,
+          0.08133
+        ]
+      ],
+      "intercept": [
+        1.799547,
+        -0.622738,
+        -1.17681
+      ],
+      "training_rows": 7522
+    },
+    "live_bound": 0.1,
+    "live_bound_train_logloss": {
+      "0.0": 0.73897,
+      "0.01": 0.68155,
+      "0.02": 0.67734,
+      "0.03": 0.67489,
+      "0.05": 0.67065,
+      "0.08": 0.6636,
+      "0.1": 0.65878
+    }
+  },
+  "caveats": [
+    "The regulation boosters being corrected were trained on 2004-2025, so the 2022-25 holdout is out of sample only for the correction (q, the spread slope, the drive model, the bound).",
+    "During development the drive model's C (0.01-10), known vs inferred possession order and the try rates were compared on 2022-25 before the design was fixed; C = 1.0 is sklearn's default and the try rates are the ones cfb_pbp already pins.",
+    "Overtime labels are noisy: ESPN's overtime feed has possession and score errors, so about 15% of live overtime snaps carry a margin their possession order cannot have.",
+    "A trial q with the shipped features and hyperparameters was early-stopped on 2022-25 and its 2022-25 regulation calibration inspected before the design was fixed; the shipped q early-stops on 2019-21 only.",
+    "live_bound was chosen at the top of its grid (0.10) with the 2004-21 log loss still falling: it shrinks live overtime snaps for noisy labels, and fourth-down overtime branches mix those bounded values with unbounded terminal ones. It never touches regulation.",
+    "q has no spread feature: favoured leaders' overtime rate is over-predicted and underdog leaders' under-predicted by about 0.01-0.02 at 5-10 minutes (a WP effect under 0.01)."
+  ],
+  "holdout_metrics": {
+    "regulation": {
+      "before": {
+        "n": 480456,
+        "brier": 0.11295,
+        "logloss": 0.34643
+      },
+      "after": {
+        "n": 480456,
+        "brier": 0.11273,
+        "logloss": 0.34627
+      },
+      "brier_delta": {
+        "delta": -0.000217,
+        "ci95": [
+          -0.000371,
+          -2.4e-05
+        ]
+      },
+      "naive_before": {
+        "n": 480456,
+        "brier": 0.13726,
+        "logloss": 0.41244
+      },
+      "naive_after": {
+        "n": 480456,
+        "brier": 0.13707,
+        "logloss": 0.41183
+      }
+    },
+    "q4": {
+      "before": {
+        "n": 120259,
+        "brier": 0.07367,
+        "logloss": 0.23066
+      },
+      "after": {
+        "n": 120259,
+        "brier": 0.07289,
+        "logloss": 0.22814
+      },
+      "brier_delta": {
+        "delta": -0.000787,
+        "ci95": [
+          -0.001253,
+          -0.000307
+        ]
+      }
+    },
+    "tied_last_2m": {
+      "before": {
+        "n": 1339,
+        "brier": 0.24342,
+        "logloss": 0.72153
+      },
+      "after": {
+        "n": 1339,
+        "brier": 0.21476,
+        "logloss": 0.61882
+      },
+      "won": 0.6475,
+      "mean_before": 0.7709,
+      "mean_after": 0.6467
+    },
+    "overtime": {
+      "before": {
+        "n": 1328,
+        "brier": 0.38457,
+        "logloss": 1.31093
+      },
+      "after": {
+        "n": 1328,
+        "brier": 0.22276,
+        "logloss": 0.64302
+      },
+      "flat_half": {
+        "n": 1328,
+        "brier": 0.25,
+        "logloss": 0.69315
+      }
+    },
+    "q_logloss_holdout": 0.15771
+  },
+  "sha256": "a6cc8d25af1871150cf1bc35af685f8b3ffe842b6ead69e5e64d5e81cba198b7"
+}

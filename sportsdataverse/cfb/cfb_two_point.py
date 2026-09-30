@@ -60,6 +60,11 @@ from sportsdataverse.cfb.cfb_fourth_down import (
     _to_pandas,
 )
 from sportsdataverse.cfb.cfb_pbp import _cfb_resource_filename
+from sportsdataverse.cfb.cfb_wp_overtime import (
+    infer_second_possession as _infer_second,
+    ot_possession_over_wp as _ot_possession_over_wp,
+    tie_value as _tie_value,
+)
 
 __all__ = [
     "get_2pt_probs",
@@ -153,7 +158,16 @@ def _wp_after_pts(st: pd.DataFrame, pts: int) -> np.ndarray:
     # flip the WP back to the scoring (originally possessing) team.
     orig_is_home = s["is_home"].to_numpy().astype(float)
     new_is_home = flipped["is_home"].to_numpy().astype(float)
-    return np.where(new_is_home != orig_is_home, 1.0 - wp, wp)
+    wp = np.where(new_is_home != orig_is_home, 1.0 - wp, wp)
+    # Overtime: no kickoff follows. The try ends the possession, and the other team
+    # answers from the 25 or the period is over (see cfb_wp_overtime).
+    ot = st["period"].to_numpy().astype(float) >= 5
+    if ot.any():
+        margin = st["pos_score_diff_start"].to_numpy().astype(float)  # after the touchdown
+        second = _infer_second(st["ot_second"].to_numpy() if "ot_second" in st.columns else None, margin - 6.0)
+        tie = _tie_value(st["pos_team_spread"].to_numpy())
+        wp = np.where(ot, _ot_possession_over_wp(margin + pts, tie, second), wp)
+    return wp
 
 
 def get_2pt_probs(pbp_df: Any) -> pd.DataFrame:
@@ -215,7 +229,7 @@ def get_2pt_probs(pbp_df: Any) -> pd.DataFrame:
         return out
 
     # guard: required state columns must be present (mirrors other surfaces)
-    required = set(_PBP_COLS.values())
+    required = set(_PBP_COLS.values()) - {_PBP_COLS["ot_second"]}  # optional, inferred when absent
     if not required.issubset(set(base.columns)) or two_pt_model is None:
         return _null_out()
 
