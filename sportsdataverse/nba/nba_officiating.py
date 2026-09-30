@@ -290,7 +290,9 @@ def parse_nba_l2m(payload: dict | None, *, return_as_pandas: bool = False) -> di
     tables: calls (one row per graded play, with foul details and decisions), game
     metadata (1 row per game), and stats (3 rows per game with error counts).
     Player names and team IDs are preserved verbatim from the source; decision
-    tags ("CC", "CNC", "INC") are normalized from raw values.
+    tags are normalized to "CC", "CNC", "IC" or "INC" (the rare "NCC"/"NCI" codes
+    fold into "CNC"/"INC"); any other value leaves ``decision`` null, with the raw
+    code still in ``decision_raw``.
 
     Args:
         payload: The JSON payload (dict) from official.nba.com L2M endpoint, or
