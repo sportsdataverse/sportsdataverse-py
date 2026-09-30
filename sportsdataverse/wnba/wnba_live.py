@@ -56,7 +56,7 @@ def wnba_live_pbp(
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
-            negative or fractional number, or a string that is not all digits
+            negative or fractional number, a string that is not all digits, or more than 10 digits
             (checked before any request).
         NoDataError: The game has no liveData play-by-play object.
         AssetFetchError: The fetch failed (network error, rate limit, or a
@@ -121,7 +121,7 @@ def wnba_live_boxscore(
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
-            negative or fractional number, or a string that is not all digits
+            negative or fractional number, a string that is not all digits, or more than 10 digits
             (checked before any request).
         NoDataError: The game has no liveData boxscore object.
         AssetFetchError: The fetch failed (network error, rate limit, or a

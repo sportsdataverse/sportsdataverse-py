@@ -544,7 +544,22 @@ def _no_request(url, **kw):
 
 
 @pytest.mark.parametrize(
-    "gid", [True, False, -1, "-1", -42500405.0, "4_2500405", " 42500405", "+42500405", "", "abc", "٤٢٥٠٠٤٠٥"]
+    "gid",
+    [
+        True,
+        False,
+        -1,
+        "-1",
+        -42500405.0,
+        "4_2500405",
+        " 42500405",
+        "+42500405",
+        "",
+        "abc",
+        "٤٢٥٠٠٤٠٥",
+        "12345678901",
+        12345678901,
+    ],
 )
 def test_bad_game_id_is_value_error_before_request(monkeypatch, gid):
     # int() would read "4_2500405", " 42500405" and "+42500405" as game 42500405,

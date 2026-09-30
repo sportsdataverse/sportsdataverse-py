@@ -461,8 +461,8 @@ plus the WNBA twins.
 Every function here follows the same error rules:
 
 - A bad argument raises `ValueError` before any request: a `game_id` that is not
-  one non-negative integer id (a bool, a negative or fractional number, or a string
-  that is not all digits), a `season` that is not a 4-digit year, a `date` that is
+  one non-negative integer id of at most 10 digits (a bool, a negative or fractional
+  number, a string that is not all digits, or a longer id), a `season` that is not a 4-digit year, a `date` that is
   not one valid `YYYY-MM-DD`, or an unknown `league`.
 - "No data" raises `NoDataError`: a 404, or S3's `AccessDenied` 403. That covers a
   game without an L2M report or a liveData object, and a season without a listing page.

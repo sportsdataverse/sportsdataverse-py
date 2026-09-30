@@ -221,8 +221,9 @@ def _gid(game_id: str | int) -> str:
     if isinstance(game_id, float) and game_id.is_integer():
         game_id = int(game_id)
     s = str(game_id)  # str(True) == "True", so a bool fails the digit check too
-    if not (s.isascii() and s.isdigit()):
-        raise ValueError(f"game_id must be a non-negative integer id, got {game_id!r}")
+    # An NBA/WNBA game id is 10 digits: a longer one is not padded, it is a wrong id.
+    if not (s.isascii() and s.isdigit()) or len(s) > 10:
+        raise ValueError(f"game_id must be a non-negative integer id of at most 10 digits, got {game_id!r}")
     return s.zfill(10)
 
 
@@ -437,7 +438,7 @@ def nba_l2m(
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id -- a bool, a
-            negative or fractional number, or a string that is not all digits
+            negative or fractional number, a string that is not all digits, or more than 10 digits
             (checked before any request).
         NoDataError: The game has no L2M report (a 404, or S3's ``AccessDenied``
             403). Only games within 3 points (5 before 2017-18) at some point in the
