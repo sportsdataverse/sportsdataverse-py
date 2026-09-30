@@ -4087,7 +4087,7 @@ Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdat
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -4704,7 +4704,7 @@ One row per (season, team, head coach). The coach comes from the producer's vend
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |
@@ -5322,7 +5322,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `fourth_agreed` | UInt32 | Decisions that matched the model's recommendation (went when it said go, kicked when it said kick). |
 | `fourth_wp_left` | Float64 | Win probability left on the table, summed over the decisions that went against the model: go_boost when the offense kicked against a go recommendation, minus go_boost when it went against a kick recommendation, floored at zero. |
 | `drives` | UInt32 | Offensive drives: distinct drive.id values with at least one standing scrimmage play. |
-| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps). |
+| `drives_with_clock` | UInt32 | Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team when it matches an offense in the drive, else the offense with the most standing snaps, the first snap breaking a tie). |
 | `drive_seconds` | Float64 | ESPN elapsed drive time in seconds, summed over the drives with a usable clock. |
 | `drive_plays` | Float64 | ESPN drive.offensivePlays summed over the drives with a usable clock -- the pace denominator. |
 | `drive_seconds_neutral` | Float64 | ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral. |

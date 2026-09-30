@@ -70,3 +70,11 @@ def test_each_drive_clock_counts_once(plays):
     )
     assert got["secs"].to_list() == want["secs"].to_list()
     assert got["n"].to_list() == want["n"].cast(pl.Float64).to_list()
+
+
+def test_a_league_wide_group_counts_each_shared_drive_clock_once(plays):
+    """Grouping both offenses together still clocks a shared drive once, not zero times."""
+    team = tendencies(plays, league="cfb")
+    league = tendencies(plays, league="cfb", group_cols=("season",), def_group_cols=("season",))
+    for c in ("drive_seconds", "drive_plays", "drives_with_clock"):
+        assert league[c].sum() == team[c].sum(), c
