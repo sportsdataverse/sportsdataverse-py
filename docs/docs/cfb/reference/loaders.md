@@ -3610,8 +3610,8 @@ Needs ESPN play participants (tackler / assist ids); a season without them has n
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the defending team, as carried on the released play-by-play. |
+| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
 | `player_name` | String | Player display name, as carried on the play-by-play participants. |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
@@ -3619,8 +3619,8 @@ Needs ESPN play participants (tackler / assist ids); a season without them has n
 | `assists` | Int64 | Assisted tackles credited to the player in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the player's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the player's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_cfb_usage_tackles(seasons=2024)
@@ -3639,15 +3639,15 @@ Needs ESPN play participants with player positions; a season without them has no
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the defending team, as carried on the released play-by-play. |
+| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
 | `tackles` | Int64 | Solo tackles credited to the position group in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the position group in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the position group's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the position group's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense's tackles after a turnover are left out; null when the defense has none. |
 
 ```python
 load_cfb_usage_position_group_tackles(seasons=2024)
@@ -6655,3 +6655,4 @@ One row per team per season: the SDV subdivision, conference and division group 
 ```python
 load_cfb_team_group_seasons(seasons=2024)
 ```
+
