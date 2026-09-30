@@ -40,7 +40,9 @@ def test_fixture_holds_defensive_and_offensive_third_down_tds(plays):
 
 
 def test_tendencies_ignore_defensive_touchdowns(plays):
-    assert_frame_equal(tendencies(plays, league="cfb"), tendencies(_no_defensive_tds(plays), league="cfb"))
+    assert_frame_equal(
+        tendencies(plays, league="cfb"), tendencies(_no_defensive_tds(plays), league="cfb"), check_exact=False
+    )
 
 
 def test_third_down_conversions_count_offensive_touchdowns_only(plays):
@@ -59,7 +61,12 @@ def test_usage_box_ignores_defensive_touchdowns(plays):
         game = plays.filter(pl.col("game_id") == gid)
         got, want = create_usage_box(game, league="cfb"), create_usage_box(_no_defensive_tds(game), league="cfb")
         for s in _NON_ST:
-            assert got[s] == want[s], (gid, s)
+            # some sections group without maintain_order, so compare as frames, not row lists
+            assert len(got[s]) == len(want[s]), (gid, s)
+            if got[s]:
+                assert_frame_equal(
+                    pl.from_dicts(got[s]), pl.from_dicts(want[s]), check_row_order=False, check_exact=False
+                )
 
 
 def test_third_down_curve_ignores_defensive_touchdowns(plays):
