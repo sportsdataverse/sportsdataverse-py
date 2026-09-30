@@ -760,6 +760,23 @@ def test_an_overtime_shootout_attempt_is_not_handed_a_touchdowns_board() -> None
     assert first["two_pt_recommendation"] is None  # no kick to weigh it against (was "kick_xp")
 
 
+def test_the_board_before_a_standalone_try_carries_the_overtime_correction() -> None:
+    """293182305 (2009): Kansas ties Nebraska 16-16 with 7:34 left; the extra point is its own
+    row and a kickoff follows. The touchdown's wp_after is the board before the try, built
+    from the kickoff view (``_board_at``) and put through the WP overtime correction like
+    every other regulation prediction. Pinned as observed on the committed card: without
+    the correction it reads 0.6262 (naive 0.6547).
+    """
+    plays = _offline_plays(293182305).sort("game_play_number")
+    td = plays.filter(pl.col("game_play_number") == 142).row(0, named=True)
+    xp = plays.filter(pl.col("game_play_number") == 143).row(0, named=True)
+    assert "Dezmon Briscoe for 21 yards for a TOUCHDOWN" in td["text"] and xp["type.text"] == "Extra Point Good"
+    assert td["period"] == 4 and td["pos_score_diff_start"] == -6
+    assert td["wp_after"] == pytest.approx(0.6220, abs=0.001)
+    assert td["wp_after_naive"] == pytest.approx(0.6463, abs=0.001)
+    assert xp["wp_before"] == pytest.approx(td["wp_after"], abs=1e-6)
+
+
 def test_an_overtime_try_after_a_touchdown_typed_as_the_play_hands_over() -> None:
     """322802005: "Keenan Reynolds rush for no gain, fumbled, recovered by Navy Jake Zuzek in
     the end zone for a TOUCHDOWN" (typed "Rush") in overtime, then "Nick Sloan extra point
