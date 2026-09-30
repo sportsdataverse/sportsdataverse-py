@@ -1154,10 +1154,14 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     spot -- tells them apart: goal-to-go becomes the yards to the goal, as the
     "Goal" rewrite that runs just before this does, and a lost distance becomes the
     previous end distance, capped at the yards to the goal (the line to gain cannot
-    lie past the goal line). Anything else stays 0 -- including a penalty that
-    backs a goal-to-go series up when that row carries no end state, which needs a
-    same-series rule on the previous snap's START text (follow-up). Across 2,472 such rows in the 2014-2026 finals: 2,127
-    goal-to-go, 24 lost distances, 321 left at 0.
+    lie past the goal line). When the previous snap has no usable end state -- a
+    penalty that backs a goal-to-go series up often carries none ("1st & 0 at TULN
+    15" after "1st & Goal at TULN 10") -- its START text decides: a series that
+    started "Goal" with the same offense stays goal-to-go until possession changes.
+    Anything else stays 0. Across 2,472 such rows in the 2014-2026 finals: 2,127
+    goal-to-go by end state, 24 lost distances, 164 goal-to-go by series (63
+    confirmed by the row's own end or the next down reading "Goal", one contradicted
+    -- a broken "at SYR 0" row), 157 left at 0.
 
     The spot is compared as text: on field-goal rows ``start.yardsToEndzone`` runs
     one yard deeper than the text ("4th & 0 at SYR 13" with 14), so a numeric match
@@ -1183,14 +1187,25 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
     # column Null, and str.extract on a Null column raises.
     text = pl.col("start.downDistanceText").cast(pl.String)
     prev_text = prev("end.downDistanceText").cast(pl.String)
-    amp0 = (
+    base = (
         (pl.col("start.distance") == 0)
         & text.str.contains(_AMP0_RE)
         & pl.col("start.down").is_between(1, 4)
         & pl.col("start.yardsToEndzone").is_between(1, 99)
         & (pl.col("type.text").str.contains(r"(?i)kickoff|extra point|two[- ]point|2pt") == False)  # noqa: E712
+    )
+    amp0 = (
+        base
         & (prev("end.down") == pl.col("start.down"))
         & (prev_text.str.extract(_SPOT_RE, 1) == text.str.extract(_SPOT_RE, 1))
+    )
+    # same offense, previous snap started "Goal": the series is still goal-to-go
+    series_goal = (
+        base
+        & prev("start.downDistanceText").cast(pl.String).str.contains(r"(?i)goal")
+        & (prev("start.team.id") == pl.col("start.team.id"))
+        if "start.team.id" in plays.columns
+        else pl.lit(False)
     )
     return plays.with_columns(
         pl.when(amp0 & prev_text.str.contains(r"(?i)goal"))
@@ -1201,6 +1216,8 @@ def _repair_amp0_distance(plays: pl.DataFrame) -> pl.DataFrame:
                 plays.schema["start.distance"], strict=False
             )
         )
+        .when(series_goal)
+        .then(pl.col("start.yardsToEndzone"))
         .otherwise(pl.col("start.distance"))
         .alias("start.distance"),
     )
