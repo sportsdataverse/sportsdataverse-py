@@ -6921,7 +6921,7 @@ load_cfb_coach_careers:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -6959,7 +6959,7 @@ load_cfb_coach_careers:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -7127,7 +7127,7 @@ load_cfb_coach_careers:
     plays flagged EPA_success (positive EPA) in the team''s games against an opponent ranked at kickoff (ESPN''s displayed
     rank).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this coach''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this coach''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -7197,7 +7197,7 @@ load_cfb_coach_careers:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -7300,7 +7300,7 @@ load_cfb_coach_careers:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -7471,7 +7471,7 @@ load_cfb_coach_careers:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -7493,7 +7493,7 @@ load_cfb_coach_careers:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -7594,7 +7594,7 @@ load_cfb_coach_careers:
   successes_vs_ranked: Plays flagged EPA_success (positive EPA) in the team's games against an opponent ranked at kickoff
     (ESPN's displayed rank).
   teams: Comma-separated teams the coach's attributed seasons were with, in first-to-last season order.
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -8090,7 +8090,7 @@ load_cfb_coach_tendencies:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -8128,7 +8128,7 @@ load_cfb_coach_tendencies:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -8296,7 +8296,7 @@ load_cfb_coach_tendencies:
     plays flagged EPA_success (positive EPA) in the team''s games against an opponent ranked at kickoff (ESPN''s displayed
     rank).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this coach''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this coach''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -8366,7 +8366,7 @@ load_cfb_coach_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -8468,7 +8468,7 @@ load_cfb_coach_tendencies:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -8641,7 +8641,7 @@ load_cfb_coach_tendencies:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -8664,7 +8664,7 @@ load_cfb_coach_tendencies:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -8764,7 +8764,7 @@ load_cfb_coach_tendencies:
     < 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
   successes_vs_ranked: Plays flagged EPA_success (positive EPA) in the team's games against an opponent ranked at kickoff
     (ESPN's displayed rank).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -12478,7 +12478,7 @@ load_cfb_team_tendencies:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this team''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this team''s
@@ -12516,7 +12516,7 @@ load_cfb_team_tendencies:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this team''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this team''s
@@ -12683,7 +12683,7 @@ load_cfb_team_tendencies:
     while this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): plays
     flagged EPA_success (positive EPA) in the team''s games against an opponent ranked at kickoff (ESPN''s displayed rank).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this team''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this team''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -12753,7 +12753,7 @@ load_cfb_team_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -12855,7 +12855,7 @@ load_cfb_team_tendencies:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -13026,7 +13026,7 @@ load_cfb_team_tendencies:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -13049,7 +13049,7 @@ load_cfb_team_tendencies:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -13149,7 +13149,7 @@ load_cfb_team_tendencies:
     < 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
   successes_vs_ranked: Plays flagged EPA_success (positive EPA) in the team's games against an opponent ranked at kickoff
     (ESPN's displayed rank).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -13305,7 +13305,7 @@ load_cfb_usage_drive_scripting:
   success_rate: successes / plays; null with no plays.
   successes: Plays flagged EPA_success on those drives.
   touchdown_rate: 'touchdowns / drives: the share of drives that scored a touchdown; null with no drives.'
-  touchdowns: Drives that included a touchdown play.
+  touchdowns: Drives that included an offensive touchdown play.
   yards: statYardage summed over the plays on those drives.
   yards_per_play: yards / plays; null with no plays.
 load_cfb_usage_players:
@@ -13313,9 +13313,9 @@ load_cfb_usage_players:
   epa_per_opportunity: epa / opportunities; null with no opportunities.
   explosive_plays: Rushes and targets of the player flagged EPA_explosive on the play-by-play.
   explosive_rate: explosive_plays / opportunities; null with no opportunities.
-  fd_or_td: Rushes and targets of the player that produced a first down or a touchdown (a play counts once even when both
+  fd_or_td: Rushes and targets of the player that produced a first down or an offensive touchdown (a play counts once even when both
     flags are set).
-  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no
+  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no
     opportunities.'
   first_down_share: 'first_downs / team_first_downs: the player''s share of the team''s first downs.'
   first_downs: Rushes and targets of the player that created a first down (first_down_created).
@@ -13324,12 +13324,11 @@ load_cfb_usage_players:
   opportunities: Rushes plus targets -- the denominator of the per-opportunity rates.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs",
     "Georgia Bulldogs").
   pos_team_id: ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   receiving_yards: Yards gained on the player's receptions (yds_receiving, falling back to statYardage); an incomplete target
     adds 0.
   receptions: Targets the player caught (completed passes).
@@ -13339,7 +13338,7 @@ load_cfb_usage_players:
   rz_rushes: 'Rushes by the player snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap).'
   rz_targets: Targets of the player snapped in the red zone.
   rz_touchdown_rate: rz_touchdowns / rz_touches; null with no red-zone touches.
-  rz_touchdowns: Red-zone rushes and targets of the player that scored a touchdown.
+  rz_touchdowns: Red-zone rushes and targets of the player that scored an offensive touchdown.
   rz_touches: Touches (rushes plus receptions) by the player snapped in the red zone.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -13347,7 +13346,7 @@ load_cfb_usage_players:
     at the snap).'
   so_targets: Targets of the player snapped in scoring-opportunity territory.
   so_touchdown_rate: so_touchdowns / so_touches; null with no scoring-opportunity touches.
-  so_touchdowns: Scoring-opportunity rushes and targets of the player that scored a touchdown.
+  so_touchdowns: Scoring-opportunity rushes and targets of the player that scored an offensive touchdown.
   so_touches: Touches (rushes plus receptions) by the player snapped in scoring-opportunity territory.
   success_rate: successful_plays / opportunities; null with no opportunities.
   successful_plays: Rushes and targets of the player flagged EPA_success (positive EPA) on the play-by-play.
@@ -13357,7 +13356,7 @@ load_cfb_usage_players:
   team_targets: The team's targets over the same games, counting every standing scrimmage target whether or not a receiver
     was attributed -- the denominator of target_share.
   team_touches: The team's rushes plus completions over the same games -- the denominator of touch_share.
-  third_down_conversions: Third-down rushes and targets of the player that converted (a first down or a touchdown).
+  third_down_conversions: Third-down rushes and targets of the player that converted (a first down or an offensive touchdown).
   third_down_expected: 'Expected third-down conversions for the player: the league''s bundled third-down yards-to-go conversion
     curve summed over the third-down opportunities; null when no curve was available.'
   third_down_opportunities: Rushes and targets of the player that came on third down.
@@ -13365,12 +13364,12 @@ load_cfb_usage_players:
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
   touch_share: 'touches / team_touches: the player''s share of the team''s touches.'
-  touchdowns: Rushes and targets of the player that scored a touchdown.
+  touchdowns: Rushes and targets of the player that scored an offensive touchdown.
   touches: Rushes plus receptions.
 load_cfb_usage_position_group_tackles:
   assists: Assisted tackles credited to the position group in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the defending team, as carried on the released play-by-play.
-  def_pos_team_id: ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
+  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
@@ -13378,18 +13377,17 @@ load_cfb_usage_position_group_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the position group''s share of the defense''s tackle points; null when
-    the defense has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the position group''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the position group in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_cfb_usage_position_groups:
   epa: Play EPA summed over the position group's rushes and targets.
   epa_per_opportunity: epa / opportunities; null with no opportunities.
   explosive_plays: Rushes and targets of the position group flagged EPA_explosive on the play-by-play.
   explosive_rate: explosive_plays / opportunities; null with no opportunities.
-  fd_or_td: Rushes and targets of the position group that produced a first down or a touchdown (a play counts once even when
+  fd_or_td: Rushes and targets of the position group that produced a first down or an offensive touchdown (a play counts once even when
     both flags are set).
-  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no
+  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no
     opportunities.'
   first_down_share: 'first_downs / team_first_downs: the position group''s share of the team''s first downs.'
   first_downs: Rushes and targets of the position group that created a first down (first_down_created).
@@ -13410,7 +13408,7 @@ load_cfb_usage_position_groups:
   rz_rushes: 'Rushes by the position group snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap).'
   rz_targets: Targets of the position group snapped in the red zone.
   rz_touchdown_rate: rz_touchdowns / rz_touches; null with no red-zone touches.
-  rz_touchdowns: Red-zone rushes and targets of the position group that scored a touchdown.
+  rz_touchdowns: Red-zone rushes and targets of the position group that scored an offensive touchdown.
   rz_touches: Touches (rushes plus receptions) by the position group snapped in the red zone.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -13418,7 +13416,7 @@ load_cfb_usage_position_groups:
     end zone at the snap).'
   so_targets: Targets of the position group snapped in scoring-opportunity territory.
   so_touchdown_rate: so_touchdowns / so_touches; null with no scoring-opportunity touches.
-  so_touchdowns: Scoring-opportunity rushes and targets of the position group that scored a touchdown.
+  so_touchdowns: Scoring-opportunity rushes and targets of the position group that scored an offensive touchdown.
   so_touches: Touches (rushes plus receptions) by the position group snapped in scoring-opportunity territory.
   success_rate: successful_plays / opportunities; null with no opportunities.
   successful_plays: Rushes and targets of the position group flagged EPA_success (positive EPA) on the play-by-play.
@@ -13428,7 +13426,7 @@ load_cfb_usage_position_groups:
   team_targets: The team's targets over the same games, counting every standing scrimmage target whether or not a receiver
     was attributed -- the denominator of target_share.
   team_touches: The team's rushes plus completions over the same games -- the denominator of touch_share.
-  third_down_conversions: Third-down rushes and targets of the position group that converted (a first down or a touchdown).
+  third_down_conversions: Third-down rushes and targets of the position group that converted (a first down or an offensive touchdown).
   third_down_expected: 'Expected third-down conversions for the position group: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down opportunities; null when no curve was available.'
   third_down_opportunities: Rushes and targets of the position group that came on third down.
@@ -13436,7 +13434,7 @@ load_cfb_usage_position_groups:
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
   touch_share: 'touches / team_touches: the position group''s share of the team''s touches.'
-  touchdowns: Rushes and targets of the position group that scored a touchdown.
+  touchdowns: Rushes and targets of the position group that scored an offensive touchdown.
   touches: Rushes plus receptions.
 load_cfb_usage_st_blocks:
   blocks: punt_blocks plus fg_blocks.
@@ -13447,7 +13445,7 @@ load_cfb_usage_st_blocks:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   punt_blocks: Punts the player blocked (credited as the punt_block_player on the play).
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -13482,7 +13480,7 @@ load_cfb_usage_st_kickers:
   kickoffs: Kickoffs by the kicker that stood (kicks nullified by penalty are excluded).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on
@@ -13497,7 +13495,7 @@ load_cfb_usage_st_punters:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on
@@ -13537,7 +13535,7 @@ load_cfb_usage_st_returners:
   kick_returns: Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets
@@ -13604,22 +13602,20 @@ load_cfb_usage_st_team:
     play-by-play carries.
 load_cfb_usage_tackles:
   assists: Assisted tackles credited to the player in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the defending team, as carried on the released play-by-play.
-  def_pos_team_id: ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
+  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the player''s share of the defense''s tackle points; null when the defense
-    has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the player''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the player in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_cfb_usage_teams:
   completions: Completed passes among the standing scrimmage plays.
   epa: Play EPA summed over the standing scrimmage plays.
@@ -13644,7 +13640,7 @@ load_cfb_usage_teams:
   rz_successes: Red-zone plays flagged EPA_success.
   rz_targets: Red-zone pass plays with a targeted receiver.
   rz_touchdown_rate: 'rz_touchdowns / rz_trips: touchdowns per red-zone trip; null with no trips.'
-  rz_touchdowns: Red-zone plays that scored a touchdown.
+  rz_touchdowns: Red-zone plays that scored an offensive touchdown.
   rz_trips: Drives with at least one red-zone play.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -13660,19 +13656,19 @@ load_cfb_usage_teams:
   so_successes: Scoring-opportunity plays flagged EPA_success.
   so_targets: Scoring-opportunity pass plays with a targeted receiver.
   so_touchdown_rate: 'so_touchdowns / so_trips: touchdowns per scoring-opportunity trip; null with no trips.'
-  so_touchdowns: Scoring-opportunity plays that scored a touchdown.
+  so_touchdowns: Scoring-opportunity plays that scored an offensive touchdown.
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (the opponent's 40).
   success_rate: successful_plays / plays; null with no plays.
   successful_plays: Scrimmage plays flagged EPA_success (positive EPA) on the play-by-play.
   targets: Pass plays with a targeted receiver (the target flag).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays with a known distance.
   third_down_over_expected: 'third_down_conversions minus third_down_expected: conversions above the distance-adjusted expectation;
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
-  touchdowns: Scrimmage plays that scored a touchdown.
+  touchdowns: Scrimmage plays that scored an offensive touchdown.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,
@@ -16409,7 +16405,7 @@ load_nfl_coach_careers:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -16447,7 +16443,7 @@ load_nfl_coach_careers:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -16608,7 +16604,7 @@ load_nfl_coach_careers:
     on the scoreboard (pos_score_diff_start < 0, the score at the snap, before the play; pos_score_diff where the start score
     is missing).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this coach''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this coach''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -16671,7 +16667,7 @@ load_nfl_coach_careers:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -16770,7 +16766,7 @@ load_nfl_coach_careers:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -16935,7 +16931,7 @@ load_nfl_coach_careers:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -16957,7 +16953,7 @@ load_nfl_coach_careers:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -17054,7 +17050,7 @@ load_nfl_coach_careers:
   successes_trailing: Plays flagged EPA_success (positive EPA) snapped with the offense behind on the scoreboard (pos_score_diff_start
     < 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
   teams: Comma-separated teams the coach's attributed seasons were with, in first-to-last season order.
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -17527,7 +17523,7 @@ load_nfl_coach_tendencies:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -17565,7 +17561,7 @@ load_nfl_coach_tendencies:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this coach''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this coach''s
@@ -17726,7 +17722,7 @@ load_nfl_coach_tendencies:
     on the scoreboard (pos_score_diff_start < 0, the score at the snap, before the play; pos_score_diff where the start score
     is missing).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this coach''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this coach''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -17789,7 +17785,7 @@ load_nfl_coach_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -17887,7 +17883,7 @@ load_nfl_coach_tendencies:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -18054,7 +18050,7 @@ load_nfl_coach_tendencies:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -18077,7 +18073,7 @@ load_nfl_coach_tendencies:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -18173,7 +18169,7 @@ load_nfl_coach_tendencies:
     at the snap, before the play; pos_score_diff where the start score is missing).
   successes_trailing: Plays flagged EPA_success (positive EPA) snapped with the offense behind on the scoreboard (pos_score_diff_start
     < 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -19157,7 +19153,7 @@ load_nfl_team_tendencies:
   def_rz_td_rate: 'Defense-allowed twin of rz_td_rate: rz_tds / rz_trips: touchdowns per red-zone trip. Computed from the
     def_ counts; null when the denominator is 0.'
   def_rz_tds: 'Defense-allowed twin of rz_tds -- the same measure over the opposing offenses'' plays while this team''s defense
-    was on the field: red-zone drives that included a touchdown play.'
+    was on the field: red-zone drives that included an offensive touchdown play.'
   def_rz_trip_rate: 'Defense-allowed twin of rz_trip_rate: rz_trips / drives: the share of drives that reached the red zone.
     Computed from the def_ counts; null when the denominator is 0.'
   def_rz_trips: 'Defense-allowed twin of rz_trips -- the same measure over the opposing offenses'' plays while this team''s
@@ -19195,7 +19191,7 @@ load_nfl_team_tendencies:
   def_so_td_rate: 'Defense-allowed twin of so_td_rate: so_tds / so_trips: touchdowns per scoring-opportunity trip. Computed
     from the def_ counts; null when the denominator is 0.'
   def_so_tds: 'Defense-allowed twin of so_tds -- the same measure over the opposing offenses'' plays while this team''s defense
-    was on the field: scoring-opportunity drives that included a touchdown play.'
+    was on the field: scoring-opportunity drives that included an offensive touchdown play.'
   def_so_trip_rate: 'Defense-allowed twin of so_trip_rate: so_trips / drives: the share of drives that reached the opponent''s
     40. Computed from the def_ counts; null when the denominator is 0.'
   def_so_trips: 'Defense-allowed twin of so_trips -- the same measure over the opposing offenses'' plays while this team''s
@@ -19356,7 +19352,7 @@ load_nfl_team_tendencies:
     on the scoreboard (pos_score_diff_start < 0, the score at the snap, before the play; pos_score_diff where the start score
     is missing).'
   def_third_down_conversions: 'Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses''
-    plays while this team''s defense was on the field: third-down plays that produced a first down or a touchdown.'
+    plays while this team''s defense was on the field: third-down plays that produced a first down or an offensive touchdown.'
   def_third_down_expected: 'Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field: expected third-down conversions: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down plays; null when no curve was available.'
@@ -19419,7 +19415,7 @@ load_nfl_team_tendencies:
   drive_seconds_neutral: ESPN elapsed drive seconds summed over the clocked drives whose first play was situation-neutral.
   drives: 'Offensive drives: distinct drive.id values with at least one standing scrimmage play.'
   drives_per_game: drives / games. Null when the denominator is 0.
-  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays).
+  drives_with_clock: Drives with a usable ESPN drive clock (a parseable drive.timeElapsed and a positive drive.offensivePlays), in regulation (overtime has no game clock) and owned by this offense (an ESPN drive id that holds snaps by both offenses counts once, for ESPN's drive team, else the offense with the most snaps).
   epa: Play EPA summed over the standing scrimmage plays.
   epa_after_bye: Play EPA summed over the plays in the team's games played 13 or more days after the team's previous game.
   epa_away: Play EPA summed over the plays in the team's away games.
@@ -19517,7 +19513,7 @@ load_nfl_team_tendencies:
     is 0.'
   fourth_conversion_rate: 'fourth_converted / fourth_went: conversion rate when going for it. Null when the denominator is
     0.'
-  fourth_converted: Fourth-down go attempts that produced a first down or a touchdown.
+  fourth_converted: Fourth-down go attempts that produced a first down or an offensive touchdown.
   fourth_decisions: Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood
     (timeouts and nullified plays are not decisions).
   fourth_model_go: Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go").
@@ -19682,7 +19678,7 @@ load_nfl_team_tendencies:
   rz_pts_per_trip: 'rz_points / rz_trips: points per red-zone trip. Null when the denominator is 0.'
   rz_scores: Red-zone drives that scored (a touchdown or a field goal).
   rz_td_rate: 'rz_tds / rz_trips: touchdowns per red-zone trip. Null when the denominator is 0.'
-  rz_tds: Red-zone drives that included a touchdown play.
+  rz_tds: Red-zone drives that included an offensive touchdown play.
   rz_trip_rate: 'rz_trips / drives: the share of drives that reached the red zone. Null when the denominator is 0.'
   rz_trips: Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone).
   scripted_drives: The offense's first two drives of each half.
@@ -19705,7 +19701,7 @@ load_nfl_team_tendencies:
   so_pts_per_trip: 'so_points / so_trips: points per scoring-opportunity trip. Null when the denominator is 0.'
   so_scores: Scoring-opportunity drives that scored (a touchdown or a field goal).
   so_td_rate: 'so_tds / so_trips: touchdowns per scoring-opportunity trip. Null when the denominator is 0.'
-  so_tds: Scoring-opportunity drives that included a touchdown play.
+  so_tds: Scoring-opportunity drives that included an offensive touchdown play.
   so_trip_rate: 'so_trips / drives: the share of drives that reached the opponent''s 40. Null when the denominator is 0.'
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone).
   success_rate: successes / plays. Null when the denominator is 0.
@@ -19801,7 +19797,7 @@ load_nfl_team_tendencies:
     at the snap, before the play; pos_score_diff where the start score is missing).
   successes_trailing: Plays flagged EPA_success (positive EPA) snapped with the offense behind on the scoreboard (pos_score_diff_start
     < 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays.
@@ -19867,7 +19863,7 @@ load_nfl_usage_drive_scripting:
   success_rate: successes / plays; null with no plays.
   successes: Plays flagged EPA_success on those drives.
   touchdown_rate: 'touchdowns / drives: the share of drives that scored a touchdown; null with no drives.'
-  touchdowns: Drives that included a touchdown play.
+  touchdowns: Drives that included an offensive touchdown play.
   yards: statYardage summed over the plays on those drives.
   yards_per_play: yards / plays; null with no plays.
 load_nfl_usage_players:
@@ -19875,9 +19871,9 @@ load_nfl_usage_players:
   epa_per_opportunity: epa / opportunities; null with no opportunities.
   explosive_plays: Rushes and targets of the player flagged EPA_explosive on the play-by-play.
   explosive_rate: explosive_plays / opportunities; null with no opportunities.
-  fd_or_td: Rushes and targets of the player that produced a first down or a touchdown (a play counts once even when both
+  fd_or_td: Rushes and targets of the player that produced a first down or an offensive touchdown (a play counts once even when both
     flags are set).
-  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no
+  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no
     opportunities.'
   first_down_share: 'first_downs / team_first_downs: the player''s share of the team''s first downs.'
   first_downs: Rushes and targets of the player that created a first down (first_down_created).
@@ -19886,12 +19882,11 @@ load_nfl_usage_players:
   opportunities: Rushes plus targets -- the denominator of the per-opportunity rates.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the possession team (offense), as carried on the released play-by-play (e.g. "Kansas City Chiefs",
     "Georgia Bulldogs").
   pos_team_id: ESPN team id of the possession team (offense); joins to the ESPN teams and schedule datasets on team_id.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   receiving_yards: Yards gained on the player's receptions (yds_receiving, falling back to statYardage); an incomplete target
     adds 0.
   receptions: Targets the player caught (completed passes).
@@ -19901,7 +19896,7 @@ load_nfl_usage_players:
   rz_rushes: 'Rushes by the player snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap).'
   rz_targets: Targets of the player snapped in the red zone.
   rz_touchdown_rate: rz_touchdowns / rz_touches; null with no red-zone touches.
-  rz_touchdowns: Red-zone rushes and targets of the player that scored a touchdown.
+  rz_touchdowns: Red-zone rushes and targets of the player that scored an offensive touchdown.
   rz_touches: Touches (rushes plus receptions) by the player snapped in the red zone.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -19909,7 +19904,7 @@ load_nfl_usage_players:
     at the snap).'
   so_targets: Targets of the player snapped in scoring-opportunity territory.
   so_touchdown_rate: so_touchdowns / so_touches; null with no scoring-opportunity touches.
-  so_touchdowns: Scoring-opportunity rushes and targets of the player that scored a touchdown.
+  so_touchdowns: Scoring-opportunity rushes and targets of the player that scored an offensive touchdown.
   so_touches: Touches (rushes plus receptions) by the player snapped in scoring-opportunity territory.
   success_rate: successful_plays / opportunities; null with no opportunities.
   successful_plays: Rushes and targets of the player flagged EPA_success (positive EPA) on the play-by-play.
@@ -19919,7 +19914,7 @@ load_nfl_usage_players:
   team_targets: The team's targets over the same games, counting every standing scrimmage target whether or not a receiver
     was attributed -- the denominator of target_share.
   team_touches: The team's rushes plus completions over the same games -- the denominator of touch_share.
-  third_down_conversions: Third-down rushes and targets of the player that converted (a first down or a touchdown).
+  third_down_conversions: Third-down rushes and targets of the player that converted (a first down or an offensive touchdown).
   third_down_expected: 'Expected third-down conversions for the player: the league''s bundled third-down yards-to-go conversion
     curve summed over the third-down opportunities; null when no curve was available.'
   third_down_opportunities: Rushes and targets of the player that came on third down.
@@ -19927,12 +19922,12 @@ load_nfl_usage_players:
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
   touch_share: 'touches / team_touches: the player''s share of the team''s touches.'
-  touchdowns: Rushes and targets of the player that scored a touchdown.
+  touchdowns: Rushes and targets of the player that scored an offensive touchdown.
   touches: Rushes plus receptions.
 load_nfl_usage_position_group_tackles:
   assists: Assisted tackles credited to the position group in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the defending team, as carried on the released play-by-play.
-  def_pos_team_id: ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
+  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
@@ -19940,18 +19935,17 @@ load_nfl_usage_position_group_tackles:
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the position group''s share of the defense''s tackle points; null when
-    the defense has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the position group''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the position group in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_position_groups:
   epa: Play EPA summed over the position group's rushes and targets.
   epa_per_opportunity: epa / opportunities; null with no opportunities.
   explosive_plays: Rushes and targets of the position group flagged EPA_explosive on the play-by-play.
   explosive_rate: explosive_plays / opportunities; null with no opportunities.
-  fd_or_td: Rushes and targets of the position group that produced a first down or a touchdown (a play counts once even when
+  fd_or_td: Rushes and targets of the position group that produced a first down or an offensive touchdown (a play counts once even when
     both flags are set).
-  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no
+  fd_td_rate: 'fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no
     opportunities.'
   first_down_share: 'first_downs / team_first_downs: the position group''s share of the team''s first downs.'
   first_downs: Rushes and targets of the position group that created a first down (first_down_created).
@@ -19972,7 +19966,7 @@ load_nfl_usage_position_groups:
   rz_rushes: 'Rushes by the position group snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap).'
   rz_targets: Targets of the position group snapped in the red zone.
   rz_touchdown_rate: rz_touchdowns / rz_touches; null with no red-zone touches.
-  rz_touchdowns: Red-zone rushes and targets of the position group that scored a touchdown.
+  rz_touchdowns: Red-zone rushes and targets of the position group that scored an offensive touchdown.
   rz_touches: Touches (rushes plus receptions) by the position group snapped in the red zone.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -19980,7 +19974,7 @@ load_nfl_usage_position_groups:
     end zone at the snap).'
   so_targets: Targets of the position group snapped in scoring-opportunity territory.
   so_touchdown_rate: so_touchdowns / so_touches; null with no scoring-opportunity touches.
-  so_touchdowns: Scoring-opportunity rushes and targets of the position group that scored a touchdown.
+  so_touchdowns: Scoring-opportunity rushes and targets of the position group that scored an offensive touchdown.
   so_touches: Touches (rushes plus receptions) by the position group snapped in scoring-opportunity territory.
   success_rate: successful_plays / opportunities; null with no opportunities.
   successful_plays: Rushes and targets of the position group flagged EPA_success (positive EPA) on the play-by-play.
@@ -19990,7 +19984,7 @@ load_nfl_usage_position_groups:
   team_targets: The team's targets over the same games, counting every standing scrimmage target whether or not a receiver
     was attributed -- the denominator of target_share.
   team_touches: The team's rushes plus completions over the same games -- the denominator of touch_share.
-  third_down_conversions: Third-down rushes and targets of the position group that converted (a first down or a touchdown).
+  third_down_conversions: Third-down rushes and targets of the position group that converted (a first down or an offensive touchdown).
   third_down_expected: 'Expected third-down conversions for the position group: the league''s bundled third-down yards-to-go
     conversion curve summed over the third-down opportunities; null when no curve was available.'
   third_down_opportunities: Rushes and targets of the position group that came on third down.
@@ -19998,7 +19992,7 @@ load_nfl_usage_position_groups:
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
   touch_share: 'touches / team_touches: the position group''s share of the team''s touches.'
-  touchdowns: Rushes and targets of the position group that scored a touchdown.
+  touchdowns: Rushes and targets of the position group that scored an offensive touchdown.
   touches: Rushes plus receptions.
 load_nfl_usage_st_blocks:
   blocks: punt_blocks plus fg_blocks.
@@ -20009,7 +20003,7 @@ load_nfl_usage_st_blocks:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   punt_blocks: Punts the player blocked (credited as the punt_block_player on the play).
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -20044,7 +20038,7 @@ load_nfl_usage_st_kickers:
   kickoffs: Kickoffs by the kicker that stood (kicks nullified by penalty are excluded).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the kicking team (the kicker's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the kicking team (the kicker's own team); joins to the ESPN teams and schedule datasets on
@@ -20059,7 +20053,7 @@ load_nfl_usage_st_punters:
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the punting team (the punter's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the punting team (the punter's own team); joins to the ESPN teams and schedule datasets on
@@ -20099,7 +20093,7 @@ load_nfl_usage_st_returners:
   kick_returns: Kickoff returns by the returner (kickoffs that were neither a touchback, onside, out of bounds nor fair caught).
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
   pos_team: Display name of the returning team (the returner's own team), as carried on the released play-by-play (e.g. "Kansas
     City Chiefs", "Georgia Bulldogs").
   pos_team_id: ESPN team id of the returning team (the returner's own team); joins to the ESPN teams and schedule datasets
@@ -20166,22 +20160,20 @@ load_nfl_usage_st_team:
     play-by-play carries.
 load_nfl_usage_tackles:
   assists: Assisted tackles credited to the player in the play participants (assisted_by_player_ids).
-  def_pos_team: Display name of the defending team, as carried on the released play-by-play.
-  def_pos_team_id: ESPN team id of the defense the row belongs to; joins to the ESPN teams dataset on team_id.
+  def_pos_team: Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense.
+  def_pos_team_id: ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id.
   games: Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts
     games with activity, not games played.
   player_id: ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row
     is then keyed on the name).
-  player_name: Player display name, as carried on the play-by-play participants.
-  position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
-    ESPN position ids; null when no participant row carried a position for the player.
+  player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row.'
+  position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
-  tackle_share: 'tackle_points / team_tackle_points: the player''s share of the defense''s tackle points; null when the defense
-    has none.'
+  tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the player''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage, plays a penalty wiped out and the offense''s tackles after a turnover are left out; null when the defense has none.'
   tackles: Solo tackles credited to the player in the play participants (tackler_player_ids).
-  team_tackle_points: tackle_points summed over every player on the defense for the season -- the denominator of tackle_share.
+  team_tackle_points: tackle_points summed over every player on the team for the season, special-teams and post-turnover tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_teams:
   completions: Completed passes among the standing scrimmage plays.
   epa: Play EPA summed over the standing scrimmage plays.
@@ -20206,7 +20198,7 @@ load_nfl_usage_teams:
   rz_successes: Red-zone plays flagged EPA_success.
   rz_targets: Red-zone pass plays with a targeted receiver.
   rz_touchdown_rate: 'rz_touchdowns / rz_trips: touchdowns per red-zone trip; null with no trips.'
-  rz_touchdowns: Red-zone plays that scored a touchdown.
+  rz_touchdowns: Red-zone plays that scored an offensive touchdown.
   rz_trips: Drives with at least one red-zone play.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
@@ -20222,19 +20214,19 @@ load_nfl_usage_teams:
   so_successes: Scoring-opportunity plays flagged EPA_success.
   so_targets: Scoring-opportunity pass plays with a targeted receiver.
   so_touchdown_rate: 'so_touchdowns / so_trips: touchdowns per scoring-opportunity trip; null with no trips.'
-  so_touchdowns: Scoring-opportunity plays that scored a touchdown.
+  so_touchdowns: Scoring-opportunity plays that scored an offensive touchdown.
   so_trips: Drives with at least one play snapped in scoring-opportunity territory (the opponent's 40).
   success_rate: successful_plays / plays; null with no plays.
   successful_plays: Scrimmage plays flagged EPA_success (positive EPA) on the play-by-play.
   targets: Pass plays with a targeted receiver (the target flag).
-  third_down_conversions: Third-down plays that produced a first down or a touchdown.
+  third_down_conversions: Third-down plays that produced a first down or an offensive touchdown.
   third_down_expected: 'Expected third-down conversions: the league''s bundled third-down yards-to-go conversion curve summed
     over the third-down plays; null when no curve was available.'
   third_down_opportunities: Third-down scrimmage plays with a known distance.
   third_down_over_expected: 'third_down_conversions minus third_down_expected: conversions above the distance-adjusted expectation;
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
-  touchdowns: Scrimmage plays that scored a touchdown.
+  touchdowns: Scrimmage plays that scored an offensive touchdown.
 load_nfl_weekly_rosters:
   birth_date: Player's date of birth (YYYY-MM-DD).
   college: College or university the player attended.
