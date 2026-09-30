@@ -198,10 +198,16 @@ def test_drive_points_on_a_2005_cfb_game():
 
 
 def test_pre_existing_split_epa_is_unchanged(plays):
-    """Pinned from origin/main 6426286aa, before ``_split`` generated the EPA columns."""
+    """Pinned from origin/main 6426286aa, before ``_split`` generated the EPA columns.
+
+    The neutral values were re-pinned when NFL's neutral split moved to the score-and-clock
+    ``wp_before_naive`` (#630): a straight recount over snaps with ``wp_before_naive`` in
+    20-80% (first four quarters, outside the last two minutes of a half) gives them exactly,
+    as the same recount over ``wp_before`` gives the old -0.8858761638402939 / 0.5800969863776118.
+    """
     t = tendencies(plays, league="nfl")
     got = {r["pos_team"]: (r["epa_early_down"], r["epa_per_play_neutral"]) for r in t.to_dicts()}
-    want = {5: (-1.4621596468205098, -0.8858761638402939), 30: (13.574272631376516, 0.5800969863776118)}
+    want = {5: (-1.4621596468205098, -0.8486290538567118), 30: (13.574272631376516, 0.6861752757104114)}
     for team, (early, neutral) in want.items():
         assert abs(got[team][0] - early) < 1e-9 and abs(got[team][1] - neutral) < 1e-9, team
 

@@ -6517,7 +6517,7 @@ load_cfb_coach_careers:
     coach''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%,
+    coach''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%,
     in the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -6862,7 +6862,7 @@ load_cfb_coach_careers:
     coach''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    coach''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
@@ -6996,7 +6996,7 @@ load_cfb_coach_careers:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -7078,7 +7078,7 @@ load_cfb_coach_careers:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -7213,7 +7213,7 @@ load_cfb_coach_careers:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -7438,7 +7438,7 @@ load_cfb_coach_careers:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -7518,7 +7518,7 @@ load_cfb_coach_careers:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -7568,7 +7568,7 @@ load_cfb_coach_careers:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -7686,7 +7686,7 @@ load_cfb_coach_tendencies:
     coach''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%,
+    coach''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%,
     in the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -8031,7 +8031,7 @@ load_cfb_coach_tendencies:
     coach''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    coach''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
@@ -8165,7 +8165,7 @@ load_cfb_coach_tendencies:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -8247,7 +8247,7 @@ load_cfb_coach_tendencies:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -8382,7 +8382,7 @@ load_cfb_coach_tendencies:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -8604,7 +8604,7 @@ load_cfb_coach_tendencies:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -8689,7 +8689,7 @@ load_cfb_coach_tendencies:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -8739,7 +8739,7 @@ load_cfb_coach_tendencies:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -12074,7 +12074,7 @@ load_cfb_team_tendencies:
     team''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    team''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%, in
+    team''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in
     the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -12419,7 +12419,7 @@ load_cfb_team_tendencies:
     team''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    team''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    team''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): plays
@@ -12553,7 +12553,7 @@ load_cfb_team_tendencies:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -12635,7 +12635,7 @@ load_cfb_team_tendencies:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -12769,7 +12769,7 @@ load_cfb_team_tendencies:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -12991,7 +12991,7 @@ load_cfb_team_tendencies:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -13074,7 +13074,7 @@ load_cfb_team_tendencies:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -13124,7 +13124,7 @@ load_cfb_team_tendencies:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -16020,7 +16020,7 @@ load_nfl_coach_careers:
     coach''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%,
+    coach''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%,
     in the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -16349,7 +16349,7 @@ load_nfl_coach_careers:
     coach''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    coach''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
@@ -16480,7 +16480,7 @@ load_nfl_coach_careers:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -16559,7 +16559,7 @@ load_nfl_coach_careers:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -16683,7 +16683,7 @@ load_nfl_coach_careers:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -16899,7 +16899,7 @@ load_nfl_coach_careers:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -16978,7 +16978,7 @@ load_nfl_coach_careers:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -17026,7 +17026,7 @@ load_nfl_coach_careers:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -17138,7 +17138,7 @@ load_nfl_coach_tendencies:
     coach''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%,
+    coach''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%,
     in the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -17467,7 +17467,7 @@ load_nfl_coach_tendencies:
     coach''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    coach''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    coach''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
@@ -17598,7 +17598,7 @@ load_nfl_coach_tendencies:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -17677,7 +17677,7 @@ load_nfl_coach_tendencies:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this coach''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this coach''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -17801,7 +17801,7 @@ load_nfl_coach_tendencies:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -18014,7 +18014,7 @@ load_nfl_coach_tendencies:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -18098,7 +18098,7 @@ load_nfl_coach_tendencies:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -18146,7 +18146,7 @@ load_nfl_coach_tendencies:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -18768,7 +18768,7 @@ load_nfl_team_tendencies:
     team''s defense was on the field: play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_epa_neutral: 'Defense-allowed twin of epa_neutral -- the same measure over the opposing offenses'' plays while this
-    team''s defense was on the field: play EPA summed over situation-neutral plays: win probability between 20% and 80%, in
+    team''s defense was on the field: play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in
     the first four quarters, outside the final two minutes of a half.'
   def_epa_neutral_site: 'Defense-allowed twin of epa_neutral_site -- the same measure over the opposing offenses'' plays while
     this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): play EPA
@@ -19097,7 +19097,7 @@ load_nfl_team_tendencies:
     team''s defense was on the field: plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the
     score at the snap, before the play; pos_score_diff where the start score is missing).'
   def_plays_neutral: 'Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses'' plays while this
-    team''s defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first
+    team''s defense was on the field: plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first
     four quarters, outside the final two minutes of a half.'
   def_plays_neutral_site: 'Defense-allowed twin of plays_neutral_site -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*): plays
@@ -19228,7 +19228,7 @@ load_nfl_team_tendencies:
     snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff
     where the start score is missing). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral: 'Defense-allowed twin of success_rate_neutral: successes_neutral / plays_neutral: success rate
-    in situation-neutral situations (win probability between 20% and 80%, in the first four quarters, outside the final two
+    in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two
     minutes of a half). Computed from the def_ counts; null when the denominator is 0.'
   def_success_rate_neutral_site: 'Defense-allowed twin of success_rate_neutral_site: successes_neutral_site / plays_neutral_site:
     success rate in the team''s neutral-site games. Computed from the def_ counts; null when the denominator is 0.'
@@ -19307,7 +19307,7 @@ load_nfl_team_tendencies:
     is missing).'
   def_successes_neutral: 'Defense-allowed twin of successes_neutral -- the same measure over the opposing offenses'' plays
     while this team''s defense was on the field: plays flagged EPA_success (positive EPA) in situation-neutral situations
-    (win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
+    (score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside the final two minutes of a half).'
   def_successes_neutral_site: 'Defense-allowed twin of successes_neutral_site -- the same measure over the opposing offenses''
     plays while this team''s defense was on the field, with the game context read from the defending team''s side (def_ctx_*):
     plays flagged EPA_success (positive EPA) in the team''s neutral-site games.'
@@ -19431,7 +19431,7 @@ load_nfl_team_tendencies:
   epa_home: Play EPA summed over the plays in the team's home games.
   epa_leading: Play EPA summed over the plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0,
     the score at the snap, before the play; pos_score_diff where the start score is missing).
-  epa_neutral: 'Play EPA summed over situation-neutral plays: win probability between 20% and 80%, in the first four quarters,
+  epa_neutral: 'Play EPA summed over situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters,
     outside the final two minutes of a half.'
   epa_neutral_site: Play EPA summed over the plays in the team's neutral-site games.
   epa_one_score: Play EPA summed over the plays snapped with the offense within 8 points either way (|pos_score_diff_start|
@@ -19644,7 +19644,7 @@ load_nfl_team_tendencies:
   plays_home: Plays in the team's home games.
   plays_leading: Plays snapped with the offense ahead on the scoreboard (pos_score_diff_start > 0, the score at the snap,
     before the play; pos_score_diff where the start score is missing).
-  plays_neutral: 'Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside
+  plays_neutral: 'Plays in situation-neutral plays: score-and-clock win probability (wp_before_naive, no pregame line) between 20% and 80%, in the first four quarters, outside
     the final two minutes of a half.'
   plays_neutral_site: Plays in the team's neutral-site games.
   plays_one_score: Plays snapped with the offense within 8 points either way (|pos_score_diff_start| <= 8, the score at the
@@ -19726,7 +19726,7 @@ load_nfl_team_tendencies:
   success_rate_leading: 'successes_leading / plays_leading: success rate snapped with the offense ahead on the scoreboard
     (pos_score_diff_start > 0, the score at the snap, before the play; pos_score_diff where the start score is missing). Null
     when the denominator is 0.'
-  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (win probability
+  success_rate_neutral: 'successes_neutral / plays_neutral: success rate in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line)
     between 20% and 80%, in the first four quarters, outside the final two minutes of a half). Null when the denominator is
     0.'
   success_rate_neutral_site: 'successes_neutral_site / plays_neutral_site: success rate in the team''s neutral-site games.
@@ -19774,7 +19774,7 @@ load_nfl_team_tendencies:
   successes_home: Plays flagged EPA_success (positive EPA) in the team's home games.
   successes_leading: Plays flagged EPA_success (positive EPA) snapped with the offense ahead on the scoreboard (pos_score_diff_start
     > 0, the score at the snap, before the play; pos_score_diff where the start score is missing).
-  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (win probability between 20%
+  successes_neutral: Plays flagged EPA_success (positive EPA) in situation-neutral situations (score-and-clock win probability (wp_before_naive, no pregame line) between 20%
     and 80%, in the first four quarters, outside the final two minutes of a half).
   successes_neutral_site: Plays flagged EPA_success (positive EPA) in the team's neutral-site games.
   successes_one_score: Plays flagged EPA_success (positive EPA) snapped with the offense within 8 points either way (|pos_score_diff_start|
