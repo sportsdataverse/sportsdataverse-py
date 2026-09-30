@@ -945,6 +945,8 @@ else:
 
 
     ✅ college_softball teams
+
+
     ✅ mch teams
 
 
@@ -976,7 +978,7 @@ else:
     'no CFL games today (or offseason)'
 ```
 
-    ✅ today's CFL slate (20260907)
+    ✅ today's CFL slate (20260928)
 
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
@@ -1028,6 +1030,8 @@ _keys(injuries_cfl)
 
     ✅ UFL news
     <class 'polars.dataframe.frame.DataFrame'>
+
+
     ✅ CFL injuries
     <class 'polars.dataframe.frame.DataFrame'>
 

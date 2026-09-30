@@ -168,9 +168,9 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 
     ✅ espn_nba_teams
     ✅ espn_wnba_teams
-
-
     ✅ espn_nhl_teams
+
+
     ✅ espn_mlb_teams
 
 
@@ -356,11 +356,11 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
-    │ mbb    ┆ 628         │
-    │ wbb    ┆ 566         │
-    │ cfb    ┆ 424         │
-    │ nhl    ┆ 402         │
-    │ nba    ┆ 365         │
+    │ mbb    ┆ 632         │
+    │ wbb    ┆ 570         │
+    │ cfb    ┆ 458         │
+    │ nhl    ┆ 406         │
+    │ mlb    ┆ 370         │
     │ …      ┆ …           │
     │ pwhl   ┆ 68          │
     │ ahl    ┆ 14          │
@@ -442,33 +442,30 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
 
 
 
-    shape: (5, 50)
+    shape: (4, 50)
     ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
     │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
     │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
     │ str       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ bool      ┆ str      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401816843 ┆ s:1~l:10~ ┆ 2026-09-0 ┆ Atlanta   ┆ … ┆ https://a ┆ 0         ┆ false     ┆ null     │
-    │           ┆ e:4018168 ┆ 7T17:05Z  ┆ Braves at ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 43        ┆           ┆ Philadelp ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ hia…      ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401816846 ┆ s:1~l:10~ ┆ 2026-09-0 ┆ New York  ┆ … ┆ https://a ┆ 9         ┆ null      ┆ null     │
-    │           ┆ e:4018168 ┆ 7T17:10Z  ┆ Mets at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 46        ┆           ┆ Miami     ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Marlins   ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401816842 ┆ s:1~l:10~ ┆ 2026-09-0 ┆ Los       ┆ … ┆ https://a ┆ 2         ┆ null      ┆ null     │
-    │           ┆ e:4018168 ┆ 7T17:35Z  ┆ Angeles   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 42        ┆           ┆ Angels at ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Boston R… ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401816844 ┆ s:1~l:10~ ┆ 2026-09-0 ┆ Cleveland ┆ … ┆ https://a ┆ 1         ┆ null      ┆ null     │
-    │           ┆ e:4018168 ┆ 7T17:35Z  ┆ Guardians ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 44        ┆           ┆ at        ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Baltimo…  ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401816847 ┆ s:1~l:10~ ┆ 2026-09-0 ┆ Arizona   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018168 ┆ 7T18:10Z  ┆ Diamondba ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 47        ┆           ┆ cks at    ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Kansas…   ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401907965 ┆ s:1~l:10~ ┆ 2026-09-2 ┆ Philadelp ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4019079 ┆ 9T18:00Z  ┆ hia       ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 65        ┆           ┆ Phillies  ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ at Atlan… ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401907896 ┆ s:1~l:10~ ┆ 2026-09-2 ┆ Chicago   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4019078 ┆ 9T21:00Z  ┆ White Sox ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 96        ┆           ┆ at        ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ Houston   ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ A…        ┆   ┆           ┆           ┆           ┆          │
+    │ 401907924 ┆ s:1~l:10~ ┆ 2026-09-3 ┆ Boston    ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4019079 ┆ 0T00:00Z  ┆ Red Sox   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 24        ┆           ┆ at New    ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ York Yan… ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401907974 ┆ s:1~l:10~ ┆ 2026-09-3 ┆ Chicago   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4019079 ┆ 0T02:00Z  ┆ Cubs at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 74        ┆           ┆ San Diego ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ Padr…     ┆   ┆ mlo…      ┆           ┆           ┆          │
     └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
@@ -561,8 +558,8 @@ pl.DataFrame(rows)
     │ ---    ┆ ---  ┆ ---  │
     │ str    ┆ i64  ┆ i64  │
     ╞════════╪══════╪══════╡
-    │ NBA    ┆ 30   ┆ 31   │
-    │ NHL    ┆ 32   ┆ 35   │
+    │ NBA    ┆ 30   ┆ 29   │
+    │ NHL    ┆ 32   ┆ 34   │
     │ MLB    ┆ 30   ┆ 47   │
     └────────┴──────┴──────┘
 
@@ -587,6 +584,8 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 
 
     nhl  Bruins         -> Boston Bruins (id=1)
+
+
     cfb  Crimson Tide   -> Alabama Crimson Tide (id=333)
 
 
@@ -700,7 +699,7 @@ print("raw    ->", type(raw).__name__, "(top-level keys:", None if not isinstanc
 
 
     ✅ nhl_standings (raw dict)
-    parsed -> DataFrame (32, 85)
+    parsed -> DataFrame (32, 76)
     raw    -> dict (top-level keys: ['wildCardIndicator', 'standingsDateTimeUtc', 'standings'] )
 
 
@@ -857,14 +856,14 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
     │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
     │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
     ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 55   ┆ 16     ┆ 11        ┆ 121    ┆ Western         ┆ Central       │
-    │ 53   ┆ 22     ┆ 7         ┆ 113    ┆ Eastern         ┆ Metropolitan  │
-    │ 50   ┆ 20     ┆ 12        ┆ 112    ┆ Western         ┆ Central       │
-    │ 50   ┆ 23     ┆ 9         ┆ 109    ┆ Eastern         ┆ Atlantic      │
-    │ 50   ┆ 26     ┆ 6         ┆ 106    ┆ Eastern         ┆ Atlantic      │
-    │ 48   ┆ 24     ┆ 10        ┆ 106    ┆ Eastern         ┆ Atlantic      │
-    │ 46   ┆ 24     ┆ 12        ┆ 104    ┆ Western         ┆ Central       │
-    │ 45   ┆ 27     ┆ 10        ┆ 100    ┆ Eastern         ┆ Atlantic      │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Pacific       │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Atlantic      │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Atlantic      │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Pacific       │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Metropolitan  │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Central       │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Central       │
+    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Metropolitan  │
     └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
 
 
@@ -908,15 +907,31 @@ print("standings rows:", None if pwhl_st is None else getattr(pwhl_st, "height",
  else "PWHL standings unavailable right now")
 ```
 
-    ⏭️  pwhl_standings: unavailable right now (ValueError)
+    ✅ pwhl_standings
     ✅ load_pwhl_schedules([2024])
-    standings rows: None | schedule rows: 85
+    standings rows: 12 | schedule rows: 85
 
 
 
 
 
-    'PWHL standings unavailable right now'
+    shape: (5, 15)
+    ┌───────────┬────────┬───────────────┬────────┬───┬──────────────┬───────────┬──────────────┬──────┐
+    │ team_code ┆ losses ┆ regulation_wi ┆ points ┆ … ┆ games_played ┆ team_rank ┆ team         ┆ wins │
+    │ ---       ┆ ---    ┆ ns            ┆ ---    ┆   ┆ ---          ┆ ---       ┆ ---          ┆ ---  │
+    │ str       ┆ str    ┆ ---           ┆ i64    ┆   ┆ str          ┆ i64       ┆ str          ┆ i64  │
+    │           ┆        ┆ str           ┆        ┆   ┆              ┆           ┆              ┆      │
+    ╞═══════════╪════════╪═══════════════╪════════╪═══╪══════════════╪═══════════╪══════════════╪══════╡
+    │ BOS       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 1         ┆ Boston Fleet ┆ null │
+    │ MIN       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 2         ┆ Minnesota    ┆ null │
+    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Frost        ┆      │
+    │ MTL       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 3         ┆ Montréal     ┆ null │
+    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Victoire     ┆      │
+    │ NY        ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 4         ┆ New York     ┆ null │
+    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Sirens       ┆      │
+    │ OTT       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 5         ┆ Ottawa       ┆ null │
+    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Charge       ┆      │
+    └───────────┴────────┴───────────────┴────────┴───┴──────────────┴───────────┴──────────────┴──────┘
 
 
 
@@ -1011,11 +1026,11 @@ out
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
     │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
-    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       │
     │ aussierules_aflw                ┆ Aussie Rules      ┆ AFL Women's               │
     │ baseball_kbo                    ┆ Baseball          ┆ KBO                       │
-    │ baseball_milb                   ┆ Baseball          ┆ MiLB                      │
     │ baseball_mlb                    ┆ Baseball          ┆ MLB                       │
+    │ baseball_mlb_world_series_winn… ┆ Baseball          ┆ MLB World Series Winner   │
+    │ baseball_npb                    ┆ Baseball          ┆ NPB                       │
     └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
@@ -1045,32 +1060,32 @@ out
 
 
     shape: (10, 6)
-    ┌───────────┬─────────────┬───────────────┬────────────┬──────────────────────┬───────────────┐
-    │ home_team ┆ away_team   ┆ bookmaker_key ┆ market_key ┆ outcome_name         ┆ outcome_price │
-    │ ---       ┆ ---         ┆ ---           ┆ ---        ┆ ---                  ┆ ---           │
-    │ str       ┆ str         ┆ str           ┆ str        ┆ str                  ┆ i64           │
-    ╞═══════════╪═════════════╪═══════════════╪════════════╪══════════════════════╪═══════════════╡
-    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ New England Patriots ┆ 145           │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ Seattle Seahawks     ┆ -175          │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ betus         ┆ h2h        ┆ New England Patriots ┆ 150           │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ betus         ┆ h2h        ┆ Seattle Seahawks     ┆ -175          │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ fanduel       ┆ h2h        ┆ New England Patriots ┆ 158           │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ fanduel       ┆ h2h        ┆ Seattle Seahawks     ┆ -188          │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ fanatics      ┆ h2h        ┆ New England Patriots ┆ 150           │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ fanatics      ┆ h2h        ┆ Seattle Seahawks     ┆ -180          │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ lowvig        ┆ h2h        ┆ New England Patriots ┆ 155           │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    │ Seattle   ┆ New England ┆ lowvig        ┆ h2h        ┆ Seattle Seahawks     ┆ -177          │
-    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
-    └───────────┴─────────────┴───────────────┴────────────┴──────────────────────┴───────────────┘
+    ┌───────────────┬──────────────┬────────────────┬────────────┬─────────────────────┬───────────────┐
+    │ home_team     ┆ away_team    ┆ bookmaker_key  ┆ market_key ┆ outcome_name        ┆ outcome_price │
+    │ ---           ┆ ---          ┆ ---            ┆ ---        ┆ ---                 ┆ ---           │
+    │ str           ┆ str          ┆ str            ┆ str        ┆ str                 ┆ i64           │
+    ╞═══════════════╪══════════════╪════════════════╪════════════╪═════════════════════╪═══════════════╡
+    │ Chicago Bears ┆ Philadelphia ┆ draftkings     ┆ h2h        ┆ Chicago Bears       ┆ 164           │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ draftkings     ┆ h2h        ┆ Philadelphia Eagles ┆ -198          │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ williamhill_us ┆ h2h        ┆ Chicago Bears       ┆ 168           │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ williamhill_us ┆ h2h        ┆ Philadelphia Eagles ┆ -197          │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ fanduel        ┆ h2h        ┆ Chicago Bears       ┆ 166           │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ fanduel        ┆ h2h        ┆ Philadelphia Eagles ┆ -198          │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ betrivers      ┆ h2h        ┆ Chicago Bears       ┆ 165           │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ betrivers      ┆ h2h        ┆ Philadelphia Eagles ┆ -200          │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ betus          ┆ h2h        ┆ Chicago Bears       ┆ 167           │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    │ Chicago Bears ┆ Philadelphia ┆ betus          ┆ h2h        ┆ Philadelphia Eagles ┆ -195          │
+    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
+    └───────────────┴──────────────┴────────────────┴────────────┴─────────────────────┴───────────────┘
 
 
 
@@ -1089,7 +1104,7 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 5893
+    Total wrappers across the counted leagues: 5988
 
 
 
@@ -1101,11 +1116,11 @@ df
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
-    │ mbb    ┆ 628         │
-    │ wbb    ┆ 566         │
-    │ cfb    ┆ 424         │
-    │ nhl    ┆ 402         │
-    │ nba    ┆ 365         │
+    │ mbb    ┆ 632         │
+    │ wbb    ┆ 570         │
+    │ cfb    ┆ 458         │
+    │ nhl    ┆ 406         │
+    │ mlb    ┆ 370         │
     │ …      ┆ …           │
     │ pwhl   ┆ 68          │
     │ ahl    ┆ 14          │
