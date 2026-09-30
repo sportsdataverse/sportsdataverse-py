@@ -15,7 +15,11 @@ allowed while the group's DEFENSE was on the field):
 * pace -- drive-level: ESPN's own elapsed drive clock over its own offensive
   play count (``sec_per_play``), and the same on situation-neutral drives
   (``sec_per_play_neutral``); ``pace_coverage`` is the share of drives with
-  a usable clock, so a season whose clock is sparse can be excluded.
+  a usable clock, so a season whose clock is sparse can be excluded. Only
+  regulation drives carry a clock (overtime has none; ESPN files its drives
+  as 0:00), and an ESPN drive id holding snaps by both offenses is clocked
+  once, for its owner (ESPN's drive team, else the offense with the most
+  standing snaps).
 * run / pass -- ``pass_rate`` overall and on every split below.
 * splits (:data:`SPLITS`) -- situation-neutral (win probability 20-80%, first
   four quarters, outside the last two minutes of a half), by down
@@ -316,6 +320,45 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
     return df
 
 
+def _drive_owners(df: pl.DataFrame) -> pl.DataFrame:
+    """``t_own_drive``: the snap's offense owns its ESPN drive id.
+
+    An ESPN drive id can hold standing snaps by BOTH offenses (a turnover filed
+    under the passer's drive, a shifted drive header), but its clock and play
+    count are one drive's. The owner is the offense ESPN names
+    (``drive.team.displayName``) when one of the drive's offenses matches it,
+    else the offense with the most standing snaps, the first snap breaking a tie
+    -- the rule cfb-data's ``team_summaries`` uses.
+    """
+    if "pos_team" not in df.columns:
+        return df.with_columns(t_own_drive=pl.lit(True))
+    label = (
+        pl.col("drive.team.displayName").cast(pl.Utf8)
+        if "drive.team.displayName" in df.columns
+        else pl.lit(None, dtype=pl.Utf8)
+    )
+    owner = (
+        df.filter(pl.col("t_standing") & pl.col("t_drive").is_not_null())
+        .with_row_index("_i")
+        .group_by("game_id", "t_drive", "pos_team")
+        .agg(
+            espn=(pl.col("pos_team").cast(pl.Utf8) == label).fill_null(False).any(),
+            n=pl.len(),
+            first=pl.col("_i").min(),
+        )
+        .group_by("game_id", "t_drive")
+        .agg(t_owner=pl.col("pos_team").sort_by(["espn", "n", "first"], descending=[True, True, False]).first())
+    )
+    # row order restored explicitly (join's maintain_order needs a newer polars than the floor)
+    return (
+        df.with_row_index("_row")
+        .join(owner, on=["game_id", "t_drive"], how="left")
+        .sort("_row")
+        .with_columns(t_own_drive=(pl.col("pos_team") == pl.col("t_owner")).fill_null(True))
+        .drop("t_owner", "_row")
+    )
+
+
 def _drive_frame(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
     """One row per (keys, game, drive) from standing scrimmage plays."""
     d = df.filter(pl.col("t_standing") & pl.col("t_drive").is_not_null())
@@ -338,6 +381,8 @@ def _drive_frame(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
             pts=pl.col("t_drive_pts").first(),
             clock_seconds=pl.col("t_drive_seconds").first(),
             clock_plays=pl.col("t_drive_plays").first(),
+            # any: a group holding both offenses (a league-wide key) still clocks a shared drive once
+            owned=pl.col("t_own_drive").any(),
         )
         .sort([*keys, "game_id", "half", "first_play"])
     )
@@ -345,7 +390,12 @@ def _drive_frame(df: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         drive_index=pl.int_range(pl.len()).over([*keys, "game_id", "half"]),
     ).with_columns(
         scripted=pl.col("drive_index") < _SCRIPTED_DRIVES_PER_HALF,
-        has_clock=(pl.col("clock_seconds").is_not_null() & (pl.col("clock_plays") > 0)),
+        # a usable clock: regulation only (overtime has no game clock; ESPN files its
+        # drives as 0:00, one 2025 drive as 15:00), and only on the drive's owner, so a
+        # drive id shared by both offenses is counted once
+        has_clock=(
+            pl.col("clock_seconds").is_not_null() & (pl.col("clock_plays") > 0) & (pl.col("half") < 3) & pl.col("owned")
+        ),
     )
 
 
@@ -564,7 +614,7 @@ def tendencies(
             curve = load_third_down_curve(league)
         except (FileNotFoundError, OSError, ValueError):
             curve = None
-    df = _prepare(plays, curve)
+    df = _drive_owners(_prepare(plays, curve))
 
     off = _join_all(
         [_offense_counts(df, keys), _fourth_counts(df, keys), _drive_counts(_drive_frame(df, keys), keys)], keys
