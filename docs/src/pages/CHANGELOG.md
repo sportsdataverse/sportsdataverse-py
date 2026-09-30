@@ -3,6 +3,9 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
+  - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
+  - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +303,78 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
+
+The regulation WP boosters were trained on a frame that drops every game that reached overtime
+(cfbfastR-cfb-data `clean_plays`), so they estimate P(win | state, settled in regulation). A tied
+game late in the fourth was learned only from games somebody won in regulation, and overtime was
+never seen: its clock reads 0, so it scored as the last snap of such a game. On the 2022–25
+holdout, tied with two minutes or less left, the team with the ball was given 0.77 against 0.65
+won, and a tied overtime snap 0.94 against 0.50. New `cfb_wp_overtime` (fitted by
+`tools/fit_cfb_wp_overtime.py` on 2004–21, read from `models/wp_ot_reach.card.json`) mixes each
+regulation prediction with the overtime it may reach, `(1 - q) * wp + q * tie_value` (q from the new
+`wp_ot_reach` booster, the tie value a logistic in the pregame spread), and values overtime by its
+rules: the possession ends in a touchdown, a field goal or nothing, and the first team is answered
+by the second from the 25 (who had the ball first is read off the period's first snap that is not
+a timeout or a flag). Both the spread and the spread-free surfaces use it. The card pins the
+sha256 of `wp_spread.ubj` / `wp_naive.ubj`; retraining either (above all to keep overtime games)
+needs a refit of this correction, and a test fails until then.
+
+The fourth-down and two-point surfaces score the state a decision leads to. A state with no
+regulation time left after the play is now decided (win, loss, or overtime if level), and in
+overtime a punt, a kick or a failed try ends the possession instead of handing the opponent the
+ball at the spot. Georgia Tech's walk-off field goal (401754623) goes from "punt 91.7%" to FG
+68.9% vs punt 47.3%; a tied punt with 0:05 left (401762856) is overtime (56.4%, not 91.2%); Cal's
+overtime 4th and 3 at the 3, down 3 (401754585), is go 38.7% vs FG 32.8% (was FG 85.2%).
+`CFBPlayProcess` passes the overtime possession order as `ot_second_possession`; other callers
+may, and without it a non-zero margin implies the second possession.
+
+A made field goal's `wp_after` now hands over to the kickoff that follows, as a try's does. It
+was the kicker's snap at the spot with the points counted, a team with the ball: 11% of 2025's
+made field goals missed the next row by more than 5 points, up to 50 late in the fourth
+(Louisville's tying kick in 401754554 published WPA +30.9%). In overtime a touchdown row that
+carries its own try (2014 on) ends the possession at the realised margin.
+
+In a two-point shootout (2019-20 from the fifth overtime, 2021 on from the third) an attempt is
+valued by the shootout rule: a make leaves the other team one attempt of its own, not a drive from
+the 25. Alabama's first attempt at Auburn (401282146) reads 0.59 -> 0.85; scored as a possession it
+read -0.40. ESPN often files the second attempt under the first team, so the row order decides
+which attempt a row is. A shootout attempt is not a two-point decision (there is no kick to weigh),
+and its `two_pt_*` columns are null.
+
+Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a little (most in
+close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
+`fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
+Float32; the published parquet was already Float64).
+
+### Fixed — a tackle is credited to the tackler's own team
+
+The usage box credited every tackler on a play to the play's defense, so a punting team's
+coverage tackles and an offense's tackles after an interception or fumble landed in the
+opponent's tackle table: 2,945 of 113,407 CFB tackle credits in 2025 (punts, punt returns,
+interception returns, fumble recoveries), and every FBS team's season table listed opposing
+players (Indiana's Jeff Utzinger under Miami in the 2025 title game). `create_usage_box` now reads
+each tackler's team from the game roster (`rosters`, which the CFB processor and the cfb-data build
+already pass) and files the credit under that team; a tackler the roster doesn't list stays with the
+play's defense, as before (NFL, which passes no roster, is unchanged). Raw tackle and assist counts
+are unchanged; `def_pos_team` in the `tackles` / `position_group_tackles` sections now means the
+tackler's team. `adv_tackles`, `adv_position_group_tackles` and their `usage_*` season tables need a
+rebuild.
+
+### Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown
+
+The football tendencies and usage box read "touchdown" as any touchdown on the play, so a third
+down that ended in an interception or fumble returned for a score counted as the offense's
+conversion: 816 of 115,222 CFB third-down conversions in 2014–2025 (640 interception-return, 129
+fumble-return and 47 fumble-recovery touchdowns; 58 in 2025 across 40 FBS offenses). The same flag
+fed fourth-down conversions (13 of 2,081 in 2025), a ball carrier's `touchdowns` / `fd_or_td` when
+his fumble was returned for a score, red-zone and scoring-opportunity touchdowns, and the drive
+touchdown behind `rz_tds` / `so_tds`. A touchdown now counts only when it is not a
+`defense_score_play`, in `football.tendencies`, `football.usage_box` and `fit_third_down_curve`
+(both leagues). Team / coach tendencies, coach careers and the usage tables need a rebuild; the
+bundled third-down curves should be refit on the reprocessed play-by-play (today's release no
+longer reproduces them exactly, so a refit now would mix in unrelated data changes).
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
