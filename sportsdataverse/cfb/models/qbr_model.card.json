@@ -8,19 +8,18 @@
     "pass_epa",
     "rush_epa",
     "pen_epa",
-    "spread",
     "era0",
     "era1",
     "era2",
     "era3"
   ],
-  "n_features": 10,
+  "n_features": 9,
   "label": "qbr",
   "training_seasons": [
     2004,
     2025
   ],
-  "n_training_rows": null,
+  "n_training_rows": 32323,
   "hyperparameters": {
     "booster": "gbtree",
     "objective": "reg:squarederror",
@@ -30,8 +29,8 @@
     "max_depth": 4,
     "min_child_weight": 1
   },
-  "source": "cfb_final_json",
-  "trained_date": "2026-08-02",
+  "source": "adv_passing (served box score) + models/qbr/espn_qbr_labels.parquet",
+  "trained_date": "2026-09-30",
   "era_contract": {
     "encoding": "one_hot",
     "cuts": [
@@ -54,5 +53,6 @@
     ]
   },
   "num_boost_round": 45,
-  "training_frame": "artifacts/pbp_full_v2.parquet"
+  "arm": "no_spread",
+  "gate_record": "qbr_model.gate.json"
 }
