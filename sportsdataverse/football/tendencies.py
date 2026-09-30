@@ -44,8 +44,10 @@ allowed while the group's DEFENSE was on the field):
   a ``Null``-dtype column (``pl.lit(None)``) raises ``TypeError``: build
   ``ctx_*`` as Boolean even when no value is known.
 * efficiency -- EPA per play, success rate, yards per play, explosive rate,
-  with rush / pass splits; third downs converted and over expected (the
-  league's bundled distance curve).
+  with rush / pass splits; third downs converted (a first down or the
+  offense's own touchdown -- a pick-six or fumble-return score is the
+  defense's, ``defense_score_play``) and over expected (the league's bundled
+  distance curve).
 * finishing -- red-zone and scoring-opportunity trips, touchdown rate,
   conversion rate (TD or FG), points per trip; scripted (first two drives
   of each half) vs non-scripted EPA per play, success rate, points per drive.
@@ -241,7 +243,8 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         b("EPA_success").alias("t_success"),
         b("EPA_explosive").alias("t_explosive"),
         b("first_down_created").alias("t_first_down"),
-        b("touchdown").alias("t_touchdown"),
+        # the offense's own touchdown: a pick-six or fumble-return score is the defense's
+        (b("touchdown") & ~b("defense_score_play")).alias("t_touchdown"),
         b("scoring_opp").alias("t_so"),
         b("standard_down").alias("t_standard_down"),
         b("passing_down").alias("t_passing_down"),
