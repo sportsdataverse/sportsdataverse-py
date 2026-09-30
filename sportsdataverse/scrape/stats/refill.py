@@ -94,7 +94,9 @@ def main(cfg: LeagueConfig, argv: "Optional[list[str]]" = None, *, default_root:
     overrides it, exactly as the sweep resolves the root.
     """
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("seasons", nargs="?", default=None, help="LO:HI store dir years, i.e. END years (default: all found)")
+    ap.add_argument(
+        "seasons", nargs="?", default=None, help="LO:HI store dir years, i.e. END years (default: all found)"
+    )
     ap.add_argument("--check", action="store_true", help="census only; no deletes, no network")
     ap.add_argument("--endpoint", default=None, help="restrict to one endpoint")
     ap.add_argument(
