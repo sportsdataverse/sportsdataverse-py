@@ -207,7 +207,7 @@ def _series_frame(rows: list[tuple]) -> pl.DataFrame:
         "end.distance",
         "end.downDistanceText",
     ]
-    return pl.DataFrame(rows, schema=cols, orient="row")
+    return pl.DataFrame(rows, schema=cols, orient="row").with_columns(pl.lit(1).alias("period.number"))
 
 
 @pytest.mark.parametrize(
@@ -262,3 +262,46 @@ def test_repair_amp0_distance_series_respects_a_conflicting_end(prev_end, expect
         ]
     )
     assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]
+
+
+@pytest.mark.parametrize(
+    ("prev_type", "prev_period", "row_down", "expected"),
+    [
+        # the same series: a penalty backs "1st & Goal at TULN 10" up
+        ("Penalty", 1, 1, 15),
+        # the previous snap ended the possession: a new series starts
+        ("Passing Touchdown", 1, 1, 0),
+        # a new period (overtime possessions share one ESPN drive)
+        ("Penalty", 5, 1, 0),
+    ],
+)
+def test_repair_amp0_distance_series_stops_at_a_new_series(prev_type, prev_period, row_down, expected):
+    df = _series_frame(
+        [
+            (prev_type, "2653", 1, 10, 10, "1st & Goal at TULN 10", 1, 0, None),
+            ("Rush", "2653", row_down, 0, 15, f"{row_down}st & 0 at TULN 15", 2, 0, None),
+        ]
+    ).with_columns(pl.Series("period.number", [prev_period, 1]))
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [10, expected]
+
+
+def test_repair_amp0_distance_series_stops_at_a_down_reset():
+    # 400869264 overtime: OHIO opens OT2 "1st & 0 at OHIO 25" after its own OT1 goal-line
+    # snap "2nd & Goal at OHIO 2" -- a down reset, so a new series (1st & 10), not goal-to-go
+    df = _series_frame(
+        [
+            ("Rush", "195", 2, 2, 2, "2nd & Goal at OHIO 2", 3, 3, "3rd & Goal at OHIO 3"),
+            ("Rush", "195", 1, 0, 25, "1st & 0 at OHIO 25", 2, 0, None),
+        ]
+    )
+    assert cfb_pbp_mod._repair_amp0_distance(df)["start.distance"].to_list() == [2, 0]
+
+
+def test_overtime_possession_does_not_inherit_the_goal_line(monkeypatch):
+    """400869264 (2016, OT): OT possessions start "1st & 0 at <team> 25"; none is goal-to-go."""
+    df = _run(monkeypatch, 400869264)
+    ot = df.filter(
+        (pl.col("period.number") >= 5) & pl.col("start.downDistanceText").str.contains(r"^1st & 0 at \w+ 25$")
+    )
+    assert ot.height >= 2
+    assert (ot["start.distance"] != 25).all()
