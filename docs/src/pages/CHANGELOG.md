@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
   - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
   - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
@@ -300,6 +301,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — pace counts regulation drives once, for the drive's own offense
+
+`sec_per_play` in `football.tendencies` summed ESPN's drive clock over every drive with a
+parseable `drive.timeElapsed`, overtime included. Overtime has no game clock: ESPN files its
+drives as 0:00 (86 of 89 in 2025), so they added plays and no seconds, and one North Texas OT drive
+(401762461) carried 15:00 over 3 plays. Separately, an ESPN drive id holding standing snaps by both
+offenses (51 ids in 28 games in 2025) handed each offense the whole drive clock and play count.
+A drive now carries a clock only in regulation and only for its owner: the offense ESPN names as
+the drive team, else the one with the most standing snaps (the rule cfb-data's `team_summaries`
+uses). In 2025, 75 of 136 FBS teams' `sec_per_play` move, by at most 0.71 s (North Texas 27th →
+16th), and 10 teams' `sec_per_play_neutral` move by at most 0.58 s. `drives_with_clock`,
+`drive_seconds`, `drive_plays` and `pace_coverage` change with them; drive counts, finishing and
+scripting are unchanged.
 
 ### Fixed — CFB plays ESPN files twice under new ids are dropped
 
