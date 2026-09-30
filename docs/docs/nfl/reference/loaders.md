@@ -1249,8 +1249,8 @@ Built from ESPN play participants (tackler / assist ids), which the NFL feed car
 | `assists` | Int64 | Assisted tackles credited to the player in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the player's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the player's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play's defense and is shared); null when the defense has none. |
 
 ```python
 load_nfl_usage_tackles(seasons=2024)
@@ -1276,8 +1276,8 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 | `assists` | Int64 | Assisted tackles credited to the position group in the play participants (assisted_by_player_ids). |
 | `tackle_points` | Float64 | tackles plus 0.5 times assists. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `team_tackle_points` | Float64 | tackle_points summed over every player on the defense for the season -- the denominator of tackle_share. |
-| `tackle_share` | Float64 | tackle_points / team_tackle_points: the position group's share of the defense's tackle points; null when the defense has none. |
+| `team_tackle_points` | Float64 | tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total. |
+| `tackle_share` | Float64 | scrimmage_tackle_points / team_scrimmage_tackle_points: the position group's share of the defense's tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play's defense and is shared); null when the defense has none. |
 
 ```python
 load_nfl_usage_position_group_tackles(seasons=2024)

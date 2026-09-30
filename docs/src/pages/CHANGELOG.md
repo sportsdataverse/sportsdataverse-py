@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
+  - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
   - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
   - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
   - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
@@ -324,6 +325,19 @@ pre-registered tolerance for dropping it was 0.30. The bundle now carries
 fails if `qbr_model.ubj` is not the candidate that passed it. Every `exp_qbr` changes;
 published `adv_passing` / pbp box scores keep the old values until they are reprocessed.
 The box score still emits a `spread` column.
+
+### Changed — tackle share counts only the defense's own scrimmage snaps
+
+Tackle share divided a player's tackle points by his team's across every play, special teams
+included: kickoff and punt coverage made up 6,590 of 113,407 CFB credits in 2025 (5.8%), with
+22 more on plays a penalty wiped out. Per the owner's decision (2026-09-30) the share now counts
+only the defense's own standing scrimmage snaps: two new columns,
+`scrimmage_tackle_points` and `team_scrimmage_tackle_points`, carry its numerator and
+denominator, and `tackle_share` is their ratio (per game, per position group and per season in
+`aggregate_usage_box`). `tackles`, `assists`, `tackle_points` and `team_tackle_points` still count
+every credit, special teams and the offense's tackles after a turnover included. Rows built before
+this change still share on every credit. The two new columns are declared in the loader schemas
+after the tackle tables are republished.
 
 ### Fixed — a tackle is credited to the tackler's own team
 

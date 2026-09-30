@@ -2559,7 +2559,9 @@ def load_nfl_usage_tackles(seasons: List[int], return_as_pandas: bool = False) -
 
     One row per (season, defending team, tackler): tackles, assists,
     ``tackle_points`` (tackles + 0.5 assists) and the **tackle share** of the
-    defense, with the position group. Needs the ESPN play participants
+    defense -- its tackle points on its own standing scrimmage snaps, so
+    kickoff and punt coverage are counted but not shared -- with the position
+    group. Needs the ESPN play participants
     (``tackler_player_ids`` / ``assisted_by_player_ids``), which the NFL feed
     carries from 2014; earlier seasons have no asset.
 
