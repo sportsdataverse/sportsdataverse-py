@@ -1240,8 +1240,8 @@ Built from ESPN play participants (tackler / assist ids), which the NFL feed car
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
+| `def_pos_team_id` | Int64 | ESPN team id of the play's defense (the NFL build passes no game roster, so a tackle is not moved to the tackler's own team); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the play's defense. The NFL build passes no game roster, so every tackle stays with the play's defense, including kickoff / punt coverage tackles and tackles after a turnover. |
 | `player_id` | String | ESPN athlete id of the player, as a string; null when the play-by-play named the player without an id (the row is then keyed on the name). |
 | `player_name` | String | Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player keeps one row. |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season. |
@@ -1269,8 +1269,8 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released play-by-play carries. |
-| `def_pos_team_id` | Int64 | ESPN team id of the tackler's own team (his game-roster team, else the play's defense); joins to the ESPN teams dataset on team_id. |
-| `def_pos_team` | String | Display name of the tackler's own team -- the team the game roster lists him under (a punt-coverage tackle or a tackle after a turnover belongs to the play's offense), else the play's defense. |
+| `def_pos_team_id` | Int64 | ESPN team id of the play's defense (the NFL build passes no game roster, so a tackle is not moved to the tackler's own team); joins to the ESPN teams dataset on team_id. |
+| `def_pos_team` | String | Display name of the play's defense. The NFL build passes no game roster, so every tackle stays with the play's defense, including kickoff / punt coverage tackles and tackles after a turnover. |
 | `position_group` | String | Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants' ESPN position ids; null when no participant row carried a position for the player. |
 | `tackles` | Int64 | Solo tackles credited to the position group in the play participants (tackler_player_ids). |
 | `assists` | Int64 | Assisted tackles credited to the position group in the play participants (assisted_by_player_ids). |
@@ -3482,4 +3482,3 @@ One row per team per season: the SDV subdivision, conference and division group 
 ```python
 load_nfl_team_group_seasons(seasons=2024)
 ```
-
