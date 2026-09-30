@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
+  - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
   - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
   - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
   - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
@@ -351,6 +352,21 @@ Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a li
 close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
 `fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
 Float32; the published parquet was already Float64).
+
+### Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)
+
+The neutral split in `football.tendencies` (win probability 20–80%, regulation, outside the last
+two minutes of a half) read `wp_before`, which carries the pregame line, so a heavy favorite's
+tied first quarter was not neutral: in 2025 only 64.1% of tied first-quarter FBS snaps counted,
+433 of 1,739 team-games had no neutral snap at all, and 25 teams' neutral pass rate moved 3+
+points between the two WPs. Per the owner's decision (2026-09-30), CFB now reads
+`wp_before_naive` (score, clock and field position only), the same model adjusted EPA's
+garbage-time rule uses; the band and the clock rules are unchanged. This moves every `*_neutral`
+column (`plays_` / `passes_` / `epa_` / `successes_neutral`, their rates and `def_` twins) and
+`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL follows (owner, same
+day) so both leagues' "neutral pass rate" mean the same thing: it reads its `wp_before_naive`
+(nflfastR's spread-free `wp`) under the same band and clock rules. In 2025's Raiders–Texans game
+(401772805) the pregame line left 19 of 102 snaps neutral; the score-and-clock WP leaves 93.
 
 ### Fixed — pace counts regulation drives once, for the drive's own offense
 

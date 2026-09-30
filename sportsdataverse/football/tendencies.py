@@ -22,7 +22,8 @@ allowed while the group's DEFENSE was on the field):
   standing snaps).
 * run / pass -- ``pass_rate`` overall and on every split below.
 * splits (:data:`SPLITS`) -- situation-neutral (win probability 20-80%, first
-  four quarters, outside the last two minutes of a half), by down
+  four quarters, outside the last two minutes of a half; the win probability
+  is the score-and-clock ``wp_before_naive`` in both leagues), by down
   (``d1..d4``), early / standard / passing downs, score state at the snap
   (``leading`` / ``tied`` / ``trailing`` from ``pos_score_diff_start``, else
   ``pos_score_diff``), half, third down by distance (``d3_short`` 1-3,
@@ -200,6 +201,10 @@ _DRIVE_PTS = (
     .fill_null(0.0)
 )
 _SCRIPTED_DRIVES_PER_HALF = 2
+#: the win probability "situation-neutral" reads in both leagues: the score-and-clock
+#: model (no pregame line; NFL's is nflfastR's ``wp``), as CFB adjusted EPA's garbage-time
+#: rule does, so a heavy favorite's tied first quarter is neutral
+_NEUTRAL_WP = "wp_before_naive"
 
 
 def _col(df: pl.DataFrame, *names: str) -> Optional[str]:
@@ -250,7 +255,7 @@ def _prepare(plays: pl.DataFrame, curve: Optional[pl.DataFrame]) -> pl.DataFrame
         b("passing_down").alias("t_passing_down"),
         f("EPA").alias("t_epa"),
         f("statYardage").alias("t_yards"),
-        f("wp_before").alias("t_wp"),
+        f(_NEUTRAL_WP).alias("t_wp"),
         # the score at the snap; pos_score_diff is the score AFTER the play, so a touchdown
         # that flips the lead would count its own EPA as "leading"
         first("pos_score_diff_start", "pos_score_diff").alias("t_score_diff"),
