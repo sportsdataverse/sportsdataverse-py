@@ -24,6 +24,8 @@ Women's mirror of [`tests/fixtures/mbb_prediction/`](../mbb_prediction/README.md
 | `espn_odds_sample.parquet` | 175 | `espn_wbb_game_odds` closing lines; women's book coverage is thin (136 of 311 sampled games had no usable book). |
 | `pbp_sample_2024.parquet` | 55170 | Every 25th play of all 4,070 eligible games + as-of `pregame_home_prob` + `home_win` label. |
 | `ncaa_tourney_2024.parquet` | 134 | Actual 2024 women's tournament (67 games, 68 teams, seeds 1–16 via scoreboard `curatedRank`; headline filter `NCAA Women's Championship`). |
+| `turnover_key_team_box.parquet` | 316 | `load_wbb_team_boxscore([2008, 2009, 2010, 2014])`, captured 2026-09-29: both team rows of every 2008 and 2009 Purdue (`2509`) game, every 2010 Stanford (`24`) and UConn (`41`) game, and every 2014 UConn game; raw ESPN `Int32` ids. Cols: `game_id, season, team_id, team_abbreviation, team_score, field_goals_attempted, offensive_rebounds, turnovers, total_turnovers, team_turnovers, free_throws_attempted`. 2009-2010 carry the count in `team_turnovers` with `turnovers`/`total_turnovers` 0 (ESPN `teamTurnovers`; the 2010 final is `300960041`, 10 each); 2009 game `290252509` has 0 under every key; 2008 has 0 under every key in all 22 games; 2014 uses `turnovers`, with a different `team_turnovers`. |
+| `turnover_key_schedule.parquet` | 158 | `load_wbb_schedule([2008, 2009, 2010, 2014])`, captured 2026-09-29: those 158 games, raw ESPN columns and dtypes (`game_id, season, date, game_date, home_id, away_id, neutral_site`). Regression slice for the `team_turnovers` fallback and the zero-turnover game drop in `raw_game_efficiency`. |
 
 Observed gate values at capture time (same thresholds as the men's gates;
 the spread/total MAE floors are women's observed-floor values — see

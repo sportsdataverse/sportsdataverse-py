@@ -1,10 +1,18 @@
 import datetime
+import warnings
+from pathlib import Path
 
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.errors import InsufficientInputError
-from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
+from sportsdataverse.mbb.mbb_team_ratings import (
+    _normalize_schedule,
+    adjust_efficiency,
+    adjust_tempo,
+    raw_game_efficiency,
+)
 
 
 def _mini():
@@ -389,16 +397,11 @@ def test_one_shell_game_does_not_poison_the_whole_season():
 
 
 def test_structurally_absent_turnovers_are_refused():
-    """WBB 2003-2012: `turnovers` is 0 in 100% of team rows (a schema gap, not a value)."""
+    """A season whose every game has 0 turnovers (WBB 2008: a schema gap, not a value)."""
     sched, box = _mini()
     zeroed = box.with_columns(pl.lit(0.0).alias("turnovers"))
     with pytest.raises(InsufficientInputError, match="no turnovers"):
         raw_game_efficiency(sched, zeroed)
-    # a frame that merely CONTAINS a zero is fine
-    one_zero = box.with_columns(
-        pl.when(pl.col("team_id") == "A").then(0.0).otherwise(pl.col("turnovers")).alias("turnovers")
-    )
-    assert raw_game_efficiency(sched, one_zero).height == 2
 
 
 def test_one_sided_shell_is_dropped_too():
@@ -445,3 +448,115 @@ def test_real_2011_shell_game_does_not_poison_the_season(monkeypatch):
         assert out[c].is_finite().all(), f"{c} went non-finite"
     games = dict(zip(out["team_id"].to_list(), out["games"].to_list()))
     assert games["2443"] == 19 and games["3129"] == 2  # the shell game is gone, the rest kept
+
+
+# ---------------------------------------------------------------------------
+# WBB 2009-2012: ESPN files each team's turnover total under `teamTurnovers`
+# (loader column `team_turnovers`) with `turnovers`/`total_turnovers` both 0;
+# from 2013 it is under `turnovers`. Real slices in
+# tests/fixtures/wbb_prediction/turnover_key_*.parquet (see its README).
+# ---------------------------------------------------------------------------
+
+_WBB_FIX = Path(__file__).resolve().parents[1] / "fixtures" / "wbb_prediction"
+
+
+def _turnover_key_slice(season: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+    sched = pl.read_parquet(_WBB_FIX / "turnover_key_schedule.parquet").filter(pl.col("season") == season)
+    box = pl.read_parquet(_WBB_FIX / "turnover_key_team_box.parquet").filter(pl.col("season") == season)
+    return _normalize_schedule(sched), box
+
+
+def _poss(eff: pl.DataFrame, game_id: str) -> float:
+    return eff.filter(pl.col("game_id") == game_id)["poss"].unique().item()
+
+
+def test_legacy_team_turnovers_key_supplies_the_turnovers():
+    """2010 final (UConn 53, Stanford 47): both teams' 10 turnovers live in `team_turnovers`."""
+    sched, box = _turnover_key_slice(2010)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        eff = raw_game_efficiency(sched, box)
+    assert eff["game_id"].n_unique() == 64  # every STAN / CONN game kept
+    # STAN 68 - 13 + 10 + 0.44*4 = 66.76 ; CONN 58 - 10 + 10 + 0.44*22 = 67.68
+    assert _poss(eff, "300960041") == pytest.approx(0.5 * (66.76 + 67.68))
+    # without the turnover term the slice's tempo reads ~55; real WBB tempo is ~70
+    assert 65.0 < eff["poss"].mean() < 80.0
+
+
+def test_turnover_key_fallback_is_per_row():
+    """One season mixing both layouts must rate exactly like the all-legacy season.
+
+    Half the 2010 games are rewritten into the 2013+ layout (the same count moved
+    to `turnovers`/`total_turnovers`); a season- or frame-level switch would leave
+    the other half at 0 and drop them.
+    """
+    sched, box = _turnover_key_slice(2010)
+    modern = pl.col("game_id") % 2 == 0
+    mixed = box.with_columns(
+        pl.when(modern).then(pl.col("team_turnovers")).otherwise(pl.col("turnovers")).alias("turnovers"),
+        pl.when(modern).then(pl.col("team_turnovers")).otherwise(pl.col("total_turnovers")).alias("total_turnovers"),
+        pl.when(modern).then(0).otherwise(pl.col("team_turnovers")).alias("team_turnovers"),
+    )
+    assert 0 < mixed.filter(pl.col("turnovers") > 0).height < mixed.height  # both layouts present
+    assert_frame_equal(raw_game_efficiency(sched, mixed), raw_game_efficiency(sched, box))
+
+
+def test_modern_rows_keep_their_turnovers():
+    """2014: `turnovers` > 0, and `team_turnovers` carries a different (smaller) count."""
+    sched, box = _turnover_key_slice(2014)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        eff = raw_game_efficiency(sched, box)
+    assert eff["game_id"].n_unique() == 40
+    # CONN 89 - HART 34: CONN 60 - 10 + 8 + 0.44*15 = 64.6 ; HART 44 - 6 + 22 + 0.44*8 = 63.52
+    # (team_turnovers is 2 for both -- using it would give 58.6 / 43.52)
+    assert _poss(eff, "400509246") == pytest.approx(0.5 * (64.6 + 63.52))
+
+
+def test_frame_without_the_extra_turnover_columns_is_unchanged():
+    """The mbb path and older frames carry only `turnovers`: same output, no warning."""
+    sched, box = _turnover_key_slice(2014)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        bare = raw_game_efficiency(sched, box.drop("team_turnovers", "total_turnovers"))
+        only_team = raw_game_efficiency(sched, box.drop("total_turnovers"))
+    assert_frame_equal(bare, raw_game_efficiency(sched, box))
+    assert_frame_equal(only_team, bare)
+
+
+def test_zero_turnover_game_is_dropped_with_a_warning():
+    """2009 Purdue: OSU 71, PUR 60 (290252509) has 0 under every turnover key, 1 of 32 games."""
+    sched, box = _turnover_key_slice(2009)
+    with pytest.warns(UserWarning, match=r"dropped 2 team-game row\(s\) from 1 game\(s\).*0 turnovers.*290252509"):
+        eff = raw_game_efficiency(sched, box)
+    assert "290252509" not in eff["game_id"].to_list()
+    assert eff["game_id"].n_unique() == 31
+
+
+def _zero_game_plus(others: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """The 2009 zero-turnover game plus the first ``others`` of Purdue's other games."""
+    sched, box = _turnover_key_slice(2009)
+    keep = ["290252509"] + sched.filter(pl.col("game_id") != 290252509)["game_id"].cast(pl.Utf8).sort().head(
+        others
+    ).to_list()
+    return sched.filter(pl.col("game_id").cast(pl.Utf8).is_in(keep)), box
+
+
+def test_more_than_ten_percent_zero_turnover_games_rejects_the_season():
+    # 1 of 10 games is exactly 10%: dropped with a warning, season kept
+    with pytest.warns(UserWarning, match="0 turnovers"):
+        assert raw_game_efficiency(*_zero_game_plus(9))["game_id"].n_unique() == 9
+    # 1 of 9 is 11.1%: refused
+    with pytest.raises(InsufficientInputError, match=r"2009: 1 of 9 games"):
+        raw_game_efficiency(*_zero_game_plus(8))
+
+
+def test_2008_stays_rejected():
+    """WBB 2008 has no turnovers under any key (10 of 1,761 games league-wide)."""
+    sched, box = _turnover_key_slice(2008)
+    with pytest.raises(InsufficientInputError, match=r"2008: 22 of 22 games"):
+        raw_game_efficiency(sched, box)
+    # a clean season alongside does not rescue it
+    s10, b10 = _turnover_key_slice(2010)
+    with pytest.raises(InsufficientInputError, match="2008"):
+        raw_game_efficiency(pl.concat([sched, s10]), pl.concat([box, b10]))
