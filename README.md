@@ -96,7 +96,7 @@ for the full architecture + parser registry.
 
 ## Data status
 
-Every `load_*()` function reads release assets on [sportsdataverse-data](https://github.com/sportsdataverse/sportsdataverse-data/releases). The badges below are rebuilt nightly from each producer's latest workflow run and newest release files; idle means the sport is out of season. Full detail: [sportsdataverse.org/status](https://sportsdataverse.org/status).
+The `load_*()` functions read release assets on [sportsdataverse-data](https://github.com/sportsdataverse/sportsdataverse-data/releases); most `load_nfl_*()` loaders read the nflverse-data releases instead. The badges below are rebuilt nightly from each producer's latest workflow run and newest release files; idle means the sport is out of season. Full detail: [sportsdataverse.org/status](https://sportsdataverse.org/status).
 
 | Dataset | Data updated | Through | Pipeline | Update workflows |
 |:--|:--|:--|:--|:--|
