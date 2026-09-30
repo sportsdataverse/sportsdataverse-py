@@ -250,6 +250,7 @@ CARD_BACKED = [
     ("two_pt_model", "sportsdataverse.cfb.cfb_two_point", "TWO_PT_FEATURES"),
     ("cfb_cp_model", "sportsdataverse.cfb.cfb_pbp", "CP_FEATURES"),
     ("xpass_model", "sportsdataverse.cfb.cfb_pbp", "XPASS_FEATURES"),
+    ("qbr_model", "sportsdataverse.cfb.model_vars", "qbr_vars"),
 ]
 
 
