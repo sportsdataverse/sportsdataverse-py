@@ -24,8 +24,10 @@ roster is supplied.
 
 ``tackles`` -- one row per (def_pos_team, tackler): tackles, assists,
 **tackle share** = (tackles + 0.5 assists) / team total, position group.
-Needs the participants frame (``tackler_player_ids`` /
-``assisted_by_player_ids``); empty without it.
+``def_pos_team`` is the TACKLER's team: the game roster's (``rosters``), so a
+punt-coverage tackle or a tackle after a turnover stays with the tackler's own
+side; the play's defense when no roster lists him. Needs the participants
+frame (``tackler_player_ids`` / ``assisted_by_player_ids``); empty without it.
 
 ``position_group_tackles`` -- tackles summed per (def_pos_team, group).
 
@@ -419,8 +421,19 @@ def _decode_list_cell(v: Any) -> Optional[list[str]]:
     return []
 
 
-def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dict[str, Any]) -> pl.DataFrame:
-    """Long (play, tackler, kind) rows from the participants' tackler / assist lists."""
+def _tackle_rows(
+    participants: pl.DataFrame,
+    plays: pl.DataFrame,
+    positions: dict[str, Any],
+    teams: Optional[dict[str, str]] = None,
+) -> pl.DataFrame:
+    """Long (play, tackler, kind) rows from the participants' tackler / assist lists.
+
+    ``def_pos_team`` is the TACKLER's team: the play's offense when the game
+    roster (``teams``: athlete id -> team id) lists him there -- a punt-coverage
+    tackle, a tackle after an interception or fumble -- else the play's defense
+    (also when the roster doesn't list him). ``on_offense`` flags the former.
+    """
     need = {"play_id"}
     if participants is None or participants.height == 0 or not need <= set(participants.columns):
         return pl.DataFrame()
@@ -456,6 +469,7 @@ def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dic
         rows = base.select(
             "play_id",
             "def_pos_team",
+            "pos_team",
             pl.col(col).alias("ids"),
             (pl.col(names_col) if names_col in base.columns else pl.lit([], dtype=pl.List(pl.Utf8))).alias("names"),
         ).filter(pl.col("ids").list.len() > 0)
@@ -477,9 +491,13 @@ def _tackle_rows(participants: pl.DataFrame, plays: pl.DataFrame, positions: dic
     if not parts:
         return pl.DataFrame()
     long = pl.concat(parts, how="diagonal_relaxed").filter(pl.col("player_id").is_not_null())
+    roster_team = pl.col("player_id").replace_strict(teams or {}, default=None, return_dtype=pl.Utf8)
+    on_offense = (roster_team == pl.col("pos_team").cast(pl.Utf8)).fill_null(False)
     long = long.with_columns(
-        position_group=pl.col("player_id").map_elements(lambda pid: positions.get(pid), return_dtype=pl.Utf8)
-    )
+        on_offense=on_offense,
+        def_pos_team=pl.when(on_offense).then(pl.col("pos_team")).otherwise(pl.col("def_pos_team")),
+        position_group=pl.col("player_id").map_elements(lambda pid: positions.get(pid), return_dtype=pl.Utf8),
+    ).drop("pos_team")
     return long
 
 
@@ -1170,16 +1188,20 @@ def _special_teams(plays: pl.DataFrame) -> dict[str, pl.DataFrame]:
 _POSITION_FROM_HREF = re.compile(r"/positions/(\d+)")
 
 
-def _roster_positions(rosters: Any) -> dict[str, Any]:
-    """athlete id -> position group from a game roster.
+def _id_str(v: Any) -> str:
+    # a roster frame that widened ids to float must still key "4432712", not "4432712.0"
+    return str(int(v)) if isinstance(v, float) and v.is_integer() else str(v)
+
+
+def _roster_records(rosters: Any) -> list[tuple[str, dict[str, Any]]]:
+    """``(athlete id, record)`` for every roster row that names an athlete.
 
     Accepts a polars / pandas frame, a list of athlete records or the stored
-    ``{"data": [...]}`` envelope. Only ``athlete_id`` and ``position_id`` (else
-    the id inside ``position_href``) are read, row by row, so a roster whose
+    ``{"data": [...]}`` envelope. Fields are read row by row, so a roster whose
     other columns mix types can never cost the box.
     """
     if rosters is None:
-        return {}
+        return []
     if hasattr(rosters, "to_dicts"):
         rows = rosters.to_dicts()
     elif hasattr(rosters, "to_dict"):
@@ -1188,20 +1210,31 @@ def _roster_positions(rosters: Any) -> dict[str, Any]:
         rows = rosters.get("data") or []
     else:
         rows = rosters
+    return [
+        (_id_str(r["athlete_id"]), r) for r in rows or [] if isinstance(r, dict) and r.get("athlete_id") is not None
+    ]
+
+
+def _roster_positions(rosters: Any) -> dict[str, Any]:
+    """athlete id -> position group from a game roster (``position_id``, else the id inside ``position_href``)."""
     out: dict[str, Any] = {}
-    for rec in rows or []:
-        if not isinstance(rec, dict) or rec.get("athlete_id") is None:
-            continue
+    for pid, rec in _roster_records(rosters):
         pos = rec.get("position_id")
         if pos is None:
             m = _POSITION_FROM_HREF.search(str(rec.get("position_href") or ""))
             pos = m.group(1) if m else None
         grp = position_group(pos)
-        raw_id = rec["athlete_id"]
-        # a roster frame that widened ids to float must still key "4432712", not "4432712.0"
-        pid = str(int(raw_id)) if isinstance(raw_id, float) and raw_id.is_integer() else str(raw_id)
         if grp and pid not in out:
             out[pid] = grp
+    return out
+
+
+def _roster_teams(rosters: Any) -> dict[str, str]:
+    """athlete id -> the team id (as a string) the game roster lists him under."""
+    out: dict[str, str] = {}
+    for pid, rec in _roster_records(rosters):
+        if rec.get("team_id") is not None:
+            out.setdefault(pid, _id_str(rec["team_id"]))
     return out
 
 
@@ -1261,11 +1294,12 @@ def create_usage_box(
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         third_down_curve: override the bundled curve (``distance``, ``rate``).
         rosters: the game roster -- a frame, a list of athlete records or the
-            stored ``{"data": [...]}`` envelope, read for ``athlete_id`` and
-            ``position_id`` (else ``position_href``). Fills the
+            stored ``{"data": [...]}`` envelope, read for ``athlete_id``,
+            ``team_id`` and ``position_id`` (else ``position_href``). Fills the
             position group of any athlete the participants carry no
             ``{type}_position_id`` for -- e.g. participants stored before that
-            column existed; a participant's own position always wins.
+            column existed; a participant's own position always wins. Its
+            ``team_id`` credits each tackle to the tackler's own team.
 
     Returns:
         ``{section: [row, ...]}`` for every name in :data:`SECTIONS`; a
@@ -1317,7 +1351,11 @@ def create_usage_box(
     else:
         player, group = pl.DataFrame(), pl.DataFrame()
 
-    tackles_long = _tackle_rows(participants, plays, positions) if participants is not None else pl.DataFrame()
+    tackles_long = (
+        _tackle_rows(participants, plays, positions, _roster_teams(rosters))
+        if participants is not None
+        else pl.DataFrame()
+    )
     if tackles_long.height:
         tackles = _tackle_agg(tackles_long, ["def_pos_team", "player_id"])
         names = tackles_long.group_by("player_id").agg(
