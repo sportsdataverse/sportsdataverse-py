@@ -96,8 +96,10 @@ def _drop_zero_turnover_games(paired: pl.DataFrame) -> pl.DataFrame:
     Raises:
         InsufficientInputError: When more than 10% of a season's games are dropped.
     """
-    # ponytail: a genuine 0-turnover box goes too (mbb 2009 and 2024-26 each have one game,
-    # opponent 0 steals); require both sides at 0 if keeping those ever matters.
+    # ponytail: a possibly genuine 0-turnover box goes too (mbb 2009 and 2024-26 each have one game;
+    # opponent 0 steals, and ESPN's pbp logs no turnover for that team). Not "both sides at 0": that
+    # keeps wbb 2018's 0-turnover rows whose opponent logged steals. If those games ever matter, keep
+    # a 0 only when the opponent's steals are 0 too, which is the one case the box does not contradict.
     zero = (pl.col("tov") <= 0.0) | (pl.col("opp_tov") <= 0.0)
     per_season = (
         paired.group_by("season")
