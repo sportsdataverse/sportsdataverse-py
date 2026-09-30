@@ -274,10 +274,13 @@ def test_the_card_pins_the_boosters_it_corrects():
 
     from sportsdataverse.cfb.model_cards import _MODEL_DIR, load_model_card
 
-    pins = load_model_card("wp_ot_reach")["corrects"]
+    card = load_model_card("wp_ot_reach")
+    pins = card["corrects"]
     assert set(pins) == {"wp_spread.ubj", "wp_naive.ubj"}
     for name, sha in pins.items():
         assert hashlib.sha256((_MODEL_DIR / name).read_bytes()).hexdigest() == sha, name
+    # and its own booster: the one the card's holdout metrics were computed with
+    assert hashlib.sha256((_MODEL_DIR / "wp_ot_reach.ubj").read_bytes()).hexdigest() == card["sha256"]
 
 
 def test_the_card_records_a_disjoint_holdout_that_the_fix_improves():
@@ -290,7 +293,76 @@ def test_the_card_records_a_disjoint_holdout_that_the_fix_improves():
     for block in ("regulation", "q4"):
         # game-clustered bootstrap: the Brier change is an improvement, not noise
         assert m[block]["brier_delta"]["ci95"][1] < 0, block
+    for block in ("regulation", "q4", "tied_last_2m", "overtime"):
+        assert m[block]["after"]["brier"] < m[block]["before"]["brier"], block
+        assert m[block]["after"]["logloss"] < m[block]["before"]["logloss"], block
+    # the spread-free surface goes through the same correction
+    assert m["regulation"]["naive_after"]["brier"] < m["regulation"]["naive_before"]["brier"]
+    assert m["regulation"]["naive_after"]["logloss"] < m["regulation"]["naive_before"]["logloss"]
+    assert abs(m["tied_last_2m"]["mean_after"] - m["tied_last_2m"]["won"]) <= 0.005
+    # Ceilings are the values the 2026-09-30 refit observed: a refit may only hold or improve
+    # them, never raise them to pass.
+    assert m["q4"]["after"]["brier"] <= 0.07289
+    assert m["overtime"]["after"]["brier"] <= 0.22276
     assert m["overtime"]["after"]["logloss"] < m["overtime"]["flat_half"]["logloss"]
+
+
+def test_q4_one_score_holdout_rows_hold_calibration_through_the_runtime():
+    # Every 2022-25 Q4 scrimmage snap within eight points (43,182 rows, 1,830 games), scored
+    # through the runtime. The correction pulls a leader toward the tie value; it must not cost
+    # calibration anywhere in the fourth, above all to leaders with time left. Observed at the
+    # 2026-09-30 refit (Brier before -> after): all 0.17262 -> 0.17046; last five minutes
+    # 0.15932 -> 0.15446; leading with 5-15 minutes left 0.14402 -> 0.14407 (the mean gap
+    # 0.014 -> -0.005). The leader band is that observed hold.
+    from sportsdataverse.cfb.cfb_wp_overtime import adjust_wp
+    from sportsdataverse.cfb.model_vars import wp_final_names, wp_start_columns
+
+    f = pl.read_parquet(HOLDOUT / "q4_one_score_2022_2025.parquet")
+    assert f.height >= 40_000
+    X = f.select([pl.col(src).alias(name) for src, name in zip(wp_start_columns, wp_final_names)])
+    y = f["won"].cast(pl.Float64).to_numpy()
+    before = f["wp_before"].to_numpy()
+    after = adjust_wp(before, X)
+    t = f["start.adj_TimeSecsRem"].to_numpy()
+    d = f["pos_score_diff_start"].to_numpy()
+    late = t <= 300
+    assert _brier(after, y) < _brier(before, y)
+    for name, m in (
+        ("last 5", late),
+        ("tied", late & (d == 0)),
+        ("leading", late & (d > 0)),
+        ("trailing", late & (d < 0)),
+    ):
+        assert _brier(after[m], y[m]) < _brier(before[m], y[m]), name
+    lead_early = (d > 0) & ~late
+    assert _brier(after[lead_early], y[lead_early]) <= _brier(before[lead_early], y[lead_early]) + 0.0001
+    assert abs(after[lead_early].mean() - y[lead_early].mean()) < abs(before[lead_early].mean() - y[lead_early].mean())
+
+
+#: One late-fourth regulation value per published surface, pinned as observed on the committed
+#: card. With ``adjust_wp`` an identity in regulation every one of them moves (see the PR's
+#: mutation run), so none of these surfaces can drop the correction silently.
+REGULATION_PINS = [
+    # Virginia, tied 24-24, 2nd and 10 with 0:10 left: the booster alone read ~0.7
+    (401754554, 171, "Chandler Morris pass complete", "wp_before", 0.5129),
+    (401754554, 171, "Chandler Morris pass complete", "wp_before_naive", 0.5300),
+    # Louisville's kickoff right after its tying field goal, 1:08 left
+    (401754554, 165, "Nick Keller kickoff", "wp_before", 0.5227),
+    # Louisville up 3, 4th down at its own 44 with 4:31 left: the punt branch (and go / FG)
+    (401754554, 153, "Elijah Slibeck punt", "punt_wp", 0.6353),
+    (401754554, 153, "Elijah Slibeck punt", "go_wp", 0.5468),
+    (401754554, 153, "Elijah Slibeck punt", "fg_wp", 0.5002),
+    # Kent State's touchdown at 2:04 to trail by two: the try boards (a two ties it)
+    (401762856, 169, "B.Finley pass complete short", "xp_wp", 0.2669),
+    (401762856, 169, "B.Finley pass complete short", "two_pt_wp", 0.3317),
+]
+
+
+@pytest.mark.parametrize(("game_id", "play", "text", "col", "expected"), REGULATION_PINS)
+def test_regulation_surfaces_carry_the_overtime_correction(game_id, play, text, col, expected):
+    r = _plays(game_id).filter(pl.col("game_play_number") == play).row(0, named=True)
+    assert text in r["text"] and r["period"] == 4
+    assert abs(r[col] - expected) < 0.001, (col, r[col])
 
 
 def test_possession_order_is_inferred_from_the_margin_only_when_unknown():

@@ -95,6 +95,14 @@ CAVEATS = [
     "and the try rates are the ones cfb_pbp already pins.",
     "Overtime labels are noisy: ESPN's overtime feed has possession and score errors, so about 15% "
     "of live overtime snaps carry a margin their possession order cannot have.",
+    "A trial q with the shipped features and hyperparameters was early-stopped on 2022-25 and its "
+    "2022-25 regulation calibration inspected before the design was fixed; the shipped q early-stops "
+    "on 2019-21 only.",
+    "live_bound was chosen at the top of its grid (0.10) with the 2004-21 log loss still falling: it "
+    "shrinks live overtime snaps for noisy labels, and fourth-down overtime branches mix those bounded "
+    "values with unbounded terminal ones. It never touches regulation.",
+    "q has no spread feature: favoured leaders' overtime rate is over-predicted and underdog leaders' "
+    "under-predicted by about 0.01-0.02 at 5-10 minutes (a WP effect under 0.01).",
 ]
 
 
@@ -371,6 +379,9 @@ def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.Da
     card_path = args.out / "wp_ot_reach.card.json"
     card = json.loads(card_path.read_text(encoding="utf-8"))
     card["holdout_metrics"] = metrics
+    # the booster these metrics were computed with (a test pins it), and the caveats as they stand
+    card["sha256"] = hashlib.sha256((args.out / "wp_ot_reach.ubj").read_bytes()).hexdigest()
+    card["caveats"] = CAVEATS
     card_path.write_text(json.dumps(card, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(metrics, indent=2))
 
@@ -394,6 +405,10 @@ def evaluate(args: argparse.Namespace, regulation: pl.DataFrame, overtime: pl.Da
             "wp_before",
             "won",
         ).write_parquet(args.fixture_dir / "overtime_2022_2025.parquet")
+        # every Q4 one-score snap: the correction must hold or improve calibration there, not only tied
+        hold.filter((pl.col("period") == 4) & (pl.col("pos_score_diff_start").abs() <= 8)).select(
+            "season", "game_id", "game_play_number", *wp_start_columns, "wp_before", "won"
+        ).write_parquet(args.fixture_dir / "q4_one_score_2022_2025.parquet")
 
     if args.report:
         # Overtime labels are noisy per play (ESPN possession errors), so also score whole

@@ -123,7 +123,10 @@
   "caveats": [
     "The regulation boosters being corrected were trained on 2004-2025, so the 2022-25 holdout is out of sample only for the correction (q, the spread slope, the drive model, the bound).",
     "During development the drive model's C (0.01-10), known vs inferred possession order and the try rates were compared on 2022-25 before the design was fixed; C = 1.0 is sklearn's default and the try rates are the ones cfb_pbp already pins.",
-    "Overtime labels are noisy: ESPN's overtime feed has possession and score errors, so about 15% of live overtime snaps carry a margin their possession order cannot have."
+    "Overtime labels are noisy: ESPN's overtime feed has possession and score errors, so about 15% of live overtime snaps carry a margin their possession order cannot have.",
+    "A trial q with the shipped features and hyperparameters was early-stopped on 2022-25 and its 2022-25 regulation calibration inspected before the design was fixed; the shipped q early-stops on 2019-21 only.",
+    "live_bound was chosen at the top of its grid (0.10) with the 2004-21 log loss still falling: it shrinks live overtime snaps for noisy labels, and fourth-down overtime branches mix those bounded values with unbounded terminal ones. It never touches regulation.",
+    "q has no spread feature: favoured leaders' overtime rate is over-predicted and underdog leaders' under-predicted by about 0.01-0.02 at 5-10 minutes (a WP effect under 0.01)."
   ],
   "holdout_metrics": {
     "regulation": {
@@ -207,5 +210,6 @@
       }
     },
     "q_logloss_holdout": 0.15771
-  }
+  },
+  "sha256": "a6cc8d25af1871150cf1bc35af685f8b3ffe842b6ead69e5e64d5e81cba198b7"
 }
