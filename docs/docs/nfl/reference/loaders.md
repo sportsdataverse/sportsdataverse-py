@@ -1131,27 +1131,27 @@ Release: [espn_nfl_usage_players](https://github.com/sportsdataverse/sportsdatav
 | `rush_yards` | Float64 | Yards gained on the player's rushes (yds_rushed, falling back to the play's statYardage). |
 | `receiving_yards` | Float64 | Yards gained on the player's receptions (yds_receiving, falling back to statYardage); an incomplete target adds 0. |
 | `first_downs` | Int64 | Rushes and targets of the player that created a first down (first_down_created). |
-| `touchdowns` | Int64 | Rushes and targets of the player that scored a touchdown. |
-| `fd_or_td` | Int64 | Rushes and targets of the player that produced a first down or a touchdown (a play counts once even when both flags are set). |
+| `touchdowns` | Int64 | Rushes and targets of the player that scored an offensive touchdown. |
+| `fd_or_td` | Int64 | Rushes and targets of the player that produced a first down or an offensive touchdown (a play counts once even when both flags are set). |
 | `explosive_plays` | Int64 | Rushes and targets of the player flagged EPA_explosive on the play-by-play. |
 | `successful_plays` | Int64 | Rushes and targets of the player flagged EPA_success (positive EPA) on the play-by-play. |
 | `epa` | Float64 | Play EPA summed over the player's rushes and targets. |
 | `rz_rushes` | Int64 | Rushes by the player snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap). |
 | `rz_targets` | Int64 | Targets of the player snapped in the red zone. |
 | `rz_touches` | Int64 | Touches (rushes plus receptions) by the player snapped in the red zone. |
-| `rz_touchdowns` | Int64 | Red-zone rushes and targets of the player that scored a touchdown. |
+| `rz_touchdowns` | Int64 | Red-zone rushes and targets of the player that scored an offensive touchdown. |
 | `so_rushes` | Int64 | Rushes by the player snapped in scoring-opportunity territory (scoring_opp: 40 or fewer yards to the end zone at the snap). |
 | `so_targets` | Int64 | Targets of the player snapped in scoring-opportunity territory. |
 | `so_touches` | Int64 | Touches (rushes plus receptions) by the player snapped in scoring-opportunity territory. |
-| `so_touchdowns` | Int64 | Scoring-opportunity rushes and targets of the player that scored a touchdown. |
+| `so_touchdowns` | Int64 | Scoring-opportunity rushes and targets of the player that scored an offensive touchdown. |
 | `third_down_opportunities` | Int64 | Rushes and targets of the player that came on third down. |
-| `third_down_conversions` | Int64 | Third-down rushes and targets of the player that converted (a first down or a touchdown). |
+| `third_down_conversions` | Int64 | Third-down rushes and targets of the player that converted (a first down or an offensive touchdown). |
 | `third_down_expected` | Float64 | Expected third-down conversions for the player: the league's bundled third-down yards-to-go conversion curve summed over the third-down opportunities; null when no curve was available. |
 | `team_targets` | Int64 | The team's targets over the same games, counting every standing scrimmage target whether or not a receiver was attributed -- the denominator of target_share. |
 | `team_first_downs` | Int64 | The team's first downs created on standing scrimmage plays over the same games -- the denominator of first_down_share. |
 | `team_touches` | Int64 | The team's rushes plus completions over the same games -- the denominator of touch_share. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `fd_td_rate` | Float64 | fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no opportunities. |
+| `fd_td_rate` | Float64 | fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no opportunities. |
 | `explosive_rate` | Float64 | explosive_plays / opportunities; null with no opportunities. |
 | `success_rate` | Float64 | successful_plays / opportunities; null with no opportunities. |
 | `epa_per_opportunity` | Float64 | epa / opportunities; null with no opportunities. |
@@ -1191,27 +1191,27 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 | `rush_yards` | Float64 | Yards gained on the position group's rushes (yds_rushed, falling back to the play's statYardage). |
 | `receiving_yards` | Float64 | Yards gained on the position group's receptions (yds_receiving, falling back to statYardage); an incomplete target adds 0. |
 | `first_downs` | Int64 | Rushes and targets of the position group that created a first down (first_down_created). |
-| `touchdowns` | Int64 | Rushes and targets of the position group that scored a touchdown. |
-| `fd_or_td` | Int64 | Rushes and targets of the position group that produced a first down or a touchdown (a play counts once even when both flags are set). |
+| `touchdowns` | Int64 | Rushes and targets of the position group that scored an offensive touchdown. |
+| `fd_or_td` | Int64 | Rushes and targets of the position group that produced a first down or an offensive touchdown (a play counts once even when both flags are set). |
 | `explosive_plays` | Int64 | Rushes and targets of the position group flagged EPA_explosive on the play-by-play. |
 | `successful_plays` | Int64 | Rushes and targets of the position group flagged EPA_success (positive EPA) on the play-by-play. |
 | `epa` | Float64 | Play EPA summed over the position group's rushes and targets. |
 | `rz_rushes` | Int64 | Rushes by the position group snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap). |
 | `rz_targets` | Int64 | Targets of the position group snapped in the red zone. |
 | `rz_touches` | Int64 | Touches (rushes plus receptions) by the position group snapped in the red zone. |
-| `rz_touchdowns` | Int64 | Red-zone rushes and targets of the position group that scored a touchdown. |
+| `rz_touchdowns` | Int64 | Red-zone rushes and targets of the position group that scored an offensive touchdown. |
 | `so_rushes` | Int64 | Rushes by the position group snapped in scoring-opportunity territory (scoring_opp: 40 or fewer yards to the end zone at the snap). |
 | `so_targets` | Int64 | Targets of the position group snapped in scoring-opportunity territory. |
 | `so_touches` | Int64 | Touches (rushes plus receptions) by the position group snapped in scoring-opportunity territory. |
-| `so_touchdowns` | Int64 | Scoring-opportunity rushes and targets of the position group that scored a touchdown. |
+| `so_touchdowns` | Int64 | Scoring-opportunity rushes and targets of the position group that scored an offensive touchdown. |
 | `third_down_opportunities` | Int64 | Rushes and targets of the position group that came on third down. |
-| `third_down_conversions` | Int64 | Third-down rushes and targets of the position group that converted (a first down or a touchdown). |
+| `third_down_conversions` | Int64 | Third-down rushes and targets of the position group that converted (a first down or an offensive touchdown). |
 | `third_down_expected` | Float64 | Expected third-down conversions for the position group: the league's bundled third-down yards-to-go conversion curve summed over the third-down opportunities; null when no curve was available. |
 | `team_targets` | Int64 | The team's targets over the same games, counting every standing scrimmage target whether or not a receiver was attributed -- the denominator of target_share. |
 | `team_first_downs` | Int64 | The team's first downs created on standing scrimmage plays over the same games -- the denominator of first_down_share. |
 | `team_touches` | Int64 | The team's rushes plus completions over the same games -- the denominator of touch_share. |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
-| `fd_td_rate` | Float64 | fd_or_td / opportunities: the share of opportunities that produced a first down or a touchdown; null with no opportunities. |
+| `fd_td_rate` | Float64 | fd_or_td / opportunities: the share of opportunities that produced a first down or an offensive touchdown; null with no opportunities. |
 | `explosive_rate` | Float64 | explosive_plays / opportunities; null with no opportunities. |
 | `success_rate` | Float64 | successful_plays / opportunities; null with no opportunities. |
 | `epa_per_opportunity` | Float64 | epa / opportunities; null with no opportunities. |
@@ -1303,17 +1303,17 @@ Published 2002-2026 (2005 is built from ESPN's play-text-less 2005 feed, so it i
 | `targets` | Int64 | Pass plays with a targeted receiver (the target flag). |
 | `completions` | Int64 | Completed passes among the standing scrimmage plays. |
 | `first_downs` | Int64 | Scrimmage plays that created a first down (first_down_created). |
-| `touchdowns` | Int64 | Scrimmage plays that scored a touchdown. |
+| `touchdowns` | Int64 | Scrimmage plays that scored an offensive touchdown. |
 | `explosive_plays` | Int64 | Scrimmage plays flagged EPA_explosive on the play-by-play. |
 | `successful_plays` | Int64 | Scrimmage plays flagged EPA_success (positive EPA) on the play-by-play. |
 | `epa` | Float64 | Play EPA summed over the standing scrimmage plays. |
 | `third_down_opportunities` | Int64 | Third-down scrimmage plays with a known distance. |
-| `third_down_conversions` | Int64 | Third-down plays that produced a first down or a touchdown. |
+| `third_down_conversions` | Int64 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `rz_plays` | Int64 | Scrimmage plays snapped in the red zone (rz_play: 20 or fewer yards to the end zone at the snap). |
 | `rz_successes` | Int64 | Red-zone plays flagged EPA_success. |
 | `rz_epa` | Float64 | Play EPA summed over the red-zone plays. |
-| `rz_touchdowns` | Int64 | Red-zone plays that scored a touchdown. |
+| `rz_touchdowns` | Int64 | Red-zone plays that scored an offensive touchdown. |
 | `rz_targets` | Int64 | Red-zone pass plays with a targeted receiver. |
 | `rz_rushes` | Int64 | Red-zone rushing plays. |
 | `rz_trips` | Int64 | Drives with at least one red-zone play. |
@@ -1321,7 +1321,7 @@ Published 2002-2026 (2005 is built from ESPN's play-text-less 2005 feed, so it i
 | `so_plays` | Int64 | Scrimmage plays snapped in scoring-opportunity territory (scoring_opp: 40 or fewer yards to the end zone at the snap). |
 | `so_successes` | Int64 | Scoring-opportunity plays flagged EPA_success. |
 | `so_epa` | Float64 | Play EPA summed over the scoring-opportunity plays. |
-| `so_touchdowns` | Int64 | Scoring-opportunity plays that scored a touchdown. |
+| `so_touchdowns` | Int64 | Scoring-opportunity plays that scored an offensive touchdown. |
 | `so_targets` | Int64 | Scoring-opportunity pass plays with a targeted receiver. |
 | `so_rushes` | Int64 | Scoring-opportunity rushing plays. |
 | `so_trips` | Int64 | Drives with at least one play snapped in scoring-opportunity territory (the opponent's 40). |
@@ -1367,7 +1367,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `successes` | Int64 | Plays flagged EPA_success on those drives. |
 | `yards` | Float64 | statYardage summed over the plays on those drives. |
 | `points` | Float64 | Drive points (touchdown 7, field goal 3, from drive.result) summed over those drives. |
-| `touchdowns` | Int64 | Drives that included a touchdown play. |
+| `touchdowns` | Int64 | Drives that included an offensive touchdown play. |
 | `scoring_opps` | Int64 | Drives that reached scoring-opportunity territory (a play snapped 40 or fewer yards from the end zone). |
 | `games` | UInt32 | Per-game rows summed into this season row -- the games in which this key appeared in the section -- so it counts games with activity, not games played. |
 | `epa_per_play` | Float64 | epa / plays; null with no plays. |
@@ -1623,7 +1623,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `explosives_rush` | UInt32 | Rushing plays flagged EPA_explosive. |
 | `explosives_pass` | UInt32 | Pass plays flagged EPA_explosive. |
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
-| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or a touchdown. |
+| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
@@ -1743,7 +1743,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `wins_one_score_game` | UInt32 | Of games_one_score_game, the games decided by 8 points or fewer the team won (points for above points against, so a tie is not a win). |
 | `fourth_decisions` | UInt32 | Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood (timeouts and nullified plays are not decisions). |
 | `fourth_went` | UInt32 | Fourth-down decisions that were a rush or a pass (the offense went for it). |
-| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or a touchdown. |
+| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or an offensive touchdown. |
 | `fourth_model_go` | UInt32 | Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go"). |
 | `fourth_model_kick` | UInt32 | Decisions on which the fourth-down model recommended a punt or a field goal. |
 | `fourth_went_when_go` | UInt32 | Decisions on which the offense went for it when the model also said go. |
@@ -1758,11 +1758,11 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `drive_plays_neutral` | Float64 | ESPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `drive_points` | Float64 | Drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `rz_trips` | UInt32 | Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `rz_tds` | UInt32 | Red-zone drives that included a touchdown play. |
+| `rz_tds` | UInt32 | Red-zone drives that included an offensive touchdown play. |
 | `rz_scores` | UInt32 | Red-zone drives that scored (a touchdown or a field goal). |
 | `rz_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `so_trips` | UInt32 | Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `so_tds` | UInt32 | Scoring-opportunity drives that included a touchdown play. |
+| `so_tds` | UInt32 | Scoring-opportunity drives that included an offensive touchdown play. |
 | `so_scores` | UInt32 | Scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `so_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `scripted_drives` | UInt32 | The offense's first two drives of each half. |
@@ -1918,7 +1918,7 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `def_explosives_rush` | UInt32 | Defense-allowed twin of explosives_rush -- the same measure over the opposing offenses' plays while this team's defense was on the field: rushing plays flagged EPA_explosive. |
 | `def_explosives_pass` | UInt32 | Defense-allowed twin of explosives_pass -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays flagged EPA_explosive. |
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this team's defense was on the field: third-down scrimmage plays. |
-| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this team's defense was on the field: third-down plays that produced a first down or a touchdown. |
+| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this team's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this team's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
@@ -2044,11 +2044,11 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 | `def_drive_plays_neutral` | Float64 | Defense-allowed twin of drive_plays_neutral -- the same measure over the opposing offenses' plays while this team's defense was on the field: eSPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `def_drive_points` | Float64 | Defense-allowed twin of drive_points -- the same measure over the opposing offenses' plays while this team's defense was on the field: drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `def_rz_trips` | UInt32 | Defense-allowed twin of rz_trips -- the same measure over the opposing offenses' plays while this team's defense was on the field: drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this team's defense was on the field: red-zone drives that included a touchdown play. |
+| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this team's defense was on the field: red-zone drives that included an offensive touchdown play. |
 | `def_rz_scores` | UInt32 | Defense-allowed twin of rz_scores -- the same measure over the opposing offenses' plays while this team's defense was on the field: red-zone drives that scored (a touchdown or a field goal). |
 | `def_rz_points` | Float64 | Defense-allowed twin of rz_points -- the same measure over the opposing offenses' plays while this team's defense was on the field: drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `def_so_trips` | UInt32 | Defense-allowed twin of so_trips -- the same measure over the opposing offenses' plays while this team's defense was on the field: drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this team's defense was on the field: scoring-opportunity drives that included a touchdown play. |
+| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this team's defense was on the field: scoring-opportunity drives that included an offensive touchdown play. |
 | `def_so_scores` | UInt32 | Defense-allowed twin of so_scores -- the same measure over the opposing offenses' plays while this team's defense was on the field: scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `def_so_points` | Float64 | Defense-allowed twin of so_points -- the same measure over the opposing offenses' plays while this team's defense was on the field: drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `def_scripted_drives` | UInt32 | Defense-allowed twin of scripted_drives -- the same measure over the opposing offenses' plays while this team's defense was on the field: the offense's first two drives of each half. |
@@ -2220,7 +2220,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `explosives_rush` | UInt32 | Rushing plays flagged EPA_explosive. |
 | `explosives_pass` | UInt32 | Pass plays flagged EPA_explosive. |
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
-| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or a touchdown. |
+| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
@@ -2340,7 +2340,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `wins_one_score_game` | UInt32 | Of games_one_score_game, the games decided by 8 points or fewer the team won (points for above points against, so a tie is not a win). |
 | `fourth_decisions` | UInt32 | Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood (timeouts and nullified plays are not decisions). |
 | `fourth_went` | UInt32 | Fourth-down decisions that were a rush or a pass (the offense went for it). |
-| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or a touchdown. |
+| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or an offensive touchdown. |
 | `fourth_model_go` | UInt32 | Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go"). |
 | `fourth_model_kick` | UInt32 | Decisions on which the fourth-down model recommended a punt or a field goal. |
 | `fourth_went_when_go` | UInt32 | Decisions on which the offense went for it when the model also said go. |
@@ -2355,11 +2355,11 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `drive_plays_neutral` | Float64 | ESPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `drive_points` | Float64 | Drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `rz_trips` | UInt32 | Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `rz_tds` | UInt32 | Red-zone drives that included a touchdown play. |
+| `rz_tds` | UInt32 | Red-zone drives that included an offensive touchdown play. |
 | `rz_scores` | UInt32 | Red-zone drives that scored (a touchdown or a field goal). |
 | `rz_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `so_trips` | UInt32 | Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `so_tds` | UInt32 | Scoring-opportunity drives that included a touchdown play. |
+| `so_tds` | UInt32 | Scoring-opportunity drives that included an offensive touchdown play. |
 | `so_scores` | UInt32 | Scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `so_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `scripted_drives` | UInt32 | The offense's first two drives of each half. |
@@ -2515,7 +2515,7 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `def_explosives_rush` | UInt32 | Defense-allowed twin of explosives_rush -- the same measure over the opposing offenses' plays while this coach's defense was on the field: rushing plays flagged EPA_explosive. |
 | `def_explosives_pass` | UInt32 | Defense-allowed twin of explosives_pass -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays flagged EPA_explosive. |
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down scrimmage plays. |
-| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or a touchdown. |
+| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this coach's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
@@ -2641,11 +2641,11 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 | `def_drive_plays_neutral` | Float64 | Defense-allowed twin of drive_plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: eSPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `def_drive_points` | Float64 | Defense-allowed twin of drive_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `def_rz_trips` | UInt32 | Defense-allowed twin of rz_trips -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that included a touchdown play. |
+| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that included an offensive touchdown play. |
 | `def_rz_scores` | UInt32 | Defense-allowed twin of rz_scores -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that scored (a touchdown or a field goal). |
 | `def_rz_points` | Float64 | Defense-allowed twin of rz_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `def_so_trips` | UInt32 | Defense-allowed twin of so_trips -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that included a touchdown play. |
+| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that included an offensive touchdown play. |
 | `def_so_scores` | UInt32 | Defense-allowed twin of so_scores -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `def_so_points` | Float64 | Defense-allowed twin of so_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `def_scripted_drives` | UInt32 | Defense-allowed twin of scripted_drives -- the same measure over the opposing offenses' plays while this coach's defense was on the field: the offense's first two drives of each half. |
@@ -2818,7 +2818,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `explosives_rush` | UInt32 | Rushing plays flagged EPA_explosive. |
 | `explosives_pass` | UInt32 | Pass plays flagged EPA_explosive. |
 | `third_down_opportunities` | UInt32 | Third-down scrimmage plays. |
-| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or a touchdown. |
+| `third_down_conversions` | UInt32 | Third-down plays that produced a first down or an offensive touchdown. |
 | `third_down_expected` | Float64 | Expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `plays_neutral` | UInt32 | Plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `passes_neutral` | UInt32 | Pass plays in situation-neutral situations (see plays_neutral). |
@@ -2938,7 +2938,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `wins_one_score_game` | UInt32 | Of games_one_score_game, the games decided by 8 points or fewer the team won (points for above points against, so a tie is not a win). |
 | `fourth_decisions` | UInt32 | Fourth-down plays on which the offense ran, passed, punted or attempted a field goal and the play stood (timeouts and nullified plays are not decisions). |
 | `fourth_went` | UInt32 | Fourth-down decisions that were a rush or a pass (the offense went for it). |
-| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or a touchdown. |
+| `fourth_converted` | UInt32 | Fourth-down go attempts that produced a first down or an offensive touchdown. |
 | `fourth_model_go` | UInt32 | Decisions on which the fourth-down model recommended going for it (fourth_down_recommendation == "go"). |
 | `fourth_model_kick` | UInt32 | Decisions on which the fourth-down model recommended a punt or a field goal. |
 | `fourth_went_when_go` | UInt32 | Decisions on which the offense went for it when the model also said go. |
@@ -2953,11 +2953,11 @@ One season-less file: every published coach_tendencies season summed per head co
 | `drive_plays_neutral` | Float64 | ESPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `drive_points` | Float64 | Drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `rz_trips` | UInt32 | Drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `rz_tds` | UInt32 | Red-zone drives that included a touchdown play. |
+| `rz_tds` | UInt32 | Red-zone drives that included an offensive touchdown play. |
 | `rz_scores` | UInt32 | Red-zone drives that scored (a touchdown or a field goal). |
 | `rz_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `so_trips` | UInt32 | Drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `so_tds` | UInt32 | Scoring-opportunity drives that included a touchdown play. |
+| `so_tds` | UInt32 | Scoring-opportunity drives that included an offensive touchdown play. |
 | `so_scores` | UInt32 | Scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `so_points` | Float64 | Drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `scripted_drives` | UInt32 | The offense's first two drives of each half. |
@@ -2987,7 +2987,7 @@ One season-less file: every published coach_tendencies season summed per head co
 | `def_explosives_rush` | UInt32 | Defense-allowed twin of explosives_rush -- the same measure over the opposing offenses' plays while this coach's defense was on the field: rushing plays flagged EPA_explosive. |
 | `def_explosives_pass` | UInt32 | Defense-allowed twin of explosives_pass -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays flagged EPA_explosive. |
 | `def_third_down_opportunities` | UInt32 | Defense-allowed twin of third_down_opportunities -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down scrimmage plays. |
-| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or a touchdown. |
+| `def_third_down_conversions` | UInt32 | Defense-allowed twin of third_down_conversions -- the same measure over the opposing offenses' plays while this coach's defense was on the field: third-down plays that produced a first down or an offensive touchdown. |
 | `def_third_down_expected` | Float64 | Defense-allowed twin of third_down_expected -- the same measure over the opposing offenses' plays while this coach's defense was on the field: expected third-down conversions: the league's bundled third-down yards-to-go conversion curve summed over the third-down plays; null when no curve was available. |
 | `def_plays_neutral` | UInt32 | Defense-allowed twin of plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: plays in situation-neutral plays: win probability between 20% and 80%, in the first four quarters, outside the final two minutes of a half. |
 | `def_passes_neutral` | UInt32 | Defense-allowed twin of passes_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: pass plays in situation-neutral situations (see plays_neutral). |
@@ -3113,11 +3113,11 @@ One season-less file: every published coach_tendencies season summed per head co
 | `def_drive_plays_neutral` | Float64 | Defense-allowed twin of drive_plays_neutral -- the same measure over the opposing offenses' plays while this coach's defense was on the field: eSPN drive.offensivePlays summed over the clocked drives whose first play was situation-neutral. |
 | `def_drive_points` | Float64 | Defense-allowed twin of drive_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3, from drive.result) summed over the drives. |
 | `def_rz_trips` | UInt32 | Defense-allowed twin of rz_trips -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drives with at least one play snapped in the red zone (20 or fewer yards to the end zone). |
-| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that included a touchdown play. |
+| `def_rz_tds` | UInt32 | Defense-allowed twin of rz_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that included an offensive touchdown play. |
 | `def_rz_scores` | UInt32 | Defense-allowed twin of rz_scores -- the same measure over the opposing offenses' plays while this coach's defense was on the field: red-zone drives that scored (a touchdown or a field goal). |
 | `def_rz_points` | Float64 | Defense-allowed twin of rz_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3) summed over the red-zone drives. |
 | `def_so_trips` | UInt32 | Defense-allowed twin of so_trips -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drives with at least one play snapped in scoring-opportunity territory (40 or fewer yards to the end zone). |
-| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that included a touchdown play. |
+| `def_so_tds` | UInt32 | Defense-allowed twin of so_tds -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that included an offensive touchdown play. |
 | `def_so_scores` | UInt32 | Defense-allowed twin of so_scores -- the same measure over the opposing offenses' plays while this coach's defense was on the field: scoring-opportunity drives that scored (a touchdown or a field goal). |
 | `def_so_points` | Float64 | Defense-allowed twin of so_points -- the same measure over the opposing offenses' plays while this coach's defense was on the field: drive points (touchdown 7, field goal 3) summed over the scoring-opportunity drives. |
 | `def_scripted_drives` | UInt32 | Defense-allowed twin of scripted_drives -- the same measure over the opposing offenses' plays while this coach's defense was on the field: the offense's first two drives of each half. |
