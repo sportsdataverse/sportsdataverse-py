@@ -272,7 +272,7 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `away_non_div1_team` | Boolean |  |
+| `away_non_div1_team` | Boolean | ESPN's non-Division I flag for the away team: True when the away team is not a Division I program (a lower-division or exhibition opponent, which also carries no away_conference_id); null, not False, for every Division I team. Sparse -- a handful of games per season. |
 | `status_type_alt_detail` | String | Status type alt detail. |
 | `tournament_id` | Int32 | ESPN tournament identifier. |
 | `groups_id` | Int32 | Unique identifier for groups. |
