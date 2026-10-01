@@ -322,6 +322,7 @@ are now the end state of the play before, when that play ended at the snap's spo
 a change of possession included: ESPN's end state is already the new offence's), and otherwise 1st
 and 10 (goal to go inside the 10); ESPN's "& Goal" distance 0 is the distance to the goal line. All
 247 such rows in their 86 games now carry a down 1-4 (was -1); EP_start median 3.8 -> 4.5.
+
 ### Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy
 
 Four string relabels in `__helper_cfb_pbp_features` turned any type containing "field goal" or
