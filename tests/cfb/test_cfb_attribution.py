@@ -47,10 +47,12 @@ def test_strip_overturned_none_input():
     assert _strip_overturned_text(None) is None
 
 
+import re
+
 import polars as pl
 import pytest
 
-from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.cfb.cfb_pbp import _UNTYPED_ADMIN_RE, CFBPlayProcess
 
 
 def _attr(rows: list[dict]) -> pl.DataFrame:
@@ -674,14 +676,33 @@ def test_2pt_conversion_missed_normalized():
     assert out["type.text"].to_list() == ["Two-Point Conversion Missed"]
 
 
-def test_unknown_period_marker_to_end_period():
-    out = _npt([_npt_base(**{"type.text": "Unknown", "text": "Start of the 2nd quarter."})])
-    assert out["type.text"].to_list() == ["End Period"]
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Start of the 2nd quarter.",
+        "End of the game.",
+        "Begin Drive",
+        "PURDUE drive start at 15:00 (OT ).",
+        "",
+        "(Sean O'Haire Kick)",
+        "(Two-Point Pass Conversion Failed)",
+    ],
+)
+def test_an_untyped_admin_row_is_not_a_play(text: str) -> None:
+    # dropped before the plays are ordered (2004's markers, every era's drive headers and lone tries)
+    assert re.search(_UNTYPED_ADMIN_RE, text)
 
 
-def test_unknown_end_of_game_to_end_period():
-    out = _npt([_npt_base(**{"type.text": "Unknown", "text": "End of the game."})])
-    assert out["type.text"].to_list() == ["End Period"]
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Josh Burton return for 8 yds for a TD, (Josh Kealamakia KICK)",
+        "fumbled, recovered by Rice Jake Constantine",
+        "35 yard field goal by Ryan Killeen (USC) is no good.",
+    ],
+)
+def test_an_untyped_play_is_kept(text: str) -> None:
+    assert not re.search(_UNTYPED_ADMIN_RE, text)
 
 
 def test_unknown_missed_field_goal_reclassified():

@@ -465,6 +465,19 @@ def _ot_end_state_wp(play_df, naive: bool):
 _TRY_PAREN_RE = r"(?i)\([^()]*\b(?:kick|pat|two-point|2-point)\b[^()]*\)"
 
 
+#: An untyped row that is not a play: a period or game marker (2004 files "Start of the 2nd
+#: quarter." / "End of the game." with no type), "Begin Drive", "PURDUE drive start at 15:00
+#: (OT ).", an empty row, or a try alone in parentheses -- "(Sean O'Haire Kick)" ahead of the
+#: touchdown row that carries it (401752914), "(Two-Point Pass Conversion Failed)" twice in one
+#: overtime (401426542). It is dropped before the plays are ordered; as "Unknown" the model
+#: scored it as a snap (99 of 183 such rows on the 2004-26 finals above |EPA| 1), and a
+#: game-closing marker took the end of the game from the last play.
+_UNTYPED_ADMIN_RE = (
+    r"(?i)(start|end) of (the )?.*(quarter|half|game|overtime|regulation)|^\s*$|^begin drive\b"
+    r"|\bdrive start at\b|^\s*\([^()]*\b(?:kick|pat|two-point|2-point)\b[^()]*\)\s*$"
+)
+
+
 def _type_espn_scored_rows(play_df: pl.DataFrame) -> pl.DataFrame:
     """Type the rows ESPN scored that no text rule did: the score kind and side from the row.
 
@@ -508,18 +521,20 @@ def _type_espn_scored_rows(play_df: pl.DataFrame) -> pl.DataFrame:
     fam_fumble = tx.str.contains(r"(?i)fumble")
     fam_pass = ty.str.contains(r"(?i)^pass|reception|completion") | tx.str.contains(r"(?i)\bpass(?:ed)?\b")
     fam_rush = ty.is_in(["Rush", "Sack"]) | tx.str.contains(r"(?i)\brush|\brun\b|\bsacked\b|\bscrambl")
-    defence_family = fam_int | (ty == "Fumble Recovery (Opponent)")
+    # the defence's plays: an interception, its fumble recovery, a blocked kick returned
+    defence_family = (
+        fam_int
+        | (ty == "Fumble Recovery (Opponent)")
+        | fam_blocked_punt
+        | (fam_fg & tx.str.contains(r"(?i)block") & tx.str.contains(r"(?i)return"))
+    )
     moved = delta.abs().is_between(6, 8)
     frozen = (delta == 0) & td_evidence
     td = moved | frozen
     defence = (moved & (delta < 0)) | (frozen & defence_family)
     # a frozen board cannot say whose fumble recovery a rush or pass ended in: left as it is
     offence = (moved & (delta > 0) & ~defence_family) | (frozen & ~defence_family & ~fam_fumble & (fam_pass | fam_rush))
-    field_goal = (
-        ((delta == 3) | (delta == 0))
-        & ~fam_kick
-        & tx.str.contains(r"(?i)field goal\b.*\bgood|\bfg good")
-    )
+    field_goal = ((delta == 3) | (delta == 0)) & ~fam_kick & tx.str.contains(r"(?i)field goal\b.*\bgood|\bfg good")
     new_type = (
         pl.when(scored & field_goal & ~td)
         .then(pl.lit("Field Goal Good"))
@@ -537,7 +552,14 @@ def _type_espn_scored_rows(play_df: pl.DataFrame) -> pl.DataFrame:
         )
         .when(scored & defence & fam_kick)
         .then(pl.lit("Kickoff Team Fumble Recovery Touchdown"))
-        .when(scored & defence & (fam_fumble | fam_rush | fam_pass | (ty == "Fumble Recovery (Opponent)")))
+        # the defence scores on a rush or pass only through a turnover: a fumble, or a sack's
+        # (2005-07: "Joel Klatt sacked by Stryker Sulak at the Colo 0 for a loss of 8 yards.");
+        # "run for 3 yds for a TD" with the runner's margin falling is left as it is
+        .when(
+            scored
+            & defence
+            & (fam_fumble | (ty == "Fumble Recovery (Opponent)") | (ty == "Sack") | tx.str.contains(r"(?i)\bsacked\b"))
+        )
         .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
         .when(scored & offence & fam_kick)
         .then(pl.lit("Kickoff Return Touchdown"))
@@ -570,10 +592,10 @@ _TRY_TYPES = (
     # it EPA ~-7.7
     "Defensive 2pt Conversion",
 )
-#: Clock-stoppage rows that reach the play frame: not plays, and they carry no game state
-#: of their own. The other markers ESPN files ("End of Half", "End of Game", "End of
-#: Regulation", "Coin Toss") are dropped in __add_downs_data; "End Period" survives as the
-#: relabelled 2004 "Unknown" quarter marker. The EP chain treats the same two as stoppages.
+#: Clock-stoppage rows: not plays, and they carry no game state of their own. The markers
+#: ESPN files ("End Period", "End of Half", "End of Game", "End of Regulation", "Coin Toss")
+#: are dropped in __add_downs_data, the untyped ones (_UNTYPED_ADMIN_RE) before the plays
+#: are ordered; the EP chain treats the two as stoppages wherever one is left.
 _CLOCK_STOPPAGES = ("Timeout", "End Period")
 
 
@@ -2501,7 +2523,10 @@ class CFBPlayProcess(object):
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
-        pbp_txt["plays"] = _drop_espn_play_copies(_sort_plays_ot_aware(pbp_txt["plays"]))
+        # an untyped row that is not a play goes before the order is set: kept, it anchored the
+        # reordering (401752914's "(Sean O'Haire Kick)" sits inside its touchdown's drive)
+        untyped_admin = pl.col("type.text").is_null() & pl.col("text").fill_null("").str.contains(_UNTYPED_ADMIN_RE)
+        pbp_txt["plays"] = _drop_espn_play_copies(_sort_plays_ot_aware(pbp_txt["plays"].filter(~untyped_admin)))
 
         # Drop true duplicates only: the next row carries the same play id (a live
         # feed repeating the drive in progress) or is an identical copy -- same text,
@@ -4322,15 +4347,9 @@ class CFBPlayProcess(object):
             .when(pl.col("type.text") == "2pt Conversion")
             .then(pl.lit("Two-Point Conversion Missed"))
             # 2004 "Unknown" is a grab-bag of period/game markers and a few misclassified
-            # kicks. Relabel the recognizable ones from the text so the non-plays are
-            # excluded (End Period) and the real kicks get a proper type + EPA, instead of
-            # being scored as generic plays (which produced garbage EPA on non-plays).
-            .when(
-                (pl.col("type.text") == "Unknown").and_(
-                    pl.col("text").str.contains(r"(?i)(start|end) of (the )?.*(quarter|half|game|overtime|regulation)"),
-                ),
-            )
-            .then(pl.lit("End Period"))
+            # kicks. The markers are dropped before the plays are ordered (_UNTYPED_ADMIN_RE);
+            # relabel the real kicks from the text so they get a proper type + EPA instead of
+            # being scored as generic plays.
             .when(
                 (pl.col("type.text") == "Unknown")
                 .and_(pl.col("text").str.contains(r"(?i)field goal"))
