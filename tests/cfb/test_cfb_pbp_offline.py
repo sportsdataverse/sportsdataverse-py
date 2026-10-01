@@ -1263,3 +1263,17 @@ def test_a_play_ends_at_the_next_plays_clock() -> None:
     assert (first_half["end.TimeSecsRem"], first_half["end.adj_TimeSecsRem"]) == (0, 1800)
     last = plays.row(-1, named=True)
     assert (last["end.TimeSecsRem"], last["end.adj_TimeSecsRem"]) == (0, 0)
+
+
+def test_a_live_games_latest_play_keeps_its_clock() -> None:
+    """In a game still in progress the latest play has no next play yet: it is not the end of the
+    half, so it keeps its own clock instead of 0:00 (which would also send its end spot to the
+    end-of-half 99 and feed the live WP a finished half). 313090025 replayed as unfinished."""
+    summary = _trimmed(313090025)
+    summary["header"]["competitions"][0]["status"]["type"]["completed"] = False
+    proc = CFBPlayProcess(gameId=313090025, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    last = proc.plays_frame.row(-1, named=True)
+    assert last["end.TimeSecsRem"] == last["start.TimeSecsRem"] == 56
+    assert last["end.adj_TimeSecsRem"] == last["start.adj_TimeSecsRem"]

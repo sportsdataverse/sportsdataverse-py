@@ -2642,6 +2642,11 @@ class CFBPlayProcess(object):
         for side in ("home", "away"):
             by_window = charged.filter(pl.col(side)).group_by("window", maintain_order=True).agg(pl.col("id"))
             pbp_txt["timeouts"][init[f"{side}TeamId"]] = {"1": [], "2": [], **dict(by_window.iter_rows())}
+        # a half is over when the next play is in the next half; the game, when the feed says it
+        # finished and no play follows (a live game's latest play has no next play YET)
+        _period_over = (pl.col("half").shift(-1) != pl.col("half")).fill_null(False) | (
+            pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)  # noqa: E712
+        ).fill_null(False)
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -2663,13 +2668,19 @@ class CFBPlayProcess(object):
                 pl.col("start.adj_TimeSecsRem").shift(n=-1).alias("end.adj_TimeSecsRem"),
             )
             .with_columns(
-                # the last play of a half or of the game ends at 0:00 (game time 1800 / 0)
-                pl.when((pl.col("half").shift(-1) != pl.col("half")).fill_null(True))
+                # the last play of a half, or of a finished game, ends at 0:00 (game time
+                # 1800 / 0); a live game's latest play has no next play yet and keeps its own
+                # clock, its best estimate
+                pl.when(_period_over)
                 .then(pl.lit(0))
+                .when(pl.col("half").shift(-1).is_null())
+                .then(pl.col("start.TimeSecsRem"))
                 .otherwise(pl.col("end.TimeSecsRem"))
                 .alias("end.TimeSecsRem"),
-                pl.when((pl.col("half").shift(-1) != pl.col("half")).fill_null(True))
+                pl.when(_period_over)
                 .then(pl.when(pl.col("half") == 1).then(pl.lit(1800)).otherwise(pl.lit(0)))
+                .when(pl.col("half").shift(-1).is_null())
+                .then(pl.col("start.adj_TimeSecsRem"))
                 .otherwise(pl.col("end.adj_TimeSecsRem"))
                 .alias("end.adj_TimeSecsRem"),
                 pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
