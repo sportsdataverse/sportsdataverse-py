@@ -3350,9 +3350,7 @@ class CFBPlayProcess(object):
                 # state of the play before it when that play ended at the snap's spot (219 of
                 # the 248 such rows 2007-13, a change of possession included: ESPN's end state is
                 # already the new offence's); otherwise first down, and goal to go inside the 10.
-                _merged_td.then(
-                    pl.when(_prev_spot_ok).then(_prev_play("end.down")).otherwise(pl.lit(1))
-                )
+                _merged_td.then(pl.when(_prev_spot_ok).then(_prev_play("end.down")).otherwise(pl.lit(1)))
                 .otherwise(pl.col("start.down"))
                 .alias("start.down"),
                 # ESPN writes "& Goal" as distance 0: goal to go is the distance to the goal line

@@ -674,8 +674,7 @@ def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None
     assert (r["type.text"], r["start.yardsToEndzone"], r["xp_made"], r["EP_end"]) == ("Passing Touchdown", 19, True, 7)
     assert 2 < r["EPA"] < 5
     downs = {
-        t: (d, n)
-        for t, d, n in tds.select(pl.col("text").str.slice(0, 12), "start.down", "start.distance").iter_rows()
+        t: (d, n) for t, d, n in tds.select(pl.col("text").str.slice(0, 12), "start.down", "start.distance").iter_rows()
     }
     # 2nd & 6 at the 19; 2nd & Goal at the 1 and the 5 (ESPN's "& Goal" is distance 0); 4th & 1 at the 43
     assert downs == {"Maynard, Zac": (2, 6), "Sofele, Isi ": (2, 1), "Kapp, Will r": (4, 1), "Galvin, Rick": (2, 5)}
