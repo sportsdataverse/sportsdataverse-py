@@ -38,6 +38,8 @@ def main() -> int:
     except OSError as exc:
         print(f"commit-msg hook: cannot read {path}: {exc}")
         return 0  # never block on an infra failure
+    # git commit -v appends the diff below a scissors line; it is not part of the message
+    msg = re.split(r"^# -+ >8 -+$", msg, maxsplit=1, flags=re.M)[0]
 
     lines = [ln for ln in msg.splitlines() if not ln.startswith("#")]
     subject = next((ln for ln in lines if ln.strip()), "")
