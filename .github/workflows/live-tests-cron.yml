@@ -71,7 +71,7 @@ jobs:
         if: ${{ !cancelled() }}
         # The example notebooks hit the same live APIs. Flakiness here shouldn't
         # mask the core live-test drift signal (the tracking issue keys off the
-        # run-pytest step), so this leg is informational: continue-on-error with a
+        # live tests and the tutorial render), so this leg is informational: continue-on-error with a
         # separate uploaded log. A reproducible notebook break still surfaces here.
         continue-on-error: true
         env:
@@ -205,10 +205,13 @@ jobs:
       # issue (e.g. after fixing the regression) resets state.
       - name: Open / update drift tracking issue
         # Also opens when only the tutorial render failed (that step records it instead of failing).
-        if: ${{ needs.live.outputs.pytest_status == 'failure' || needs.live.outputs.render_failed == '1' }}
+        # main only (a branch dispatch tests that branch, not main); a timed-out pytest step ends 'cancelled'.
+        if: >-
+          ${{ github.ref == 'refs/heads/main' && (needs.live.outputs.pytest_status == 'failure'
+          || needs.live.outputs.pytest_status == 'cancelled' || needs.live.outputs.render_failed == '1') }}
         uses: actions/github-script@v9
         env:
-          LOG_FILE: ${{ needs.live.outputs.pytest_status == 'failure' && 'pytest-live.log' || 'render-notebooks.log' }}
+          LOG_FILE: ${{ needs.live.outputs.pytest_status != 'success' && 'pytest-live.log' || 'render-notebooks.log' }}
         with:
           script: |
             const fs = require('fs');
