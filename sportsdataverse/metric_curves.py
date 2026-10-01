@@ -30,6 +30,7 @@ from __future__ import annotations
 import polars as pl
 
 from sportsdataverse.football.usage_box import _standing_scrimmage
+from sportsdataverse.nba.nba_play_context import _shot_distance_ft
 from sportsdataverse.rolling_windows import _as_id
 
 __all__ = [
@@ -155,6 +156,8 @@ SHOT_ATTEMPT_COLUMNS: tuple[str, ...] = (
     "player_name",
     "shot_result",
     "shot_distance",
+    "x_legacy",
+    "y_legacy",
 )
 
 #: ESPN season types that count: regular season (2) and postseason (3)
@@ -441,9 +444,17 @@ def nflfastr_attempts(pbp: pl.DataFrame) -> pl.DataFrame:
 def shot_attempts(shots: pl.DataFrame, league: str = "nba") -> pl.DataFrame:
     """``fg_pct_by_shot_distance`` attempts from released ``{nba,wnba}_stats_shots``.
 
-    Regular-season (``season_type_id`` ``"2"``) and playoff (``"4"``) shots with a
-    ``shot_distance`` (feet); success = ``shot_result == "Made"``; player = the
-    shooter (stats.nba ``person_id``); no EPA.
+    Regular-season (``season_type_id`` ``"2"``) and playoff (``"4"``) shots; success =
+    ``shot_result == "Made"``; player = the shooter (stats.nba ``person_id``); no EPA.
+
+    The distance binned is the exact release distance from the legacy coordinates,
+    ``sqrt(x_legacy^2 + y_legacy^2) / 10`` feet (tenths of a foot, rim at the origin, the
+    same on the NBA and WNBA feeds), not the feed's ``shot_distance``: stats.nba
+    ``playbyplayv3`` reports ``shot_distance`` 0 for every three released under 23.5 ft
+    (15,378 NBA corner threes in 2025-26; most WNBA threes before the 2013 line move),
+    which put them in the 0-1 ft bucket and emptied 22-24 ft, and its whole-foot
+    rounding shifts every other bucket by half a foot. ``shot_distance`` is used only
+    when a coordinate is null.
 
     Args:
         shots: ``load_{nba,wnba}_stats_shots`` rows, any number of seasons (project to ``SHOT_ATTEMPT_COLUMNS``).
@@ -479,7 +490,7 @@ def shot_attempts(shots: pl.DataFrame, league: str = "nba") -> pl.DataFrame:
         return pl.DataFrame(schema=ATTEMPT_SCHEMA)
     made = shots.filter(
         pl.col("season_type_id").cast(pl.Utf8).is_in(_STATS_SEASON_TYPES)
-        & pl.col("shot_distance").is_not_null()
+        & _shot_distance_ft().is_not_null()
         & pl.col("shot_result").is_in(["Made", "Missed"])
     )
     return _finish(
@@ -487,7 +498,7 @@ def shot_attempts(shots: pl.DataFrame, league: str = "nba") -> pl.DataFrame:
             _attempts(
                 made,
                 "fg_pct_by_shot_distance",
-                x=pl.col("shot_distance"),
+                x=_shot_distance_ft(),
                 success=pl.col("shot_result") == "Made",
                 player_id=_as_id(made, "person_id"),
                 player_name=pl.col("player_name"),
