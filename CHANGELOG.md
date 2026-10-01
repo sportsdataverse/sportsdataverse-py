@@ -313,6 +313,26 @@
 
 ## Unreleased
 
+### Fixed — CFB plays that end a half leave a possession worth nothing
+
+A play ends the half when it is the first half's last play, regulation's last play in a game that
+goes to overtime, or a finished game's last play. Without a score nothing follows it, so its EP_end
+is now 0 and its EPA -EP_start, the cfbfastR / nflfastR convention. EPA already booked -EP_start on
+the first half's last play, but EP_end was the model at 0:00 on the 1 (about -0.4). Three cases were
+wrong outright:
+
+- **A finished game's last play was never flagged.** The flag compared against `lead_half` in the
+  same `with_columns` as the fill of its null, so the last row read the null. The final kneel of
+  400547699 booked EPA -1.51 where its possession was worth 1.93.
+- **Regulation's last play in an overtime game was not flagged**, because overtime is half 2. It
+  read the 0:00 own-1 state: 400787460's last regulation rush booked -0.55 instead of -0.10.
+- **A play whose NEXT snap is at 0:00 was treated as the end.** The dead-possession end state keyed
+  on an end clock of 0, which since the end clock became the next play's clock also catches the play
+  before an untimed down or a half's last snap. 400547699's rush to the 5 with 0:30 left was moved to
+  the 1 and booked EPA -3.34; it ends at the 0:00 snap's EP (1.93), EPA -1.64.
+
+A live game's latest play still ends nothing, since nothing follows it yet.
+
 ### Fixed — CFB returned kickoffs end at the receiving team's first down
 
 ESPN ends a returned kickoff ("Kickoff Return (Offense)", 2014 on) at `end.down` -1, its no-down

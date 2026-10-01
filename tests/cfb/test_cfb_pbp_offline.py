@@ -243,6 +243,8 @@ def _trimmed(game_id: int) -> dict:
       of its own plays at the drive's start clock.
     * ``summary_401761622_trimmed.json.gz`` -- Southern Miss @ Georgia Southern, 2025. Two real
       plays share text and start state in the same quarter, on different drives.
+    * ``summary_400547699_trimmed.json.gz`` -- SMU @ Memphis, 2014 week 9. The last snap is at
+      0:00, after a rush to the 5 with 0:30 left.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -1292,3 +1294,39 @@ def test_a_returned_kickoff_ends_at_the_receiving_teams_first_down() -> None:
     assert returns["end.down"].to_list() == [1, 1, 1]
     assert returns["next_type"].is_in(["Rush", "Pass Reception", "Pass Incompletion", "Sack"]).all()
     assert (returns["EP_end"] - returns["next_ep"]).abs().max() < 1e-6
+
+
+def test_a_play_that_ends_the_half_leaves_a_possession_worth_nothing() -> None:
+    """The half ends after the first half's last play, regulation's last play before overtime and
+    a finished game's last play. Without a score nothing follows, so EP_end is 0 and EPA is
+    -EP_start, as cfbfastR books them. EP_end was the model at 0:00 on the 1 (about -0.4), the
+    game's last play was never flagged (its flag read an unfilled null), and regulation's last
+    play read the overtime start as a 0:00 end."""
+    smu = _offline_plays(400547699)
+    last = smu.row(-1, named=True)
+    assert (last["end_of_half"], last["EP_end"]) == (True, 0.0)
+    assert last["EPA"] == pytest.approx(-last["EP_start"])
+    # the rush to the 5 with 0:30 left does not end the half: the 0:00 snap follows it, and its
+    # end is that snap (it was moved to the 1 at 0:00 and booked EPA -3.34)
+    rush = smu.row(-2, named=True)
+    assert rush["end_of_half"] is False
+    assert (rush["end.yardsToEndzone"], rush["EP_end"]) == (5, pytest.approx(last["EP_start"]))
+    first_half = _offline_plays(313090025).filter(pl.col("half") == 1).row(-1, named=True)
+    assert (first_half["end_of_half"], first_half["EP_end"]) == (True, 0.0)
+    # 401282146 goes to overtime: regulation's last play ends the possession
+    regulation = _offline_plays(401282146).filter(pl.col("period") == 4).row(-1, named=True)
+    assert (regulation["type.text"], regulation["end_of_half"], regulation["EP_end"]) == ("Rush", True, 0.0)
+    assert regulation["EPA"] == pytest.approx(-regulation["EP_start"])
+
+
+def test_a_live_games_latest_play_does_not_end_the_half() -> None:
+    """In a game still in progress the latest play has no next play yet: it is not the end of
+    anything, so it keeps its EP_end. 400547699 replayed as unfinished."""
+    summary = _trimmed(400547699)
+    summary["header"]["competitions"][0]["status"]["type"]["completed"] = False
+    proc = CFBPlayProcess(gameId=400547699, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    last = proc.plays_frame.row(-1, named=True)
+    assert last["end_of_half"] is False
+    assert last["EP_end"] != 0.0
