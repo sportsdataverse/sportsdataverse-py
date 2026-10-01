@@ -333,6 +333,52 @@ df = decompose_college_baseball_plays(
 print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
 ```
 
+### `football_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_attempts}
+
+Field-goal, air-yards, fourth-down and down-x-distance attempts from released `espn_{cfb,nfl}_pbp`.
+
+Populations (regular season + postseason):
+
+* `fg_pct_by_distance`: `fg_attempt` with a `yds_fg`; success = `fg_made`;
+  player = the kicker.
+* `cmp_pct_by_air_yards` / `epa_by_air_yards`: `pass_attempt` with
+  `air_yards`; success = `completion` / `EPA_success`; player = the passer.
+  CFB carries air yards from 2025 only (41% of attempts), so earlier seasons
+  yield no rows.
+* `fourth_conv_by_ytg`: fourth-down rushes and passes that stood (no nullifying
+  penalty); success = a first down or the offense's own touchdown -- the
+  `usage_box._standing_scrimmage` semantics. No player rows.
+* `success_by_down_distance`: every standing scrimmage play on downs 1-4 with
+  a distance; success = `EPA_success`; `down` is the second axis. No player
+  rows. Distance follows standing_scrimmage` (clipped to 1-25, so ESPN's rare
+  `distance == 0` lands in the 1-yard bucket).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | released pbp plays, any number of seasons (project to `FOOTBALL_ATTEMPT_COLUMNS`). |
+
+**Returns**
+
+one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp
+from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_ATTEMPT_COLUMNS)
+att = football_attempts(pbp)
+att.filter(pl.col("metric") == "fg_pct_by_distance").head()
+
+# Pipeline next step (one line)
+
+att.group_by("metric").agg(pl.len(), pl.col("success").mean())
+```
+
 ### `football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_events}
 
 Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays.
@@ -406,6 +452,80 @@ One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
 from sportsdataverse.hockey.mch import mch_ratings
 ratings = mch_ratings(["20250118", "20250201"])
 ratings.sort("adj_net", descending=True).head()
+```
+
+### `metric_curves(attempts: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'` {#metric_curves}
+
+League, team and player rate curves from an `ATTEMPT_SCHEMA` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `attempts` | `DataFrame` |  | one row per attempt x metric (from an adapter), any number of seasons. |
+| `league` | `str` |  | `"cfb"`, `"nfl"`, `"nba"` or `"wnba"` -- stamps `id_source` (`ID_SOURCE`); the curves themselves are league-agnostic. |
+
+**Returns**
+
+one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_type` `league` (`entity_id` null), `team` and `player` (only attempts credited to a player; `team_id` is the team of most of them). * `x_lo` / `x_hi`: the attempt's bucket, inclusive / exclusive. * `attempts`, `successes`, `rate = successes / attempts` (exact), `epa_per_att` (mean EPA of the attempts that have one, else null). * `down`: only set for `success_by_down_distance`. A bucket with no attempt has no row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp
+from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_ATTEMPT_COLUMNS)
+curves = metric_curves(football_attempts(pbp), "cfb")
+curves.filter((pl.col("metric") == "fg_pct_by_distance") & (pl.col("entity_type") == "league"))
+
+# Pipeline next step (one line)
+
+curves.filter((pl.col("entity_type") == "player") & (pl.col("attempts") >= 10)).sort("rate", descending=True)
+```
+
+### `nflfastr_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#nflfastr_attempts}
+
+The same attempts from `nfl_model_pbp` (the nflfastR shape), which carries air yards.
+
+Populations (`REG` + `POST`):
+
+* `fg_pct_by_distance`: `field_goal_attempt` with a `kick_distance`; success =
+  `field_goal_result == "made"`; player = the kicker.
+* `cmp_pct_by_air_yards` / `epa_by_air_yards`: `pass_attempt == 1 & sack == 0`
+  with `air_yards`; success = `complete_pass` / `epa > 0` (nflfastR's success);
+  player = the passer.
+* `fourth_conv_by_ytg`: fourth-down `play_type` `pass` / `run` (a nullified
+  play is `no_play`); success = a rushing or passing first down or the
+  offense's own touchdown. No player rows.
+* `success_by_down_distance`: every `pass` / `run` play on downs 1-4 with a
+  `ydstogo`; success = `epa > 0`. No player rows.
+
+Player ids are nflfastR gsis ids; the producer re-keys them to ESPN through the
+players master and keeps `gsis_id` beside `entity_id`. Teams are nflfastR
+abbreviations.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_nfl_model_pbp` plays, any number of seasons (project to `NFLFASTR_ATTEMPT_COLUMNS`). |
+
+**Returns**
+
+one row per attempt x metric, `ATTEMPT_SCHEMA`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nfl import load_nfl_model_pbp
+from sportsdataverse.metric_curves import NFLFASTR_ATTEMPT_COLUMNS, metric_curves, nflfastr_attempts
+
+pbp = load_nfl_model_pbp([2024]).select(NFLFASTR_ATTEMPT_COLUMNS)
+curves = metric_curves(nflfastr_attempts(pbp), "nfl")
+curves.filter((pl.col("metric") == "cmp_pct_by_air_yards") & (pl.col("entity_type") == "league"))
 ```
 
 ### `pff_aaf_facet_blocking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_blocking_summary}
@@ -6046,6 +6166,36 @@ Override the default TTL for endpoints not matched by the tier rules.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
+
+### `shot_attempts(shots: 'pl.DataFrame') -> 'pl.DataFrame'` {#shot_attempts}
+
+`fg_pct_by_shot_distance` attempts from released `{nba,wnba}_stats_shots`.
+
+Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots with a
+`shot_distance` (feet); success = `shot_result == "Made"`; player = the
+shooter (stats.nba `person_id`); no EPA.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | `load_{nba,wnba}_stats_shots` rows, any number of seasons (project to `SHOT_ATTEMPT_COLUMNS`). |
+
+**Returns**
+
+one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for the NBA).
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import load_nba_stats_shots
+from sportsdataverse.metric_curves import SHOT_ATTEMPT_COLUMNS, metric_curves, shot_attempts
+
+shots = load_nba_stats_shots([2024]).select(SHOT_ATTEMPT_COLUMNS)
+curves = metric_curves(shot_attempts(shots), "nba")
+curves.filter((pl.col("entity_type") == "player") & (pl.col("entity_id") == "201939"))
+```
 
 ### `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ufl_pbp}
 
