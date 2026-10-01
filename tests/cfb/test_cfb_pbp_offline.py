@@ -6,7 +6,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -162,6 +162,11 @@ def _trimmed(game_id: int) -> dict:
       duplicate, including the two canonical pairs: "Jordan Travis pass intercepted"
       (3rd-and-9, 74 to go) at 9:59 and 9:51 and "Malik Cunningham pass incomplete to
       Tyler Hudson" (4th-and-2, 45 to go) at 5:18 and 4:42.
+    * ``summary_303102638_trimmed.json.gz`` -- 2010: a touchdown filed as its own kick whose
+      snap was 3rd and goal from the 13 (the only goal-to-go such snap past the 10, 2007-13).
+    * ``summary_400547866_trimmed.json.gz``, ``summary_400547865_trimmed.json.gz``,
+      ``summary_400548023_trimmed.json.gz`` -- 2014 games with an ESPN-typed blocked field goal
+      the removed "Extra Point Missed" string relabels mistyped (#641).
     * ``summary_242972641_trimmed.json.gz`` -- Texas @ Texas Tech, 2004 week 9. The
       2004 feed repeats the start state on the next row 49 times; none of those rows
       is a duplicate, and all of them must survive.
@@ -660,7 +665,8 @@ def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None
     The try pin scored each as a kick: EP_start 0.92, EP_end 1, EPA +0.08 for a touchdown
     drive's last play. It is now the pass or rush touchdown the text describes, from the spot
     its gain names, and realises the touchdown and its kick (7, or 6 on "kick attempt failed
-    (blocked)").
+    (blocked)"). Its down and distance are the snap's, not the try's (-1, -1, which the EP model
+    cannot score): the end state of the play before, which ended at the snap's spot.
     """
     plays = _offline_plays(313090025)
     tds = plays.filter((pl.col("orig_play_type") == "Extra Point Good") & pl.col("text").str.contains("TOUCHDOWN"))
@@ -669,6 +675,11 @@ def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None
     r = tds.filter(pl.col("text").str.starts_with("Maynard, Zach left side pass complete")).row(0, named=True)
     assert (r["type.text"], r["start.yardsToEndzone"], r["xp_made"], r["EP_end"]) == ("Passing Touchdown", 19, True, 7)
     assert 2 < r["EPA"] < 5
+    downs = {
+        t: (d, n) for t, d, n in tds.select(pl.col("text").str.slice(0, 12), "start.down", "start.distance").iter_rows()
+    }
+    # 2nd & 6 at the 19; 2nd & Goal at the 1 and the 5 (ESPN's "& Goal" is distance 0); 4th & 1 at the 43
+    assert downs == {"Maynard, Zac": (2, 6), "Sofele, Isi ": (2, 1), "Kapp, Will r": (4, 1), "Galvin, Rick": (2, 5)}
     blocked = tds.filter(pl.col("text").str.contains("kick attempt failed")).row(0, named=True)
     assert (blocked["xp_attempt"], blocked["xp_made"], blocked["EP_end"]) == (True, False, 6)
     # no scrimmage touchdown is left pinned as a try
@@ -1183,3 +1194,55 @@ def test_a_game_whose_score_columns_are_reversed_reads_the_header_final():
     assert (df["homeScore"].max(), df["awayScore"].max()) == (52, 35)
     td = df.filter((pl.col("scoringPlay") == True) & (pl.col("start.pos_team.id").cast(pl.Utf8) == "2393"))  # noqa: E712
     assert td.row(0, named=True)["end.pos_score_diff"] == 7
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "espn_type"),
+    [
+        # "Josh Lambert 47 yd FG BLOCKED blocked by T.J. Semke ...": was a "Penalty" (EPA +1.69)
+        (400547866, 400547866102889201, "Blocked Field Goal"),
+        # "Terrell Burt 62 Yd Return of Blocked Field Goal (Chris Callahan Kick)": the defence's
+        # touchdown was a plain "Blocked Field Goal"
+        (400547865, 400547865101909701, "Blocked Field Goal Touchdown"),
+        # "James Hairston 48 Yard Field Goal Missed": was an "Extra Point Missed" try (EPA -0.92)
+        (400548023, 400548023102999801, "Blocked Field Goal"),
+    ],
+)
+def test_a_blocked_field_goal_keeps_espns_type(game_id: int, play_id: int, espn_type: str) -> None:
+    """#641: four string relabels turned ESPN's "Blocked Field Goal (Touchdown)" into "Extra
+    Point Missed", and the kick rules after them typed ~71 corpus rows wrongly."""
+    plays = _offline_plays(game_id)
+    r = plays.filter(pl.col("id") == play_id).row(0, named=True)
+    assert (r["orig_play_type"], r["type.text"]) == (espn_type, espn_type)
+    if espn_type == "Blocked Field Goal Touchdown":
+        assert r["EPA"] < -6
+
+
+def test_copies_with_a_null_key_never_twin() -> None:
+    """A null start-state key is no twin: polars (1.42) matches rows whose join key has four or
+    more null columns, which made this clock batch (two plays at 50:00, each repeated later at a
+    lower clock) stale although no row has a drive, team, down or distance."""
+    df = pl.DataFrame(
+        {
+            "id": [1, 2, 3, 4],
+            "drive.id": pl.Series([None] * 4, dtype=pl.Utf8),
+            "period.number": [1] * 4,
+            "start.team.id": pl.Series([None] * 4, dtype=pl.Int64),
+            "start.down": pl.Series([None] * 4, dtype=pl.Int64),
+            "start.distance": pl.Series([None] * 4, dtype=pl.Int64),
+            "start.yardsToEndzone": [75] * 4,
+            "type.text": ["Rush"] * 4,
+            "text": ["A run for 3 yards", "B run for 2 yards", "A run for 3 yards", "B run for 2 yards"],
+            "start.adj_TimeSecsRem": [3000, 3000, 2990, 2980],
+        }
+    )
+    assert _drop_espn_play_copies(df)["id"].to_list() == [1, 2, 3, 4]
+
+
+def test_a_touchdown_filed_as_its_own_kick_from_goal_to_go_past_the_10() -> None:
+    """303102638: the play before ended 3rd and goal at the 13 (ESPN's "& Goal" distance 0) and
+    the touchdown is "for 13 yards". Goal to go is the distance to the goal line, not 10."""
+    plays = _offline_plays(303102638)
+    r = plays.filter(pl.col("id") == 303102638107).row(0, named=True)
+    assert r["orig_play_type"] == "Extra Point Good"
+    assert (r["start.down"], r["start.distance"], r["start.yardsToEndzone"]) == (3, 13, 13)

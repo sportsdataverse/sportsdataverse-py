@@ -1569,8 +1569,11 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     rows = df.filter(~marker & (pl.col("start.yardsToEndzone") != 0)).select(
         "_pos", *key, "text", _t="start.adj_TimeSecsRem"
     )
+    # a null key never twins: polars (1.40-1.44) matches rows whose join key has four or more null
+    # columns, despite nulls_equal=False, so drop them before the self-join
+    keyed = rows.drop_nulls(key)
     twins = (
-        rows.join(rows.select(*key, _lpos="_pos", _ltext="text", _lt="_t"), on=key)
+        keyed.join(keyed.select(*key, _lpos="_pos", _ltext="text", _lt="_t"), on=key)
         .filter((pl.col("_lpos") > pl.col("_pos")) & (pl.col("_lt") < pl.col("_t")))
         .group_by("_pos", "period.number", "_t")
         .agg(_exact=(pl.col("text") == pl.col("_ltext")).any())
@@ -3168,6 +3171,21 @@ class CFBPlayProcess(object):
                 )
             )
 
+        def _prev_play(col: str) -> pl.Expr:
+            # ``col`` on the last row before this one that is not a timeout or period marker
+            real = ~pl.col("type.text").str.contains(r"(?i)^(?:timeout|end\b)").fill_null(False)
+            return pl.when(real).then(pl.col(col)).otherwise(None).shift(1).forward_fill()
+
+        # a 2007-13 touchdown filed as its own kick and retyped to its snap (below)
+        _merged_td = pl.when(
+            pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed", "2pt Conversion"])
+            & pl.col("type.text").is_in(["Pass Completion", "Rush"])
+        )
+        _prev_spot_ok = (
+            (_prev_play("end.yardsToEndzone") == pl.col("start.yardsToEndzone"))
+            & _prev_play("end.down").is_in([1, 2, 3, 4])
+        ).fill_null(False)
+
         def _last_td(col: str) -> pl.Expr:
             # ``col`` on the last row before this one whose type names a touchdown
             return (
@@ -3183,50 +3201,6 @@ class CFBPlayProcess(object):
             .with_columns(
                 pl.when(pl.col("type.text").is_null())
                 .then(pl.lit("Unknown"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)extra point")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)extra point")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -3368,6 +3342,28 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # ... and the try's down and distance (-1, -1): ESPN's 2005-13 sentinel for a
+                # play with no down, which the EP model cannot score (its down one-hots are all
+                # zero: 302602440's rushing touchdown read EP 0.1). The snap's down is the end
+                # state of the play before it when that play ended at the snap's spot (219 of
+                # the 248 such rows 2007-13, a change of possession included: ESPN's end state is
+                # already the new offence's); otherwise first down, and goal to go inside the 10.
+                _merged_td.then(pl.when(_prev_spot_ok).then(_prev_play("end.down")).otherwise(pl.lit(1)))
+                .otherwise(pl.col("start.down"))
+                .alias("start.down"),
+                # ESPN writes "& Goal" as distance 0: goal to go is the distance to the goal line,
+                # however far out (a penalty can back a goal-to-go snap past the 10)
+                _merged_td.then(
+                    pl.when(_prev_spot_ok & (_prev_play("end.distance") > 0))
+                    .then(pl.min_horizontal(_prev_play("end.distance"), pl.col("start.yardsToEndzone")))
+                    .when(_prev_spot_ok & (_prev_play("end.distance") == 0))
+                    .then(pl.col("start.yardsToEndzone"))
+                    .otherwise(pl.min_horizontal(pl.lit(10), pl.col("start.yardsToEndzone")))
+                )
+                .otherwise(pl.col("start.distance"))
+                .alias("start.distance"),
             )
         )
 
@@ -4379,12 +4375,14 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
-                # -- Fix blocked field goals ESPN mislabels as "Extra Point Missed" ----
-                # A blocked FG returned by the defense is sometimes typed "Extra Point
-                # Missed" by ESPN, which routes it through PAT-scoring EPA logic. Relabel to
-                # the correct blocked-FG type (TD variant when returned for a score). Gate on
-                # text showing a blocked FIELD GOAL -- "blocked" plus an FG/field-goal token --
-                # so a genuine blocked/missed PAT (no FG token) is left untouched.
+                # -- Fix blocked field goals typed "Extra Point Missed" ----
+                # A row typed "Extra Point Missed" whose text shows a blocked FIELD GOAL --
+                # "blocked" plus an FG/field-goal token -- is that blocked field goal (the TD
+                # variant when returned for a score); a genuine blocked/missed PAT (no FG token)
+                # is left untouched. sdv-py itself no longer produces such rows: four string
+                # relabels in __helper_cfb_pbp_features turned ESPN's own "Blocked Field Goal
+                # (Touchdown)" into "Extra Point Missed" until #641, and this rule only restored
+                # the ones whose text names the field goal and the block.
                 pl.when(
                     (pl.col("type.text") == "Extra Point Missed")
                     .and_(pl.col("text").str.contains("(?i)blocked"))
