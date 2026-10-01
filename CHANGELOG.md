@@ -310,6 +310,22 @@
 
 ## Unreleased
 
+### Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy
+
+Four string relabels in `__helper_cfb_pbp_features` turned any type containing "field goal" or
+"extra point" plus "blocked" or "no good" into "Extra Point Missed". On ESPN's types they only ever
+matched "Blocked Field Goal" and "Blocked Field Goal Touchdown" (1,061 rows 2004–26), which then
+went through the kick rules after them, and the one later rule that restores the type reads the
+text: 12 blocked field goals finished as "Penalty" (400547866, EPA +1.69), 4 as an "Extra Point
+Missed" try (400548023), and 55 blocked-field-goal return touchdowns as a plain "Blocked Field
+Goal" (400547865: the defence's touchdown lost, EPA -0.93 -> -7.7). The four rules are removed;
+ESPN's types stand. Found porting the relabel block to cfbfastR (sportsdataverse/cfbfastR#175).
+
+`_drop_espn_play_copies` twins a play with a later copy through a self-join on the drive and start
+state. Polars (1.40–1.44) matches rows whose join key has four or more null columns despite
+`nulls_equal=False`, so plays with no drive, team, down or distance could be dropped as a stale
+batch. Null keys are now dropped before the join; no game in the raw corpus was affected.
+
 ### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
 
 The regulation WP boosters were trained on a frame that drops every game that reached overtime
