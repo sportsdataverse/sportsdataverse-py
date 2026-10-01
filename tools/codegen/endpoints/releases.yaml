@@ -1103,6 +1103,14 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_game_matchups
+  league: nba
+  base: sdv_releases
+  url: nba_stats_game_matchups/game_matchups_{season + 1}.parquet
+  tag: nba_stats_game_matchups
+  min_season: 2017
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_pbp_v3
   league: nba
   base: sdv_releases

@@ -37,6 +37,7 @@ __all__ = [
     "load_nba_stats_pbp",
     "load_nba_stats_possessions",
     "load_nba_stats_game_lineups",
+    "load_nba_stats_game_matchups",
     "load_nba_stats_pbp_v3",
     "load_nba_stats_player_boxscores",
     "load_nba_stats_player_game_logs",
@@ -1186,6 +1187,7 @@ def load_nba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         |team_abbreviation |String |
         |season            |Int32  |
         |game_id           |String |
+        |season_type_id    |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -1545,14 +1547,15 @@ def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
            names a season by its STARTING year, so normalize before
            joining on ``season`` across those.
 
-        |col_name    |type   |
-        |:-----------|:------|
-        |official_id |Int64  |
-        |first_name  |String |
-        |last_name   |String |
-        |jersey_num  |String |
-        |season      |Int32  |
-        |game_id     |String |
+        |col_name       |type   |
+        |:--------------|:------|
+        |official_id    |Int64  |
+        |first_name     |String |
+        |last_name      |String |
+        |jersey_num     |String |
+        |season         |Int32  |
+        |game_id        |String |
+        |season_type_id |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -1847,6 +1850,112 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+def load_nba_stats_game_matchups(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_game_matchups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_matchups
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2017).
+            Pass the season's START year (e.g. ``2017`` for the
+            2017-18 season); the published asset is keyed by the
+            END year and the loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_game_matchups(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
+
+        |col_name                          |type    |
+        |:---------------------------------|:-------|
+        |off_team_id                       |Int64   |
+        |off_team_city                     |String  |
+        |off_team_name                     |String  |
+        |off_team_tricode                  |String  |
+        |off_team_slug                     |String  |
+        |def_team_id                       |Int64   |
+        |side                              |String  |
+        |off_person_id                     |Int64   |
+        |off_first_name                    |String  |
+        |off_family_name                   |String  |
+        |off_name_i                        |String  |
+        |off_player_slug                   |String  |
+        |off_position                      |String  |
+        |off_comment                       |String  |
+        |off_jersey_num                    |String  |
+        |def_person_id                     |Int64   |
+        |def_first_name                    |String  |
+        |def_family_name                   |String  |
+        |def_name_i                        |String  |
+        |def_player_slug                   |String  |
+        |def_jersey_num                    |String  |
+        |matchup_minutes                   |String  |
+        |matchup_minutes_sort              |Float64 |
+        |partial_possessions               |Float64 |
+        |percentage_defender_total_time    |Float64 |
+        |percentage_offensive_total_time   |Float64 |
+        |percentage_total_time_both_on     |Float64 |
+        |switches_on                       |Int64   |
+        |player_points                     |Int64   |
+        |team_points                       |Int64   |
+        |matchup_assists                   |Int64   |
+        |matchup_potential_assists         |Int64   |
+        |matchup_turnovers                 |Int64   |
+        |matchup_blocks                    |Int64   |
+        |matchup_field_goals_made          |Int64   |
+        |matchup_field_goals_attempted     |Int64   |
+        |matchup_field_goals_percentage    |Float64 |
+        |matchup_three_pointers_made       |Int64   |
+        |matchup_three_pointers_attempted  |Int64   |
+        |matchup_three_pointers_percentage |Float64 |
+        |help_blocks                       |Int64   |
+        |help_field_goals_made             |Int64   |
+        |help_field_goals_attempted        |Int64   |
+        |help_field_goals_percentage       |Float64 |
+        |matchup_free_throws_made          |Int64   |
+        |matchup_free_throws_attempted     |Int64   |
+        |shooting_fouls                    |Int64   |
+        |game_id                           |String  |
+        |season                            |Int32   |
+        |season_type_id                    |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2017.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_game_matchups(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2017:
+            raise SeasonNotFoundError("season cannot be less than 2017")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_matchups/game_matchups_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_game_matchups: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
 def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
     """Deprecated alias for ``load_nba_stats_pbp``.
 
@@ -1978,8 +2087,10 @@ def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
         |col_name                  |type    |
         |:-------------------------|:-------|
         |team_id                   |Int64   |
+        |team_city                 |String  |
         |team_name                 |String  |
         |team_tricode              |String  |
+        |team_slug                 |String  |
         |side                      |String  |
         |person_id                 |Int64   |
         |first_name                |String  |
@@ -2011,6 +2122,7 @@ def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
         |plus_minus_points         |Float64 |
         |game_id                   |String  |
         |season                    |Int32   |
+        |season_type_id            |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -2581,26 +2693,27 @@ def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
            names a season by its STARTING year, so normalize before
            joining on ``season`` across those.
 
-        |col_name      |type   |
-        |:-------------|:------|
-        |game_id       |String |
-        |season        |Int32  |
-        |period        |Int64  |
-        |clock         |String |
-        |team_id       |Int64  |
-        |team_tricode  |String |
-        |person_id     |Int64  |
-        |player_name   |String |
-        |action_type   |String |
-        |sub_type      |String |
-        |shot_result   |String |
-        |shot_value    |Int64  |
-        |shot_distance |Int64  |
-        |x_legacy      |Int64  |
-        |y_legacy      |Int64  |
-        |description   |String |
-        |score_home    |String |
-        |score_away    |String |
+        |col_name       |type   |
+        |:--------------|:------|
+        |game_id        |String |
+        |season         |Int32  |
+        |season_type_id |String |
+        |period         |Int64  |
+        |clock          |String |
+        |team_id        |Int64  |
+        |team_tricode   |String |
+        |person_id      |Int64  |
+        |player_name    |String |
+        |action_type    |String |
+        |sub_type       |String |
+        |shot_result    |String |
+        |shot_value     |Int64  |
+        |shot_distance  |Int64  |
+        |x_legacy       |Int64  |
+        |y_legacy       |Int64  |
+        |description    |String |
+        |score_home     |String |
+        |score_away     |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -2808,8 +2921,10 @@ def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
         |col_name                  |type    |
         |:-------------------------|:-------|
         |team_id                   |Int64   |
+        |team_city                 |String  |
         |team_name                 |String  |
         |team_tricode              |String  |
+        |team_slug                 |String  |
         |side                      |String  |
         |minutes                   |String  |
         |field_goals_made          |Int64   |
@@ -2833,6 +2948,7 @@ def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
         |plus_minus_points         |Float64 |
         |game_id                   |String  |
         |season                    |Int32   |
+        |season_type_id            |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.

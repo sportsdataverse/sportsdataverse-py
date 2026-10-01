@@ -36,6 +36,7 @@ flowchart LR
 | `load_nba_stats_pbp` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_possessions` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
 | `load_nba_stats_game_lineups` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
+| `load_nba_stats_game_matchups` | [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_matchups) | — |
 | `load_nba_stats_pbp_v3` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_player_boxscores` | [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) | — |
 | `load_nba_stats_player_game_logs` | [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) | — |
@@ -702,6 +703,7 @@ Release: [nba_stats_game_rosters](https://github.com/sportsdataverse/sportsdatav
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `season` | Int32 | Season year. |
 | `game_id` | String | Unique game identifier. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
 
 ```python
 load_nba_stats_game_rosters(seasons=2025)
@@ -940,6 +942,7 @@ Release: [nba_stats_officials](https://github.com/sportsdataverse/sportsdatavers
 | `jersey_num` | String | Jersey number worn by the player. |
 | `season` | Int32 | Season year. |
 | `game_id` | String | Unique game identifier. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
 
 ```python
 load_nba_stats_officials(seasons=2025)
@@ -1079,6 +1082,68 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 load_nba_stats_game_lineups(seasons=2025)
 ```
 
+## `load_nba_stats_game_matchups`
+
+Release: [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_matchups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_matchups/game_matchups_{season + 1}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `off_team_id` | Int64 | Team id of the offensive player. Taken from the payload's team block. |
+| `off_team_city` | String | City/market of the offensive player's team ("Indiana"). |
+| `off_team_name` | String | Nickname of the offensive player's team ("Pacers") -- pair with `off_team_city` for the full club name. |
+| `off_team_tricode` | String | Three-letter abbreviation of the offensive player's team ("IND"). |
+| `off_team_slug` | String | URL slug of the offensive player's team ("pacers"). |
+| `def_team_id` | Int64 | Team id of the defender, read from the game envelope's homeTeamId/awayTeamId rather than the nested team object, which is 0 on uncovered captures. |
+| `side` | String | Which side of the game the row's team was on: "home" or "away". In `game_matchups`, where a row carries two teams, it is the OFFENSIVE player's team (`off_team_id`) -- the defender is always the other side. |
+| `off_person_id` | Int64 | stats.nba.com person id of the offensive player -- the one being guarded. |
+| `off_first_name` | String | First name of the offensive player. |
+| `off_family_name` | String | Family name of the offensive player. |
+| `off_name_i` | String | Offensive player's abbreviated display name ("B. Mathurin"). |
+| `off_player_slug` | String | URL slug of the offensive player ("bennedict-mathurin"). |
+| `off_position` | String | Starting position of the offensive player as the payload reports it; empty for players who did not start. |
+| `off_comment` | String | Availability note on the offensive player (DNP reason); empty when they played. |
+| `off_jersey_num` | String | Jersey number of the offensive player, as a string (it can carry a leading zero, e.g. "00"). |
+| `def_person_id` | Int64 | stats.nba.com person id of the defender guarding the offensive player. |
+| `def_first_name` | String | First name of the defender. |
+| `def_family_name` | String | Family name of the defender. |
+| `def_name_i` | String | Defender's abbreviated display name ("J. Allen"). |
+| `def_player_slug` | String | URL slug of the defender ("jarrett-allen"). |
+| `def_jersey_num` | String | Jersey number of the defender, as a string (it can carry a leading zero). |
+| `matchup_minutes` | String | Time the pair were matched up, as the payload's MM:SS string; use `matchup_minutes_sort` for arithmetic. |
+| `matchup_minutes_sort` | Float64 | The same matchup time in seconds, as a float -- the sortable/summable form. |
+| `partial_possessions` | Float64 | Possessions credited to the matchup. Fractional because a possession is split across every defender who guarded the ball-handler during it, which is why matchup counting stats do not sum exactly to a player's game totals. |
+| `percentage_defender_total_time` | Float64 | Share of the defender's floor time spent guarding this offensive player. |
+| `percentage_offensive_total_time` | Float64 | Share of the offensive player's floor time spent guarded by this defender. |
+| `percentage_total_time_both_on` | Float64 | Share of the time both players were on the floor together that they were matched up. |
+| `switches_on` | Int64 | Times the defense switched this defender onto the offensive player. |
+| `player_points` | Int64 | Points the offensive player scored while guarded by this defender. |
+| `team_points` | Int64 | Points the offensive player's team scored while this matchup was on. |
+| `matchup_assists` | Int64 | Assists by the offensive player while guarded by this defender. |
+| `matchup_potential_assists` | Int64 | Passes by the offensive player that would have been assists had the shot fallen, while guarded by this defender. |
+| `matchup_turnovers` | Int64 | Turnovers by the offensive player while guarded by this defender. |
+| `matchup_blocks` | Int64 | Shots by the offensive player blocked by this defender. |
+| `matchup_field_goals_made` | Int64 | Field goals made by the offensive player against this defender. |
+| `matchup_field_goals_attempted` | Int64 | Field goals attempted by the offensive player against this defender. |
+| `matchup_field_goals_percentage` | Float64 | Field-goal percentage of the offensive player against this defender. |
+| `matchup_three_pointers_made` | Int64 | Three-pointers made by the offensive player against this defender. |
+| `matchup_three_pointers_attempted` | Int64 | Three-pointers attempted by the offensive player against this defender. |
+| `matchup_three_pointers_percentage` | Float64 | Three-point percentage of the offensive player against this defender. |
+| `help_blocks` | Int64 | Blocks by this defender on the offensive player when helping off another assignment rather than as the primary defender. |
+| `help_field_goals_made` | Int64 | Field goals the offensive player made against this defender in help defense. |
+| `help_field_goals_attempted` | Int64 | Field goals the offensive player attempted against this defender in help defense. |
+| `help_field_goals_percentage` | Float64 | Field-goal percentage allowed by this defender in help defense. |
+| `matchup_free_throws_made` | Int64 | Free throws made by the offensive player on trips drawn against this defender. |
+| `matchup_free_throws_attempted` | Int64 | Free throws attempted by the offensive player on trips drawn against this defender. |
+| `shooting_fouls` | Int64 | Shooting fouls committed by this defender on the offensive player. |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int32 | Season year. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
+
+```python
+load_nba_stats_game_matchups(seasons=2025)
+```
+
 ## `load_nba_stats_pbp_v3`
 
 Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`
@@ -1148,8 +1213,10 @@ Release: [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsd
 | col_name | type | description |
 |---|---|---|
 | `team_id` | Int64 | Unique team identifier. |
+| `team_city` | String | City/market of the team ("Indiana"); pair with `team_name` for the full club name. |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_tricode` | String | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `team_slug` | String | URL slug of the team ("pacers"). |
 | `side` | String | Side label (e.g. 'home', 'away', or 'overUnder'). |
 | `person_id` | Int64 | Unique player identifier (V3 endpoints). |
 | `first_name` | String | Player's first name. |
@@ -1181,6 +1248,7 @@ Release: [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsd
 | `plus_minus_points` | Float64 | Plus/minus point differential while on court. |
 | `game_id` | String | Unique game identifier. |
 | `season` | Int32 | Season year. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
 
 ```python
 load_nba_stats_player_boxscores(seasons=2025)
@@ -1536,6 +1604,7 @@ Release: [nba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-da
 |---|---|---|
 | `game_id` | String | Unique game identifier. |
 | `season` | Int32 | Season year. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `clock` | String | Game clock value. |
 | `team_id` | Int64 | Unique team identifier. |
@@ -1671,8 +1740,10 @@ Release: [nba_stats_team_boxscores](https://github.com/sportsdataverse/sportsdat
 | col_name | type | description |
 |---|---|---|
 | `team_id` | Int64 | Unique team identifier. |
+| `team_city` | String | City/market of the team ("Indiana"); pair with `team_name` for the full club name. |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_tricode` | String | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `team_slug` | String | URL slug of the team ("pacers"). |
 | `side` | String | Side label (e.g. 'home', 'away', or 'overUnder'). |
 | `minutes` | String | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
 | `field_goals_made` | Int64 | Field goals made (2-pt + 3-pt). |
@@ -1696,6 +1767,7 @@ Release: [nba_stats_team_boxscores](https://github.com/sportsdataverse/sportsdat
 | `plus_minus_points` | Float64 | Plus/minus point differential while on court. |
 | `game_id` | String | Unique game identifier. |
 | `season` | Int32 | Season year. |
+| `season_type_id` | String | Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2 = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international. |
 
 ```python
 load_nba_stats_team_boxscores(seasons=2025)

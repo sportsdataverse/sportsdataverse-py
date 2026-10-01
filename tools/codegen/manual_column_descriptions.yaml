@@ -14173,6 +14173,64 @@ load_nba_stats_game_lineups:
   home_player_3: NBA Stats player id of the home on-court player 3 of 5 for the row.
   home_player_4: NBA Stats player id of the home on-court player 4 of 5 for the row.
   home_player_5: NBA Stats player id of the home on-court player 5 of 5 for the row.
+load_nba_stats_game_matchups:
+  def_family_name: Family name of the defender.
+  def_first_name: First name of the defender.
+  def_jersey_num: Jersey number of the defender, as a string (it can carry a leading zero).
+  def_name_i: Defender's abbreviated display name ("J. Allen").
+  def_person_id: stats.nba.com person id of the defender guarding the offensive player.
+  def_player_slug: URL slug of the defender ("jarrett-allen").
+  def_team_id: Team id of the defender, read from the game envelope's homeTeamId/awayTeamId rather than the nested team object,
+    which is 0 on uncovered captures.
+  help_blocks: Blocks by this defender on the offensive player when helping off another assignment rather than as the primary
+    defender.
+  help_field_goals_attempted: Field goals the offensive player attempted against this defender in help defense.
+  help_field_goals_made: Field goals the offensive player made against this defender in help defense.
+  help_field_goals_percentage: Field-goal percentage allowed by this defender in help defense.
+  matchup_assists: Assists by the offensive player while guarded by this defender.
+  matchup_blocks: Shots by the offensive player blocked by this defender.
+  matchup_field_goals_attempted: Field goals attempted by the offensive player against this defender.
+  matchup_field_goals_made: Field goals made by the offensive player against this defender.
+  matchup_field_goals_percentage: Field-goal percentage of the offensive player against this defender.
+  matchup_free_throws_attempted: Free throws attempted by the offensive player on trips drawn against this defender.
+  matchup_free_throws_made: Free throws made by the offensive player on trips drawn against this defender.
+  matchup_minutes: Time the pair were matched up, as the payload's MM:SS string; use `matchup_minutes_sort` for arithmetic.
+  matchup_minutes_sort: The same matchup time in seconds, as a float -- the sortable/summable form.
+  matchup_potential_assists: Passes by the offensive player that would have been assists had the shot fallen, while guarded
+    by this defender.
+  matchup_three_pointers_attempted: Three-pointers attempted by the offensive player against this defender.
+  matchup_three_pointers_made: Three-pointers made by the offensive player against this defender.
+  matchup_three_pointers_percentage: Three-point percentage of the offensive player against this defender.
+  matchup_turnovers: Turnovers by the offensive player while guarded by this defender.
+  off_comment: Availability note on the offensive player (DNP reason); empty when they played.
+  off_family_name: Family name of the offensive player.
+  off_first_name: First name of the offensive player.
+  off_jersey_num: Jersey number of the offensive player, as a string (it can carry a leading zero, e.g. "00").
+  off_name_i: Offensive player's abbreviated display name ("B. Mathurin").
+  off_person_id: stats.nba.com person id of the offensive player -- the one being guarded.
+  off_player_slug: URL slug of the offensive player ("bennedict-mathurin").
+  off_position: Starting position of the offensive player as the payload reports it; empty for players who did not start.
+  off_team_city: City/market of the offensive player's team ("Indiana").
+  off_team_id: Team id of the offensive player. Taken from the payload's team block.
+  off_team_name: Nickname of the offensive player's team ("Pacers") -- pair with `off_team_city` for the full club name.
+  off_team_slug: URL slug of the offensive player's team ("pacers").
+  off_team_tricode: Three-letter abbreviation of the offensive player's team ("IND").
+  partial_possessions: Possessions credited to the matchup. Fractional because a possession is split across every defender
+    who guarded the ball-handler during it, which is why matchup counting stats do not sum exactly to a player's game totals.
+  percentage_defender_total_time: Share of the defender's floor time spent guarding this offensive player.
+  percentage_offensive_total_time: Share of the offensive player's floor time spent guarded by this defender.
+  percentage_total_time_both_on: Share of the time both players were on the floor together that they were matched up.
+  player_points: Points the offensive player scored while guarded by this defender.
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
+  shooting_fouls: Shooting fouls committed by this defender on the offensive player.
+  side: 'Which side of the game the row''s team was on: "home" or "away". In `game_matchups`, where a row carries two teams,
+    it is the OFFENSIVE player''s team (`off_team_id`) -- the defender is always the other side.'
+  switches_on: Times the defense switched this defender onto the offensive player.
+  team_points: Points the offensive player's team scored while this matchup was on.
+load_nba_stats_game_rosters:
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
 load_nba_stats_lineups:
   ast_pct_rank: League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for
     the season and split.
@@ -14332,6 +14390,9 @@ load_nba_stats_lineups_v3:
   home_player_3: NBA Stats player id of the home on-court player 3 of 5 for the row.
   home_player_4: NBA Stats player id of the home on-court player 4 of 5 for the row.
   home_player_5: NBA Stats player id of the home on-court player 5 of 5 for the row.
+load_nba_stats_officials:
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
 load_nba_stats_pbp:
   def_player_1: NBA Stats player id of defensive on-court player 1 of 5 during the event.
   def_player_2: NBA Stats player id of defensive on-court player 2 of 5 during the event.
@@ -14374,6 +14435,11 @@ load_nba_stats_pbp_v3:
   off_player_4: NBA Stats player id of offensive on-court player 4 of 5 during the event.
   off_player_5: NBA Stats player id of offensive on-court player 5 of 5 during the event.
   order_index: Stable within-game ordering index for events after pbpstats-style reordering of the raw feed.
+load_nba_stats_player_boxscores:
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
+  team_city: City/market of the team ("Indiana"); pair with `team_name` for the full club name.
+  team_slug: URL slug of the team ("pacers").
 load_nba_stats_player_season_stats:
   ast_pct_rank: League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for
     the season and split.
@@ -14631,6 +14697,9 @@ load_nba_stats_schedules:
   away_wl: Away team's result for the game (W or L).
   home_pts: Final points scored by the home team.
   home_wl: Home team's result for the game (W or L).
+load_nba_stats_shots:
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
 load_nba_stats_standings:
   ahead_at_half: Win-loss record when leading at halftime.
   ahead_at_third: Win-loss record when leading after three quarters.
@@ -14701,6 +14770,11 @@ load_nba_stats_standings:
   vs_southeast: Win-loss record against Southeast Division opponents.
   vs_southwest: Win-loss record against Southwest Division opponents.
   vs_west: Win-loss record against Western Conference opponents.
+load_nba_stats_team_boxscores:
+  season_type_id: 'Season-type digit: the 3rd character of game_id (and the leading digit of season_id). 1 = preseason, 2
+    = regular season, 3 = All-Star, 4 = playoffs, 5 = play-in, 6 = NBA Cup final, 9 = international.'
+  team_city: City/market of the team ("Indiana"); pair with `team_name` for the full club name.
+  team_slug: URL slug of the team ("pacers").
 load_nba_stats_team_season_stats:
   ast_pct_rank: League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for
     the season and split.
