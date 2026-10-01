@@ -14,6 +14,7 @@ from sportsdataverse.metric_curves import (
     BUCKET_EDGES,
     FOOTBALL_ATTEMPT_COLUMNS,
     OUTPUT_SCHEMA,
+    SHOT_ATTEMPT_COLUMNS,
     football_attempts,
     metric_curves,
     nflfastr_attempts,
@@ -48,6 +49,24 @@ def nfl_curves(nfl_pbp) -> pl.DataFrame:
 @pytest.fixture(scope="module")
 def curry_shots() -> pl.DataFrame:
     return pl.read_parquet(FIX / "rolling_windows" / "nba_stats_shots_201939_2024_2025.parquet")
+
+
+@pytest.fixture(scope="module")
+def nba_2026_shots() -> pl.DataFrame:
+    return pl.read_parquet(FIX / "metric_curves" / "nba_stats_shots_2026_slice.parquet")
+
+
+@pytest.fixture(scope="module")
+def wnba_2025_shots() -> pl.DataFrame:
+    # the WNBA shots carry no season_type_id; the producer derives it from the game id's type digit
+    shots = pl.read_parquet(FIX / "metric_curves" / "wnba_stats_shots_2025_slice.parquet")
+    return shots.with_columns(season_type_id=pl.col("game_id").str.slice(2, 1))
+
+
+def _coordinate_ft(df: pl.DataFrame) -> list[float]:
+    """The exact release distance: legacy coordinates are tenths of a foot with the rim at the origin."""
+    ft = (pl.col("x_legacy").cast(pl.Float64) ** 2 + pl.col("y_legacy").cast(pl.Float64) ** 2).sqrt() / 10
+    return df.select(ft).to_series().to_list()
 
 
 def _league(df: pl.DataFrame, metric: str) -> pl.DataFrame:
@@ -213,6 +232,62 @@ def test_curry_shot_attempts_sum_to_2833(curry_shots):
     assert metric_curves(shot_attempts(curry_shots, league="wnba"), "wnba")["id_source"].unique().to_list() == [
         "wnba_stats"
     ]
+
+
+def test_zeroed_corner_threes_bin_at_their_coordinate_distance(nba_2026_shots):
+    # stats.nba playbyplayv3 reports shotDistance 0 for every three released under 23.5 ft
+    # (the corner); binned on that field they sat in the 0-1 ft bucket and emptied 22-24 ft
+    zeroed = nba_2026_shots.filter((pl.col("shot_value") == 3) & (pl.col("shot_distance") == 0))
+    assert zeroed.height == 40 and min(_coordinate_ft(zeroed)) > 22
+    league = _league(
+        metric_curves(shot_attempts(nba_2026_shots.select(SHOT_ATTEMPT_COLUMNS)), "nba"), "fg_pct_by_shot_distance"
+    )
+    # floor of the coordinate distance; the 40 rim twos (20 tips at the origin) are all that stay under 1 ft
+    assert dict(zip(league["x_lo"], league["attempts"])) == {
+        0.0: 40,
+        21.0: 5,
+        22.0: 22,
+        23.0: 25,
+        24.0: 4,
+        25.0: 9,
+        26.0: 5,
+    }
+    assert league["attempts"].sum() == nba_2026_shots.height == 110
+    assert league["successes"].sum() == nba_2026_shots.filter(pl.col("shot_result") == "Made").height == 51
+
+
+def test_every_shot_attempt_carries_its_coordinate_distance(nba_2026_shots, wnba_2025_shots):
+    for shots, league in ((nba_2026_shots, "nba"), (wnba_2025_shots, "wnba")):
+        att = shot_attempts(shots.select(SHOT_ATTEMPT_COLUMNS), league=league)
+        assert att.height == shots.height
+        assert att["x"].to_list() == pytest.approx(_coordinate_ft(shots))
+        # where the feed's whole-foot distance is not zeroed it is the coordinate distance rounded
+        kept = shots["shot_distance"] > 0
+        assert ((att["x"] - shots["shot_distance"]).abs().filter(kept) <= 0.5).all()
+
+
+def test_wnba_zeroed_threes_bin_at_their_coordinate_distance(wnba_2025_shots):
+    # same feed defect, worse share: the WNBA arc is 22.146 ft, so every corner and near-arc three is zeroed
+    league = _league(
+        metric_curves(shot_attempts(wnba_2025_shots.select(SHOT_ATTEMPT_COLUMNS), league="wnba"), "wnba"),
+        "fg_pct_by_shot_distance",
+    )
+    assert dict(zip(league["x_lo"], league["attempts"])) == {0.0: 10, 22.0: 12, 23.0: 25, 24.0: 3}
+    assert league["attempts"].sum() == wnba_2025_shots.height == 50
+
+
+def test_a_null_coordinate_falls_back_to_shot_distance(nba_2026_shots):
+    # no sampled 1997-2026 NBA / WNBA shots season has a null coordinate, so null one on real rows
+    shots = (
+        nba_2026_shots.select(SHOT_ATTEMPT_COLUMNS)
+        .with_row_index("i")
+        .with_columns(x_legacy=pl.when(pl.col("i") < 10).then(None).otherwise(pl.col("x_legacy")))
+        .drop("i")
+    )
+    att = shot_attempts(shots)
+    assert att.height == shots.height
+    assert att["x"].head(10).to_list() == shots["shot_distance"].head(10).cast(pl.Float64).to_list()
+    assert att["x"].tail(100).to_list() == pytest.approx(_coordinate_ft(shots.tail(100)))
 
 
 def test_unprojected_pbp_bins_like_the_projected_columns(cfb_pbp):

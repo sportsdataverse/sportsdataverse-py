@@ -6216,9 +6216,17 @@ Override the default TTL for endpoints not matched by the tier rules.
 
 `fg_pct_by_shot_distance` attempts from released `{nba,wnba}_stats_shots`.
 
-Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots with a
-`shot_distance` (feet); success = `shot_result == "Made"`; player = the
-shooter (stats.nba `person_id`); no EPA.
+Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success =
+`shot_result == "Made"`; player = the shooter (stats.nba `person_id`); no EPA.
+
+The distance binned is the exact release distance from the legacy coordinates,
+`sqrt(x_legacy^2 + y_legacy^2) / 10` feet (tenths of a foot, rim at the origin, the
+same on the NBA and WNBA feeds), not the feed's `shot_distance`: stats.nba
+`playbyplayv3` reports `shot_distance` 0 for every three released under 23.5 ft
+(15,378 NBA corner threes in 2025-26; most WNBA threes before the 2013 line move),
+which put them in the 0-1 ft bucket and emptied 22-24 ft, and its whole-foot
+rounding shifts every other bucket by half a foot. `shot_distance` is used only
+when a coordinate is null.
 
 **Parameters**
 
