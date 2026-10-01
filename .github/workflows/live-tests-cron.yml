@@ -20,9 +20,7 @@ on:
     - cron: "0 13 * * 1" # Every Monday at 13:00 UTC
   workflow_dispatch:
 permissions:
-  contents: write # required to push the tutorials-refresh branch
-  issues: write # required to open / update the drift tracking issue
-  pull-requests: write # required to open the tutorials-refresh PR
+  contents: read # each job below widens only what it needs
 concurrency:
   group: live-tests-cron
   cancel-in-progress: false
@@ -30,12 +28,19 @@ jobs:
   live:
     name: pytest --live (ubuntu / py3.13.2)
     runs-on: ubuntu-latest
+    # Runs the tests and notebooks (project + third-party code), so it holds a read-only token:
+    # any step can read a job's token from the runner, so write access lives in the jobs below.
+    permissions:
+      contents: read
     outputs:
       pytest_status: ${{ steps.run-pytest.outcome }}
+      render_status: ${{ steps.render.outcome }}
+      render_failed: ${{ steps.render.outputs.failed }}
+      has_changes: ${{ steps.tutorial-changes.outputs.has_changes }}
     steps:
       - uses: actions/checkout@v5
         with:
-          # The tests and notebooks run third-party code; only the PR step below gets a write token.
+          # No token on disk while project and third-party code runs.
           persist-credentials: false
       - name: Install uv
         # setup-uv stopped publishing major/minor tags at v8 for supply-chain
@@ -101,30 +106,22 @@ jobs:
           if ! uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log; then
             echo "failed=1" >> "$GITHUB_OUTPUT"
           fi
-      - name: Open tutorials refresh PR
-        # The only step holding a write token; it runs no project code. main is
-        # branch-protected (PR-only), so push a refresh branch and open/update a PR.
+      - name: Detect tutorial changes
+        id: tutorial-changes
         if: ${{ !cancelled() && steps.render.outcome == 'success' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
+        # git status, not git diff: a new notebook renders an untracked page.
         run: |
-          if git diff --quiet -- docs/docs/tutorials; then
-            echo "No tutorial changes to publish."
-            exit 0
+          if [ -n "$(git status --porcelain -- docs/docs/tutorials)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
-          gh auth setup-git
-          branch="auto/tutorials-refresh"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$branch"
-          git add docs/docs/tutorials
-          git commit -m "docs(tutorials): refresh executed notebook pages"
-          git push -f origin "$branch"
-          if [ -z "$(gh pr list --head "$branch" --state open --json number -q '.[0].number')" ]; then
-            gh pr create --head "$branch" --base main \
-              --title "docs(tutorials): weekly refresh of executed notebook pages" \
-              --body "Automated re-execution + render of \`examples/notebooks/\` to \`docs/docs/tutorials/\` by \`render_notebooks.py\` (live-tests-cron). Review the output diffs and merge to refresh the rendered tutorials."
-          fi
+      - name: Upload rendered tutorials
+        if: ${{ !cancelled() && steps.tutorial-changes.outputs.has_changes == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: rendered-tutorials
+          path: docs/docs/tutorials
+          if-no-files-found: error
+          retention-days: 7
       - name: Upload notebook render log
         if: always()
         uses: actions/upload-artifact@v7
@@ -149,16 +146,69 @@ jobs:
           path: pytest-live.log
           if-no-files-found: warn
           retention-days: 30
+
+  # Publishes the rendered tutorials on a fresh runner that executes no project code.
+  publish:
+    name: tutorials refresh PR
+    needs: live
+    if: ${{ !cancelled() && needs.live.outputs.has_changes == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the tutorials-refresh branch
+      pull-requests: write # open the tutorials-refresh PR
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download the rendered tutorials
+        uses: actions/download-artifact@v8
+        with:
+          name: rendered-tutorials
+          path: docs/docs/tutorials
+      - name: Open / update the refresh PR
+        # main is PR-only, so push a refresh branch and open/update a PR.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- docs/docs/tutorials)" ]; then
+            echo "No tutorial changes to publish."
+            exit 0
+          fi
+          branch="auto/tutorials-refresh"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add docs/docs/tutorials
+          git commit -m "docs(tutorials): refresh executed notebook pages"
+          git push -f origin "$branch"
+          if [ -z "$(gh pr list --head "$branch" --state open --json number -q '.[0].number')" ]; then
+            gh pr create --head "$branch" --base main \
+              --title "docs(tutorials): weekly refresh of executed notebook pages" \
+              --body "Automated re-execution + render of \`examples/notebooks/\` to \`docs/docs/tutorials/\` by \`render_notebooks.py\` (live-tests-cron). Review the output diffs and merge to refresh the rendered tutorials."
+          fi
+
+  report:
+    name: drift tracking issue
+    needs: live
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write # open / update / close the drift tracking issue
+    steps:
+      - name: Download the logs
+        continue-on-error: true # a missing log is reported in the issue body
+        uses: actions/download-artifact@v8
+        with:
+          pattern: "*-log"
+          merge-multiple: true
       # Open or update the drift tracking issue on failure. One issue
       # per drift event — subsequent failures comment on the same issue
       # so we don't fan out into a stream of duplicates. Closing the
       # issue (e.g. after fixing the regression) resets state.
       - name: Open / update drift tracking issue
         # Also opens when only the tutorial render failed (that step records it instead of failing).
-        if: ${{ !cancelled() && (steps.run-pytest.outcome == 'failure' || steps.render.outputs.failed == '1') }}
+        if: ${{ needs.live.outputs.pytest_status == 'failure' || needs.live.outputs.render_failed == '1' }}
         uses: actions/github-script@v9
         env:
-          LOG_FILE: ${{ steps.run-pytest.outcome == 'failure' && 'pytest-live.log' || 'render-notebooks.log' }}
+          LOG_FILE: ${{ needs.live.outputs.pytest_status == 'failure' && 'pytest-live.log' || 'render-notebooks.log' }}
         with:
           script: |
             const fs = require('fs');
@@ -231,7 +281,10 @@ jobs:
       # tracker filled with resolved issues (#416 sat open for a week after
       # d7a8c7829 fixed it).
       - name: Close drift tracking issue on green
-        if: success() && steps.run-pytest.outcome == 'success' && steps.render.outputs.failed != '1'
+        # A completed render is required: a branch dispatch skips it, which proves nothing.
+        if: >-
+          ${{ needs.live.outputs.pytest_status == 'success' && needs.live.outputs.render_status == 'success'
+          && needs.live.outputs.render_failed != '1' }}
         uses: actions/github-script@v9
         with:
           script: |
