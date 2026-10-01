@@ -20411,6 +20411,9 @@ load_nhl_penalties:
   committedByPlayer.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
+  committedByPlayer.lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs
+    from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
+    them instead -- so treat it as an alternate spelling, not a canonical one.
   committedByPlayer.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
@@ -20455,6 +20458,9 @@ load_nhl_penalties:
   drawnBy.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from
     the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
+  drawnBy.lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs from the
+    default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them
+    instead -- so treat it as an alternate spelling, not a canonical one.
   drawnBy.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the
     default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them
     instead -- so treat it as an alternate spelling, not a canonical one.
@@ -20464,6 +20470,10 @@ load_nhl_penalties:
   drawnBy.sweaterNumber: Jersey number of the opposing player credited with drawing the infraction; null whenever no victim
     is credited, as on all bench and game-misconduct penalties.
   servedBy.cs: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing
+    from the default by diacritics or by an alternate given-name form.
+  servedBy.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
+    from the default by diacritics or by an alternate given-name form.
+  servedBy.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
     from the default by diacritics or by an alternate given-name form.
   servedBy.default: Abbreviated name, in the feed's default English locale, of the player serving the penalty.
   servedBy.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
@@ -20541,6 +20551,9 @@ load_nhl_scoring:
   lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
+  lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
   lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
@@ -20553,8 +20566,12 @@ load_nhl_scoring:
     from the default by diacritics or by an alternate given-name form.
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
+  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
+    from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fr: Alternate abbreviated name (first initial plus family name) published under the NHL feed's French key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
@@ -20631,8 +20648,12 @@ load_nhl_three_stars:
     from the default by diacritics or by an alternate given-name form.
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
+  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
+    from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fr: Alternate abbreviated name (first initial plus family name) published under the NHL feed's French key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
