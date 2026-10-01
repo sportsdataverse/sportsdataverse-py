@@ -70,6 +70,7 @@ ATTEMPT_SCHEMA: dict[str, pl.DataType] = {
     "x": pl.Float64,
     "success": pl.Boolean,
     "epa": pl.Float64,
+    "id_source": pl.Utf8,
 }
 
 OUTPUT_SCHEMA: dict[str, pl.DataType] = {
@@ -177,6 +178,7 @@ def _attempts(
     player_name: pl.Expr,
     team_id: pl.Expr,
     team_name: pl.Expr,
+    id_source: str,
     down: pl.Expr = _NO_DOWN,
     epa: pl.Expr = _NO_EPA,
 ) -> pl.DataFrame:
@@ -192,6 +194,7 @@ def _attempts(
         x.cast(pl.Float64).alias("x"),
         success.cast(pl.Boolean).alias("success"),
         epa.cast(pl.Float64).alias("epa"),
+        pl.lit(id_source).alias("id_source"),
     )
 
 
@@ -253,10 +256,12 @@ def football_attempts(pbp: pl.DataFrame) -> pl.DataFrame:
     """
     if pbp.height == 0:
         return pl.DataFrame(schema=ATTEMPT_SCHEMA)
-    plays = pbp
+    # project first: load_cfb_pbp also carries ESPN's raw start.down / start.distance,
+    # which _standing_scrimmage would prefer over the repaired down / distance.
+    plays = pbp.select([c for c in FOOTBALL_ATTEMPT_COLUMNS if c in pbp.columns])
     if "seasonType" in plays.columns:
         plays = plays.filter(pl.col("seasonType").cast(pl.Int64, strict=False).is_in(_ESPN_SEASON_TYPES))
-    team = dict(team_id=_as_id(plays, "pos_team_id"), team_name=pl.col("pos_team"))
+    team = dict(team_id=_as_id(plays, "pos_team_id"), team_name=pl.col("pos_team"), id_source="espn")
     frames = []
     fg = plays.filter((pl.col("fg_attempt") == True) & pl.col("yds_fg").is_not_null())  # noqa: E712
     frames.append(
@@ -288,7 +293,7 @@ def football_attempts(pbp: pl.DataFrame) -> pl.DataFrame:
     standing = _standing_scrimmage(plays).filter(
         pl.col("td_down").is_between(1, 4) & pl.col("td_distance").is_not_null()
     )
-    fourth = standing.filter((pl.col("td_down") == 4) & (pl.col("u_rush") | pl.col("u_pass")))
+    fourth = standing.filter((pl.col("td_down") == 4) & ((pl.col("u_rush") == True) | (pl.col("u_pass") == True)))  # noqa: E712
     frames.append(
         _attempts(
             fourth,
@@ -367,7 +372,7 @@ def nflfastr_attempts(pbp: pl.DataFrame) -> pl.DataFrame:
     plays = pbp
     if "season_type" in plays.columns:
         plays = plays.filter(pl.col("season_type").is_in(_NFLFASTR_SEASON_TYPES))
-    team = dict(team_id=_as_id(plays, "posteam"), team_name=pl.col("posteam"))
+    team = dict(team_id=_as_id(plays, "posteam"), team_name=pl.col("posteam"), id_source="gsis")
     frames = []
     fg = plays.filter((pl.col("field_goal_attempt") == 1) & pl.col("kick_distance").is_not_null())
     frames.append(
@@ -433,7 +438,7 @@ def nflfastr_attempts(pbp: pl.DataFrame) -> pl.DataFrame:
     return _finish(frames)
 
 
-def shot_attempts(shots: pl.DataFrame) -> pl.DataFrame:
+def shot_attempts(shots: pl.DataFrame, league: str = "nba") -> pl.DataFrame:
     """``fg_pct_by_shot_distance`` attempts from released ``{nba,wnba}_stats_shots``.
 
     Regular-season (``season_type_id`` ``"2"``) and playoff (``"4"``) shots with a
@@ -442,12 +447,15 @@ def shot_attempts(shots: pl.DataFrame) -> pl.DataFrame:
 
     Args:
         shots: ``load_{nba,wnba}_stats_shots`` rows, any number of seasons (project to ``SHOT_ATTEMPT_COLUMNS``).
+        league: ``"nba"`` (default) or ``"wnba"`` -- which stats site the ids come from; stamps
+            ``id_source`` ``nba_stats`` / ``wnba_stats``.
 
     Returns:
         pl.DataFrame: one row per shot, ``ATTEMPT_SCHEMA``; ``season`` is the asset's key (END year for the NBA).
 
     Raises:
         TypeError: an id column is float.
+        ValueError: ``league`` is not ``"nba"`` or ``"wnba"``.
 
     Example:
         Quick start::
@@ -465,6 +473,8 @@ def shot_attempts(shots: pl.DataFrame) -> pl.DataFrame:
 
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
+    if league not in ("nba", "wnba"):
+        raise ValueError(f"league must be 'nba' or 'wnba', got {league!r}")
     if shots.height == 0:
         return pl.DataFrame(schema=ATTEMPT_SCHEMA)
     made = shots.filter(
@@ -483,6 +493,7 @@ def shot_attempts(shots: pl.DataFrame) -> pl.DataFrame:
                 player_name=pl.col("player_name"),
                 team_id=_as_id(made, "team_id"),
                 team_name=pl.col("team_tricode"),
+                id_source=ID_SOURCE[league],
             )
         ]
     )
@@ -529,8 +540,10 @@ def metric_curves(attempts: pl.DataFrame, league: str) -> pl.DataFrame:
 
     Args:
         attempts: one row per attempt x metric (from an adapter), any number of seasons.
-        league: ``"cfb"``, ``"nfl"``, ``"nba"`` or ``"wnba"`` -- stamps ``id_source``
-            (:data:`ID_SOURCE`); the curves themselves are league-agnostic.
+        league: ``"cfb"``, ``"nfl"``, ``"nba"`` or ``"wnba"``. The curves are league-agnostic;
+            ``league`` only supplies the default ``id_source`` (:data:`ID_SOURCE`) when the
+            attempts frame carries no ``id_source`` column. An adapter's column wins, so the
+            ESPN adapter on NFL pbp keeps ``espn`` whatever ``league`` says.
 
     Returns:
         pl.DataFrame: one row per (season, entity, metric, down, bucket), ``OUTPUT_SCHEMA``:
@@ -546,7 +559,8 @@ def metric_curves(attempts: pl.DataFrame, league: str) -> pl.DataFrame:
 
     Raises:
         TypeError: ``player_id`` / ``team_id`` is float.
-        ValueError: unknown ``league``, or a ``metric`` with no bucket edges.
+        ValueError: unknown ``league``, a ``metric`` with no bucket edges, or an attempts frame
+            that mixes id namespaces (more than one ``id_source``).
 
     Example:
         Quick start::
@@ -562,16 +576,32 @@ def metric_curves(attempts: pl.DataFrame, league: str) -> pl.DataFrame:
         Pipeline next step (one line)::
 
             curves.filter((pl.col("entity_type") == "player") & (pl.col("attempts") >= 10)).sort("rate", descending=True)
+
+        See Also:
+            * :func:`football_attempts`, :func:`nflfastr_attempts`, :func:`shot_attempts` -- the
+              adapters that build ``attempts`` and stamp its ``id_source``.
+            * :func:`sportsdataverse.rolling_windows.rolling_windows` -- the sibling event-window
+              derivation with the same id discipline and entity labels.
+            * `nflfastR`_ -- the success and air-yards conventions the football curves mirror.
+
+        .. _nflfastR: https://www.nflfastr.com
     """
     if league not in ID_SOURCE:
         raise ValueError(f"league must be one of {sorted(ID_SOURCE)}, got {league!r}")
     if attempts.height == 0:
         return pl.DataFrame(schema=OUTPUT_SCHEMA)
+    id_source = ID_SOURCE[league]
+    if "id_source" in attempts.columns:
+        sources = sorted(attempts["id_source"].drop_nulls().unique().to_list())
+        if len(sources) > 1:
+            raise ValueError(f"attempts mix id namespaces: {sources}")
+        id_source = sources[0] if sources else id_source
+    cols = {k: v for k, v in ATTEMPT_SCHEMA.items() if k != "id_source"}
     att = attempts.select(
-        *[c for c in ATTEMPT_SCHEMA if c not in ("player_id", "team_id")],
+        *[c for c in cols if c not in ("player_id", "team_id")],
         _as_id(attempts, "player_id").alias("player_id"),
         _as_id(attempts, "team_id").alias("team_id"),
-    ).cast(ATTEMPT_SCHEMA)
+    ).cast(cols)
     unknown = sorted(set(att["metric"].unique()) - set(BUCKET_EDGES))
     if unknown:
         raise ValueError(f"metric(s) without bucket edges: {unknown}")
@@ -587,7 +617,7 @@ def metric_curves(attempts: pl.DataFrame, league: str) -> pl.DataFrame:
     ]
     out = pl.concat(parts).with_columns(
         rate=pl.col("successes") / pl.col("attempts"),
-        id_source=pl.lit(ID_SOURCE[league]),
+        id_source=pl.lit(id_source),
     )
     return (
         out.select(list(OUTPUT_SCHEMA))

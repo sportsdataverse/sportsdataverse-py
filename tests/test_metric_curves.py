@@ -7,9 +7,12 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from polars.testing import assert_frame_equal
+
 from sportsdataverse.metric_curves import (
     ATTEMPT_SCHEMA,
     BUCKET_EDGES,
+    FOOTBALL_ATTEMPT_COLUMNS,
     OUTPUT_SCHEMA,
     football_attempts,
     metric_curves,
@@ -207,7 +210,31 @@ def test_curry_shot_attempts_sum_to_2833(curry_shots):
         zip(BUCKET_EDGES["fg_pct_by_shot_distance"][:-1], BUCKET_EDGES["fg_pct_by_shot_distance"][1:])
     )
     assert (35.0, 50.0) in set(zip(league["x_lo"], league["x_hi"]))
-    assert metric_curves(shot_attempts(curry_shots), "wnba")["id_source"].unique().to_list() == ["wnba_stats"]
+    assert metric_curves(shot_attempts(curry_shots, league="wnba"), "wnba")["id_source"].unique().to_list() == [
+        "wnba_stats"
+    ]
+
+
+def test_unprojected_pbp_bins_like_the_projected_columns(cfb_pbp):
+    # load_cfb_pbp carries ESPN's raw start.down / start.distance beside the repaired down /
+    # distance, and usage_box._standing_scrimmage prefers start.* when present; the adapter
+    # projects to FOOTBALL_ATTEMPT_COLUMNS first so a full frame reads the repaired columns.
+    assert {"start.down", "start.distance"} <= set(cfb_pbp.columns)
+    assert_frame_equal(football_attempts(cfb_pbp), football_attempts(cfb_pbp.select(FOOTBALL_ATTEMPT_COLUMNS)))
+
+
+def test_id_source_comes_from_the_adapter_not_the_league(cfb_pbp, nfl_pbp, curry_shots):
+    att = football_attempts(cfb_pbp)
+    assert set(att["id_source"]) == {"espn"}
+    assert set(metric_curves(att, "nfl")["id_source"]) == {"espn"}  # ESPN NFL pbp keeps ESPN ids
+    assert set(nflfastr_attempts(nfl_pbp)["id_source"]) == {"gsis"}
+    assert set(shot_attempts(curry_shots)["id_source"]) == {"nba_stats"}
+    assert set(shot_attempts(curry_shots, league="wnba")["id_source"]) == {"wnba_stats"}
+    with pytest.raises(ValueError, match="namespace"):
+        metric_curves(pl.concat([att, nflfastr_attempts(nfl_pbp)]), "nfl")
+    assert set(metric_curves(att.drop("id_source"), "cfb")["id_source"]) == {"espn"}  # no column: league default
+    with pytest.raises(ValueError, match="league"):
+        shot_attempts(curry_shots, league="cfb")
 
 
 # --------------------------------------------------------------------------- contract

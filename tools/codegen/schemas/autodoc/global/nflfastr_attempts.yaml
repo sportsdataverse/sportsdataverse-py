@@ -32,3 +32,6 @@ columns:
 - name: epa
   type: double
   description: ''
+- name: id_source
+  type: character
+  description: ''

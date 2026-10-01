@@ -32,7 +32,10 @@ threw a pass.
    `sportsdataverse/metric_curves.py`: `yds_fg, fg_attempt, fg_made,
    fg_kicker_player_id, fg_kicker_player_name, air_yards, completion,
    pass_attempt, distance, first_down_created, touchdown, penalty_no_play,
-   scrimmage_play, defense_score_play`), concatenated `how="diagonal_relaxed"`.
+   scrimmage_play, defense_score_play`) and ESPN's raw `start.down, start.distance`
+   (so `football_attempts` is exercised on a frame that carries both the raw and
+   the repaired down/distance, as `load_cfb_pbp` does), concatenated
+   `how="diagonal_relaxed"`.
    The blobs are read at the pinned commit (`git show <sha>:<path>`), so the
    2026-10-01 regeneration that added the metric_curves columns changed no
    row: the rolling_windows hand counts below still hold.
@@ -45,13 +48,15 @@ threw a pass.
 
 ## Expected counts
 
-- `pbp.height` = 6048 (33 columns)
+- `pbp.height` = 6048 (35 columns)
 - `pbp["game_id"].n_unique()` = 36
 - `sched.height` = 36
 - metric_curves populations: 102 field-goal attempts (74 made; one at 19
   yards, four at exactly 45), 4,704 standing scrimmage plays on downs 1-4 with
   a distance, 126 fourth-down rushes/passes that stood (70 converted), and no
-  `air_yards` at all (CFB air yards are 2025+ only).
+  `air_yards` at all (CFB air yards are 2025+ only). `start.down` /
+  `start.distance` equal `down` / `distance` on every standing play (measured on
+  all five released seasons at the pinned commit and at HEAD `38a878fd`).
 
 Reproduced exactly against the source above.
 
