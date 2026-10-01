@@ -54,6 +54,7 @@ from __future__ import annotations
 import copy
 import gzip
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -61,7 +62,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.cfb.cfb_pbp import _UNTYPED_ADMIN_RE, CFBPlayProcess
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -459,7 +460,11 @@ def _raw_ids(summary: dict, *, admin: bool = True) -> set[int]:
         for drives in summary["drives"].values()
         for d in (drives if isinstance(drives, list) else [drives])
         for p in d["plays"]
-        if admin or p.get("type", {}).get("text") not in _ADMIN_TYPES
+        if admin
+        or not (
+            p.get("type", {}).get("text") in _ADMIN_TYPES
+            or (p.get("type", {}).get("text") is None and re.search(_UNTYPED_ADMIN_RE, p.get("text") or ""))
+        )
     }
 
 
