@@ -3,6 +3,9 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down](#fixed--cfb-2007-13-touchdowns-filed-as-their-own-kick-get-the-snaps-down)
+  - [Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy](#fixed--cfb-blocked-field-goals-keep-espns-type-641-null-keys-never-twin-a-play-copy)
+  - [Added — the metric registry (`sportsdataverse.registry`)](#added--the-metric-registry-sportsdataverseregistry)
   - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
   - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
   - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
@@ -309,6 +312,49 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down
+
+ESPN's 2005-13 feed writes down and distance -1 on plays with no down (kickoffs, tries,
+penalties on tries: 119,040 rows). In 2007-13 it also filed some touchdowns as ONE row with their
+extra point, typed as the kick, so the row carries the try's start state. `__helper_cfb_pbp_features`
+already retypes those 248 rows to the pass or rush touchdown and takes the snap's spot from the
+text ("for 36 yards"), but kept down -1: the EP model's down one-hots were all zero and scored the
+snap as no down at all (302602440's 59-yard rushing touchdown: EP_start 0.11). The down and distance
+are now the end state of the play before, when that play ended at the snap's spot (219 of the 248,
+a change of possession included: ESPN's end state is already the new offence's), and otherwise 1st
+and 10 (goal to go inside the 10); ESPN's "& Goal" distance 0 is the distance to the goal line. All
+247 such rows in their 86 games now carry a down 1-4 (was -1); EP_start median 3.8 -> 4.5.
+
+### Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy
+
+Four string relabels in `__helper_cfb_pbp_features` turned any type containing "field goal" or
+"extra point" plus "blocked" or "no good" into "Extra Point Missed". On ESPN's types they only ever
+matched "Blocked Field Goal" and "Blocked Field Goal Touchdown" (1,061 rows 2004–26), which then
+went through the kick rules after them, and the one later rule that restores the type reads the
+text: 12 blocked field goals finished as "Penalty" (400547866, EPA +1.69), 4 as an "Extra Point
+Missed" try (400548023), and 55 blocked-field-goal return touchdowns as a plain "Blocked Field
+Goal" (400547865: the defence's touchdown lost, EPA -0.93 -> -7.7). The four rules are removed;
+ESPN's types stand. Found porting the relabel block to cfbfastR (sportsdataverse/cfbfastR#175).
+
+`_drop_espn_play_copies` twins a play with a later copy through a self-join on the drive and start
+state. Polars (1.40–1.44) matches rows whose join key has four or more null columns despite
+`nulls_equal=False`, so plays with no drive, team, down or distance could be dropped as a stale
+batch. Null keys are now dropped before the join; no game in the raw corpus was affected.
+### Added — the metric registry (`sportsdataverse.registry`)
+
+`sportsdataverse/registry/metrics.yaml` is the one source for how a published football metric is
+displayed: label, short label, axis label, format (`num2` / `num1` / `pct1` / `int`), polarity
+(`higher` / `lower`, from the offense or player perspective), family, qualifier, glossary slug and
+per-basis variants, one entry per base metric. `resolve(column)` maps any published column
+(`EPAplay_off_pass_rank`, `adj_def_epa`, `havoc_margin`) onto its entry plus the column's side,
+phase, suffix and effective polarity: `_def` flips the base's, a `_margin` is always higher-is-
+better (every producer margin is good-minus-bad). `python -m sportsdataverse.registry --ts
+--target gop|web` renders a deterministic TypeScript module (`METRICS` + `resolveMetric`) headed
+by the sdv-py version and a sha256 of its body, which Game on Paper and the web platform generate
+their copies from instead of keeping four drifting tables. The yaml ships in the wheel and is
+read without PyYAML, like `validation/thresholds.yaml`. Documented under *Architecture → Metric
+registry*.
 
 ### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
 
