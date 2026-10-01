@@ -313,6 +313,38 @@
 
 ## Unreleased
 
+### Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows
+
+Three ESPN feed defects, sized on the 20,080 processed games of 2004-26:
+
+- **ESPN scored the row; sdv-py did not (~650 rows).** The touchdown or field goal is in ESPN's
+  `scoringPlay` and the score, but no text rule names it. Examples: a pick-six on a frozen
+  scoreboard (169; 282640084 "... returned for 40 yards for a TOUCHDOWN." at 28-20 before and
+  after), a 2004-07 "Vernon Gholston 21 yd fumble return." (177), a 2014+ fumble return closed
+  by "(Aaron Boumerhi KICK)" (168), and field goals typed as the snap before them. Each realised
+  the play's model end state instead of the points. A last pass, `_type_espn_scored_rows`, types
+  these from the row itself:
+  - **Who scored** is the start team's margin change: ±6-8 a touchdown, +3 a field goal. On a
+    frozen board, the play family decides, provided the text or ESPN's `scoringType` says
+    touchdown.
+  - **Rows left alone:** a row whose margin credits the other side than its family (ESPN's start
+    team is the returner), and a frozen-board fumble on a rush or pass, whose side the text
+    cannot settle.
+  - **Kickoff return touchdowns keep their score at the end of a game.** Miami's eight-lateral
+    return at Duke (2015) closes the game and is a touchdown, not a dead possession.
+- **Textless copies (~180 rows).** A row with no text whose drive has a texted row of the same
+  type, period and start state is a copy and is dropped. ESPN files it before the play at the
+  previous play's clock (401403886, 2022: eleven punts and sacks, each booked twice) or after it
+  (2007-15).
+- **Untyped admin rows (1,387 in 483 games).** These are dropped before the plays are ordered: the 2004
+  quarter and game markers, "Begin Drive", "PURDUE drive start at 15:00 (OT ).", empty rows, and a
+  try alone in parentheses ("(Sean O'Haire Kick)" ahead of the touchdown row that carries it).
+  As "Unknown" (or "End Period") rows they carried model EPA up to 4. In the drive of
+  401752914's touchdown, the kick fragment also moved that touchdown to the end of the game.
+
+On a 200-game random sample (32,146 rows), nothing else changed: 7 rows were retyped to the score,
+8 dropped (6 admin, 2 textless copies), and 3 next to them moved EPA.
+
 ### Fixed — CFB plays that end a half leave a possession worth nothing
 
 A play ends the half when it is the first half's last play, regulation's last play in a game that

@@ -245,6 +245,18 @@ def _trimmed(game_id: int) -> dict:
       plays share text and start state in the same quarter, on different drives.
     * ``summary_400547699_trimmed.json.gz`` -- SMU @ Memphis, 2014 week 9. The last snap is at
       0:00, after a rush to the 5 with 0:30 left.
+    * ``summary_282640084_trimmed.json.gz`` -- Ball State @ Indiana, 2008 week 4. A pick-six ESPN
+      scores on a scoreboard frozen at 28-20.
+    * ``summary_272650194_trimmed.json.gz`` -- Northwestern @ Ohio State, 2007 week 4. "Vernon
+      Gholston 21 yd fumble return." -- a touchdown with no touchdown in its text.
+    * ``summary_401234617_trimmed.json.gz`` -- Georgia Tech @ Boston College, 2020. A fumble return
+      closed by "(Aaron Boumerhi KICK)", typed "Fumble Recovery (Opponent)".
+    * ``summary_400756970_trimmed.json.gz`` -- Miami @ Duke, 2015. Miami's eight-lateral kickoff
+      return for the winning touchdown, typed "Kickoff Return (Offense)", on the game's last play.
+    * ``summary_401403886_trimmed.json.gz`` -- Ole Miss @ Georgia Tech, 2022. Eleven punts and
+      sacks filed twice: a textless copy at the previous play's clock, then the play.
+    * ``summary_401752914_trimmed.json.gz`` -- Michigan @ Maryland, 2025. "(Sean O'Haire Kick)"
+      filed alone, untyped, ahead of the touchdown row that carries it.
     """
     with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         return json.load(fh)
@@ -313,9 +325,9 @@ def test_repeated_start_state_rows_all_survive():
 
     plays = _offline_plays(242972641)
     lost = Counter(p["text"] for p in feed) - Counter(plays["text"].to_list())
-    # only the quarter-end markers the pipeline drops downstream -- no real play
-    assert all(text.startswith("End of the") for text in lost), lost
-    assert plays.height == 217
+    # only the untyped period and game markers the pipeline drops -- no real play
+    assert all(text.startswith(("End of the", "Start of the")) for text in lost), lost
+    assert plays.height == 214
 
 
 # persisted core-odds values (cfbfastR-cfb-raw/cfb/betting/json/{id}.json): the 2025 summaries
@@ -634,7 +646,8 @@ def test_a_try_row_repeating_a_realised_try_realises_nothing() -> None:
       TOUCHDOWN. Graham Harrell pass to Detron Lewis two-point conversion GOOD." (EP_end 8),
       then "Graham Harrell pass to Detron Lewis two-point conversion GOOD." as its own row,
       which added +1.08 on top.
-    * 293182305: a good two, then an empty "2pt Conversion" row (typed Missed, -0.92).
+    * 293182305: a good two, then an empty "2pt Conversion" row (typed Missed, -0.92): a
+      textless copy of the two, dropped.
     * 292542649: "Two-point conversion attempt, Aaron Opelt pass failed." ESPN flags as a
       scoring play (the score stays 6-0); the text wins, so it is a missed two, not a made one.
     """
@@ -650,9 +663,8 @@ def test_a_try_row_repeating_a_realised_try_realises_nothing() -> None:
     tries = plays.filter(pl.col("orig_play_type") == "2pt Conversion")
     assert tries["text"].fill_null("").str.strip_chars().to_list() == [
         "Two-point conversion attempt, Zac Lee pass to Niles Paul GOOD.",
-        "",
     ]
-    assert tries["EPA"].to_list() == pytest.approx([1.08, 0])
+    assert tries["EPA"].to_list() == pytest.approx([1.08])
 
     plays = _offline_plays(292542649)
     r = plays.filter(pl.col("text").str.contains("Aaron Opelt pass failed")).row(0, named=True)
@@ -1330,3 +1342,52 @@ def test_a_live_games_latest_play_does_not_end_the_half() -> None:
     last = proc.plays_frame.row(-1, named=True)
     assert last["end_of_half"] is False
     assert last["EP_end"] != 0.0
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "scored_as"),
+    [
+        (282640084, 282640084110, "Interception Return Touchdown"),
+        (272650194, 272650194040, "Fumble Recovery (Opponent) Touchdown"),
+        (401234617, 401234617102878701, "Fumble Recovery (Opponent) Touchdown"),
+    ],
+)
+def test_a_score_espn_marks_is_typed_from_the_row(game_id: int, play_id: int, scored_as: str) -> None:
+    """ESPN scores the row but no text rule names the touchdown: a pick-six on a frozen
+    scoreboard (no margin change to say who scored), a 2004-07 "21 yd fumble return.", and a
+    2014+ fumble return closed by the kick. Each realised the model's end state (EP_end about
+    +0.3) instead of the defence's touchdown."""
+    row = _offline_plays(game_id).filter(pl.col("id") == play_id).row(0, named=True)
+    assert row["type.text"] == scored_as
+    assert row["EP_end"] <= -6.0
+
+
+def test_a_game_ending_kickoff_return_touchdown_keeps_its_score() -> None:
+    """400756970: Miami's eight-lateral kickoff return beat Duke on the game's last play. Typed
+    "Kickoff Return (Offense)", it realised a dead possession at the end of the game; it is a
+    kickoff return touchdown, and the end of the game does not take its points away."""
+    last = _offline_plays(400756970).row(-1, named=True)
+    assert (last["type.text"], last["end_of_half"]) == ("Kickoff Return Touchdown", True)
+    assert last["EP_end"] > 6.0
+    assert last["EPA"] == pytest.approx(last["EP_end"] - last["EP_start"])
+
+
+def test_a_textless_copy_of_a_play_is_dropped() -> None:
+    """401403886: ESPN files eleven punts and sacks twice -- a row with no text at the previous
+    play's clock, then the play with its text. Kept, each was booked twice."""
+    plays = _offline_plays(401403886)
+    assert plays.filter(pl.col("id") == 401403886101928402).height == 0
+    assert plays.filter(pl.col("id") == 401403886101929001).height == 1
+    textless = plays.filter((pl.col("text").fill_null("").str.strip_chars() == "") & (pl.col("type.text") != "Timeout"))
+    assert textless.height == 0
+
+
+def test_an_untyped_try_fragment_is_not_a_play() -> None:
+    """401752914 files "(Sean O'Haire Kick)" alone and untyped ahead of the touchdown row that
+    carries the kick. Scored as a snap it booked EPA 0.42, and as a row in the touchdown's drive
+    it moved the touchdown to the end of the game; the touchdown stays before its kickoff."""
+    plays = _offline_plays(401752914).with_row_index("i")
+    assert plays.filter(pl.col("id") == 401752914786).height == 0
+    td = plays.filter(pl.col("id") == 401752914787).row(0, named=True)
+    after = plays.filter(pl.col("i") == td["i"] + 1).row(0, named=True)
+    assert (td["type.text"], after["id"]) == ("Passing Touchdown", 401752914738)
