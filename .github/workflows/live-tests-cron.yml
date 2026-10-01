@@ -34,6 +34,9 @@ jobs:
       pytest_status: ${{ steps.run-pytest.outcome }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The tests and notebooks run third-party code; only the PR step below gets a write token.
+          persist-credentials: false
       - name: Install uv
         # setup-uv stopped publishing major/minor tags at v8 for supply-chain
         # hardening (https://github.com/astral-sh/setup-uv/releases/tag/v8.0.0).
@@ -59,6 +62,8 @@ jobs:
           set -o pipefail
           uv run --frozen pytest --maxfail=10 -rN 2>&1 | tee pytest-live.log
       - name: Run example notebooks (nbmake)
+        # !cancelled(): run even when the live tests failed, so a drift week still gets the notebook signal.
+        if: ${{ !cancelled() }}
         # The example notebooks hit the same live APIs. Flakiness here shouldn't
         # mask the core live-test drift signal (the tracking issue keys off the
         # run-pytest step), so this leg is informational: continue-on-error with a
@@ -74,33 +79,40 @@ jobs:
         run: |
           set -o pipefail
           uv run --frozen pytest --nbmake examples/notebooks/ -q -rN 2>&1 | tee pytest-notebooks.log
-      - name: Render notebook tutorials and open refresh PR
+      - name: Render notebook tutorials
         # Re-execute the example notebooks and render them (with outputs) to
-        # docs/docs/tutorials/. main is branch-protected (PR-only), so we push a
-        # refresh branch and open/update a PR rather than committing to main.
-        # Informational: a live-API flake here shouldn't fail the cron.
-        continue-on-error: true
+        # docs/docs/tutorials/. Only from main: a dispatch from another branch would
+        # otherwise build the refresh PR on top of that branch's unmerged commits.
+        id: render
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
         env:
           SDV_PY_LIVE_TESTS: "1"
-          GH_TOKEN: ${{ github.token }}
           # Optional: set the ODDS_API_KEY repo secret to refresh the betting-odds
           # tutorial with live outputs; unset -> it re-renders the key-guarded
-          # fallback. The step is continue-on-error, so a quota/transient odds
-          # failure can't break the weekly refresh of the other tutorials.
+          # fallback. A quota/transient odds failure only marks the render failed
+          # below; it can't block the refresh of the other tutorials.
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
+          # render_notebooks.py exits 1 if ANY of the 12 live notebooks flakes, but it
+          # still writes the pages that DID render (a failed notebook keeps its prior
+          # page). Record the failure for the drift issue instead of failing here, so
+          # one weekly flake never skips publishing the pages that did render.
           set -o pipefail
-          # render_notebooks.py exits 1 if ANY of the 12 live notebooks flakes, but
-          # it still writes the pages that DID render. `|| true` keeps that partial
-          # failure from aborting the step here (under `set -o pipefail`) so the
-          # commit/PR below still publishes the refreshed pages — failed notebooks
-          # simply keep their prior page (no diff). Without this, one weekly flake
-          # (near-certain across 12 live notebooks) skips the refresh entirely.
-          uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log || true
+          if ! uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log; then
+            echo "failed=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Open tutorials refresh PR
+        # The only step holding a write token; it runs no project code. main is
+        # branch-protected (PR-only), so push a refresh branch and open/update a PR.
+        if: ${{ !cancelled() && steps.render.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
           if git diff --quiet -- docs/docs/tutorials; then
             echo "No tutorial changes to publish."
             exit 0
           fi
+          gh auth setup-git
           branch="auto/tutorials-refresh"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -142,19 +154,23 @@ jobs:
       # so we don't fan out into a stream of duplicates. Closing the
       # issue (e.g. after fixing the regression) resets state.
       - name: Open / update drift tracking issue
-        if: failure() && steps.run-pytest.outcome == 'failure'
+        # Also opens when only the tutorial render failed (that step records it instead of failing).
+        if: ${{ !cancelled() && (steps.run-pytest.outcome == 'failure' || steps.render.outputs.failed == '1') }}
         uses: actions/github-script@v9
+        env:
+          LOG_FILE: ${{ steps.run-pytest.outcome == 'failure' && 'pytest-live.log' || 'render-notebooks.log' }}
         with:
           script: |
             const fs = require('fs');
+            const logFile = process.env.LOG_FILE;
             let logTail = '';
             try {
-              const log = fs.readFileSync('pytest-live.log', 'utf8');
+              const log = fs.readFileSync(logFile, 'utf8');
               // Last 4 KB of the log -- usually contains the summary lines
               // plus enough context to identify which assertions failed.
               logTail = log.slice(-4000);
             } catch (e) {
-              logTail = `(could not read pytest-live.log: ${e.message})`;
+              logTail = `(could not read ${logFile}: ${e.message})`;
             }
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const today = new Date().toISOString().slice(0, 10);
@@ -163,7 +179,7 @@ jobs:
               ``,
               `Run: ${runUrl}`,
               ``,
-              `<details><summary>Last 4KB of pytest output</summary>`,
+              `<details><summary>Last 4KB of ${logFile}</summary>`,
               ``,
               '```',
               logTail,
@@ -215,7 +231,7 @@ jobs:
       # tracker filled with resolved issues (#416 sat open for a week after
       # d7a8c7829 fixed it).
       - name: Close drift tracking issue on green
-        if: success() && steps.run-pytest.outcome == 'success'
+        if: success() && steps.run-pytest.outcome == 'success' && steps.render.outputs.failed != '1'
         uses: actions/github-script@v9
         with:
           script: |
