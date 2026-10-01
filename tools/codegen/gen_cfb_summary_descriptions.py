@@ -55,6 +55,12 @@ BASES: dict[str, str] = {
     "line_yards": "average line yards credited to the offensive line on rushes",
     "opportunity_rate": "opportunity rate -- opportunity-flagged rushes as a share of all plays",
     "start_position": "average drive start position, measured in yards from the opponent goal line",
+    # team_summaries.py::_drives -- mean ep over the side's OWNED drives; off rank descending,
+    # def rank ascending (less EP handed to opponents ranks first), margin = off - def.
+    "drive_start_ep": "average expected points (EP) at the first snap of a drive, over the drives the side owned",
+    # team_summaries.py::_havoc_and_expected_turnovers -- EPA per game on havoc snaps; the
+    # offense's own snaps for _off (its cost, negative), opponents' snaps it disrupted for _def.
+    "havoc_EPAgame": "EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those snaps",
 }
 
 SIDE = {
@@ -228,6 +234,54 @@ EXTRA |= {
         "better. Spelled singular; there is no turnovers_margin column."
     ),
     "turnover_margin_rank": "National rank of turnover_margin, 1 = largest margin.",
+}
+
+# Expected turnovers + turnover luck (team_summaries.py::_havoc_and_expected_turnovers,
+# ::_add_turnover_luck) and the havoc-rate margin (::_summarize_plays). All off the grid:
+# the margins are spelled singular / without a side, and havoc_margin runs def - off.
+_XTO = (
+    "half of every scrimmage fumble, plus interceptions at the season's national share of passes defensed "
+    "(INT + PBU) that were intercepted"
+)
+EXTRA |= {
+    "expected_turnovers_off": f"Expected giveaways per game: {_XTO}, counted on the team's own plays. Lower is better.",
+    "expected_turnovers_def": (
+        f"Expected takeaways per game: {_XTO}, counted on opponents' plays against the team's defense. "
+        "Higher is better."
+    ),
+    "expected_turnovers_off_rank": (
+        "National rank of expected_turnovers_off, where 1 is best (fewest expected giveaways per game)."
+    ),
+    "expected_turnovers_def_rank": (
+        "National rank of expected_turnovers_def, where 1 is best (most expected takeaways per game)."
+    ),
+    "expected_turnover_margin": (
+        "Expected turnover margin per game: expected_turnovers_def minus expected_turnovers_off (expected "
+        "takeaways minus expected giveaways). Higher is better. Spelled singular, like turnover_margin."
+    ),
+    "expected_turnover_margin_rank": "National rank of expected_turnover_margin, 1 = largest margin.",
+    "turnover_luck_off": (
+        "Offensive turnover luck in points per game: 5 points for every giveaway fewer than expected -- "
+        "5 x (expected_turnovers_off minus turnovers_off). Positive = lucky."
+    ),
+    "turnover_luck_def": (
+        "Defensive turnover luck in points per game: 5 points for every takeaway more than expected -- "
+        "5 x (turnovers_def minus expected_turnovers_def). Positive = lucky."
+    ),
+    "turnover_luck": (
+        "Turnover luck in points per game: 5 x (turnover_margin minus expected_turnover_margin), the part of "
+        "the turnover margin the team's fumble and pass-defensed volume did not earn; turnover_luck_off plus "
+        "turnover_luck_def. Positive = lucky."
+    ),
+    "turnover_luck_off_rank": "National rank of turnover_luck_off, 1 = luckiest (largest).",
+    "turnover_luck_def_rank": "National rank of turnover_luck_def, 1 = luckiest (largest).",
+    "turnover_luck_rank": "National rank of turnover_luck, 1 = luckiest (largest).",
+    "havoc_margin": (
+        "Havoc-rate margin, as a share of plays: the havoc rate the defense created (havoc_def) minus the rate "
+        "the offense allowed (havoc_off). Positive is good -- the team disrupts more than it is disrupted. "
+        "Runs created minus allowed, the opposite direction from the offense-minus-defense margins."
+    ),
+    "havoc_margin_rank": "National rank of havoc_margin, 1 = largest margin.",
 }
 
 # Drive efficiency (CFBE-1d). Whole-team only. Same owner rule and drive.result scoring as pts_per_opp.

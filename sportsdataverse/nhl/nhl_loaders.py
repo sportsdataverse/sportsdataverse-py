@@ -984,6 +984,7 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |committedByPlayer.lastName.fi       |String |
         |committedByPlayer.lastName.sk       |String |
         |committedByPlayer.lastName.sv       |String |
+        |committedByPlayer.lastName.fr       |String |
         |committedByPlayer.sweaterNumber     |Int64  |
         |teamAbbrev.default                  |String |
         |drawnBy.firstName.default           |String |
@@ -1001,6 +1002,7 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |drawnBy.lastName.fi                 |String |
         |drawnBy.lastName.sk                 |String |
         |drawnBy.lastName.sv                 |String |
+        |drawnBy.lastName.fr                 |String |
         |drawnBy.sweaterNumber               |Int64  |
         |descKey                             |String |
         |game_id                             |Int64  |
@@ -1008,6 +1010,8 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |period_type                         |String |
         |servedBy.default                    |String |
         |servedBy.cs                         |String |
+        |servedBy.de                         |String |
+        |servedBy.es                         |String |
         |servedBy.fi                         |String |
         |servedBy.sk                         |String |
         |servedBy.sv                         |String |
@@ -1281,23 +1285,23 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |lastName.cs               |String  |
         |lastName.fi               |String  |
         |lastName.sk               |String  |
+        |lastName.sv               |String  |
         |lastName.de               |String  |
         |lastName.es               |String  |
-        |lastName.sv               |String  |
+        |lastName.fr               |String  |
         |name.default              |String  |
         |name.cs                   |String  |
         |name.de                   |String  |
+        |name.es                   |String  |
         |name.fi                   |String  |
         |name.sk                   |String  |
         |name.sv                   |String  |
+        |name.fr                   |String  |
         |teamAbbrev.default        |String  |
         |headshot                  |String  |
         |highlightClipSharingUrl   |String  |
-        |highlightClipSharingUrlFr |String  |
         |highlightClip             |Int64   |
-        |highlightClipFr           |Int64   |
         |discreteClip              |Int64   |
-        |discreteClipFr            |Int64   |
         |goalsToDate               |Int64   |
         |awayScore                 |Int64   |
         |homeScore                 |Int64   |
@@ -1313,6 +1317,9 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |period_number             |Int64   |
         |period_type               |String  |
         |goalInGame                |Int64   |
+        |discreteClipFr            |Int64   |
+        |highlightClipSharingUrlFr |String  |
+        |highlightClipFr           |Int64   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
@@ -1725,22 +1732,24 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
         |headshot            |String  |
         |name.default        |String  |
         |name.cs             |String  |
-        |name.de             |String  |
-        |name.fi             |String  |
         |name.sk             |String  |
+        |name.fi             |String  |
         |name.sv             |String  |
+        |name.de             |String  |
+        |name.es             |String  |
+        |name.fr             |String  |
         |sweaterNo           |Int64   |
         |position            |String  |
         |goals               |Int64   |
         |assists             |Int64   |
         |points              |Int64   |
+        |goalsAgainstAverage |Float64 |
+        |savePctg            |Float64 |
         |game_id             |Int64   |
         |winner_id           |Int64   |
         |winner_name         |String  |
         |loser_id            |Int64   |
         |loser_name          |String  |
-        |goalsAgainstAverage |Float64 |
-        |savePctg            |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.

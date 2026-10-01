@@ -142,6 +142,7 @@ Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `assists` | Int32 | Assists. |
 | `points` | Int32 | Total points (goals + assists). |
 | `penalty_minutes` | Int32 | Penalty minutes. |
+| `plus_minus` | Int32 | Plus/minus rating. |
 | `shots_on_goal` | Int32 | Shots on goal. |
 | `blocks` | Int32 | Total blocks. |
 | `giveaways` | Int32 | Giveaways. |

@@ -414,6 +414,7 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
 | `box_dbpm` | Float64 | Box-score defensive plus/minus for the player, the defensive half of box BPM. |
 | `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above average, exactly box_obpm plus box_dbpm in every published row. |
+| `qualified` | Boolean | True/False indicator of whether or not player meets minimum play requirement |
 
 ```python
 load_wbb_player_value(seasons=2025)
@@ -520,7 +521,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `team_color` | String | Team primary color (hex without leading '#'). |
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
-| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
+| `athlete_id` | String | Unique athlete identifier (ESPN). |
 | `uid` | String | ESPN UID string. |
 | `guid` | String | Stable cross-league team GUID. |
 | `full_name` | String | Player's full name. |
@@ -531,7 +532,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `jersey` | String | Jersey number worn by the player. |
 | `position_abbreviation` | String | Position abbreviation ('G' / 'F' / 'C'). |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
-| `position_id` | Int32 | Unique position identifier. |
+| `position_id` | String | Unique position identifier. |
 | `height` | String | Player height (string e.g. '6-2' or inches). |
 | `weight` | String | Player weight in pounds. |
 | `age` | String | Player age (in years). |
@@ -544,7 +545,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `headshot_href` | String | Headshot image URL. |
 | `headshot_alt` | String | Alternative-text label for the headshot. |
 | `link_web` | String | Web link / URL. |
-| `status_id` | Int32 | Status identifier. |
+| `status_id` | String | Status identifier. |
 | `status_name` | String | Status label. |
 | `status_type` | String | Status type. |
 

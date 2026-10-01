@@ -9110,6 +9110,8 @@ load_cfb_pbp:
   adj_rush_yardage: Rushing yards capped at 8, the input to the line-yards decomposition.
   air_yardsToEndzone: Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025
     or when unresolvable.
+  awayFinalScore: Final score of the away team from the ESPN game header, repeated on every play of the game; the processing
+    step checks the running score at the last play against it.
   awayTeamAbbrev: ESPN's away-team Abbrev for the game, stamped on every play.
   awayTeamId: ESPN's away-team Id for the game, stamped on every play.
   awayTeamMascot: ESPN's away-team Mascot for the game, stamped on every play.
@@ -9122,6 +9124,11 @@ load_cfb_pbp:
   clock.displayValue: Game clock at the play, as the displayed mm:ss string.
   clock.minutes: Minutes remaining on the game clock at the play.
   clock.seconds: Seconds component of the game clock at the play.
+  cp_game_state: Completion probability from the 8-feature game-state booster, scored on every pass play regardless of which
+    model produced cp. On one scale across seasons, so use it (not cp) for anything summed or averaged; null on non-pass plays.
+  cp_model: 'Which completion-probability booster scored cp on the play: "air_yards" (the 11-feature model, used where ESPN''s
+    play text gives a catch/target spot -- essentially 2025 onward) or "game_state" (the 8-feature model used everywhere else).
+    The two are not on one scale, so group any cpoe aggregate by this column; null on non-pass plays.'
   def_fumble_lost: Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back.
   def_pos_team_id: Team id of the defense on the play.
   def_wp_after_naive: End-of-play defense win probability under the naive model.
@@ -9227,6 +9234,8 @@ load_cfb_pbp:
   highlight_run: True when the rush gained 8 or more yards.
   highlight_yards: Second-level plus open-field yards -- the yardage credited to the carrier.
   homeFavorite: True when the home team was favoured by the spread.
+  homeFinalScore: Final score of the home team from the ESPN game header, repeated on every play of the game; the processing
+    step checks the running score at the last play against it.
   homeTeamAbbrev: ESPN's home-team Abbrev for the game, stamped on every play.
   homeTeamId: ESPN's home-team Id for the game, stamped on every play.
   homeTeamMascot: ESPN's home-team Mascot for the game, stamped on every play.
@@ -9279,6 +9288,8 @@ load_cfb_pbp:
   line_yards: 'Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on
     a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that.'
   make_fg_wp: Win probability given the field-goal attempt is made.
+  mediaId: Identifier of the ESPN media item (video clip) attached to the play in ESPN's play feed, passed through as published;
+    null when no clip is attached.
   miss_fg_wp: Win probability given the field-goal attempt misses.
   net_HA_score_pts: Net points the play added to the home-minus-away score margin.
   new_distance: Distance to go after the play, including any penalty enforcement.
@@ -9354,8 +9365,6 @@ load_cfb_pbp:
   sack_player_id2: ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot).
   sack_team: Team id credited with the sack (the defense).
   sack_weight: Weighting applied to the sack component of the play.
-  scoreValue: Present in the published asset but never populated (all-null, Null dtype as of the 2026 capture); do not rely
-    on it.
   scoringPlay: ESPN flag marking the play as a scoring play.
   scoringType.abbreviation: ESPN's abbreviation for the scoring type.
   scoringType.displayName: ESPN's display label for the scoring type.
@@ -9431,6 +9440,15 @@ load_cfb_pbp:
   xp_kicker_player_name: Name of the kicker attempting the extra point.
   xp_made: Whether the extra-point kick was successful.
   xp_wp: Win probability of kicking the extra point, weighting the make by the empirical CFB extra-point make rate.
+  yds_kickoff_source: 'Provenance of yds_kickoff: "text" when the value was present before the special-teams derivation step
+    (parsed from the play text, or set by a flag convention such as a blocked punt''s 0), "derived" when that step filled it
+    from field position, null when there is no value.'
+  yds_punt_return_source: 'Provenance of yds_punt_return: "text" when the value was present before the special-teams derivation
+    step (parsed from the play text, or set by a flag convention such as a blocked punt''s 0), "derived" when that step filled
+    it from field position, null when there is no value.'
+  yds_punted_source: 'Provenance of yds_punted: "text" when the value was present before the special-teams derivation step (parsed
+    from the play text, or set by a flag convention such as a blocked punt''s 0), "derived" when that step filled it from field
+    position, null when there is no value.'
 load_cfb_pbp_r:
   away_team_pregame_elo: Away team's pregame Elo rating, carried on the cfbfastR-shaped schema.
   home_team_pregame_elo: Home team's pregame Elo rating, carried on the cfbfastR-shaped schema.
@@ -9485,6 +9503,8 @@ load_cfb_play_participants:
     on the play.
   assisted_by_player_names: List of the display names of EVERY participant credited as a defender credited with an assisted
     tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  assisted_by_position_id: ESPN position id of a defender credited with an assisted tackle -- the FIRST participant in that
+    role on the play, as listed in the game's participants.
   forced_by_player_id: ESPN athlete id of the defender who forced the fumble -- the FIRST participant in that role on the
     play.
   forced_by_player_ids: List of the athlete ids of EVERY participant credited as the defender who forced the fumble on the
@@ -9492,16 +9512,22 @@ load_cfb_play_participants:
   forced_by_player_name: Display name of the defender who forced the fumble -- the FIRST participant in that role on the play.
   forced_by_player_names: List of the display names of EVERY participant credited as the defender who forced the fumble on
     the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  forced_by_position_id: ESPN position id of the defender who forced the fumble -- the FIRST participant in that role on the
+    play, as listed in the game's participants.
   fumbler_player_id: ESPN athlete id of the first (primary) player who fumbled on the play.
   fumbler_player_ids: ESPN athlete ids of every player who fumbled on the play, as a list.
   fumbler_player_name: Display name of the first (primary) player who fumbled on the play, from ESPN's per-play participants.
   fumbler_player_names: Display names of every player who fumbled on the play, as a list.
+  fumbler_position_id: ESPN position id of the fumbler -- the FIRST participant in that role on the play, as listed in the game's
+    participants.
   kicker_player_id: ESPN athlete id of the kicker -- the FIRST participant in that role on the play.
   kicker_player_ids: List of the athlete ids of EVERY participant credited as the kicker on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
   kicker_player_name: Display name of the kicker -- the FIRST participant in that role on the play.
   kicker_player_names: List of the display names of EVERY participant credited as the kicker on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
+  kicker_position_id: ESPN position id of the kicker -- the FIRST participant in that role on the play, as listed in the game's
+    participants.
   pass_defender_player_id: ESPN athlete id of the defender credited with defending the pass -- the FIRST participant in that
     role on the play.
   pass_defender_player_ids: List of the athlete ids of EVERY participant credited as the defender credited with defending
@@ -9510,12 +9536,16 @@ load_cfb_play_participants:
     role on the play.
   pass_defender_player_names: List of the display names of EVERY participant credited as the defender credited with defending
     the pass on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pass_defender_position_id: ESPN position id of the defender credited with defending the pass -- the FIRST participant in that
+    role on the play, as listed in the game's participants.
   passer_player_id: ESPN athlete id of the passer -- the FIRST participant in that role on the play.
   passer_player_ids: List of the athlete ids of EVERY participant credited as the passer on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
   passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
   passer_player_names: List of the display names of EVERY participant credited as the passer on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
+  passer_position_id: ESPN position id of the passer -- the FIRST participant in that role on the play, as listed in the game's
+    participants.
   pat_passer_player_id: ESPN athlete id of the passer on the point-after attempt -- the FIRST participant in that role on
     the play.
   pat_passer_player_ids: List of the athlete ids of EVERY participant credited as the passer on the point-after attempt on
@@ -9524,6 +9554,8 @@ load_cfb_play_participants:
     play.
   pat_passer_player_names: List of the display names of EVERY participant credited as the passer on the point-after attempt
     on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pat_passer_position_id: ESPN position id of the passer on the point-after attempt -- the FIRST participant in that role on
+    the play, as listed in the game's participants.
   pat_scorer_player_id: ESPN athlete id of the player credited with the point-after score -- the FIRST participant in that
     role on the play.
   pat_scorer_player_ids: List of the athlete ids of EVERY participant credited as the player credited with the point-after
@@ -9532,24 +9564,32 @@ load_cfb_play_participants:
     role on the play.
   pat_scorer_player_names: List of the display names of EVERY participant credited as the player credited with the point-after
     score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pat_scorer_position_id: ESPN position id of the player credited with the point-after score -- the FIRST participant in that
+    role on the play, as listed in the game's participants.
   penalized_player_id: ESPN athlete id of the penalized player -- the FIRST participant in that role on the play.
   penalized_player_ids: List of the athlete ids of EVERY participant credited as the penalized player on the play, so multi-entry
     roles such as split sacks or gang tackles are not collapsed to one.
   penalized_player_name: Display name of the penalized player -- the FIRST participant in that role on the play.
   penalized_player_names: List of the display names of EVERY participant credited as the penalized player on the play, so
     multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  penalized_position_id: ESPN position id of the penalized player -- the FIRST participant in that role on the play, as listed
+    in the game's participants.
   punter_player_id: ESPN athlete id of the punter -- the FIRST participant in that role on the play.
   punter_player_ids: List of the athlete ids of EVERY participant credited as the punter on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
   punter_player_name: Display name of the punter -- the FIRST participant in that role on the play.
   punter_player_names: List of the display names of EVERY participant credited as the punter on the play, so multi-entry roles
     such as split sacks or gang tackles are not collapsed to one.
+  punter_position_id: ESPN position id of the punter -- the FIRST participant in that role on the play, as listed in the game's
+    participants.
   receiver_player_id: ESPN athlete id of the targeted receiver -- the FIRST participant in that role on the play.
   receiver_player_ids: List of the athlete ids of EVERY participant credited as the targeted receiver on the play, so multi-entry
     roles such as split sacks or gang tackles are not collapsed to one.
   receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
   receiver_player_names: List of the display names of EVERY participant credited as the targeted receiver on the play, so
     multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  receiver_position_id: ESPN position id of the targeted receiver -- the FIRST participant in that role on the play, as listed
+    in the game's participants.
   recoverer_player_id: ESPN athlete id of the player who recovered the fumble -- the FIRST participant in that role on the
     play.
   recoverer_player_ids: List of the athlete ids of EVERY participant credited as the player who recovered the fumble on the
@@ -9558,6 +9598,8 @@ load_cfb_play_participants:
     play.
   recoverer_player_names: List of the display names of EVERY participant credited as the player who recovered the fumble on
     the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  recoverer_position_id: ESPN position id of the player who recovered the fumble -- the FIRST participant in that role on the
+    play, as listed in the game's participants.
   returner_player_id: ESPN athlete id of the player returning the kick or punt -- the FIRST participant in that role on the
     play.
   returner_player_ids: List of the athlete ids of EVERY participant credited as the player returning the kick or punt on the
@@ -9566,30 +9608,40 @@ load_cfb_play_participants:
     play.
   returner_player_names: List of the display names of EVERY participant credited as the player returning the kick or punt
     on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  returner_position_id: ESPN position id of the player returning the kick or punt -- the FIRST participant in that role on the
+    play, as listed in the game's participants.
   rusher_player_id: ESPN athlete id of the ball carrier on a rush -- the FIRST participant in that role on the play.
   rusher_player_ids: List of the athlete ids of EVERY participant credited as the ball carrier on a rush on the play, so multi-entry
     roles such as split sacks or gang tackles are not collapsed to one.
   rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
   rusher_player_names: List of the display names of EVERY participant credited as the ball carrier on a rush on the play,
     so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  rusher_position_id: ESPN position id of the ball carrier on a rush -- the FIRST participant in that role on the play, as listed
+    in the game's participants.
   sacked_by_player_id: ESPN athlete id of a defender credited with the sack -- the FIRST participant in that role on the play.
   sacked_by_player_ids: List of the athlete ids of EVERY participant credited as a defender credited with the sack on the
     play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
   sacked_by_player_name: Display name of a defender credited with the sack -- the FIRST participant in that role on the play.
   sacked_by_player_names: List of the display names of EVERY participant credited as a defender credited with the sack on
     the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  sacked_by_position_id: ESPN position id of a defender credited with the sack -- the FIRST participant in that role on the
+    play, as listed in the game's participants.
   scorer_player_id: ESPN athlete id of the player credited with the score -- the FIRST participant in that role on the play.
   scorer_player_ids: List of the athlete ids of EVERY participant credited as the player credited with the score on the play,
     so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
   scorer_player_name: Display name of the player credited with the score -- the FIRST participant in that role on the play.
   scorer_player_names: List of the display names of EVERY participant credited as the player credited with the score on the
     play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  scorer_position_id: ESPN position id of the player credited with the score -- the FIRST participant in that role on the play,
+    as listed in the game's participants.
   tackler_player_id: ESPN athlete id of a defender credited with the tackle -- the FIRST participant in that role on the play.
   tackler_player_ids: List of the athlete ids of EVERY participant credited as a defender credited with the tackle on the
     play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
   tackler_player_name: Display name of a defender credited with the tackle -- the FIRST participant in that role on the play.
   tackler_player_names: List of the display names of EVERY participant credited as a defender credited with the tackle on
     the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  tackler_position_id: ESPN position id of a defender credited with the tackle -- the FIRST participant in that role on the
+    play, as listed in the game's participants.
 load_cfb_player_box:
   adjQBR: Adjusted Total QBR for the quarterback.
   completions/passingAttempts: Completions and pass attempts, as ESPN's combined string.
@@ -9690,8 +9742,13 @@ load_cfb_ratings_weekly:
   def_rank: Dense rank of adj_def_epa in ascending order within the snapshot week, so rank 1 is the stingiest defense at that
     point.
   fei_def: Drive-level defensive rating at the snapshot week, from the same per-drive ridge fit and on the same scale as fei_off.
+  fei_def_rank: 'National rank of fei_def at the snapshot week: dense rank, ascending -- fewer drive EPA allowed ranks better,
+    1 = best defense.'
   fei_net: fei_off minus fei_def at the snapshot week, the team's overall drive-efficiency rating.
+  fei_net_rank: 'National rank of fei_net at the snapshot week: dense rank, descending, 1 = highest net drive-efficiency rating.'
   fei_off: Drive-level offensive rating at the snapshot week, from a ridge fit on per-drive EPA.
+  fei_off_rank: 'National rank of fei_off at the snapshot week: dense rank, descending, 1 = highest offensive drive-efficiency
+    rating.'
   net_rank: Dense rank of adj_net in descending order within the snapshot week, so rank 1 is the strongest overall team at
     that point.
   net_z: adj_net restated as a z-score against the mean and standard deviation of adj_net across the teams rated in that snapshot
@@ -9773,10 +9830,16 @@ load_cfb_recruits:
   team_id_247: 247Sports' own team key for the recruit's committed or signed school; not interchangeable with the ESPN/CFBD
     team id.
 load_cfb_returning_production:
+  def_basis: 'Defensive measure behind def_returning: "participants" when the production season is 2014+ (tackle volume -- tackles,
+    assists, tackles for loss, shared sacks, passes defended -- from load_cfb_play_participants), "pbp_splash" for 2004-2013
+    (sacks, interceptions, pass breakups and forced fumbles from play-by-play ids; no tackle volume, so not on the same scale),
+    "box" when that source''s release is missing and the ESPN player box stood in; null when def_returning is null.'
   def_returning: Share of the team's prior-season defensive production returning for the season.
   is_estimated: Whether the returning-production figures for the row were estimated rather than derived from complete data.
   n_returning: Number of returning players counted in the returning-production calculation.
   off_returning: Share of the team's prior-season offensive production returning for the season.
+  overall_basis: '"offense+defense" when overall_returning is the usage-weighted blend of off_returning and def_returning; "offense"
+    when the team has no defensive value (e.g. production season 2003), so overall_returning equals off_returning.'
   overall_returning: Usage-weighted blend of the offensive and defensive returning-production shares.
 load_cfb_rosters:
   active: ESPN's active flag on the athlete record. It reflects capture time, not the season, so do not use it as a season-eligibility
@@ -10276,6 +10339,18 @@ load_cfb_team_summaries:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
+  drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the team
+    on defense (i.e. allowed to opponents).
+  drive_start_ep_def_rank: National rank of the team's average expected points (EP) at the first snap of a drive, over the drives
+    the side owned with the team on defense (i.e. allowed to opponents), where 1 is best.
+  drive_start_ep_margin: 'Margin in average expected points (EP) at the first snap of a drive, over the drives the side owned:
+    the team''s offensive value minus the value it allowed on defense.'
+  drive_start_ep_margin_rank: 'Margin in average expected points (EP) at the first snap of a drive, over the drives the side
+    owned: the team''s offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
+  drive_start_ep_off: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the team
+    on offense.
+  drive_start_ep_off_rank: National rank of the team's average expected points (EP) at the first snap of a drive, over the drives
+    the side owned with the team on offense, where 1 is best.
   drives_def: Offensive drives, with the team on defense (i.e. allowed to opponents).
   drives_def_pass: Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents).
   drives_def_rush: Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents).
@@ -10342,6 +10417,16 @@ load_cfb_team_summaries:
     on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0.'
   early_down_EPA_off_rush_rank: National rank of the team's EPA per early-down play on rush plays with the team on offense,
     where 1 is best.
+  expected_turnover_margin: 'Expected turnover margin per game: expected_turnovers_def minus expected_turnovers_off (expected
+    takeaways minus expected giveaways). Higher is better. Spelled singular, like turnover_margin.'
+  expected_turnover_margin_rank: National rank of expected_turnover_margin, 1 = largest margin.
+  expected_turnovers_def: 'Expected takeaways per game: half of every scrimmage fumble, plus interceptions at the season''s
+    national share of passes defensed (INT + PBU) that were intercepted, counted on opponents'' plays against the team''s defense.
+    Higher is better.'
+  expected_turnovers_def_rank: National rank of expected_turnovers_def, where 1 is best (most expected takeaways per game).
+  expected_turnovers_off: 'Expected giveaways per game: half of every scrimmage fumble, plus interceptions at the season''s
+    national share of passes defensed (INT + PBU) that were intercepted, counted on the team''s own plays. Lower is better.'
+  expected_turnovers_off_rank: National rank of expected_turnovers_off, where 1 is best (fewest expected giveaways per game).
   explosive_def: Explosive-play rate -- the share of plays carrying the explosive flag, with the team on defense (i.e. allowed
     to opponents).
   explosive_def_n: 'Sample size behind explosive_def: the number of plays it is computed over, with the team on defense (i.e.
@@ -10383,6 +10468,18 @@ load_cfb_team_summaries:
     on rush plays with the team on offense, where 1 is best.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership (Notre Dame is classified with the power group). Null for teams outside FBS.'
+  havoc_EPAgame_def: EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those snaps, with
+    the team on defense (i.e. allowed to opponents).
+  havoc_EPAgame_def_rank: National rank of the team's EPA per game on havoc-flagged plays -- the EPA cost of the disruption
+    to the offense on those snaps with the team on defense (i.e. allowed to opponents), where 1 is best.
+  havoc_EPAgame_margin: 'Margin in EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those
+    snaps: the team''s offensive value minus the value it allowed on defense.'
+  havoc_EPAgame_margin_rank: 'Margin in EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense
+    on those snaps: the team''s offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
+  havoc_EPAgame_off: EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those snaps, with
+    the team on offense.
+  havoc_EPAgame_off_rank: National rank of the team's EPA per game on havoc-flagged plays -- the EPA cost of the disruption
+    to the offense on those snaps with the team on offense, where 1 is best.
   havoc_def: Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on defense (i.e. allowed
     to opponents).
   havoc_def_n: 'Sample size behind havoc_def: the number of plays it is computed over, with the team on defense (i.e. allowed
@@ -10401,6 +10498,10 @@ load_cfb_team_summaries:
     on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
   havoc_def_rush_rank: National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag
     on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best.
+  havoc_margin: 'Havoc-rate margin, as a share of plays: the havoc rate the defense created (havoc_def) minus the rate the offense
+    allowed (havoc_off). Positive is good -- the team disrupts more than it is disrupted. Runs created minus allowed, the opposite
+    direction from the offense-minus-defense margins.'
+  havoc_margin_rank: National rank of havoc_margin, 1 = largest margin.
   havoc_off: Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on offense.
   havoc_off_n: 'Sample size behind havoc_off: the number of plays it is computed over, with the team on offense. Null when
     the team has no rows in that split; read it as 0.'
@@ -10939,6 +11040,15 @@ load_cfb_team_summaries:
   total_gained_yards_margin: Yards the team gained minus yards it allowed.
   total_gained_yards_margin_rank: National rank of total_gained_yards_margin, 1 = largest margin.
   total_gained_yards_off: Total yards the team actually gained across its own drives.
+  turnover_luck: 'Turnover luck in points per game: 5 x (turnover_margin minus expected_turnover_margin), the part of the turnover
+    margin the team''s fumble and pass-defensed volume did not earn; turnover_luck_off plus turnover_luck_def. Positive = lucky.'
+  turnover_luck_def: 'Defensive turnover luck in points per game: 5 points for every takeaway more than expected -- 5 x (turnovers_def
+    minus expected_turnovers_def). Positive = lucky.'
+  turnover_luck_def_rank: National rank of turnover_luck_def, 1 = luckiest (largest).
+  turnover_luck_off: 'Offensive turnover luck in points per game: 5 points for every giveaway fewer than expected -- 5 x (expected_turnovers_off
+    minus turnovers_off). Positive = lucky.'
+  turnover_luck_off_rank: National rank of turnover_luck_off, 1 = luckiest (largest).
+  turnover_luck_rank: National rank of turnover_luck, 1 = luckiest (largest).
   turnover_margin: 'Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better.
     Spelled singular; there is no turnovers_margin column.'
   turnover_margin_rank: National rank of turnover_margin, 1 = largest margin.
@@ -11237,6 +11347,18 @@ load_cfb_team_summaries_weekly:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
+  drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the team
+    on defense (i.e. allowed to opponents).
+  drive_start_ep_def_rank: National rank of the team's average expected points (EP) at the first snap of a drive, over the drives
+    the side owned with the team on defense (i.e. allowed to opponents), where 1 is best.
+  drive_start_ep_margin: 'Margin in average expected points (EP) at the first snap of a drive, over the drives the side owned:
+    the team''s offensive value minus the value it allowed on defense.'
+  drive_start_ep_margin_rank: 'Margin in average expected points (EP) at the first snap of a drive, over the drives the side
+    owned: the team''s offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
+  drive_start_ep_off: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the team
+    on offense.
+  drive_start_ep_off_rank: National rank of the team's average expected points (EP) at the first snap of a drive, over the drives
+    the side owned with the team on offense, where 1 is best.
   drives_def: Offensive drives, with the team on defense (i.e. allowed to opponents).
   drives_def_pass: Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents).
   drives_def_rush: Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents).
@@ -11303,6 +11425,16 @@ load_cfb_team_summaries_weekly:
     on rush plays, with the team on offense. Null when the team has no rows in that split; read it as 0.'
   early_down_EPA_off_rush_rank: National rank of the team's EPA per early-down play on rush plays with the team on offense,
     where 1 is best.
+  expected_turnover_margin: 'Expected turnover margin per game: expected_turnovers_def minus expected_turnovers_off (expected
+    takeaways minus expected giveaways). Higher is better. Spelled singular, like turnover_margin.'
+  expected_turnover_margin_rank: National rank of expected_turnover_margin, 1 = largest margin.
+  expected_turnovers_def: 'Expected takeaways per game: half of every scrimmage fumble, plus interceptions at the season''s
+    national share of passes defensed (INT + PBU) that were intercepted, counted on opponents'' plays against the team''s defense.
+    Higher is better.'
+  expected_turnovers_def_rank: National rank of expected_turnovers_def, where 1 is best (most expected takeaways per game).
+  expected_turnovers_off: 'Expected giveaways per game: half of every scrimmage fumble, plus interceptions at the season''s
+    national share of passes defensed (INT + PBU) that were intercepted, counted on the team''s own plays. Lower is better.'
+  expected_turnovers_off_rank: National rank of expected_turnovers_off, where 1 is best (fewest expected giveaways per game).
   explosive_def: Explosive-play rate -- the share of plays carrying the explosive flag, with the team on defense (i.e. allowed
     to opponents).
   explosive_def_n: 'Sample size behind explosive_def: the number of plays it is computed over, with the team on defense (i.e.
@@ -11344,6 +11476,18 @@ load_cfb_team_summaries_weekly:
     on rush plays with the team on offense, where 1 is best.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership (Notre Dame is classified with the power group). Null for teams outside FBS.'
+  havoc_EPAgame_def: EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those snaps, with
+    the team on defense (i.e. allowed to opponents).
+  havoc_EPAgame_def_rank: National rank of the team's EPA per game on havoc-flagged plays -- the EPA cost of the disruption
+    to the offense on those snaps with the team on defense (i.e. allowed to opponents), where 1 is best.
+  havoc_EPAgame_margin: 'Margin in EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those
+    snaps: the team''s offensive value minus the value it allowed on defense.'
+  havoc_EPAgame_margin_rank: 'Margin in EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense
+    on those snaps: the team''s offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest.'
+  havoc_EPAgame_off: EPA per game on havoc-flagged plays -- the EPA cost of the disruption to the offense on those snaps, with
+    the team on offense.
+  havoc_EPAgame_off_rank: National rank of the team's EPA per game on havoc-flagged plays -- the EPA cost of the disruption
+    to the offense on those snaps with the team on offense, where 1 is best.
   havoc_def: Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on defense (i.e. allowed
     to opponents).
   havoc_def_n: 'Sample size behind havoc_def: the number of plays it is computed over, with the team on defense (i.e. allowed
@@ -11362,6 +11506,10 @@ load_cfb_team_summaries_weekly:
     on defense (i.e. allowed to opponents). Null when the team has no rows in that split; read it as 0.'
   havoc_def_rush_rank: National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag
     on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best.
+  havoc_margin: 'Havoc-rate margin, as a share of plays: the havoc rate the defense created (havoc_def) minus the rate the offense
+    allowed (havoc_off). Positive is good -- the team disrupts more than it is disrupted. Runs created minus allowed, the opposite
+    direction from the offense-minus-defense margins.'
+  havoc_margin_rank: National rank of havoc_margin, 1 = largest margin.
   havoc_off: Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on offense.
   havoc_off_n: 'Sample size behind havoc_off: the number of plays it is computed over, with the team on offense. Null when
     the team has no rows in that split; read it as 0.'
@@ -11902,6 +12050,15 @@ load_cfb_team_summaries_weekly:
   total_gained_yards_margin: Yards the team gained minus yards it allowed.
   total_gained_yards_margin_rank: National rank of total_gained_yards_margin, 1 = largest margin.
   total_gained_yards_off: Total yards the team actually gained across its own drives.
+  turnover_luck: 'Turnover luck in points per game: 5 x (turnover_margin minus expected_turnover_margin), the part of the turnover
+    margin the team''s fumble and pass-defensed volume did not earn; turnover_luck_off plus turnover_luck_def. Positive = lucky.'
+  turnover_luck_def: 'Defensive turnover luck in points per game: 5 points for every takeaway more than expected -- 5 x (turnovers_def
+    minus expected_turnovers_def). Positive = lucky.'
+  turnover_luck_def_rank: National rank of turnover_luck_def, 1 = luckiest (largest).
+  turnover_luck_off: 'Offensive turnover luck in points per game: 5 points for every giveaway fewer than expected -- 5 x (expected_turnovers_off
+    minus turnovers_off). Positive = lucky.'
+  turnover_luck_off_rank: National rank of turnover_luck_off, 1 = luckiest (largest).
+  turnover_luck_rank: National rank of turnover_luck, 1 = luckiest (largest).
   turnover_margin: 'Turnover margin per game: turnovers_def minus turnovers_off (takeaways minus giveaways). Higher is better.
     Spelled singular; there is no turnovers_margin column.'
   turnover_margin_rank: National rank of turnover_margin, 1 = largest margin.
@@ -13787,6 +13944,9 @@ load_mbb_ratings:
 load_mbb_schedule:
   away_current_rank: Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value).
   away_linescores: Period-by-period scores for the away team as a delimited string from ESPN's schedule feed.
+  away_non_div1_team: 'ESPN''s non-Division I flag for the away team: True when the away team is not a Division I program (a
+    lower-division or exhibition opponent, which also carries no away_conference_id); null, not False, for every Division I
+    team. Sparse -- a handful of games per season.'
   away_records: Record strings (overall and split records) for the away team from ESPN's schedule feed.
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
@@ -14703,6 +14863,7 @@ load_nba_stats_rosters:
   exp: Years of NBA playing experience entering the season ('R' = rookie).
   how_acquired: How the team acquired the player (e.g. draft, trade, free agency).
   num: Jersey number worn by the player.
+  supplemental_status: Numeric supplemental roster-status code from the stats.nba.com roster feed.
 load_nba_stats_schedules:
   away_pts: Final points scored by the away team.
   away_wl: Away team's result for the game (W or L).
@@ -20017,11 +20178,16 @@ load_nfl_usage_position_group_tackles:
     games with activity, not games played.
   position_group: Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'
     ESPN position ids; null when no participant row carried a position for the player.
+  scrimmage_tackle_points: tackle_points (tackles plus 0.5 times assists) earned by the position group on the defense's own
+    standing scrimmage snaps only -- kickoff, punt and field-goal coverage, plays a penalty wiped out and tackles after a turnover
+    are excluded; tackle_share's numerator.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
   tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the position group''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play''s defense and is shared); null when the defense has none.'
   tackles: Solo tackles credited to the position group in the play participants (tackler_player_ids).
+  team_scrimmage_tackle_points: scrimmage_tackle_points summed over every position group credited to the defense for the season;
+    tackle_share's denominator.
   team_tackle_points: tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_position_groups:
   epa: Play EPA summed over the position group's rushes and targets.
@@ -20253,11 +20419,16 @@ load_nfl_usage_tackles:
     is then keyed on the name).
   player_name: 'Player display name, as carried on the play-by-play participants; the season row carries the most frequent non-null name over his games, so a renamed player with a player_id keeps one row per team (a row with no player_id is keyed on its name, so a rename there splits it).'
   position_group: 'Position group of the player (QB, RB, WR, TE, OL, DL, LB, DB, K, P, ...) resolved from the play participants'' ESPN position ids; null when no participant row carried a position for the player; the season row carries his most frequent non-null group, so a game with no group does not split his season.'
+  scrimmage_tackle_points: tackle_points (tackles plus 0.5 times assists) earned on the defense's own standing scrimmage snaps
+    only -- kickoff, punt and field-goal coverage, plays a penalty wiped out and tackles after a turnover are excluded; tackle_share's
+    numerator.
   season: Season the rows were summed over, keyed by the season's starting calendar year -- the same season stamp the released
     play-by-play carries.
   tackle_points: tackles plus 0.5 times assists.
   tackle_share: 'scrimmage_tackle_points / team_scrimmage_tackle_points: the player''s share of the defense''s tackle points on its own standing scrimmage snaps -- kickoff, punt and field-goal coverage and plays a penalty wiped out are left out (the NFL build passes no game roster, so a tackle after a turnover stays with the play''s defense and is shared); null when the defense has none.'
   tackles: Solo tackles credited to the player in the play participants (tackler_player_ids).
+  team_scrimmage_tackle_points: scrimmage_tackle_points summed over every player credited to the defense for the season; tackle_share's
+    denominator.
   team_tackle_points: tackle_points summed over every player credited to the defense for the season, special-teams tackles included; tackle_share's denominator is the scrimmage-only total.
 load_nfl_usage_teams:
   completions: Completed passes among the standing scrimmage plays.
@@ -20424,6 +20595,9 @@ load_nhl_penalties:
   committedByPlayer.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
+  committedByPlayer.lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs
+    from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
+    them instead -- so treat it as an alternate spelling, not a canonical one.
   committedByPlayer.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
@@ -20468,6 +20642,9 @@ load_nhl_penalties:
   drawnBy.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from
     the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
+  drawnBy.lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs from the
+    default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them
+    instead -- so treat it as an alternate spelling, not a canonical one.
   drawnBy.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the
     default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them
     instead -- so treat it as an alternate spelling, not a canonical one.
@@ -20477,6 +20654,10 @@ load_nhl_penalties:
   drawnBy.sweaterNumber: Jersey number of the opposing player credited with drawing the infraction; null whenever no victim
     is credited, as on all bench and game-misconduct penalties.
   servedBy.cs: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing
+    from the default by diacritics or by an alternate given-name form.
+  servedBy.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
+    from the default by diacritics or by an alternate given-name form.
+  servedBy.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
     from the default by diacritics or by an alternate given-name form.
   servedBy.default: Abbreviated name, in the feed's default English locale, of the player serving the penalty.
   servedBy.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
@@ -20554,6 +20735,9 @@ load_nhl_scoring:
   lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
+  lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
   lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
@@ -20566,8 +20750,12 @@ load_nhl_scoring:
     from the default by diacritics or by an alternate given-name form.
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
+  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
+    from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fr: Alternate abbreviated name (first initial plus family name) published under the NHL feed's French key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
@@ -20644,8 +20832,12 @@ load_nhl_three_stars:
     from the default by diacritics or by an alternate given-name form.
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
+  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
+    from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fr: Alternate abbreviated name (first initial plus family name) published under the NHL feed's French key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
