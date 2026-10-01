@@ -375,6 +375,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 | `x` | double | Position on the metric's axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go. |
 | `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
 | `epa` | double | EPA of the play from the released pbp. |
+| `id_source` | character | Always "espn": the ids are ESPN athlete and team ids. |
 
 **Example**
 
@@ -476,7 +477,7 @@ League, team and player rate curves from an `ATTEMPT_SCHEMA` frame.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `attempts` | `DataFrame` |  | one row per attempt x metric (from an adapter), any number of seasons. |
-| `league` | `str` |  | `"cfb"`, `"nfl"`, `"nba"` or `"wnba"` -- stamps `id_source` (`ID_SOURCE`); the curves themselves are league-agnostic. |
+| `league` | `str` |  | `"cfb"`, `"nfl"`, `"nba"` or `"wnba"`. The curves are league-agnostic; `league` only supplies the default `id_source` (`ID_SOURCE`) when the attempts frame carries no `id_source` column. An adapter's column wins, so the ESPN adapter on NFL pbp keeps `espn` whatever `league` says. |
 
 **Returns**
 
@@ -486,10 +487,10 @@ one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_t
 |---|---|---|
 | `season` | integer | Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year). |
 | `entity_type` | character | Aggregation level of the row: "league" (every attempt), "team" or "player". |
-| `entity_id` | character | Text id of the team or player the row describes (ESPN id for cfb, nflfastR gsis id for nfl until the producer re-keys it to ESPN, stats.nba person_id for nba/wnba); null on league rows. |
+| `entity_id` | character | Text id of the entity the row describes, per entity_type: team rows carry the source's team id (ESPN pos_team_id, nflfastR posteam, stats.nba team_id) and player rows the source's player id (ESPN athlete id, nflfastR gsis id until the NFL producer re-keys it to ESPN, stats.nba person_id); null on league rows. |
 | `entity_name` | character | Display name of the player or team as the source pbp/shots carry it; null on league rows. |
 | `team_id` | character | On player rows, the team of most of the player's attempts that season (text id); null on league and team rows. |
-| `id_source` | character | Id system of the row's ids by league: espn (cfb), gsis (nfl), nba_stats or wnba_stats (see metric_curves.ID_SOURCE). |
+| `id_source` | character | Id system of the row's ids, stamped by the adapter that built the attempts (espn, gsis, nba_stats or wnba_stats); the league argument only supplies the default when the attempts frame carries no id_source column. |
 | `metric` | character | Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance. |
 | `down` | integer | Down (1-4), the second axis of success_by_down_distance; null for every other metric. |
 | `x_lo` | double | Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES. |
@@ -558,6 +559,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`.
 | `x` | double | Position on the metric's axis in yards: kick_distance, air_yards or ydstogo. |
 | `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
 | `epa` | double | EPA of the play from nfl_model_pbp. |
+| `id_source` | character | Always "gsis": player ids are nflfastR gsis ids and teams are nflfastR abbreviations. |
 
 **Example**
 
@@ -6210,7 +6212,7 @@ Override the default TTL for endpoints not matched by the tier rules.
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
 
-### `shot_attempts(shots: 'pl.DataFrame') -> 'pl.DataFrame'` {#shot_attempts}
+### `shot_attempts(shots: 'pl.DataFrame', league: 'str' = 'nba') -> 'pl.DataFrame'` {#shot_attempts}
 
 `fg_pct_by_shot_distance` attempts from released `{nba,wnba}_stats_shots`.
 
@@ -6223,6 +6225,7 @@ shooter (stats.nba `person_id`); no EPA.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `shots` | `DataFrame` |  | `load_{nba,wnba}_stats_shots` rows, any number of seasons (project to `SHOT_ATTEMPT_COLUMNS`). |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"` -- which stats site the ids come from; stamps `id_source` `nba_stats` / `wnba_stats`. |
 
 **Returns**
 
@@ -6240,6 +6243,7 @@ one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for th
 | `x` | double | Shot distance in feet, as stats.nba records it. |
 | `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
 | `epa` | double | Always null: shots carry no EPA. |
+| `id_source` | character | "nba_stats" or "wnba_stats" per the league argument: the stats site whose person_id and team_id the row carries. |
 
 **Example**
 
