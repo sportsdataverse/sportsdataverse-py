@@ -1569,8 +1569,11 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     rows = df.filter(~marker & (pl.col("start.yardsToEndzone") != 0)).select(
         "_pos", *key, "text", _t="start.adj_TimeSecsRem"
     )
+    # a null key never twins: polars (1.40-1.44) matches rows whose join key has four or more null
+    # columns, despite nulls_equal=False, so drop them before the self-join
+    keyed = rows.drop_nulls(key)
     twins = (
-        rows.join(rows.select(*key, _lpos="_pos", _ltext="text", _lt="_t"), on=key)
+        keyed.join(keyed.select(*key, _lpos="_pos", _ltext="text", _lt="_t"), on=key)
         .filter((pl.col("_lpos") > pl.col("_pos")) & (pl.col("_lt") < pl.col("_t")))
         .group_by("_pos", "period.number", "_t")
         .agg(_exact=(pl.col("text") == pl.col("_ltext")).any())
@@ -3187,50 +3190,6 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)extra point")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)extra point")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
-                pl.when(
-                    pl.col("type.text")
-                    .str.to_lowercase()
-                    .str.contains("(?i)field goal")
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good")),
-                )
-                .then(pl.lit("Extra Point Missed"))
-                .otherwise(pl.col("type.text"))
-                .alias("type.text"),
-            )
-            .with_columns(
                 # 2007-13 types a try the defence returned for two as the kick it started as:
                 # "extra point BLOCKED returned for 2-point defensive conversion by Leon
                 # McFadden." (Extra Point Missed), "pass attempt failed (intercepted), returned
@@ -4379,12 +4338,14 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
-                # -- Fix blocked field goals ESPN mislabels as "Extra Point Missed" ----
-                # A blocked FG returned by the defense is sometimes typed "Extra Point
-                # Missed" by ESPN, which routes it through PAT-scoring EPA logic. Relabel to
-                # the correct blocked-FG type (TD variant when returned for a score). Gate on
-                # text showing a blocked FIELD GOAL -- "blocked" plus an FG/field-goal token --
-                # so a genuine blocked/missed PAT (no FG token) is left untouched.
+                # -- Fix blocked field goals typed "Extra Point Missed" ----
+                # A row typed "Extra Point Missed" whose text shows a blocked FIELD GOAL --
+                # "blocked" plus an FG/field-goal token -- is that blocked field goal (the TD
+                # variant when returned for a score); a genuine blocked/missed PAT (no FG token)
+                # is left untouched. sdv-py itself no longer produces such rows: four string
+                # relabels in __helper_cfb_pbp_features turned ESPN's own "Blocked Field Goal
+                # (Touchdown)" into "Extra Point Missed" until #641, and this rule only restored
+                # the ones whose text names the field goal and the block.
                 pl.when(
                     (pl.col("type.text") == "Extra Point Missed")
                     .and_(pl.col("text").str.contains("(?i)blocked"))
