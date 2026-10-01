@@ -31,7 +31,7 @@ import polars as pl
 
 from sportsdataverse.football.usage_box import _standing_scrimmage
 from sportsdataverse.nba.nba_play_context import _shot_distance_ft
-from sportsdataverse.rolling_windows import _as_id
+from sportsdataverse.rolling_windows import _STATS_SEASON_TYPES, _as_id
 
 __all__ = [
     "ATTEMPT_SCHEMA",
@@ -164,8 +164,6 @@ SHOT_ATTEMPT_COLUMNS: tuple[str, ...] = (
 _ESPN_SEASON_TYPES = (2, 3)
 #: nflfastR season types that count
 _NFLFASTR_SEASON_TYPES = ("REG", "POST")
-#: stats.nba season types that count: regular season (2) and playoffs (4); play-in (5) and the Cup final (6) do not
-_STATS_SEASON_TYPES = ("2", "4")
 _NO_PLAYER = pl.lit(None, dtype=pl.Utf8)
 _NO_DOWN = pl.lit(None, dtype=pl.Int64)
 _NO_EPA = pl.lit(None, dtype=pl.Float64)
