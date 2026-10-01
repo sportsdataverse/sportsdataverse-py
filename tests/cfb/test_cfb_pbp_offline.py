@@ -1246,3 +1246,20 @@ def test_a_touchdown_filed_as_its_own_kick_from_goal_to_go_past_the_10() -> None
     r = plays.filter(pl.col("id") == 303102638107).row(0, named=True)
     assert r["orig_play_type"] == "Extra Point Good"
     assert (r["start.down"], r["start.distance"], r["start.yardsToEndzone"]) == (3, 13, 13)
+
+
+def test_a_play_ends_at_the_next_plays_clock() -> None:
+    """313090025: end.TimeSecsRem is the clock at the next play's start, not the previous play's
+    (shift(1) ran every play's clock backwards: a final kneel at 0:14 ended at 0:54 and EP_end
+    scored the possession as if the game went on). The last play of a half or game ends at 0:00."""
+    plays = _offline_plays(313090025)
+    within_half = plays.with_columns(
+        next_half=pl.col("half").shift(-1), next_start=pl.col("start.TimeSecsRem").shift(-1)
+    ).filter(pl.col("next_half") == pl.col("half"))
+    assert (within_half["end.TimeSecsRem"] == within_half["next_start"]).all()
+    kickoff = plays.filter(pl.col("id") == 313090025016).row(0, named=True)
+    assert (kickoff["start.TimeSecsRem"], kickoff["end.TimeSecsRem"]) == (1557, 1551)
+    first_half = plays.filter(pl.col("half") == 1).row(-1, named=True)
+    assert (first_half["end.TimeSecsRem"], first_half["end.adj_TimeSecsRem"]) == (0, 1800)
+    last = plays.row(-1, named=True)
+    assert (last["end.TimeSecsRem"], last["end.adj_TimeSecsRem"]) == (0, 0)

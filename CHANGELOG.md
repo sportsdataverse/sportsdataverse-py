@@ -310,6 +310,19 @@
 
 ## Unreleased
 
+### Fixed — CFB plays end at the next play's clock
+
+`end.TimeSecsRem` (and `end.adj_TimeSecsRem`) was `start.TimeSecsRem.shift(1)`: the clock at the
+PREVIOUS play's start. Every EP_end and every after-state that reads the end clock was scored at an
+earlier clock than the play ended at. On most plays the difference is a few seconds, but at the end
+of a half or a game it is the whole question: 400547730's final kneel at 0:14 "ended" at 0:54, and
+its EPA was -0.97, as if the offence kept a possession worth 3.6 points. The end clock is now the
+next play's start clock, and the last play of a half or game ends at 0:00 (game time 1800 / 0):
+that kneel is EPA -4.8. Over a 7-game probe the median EPA change is 0.009; 17% of plays move by more
+than 0.1 and 2.3% by more than 0.5, almost all of them at period ends. Found aligning cfbfastR's
+end-of-half rules with sdv-py: with this fix and those, the two engines' EPA agree to a median of
+0.000 on a 92-game 2004-26 sample (was 0.015).
+
 ### Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down
 
 ESPN's 2005-13 feed writes down and distance -1 on plays with no down (kickoffs, tries,

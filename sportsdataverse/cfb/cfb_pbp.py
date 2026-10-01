@@ -2655,20 +2655,21 @@ class CFBPlayProcess(object):
                 .alias("start.awayTeamTimeouts"),
             )
             .with_columns(
-                pl.col("start.TimeSecsRem").shift(n=1).alias("end.TimeSecsRem"),
-                pl.col("start.adj_TimeSecsRem").shift(n=1).alias("end.adj_TimeSecsRem"),
+                # A play ends when the next one starts: the clock at the NEXT row's start. It
+                # was shift(1), the previous play's start, so every EP_end / WP-after was scored
+                # at an earlier clock -- most visibly at the end of a half: a final kneel at 0:14
+                # read 0:54 and booked EPA -0.97 for a possession the game took away (now -4.8).
+                pl.col("start.TimeSecsRem").shift(n=-1).alias("end.TimeSecsRem"),
+                pl.col("start.adj_TimeSecsRem").shift(n=-1).alias("end.adj_TimeSecsRem"),
             )
             .with_columns(
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(1800))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                # the last play of a half or of the game ends at 0:00 (game time 1800 / 0)
+                pl.when((pl.col("half").shift(-1) != pl.col("half")).fill_null(True))
+                .then(pl.lit(0))
                 .otherwise(pl.col("end.TimeSecsRem"))
                 .alias("end.TimeSecsRem"),
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(3600))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                pl.when((pl.col("half").shift(-1) != pl.col("half")).fill_null(True))
+                .then(pl.when(pl.col("half") == 1).then(pl.lit(1800)).otherwise(pl.lit(0)))
                 .otherwise(pl.col("end.adj_TimeSecsRem"))
                 .alias("end.adj_TimeSecsRem"),
                 pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
