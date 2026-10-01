@@ -103,7 +103,7 @@ loaders:
   base: sdv_releases
   url: cfb_team_portal/cfb_team_portal_{season}.parquet
   tag: cfb_team_portal
-  min_season: 2005
+  min_season: 2015
   example_args:
     seasons: 2024
   id_int64:
