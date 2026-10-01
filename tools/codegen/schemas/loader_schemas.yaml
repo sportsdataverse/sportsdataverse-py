@@ -13351,6 +13351,107 @@ load_nba_stats_game_lineups:
   type: Int64
 - name: season
   type: Int64
+load_nba_stats_game_matchups:
+- name: off_team_id
+  type: Int64
+- name: off_team_city
+  type: String
+- name: off_team_name
+  type: String
+- name: off_team_tricode
+  type: String
+- name: off_team_slug
+  type: String
+- name: def_team_id
+  type: Int64
+- name: side
+  type: String
+- name: off_person_id
+  type: Int64
+- name: off_first_name
+  type: String
+- name: off_family_name
+  type: String
+- name: off_name_i
+  type: String
+- name: off_player_slug
+  type: String
+- name: off_position
+  type: String
+- name: off_comment
+  type: String
+- name: off_jersey_num
+  type: String
+- name: def_person_id
+  type: Int64
+- name: def_first_name
+  type: String
+- name: def_family_name
+  type: String
+- name: def_name_i
+  type: String
+- name: def_player_slug
+  type: String
+- name: def_jersey_num
+  type: String
+- name: matchup_minutes
+  type: String
+- name: matchup_minutes_sort
+  type: Float64
+- name: partial_possessions
+  type: Float64
+- name: percentage_defender_total_time
+  type: Float64
+- name: percentage_offensive_total_time
+  type: Float64
+- name: percentage_total_time_both_on
+  type: Float64
+- name: switches_on
+  type: Int64
+- name: player_points
+  type: Int64
+- name: team_points
+  type: Int64
+- name: matchup_assists
+  type: Int64
+- name: matchup_potential_assists
+  type: Int64
+- name: matchup_turnovers
+  type: Int64
+- name: matchup_blocks
+  type: Int64
+- name: matchup_field_goals_made
+  type: Int64
+- name: matchup_field_goals_attempted
+  type: Int64
+- name: matchup_field_goals_percentage
+  type: Float64
+- name: matchup_three_pointers_made
+  type: Int64
+- name: matchup_three_pointers_attempted
+  type: Int64
+- name: matchup_three_pointers_percentage
+  type: Float64
+- name: help_blocks
+  type: Int64
+- name: help_field_goals_made
+  type: Int64
+- name: help_field_goals_attempted
+  type: Int64
+- name: help_field_goals_percentage
+  type: Float64
+- name: matchup_free_throws_made
+  type: Int64
+- name: matchup_free_throws_attempted
+  type: Int64
+- name: shooting_fouls
+  type: Int64
+- name: game_id
+  type: String
+- name: season
+  type: Int32
+- name: season_type_id
+  type: String
 load_nba_stats_game_rosters:
 - name: player_id
   type: Int64
@@ -13371,6 +13472,8 @@ load_nba_stats_game_rosters:
 - name: season
   type: Int32
 - name: game_id
+  type: String
+- name: season_type_id
   type: String
 load_nba_stats_lineups:
 - name: group_set
@@ -13779,6 +13882,8 @@ load_nba_stats_officials:
   type: Int32
 - name: game_id
   type: String
+- name: season_type_id
+  type: String
 load_nba_stats_pbp:
 - name: order_index
   type: Int64
@@ -13980,9 +14085,13 @@ load_nba_stats_pbp_v3:
 load_nba_stats_player_boxscores:
 - name: team_id
   type: Int64
+- name: team_city
+  type: String
 - name: team_name
   type: String
 - name: team_tricode
+  type: String
+- name: team_slug
   type: String
 - name: side
   type: String
@@ -14046,6 +14155,8 @@ load_nba_stats_player_boxscores:
   type: String
 - name: season
   type: Int32
+- name: season_type_id
+  type: String
 load_nba_stats_player_game_logs:
 - name: season_id
   type: String
@@ -14743,6 +14854,8 @@ load_nba_stats_shots:
   type: String
 - name: season
   type: Int32
+- name: season_type_id
+  type: String
 - name: period
   type: Int64
 - name: clock
@@ -14967,9 +15080,13 @@ load_nba_stats_standings:
 load_nba_stats_team_boxscores:
 - name: team_id
   type: Int64
+- name: team_city
+  type: String
 - name: team_name
   type: String
 - name: team_tricode
+  type: String
+- name: team_slug
   type: String
 - name: side
   type: String
@@ -15017,6 +15134,8 @@ load_nba_stats_team_boxscores:
   type: String
 - name: season
   type: Int32
+- name: season_type_id
+  type: String
 load_nba_stats_team_season_stats:
 - name: team_id
   type: Int64
