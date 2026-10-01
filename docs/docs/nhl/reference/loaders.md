@@ -841,6 +841,7 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `game_id` | Int64 | Unique game identifier. |
 | `period_number` | Int64 | Period number (1-3 regulation, 4+ OT). |
 | `period_type` | String | Period type (REG/OT/SO). |
+| `goalInGame` | Int64 | Running goal count credited to the scorer within this game at the time of the goal. |
 | `discreteClipFr` | Int64 | Numeric NHL video identifier of the French-language standalone clip of the goal, always a different asset id from discreteClip. |
 | `highlightClipSharingUrlFr` | String | Shareable nhl.com URL for the French-language highlight clip; its trailing numeric segment is the same id carried in highlightClipFr. |
 | `highlightClipFr` | Int64 | NHL video id of the French-language highlight clip for the goal. Stored as Float64 even though it is a whole 13-digit identifier, so cast before using it as a key. |

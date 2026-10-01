@@ -26395,6 +26395,8 @@ load_nhl_scoring:
   type: Int64
 - name: period_type
   type: String
+- name: goalInGame
+  type: Int64
 - name: discreteClipFr
   type: Int64
 - name: highlightClipSharingUrlFr

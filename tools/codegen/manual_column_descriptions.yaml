@@ -9343,8 +9343,6 @@ load_cfb_pbp:
   sack_player_id2: ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot).
   sack_team: Team id credited with the sack (the defense).
   sack_weight: Weighting applied to the sack component of the play.
-  scoreValue: Present in the published asset but never populated (all-null, Null dtype as of the 2026 capture); do not rely
-    on it.
   scoringPlay: ESPN flag marking the play as a scoring play.
   scoringType.abbreviation: ESPN's abbreviation for the scoring type.
   scoringType.displayName: ESPN's display label for the scoring type.

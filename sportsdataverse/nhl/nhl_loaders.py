@@ -1316,6 +1316,7 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |game_id                   |Int64   |
         |period_number             |Int64   |
         |period_type               |String  |
+        |goalInGame                |Int64   |
         |discreteClipFr            |Int64   |
         |highlightClipSharingUrlFr |String  |
         |highlightClipFr           |Int64   |
