@@ -127,6 +127,8 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
         "load_nba_stats_standings",
         "load_nba_stats_team_boxscores",
         "load_nba_stats_team_season_stats",
+        # first published on END-year assets (2026-10-01)
+        "load_nba_stats_game_matchups",
         # The retired-tag shims inherit their target's END-year asset path.
         "load_nba_stats_pbp_v3",
         "load_nba_stats_possessions_v3",
