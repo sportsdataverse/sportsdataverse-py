@@ -1,0 +1,692 @@
+# Metric registry -- one entry per BASE metric (``sportsdataverse.registry``).
+#
+# Display metadata only: descriptions stay in manual_column_descriptions.yaml.
+# Read by a strict reader (PyYAML does not ship in the wheel): a line is a comment,
+# a blank, an entry opener ``- key: NAME``, a two-space ``field: value`` or a
+# four-space ``name: value`` row of a ``variants:`` block. Values are plain
+# strings, ``null`` or ``{}``. tests/test_metric_registry.py pins the reader
+# against PyYAML on this file.
+#
+# key            base column name; the resolver strips _off/_def/_margin,
+#                _pass/_rush and _rank/_pct/_n/_pos_pct/_conf_pct
+# label          full title (Game on Paper SDV_BASE_METRIC_TITLES, verbatim)
+# short          column header; the resolver rewrites it per phase (EPA/Play -> EPA/DB)
+# axis           chart axis label
+# format         num2 | num1 | pct1 | int  (GOP [1,2,2] | [1,2,1] | [100,2,1] | [1,2,0])
+# polarity       higher | lower, from the offense / player perspective
+#                (cfbfastR-cfb-data team_summaries rank directions)
+# family         efficiency | explosiveness | volume | tendency | situational | drive | adjusted
+#                (consumers do not colour ``tendency``: style, not quality)
+# qualifier      dropbacks | carries | targets | null -- the denominator a
+#                phase-bound metric is measured against
+# glossary_slug  the web glossary anchor, or null until one exists
+# variants       per-basis siblings of the same quantity ({} when none)
+
+# --- efficiency -----------------------------------------------------------
+- key: TEPA
+  label: Total EPA
+  short: EPA
+  axis: Total EPA
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: TEPA
+    per_play: EPAplay
+    per_game: EPAgame
+    per_drive: EPAdrive
+- key: EPAplay
+  label: EPA/Play
+  short: EPA/Play
+  axis: EPA per play
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: TEPA
+    per_play: EPAplay
+    per_game: EPAgame
+    per_drive: EPAdrive
+- key: EPAgame
+  label: EPA/Game
+  short: EPA/Game
+  axis: EPA per game
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: TEPA
+    per_play: EPAplay
+    per_game: EPAgame
+    per_drive: EPAdrive
+- key: EPAdrive
+  label: EPA/Drive
+  short: EPA/Drive
+  axis: EPA per drive
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: TEPA
+    per_play: EPAplay
+    per_game: EPAgame
+    per_drive: EPAdrive
+- key: EPAdropback
+  label: EPA/Dropback
+  short: EPA/DB
+  axis: EPA per dropback
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: dropbacks
+  glossary_slug: null
+  variants: {}
+- key: EPArush
+  label: EPA/Rush
+  short: EPA/Rush
+  axis: EPA per rush
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: carries
+  glossary_slug: null
+  variants: {}
+- key: success
+  label: Success %
+  short: SR%
+  axis: Success rate (%)
+  format: pct1
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: success
+  variants: {}
+- key: yardsplay
+  label: Yards/Play
+  short: Yards/Play
+  axis: Yards per play
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: yards
+    per_play: yardsplay
+    per_game: yardsgame
+    per_drive: yardsdrive
+- key: yardsgame
+  label: Yards/Game
+  short: Yards/Game
+  axis: Yards per game
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: yards
+    per_play: yardsplay
+    per_game: yardsgame
+    per_drive: yardsdrive
+- key: yardsdrive
+  label: Yards/Drive
+  short: Yards/Drive
+  axis: Yards per drive
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: yards
+    per_play: yardsplay
+    per_game: yardsgame
+    per_drive: yardsdrive
+- key: yardsdropback
+  label: Yards/Dropback
+  short: Yards/DB
+  axis: Yards per dropback
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: dropbacks
+  glossary_slug: null
+  variants: {}
+- key: havoc
+  label: Havoc %
+  short: Havoc %
+  axis: Havoc rate (%)
+  format: pct1
+  polarity: lower
+  family: efficiency
+  qualifier: null
+  glossary_slug: havoc
+  variants: {}
+- key: play_stuffed
+  label: Stuffed %
+  short: Stuffed %
+  axis: Stuffed rate (%)
+  format: pct1
+  polarity: lower
+  family: efficiency
+  qualifier: carries
+  glossary_slug: null
+  variants: {}
+- key: line_yards
+  label: Line Yards/Rush
+  short: Line Yards
+  axis: Line yards per rush
+  format: num2
+  polarity: higher
+  family: efficiency
+  qualifier: carries
+  glossary_slug: null
+  variants: {}
+- key: opportunity_rate
+  label: Rush Opp %
+  short: Rush Opp %
+  axis: Opportunity rate (%)
+  format: pct1
+  polarity: higher
+  family: efficiency
+  qualifier: carries
+  glossary_slug: null
+  variants: {}
+- key: catchpct
+  label: Catch %
+  short: Catch %
+  axis: Catch rate (%)
+  format: pct1
+  polarity: higher
+  family: efficiency
+  qualifier: targets
+  glossary_slug: null
+  variants: {}
+
+# --- explosiveness --------------------------------------------------------
+- key: explosive
+  label: Explosive %
+  short: Explosive %
+  axis: Explosive play rate (%)
+  format: pct1
+  polarity: higher
+  family: explosiveness
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: nonExplosiveEpaPerPlay
+  label: Non-Expl EPA/Play
+  short: Non-Expl EPA/Play
+  axis: EPA per non-explosive play
+  format: num2
+  polarity: higher
+  family: explosiveness
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+
+# --- volume ---------------------------------------------------------------
+- key: plays
+  label: Total Plays
+  short: Plays
+  axis: Plays
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: plays
+    per_game: playsgame
+    per_drive: playsdrive
+- key: playsgame
+  label: Plays/Game
+  short: Plays/Game
+  axis: Plays per game
+  format: num2
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: plays
+    per_game: playsgame
+    per_drive: playsdrive
+- key: playsdrive
+  label: Plays/Drive
+  short: Plays/Drive
+  axis: Plays per drive
+  format: num2
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: plays
+    per_game: playsgame
+    per_drive: playsdrive
+- key: yards
+  label: Total Yards
+  short: Yards
+  axis: Total yards
+  format: num1
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: yards
+    per_play: yardsplay
+    per_game: yardsgame
+    per_drive: yardsdrive
+- key: sack_adj_yards
+  label: Sack-Adjusted Yards
+  short: Sack-Adj Yds
+  axis: Sack-adjusted yards
+  format: num1
+  polarity: higher
+  family: volume
+  qualifier: dropbacks
+  glossary_slug: null
+  variants: {}
+- key: drives
+  label: Total Drives
+  short: Drives
+  axis: Drives
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: drives
+    per_game: drivesgame
+- key: drivesgame
+  label: Drives/Game
+  short: Drives/Game
+  axis: Drives per game
+  format: num2
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants:
+    total: drives
+    per_game: drivesgame
+- key: dropbacks
+  label: Dropbacks
+  short: Dropbacks
+  axis: Dropbacks
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: dropbacks
+  glossary_slug: null
+  variants: {}
+- key: targets
+  label: Targets
+  short: Targets
+  axis: Targets
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: targets
+  glossary_slug: null
+  variants: {}
+- key: comp
+  label: Catches
+  short: Catches
+  axis: Catches
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: targets
+  glossary_slug: null
+  variants: {}
+- key: games
+  label: Games
+  short: Games
+  axis: Games
+  format: int
+  polarity: higher
+  family: volume
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+
+# --- tendency (style, not quality: never coloured) ------------------------
+- key: passrate
+  label: Pass %
+  short: Pass %
+  axis: Pass rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: rushrate
+  label: Rush %
+  short: Rush %
+  axis: Rush rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: pass_rate
+  label: Pass Rate
+  short: Pass Rate
+  axis: Pass rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: xpass_rate
+  label: Expected Pass Rate
+  short: Expected Pass Rate
+  axis: Expected pass rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: pass_oe
+  label: Pass Rate Over Expected
+  short: PROE
+  axis: Pass rate over expected (pts)
+  format: num1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: neutral_pass_rate
+  label: Neutral Pass Rate
+  short: Neutral Pass Rate
+  axis: Neutral pass rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: neutral_xpass_rate
+  label: Neutral Expected Pass Rate
+  short: Neutral Expected
+  axis: Neutral expected pass rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: neutral_pass_oe
+  label: Neutral Pass Rate Over Expected
+  short: Neutral PROE
+  axis: Neutral pass rate over expected (pts)
+  format: num1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: fourth_decisions
+  label: Fourth Down Decisions
+  short: Decisions
+  axis: Fourth-down decisions
+  format: int
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: fourth_go_rate
+  label: Fourth Down Go Rate
+  short: Go Rate
+  axis: Fourth-down go rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: fourth_go_expected
+  label: Model Fourth Down Go Rate
+  short: Model Go Rate
+  axis: Model go rate (%)
+  format: pct1
+  polarity: higher
+  family: tendency
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+
+# --- situational ----------------------------------------------------------
+- key: fourth_go_over_expected
+  label: Fourth Down Go Rate Over Expected
+  short: Go Rate Over Expected
+  axis: Go rate over expected (pts)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: fourth_go_boost
+  label: Average Fourth Down Boost
+  short: Avg Boost
+  axis: Average win-probability boost (pts)
+  format: num2
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: fourth_go_when_recommended
+  label: Went For It When Recommended
+  short: Went When Told To
+  axis: Went when recommended (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: series_conv
+  label: Series Conversion Rate
+  short: Series Conv %
+  axis: Series conversion rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: luck_fumble_rec_pct
+  label: Fumble Recovery Rate
+  short: Fumbles Recovered
+  axis: Fumble recovery rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: luck_opp_fg_pct
+  label: Opponent Field Goal Percentage
+  short: Opp FG%
+  axis: Opponent field-goal percentage (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: red_zone_success
+  label: Red Zone SR%
+  short: RZ SR%
+  axis: Red-zone success rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: third_down_success
+  label: 3rd Down SR%
+  short: 3rd Down SR%
+  axis: Third-down success rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: third_down_distance
+  label: Avg Distance (3rd)
+  short: 3rd Down Dist
+  axis: Average third-down distance (yards)
+  format: num2
+  polarity: lower
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: late_down_success
+  label: Late Down SR%
+  short: Late Down SR%
+  axis: Late-down success rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: early_down_EPA
+  label: Early Down EPA/Play
+  short: Early Down EPA/Play
+  axis: Early-down EPA per play
+  format: num2
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: early_down_success
+  label: Early Down SR%
+  short: Early Down SR%
+  axis: Early-down success rate (%)
+  format: pct1
+  polarity: higher
+  family: situational
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+
+# --- drive ----------------------------------------------------------------
+- key: start_position
+  label: Starting Field Position
+  short: Start Pos
+  axis: Starting field position (yards to goal)
+  format: num2
+  polarity: lower
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: total_available_yards
+  label: Total Available Yards
+  short: Avail Yards
+  axis: Available yards
+  format: int
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: total_gained_yards
+  label: Total Gained Yards
+  short: Gained Yards
+  axis: Gained yards
+  format: int
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: available_yards_pct
+  label: Available Yards %
+  short: Avail Yards %
+  axis: Available yards gained (%)
+  format: pct1
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: pts_per_drive
+  label: Points/Drive
+  short: Pts/Drive
+  axis: Points per drive
+  format: num2
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: pts_per_opp
+  label: Points/Scoring Opportunity
+  short: Pts/Opp
+  axis: Points per scoring opportunity
+  format: num2
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: drive_start_ep
+  label: Starting Expected Points
+  short: Start EP
+  axis: Expected points at drive start
+  format: num2
+  polarity: higher
+  family: drive
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+
+# --- adjusted -------------------------------------------------------------
+- key: adj_epa
+  label: Adj EPA/Play
+  short: Adj EPA/Play
+  axis: Opponent-adjusted EPA per play
+  format: num2
+  polarity: higher
+  family: adjusted
+  qualifier: null
+  glossary_slug: null
+  variants: {}
+- key: strength_faced
+  label: Strength Faced
+  short: Strength Faced
+  axis: Opponent strength faced (EPA per play)
+  format: num2
+  polarity: higher
+  family: adjusted
+  qualifier: null
+  glossary_slug: null
+  variants: {}

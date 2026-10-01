@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — the metric registry (`sportsdataverse.registry`)](#added--the-metric-registry-sportsdataverseregistry)
   - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
   - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
   - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
@@ -309,6 +310,21 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — the metric registry (`sportsdataverse.registry`)
+
+`sportsdataverse/registry/metrics.yaml` is the one source for how a published football metric is
+displayed: label, short label, axis label, format (`num2` / `num1` / `pct1` / `int`), polarity
+(`higher` / `lower`, from the offense or player perspective), family, qualifier, glossary slug and
+per-basis variants, one entry per base metric. `resolve(column)` maps any published column
+(`EPAplay_off_pass_rank`, `adj_def_epa`, `havoc_margin`) onto its entry plus the column's side,
+phase, suffix and effective polarity: `_def` flips the base's, a `_margin` is always higher-is-
+better (every producer margin is good-minus-bad). `python -m sportsdataverse.registry --ts
+--target gop|web` renders a deterministic TypeScript module (`METRICS` + `resolveMetric`) headed
+by the sdv-py version and a sha256 of its body, which Game on Paper and the web platform generate
+their copies from instead of keeping four drifting tables. The yaml ships in the wheel and is
+read without PyYAML, like `validation/thresholds.yaml`. Documented under *Architecture → Metric
+registry*.
 
 ### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
 
