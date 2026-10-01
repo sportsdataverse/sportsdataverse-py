@@ -168,17 +168,63 @@ def _noun(existing: str | None) -> str | None:
     return noun
 
 
+#: the hand-curated player ``_pct`` shape, for ranks ``_noun`` cannot parse
+_PCT_NOUN = re.compile(
+    r"^Percentile position \(0-100\) of the player's (?P<noun>.+?) among qualifying players that season\.?$"
+)
+
+
+def _pct_noun(existing: str | None) -> str | None:
+    """Metric phrase out of a curated ``_pct`` description, else None."""
+    m = _PCT_NOUN.match((existing or "").strip())
+    return m.group("noun") if m else None
+
+
 def rank_desc(noun: str, subject: str, population: str) -> str:
     return f"Rank of the {subject}'s {noun} among {population}, where 1 is best."
 
 
-def pct_desc(noun: str, population: str) -> str:
-    return (
-        f"Percentile (0-100) of {noun} among {population}, where 100 is best. "
-        f"Direction is already encoded in the matching rank, so a lower-is-better "
-        f"metric still scores 100 at its best. Null when the metric is null, and "
-        f"null rows are excluded from the denominator."
+#: cohort column -> (phrase after the population, the null cases beyond a null metric).
+#: Transcribed from cfbfastR-cfb-data team_summaries.py (#126): _attach_cohort_percentiles
+#: with MIN_COHORT_PLAYERS = 10 / MIN_COHORT_TEAMS = 5, and _attach_conference_percentiles,
+#: which gives FBS Independents no conference cohort.
+COHORTS: dict[str, tuple[str, str]] = {
+    "position_group": (
+        "at the same position group (position_group)",
+        "when position_group is null, or when fewer than 10 qualifiers in the group have the metric",
+    ),
+    "conference": (
+        "in the same conference",
+        "for an FBS Independent (not a conference), or when fewer than 5 teams in the conference have the metric",
+    ),
+}
+
+
+def pct_desc(noun: str, population: str, *, cohort: str | None = None) -> str:
+    """The ``_pct`` text; ``cohort`` gives the ``_pos_pct`` / ``_conf_pct`` variant."""
+    head = (
+        "where 100 is best. Direction is already encoded in the matching rank, so a "
+        "lower-is-better metric still scores 100 at its best."
     )
+    if cohort is None:
+        return (
+            f"Percentile (0-100) of {noun} among {population}, {head} Null when the metric "
+            f"is null, and null rows are excluded from the denominator."
+        )
+    phrase, null_cases = COHORTS[cohort]
+    return (
+        f"Percentile (0-100) of {noun} among {population} {phrase}, {head} Null when the "
+        f"metric is null, {null_cases}. Rows with a null metric are excluded from the denominator."
+    )
+
+
+#: the player tables' cohort column (cfbfastR-cfb-data #126, _attach_position_cohorts)
+POSITION_GROUP_DESC = (
+    "Position group from the season's ESPN roster (espn_cfb_rosters position_abbreviation): QB; "
+    "RB (RB and FB); WR; TE; other for any other listed position. Null when the player is not on "
+    "the season roster, is listed without a position ('-'), or is listed under two different "
+    "groups. The cohort of the _pos_pct columns."
+)
 
 
 def main() -> None:
@@ -209,6 +255,10 @@ def main() -> None:
             noun = _noun(curated.get(col))
             if noun is None:
                 unparsed.append(f"{t}.{col}")
+                # the _pos_pct sibling can still take its noun from the curated _pct
+                pct_noun = _pct_noun(curated.get(f"{base}_pct"))
+                if pct_noun and f"{base}_pos_pct" in declared:
+                    out[t][f"{base}_pos_pct"] = pct_desc(pct_noun, population, cohort="position_group")
                 continue
             out[t][col] = rank_desc(noun, subject, population)
             # Emit the _pct sibling ONLY when the column is actually declared.
@@ -225,6 +275,11 @@ def main() -> None:
                 out[t][pct_col] = pct_desc(noun, population)
             else:
                 pending.append(f"{t}.{pct_col}")
+            # the position-group cohort sibling (cfbfastR-cfb-data #126), same rule
+            if f"{base}_pos_pct" in declared:
+                out[t][f"{base}_pos_pct"] = pct_desc(noun, population, cohort="position_group")
+        if "position_group" in declared:
+            out[t]["position_group"] = POSITION_GROUP_DESC
 
     total = sum(len(v) for v in out.values())
     ranks = sum(1 for v in out.values() for c in v if c.endswith("_rank"))

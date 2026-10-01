@@ -25,6 +25,8 @@ import sys
 
 sys.path.insert(0, ".")
 
+from tools.codegen.gen_cfb_player_percentile_descriptions import pct_desc  # noqa: E402
+
 # base -> (noun phrase, "higher"|"lower"|None for better-direction commentary)
 BASES: dict[str, str] = {
     "plays": "plays run",
@@ -336,9 +338,24 @@ def _sentence_case(s: str) -> str:
     return s[:1].upper() + s[1:] if s else s
 
 
+def _metric_noun(metric: str) -> str:
+    """What a team ``_rank`` ranks, as a noun phrase; the column name off the grid."""
+    m = _RE.match(metric)
+    if not m or m["suffix"] or m["base"] not in BASES:
+        return metric
+    base, side, phase = m["base"], m["side"], m["phase"]
+    noun, ph = PHASE_NOUNS.get((base, phase), BASES[base]), PHASE.get(phase or "", "")
+    if side == "margin":
+        return f"the margin in {noun}{ph} (offense minus defense allowed)"
+    return f"{noun}{ph} {SIDE[side]}"
+
+
 def describe(col: str) -> str | None:
     if col in EXTRA:
         return EXTRA[col]
+    if col.endswith("_conf_pct"):
+        # cfbfastR-cfb-data #126: one beside every team _rank, cohort = conference
+        return pct_desc(_metric_noun(col[: -len("_conf_pct")]), "teams", cohort="conference")
     m = _RE.match(col)
     if not m:
         return None
