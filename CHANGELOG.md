@@ -318,10 +318,10 @@
 ESPN ends a returned kickoff ("Kickoff Return (Offense)", 2014 on) at `end.down` -1, its no-down
 sentinel, and the EP model (all four `down_*_end` flags False) and the WP model (`end.down`) scored
 that end as a state with no down: 401282817's second-half return to the 17 read EP 0.79 where the
-1st & 10 snapped there reads 1.83. A non-scoring kickoff now ends at down 1, so its EP_end is the
-next snap's EP_start. On a 26-game 2014-26 sample that is 47 kickoffs (1.8 a game), whose EPA moves
-by a median 0.95. Found chasing cfbfastR's last second-half kickoff gap to sdv-py: cfbfastR already
-read the next snap.
+1st & 10 snapped there reads 1.83. A non-scoring kickoff whose end down is outside 1-4 now ends at
+down 1, so its EP_end is the next snap's EP_start. On a 26-game 2014-26 sample that is 47 kickoffs
+(1.8 a game), whose EPA moves by a median 0.95. Found chasing cfbfastR's last second-half kickoff gap
+to sdv-py: cfbfastR already read the next snap.
 
 ### Fixed — CFB plays end at the next play's clock
 
