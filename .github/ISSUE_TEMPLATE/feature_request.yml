@@ -69,5 +69,5 @@ body:
     attributes:
       label: Pre-flight checks
       options:
-        - label: I've searched [existing issues](https://github.com/sportsdataverse/sportsdataverse-py/issues) and discussions to confirm this isn't already proposed.
+        - label: I've searched [existing issues](https://github.com/sportsdataverse/sportsdataverse-py/issues) to confirm this isn't already proposed.
           required: true

@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for filing a bug. Please fill in the fields below — they help us
         reproduce and prioritize the issue. If you're not sure whether it's a
-        bug or a usage question, prefer [Discussions](https://github.com/sportsdataverse/sportsdataverse-py/discussions).
+        bug or a usage question, file it anyway: usage questions are welcome here.
 
   - type: textarea
     id: summary

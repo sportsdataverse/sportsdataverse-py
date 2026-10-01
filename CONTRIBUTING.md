@@ -66,8 +66,9 @@ uv add --dev some-package
 ```
 
 `uv.lock` is committed so every contributor gets a reproducible install. If
-you bump a dep, commit the regenerated lockfile alongside the `pyproject.toml`
-change.
+you bump a dep or the package `version`, run `uv lock` and commit the
+regenerated lockfile alongside the `pyproject.toml` change; the `quality`
+workflow fails on a stale lock.
 
 **pip fallback.** Contributors who cannot use uv can still install from the
 `[project.optional-dependencies]` table:

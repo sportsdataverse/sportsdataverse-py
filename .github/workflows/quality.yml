@@ -29,8 +29,8 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install 3.13.2
-      - name: Install project + extras + dep groups
-        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Install project + extras + dep groups (fails if uv.lock is stale)
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
       - name: ruff lint
         run: uv run --frozen ruff check sportsdataverse/ tests/ tools/
       - name: ruff format check

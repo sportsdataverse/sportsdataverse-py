@@ -111,7 +111,7 @@ repos:
     hooks:
       - id: sync-docs-changelog
         name: sync-docs-changelog
-        entry: python -c "import shutil, subprocess, sys; shutil.copy('CHANGELOG.md', 'docs/src/pages/CHANGELOG.md'); subprocess.run(['git', 'add', 'docs/src/pages/CHANGELOG.md'])"
+        entry: uv run --frozen python -c "import shutil, subprocess, sys; shutil.copy('CHANGELOG.md', 'docs/src/pages/CHANGELOG.md'); subprocess.run(['git', 'add', 'docs/src/pages/CHANGELOG.md'])"
         language: system
         files: ^CHANGELOG\.md$
         pass_filenames: false
@@ -132,7 +132,7 @@ repos:
       # trailers (both are CLAUDE.md rules that were previously unenforced).
       - id: conventional-commit-no-ai
         name: conventional commit + no AI co-author
-        entry: python tools/hooks/check_commit_msg.py
+        entry: uv run --frozen python tools/hooks/check_commit_msg.py
         language: system
         stages: [commit-msg]
       # pre-push: CI parity for manual terminal pushes. Each is self-gating via
