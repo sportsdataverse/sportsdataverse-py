@@ -2418,14 +2418,14 @@ cfb_transfer_impact:
   pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail
     gate).
   season: Season the net transfer talent describes.
-  team_id: School name key from the rosters dataset.
+  team_id: ESPN team id as a string (rosters team_id, cast Int64 to Utf8).
 cfb_transfer_moves:
   direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
   player_id: ESPN athlete id as a string.
-  prior_team_id: School name key of the season S-1 team.
+  prior_team_id: ESPN team id (as a string) of the season S-1 team.
   season: Destination season of the move (compares rosters S-1 to S).
   talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
-  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  team_id: ESPN team id (as a string) of the side this row describes (destination for "in", origin for "out").
 chl_leaders:
   photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
