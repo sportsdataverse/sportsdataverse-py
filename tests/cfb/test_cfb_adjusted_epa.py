@@ -322,7 +322,9 @@ def _assert_matches_pre598_golden(got: pl.DataFrame, name: str, key: list[str]) 
     from polars.testing import assert_frame_equal
 
     exp = pl.read_parquet(_FIXTURE_DIR / f"pre598_{name}.parquet")
-    assert_frame_equal(got.sort(key), exp.sort(key), check_exact=False, rel_tol=0.0, abs_tol=1e-12)
+    # abs_tol 1e-6, not 1e-12: the ridge solve differs by BLAS (macOS Accelerate vs Linux OpenBLAS)
+    # in the last digits; main's macOS live job went red at 1e-12 while ubuntu passed (2026-10-01).
+    assert_frame_equal(got.sort(key), exp.sort(key), check_exact=False, rel_tol=0.0, abs_tol=1e-6)
 
 
 @pytest.mark.parametrize(
