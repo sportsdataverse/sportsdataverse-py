@@ -460,6 +460,100 @@ def _ot_end_state_wp(play_df, naive: bool):
     return f["mask"].to_numpy(), wp
 
 
+#: A try or kick in parentheses closing a touchdown row: "(Aaron Boumerhi KICK)", "(Logan Spry
+#: PAT MISSED)", "(Two-Point Pass Conversion Failed)".
+_TRY_PAREN_RE = r"(?i)\([^()]*\b(?:kick|pat|two-point|2-point)\b[^()]*\)"
+
+
+def _type_espn_scored_rows(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Type the rows ESPN scored that no text rule did: the score kind and side from the row.
+
+    The last pass of the play-type fixes. A row ESPN marks ``scoringPlay`` whose type is still
+    not a score realised the play's model end state instead of the points. Who scored is the
+    start team's margin change on the row: +6 to +8 the offence, -6 to -8 the defence, +3 a
+    field goal. Where ESPN's scoreboard does not move on the row (2006-11 feeds freeze it
+    across a pick-six) the play family says, if the text or ESPN's ``scoringType`` says
+    touchdown. On the 20,080 finals of 2004-26 that is ~650 rows, among them frozen-board
+    pick-sixes ("... returned for 47 yards for a TOUCHDOWN.", 169), 2004-07 fumble returns
+    ("Vernon Gholston 21 yd fumble return.", 177), 2014+ fumble returns closed by the kick
+    ("... recovered by NCCtl C.J. Moore, return for 23 yds (Joe Smith Kick)", 168) and field
+    goals typed as the snap before them. A row whose margin credits the other side than its
+    family (ESPN's start team is the returner) is left as it is, as the text rules leave it.
+    """
+    need = {"scoringPlay", "type.text", "text", "start.pos_score_diff", "end.pos_score_diff"}
+    if not need <= set(play_df.columns):
+        return play_df
+    ty = pl.col("type.text").fill_null("")
+    tx = pl.col("text").fill_null("")
+    delta = pl.col("end.pos_score_diff") - pl.col("start.pos_score_diff")
+    scored = (pl.col("scoringPlay") == True) & ~ty.is_in(  # noqa: E712
+        [*scores_vec, *offense_score_vec, *defense_score_vec, *_TRY_TYPES, "Kickoff Return Touchdown"]
+    )
+    espn_td = (
+        pl.col("scoringType.name").cast(pl.Utf8).fill_null("") == "touchdown"
+        if "scoringType.name" in play_df.columns
+        else pl.lit(False)
+    )
+    td_evidence = (
+        tx.str.contains(r"(?i)touchdown|\bfor a TD\b") | tx.str.contains(_TRY_PAREN_RE) | espn_td
+    ) & ~_touchdown_negated()
+    fam_int = ty.is_in(int_vec) | tx.str.contains(r"(?i)intercept")
+    fam_punt = ty.is_in(punt_vec) | tx.str.contains(r"(?i)\bpunt")
+    fam_blocked_punt = (ty == "Blocked Punt") | (fam_punt & tx.str.contains(r"(?i)block"))
+    fam_fg = ty.is_in(["Blocked Field Goal", "Field Goal Missed", "Missed Field Goal Return"]) | tx.str.contains(
+        r"(?i)field goal|\bfg\b"
+    )
+    # by type only: a kickoff's start team is the receiver, so its margin reads the other way
+    fam_kick = ty.is_in(kickoff_vec)
+    fam_fumble = tx.str.contains(r"(?i)fumble")
+    fam_pass = ty.str.contains(r"(?i)^pass|reception|completion") | tx.str.contains(r"(?i)\bpass(?:ed)?\b")
+    fam_rush = ty.is_in(["Rush", "Sack"]) | tx.str.contains(r"(?i)\brush|\brun\b|\bsacked\b|\bscrambl")
+    defence_family = fam_int | (ty == "Fumble Recovery (Opponent)")
+    moved = delta.abs().is_between(6, 8)
+    frozen = (delta == 0) & td_evidence
+    td = moved | frozen
+    defence = (moved & (delta < 0)) | (frozen & defence_family)
+    # a frozen board cannot say whose fumble recovery a rush or pass ended in: left as it is
+    offence = (moved & (delta > 0) & ~defence_family) | (frozen & ~defence_family & ~fam_fumble & (fam_pass | fam_rush))
+    field_goal = (
+        ((delta == 3) | (delta == 0))
+        & ~fam_kick
+        & tx.str.contains(r"(?i)field goal\b.*\bgood|\bfg good")
+    )
+    new_type = (
+        pl.when(scored & field_goal & ~td)
+        .then(pl.lit("Field Goal Good"))
+        .when(scored & defence & fam_int)
+        .then(pl.lit("Interception Return Touchdown"))
+        .when(scored & defence & fam_blocked_punt)
+        .then(pl.lit("Blocked Punt Touchdown"))
+        .when(scored & defence & fam_punt)
+        .then(pl.lit("Punt Return Touchdown"))
+        .when(scored & defence & fam_fg)
+        .then(
+            pl.when(tx.str.contains(r"(?i)block"))
+            .then(pl.lit("Blocked Field Goal Touchdown"))
+            .otherwise(pl.lit("Missed Field Goal Return Touchdown"))
+        )
+        .when(scored & defence & fam_kick)
+        .then(pl.lit("Kickoff Team Fumble Recovery Touchdown"))
+        .when(scored & defence & (fam_fumble | fam_rush | fam_pass | (ty == "Fumble Recovery (Opponent)")))
+        .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
+        .when(scored & offence & fam_kick)
+        .then(pl.lit("Kickoff Return Touchdown"))
+        .when(scored & offence & fam_punt)
+        .then(pl.lit("Punt Team Fumble Recovery Touchdown"))
+        .when(scored & offence & fam_fumble)
+        .then(pl.lit("Fumble Recovery (Own) Touchdown"))
+        .when(scored & offence & fam_pass)
+        .then(pl.lit("Passing Touchdown"))
+        .when(scored & offence & fam_rush)
+        .then(pl.lit("Rushing Touchdown"))
+        .otherwise(pl.col("type.text"))
+    )
+    return play_df.with_columns(new_type.fill_null(pl.col("type.text")).alias("type.text"))
+
+
 #: Standalone try rows. Their start state is a placeholder -- the touchdown's own snap
 #: (2nd and 3 at the 3) or down 0 at the 0 or the 100 -- which neither model can score:
 #: EP_start is pinned to 0.92 and wp_before is handed over from the touchdown.
@@ -1542,6 +1636,9 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     * **Copy across a marker** -- the same play (text, period, clock, start state) filed on
       both sides of a timeout or end-of-period row, which the adjacent-copy rule never
       compares. The first copy goes, as it does there.
+    * **Textless echo** -- a row with no text beside a texted row of the same type, period and
+      start state, filed before the play at the previous play's clock (2009-13, 2021-22) or
+      after it (2007-15). It goes; the texted twin stays.
 
     Timeouts and end-of-period rows are never dropped, and neither is a play without a start
     spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
@@ -1552,6 +1649,19 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     marker = pl.col("type.text").str.contains(r"(?i)^(?:timeout|end\b)").fill_null(False) | pl.col("text").str.contains(
         r"(?i)^end of"
     ).fill_null(False)
+    # A textless echo: a row with no text whose drive has a texted row of the same type, period and
+    # start state. ESPN files it before the play at the previous play's clock (401403886, 2022: ten
+    # punts and sacks, each booked twice) or after it (2007-15), not always next to it (292760096
+    # files 124, 125, 127, 128: two echoes, then their plays). The texted twin stays.
+    textless = pl.col("text").cast(pl.Utf8).str.strip_chars().fill_null("") == ""
+    twin = [*state, "type.text"]
+    rows_ = plays_df.with_row_index("_p")
+    echo_of_text = (
+        rows_.filter(textless & ~marker & (pl.col("start.yardsToEndzone") != 0))
+        .drop_nulls(twin)
+        .join(rows_.filter(~textless).select(twin).drop_nulls().unique(), on=twin, how="semi")["_p"]
+    )
+    plays_df = rows_.filter(~pl.col("_p").is_in(echo_of_text.implode())).drop("_p")
     same_as_prev = [pl.col(c) == pl.col(c).shift(1) for c in ["text", *state[1:5]]]
     zero_spot = (pl.col("start.yardsToEndzone") == 0) & (pl.col("start.yardsToEndzone").shift(1) != 0)
     stub = (zero_spot & pl.all_horizontal(same_as_prev)).fill_null(False) & ~marker
@@ -4720,6 +4830,8 @@ class CFBPlayProcess(object):
             .otherwise(pl.col("start.distance"))
             .alias("start.distance"),
         )
+
+        play_df = _type_espn_scored_rows(play_df)
 
         # The touchdown flag was read off the feed's type before the retyping above; a row
         # that is a touchdown only by its new type (an own fumble taken in, a field goal or
