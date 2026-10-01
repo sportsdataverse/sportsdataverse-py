@@ -3671,6 +3671,18 @@ class CFBPlayProcess(object):
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
             )
             .with_columns(
+                # A kickoff the receiving team returns ends at its first down. ESPN files
+                # that end at down -1 ("Kickoff Return (Offense)", 2014 on), and the EP and
+                # WP models read it as no down at all: 401282817's second-half return to the
+                # 17 scored 0.79 where the 1st & 10 snapped there scores 1.83.
+                pl.when(
+                    pl.col("type.text").is_in(kickoff_vec)
+                    & (pl.col("scoringPlay") == False)
+                    & ~pl.col("end.down").is_in([1, 2, 3, 4]).fill_null(False)
+                )
+                .then(1)
+                .otherwise(pl.col("end.down"))
+                .alias("end.down"),
                 lead_half=pl.col("half").shift(-1),
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
             )

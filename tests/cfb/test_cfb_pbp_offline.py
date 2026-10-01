@@ -1277,3 +1277,18 @@ def test_a_live_games_latest_play_keeps_its_clock() -> None:
     last = proc.plays_frame.row(-1, named=True)
     assert last["end.TimeSecsRem"] == last["start.TimeSecsRem"] == 56
     assert last["end.adj_TimeSecsRem"] == last["start.adj_TimeSecsRem"]
+
+
+def test_a_returned_kickoff_ends_at_the_receiving_teams_first_down() -> None:
+    """401411109: ESPN ends a returned kickoff ("Kickoff Return (Offense)", 2014 on) at down -1,
+    its no-down sentinel, and the EP and WP models scored that end with no down flag set: about a
+    point below the receiving team's 1st & 10 at the same spot. The return ends at a first down,
+    so its EP_end is the next snap's EP_start."""
+    plays = _offline_plays(401411109).with_columns(
+        next_ep=pl.col("EP_start").shift(-1), next_type=pl.col("type.text").shift(-1)
+    )
+    returns = plays.filter((pl.col("type.text") == "Kickoff Return (Offense)") & (pl.col("scoringPlay") == False))
+    assert returns.height == 3
+    assert returns["end.down"].to_list() == [1, 1, 1]
+    assert returns["next_type"].is_in(["Rush", "Pass Reception", "Pass Incompletion", "Sack"]).all()
+    assert (returns["EP_end"] - returns["next_ep"]).abs().max() < 1e-6
