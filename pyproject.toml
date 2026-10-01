@@ -745,6 +745,7 @@ files = [
     "sportsdataverse/wexp/baselines.py",
     "sportsdataverse/wexp/variants.py",
     "sportsdataverse/rolling_windows.py",
+    "sportsdataverse/metric_curves.py",
     "sportsdataverse/registry/__init__.py",
     "sportsdataverse/registry/__main__.py",
 ]
