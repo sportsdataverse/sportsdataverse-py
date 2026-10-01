@@ -2384,7 +2384,7 @@ Transfer moves inferred from year-over-year roster diffs.
 
 **Returns**
 
-One row per move side: `season` (Int64, the destination season), `team_id` (Utf8), `player_id` (Utf8), `direction` ("in" | "out"), `prior_team_id` (Utf8, the season S-1 team), `talent_points` (Float64; the 0-star default when the player has no recruit rating). Zero-row (typed) when rosters are unavailable.
+One row per move side: `season` (Int64, the destination season), `team_id` (Utf8 ESPN team id), `player_id` (Utf8 ESPN athlete id), `direction` ("in" | "out"), `prior_team_id` (Utf8 ESPN team id of the season S-1 team), `talent_points` (Float64, name-joined to the `cfb_recruits` release; the 0-star default when the player has no recruit rating). Zero-row (typed) when rosters are unavailable.
 
 | col_name | type | description |
 |---|---|---|
