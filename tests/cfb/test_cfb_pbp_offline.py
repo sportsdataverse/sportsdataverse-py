@@ -162,6 +162,8 @@ def _trimmed(game_id: int) -> dict:
       duplicate, including the two canonical pairs: "Jordan Travis pass intercepted"
       (3rd-and-9, 74 to go) at 9:59 and 9:51 and "Malik Cunningham pass incomplete to
       Tyler Hudson" (4th-and-2, 45 to go) at 5:18 and 4:42.
+    * ``summary_303102638_trimmed.json.gz`` -- 2010: a touchdown filed as its own kick whose
+      snap was 3rd and goal from the 13 (the only goal-to-go such snap past the 10, 2007-13).
     * ``summary_400547866_trimmed.json.gz``, ``summary_400547865_trimmed.json.gz``,
       ``summary_400548023_trimmed.json.gz`` -- 2014 games with an ESPN-typed blocked field goal
       the removed "Extra Point Missed" string relabels mistyped (#641).
@@ -1235,3 +1237,12 @@ def test_copies_with_a_null_key_never_twin() -> None:
         }
     )
     assert _drop_espn_play_copies(df)["id"].to_list() == [1, 2, 3, 4]
+
+
+def test_a_touchdown_filed_as_its_own_kick_from_goal_to_go_past_the_10() -> None:
+    """303102638: the play before ended 3rd and goal at the 13 (ESPN's "& Goal" distance 0) and
+    the touchdown is "for 13 yards". Goal to go is the distance to the goal line, not 10."""
+    plays = _offline_plays(303102638)
+    r = plays.filter(pl.col("id") == 303102638107).row(0, named=True)
+    assert r["orig_play_type"] == "Extra Point Good"
+    assert (r["start.down"], r["start.distance"], r["start.yardsToEndzone"]) == (3, 13, 13)

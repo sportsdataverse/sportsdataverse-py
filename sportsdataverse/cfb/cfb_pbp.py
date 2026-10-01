@@ -3353,10 +3353,13 @@ class CFBPlayProcess(object):
                 _merged_td.then(pl.when(_prev_spot_ok).then(_prev_play("end.down")).otherwise(pl.lit(1)))
                 .otherwise(pl.col("start.down"))
                 .alias("start.down"),
-                # ESPN writes "& Goal" as distance 0: goal to go is the distance to the goal line
+                # ESPN writes "& Goal" as distance 0: goal to go is the distance to the goal line,
+                # however far out (a penalty can back a goal-to-go snap past the 10)
                 _merged_td.then(
                     pl.when(_prev_spot_ok & (_prev_play("end.distance") > 0))
                     .then(pl.min_horizontal(_prev_play("end.distance"), pl.col("start.yardsToEndzone")))
+                    .when(_prev_spot_ok & (_prev_play("end.distance") == 0))
+                    .then(pl.col("start.yardsToEndzone"))
                     .otherwise(pl.min_horizontal(pl.lit(10), pl.col("start.yardsToEndzone")))
                 )
                 .otherwise(pl.col("start.distance"))
