@@ -459,6 +459,7 @@ from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule
 from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_group_seasons as load_cfb_team_group_seasons  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_portal as load_cfb_team_portal  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_talent as load_cfb_team_talent  # noqa: F401
@@ -776,6 +777,7 @@ __all__ = [
     "load_cfb_team_box",
     "load_cfb_team_group_seasons",
     "load_cfb_team_info",
+    "load_cfb_team_portal",
     "load_cfb_team_summaries",
     "load_cfb_team_summaries_weekly",
     "load_cfb_team_talent",

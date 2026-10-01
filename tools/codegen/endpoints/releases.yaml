@@ -98,6 +98,17 @@ loaders:
     seasons: 2024
   id_int64:
   - team_id
+- fn: load_cfb_team_portal
+  league: cfb
+  base: sdv_releases
+  url: cfb_team_portal/cfb_team_portal_{season}.parquet
+  tag: cfb_team_portal
+  min_season: 2005
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
+  notes: "Portal counts are D-I to D-I moves visible in ESPN rosters (FBS and FCS mixed): an athlete id on a different team's roster the prior season. JUCO and non-D-I arrivals are not counted. Talent points name-join players to the cfb_recruits release, so an unmatched player carries the 0-star default."
 - fn: load_cfb_team_talent
   league: cfb
   base: sdv_releases
