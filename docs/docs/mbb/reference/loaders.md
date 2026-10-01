@@ -70,14 +70,12 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
 | `scoring_play` | Boolean | TRUE if the play resulted in points scored. |
 | `score_value` | Int32 | Point value of the play (2 / 3 / 1). |
-| `wallclock` | String | Wallclock. |
-| `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
-| `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
-| `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `points_attempted` | Int32 | Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from the ESPN play type. |
-| `short_description` | String | Shortened version of ESPN's play description text, without score context. |
 | `team_id` | Int32 | Unique team identifier. |
 | `athlete_id_1` | Int32 | Primary athlete identifier (e.g. shooter). |
+| `wallclock` | String | Wallclock. |
+| `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
+| `points_attempted` | Int32 | Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from the ESPN play type. |
+| `short_description` | String | Shortened version of ESPN's play description text, without score context. |
 | `athlete_id_2` | Int32 | Secondary athlete identifier (e.g. assister / fouler). |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
@@ -110,13 +108,16 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `start_game_seconds_remaining` | Int32 | Seconds remaining in the game at the start of the play. |
 | `end_period_seconds_remaining` | Int32 | Seconds left in the period when the play ended. |
 | `end_game_seconds_remaining` | Int32 | Seconds remaining in the game at the end of the play. |
-| `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
-| `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
+| `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
+| `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
+| `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
+| `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
 | `athlete_name_1` | String | Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt). |
 | `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
 | `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
+| `media_id` | String | Media identifier (video / image). |
 | `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. |
 | `home_win_prob` | Float64 | Home win probability - pre-game prediction (0-1). |
 
@@ -271,6 +272,7 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `away_non_div1_team` | Boolean |  |
 | `status_type_alt_detail` | String | Status type alt detail. |
 | `tournament_id` | Int32 | ESPN tournament identifier. |
 | `groups_id` | Int32 | Unique identifier for groups. |
@@ -398,6 +400,7 @@ Release: [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
 | `box_dbpm` | Float64 | Box-score defensive plus/minus for the player, the defensive half of box BPM. |
 | `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above an average player, exactly box_obpm plus box_dbpm (verified to zero residual across all 9,805 rows of 2025). |
+| `qualified` | Boolean | True/False indicator of whether or not player meets minimum play requirement |
 
 ```python
 load_mbb_player_value(seasons=2025)
