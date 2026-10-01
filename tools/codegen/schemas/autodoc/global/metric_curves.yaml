@@ -1,0 +1,46 @@
+schema: metric_curves
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: entity_type
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: entity_name
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: id_source
+  type: character
+  description: ''
+- name: metric
+  type: character
+  description: ''
+- name: down
+  type: integer
+  description: ''
+- name: x_lo
+  type: double
+  description: ''
+- name: x_hi
+  type: double
+  description: ''
+- name: attempts
+  type: integer
+  description: ''
+- name: successes
+  type: integer
+  description: ''
+- name: rate
+  type: double
+  description: ''
+- name: epa_per_att
+  type: double
+  description: ''

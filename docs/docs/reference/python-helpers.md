@@ -363,6 +363,19 @@ Populations (regular season + postseason):
 
 one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | character | ESPN athlete id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
+| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | character | ESPN id (text) of the team on offense, from pos_team_id. |
+| `team_name` | character | Offense's team label from the released pbp (pos_team). |
+| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | double | Position on the metric's axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go. |
+| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | double | EPA of the play from the released pbp. |
+
 **Example**
 
 ```python
@@ -469,6 +482,23 @@ League, team and player rate curves from an `ATTEMPT_SCHEMA` frame.
 
 one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_type` `league` (`entity_id` null), `team` and `player` (only attempts credited to a player; `team_id` is the team of most of them). * `x_lo` / `x_hi`: the attempt's bucket, inclusive / exclusive. * `attempts`, `successes`, `rate = successes / attempts` (exact), `epa_per_att` (mean EPA of the attempts that have one, else null). * `down`: only set for `success_by_down_distance`. A bucket with no attempt has no row.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year). |
+| `entity_type` | character | Aggregation level of the row: "league" (every attempt), "team" or "player". |
+| `entity_id` | character | Text id of the team or player the row describes (ESPN id for cfb, nflfastR gsis id for nfl until the producer re-keys it to ESPN, stats.nba person_id for nba/wnba); null on league rows. |
+| `entity_name` | character | Display name of the player or team as the source pbp/shots carry it; null on league rows. |
+| `team_id` | character | On player rows, the team of most of the player's attempts that season (text id); null on league and team rows. |
+| `id_source` | character | Id system of the row's ids by league: espn (cfb), gsis (nfl), nba_stats or wnba_stats (see metric_curves.ID_SOURCE). |
+| `metric` | character | Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance. |
+| `down` | integer | Down (1-4), the second axis of success_by_down_distance; null for every other metric. |
+| `x_lo` | double | Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES. |
+| `x_hi` | double | Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up. |
+| `attempts` | integer | Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row. |
+| `successes` | integer | Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots. |
+| `rate` | double | successes divided by attempts, computed exactly (no smoothing). |
+| `epa_per_att` | double | Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA. |
+
 **Example**
 
 ```python
@@ -515,6 +545,19 @@ abbreviations.
 **Returns**
 
 one row per attempt x metric, `ATTEMPT_SCHEMA`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | character | nflfastR gsis id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays. |
+| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | character | nflfastR abbreviation of the team on offense (posteam). |
+| `team_name` | character | nflfastR abbreviation of the team on offense (posteam), repeated as the label. |
+| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | double | Position on the metric's axis in yards: kick_distance, air_yards or ydstogo. |
+| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | double | EPA of the play from nfl_model_pbp. |
 
 **Example**
 
@@ -6184,6 +6227,19 @@ shooter (stats.nba `person_id`); no EPA.
 **Returns**
 
 one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for the NBA).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the play or shot, keyed as the source asset keys it. |
+| `metric` | character | Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES). |
+| `player_id` | character | stats.nba person_id (text) of the shooter. |
+| `player_name` | character | Name of the credited player as the source carries it; null when no player is credited. |
+| `team_id` | character | stats.nba team_id (text) of the shooting team. |
+| `team_name` | character | Shooting team's tricode from the shot row (team_tricode). |
+| `down` | integer | Down of the play (1-4) for success_by_down_distance; null for every other metric. |
+| `x` | double | Shot distance in feet, as stats.nba records it. |
+| `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
+| `epa` | double | Always null: shots carry no EPA. |
 
 **Example**
 

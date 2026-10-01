@@ -4168,6 +4168,17 @@ filters_teams:
 fit_field_position_ep:
   ep: Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing).
   yardline_own: Starting yard line from the offense's own goal (1-99).
+football_attempts:
+  season: Season of the play or shot, keyed as the source asset keys it.
+  metric: Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).
+  player_name: Name of the credited player as the source carries it; null when no player is credited.
+  down: Down of the play (1-4) for success_by_down_distance; null for every other metric.
+  success: 'Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.'
+  player_id: ESPN athlete id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays.
+  team_id: ESPN id (text) of the team on offense, from pos_team_id.
+  team_name: Offense's team label from the released pbp (pos_team).
+  x: 'Position on the metric''s axis in yards: yds_fg, air_yards or the standing-scrimmage distance to go.'
+  epa: EPA of the play from the released pbp.
 fox_cfb_league_conferences:
   content_type: Fox entity type of the linked item; 'league' on every sampled conference row.
   content_uri: Fox Bifrost content path of the conference (e.g. 'football/cfb/groups/9').
@@ -21413,6 +21424,21 @@ matchupsrollup:
   player_pts: Scoring or score-margin metric for player points in the requested NBA or WNBA Stats split.
   sfl: NBA or WNBA Stats value for sfl in the matchupsrollup result set.
   team_pts: Scoring or score-margin metric for team points in the requested NBA or WNBA Stats split.
+metric_curves:
+  season: Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year).
+  entity_type: 'Aggregation level of the row: "league" (every attempt), "team" or "player".'
+  entity_id: Text id of the team or player the row describes (ESPN id for cfb, nflfastR gsis id for nfl until the producer re-keys it to ESPN, stats.nba person_id for nba/wnba); null on league rows.
+  entity_name: Display name of the player or team as the source pbp/shots carry it; null on league rows.
+  team_id: On player rows, the team of most of the player's attempts that season (text id); null on league and team rows.
+  id_source: 'Id system of the row''s ids by league: espn (cfb), gsis (nfl), nba_stats or wnba_stats (see metric_curves.ID_SOURCE).'
+  metric: 'Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance.'
+  down: Down (1-4), the second axis of success_by_down_distance; null for every other metric.
+  x_lo: Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES.
+  x_hi: Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up.
+  attempts: Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row.
+  successes: 'Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots.'
+  rate: successes divided by attempts, computed exactly (no smoothing).
+  epa_per_att: Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA.
 mhl_leaders:
   photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
@@ -22911,6 +22937,17 @@ nfl_week_games:
   venue_country: Country name or ISO code indicating where the game's venue is located.
   version: API response version integer returned by the NFL Shield API for this game record.
   weekType: Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB').
+nflfastr_attempts:
+  season: Season of the play or shot, keyed as the source asset keys it.
+  metric: Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).
+  player_name: Name of the credited player as the source carries it; null when no player is credited.
+  down: Down of the play (1-4) for success_by_down_distance; null for every other metric.
+  success: 'Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.'
+  player_id: nflfastR gsis id (text) of the kicker or passer credited with the attempt; null for fourth-down and down x distance plays.
+  team_id: nflfastR abbreviation of the team on offense (posteam).
+  team_name: nflfastR abbreviation of the team on offense (posteam), repeated as the label.
+  x: 'Position on the metric''s axis in yards: kick_distance, air_yards or ydstogo.'
+  epa: EPA of the play from nfl_model_pbp.
 nhl_scoreboard:
   away_team_name_default: Full English-language team name for the away team, as returned by the NHL api-web scoreboard feed.
   away_team_name_fr: Full French-language team name for the away team, as returned by the NHL api-web scoreboard feed.
@@ -32924,6 +32961,17 @@ shiftcharts:
   hex_value: Hexadecimal color code associated with the event or team, used for display rendering.
   shift_number: Sequential number identifying the shift within the game, ordered chronologically by start time.
   type_code: Numeric code identifying the high-level event type (e.g., faceoff, goal, penalty) for this shift record.
+shot_attempts:
+  season: Season of the play or shot, keyed as the source asset keys it.
+  metric: Curve the attempt feeds (a key of metric_curves.BUCKET_EDGES).
+  player_name: Name of the credited player as the source carries it; null when no player is credited.
+  down: Down of the play (1-4) for success_by_down_distance; null for every other metric.
+  success: 'Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot.'
+  player_id: stats.nba person_id (text) of the shooter.
+  team_id: stats.nba team_id (text) of the shooting team.
+  team_name: Shooting team's tricode from the shot row (team_tricode).
+  x: Shot distance in feet, as stats.nba records it.
+  epa: 'Always null: shots carry no EPA.'
 shotchartdetail:
   grid_type: Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail").
   htm: Home team abbreviation for the game.
