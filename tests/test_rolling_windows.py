@@ -9,7 +9,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.rolling_windows import EVENT_SCHEMA, OUTPUT_SCHEMA, football_events, rolling_windows
+from sportsdataverse.rolling_windows import EVENT_SCHEMA, OUTPUT_SCHEMA, football_events, rolling_windows, shot_events
 
 FIX = Path(__file__).parent / "fixtures" / "rolling_windows"
 QB = "4433971"  # Kyle McCord: Ohio State 2021-23, Syracuse 2024
@@ -306,5 +306,72 @@ def test_package_level_export_and_reference_docs():
 
     assert sportsdataverse.rolling_windows is rolling_windows
     assert sportsdataverse.football_events is football_events
+    assert sportsdataverse.shot_events is shot_events
     doc = (Path(__file__).parents[1] / "docs" / "docs" / "reference" / "python-helpers.md").read_text(encoding="utf-8")
-    assert "{#rolling_windows}" in doc and "{#football_events}" in doc
+    assert "{#rolling_windows}" in doc and "{#football_events}" in doc and "{#shot_events}" in doc
+
+
+CURRY = "201939"  # Stephen Curry (stats.nba person_id); seasons are END-year
+
+
+@pytest.fixture(scope="module")
+def nba_shots() -> pl.DataFrame:
+    return pl.read_parquet(FIX / "nba_stats_shots_201939_2024_2025.parquet")
+
+
+@pytest.fixture(scope="module")
+def nba_dates() -> pl.DataFrame:
+    s = pl.read_parquet(FIX / "nba_stats_schedule_201939_2024_2025.parquet")
+    return s.select("game_id", pl.col("game_date").str.slice(0, 10).str.to_date())
+
+
+@pytest.fixture(scope="module")
+def nba_events(nba_shots, nba_dates):
+    return shot_events(nba_shots, nba_dates)
+
+
+def test_shot_events_units_and_counts(nba_events):
+    assert nba_events.schema == pl.Schema(EVENT_SCHEMA)
+    # regular season + playoffs only: the fixture's 38 play-in shots (20 of them threes) are not events
+    counts = dict(nba_events.group_by("window_unit").len().iter_rows())
+    assert counts == {"fga": 2833, "fg3a": 1740}
+    assert set(nba_events["metric"].unique()) == {"fg_pct", "fg3_pct"}
+    assert nba_events["entity_id"].unique().to_list() == [CURRY]
+    assert nba_events["team_id"].unique().to_list() == ["1610612744"]
+
+
+def test_shot_seq_runs_period_then_clock_down(nba_events):
+    g = nba_events.filter((pl.col("game_id") == "0022400007") & (pl.col("window_unit") == "fga")).sort("seq")
+    assert g["seq"].to_list()[:4] == [0, 1, 2, 3]
+    assert g["value"].to_list()[:4] == [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+    ]  # PT11M28 made 3, PT09M14 made 2, PT09M00 missed 3, PT06M22 made 3
+
+
+def test_shot_events_guard_ids_dates_and_empty(nba_shots, nba_dates):
+    with pytest.raises(TypeError, match="person_id"):
+        shot_events(nba_shots.with_columns(pl.col("person_id").cast(pl.Float64)), nba_dates)
+    with pytest.raises(ValueError, match="game_date"):
+        shot_events(nba_shots, nba_dates.head(3))
+    with pytest.raises(ValueError, match="game_id"):
+        shot_events(nba_shots, pl.concat([nba_dates, nba_dates.head(1)]))
+    assert shot_events(pl.DataFrame(), nba_dates).schema == pl.Schema(EVENT_SCHEMA)
+
+
+@pytest.mark.parametrize(
+    ("unit", "metric", "n", "cur", "prev", "start", "career"),
+    [
+        ("fga", "fg_pct", 200, 0.48, 0.43, 0.455, 0.448158),
+        ("fg3a", "fg3_pct", 200, 0.405, 0.405, 0.38, 0.401948),
+        ("fg3a", "fg3_pct", 50, 0.38, 0.44, 0.46, 0.402959),
+    ],
+)
+def test_curry_windows_match_a_hand_count(nba_events, unit, metric, n, cur, prev, start, career):
+    r = _row(rolling_windows(nba_events, 2025), entity_id=CURRY, window_unit=unit, metric=metric, window_n=n)
+    assert r["n"] == n
+    assert (r["cur"], r["prev"], r["season_start"]) == pytest.approx((cur, prev, start), abs=1e-6)
+    assert r["career_baseline"] == pytest.approx(career, abs=1e-6)
+    assert r["last_event_date"] == date(2025, 5, 6)

@@ -42,9 +42,11 @@ __all__ = [
     "EVENT_SCHEMA",
     "FOOTBALL_PBP_COLUMNS",
     "OUTPUT_SCHEMA",
+    "SHOT_COLUMNS",
     "WINDOWS",
     "football_events",
     "rolling_windows",
+    "shot_events",
 ]
 
 #: window sizes per unit; a producer may pass its own to :func:`rolling_windows`
@@ -103,6 +105,8 @@ _FOOTBALL_UNITS = (
 )
 #: ESPN season types that count: regular season (2) and postseason (3)
 COUNTED_SEASON_TYPES = (2, 3)
+#: stats.nba season types that count: regular season (2) and playoffs (4); play-in (5) and the Cup final (6) do not
+_STATS_SEASON_TYPES = ("2", "4")
 _ID_DTYPES = (pl.Int64, pl.Int32, pl.UInt32, pl.UInt64, pl.Utf8)
 
 
@@ -222,6 +226,115 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
             ).unpivot(on=["epa", "success_rate"], index=index, variable_name="metric", value_name="value")
         )
     return pl.concat(frames).select(list(EVENT_SCHEMA)).cast(EVENT_SCHEMA)
+
+
+#: the released ``{nba,wnba}_stats_shots`` columns :func:`shot_events` reads (project to these)
+SHOT_COLUMNS: tuple[str, ...] = (
+    "game_id",
+    "season",
+    "season_type_id",
+    "period",
+    "clock",
+    "team_id",
+    "person_id",
+    "player_name",
+    "shot_result",
+    "shot_value",
+)
+
+
+def _clock_seconds(clock: pl.Expr) -> pl.Expr:
+    """``"PT11M28.00S"`` -> 688.0, the time LEFT in the period."""
+    return clock.str.extract(r"PT(\d+)M", 1).cast(pl.Float64) * 60 + clock.str.extract(r"M([\d.]+)S", 1).cast(
+        pl.Float64
+    )
+
+
+def shot_events(shots: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
+    """Field-goal-attempt events from released ``{nba,wnba}_stats_shots``.
+
+    Population: regular-season (``season_type_id`` ``"2"``) and playoff (``"4"``) shots,
+    the population :func:`sportsdataverse.metric_curves.shot_attempts` keeps; play-in
+    and NBA Cup final games do not count. Every attempt is an ``fga`` event (metric
+    ``fg_pct``); a three-point attempt is also an ``fg3a`` event (metric ``fg3_pct``).
+    ``value`` is 1.0 for a make, 0.0 for a miss. ``seq`` orders a game's shots by
+    period, then game clock running down, then the provider's row order.
+
+    Args:
+        shots: released shots, any number of seasons (project to ``SHOT_COLUMNS``).
+            ``season`` is the asset's key: the ENDING year for the NBA, the calendar
+            year for the WNBA.
+        game_dates: ``game_id`` (text, ``"0022400007"``) and ``game_date`` (date) for
+            every game in ``shots``.
+
+    Returns:
+        pl.DataFrame: one row per attempt x unit, ``EVENT_SCHEMA``. ``entity_id`` is the
+        stats.nba / stats.wnba ``person_id``, not an ESPN id; ``entity_name`` is the
+        provider's name, which is the family name only (``"Curry"``).
+
+    Raises:
+        TypeError: ``person_id`` or ``team_id`` is float.
+        ValueError: a shot's game has no ``game_date``, or ``game_dates`` has a
+            duplicate ``game_id``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nba import load_nba_stats_schedules, load_nba_stats_shots
+            from sportsdataverse.rolling_windows import SHOT_COLUMNS, rolling_windows, shot_events
+
+            shots = load_nba_stats_shots([2024, 2025]).select(SHOT_COLUMNS)
+            sched = load_nba_stats_schedules([2024, 2025])
+            game_dates = sched.select("game_id", pl.col("game_date").str.slice(0, 10).str.to_date())
+            ev = shot_events(shots, game_dates.unique("game_id"))
+            rw = rolling_windows(ev, 2025)
+
+        Pipeline next step (one line)::
+
+            rw.filter((pl.col("window_unit") == "fg3a") & pl.col("qualified")).sort("delta_prev_rank")
+
+        See Also:
+            * `hoopR`_ -- the stats.nba shot chart loaders this reads.
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    _require_unique_game_ids(game_dates)
+    if shots.height == 0:
+        return pl.DataFrame(schema=EVENT_SCHEMA)
+    dates = game_dates.select(pl.col("game_id").cast(pl.Utf8), pl.col("game_date").cast(pl.Date))
+    # the row index is the provider's action order: take it BEFORE the join, which may reorder
+    s = (
+        shots.filter(pl.col("season_type_id").cast(pl.Utf8).is_in(_STATS_SEASON_TYPES))
+        .with_row_index("_ri")
+        .with_columns(pl.col("game_id").cast(pl.Utf8))
+    )
+    assert s.schema["game_id"] == dates.schema["game_id"]
+    s = s.join(dates, on="game_id", how="left")
+    _require_dates(s)
+    s = (
+        s.with_columns(_clock=_clock_seconds(pl.col("clock")))
+        .sort(["game_id", "period", "_clock", "_ri"], descending=[False, False, True, False], nulls_last=True)
+        .with_columns(seq=pl.int_range(pl.len()).over("game_id").cast(pl.Int64))
+    )
+    cols = [
+        pl.col("season").cast(pl.Int64),
+        pl.lit("player").alias("entity_type"),
+        _as_id(s, "person_id").alias("entity_id"),
+        pl.col("player_name").cast(pl.Utf8).alias("entity_name"),
+        _as_id(s, "team_id").alias("team_id"),
+    ]
+    tail = [
+        pl.col("game_id"),
+        pl.col("game_date").alias("event_date"),
+        pl.col("seq"),
+        (pl.col("shot_result") == "Made").cast(pl.Float64).alias("value"),
+    ]
+    fga = s.select(*cols, pl.lit("fga").alias("window_unit"), pl.lit("fg_pct").alias("metric"), *tail)
+    fg3a = s.filter(pl.col("shot_value") == 3).select(
+        *cols, pl.lit("fg3a").alias("window_unit"), pl.lit("fg3_pct").alias("metric"), *tail
+    )
+    return pl.concat([fga, fg3a]).select(list(EVENT_SCHEMA)).cast(EVENT_SCHEMA)
 
 
 OUTPUT_SCHEMA: dict[str, pl.DataType] = {

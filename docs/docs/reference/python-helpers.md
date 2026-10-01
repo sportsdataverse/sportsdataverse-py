@@ -6257,6 +6257,46 @@ curves = metric_curves(shot_attempts(shots), "nba")
 curves.filter((pl.col("entity_type") == "player") & (pl.col("entity_id") == "201939"))
 ```
 
+### `shot_events(shots: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#shot_events}
+
+Field-goal-attempt events from released `{nba,wnba}_stats_shots`.
+
+Population: regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots,
+the population `sportsdataverse.metric_curves.shot_attempts` keeps; play-in
+and NBA Cup final games do not count. Every attempt is an `fga` event (metric
+`fg_pct`); a three-point attempt is also an `fg3a` event (metric `fg3_pct`).
+`value` is 1.0 for a make, 0.0 for a miss. `seq` orders a game's shots by
+period, then game clock running down, then the provider's row order.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | released shots, any number of seasons (project to `SHOT_COLUMNS`). `season` is the asset's key: the ENDING year for the NBA, the calendar year for the WNBA. |
+| `game_dates` | `DataFrame` |  | `game_id` (text, `"0022400007"`) and `game_date` (date) for every game in `shots`. |
+
+**Returns**
+
+one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats.wnba `person_id`, not an ESPN id; `entity_name` is the provider's name, which is the family name only (`"Curry"`).
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import load_nba_stats_schedules, load_nba_stats_shots
+from sportsdataverse.rolling_windows import SHOT_COLUMNS, rolling_windows, shot_events
+
+shots = load_nba_stats_shots([2024, 2025]).select(SHOT_COLUMNS)
+sched = load_nba_stats_schedules([2024, 2025])
+game_dates = sched.select("game_id", pl.col("game_date").str.slice(0, 10).str.to_date())
+ev = shot_events(shots, game_dates.unique("game_id"))
+rw = rolling_windows(ev, 2025)
+
+# Pipeline next step (one line)
+
+rw.filter((pl.col("window_unit") == "fg3a") & pl.col("qualified")).sort("delta_prev_rank")
+```
+
 ### `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ufl_pbp}
 
 Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
