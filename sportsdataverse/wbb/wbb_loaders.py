@@ -579,6 +579,7 @@ def load_wbb_player_value(seasons, return_as_pandas: bool = False):
         |box_obpm  |Float64 |
         |box_dbpm  |Float64 |
         |box_bpm   |Float64 |
+        |qualified |Boolean |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2014.
@@ -809,7 +810,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |team_color               |String |
         |team_alternate_color     |String |
         |team_logo                |String |
-        |athlete_id               |Int32  |
+        |athlete_id               |String |
         |uid                      |String |
         |guid                     |String |
         |full_name                |String |
@@ -820,7 +821,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |jersey                   |String |
         |position_abbreviation    |String |
         |position_name            |String |
-        |position_id              |Int32  |
+        |position_id              |String |
         |height                   |String |
         |weight                   |String |
         |age                      |String |
@@ -833,7 +834,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |headshot_href            |String |
         |headshot_alt             |String |
         |link_web                 |String |
-        |status_id                |Int32  |
+        |status_id                |String |
         |status_name              |String |
         |status_type              |String |
 

@@ -183,6 +183,7 @@ def load_phf_player_boxscores(seasons, return_as_pandas: bool = False):
         |assists           |Int32   |
         |points            |Int32   |
         |penalty_minutes   |Int32   |
+        |plus_minus        |Int32   |
         |shots_on_goal     |Int32   |
         |blocks            |Int32   |
         |giveaways         |Int32   |

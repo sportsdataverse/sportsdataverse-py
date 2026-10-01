@@ -23,7 +23,14 @@ _ROOT = Path(__file__).resolve().parents[2]
 _SCHEMAS = _ROOT / "tools" / "codegen" / "schemas" / "loader_schemas.yaml"
 _RELEASES = _ROOT / "tools" / "codegen" / "endpoints" / "releases.yaml"
 
-_POLARS_BY_NAME = {"Int64": pl.Int64, "Float64": pl.Float64, "String": pl.Utf8, "Utf8": pl.Utf8}
+_POLARS_BY_NAME = {"Int64": pl.Int64, "Float64": pl.Float64, "String": pl.Utf8, "Utf8": pl.Utf8, "Boolean": pl.Boolean}
+
+# Columns the data repos append at PUBLISH time, on top of the producer schema:
+# hoopR-mbb-data python/mbb_model_publish/builders.py::add_qualified and the
+# wehoop-wbb-data python/wbb_model_publish/builders.py twin append
+# ``qualified = min >= QUALIFIED_MIN_MINUTES`` -- additive, never a filter -- so the
+# published asset (and the declared schema) carries it while _SCHEMA does not.
+PUBLISHER_ADDED: dict[str, pl.DataType] = {"qualified": pl.Boolean}
 
 
 def _declared(fn: str) -> list[dict]:
@@ -46,7 +53,8 @@ def test_ratings_declared_schema_matches_the_producer() -> None:
 
 
 def test_player_value_declared_schema_matches_the_producer() -> None:
-    _assert_schema_matches(_declared("load_wbb_player_value"), _bpm_mod._SCHEMA)
+    produced = {**_bpm_mod._SCHEMA, **PUBLISHER_ADDED}  # producer columns, then the publisher seam
+    _assert_schema_matches(_declared("load_wbb_player_value"), produced)
 
 
 def test_loader_entries_point_at_the_published_tags_and_floor() -> None:

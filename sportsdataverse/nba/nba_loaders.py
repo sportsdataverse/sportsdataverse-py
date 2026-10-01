@@ -2620,25 +2620,26 @@ def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):
            names a season by its STARTING year, so normalize before
            joining on ``season`` across those.
 
-        |col_name     |type    |
-        |:------------|:-------|
-        |team_id      |Int64   |
-        |season       |Int32   |
-        |league_id    |String  |
-        |player       |String  |
-        |nickname     |String  |
-        |player_slug  |String  |
-        |num          |String  |
-        |position     |String  |
-        |height       |String  |
-        |weight       |String  |
-        |birth_date   |String  |
-        |age          |Float64 |
-        |exp          |String  |
-        |school       |String  |
-        |player_id    |Int64   |
-        |how_acquired |String  |
-        |season_type  |String  |
+        |col_name            |type    |
+        |:-------------------|:-------|
+        |team_id             |Int64   |
+        |season              |Int32   |
+        |league_id           |String  |
+        |player              |String  |
+        |nickname            |String  |
+        |player_slug         |String  |
+        |num                 |String  |
+        |position            |String  |
+        |height              |String  |
+        |weight              |String  |
+        |birth_date          |String  |
+        |age                 |Float64 |
+        |exp                 |String  |
+        |school              |String  |
+        |player_id           |Int64   |
+        |how_acquired        |String  |
+        |supplemental_status |Int64   |
+        |season_type         |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.

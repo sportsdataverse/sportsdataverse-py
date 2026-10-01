@@ -80,14 +80,12 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |clock_display_value            |String                                                 |
         |scoring_play                   |Boolean                                                |
         |score_value                    |Int32                                                  |
-        |wallclock                      |String                                                 |
-        |shooting_play                  |Boolean                                                |
-        |coordinate_x_raw               |Float64                                                |
-        |coordinate_y_raw               |Float64                                                |
-        |points_attempted               |Int32                                                  |
-        |short_description              |String                                                 |
         |team_id                        |Int32                                                  |
         |athlete_id_1                   |Int32                                                  |
+        |wallclock                      |String                                                 |
+        |shooting_play                  |Boolean                                                |
+        |points_attempted               |Int32                                                  |
+        |short_description              |String                                                 |
         |athlete_id_2                   |Int32                                                  |
         |game_id                        |Int32                                                  |
         |season                         |Int32                                                  |
@@ -120,13 +118,16 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |start_game_seconds_remaining   |Int32                                                  |
         |end_period_seconds_remaining   |Int32                                                  |
         |end_game_seconds_remaining     |Int32                                                  |
-        |coordinate_x                   |Float64                                                |
-        |coordinate_y                   |Float64                                                |
         |game_date                      |Date                                                   |
         |game_date_time                 |Datetime(time_unit='us', time_zone='America/New_York') |
+        |coordinate_x                   |Float64                                                |
+        |coordinate_y                   |Float64                                                |
+        |coordinate_x_raw               |Float64                                                |
+        |coordinate_y_raw               |Float64                                                |
         |athlete_name_1                 |String                                                 |
         |athlete_name_2                 |String                                                 |
         |athlete_name_3                 |String                                                 |
+        |media_id                       |String                                                 |
         |pregame_home_prob              |Float64                                                |
         |home_win_prob                  |Float64                                                |
 
@@ -343,6 +344,7 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         |game_id                   |Int32                                                  |
         |season                    |Int32                                                  |
         |season_type               |Int32                                                  |
+        |away_non_div1_team        |Boolean                                                |
         |status_type_alt_detail    |String                                                 |
         |tournament_id             |Int32                                                  |
         |groups_id                 |Int32                                                  |
@@ -563,6 +565,7 @@ def load_mbb_player_value(seasons, return_as_pandas: bool = False):
         |box_obpm  |Float64 |
         |box_dbpm  |Float64 |
         |box_bpm   |Float64 |
+        |qualified |Boolean |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2006.

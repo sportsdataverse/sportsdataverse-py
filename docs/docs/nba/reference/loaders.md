@@ -1589,6 +1589,7 @@ Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-
 | `school` | String | Player school / pre-draft team. |
 | `player_id` | Int64 | Unique player identifier. |
 | `how_acquired` | String | How the team acquired the player (e.g. draft, trade, free agency). |
+| `supplemental_status` | Int64 | Numeric supplemental roster-status code from the stats.nba.com roster feed. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python

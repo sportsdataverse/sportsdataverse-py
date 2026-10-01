@@ -157,7 +157,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |yds_sacked                              |Int64   |
         |sack_players                            |String  |
         |sack_player_name                        |String  |
-        |sack_player_name2                       |Null    |
+        |sack_player_name2                       |String  |
         |pass_breakup_player_name                |String  |
         |interception_player_name                |String  |
         |yds_int_return                          |Int64   |
@@ -170,11 +170,11 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |yds_punt_return                         |Int64   |
         |yds_punt_gained                         |Int64   |
         |punt_block_player_name                  |String  |
-        |punt_block_return_player_name           |Null    |
+        |punt_block_return_player_name           |String  |
         |fg_kicker_player_name                   |String  |
         |yds_fg                                  |Int64   |
         |fg_block_player_name                    |String  |
-        |fg_return_player_name                   |Null    |
+        |fg_return_player_name                   |String  |
         |kickoff_player_name                     |String  |
         |yds_kickoff                             |Int64   |
         |yds_kickoff_return                      |Int64   |
@@ -288,6 +288,8 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |status_type_completed                   |Boolean |
         |homeTeamId                              |Int64   |
         |awayTeamId                              |Int64   |
+        |homeFinalScore                          |Int64   |
+        |awayFinalScore                          |Int64   |
         |homeTeamName                            |String  |
         |awayTeamName                            |String  |
         |homeTeamMascot                          |String  |
@@ -396,6 +398,11 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |field_goal_result                       |String  |
         |extra_point_result                      |String  |
         |two_point_conv_result                   |String  |
+        |defensive_two_point_attempt             |Boolean |
+        |defensive_two_point_conv                |Boolean |
+        |yds_punted_source                       |String  |
+        |yds_kickoff_source                      |String  |
+        |yds_punt_return_source                  |String  |
         |air_yardsToEndzone                      |Int64   |
         |air_yards                               |Int64   |
         |yards_after_catch                       |Int64   |
@@ -408,7 +415,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |return_team                             |Int64   |
         |fumble_or_muff                          |Boolean |
         |recovery_team                           |Int64   |
-        |recovery_team_2                         |Null    |
+        |recovery_team_2                         |Int64   |
         |penalty_spot_yardline                   |Int64   |
         |penalty_spot_side                       |String  |
         |penalty_spot_yardsToEndzone             |Int64   |
@@ -537,6 +544,8 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |away_wp_after_naive                     |Float64 |
         |wpa_naive                               |Float64 |
         |cp                                      |Float64 |
+        |cp_game_state                           |Float64 |
+        |cp_model                                |String  |
         |cpoe                                    |Float64 |
         |era                                     |Int64   |
         |xpass                                   |Float64 |
@@ -567,7 +576,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |receiver_player_id                      |Int64   |
         |fumble_player_id                        |Int64   |
         |sack_player_id                          |Int64   |
-        |sack_player_id2                         |Null    |
+        |sack_player_id2                         |Int64   |
         |interception_player_id                  |Int64   |
         |pass_breakup_player_id                  |Int64   |
         |fumble_forced_player_id                 |Int64   |
@@ -577,9 +586,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |kickoff_player_id                       |Int64   |
         |kickoff_return_player_id                |Int64   |
         |punt_return_player_id                   |Int64   |
-        |fg_block_player_id                      |Null    |
-        |punt_block_player_id                    |Null    |
-        |fg_return_player_id                     |Null    |
+        |fg_block_player_id                      |Int64   |
+        |punt_block_player_id                    |Int64   |
+        |fg_return_player_id                     |Int64   |
         |punt_block_return_player_id             |Null    |
         |go_wp                                   |Float64 |
         |first_down_prob                         |Float64 |
@@ -599,8 +608,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |prob_2pt                                |Float64 |
         |two_pt_recommendation                   |String  |
         |two_pt_wp_diff                          |Float64 |
-        |scoreValue                              |Null    |
-        |participants                            |Null    |
+        |mediaId                                 |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -820,6 +828,8 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
         |def_returning     |Float64 |
         |overall_returning |Float64 |
         |n_returning       |Int64   |
+        |def_basis         |String  |
+        |overall_basis     |String  |
         |is_estimated      |Boolean |
 
     Raises:
@@ -1798,6 +1808,23 @@ def load_cfb_play_participants(seasons, return_as_pandas: bool = False):
         |recoverer_player_ids       |String |
         |fumbler_player_ids         |String |
         |forced_by_player_ids       |String |
+        |kicker_position_id         |String |
+        |returner_position_id       |String |
+        |penalized_position_id      |String |
+        |passer_position_id         |String |
+        |receiver_position_id       |String |
+        |assisted_by_position_id    |String |
+        |tackler_position_id        |String |
+        |punter_position_id         |String |
+        |rusher_position_id         |String |
+        |pass_defender_position_id  |String |
+        |scorer_position_id         |String |
+        |pat_scorer_position_id     |String |
+        |sacked_by_position_id      |String |
+        |recoverer_position_id      |String |
+        |fumbler_position_id        |String |
+        |forced_by_position_id      |String |
+        |pat_passer_position_id     |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2014.
@@ -1914,6 +1941,11 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |middle_name                |String  |
         |age                        |Float64 |
         |date_of_birth              |String  |
+        |draft_display_text         |String  |
+        |draft_round                |Float64 |
+        |draft_year                 |Float64 |
+        |draft_selection            |Float64 |
+        |nickname                   |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -2835,13 +2867,13 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
         |field_goals_yards  |Int64  |
         |punts              |Int64  |
         |punts_yards        |Int64  |
+        |kick_returns       |Int64  |
+        |kick_returns_yards |Int64  |
         |punt_returns       |Int64  |
         |punt_returns_yards |Int64  |
         |game_id            |Int64  |
         |season             |Int64  |
         |week               |Int64  |
-        |kick_returns       |Int64  |
-        |kick_returns_yards |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -3439,7 +3471,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_off_n            |Int64   |
         |late_down_success_off_n              |Int64   |
         |early_down_EPA_off_n                 |Int64   |
-        |start_position_off_n                 |Int64   |
         |nonExplosiveEpaPerPlay_off_n         |Int64   |
         |line_yards_off_n                     |Int64   |
         |opportunity_rate_off_n               |Int64   |
@@ -3459,7 +3490,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_off              |Float64 |
         |late_down_success_off                |Float64 |
         |early_down_EPA_off                   |Float64 |
-        |start_position_off                   |Float64 |
         |nonExplosiveEpaPerPlay_off           |Float64 |
         |line_yards_off                       |Float64 |
         |opportunity_rate_off                 |Float64 |
@@ -3498,7 +3528,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_success_off_rank          |Float64 |
         |late_down_success_off_rank           |Float64 |
         |third_down_distance_off_rank         |Float64 |
-        |start_position_off_rank              |Float64 |
         |havoc_off_rank                       |Float64 |
         |turnovers_off_rank                   |Float64 |
         |explosive_off_rank                   |Float64 |
@@ -3520,7 +3549,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_def_n            |Int64   |
         |late_down_success_def_n              |Int64   |
         |early_down_EPA_def_n                 |Int64   |
-        |start_position_def_n                 |Int64   |
         |nonExplosiveEpaPerPlay_def_n         |Int64   |
         |line_yards_def_n                     |Int64   |
         |opportunity_rate_def_n               |Int64   |
@@ -3540,7 +3568,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_distance_def              |Float64 |
         |late_down_success_def                |Float64 |
         |early_down_EPA_def                   |Float64 |
-        |start_position_def                   |Float64 |
         |nonExplosiveEpaPerPlay_def           |Float64 |
         |line_yards_def                       |Float64 |
         |opportunity_rate_def                 |Float64 |
@@ -3579,7 +3606,6 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |third_down_success_def_rank          |Float64 |
         |late_down_success_def_rank           |Float64 |
         |third_down_distance_def_rank         |Float64 |
-        |start_position_def_rank              |Float64 |
         |havoc_def_rank                       |Float64 |
         |turnovers_def_rank                   |Float64 |
         |explosive_def_rank                   |Float64 |
@@ -3600,42 +3626,56 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_rank                  |Float64 |
         |success_margin_rank                  |Float64 |
         |yardsplay_margin_rank                |Float64 |
-        |start_position_margin                |Float64 |
-        |start_position_margin_rank           |Float64 |
         |explosive_margin                     |Float64 |
         |turnover_margin                      |Float64 |
+        |havoc_margin                         |Float64 |
         |explosive_margin_rank                |Float64 |
         |turnover_margin_rank                 |Float64 |
+        |havoc_margin_rank                    |Float64 |
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
         |pts_per_opp_off_n                    |Int64   |
         |pts_per_drive_off_n                  |Int64   |
+        |start_position_off                   |Float64 |
+        |start_position_off_n                 |Int64   |
+        |drive_start_ep_off                   |Float64 |
         |available_yards_pct_off              |Float64 |
         |pts_per_opp_off                      |Float64 |
         |pts_per_drive_off                    |Float64 |
         |available_yards_pct_off_rank         |Float64 |
         |pts_per_opp_off_rank                 |Float64 |
         |pts_per_drive_off_rank               |Float64 |
+        |start_position_off_rank              |Float64 |
+        |drive_start_ep_off_rank              |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
         |pts_per_opp_def_n                    |Int64   |
         |pts_per_drive_def_n                  |Int64   |
+        |start_position_def                   |Float64 |
+        |start_position_def_n                 |Int64   |
+        |drive_start_ep_def                   |Float64 |
         |available_yards_pct_def              |Float64 |
         |pts_per_opp_def                      |Float64 |
         |pts_per_drive_def                    |Float64 |
         |available_yards_pct_def_rank         |Float64 |
         |pts_per_opp_def_rank                 |Float64 |
         |pts_per_drive_def_rank               |Float64 |
+        |start_position_def_rank              |Float64 |
+        |drive_start_ep_def_rank              |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
         |pts_per_opp_margin                   |Float64 |
         |pts_per_drive_margin                 |Float64 |
+        |drive_start_ep_margin                |Float64 |
+        |start_position_margin                |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
         |pts_per_opp_margin_rank              |Float64 |
         |pts_per_drive_margin_rank            |Float64 |
+        |drive_start_ep_margin_rank           |Float64 |
+        |start_position_margin_rank           |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |
@@ -3960,6 +4000,24 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_rush_rank             |Float64 |
         |success_margin_rush_rank             |Float64 |
         |yardsplay_margin_rush_rank           |Float64 |
+        |havoc_EPAgame_off                    |Float64 |
+        |havoc_EPAgame_def                    |Float64 |
+        |havoc_EPAgame_margin                 |Float64 |
+        |expected_turnovers_off               |Float64 |
+        |expected_turnovers_def               |Float64 |
+        |expected_turnover_margin             |Float64 |
+        |havoc_EPAgame_off_rank               |Float64 |
+        |havoc_EPAgame_def_rank               |Float64 |
+        |havoc_EPAgame_margin_rank            |Float64 |
+        |expected_turnovers_off_rank          |Float64 |
+        |expected_turnovers_def_rank          |Float64 |
+        |expected_turnover_margin_rank        |Float64 |
+        |turnover_luck_off                    |Float64 |
+        |turnover_luck_def                    |Float64 |
+        |turnover_luck                        |Float64 |
+        |turnover_luck_off_rank               |Float64 |
+        |turnover_luck_def_rank               |Float64 |
+        |turnover_luck_rank                   |Float64 |
         |fbs_class                            |String  |
         |valid_games                          |UInt32  |
         |adj_off_epa                          |Float64 |
@@ -4166,6 +4224,9 @@ def load_cfb_ratings_weekly(seasons, return_as_pandas: bool = False):
         |def_rank     |Int64   |
         |net_rank     |Int64   |
         |net_z        |Float64 |
+        |fei_off_rank |Int64   |
+        |fei_def_rank |Int64   |
+        |fei_net_rank |Int64   |
         |through_week |Int32   |
 
     Raises:
@@ -4231,7 +4292,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_off_n            |Int64   |
         |late_down_success_off_n              |Int64   |
         |early_down_EPA_off_n                 |Int64   |
-        |start_position_off_n                 |Int64   |
         |nonExplosiveEpaPerPlay_off_n         |Int64   |
         |line_yards_off_n                     |Int64   |
         |opportunity_rate_off_n               |Int64   |
@@ -4251,7 +4311,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_off              |Float64 |
         |late_down_success_off                |Float64 |
         |early_down_EPA_off                   |Float64 |
-        |start_position_off                   |Float64 |
         |nonExplosiveEpaPerPlay_off           |Float64 |
         |line_yards_off                       |Float64 |
         |opportunity_rate_off                 |Float64 |
@@ -4290,7 +4349,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_success_off_rank          |Float64 |
         |late_down_success_off_rank           |Float64 |
         |third_down_distance_off_rank         |Float64 |
-        |start_position_off_rank              |Float64 |
         |havoc_off_rank                       |Float64 |
         |turnovers_off_rank                   |Float64 |
         |explosive_off_rank                   |Float64 |
@@ -4312,7 +4370,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_def_n            |Int64   |
         |late_down_success_def_n              |Int64   |
         |early_down_EPA_def_n                 |Int64   |
-        |start_position_def_n                 |Int64   |
         |nonExplosiveEpaPerPlay_def_n         |Int64   |
         |line_yards_def_n                     |Int64   |
         |opportunity_rate_def_n               |Int64   |
@@ -4332,7 +4389,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_distance_def              |Float64 |
         |late_down_success_def                |Float64 |
         |early_down_EPA_def                   |Float64 |
-        |start_position_def                   |Float64 |
         |nonExplosiveEpaPerPlay_def           |Float64 |
         |line_yards_def                       |Float64 |
         |opportunity_rate_def                 |Float64 |
@@ -4371,7 +4427,6 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |third_down_success_def_rank          |Float64 |
         |late_down_success_def_rank           |Float64 |
         |third_down_distance_def_rank         |Float64 |
-        |start_position_def_rank              |Float64 |
         |havoc_def_rank                       |Float64 |
         |turnovers_def_rank                   |Float64 |
         |explosive_def_rank                   |Float64 |
@@ -4392,42 +4447,56 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_rank                  |Float64 |
         |success_margin_rank                  |Float64 |
         |yardsplay_margin_rank                |Float64 |
-        |start_position_margin                |Float64 |
-        |start_position_margin_rank           |Float64 |
         |explosive_margin                     |Float64 |
         |turnover_margin                      |Float64 |
+        |havoc_margin                         |Float64 |
         |explosive_margin_rank                |Float64 |
         |turnover_margin_rank                 |Float64 |
+        |havoc_margin_rank                    |Float64 |
         |total_available_yards_off            |Float64 |
         |total_gained_yards_off               |Int64   |
         |pts_per_opp_off_n                    |Int64   |
         |pts_per_drive_off_n                  |Int64   |
+        |start_position_off                   |Float64 |
+        |start_position_off_n                 |Int64   |
+        |drive_start_ep_off                   |Float64 |
         |available_yards_pct_off              |Float64 |
         |pts_per_opp_off                      |Float64 |
         |pts_per_drive_off                    |Float64 |
         |available_yards_pct_off_rank         |Float64 |
         |pts_per_opp_off_rank                 |Float64 |
         |pts_per_drive_off_rank               |Float64 |
+        |start_position_off_rank              |Float64 |
+        |drive_start_ep_off_rank              |Float64 |
         |total_available_yards_def            |Float64 |
         |total_gained_yards_def               |Int64   |
         |pts_per_opp_def_n                    |Int64   |
         |pts_per_drive_def_n                  |Int64   |
+        |start_position_def                   |Float64 |
+        |start_position_def_n                 |Int64   |
+        |drive_start_ep_def                   |Float64 |
         |available_yards_pct_def              |Float64 |
         |pts_per_opp_def                      |Float64 |
         |pts_per_drive_def                    |Float64 |
         |available_yards_pct_def_rank         |Float64 |
         |pts_per_opp_def_rank                 |Float64 |
         |pts_per_drive_def_rank               |Float64 |
+        |start_position_def_rank              |Float64 |
+        |drive_start_ep_def_rank              |Float64 |
         |total_available_yards_margin         |Float64 |
         |total_gained_yards_margin            |Int64   |
         |available_yards_pct_margin           |Float64 |
         |pts_per_opp_margin                   |Float64 |
         |pts_per_drive_margin                 |Float64 |
+        |drive_start_ep_margin                |Float64 |
+        |start_position_margin                |Float64 |
         |total_available_yards_margin_rank    |Float64 |
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
         |pts_per_opp_margin_rank              |Float64 |
         |pts_per_drive_margin_rank            |Float64 |
+        |drive_start_ep_margin_rank           |Float64 |
+        |start_position_margin_rank           |Float64 |
         |passrate_off_pass_n                  |Int64   |
         |rushrate_off_pass_n                  |Int64   |
         |havoc_off_pass_n                     |Int64   |
@@ -4752,6 +4821,24 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |EPAgame_margin_rush_rank             |Float64 |
         |success_margin_rush_rank             |Float64 |
         |yardsplay_margin_rush_rank           |Float64 |
+        |havoc_EPAgame_off                    |Float64 |
+        |havoc_EPAgame_def                    |Float64 |
+        |havoc_EPAgame_margin                 |Float64 |
+        |expected_turnovers_off               |Float64 |
+        |expected_turnovers_def               |Float64 |
+        |expected_turnover_margin             |Float64 |
+        |havoc_EPAgame_off_rank               |Float64 |
+        |havoc_EPAgame_def_rank               |Float64 |
+        |havoc_EPAgame_margin_rank            |Float64 |
+        |expected_turnovers_off_rank          |Float64 |
+        |expected_turnovers_def_rank          |Float64 |
+        |expected_turnover_margin_rank        |Float64 |
+        |turnover_luck_off                    |Float64 |
+        |turnover_luck_def                    |Float64 |
+        |turnover_luck                        |Float64 |
+        |turnover_luck_off_rank               |Float64 |
+        |turnover_luck_def_rank               |Float64 |
+        |turnover_luck_rank                   |Float64 |
         |fbs_class                            |String  |
         |valid_games                          |UInt32  |
         |adj_off_epa                          |Float64 |
@@ -5522,6 +5609,10 @@ def load_cfb_usage_st_team(seasons, return_as_pandas: bool = False):
         |kickoff_return_yards_allowed |Float64 |
         |kickoff_return_tds_allowed   |Int64   |
         |kickoff_epa                  |Float64 |
+        |kick_returns                 |Int64   |
+        |kick_return_yards            |Float64 |
+        |kick_return_tds              |Int64   |
+        |kick_return_epa              |Float64 |
         |punts                        |Int64   |
         |punt_yards                   |Float64 |
         |punt_touchbacks              |Int64   |
@@ -5530,20 +5621,16 @@ def load_cfb_usage_st_team(seasons, return_as_pandas: bool = False):
         |punt_return_yards_allowed    |Float64 |
         |punt_return_tds_allowed      |Int64   |
         |punt_epa                     |Float64 |
+        |punt_returns                 |Int64   |
+        |punt_return_yards            |Float64 |
+        |punt_return_tds              |Int64   |
+        |punt_return_epa              |Float64 |
         |fg_attempts                  |Int64   |
         |fg_made                      |Int64   |
         |fgs_blocked                  |Int64   |
         |fg_epa                       |Float64 |
-        |kick_returns                 |Int64   |
-        |kick_return_yards            |Float64 |
-        |punt_returns                 |Int64   |
-        |punt_return_yards            |Float64 |
         |punt_blocks_by               |Int64   |
         |fg_blocks_by                 |Int64   |
-        |kick_return_tds              |Int64   |
-        |kick_return_epa              |Float64 |
-        |punt_return_tds              |Int64   |
-        |punt_return_epa              |Float64 |
         |games                        |UInt32  |
         |punt_net_yards               |Float64 |
         |kickoff_touchback_rate       |Float64 |

@@ -414,6 +414,10 @@ load_cfb_adv_specialists:
   type: Int64
 - name: punts_yards
   type: Int64
+- name: kick_returns
+  type: Int64
+- name: kick_returns_yards
+  type: Int64
 - name: punt_returns
   type: Int64
 - name: punt_returns_yards
@@ -423,10 +427,6 @@ load_cfb_adv_specialists:
 - name: season
   type: Int64
 - name: week
-  type: Int64
-- name: kick_returns
-  type: Int64
-- name: kick_returns_yards
   type: Int64
 load_cfb_adv_team:
 - name: pos_team_id
@@ -3533,6 +3533,16 @@ load_cfb_game_rosters:
   type: Float64
 - name: date_of_birth
   type: String
+- name: draft_display_text
+  type: String
+- name: draft_round
+  type: Float64
+- name: draft_year
+  type: Float64
+- name: draft_selection
+  type: Float64
+- name: nickname
+  type: String
 load_cfb_group_aliases:
 - name: league
   type: String
@@ -3937,7 +3947,7 @@ load_cfb_pbp:
 - name: sack_player_name
   type: String
 - name: sack_player_name2
-  type: 'Null'
+  type: String
 - name: pass_breakup_player_name
   type: String
 - name: interception_player_name
@@ -3963,7 +3973,7 @@ load_cfb_pbp:
 - name: punt_block_player_name
   type: String
 - name: punt_block_return_player_name
-  type: 'Null'
+  type: String
 - name: fg_kicker_player_name
   type: String
 - name: yds_fg
@@ -3971,7 +3981,7 @@ load_cfb_pbp:
 - name: fg_block_player_name
   type: String
 - name: fg_return_player_name
-  type: 'Null'
+  type: String
 - name: kickoff_player_name
   type: String
 - name: yds_kickoff
@@ -4198,6 +4208,10 @@ load_cfb_pbp:
   type: Int64
 - name: awayTeamId
   type: Int64
+- name: homeFinalScore
+  type: Int64
+- name: awayFinalScore
+  type: Int64
 - name: homeTeamName
   type: String
 - name: awayTeamName
@@ -4414,6 +4428,16 @@ load_cfb_pbp:
   type: String
 - name: two_point_conv_result
   type: String
+- name: defensive_two_point_attempt
+  type: Boolean
+- name: defensive_two_point_conv
+  type: Boolean
+- name: yds_punted_source
+  type: String
+- name: yds_kickoff_source
+  type: String
+- name: yds_punt_return_source
+  type: String
 - name: air_yardsToEndzone
   type: Int64
 - name: air_yards
@@ -4439,7 +4463,7 @@ load_cfb_pbp:
 - name: recovery_team
   type: Int64
 - name: recovery_team_2
-  type: 'Null'
+  type: Int64
 - name: penalty_spot_yardline
   type: Int64
 - name: penalty_spot_side
@@ -4696,6 +4720,10 @@ load_cfb_pbp:
   type: Float64
 - name: cp
   type: Float64
+- name: cp_game_state
+  type: Float64
+- name: cp_model
+  type: String
 - name: cpoe
   type: Float64
 - name: era
@@ -4757,7 +4785,7 @@ load_cfb_pbp:
 - name: sack_player_id
   type: Int64
 - name: sack_player_id2
-  type: 'Null'
+  type: Int64
 - name: interception_player_id
   type: Int64
 - name: pass_breakup_player_id
@@ -4777,11 +4805,11 @@ load_cfb_pbp:
 - name: punt_return_player_id
   type: Int64
 - name: fg_block_player_id
-  type: 'Null'
+  type: Int64
 - name: punt_block_player_id
-  type: 'Null'
+  type: Int64
 - name: fg_return_player_id
-  type: 'Null'
+  type: Int64
 - name: punt_block_return_player_id
   type: 'Null'
 - name: go_wp
@@ -4820,10 +4848,8 @@ load_cfb_pbp:
   type: String
 - name: two_pt_wp_diff
   type: Float64
-- name: scoreValue
-  type: 'Null'
-- name: participants
-  type: 'Null'
+- name: mediaId
+  type: String
 load_cfb_pbp_r:
 - name: year
   type: Int32
@@ -5749,6 +5775,40 @@ load_cfb_play_participants:
   type: String
 - name: forced_by_player_ids
   type: String
+- name: kicker_position_id
+  type: String
+- name: returner_position_id
+  type: String
+- name: penalized_position_id
+  type: String
+- name: passer_position_id
+  type: String
+- name: receiver_position_id
+  type: String
+- name: assisted_by_position_id
+  type: String
+- name: tackler_position_id
+  type: String
+- name: punter_position_id
+  type: String
+- name: rusher_position_id
+  type: String
+- name: pass_defender_position_id
+  type: String
+- name: scorer_position_id
+  type: String
+- name: pat_scorer_position_id
+  type: String
+- name: sacked_by_position_id
+  type: String
+- name: recoverer_position_id
+  type: String
+- name: fumbler_position_id
+  type: String
+- name: forced_by_position_id
+  type: String
+- name: pat_passer_position_id
+  type: String
 load_cfb_player_box:
 - name: stat_1
   type: String
@@ -5955,6 +6015,12 @@ load_cfb_ratings_weekly:
   type: Int64
 - name: net_z
   type: Float64
+- name: fei_off_rank
+  type: Int64
+- name: fei_def_rank
+  type: Int64
+- name: fei_net_rank
+  type: Int64
 - name: through_week
   type: Int32
 load_cfb_receiving:
@@ -6111,6 +6177,10 @@ load_cfb_returning_production:
   type: Float64
 - name: n_returning
   type: Int64
+- name: def_basis
+  type: String
+- name: overall_basis
+  type: String
 - name: is_estimated
   type: Boolean
 load_cfb_rosters:
@@ -6716,8 +6786,6 @@ load_cfb_team_summaries:
   type: Int64
 - name: early_down_EPA_off_n
   type: Int64
-- name: start_position_off_n
-  type: Int64
 - name: nonExplosiveEpaPerPlay_off_n
   type: Int64
 - name: line_yards_off_n
@@ -6755,8 +6823,6 @@ load_cfb_team_summaries:
 - name: late_down_success_off
   type: Float64
 - name: early_down_EPA_off
-  type: Float64
-- name: start_position_off
   type: Float64
 - name: nonExplosiveEpaPerPlay_off
   type: Float64
@@ -6834,8 +6900,6 @@ load_cfb_team_summaries:
   type: Float64
 - name: third_down_distance_off_rank
   type: Float64
-- name: start_position_off_rank
-  type: Float64
 - name: havoc_off_rank
   type: Float64
 - name: turnovers_off_rank
@@ -6878,8 +6942,6 @@ load_cfb_team_summaries:
   type: Int64
 - name: early_down_EPA_def_n
   type: Int64
-- name: start_position_def_n
-  type: Int64
 - name: nonExplosiveEpaPerPlay_def_n
   type: Int64
 - name: line_yards_def_n
@@ -6917,8 +6979,6 @@ load_cfb_team_summaries:
 - name: late_down_success_def
   type: Float64
 - name: early_down_EPA_def
-  type: Float64
-- name: start_position_def
   type: Float64
 - name: nonExplosiveEpaPerPlay_def
   type: Float64
@@ -6996,8 +7056,6 @@ load_cfb_team_summaries:
   type: Float64
 - name: third_down_distance_def_rank
   type: Float64
-- name: start_position_def_rank
-  type: Float64
 - name: havoc_def_rank
   type: Float64
 - name: turnovers_def_rank
@@ -7038,17 +7096,17 @@ load_cfb_team_summaries:
   type: Float64
 - name: yardsplay_margin_rank
   type: Float64
-- name: start_position_margin
-  type: Float64
-- name: start_position_margin_rank
-  type: Float64
 - name: explosive_margin
   type: Float64
 - name: turnover_margin
   type: Float64
+- name: havoc_margin
+  type: Float64
 - name: explosive_margin_rank
   type: Float64
 - name: turnover_margin_rank
+  type: Float64
+- name: havoc_margin_rank
   type: Float64
 - name: total_available_yards_off
   type: Float64
@@ -7058,6 +7116,12 @@ load_cfb_team_summaries:
   type: Int64
 - name: pts_per_drive_off_n
   type: Int64
+- name: start_position_off
+  type: Float64
+- name: start_position_off_n
+  type: Int64
+- name: drive_start_ep_off
+  type: Float64
 - name: available_yards_pct_off
   type: Float64
 - name: pts_per_opp_off
@@ -7070,6 +7134,10 @@ load_cfb_team_summaries:
   type: Float64
 - name: pts_per_drive_off_rank
   type: Float64
+- name: start_position_off_rank
+  type: Float64
+- name: drive_start_ep_off_rank
+  type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
@@ -7078,6 +7146,12 @@ load_cfb_team_summaries:
   type: Int64
 - name: pts_per_drive_def_n
   type: Int64
+- name: start_position_def
+  type: Float64
+- name: start_position_def_n
+  type: Int64
+- name: drive_start_ep_def
+  type: Float64
 - name: available_yards_pct_def
   type: Float64
 - name: pts_per_opp_def
@@ -7090,6 +7164,10 @@ load_cfb_team_summaries:
   type: Float64
 - name: pts_per_drive_def_rank
   type: Float64
+- name: start_position_def_rank
+  type: Float64
+- name: drive_start_ep_def_rank
+  type: Float64
 - name: total_available_yards_margin
   type: Float64
 - name: total_gained_yards_margin
@@ -7100,6 +7178,10 @@ load_cfb_team_summaries:
   type: Float64
 - name: pts_per_drive_margin
   type: Float64
+- name: drive_start_ep_margin
+  type: Float64
+- name: start_position_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
@@ -7109,6 +7191,10 @@ load_cfb_team_summaries:
 - name: pts_per_opp_margin_rank
   type: Float64
 - name: pts_per_drive_margin_rank
+  type: Float64
+- name: drive_start_ep_margin_rank
+  type: Float64
+- name: start_position_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64
@@ -7757,6 +7843,42 @@ load_cfb_team_summaries:
 - name: success_margin_rush_rank
   type: Float64
 - name: yardsplay_margin_rush_rank
+  type: Float64
+- name: havoc_EPAgame_off
+  type: Float64
+- name: havoc_EPAgame_def
+  type: Float64
+- name: havoc_EPAgame_margin
+  type: Float64
+- name: expected_turnovers_off
+  type: Float64
+- name: expected_turnovers_def
+  type: Float64
+- name: expected_turnover_margin
+  type: Float64
+- name: havoc_EPAgame_off_rank
+  type: Float64
+- name: havoc_EPAgame_def_rank
+  type: Float64
+- name: havoc_EPAgame_margin_rank
+  type: Float64
+- name: expected_turnovers_off_rank
+  type: Float64
+- name: expected_turnovers_def_rank
+  type: Float64
+- name: expected_turnover_margin_rank
+  type: Float64
+- name: turnover_luck_off
+  type: Float64
+- name: turnover_luck_def
+  type: Float64
+- name: turnover_luck
+  type: Float64
+- name: turnover_luck_off_rank
+  type: Float64
+- name: turnover_luck_def_rank
+  type: Float64
+- name: turnover_luck_rank
   type: Float64
 - name: fbs_class
   type: String
@@ -7819,8 +7941,6 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: early_down_EPA_off_n
   type: Int64
-- name: start_position_off_n
-  type: Int64
 - name: nonExplosiveEpaPerPlay_off_n
   type: Int64
 - name: line_yards_off_n
@@ -7858,8 +7978,6 @@ load_cfb_team_summaries_weekly:
 - name: late_down_success_off
   type: Float64
 - name: early_down_EPA_off
-  type: Float64
-- name: start_position_off
   type: Float64
 - name: nonExplosiveEpaPerPlay_off
   type: Float64
@@ -7937,8 +8055,6 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: third_down_distance_off_rank
   type: Float64
-- name: start_position_off_rank
-  type: Float64
 - name: havoc_off_rank
   type: Float64
 - name: turnovers_off_rank
@@ -7981,8 +8097,6 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: early_down_EPA_def_n
   type: Int64
-- name: start_position_def_n
-  type: Int64
 - name: nonExplosiveEpaPerPlay_def_n
   type: Int64
 - name: line_yards_def_n
@@ -8020,8 +8134,6 @@ load_cfb_team_summaries_weekly:
 - name: late_down_success_def
   type: Float64
 - name: early_down_EPA_def
-  type: Float64
-- name: start_position_def
   type: Float64
 - name: nonExplosiveEpaPerPlay_def
   type: Float64
@@ -8099,8 +8211,6 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: third_down_distance_def_rank
   type: Float64
-- name: start_position_def_rank
-  type: Float64
 - name: havoc_def_rank
   type: Float64
 - name: turnovers_def_rank
@@ -8141,17 +8251,17 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: yardsplay_margin_rank
   type: Float64
-- name: start_position_margin
-  type: Float64
-- name: start_position_margin_rank
-  type: Float64
 - name: explosive_margin
   type: Float64
 - name: turnover_margin
   type: Float64
+- name: havoc_margin
+  type: Float64
 - name: explosive_margin_rank
   type: Float64
 - name: turnover_margin_rank
+  type: Float64
+- name: havoc_margin_rank
   type: Float64
 - name: total_available_yards_off
   type: Float64
@@ -8161,6 +8271,12 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: pts_per_drive_off_n
   type: Int64
+- name: start_position_off
+  type: Float64
+- name: start_position_off_n
+  type: Int64
+- name: drive_start_ep_off
+  type: Float64
 - name: available_yards_pct_off
   type: Float64
 - name: pts_per_opp_off
@@ -8173,6 +8289,10 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: pts_per_drive_off_rank
   type: Float64
+- name: start_position_off_rank
+  type: Float64
+- name: drive_start_ep_off_rank
+  type: Float64
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
@@ -8181,6 +8301,12 @@ load_cfb_team_summaries_weekly:
   type: Int64
 - name: pts_per_drive_def_n
   type: Int64
+- name: start_position_def
+  type: Float64
+- name: start_position_def_n
+  type: Int64
+- name: drive_start_ep_def
+  type: Float64
 - name: available_yards_pct_def
   type: Float64
 - name: pts_per_opp_def
@@ -8193,6 +8319,10 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: pts_per_drive_def_rank
   type: Float64
+- name: start_position_def_rank
+  type: Float64
+- name: drive_start_ep_def_rank
+  type: Float64
 - name: total_available_yards_margin
   type: Float64
 - name: total_gained_yards_margin
@@ -8203,6 +8333,10 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: pts_per_drive_margin
   type: Float64
+- name: drive_start_ep_margin
+  type: Float64
+- name: start_position_margin
+  type: Float64
 - name: total_available_yards_margin_rank
   type: Float64
 - name: total_gained_yards_margin_rank
@@ -8212,6 +8346,10 @@ load_cfb_team_summaries_weekly:
 - name: pts_per_opp_margin_rank
   type: Float64
 - name: pts_per_drive_margin_rank
+  type: Float64
+- name: drive_start_ep_margin_rank
+  type: Float64
+- name: start_position_margin_rank
   type: Float64
 - name: passrate_off_pass_n
   type: Int64
@@ -8860,6 +8998,42 @@ load_cfb_team_summaries_weekly:
 - name: success_margin_rush_rank
   type: Float64
 - name: yardsplay_margin_rush_rank
+  type: Float64
+- name: havoc_EPAgame_off
+  type: Float64
+- name: havoc_EPAgame_def
+  type: Float64
+- name: havoc_EPAgame_margin
+  type: Float64
+- name: expected_turnovers_off
+  type: Float64
+- name: expected_turnovers_def
+  type: Float64
+- name: expected_turnover_margin
+  type: Float64
+- name: havoc_EPAgame_off_rank
+  type: Float64
+- name: havoc_EPAgame_def_rank
+  type: Float64
+- name: havoc_EPAgame_margin_rank
+  type: Float64
+- name: expected_turnovers_off_rank
+  type: Float64
+- name: expected_turnovers_def_rank
+  type: Float64
+- name: expected_turnover_margin_rank
+  type: Float64
+- name: turnover_luck_off
+  type: Float64
+- name: turnover_luck_def
+  type: Float64
+- name: turnover_luck
+  type: Float64
+- name: turnover_luck_off_rank
+  type: Float64
+- name: turnover_luck_def_rank
+  type: Float64
+- name: turnover_luck_rank
   type: Float64
 - name: fbs_class
   type: String
@@ -10660,6 +10834,14 @@ load_cfb_usage_st_team:
   type: Int64
 - name: kickoff_epa
   type: Float64
+- name: kick_returns
+  type: Int64
+- name: kick_return_yards
+  type: Float64
+- name: kick_return_tds
+  type: Int64
+- name: kick_return_epa
+  type: Float64
 - name: punts
   type: Int64
 - name: punt_yards
@@ -10676,6 +10858,14 @@ load_cfb_usage_st_team:
   type: Int64
 - name: punt_epa
   type: Float64
+- name: punt_returns
+  type: Int64
+- name: punt_return_yards
+  type: Float64
+- name: punt_return_tds
+  type: Int64
+- name: punt_return_epa
+  type: Float64
 - name: fg_attempts
   type: Int64
 - name: fg_made
@@ -10684,26 +10874,10 @@ load_cfb_usage_st_team:
   type: Int64
 - name: fg_epa
   type: Float64
-- name: kick_returns
-  type: Int64
-- name: kick_return_yards
-  type: Float64
-- name: punt_returns
-  type: Int64
-- name: punt_return_yards
-  type: Float64
 - name: punt_blocks_by
   type: Int64
 - name: fg_blocks_by
   type: Int64
-- name: kick_return_tds
-  type: Int64
-- name: kick_return_epa
-  type: Float64
-- name: punt_return_tds
-  type: Int64
-- name: punt_return_epa
-  type: Float64
 - name: games
   type: UInt32
 - name: punt_net_yards
@@ -10976,22 +11150,18 @@ load_mbb_pbp:
   type: Boolean
 - name: score_value
   type: Int32
-- name: wallclock
-  type: String
-- name: shooting_play
-  type: Boolean
-- name: coordinate_x_raw
-  type: Float64
-- name: coordinate_y_raw
-  type: Float64
-- name: points_attempted
-  type: Int32
-- name: short_description
-  type: String
 - name: team_id
   type: Int32
 - name: athlete_id_1
   type: Int32
+- name: wallclock
+  type: String
+- name: shooting_play
+  type: Boolean
+- name: points_attempted
+  type: Int32
+- name: short_description
+  type: String
 - name: athlete_id_2
   type: Int32
 - name: game_id
@@ -11056,19 +11226,25 @@ load_mbb_pbp:
   type: Int32
 - name: end_game_seconds_remaining
   type: Int32
-- name: coordinate_x
-  type: Float64
-- name: coordinate_y
-  type: Float64
 - name: game_date
   type: Date
 - name: game_date_time
   type: Datetime(time_unit='us', time_zone='America/New_York')
+- name: coordinate_x
+  type: Float64
+- name: coordinate_y
+  type: Float64
+- name: coordinate_x_raw
+  type: Float64
+- name: coordinate_y_raw
+  type: Float64
 - name: athlete_name_1
   type: String
 - name: athlete_name_2
   type: String
 - name: athlete_name_3
+  type: String
+- name: media_id
   type: String
 - name: pregame_home_prob
   type: Float64
@@ -11341,6 +11517,8 @@ load_mbb_player_value:
   type: Float64
 - name: box_bpm
   type: Float64
+- name: qualified
+  type: Boolean
 load_mbb_ratings:
 - name: season
   type: Int64
@@ -11584,6 +11762,8 @@ load_mbb_schedule:
   type: Int32
 - name: season_type
   type: Int32
+- name: away_non_div1_team
+  type: Boolean
 - name: status_type_alt_detail
   type: String
 - name: tournament_id
@@ -14816,6 +14996,8 @@ load_nba_stats_rosters:
   type: Int64
 - name: how_acquired
   type: String
+- name: supplemental_status
+  type: Int64
 - name: season_type
   type: String
 load_nba_stats_schedules:
@@ -21406,6 +21588,8 @@ load_nfl_injuries:
   type: String
 - name: report_primary_injury
   type: String
+- name: report_secondary_injury
+  type: String
 - name: report_status
   type: String
 - name: practice_primary_injury
@@ -21604,7 +21788,7 @@ load_nfl_model_pbp:
 - name: lateral_rushing_yards
   type: 'Null'
 - name: lateral_receiving_yards
-  type: 'Null'
+  type: Int64
 - name: passer_player_id
   type: String
 - name: passer_player_name
@@ -21752,11 +21936,11 @@ load_nfl_model_pbp:
 - name: forced_fumble_player_1_team
   type: String
 - name: forced_fumble_player_2_player_id
-  type: 'Null'
+  type: String
 - name: forced_fumble_player_2_player_name
-  type: 'Null'
+  type: String
 - name: forced_fumble_player_2_team
-  type: 'Null'
+  type: String
 - name: fumbled_1_player_id
   type: String
 - name: fumbled_1_player_name
@@ -21826,7 +22010,7 @@ load_nfl_model_pbp:
 - name: defteam_timeouts_remaining
   type: Int64
 - name: roof
-  type: 'Null'
+  type: String
 - name: spread_line
   type: Float64
 - name: total_line
@@ -24416,11 +24600,15 @@ load_nfl_usage_position_group_tackles:
   type: Int64
 - name: assists
   type: Int64
+- name: scrimmage_tackle_points
+  type: Float64
 - name: tackle_points
   type: Float64
 - name: games
   type: UInt32
 - name: team_tackle_points
+  type: Float64
+- name: team_scrimmage_tackle_points
   type: Float64
 - name: tackle_share
   type: Float64
@@ -24783,11 +24971,15 @@ load_nfl_usage_tackles:
   type: Int64
 - name: assists
   type: Int64
+- name: scrimmage_tackle_points
+  type: Float64
 - name: tackle_points
   type: Float64
 - name: games
   type: UInt32
 - name: team_tackle_points
+  type: Float64
+- name: team_scrimmage_tackle_points
   type: Float64
 - name: tackle_share
   type: Float64
@@ -25733,6 +25925,8 @@ load_nhl_penalties:
   type: String
 - name: committedByPlayer.lastName.sv
   type: String
+- name: committedByPlayer.lastName.fr
+  type: String
 - name: committedByPlayer.sweaterNumber
   type: Int64
 - name: teamAbbrev.default
@@ -25767,6 +25961,8 @@ load_nhl_penalties:
   type: String
 - name: drawnBy.lastName.sv
   type: String
+- name: drawnBy.lastName.fr
+  type: String
 - name: drawnBy.sweaterNumber
   type: Int64
 - name: descKey
@@ -25780,6 +25976,10 @@ load_nhl_penalties:
 - name: servedBy.default
   type: String
 - name: servedBy.cs
+  type: String
+- name: servedBy.de
+  type: String
+- name: servedBy.es
   type: String
 - name: servedBy.fi
   type: String
@@ -26133,11 +26333,13 @@ load_nhl_scoring:
   type: String
 - name: lastName.sk
   type: String
+- name: lastName.sv
+  type: String
 - name: lastName.de
   type: String
 - name: lastName.es
   type: String
-- name: lastName.sv
+- name: lastName.fr
   type: String
 - name: name.default
   type: String
@@ -26145,11 +26347,15 @@ load_nhl_scoring:
   type: String
 - name: name.de
   type: String
+- name: name.es
+  type: String
 - name: name.fi
   type: String
 - name: name.sk
   type: String
 - name: name.sv
+  type: String
+- name: name.fr
   type: String
 - name: teamAbbrev.default
   type: String
@@ -26157,15 +26363,9 @@ load_nhl_scoring:
   type: String
 - name: highlightClipSharingUrl
   type: String
-- name: highlightClipSharingUrlFr
-  type: String
 - name: highlightClip
   type: Int64
-- name: highlightClipFr
-  type: Int64
 - name: discreteClip
-  type: Int64
-- name: discreteClipFr
   type: Int64
 - name: goalsToDate
   type: Int64
@@ -26196,6 +26396,12 @@ load_nhl_scoring:
 - name: period_type
   type: String
 - name: goalInGame
+  type: Int64
+- name: discreteClipFr
+  type: Int64
+- name: highlightClipSharingUrlFr
+  type: String
+- name: highlightClipFr
   type: Int64
 load_nhl_scratches:
 - name: id
@@ -26488,13 +26694,17 @@ load_nhl_three_stars:
   type: String
 - name: name.cs
   type: String
-- name: name.de
+- name: name.sk
   type: String
 - name: name.fi
   type: String
-- name: name.sk
-  type: String
 - name: name.sv
+  type: String
+- name: name.de
+  type: String
+- name: name.es
+  type: String
+- name: name.fr
   type: String
 - name: sweaterNo
   type: Int64
@@ -26506,6 +26716,10 @@ load_nhl_three_stars:
   type: Int64
 - name: points
   type: Int64
+- name: goalsAgainstAverage
+  type: Float64
+- name: savePctg
+  type: Float64
 - name: game_id
   type: Int64
 - name: winner_id
@@ -26516,10 +26730,6 @@ load_nhl_three_stars:
   type: Int64
 - name: loser_name
   type: String
-- name: goalsAgainstAverage
-  type: Float64
-- name: savePctg
-  type: Float64
 load_phf_pbp:
 - name: play_type
   type: String
@@ -26693,6 +26903,8 @@ load_phf_player_boxscores:
 - name: points
   type: Int32
 - name: penalty_minutes
+  type: Int32
+- name: plus_minus
   type: Int32
 - name: shots_on_goal
   type: Int32
@@ -28274,6 +28486,8 @@ load_wbb_player_value:
   type: Float64
 - name: box_bpm
   type: Float64
+- name: qualified
+  type: Boolean
 load_wbb_ratings:
 - name: season
   type: Int64
@@ -28317,7 +28531,7 @@ load_wbb_rosters:
 - name: team_logo
   type: String
 - name: athlete_id
-  type: Int32
+  type: String
 - name: uid
   type: String
 - name: guid
@@ -28339,7 +28553,7 @@ load_wbb_rosters:
 - name: position_name
   type: String
 - name: position_id
-  type: Int32
+  type: String
 - name: height
   type: String
 - name: weight
@@ -28365,7 +28579,7 @@ load_wbb_rosters:
 - name: link_web
   type: String
 - name: status_id
-  type: Int32
+  type: String
 - name: status_name
   type: String
 - name: status_type
