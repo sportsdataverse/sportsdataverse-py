@@ -3688,7 +3688,16 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 pl.when(pl.col("lead_half").is_null()).then(2).otherwise(pl.col("lead_half")).alias("lead_half"),
-                end_of_half=pl.col("half") != pl.col("lead_half"),
+                # The possession ends with the half: the first half's last row, regulation's
+                # last row in a game that goes to overtime (overtime is half 2 here, and starts
+                # a fresh possession), and a finished game's last row (a live game's latest row
+                # has no next row YET). This compared against lead_half in the same
+                # with_columns as its fill, so it read the unfilled null on the game's last row.
+                end_of_half=(
+                    (pl.col("half").shift(-1) != pl.col("half"))
+                    | ((pl.col("period") == 4) & (pl.col("period").shift(-1) >= 5))
+                ).fill_null(False)
+                | (pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)).fill_null(False),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,
@@ -7109,23 +7118,28 @@ class CFBPlayProcess(object):
                 .alias("end.TimeSecsRem"),
             )
             .with_columns(
-                pl.when((pl.col("end.TimeSecsRem") <= 0).and_(pl.col("period") < 5))
+                # The half is over after the play: score its end as a dead possession at 0:00
+                # (the WP end state; EP_end is 0, below). The end clock alone also caught a play
+                # whose NEXT snap is at 0:00 -- an untimed down, or the half's last snap -- and
+                # moved its end to the 1: 400547699's rush to the 5 with 0:30 left read EP_end
+                # 0.24 where the 0:00 snap there reads 1.93.
+                pl.when((pl.col("end_of_half") == True).and_(pl.col("period") < 5))
                 .then(99)
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
-                pl.when((pl.col("end.TimeSecsRem") <= 0).and_(pl.col("period") < 5))
+                pl.when((pl.col("end_of_half") == True).and_(pl.col("period") < 5))
                 .then(True)
                 .otherwise(pl.col("down_1_end"))
                 .alias("down_1_end"),
-                pl.when((pl.col("end.TimeSecsRem") <= 0).and_(pl.col("period") < 5))
+                pl.when((pl.col("end_of_half") == True).and_(pl.col("period") < 5))
                 .then(False)
                 .otherwise(pl.col("down_2_end"))
                 .alias("down_2_end"),
-                pl.when((pl.col("end.TimeSecsRem") <= 0).and_(pl.col("period") < 5))
+                pl.when((pl.col("end_of_half") == True).and_(pl.col("period") < 5))
                 .then(False)
                 .otherwise(pl.col("down_3_end"))
                 .alias("down_3_end"),
-                pl.when((pl.col("end.TimeSecsRem") <= 0).and_(pl.col("period") < 5))
+                pl.when((pl.col("end_of_half") == True).and_(pl.col("period") < 5))
                 .then(False)
                 .otherwise(pl.col("down_4_end"))
                 .alias("down_4_end"),
@@ -7527,6 +7541,19 @@ class CFBPlayProcess(object):
                 # Onside kicks
                 .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
                 .then(pl.col("EP_end") * -1)
+                .otherwise(pl.col("EP_end")),
+            )
+            .with_columns(
+                # Nothing follows a play that ends the half (or the game, or regulation before
+                # overtime) without a score: the possession is worth 0, as EPA = -EP_start
+                # below already books it and as cfbfastR / nflfastR do. EP_end was the model at
+                # 0:00 on the 1 (about -0.4), which disagreed with the row's own EPA.
+                EP_end=pl.when(
+                    (pl.col("end_of_half") == True)
+                    & (pl.col("scoring_play") == False)
+                    & ~pl.col("type.text").is_in([*_TRY_TYPES, "Timeout"])
+                )
+                .then(0.0)
                 .otherwise(pl.col("EP_end")),
             )
             .with_columns(
