@@ -41,6 +41,19 @@ def test_a_verbose_commit_diff_below_the_scissors_is_not_scanned(tmp_path):
     assert r.returncode == 0, r.stdout
 
 
+def test_the_scissors_line_honours_a_custom_comment_char(tmp_path):
+    msg = (
+        "fix: x\n\n"
+        "; ------------------------ >8 ------------------------\n"
+        "; Do not modify or remove the line above.\n"
+        "; Everything below it will be ignored.\n"
+        "diff --git a/README.md b/README.md\n"
+        "+The parser was written by Devin, our intern.\n"
+    )
+    r = _run(tmp_path, msg)
+    assert r.returncode == 0, r.stdout
+
+
 def test_generated_with_footer_fails(tmp_path):
     r = _run(tmp_path, "fix: x\n\nGenerated with Claude Code\n")
     assert r.returncode == 1
