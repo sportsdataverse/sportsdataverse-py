@@ -86,3 +86,17 @@ seasons 2024 and 2025, verbatim (all 19 columns, every season type).
   (`season_type_id == "2"`, 1445 + 1258) plus playoffs (`"4"`, 0 + 130) --
   the population `metric_curves.shot_attempts` keeps; the other 38 are
   play-in games (`"5"`). 1760 three-point attempts.
+
+`nba_stats_schedule_201939_2024_2025.parquet` is the matching `game_id` +
+`game_date` rows for every game in the shots fixture (154 games, 2023-10-24 to
+2025-05-06), deduped on `game_id`.
+
+- Source: the published `nba_stats_schedules/nba_schedule_{2024,2025}.parquet`
+  assets (`sportsdataverse-data` releases), downloaded 2026-10-01.
+- Selection: `pl.concat([read(y).select("game_id", "game_date") for y in (2024, 2025)]).unique("game_id").filter(pl.col("game_id").is_in(shots["game_id"].unique().implode())).sort("game_id")`.
+- `shot_events` population (regular season + playoffs): 2833 `fga` and 1740
+  `fg3a` events over 152 games; the 38 play-in shots (20 threes) are excluded.
+  Hand count (plain Python, same ordering) for season 2025: `fga`/200 cur 0.48,
+  prev 0.43, season_start 0.455, career 0.448158; `fg3a`/200 cur 0.405, prev
+  0.405, season_start 0.38, career 0.401948; `fg3a`/50 cur 0.38, prev 0.44,
+  season_start 0.46, career 0.402959.

@@ -145,7 +145,7 @@ from sportsdataverse.validation import validate_game
 # Note: sportsdataverse.rolling_windows is this FUNCTION (it shadows the submodule
 # name at package level) -- import module constants with
 # `from sportsdataverse.rolling_windows import WINDOWS`, not an attribute path.
-from sportsdataverse.rolling_windows import football_events, rolling_windows
+from sportsdataverse.rolling_windows import football_events, rolling_windows, shot_events
 
 # Metric-by-continuous-axis curves (F4): same pattern -- sportsdataverse.metric_curves
 # is the FUNCTION; import BUCKET_EDGES etc. from the submodule path.
