@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down](#fixed--cfb-2007-13-touchdowns-filed-as-their-own-kick-get-the-snaps-down)
+  - [Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy](#fixed--cfb-blocked-field-goals-keep-espns-type-641-null-keys-never-twin-a-play-copy)
   - [Added — the metric registry (`sportsdataverse.registry`)](#added--the-metric-registry-sportsdataverseregistry)
   - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
   - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
