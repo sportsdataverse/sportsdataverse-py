@@ -7663,7 +7663,8 @@ class CFBPlayProcess(object):
                 EP_end=pl.when(
                     (pl.col("end_of_half") == True)
                     & (pl.col("scoring_play") == False)
-                    & ~pl.col("type.text").is_in([*_TRY_TYPES, "Timeout"])
+                    # scores_vec leaves out the kickoff return touchdowns, which score by type
+                    & ~pl.col("type.text").is_in([*_TRY_TYPES, "Timeout", *offense_score_vec, *defense_score_vec])
                 )
                 .then(0.0)
                 .otherwise(pl.col("EP_end")),
@@ -7793,7 +7794,11 @@ class CFBPlayProcess(object):
                 # 35 yard face mask" folded a spot gap in (+0.92).
                 .when(pl.col("type.text").is_in(_TRY_TYPES))
                 .then(pl.col("EP_end") - pl.col("EP_start"))
-                .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
+                .when(
+                    (pl.col("scoring_play") == False)
+                    .and_(pl.col("end_of_half") == True)
+                    .and_(~pl.col("type.text").is_in([*offense_score_vec, *defense_score_vec]))
+                )
                 .then(-1 * pl.col("EP_start"))
                 .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
                 .then(pl.col("EP_end") - pl.col("EP_start"))
