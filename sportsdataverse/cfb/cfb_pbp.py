@@ -3168,6 +3168,21 @@ class CFBPlayProcess(object):
                 )
             )
 
+        def _prev_play(col: str) -> pl.Expr:
+            # ``col`` on the last row before this one that is not a timeout or period marker
+            real = ~pl.col("type.text").str.contains(r"(?i)^(?:timeout|end\b)").fill_null(False)
+            return pl.when(real).then(pl.col(col)).otherwise(None).shift(1).forward_fill()
+
+        # a 2007-13 touchdown filed as its own kick and retyped to its snap (below)
+        _merged_td = pl.when(
+            pl.col("orig_play_type").is_in(["Extra Point Good", "Extra Point Missed", "2pt Conversion"])
+            & pl.col("type.text").is_in(["Pass Completion", "Rush"])
+        )
+        _prev_spot_ok = (
+            (_prev_play("end.yardsToEndzone") == pl.col("start.yardsToEndzone"))
+            & _prev_play("end.down").is_in([1, 2, 3, 4])
+        ).fill_null(False)
+
         def _last_td(col: str) -> pl.Expr:
             # ``col`` on the last row before this one whose type names a touchdown
             return (
@@ -3368,6 +3383,27 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # ... and the try's down and distance (-1, -1): ESPN's 2005-13 sentinel for a
+                # play with no down, which the EP model cannot score (its down one-hots are all
+                # zero: 302602440's rushing touchdown read EP 0.1). The snap's down is the end
+                # state of the play before it when that play ended at the snap's spot (219 of
+                # the 248 such rows 2007-13, a change of possession included: ESPN's end state is
+                # already the new offence's); otherwise first down, and goal to go inside the 10.
+                _merged_td.then(
+                    pl.when(_prev_spot_ok).then(_prev_play("end.down")).otherwise(pl.lit(1))
+                )
+                .otherwise(pl.col("start.down"))
+                .alias("start.down"),
+                # ESPN writes "& Goal" as distance 0: goal to go is the distance to the goal line
+                _merged_td.then(
+                    pl.when(_prev_spot_ok & (_prev_play("end.distance") > 0))
+                    .then(pl.min_horizontal(_prev_play("end.distance"), pl.col("start.yardsToEndzone")))
+                    .otherwise(pl.min_horizontal(pl.lit(10), pl.col("start.yardsToEndzone")))
+                )
+                .otherwise(pl.col("start.distance"))
+                .alias("start.distance"),
             )
         )
 

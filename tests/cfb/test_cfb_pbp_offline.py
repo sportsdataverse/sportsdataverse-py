@@ -660,7 +660,8 @@ def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None
     The try pin scored each as a kick: EP_start 0.92, EP_end 1, EPA +0.08 for a touchdown
     drive's last play. It is now the pass or rush touchdown the text describes, from the spot
     its gain names, and realises the touchdown and its kick (7, or 6 on "kick attempt failed
-    (blocked)").
+    (blocked)"). Its down and distance are the snap's, not the try's (-1, -1, which the EP model
+    cannot score): the end state of the play before, which ended at the snap's spot.
     """
     plays = _offline_plays(313090025)
     tds = plays.filter((pl.col("orig_play_type") == "Extra Point Good") & pl.col("text").str.contains("TOUCHDOWN"))
@@ -669,6 +670,12 @@ def test_a_touchdown_filed_as_its_own_kick_is_a_touchdown_and_its_kick() -> None
     r = tds.filter(pl.col("text").str.starts_with("Maynard, Zach left side pass complete")).row(0, named=True)
     assert (r["type.text"], r["start.yardsToEndzone"], r["xp_made"], r["EP_end"]) == ("Passing Touchdown", 19, True, 7)
     assert 2 < r["EPA"] < 5
+    downs = {
+        t: (d, n)
+        for t, d, n in tds.select(pl.col("text").str.slice(0, 12), "start.down", "start.distance").iter_rows()
+    }
+    # 2nd & 6 at the 19; 2nd & Goal at the 1 and the 5 (ESPN's "& Goal" is distance 0); 4th & 1 at the 43
+    assert downs == {"Maynard, Zac": (2, 6), "Sofele, Isi ": (2, 1), "Kapp, Will r": (4, 1), "Galvin, Rick": (2, 5)}
     blocked = tds.filter(pl.col("text").str.contains("kick attempt failed")).row(0, named=True)
     assert (blocked["xp_attempt"], blocked["xp_made"], blocked["EP_end"]) == (True, False, 6)
     # no scrimmage touchdown is left pinned as a try
