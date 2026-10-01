@@ -310,6 +310,19 @@
 
 ## Unreleased
 
+### Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down
+
+ESPN's 2005-13 feed writes down and distance -1 on plays with no down (kickoffs, tries,
+penalties on tries: 119,040 rows). In 2007-13 it also filed some touchdowns as ONE row with their
+extra point, typed as the kick, so the row carries the try's start state. `__helper_cfb_pbp_features`
+already retypes those 248 rows to the pass or rush touchdown and takes the snap's spot from the
+text ("for 36 yards"), but kept down -1: the EP model's down one-hots were all zero and scored the
+snap as no down at all (302602440's 59-yard rushing touchdown: EP_start 0.11). The down and distance
+are now the end state of the play before, when that play ended at the snap's spot (219 of the 248,
+a change of possession included: ESPN's end state is already the new offence's), and otherwise 1st
+and 10 (goal to go inside the 10); ESPN's "& Goal" distance 0 is the distance to the goal line. All
+247 such rows in their 86 games now carry a down 1-4 (was -1); EP_start median 3.8 -> 4.5.
+
 ### Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy
 
 Four string relabels in `__helper_cfb_pbp_features` turned any type containing "field goal" or
