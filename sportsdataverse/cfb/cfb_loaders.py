@@ -25,6 +25,7 @@ __all__ = [
     "load_cfb_schedule",
     "load_cfb_team_info",
     "load_cfb_teams",
+    "load_cfb_team_portal",
     "load_cfb_team_talent",
     "load_cfb_teams_crosswalk",
     "load_cfb_schedule_crosswalk",
@@ -1320,6 +1321,64 @@ def load_cfb_teams(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_teams: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_portal(seasons, return_as_pandas: bool = False):
+    """Load cfb_team_portal (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_portal
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2005).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name            |type    |
+        |:-------------------|:-------|
+        |season              |Int64   |
+        |team_id             |Int64   |
+        |roster_n            |Int64   |
+        |transfers_in_n      |Int64   |
+        |transfers_out_n     |Int64   |
+        |portal_share        |Float64 |
+        |transfer_talent_in  |Float64 |
+        |transfer_talent_out |Float64 |
+        |net_transfer_talent |Float64 |
+
+    Note:
+        Portal counts are D-I to D-I moves visible in ESPN rosters (FBS and FCS mixed): an athlete id on a different team's roster the prior season. JUCO and non-D-I arrivals are not counted. Talent points name-join players to the cfb_recruits release, so an unmatched player carries the 0-star default.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2005.
+
+    Example:
+        Quick start::
+
+            load_cfb_team_portal(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2005:
+            raise SeasonNotFoundError("season cannot be less than 2005")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_portal/cfb_team_portal_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_team_portal: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

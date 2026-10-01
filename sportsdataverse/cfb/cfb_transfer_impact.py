@@ -13,9 +13,8 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.cfb.cfb_loaders import load_cfb_rosters, load_cfb_schedule
+from sportsdataverse.cfb.cfb_loaders import load_cfb_recruits, load_cfb_rosters, load_cfb_schedule
 from sportsdataverse.cfb.cfb_projection_constants import fit_ridge, get_constants, predict_ridge
-from sportsdataverse.cfb.cfb_roster_talent import load_recruit_classes
 
 __all__ = ["cfb_transfer_impact", "cfb_transfer_moves"]
 
@@ -37,7 +36,7 @@ _IMPACT_SCHEMA: dict[str, pl.PolarsDataType] = {
 
 
 def _load_roster_keys(seasons: list[int]) -> pl.DataFrame:
-    """Roster membership keys per season: season/team_id/player_id (Utf8 ids)."""
+    """Roster membership keys per season: season/team_id/player_id (Utf8 ESPN ids), one row per key."""
     frames: list[pl.DataFrame] = []
     for season in seasons:
         r = load_cfb_rosters(season)
@@ -48,8 +47,9 @@ def _load_roster_keys(seasons: list[int]) -> pl.DataFrame:
         frames.append(
             r.select(
                 pl.lit(season, dtype=pl.Int64).alias("season"),
-                pl.col("team").cast(pl.Utf8).alias("team_id"),  # school name is the stable roster key
-                pl.col("athlete_id").cast(pl.Utf8).alias("player_id"),
+                # ESPN team id, Int64 -> Utf8 (never through float): the key _realized_win_deltas joins on
+                pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+                pl.col("athlete_id").cast(pl.Int64).cast(pl.Utf8).alias("player_id"),
                 (
                     pl.col("first_name").cast(pl.Utf8).fill_null("")
                     + " "
@@ -66,16 +66,20 @@ def _load_roster_keys(seasons: list[int]) -> pl.DataFrame:
     return pl.concat(frames).unique(subset=["season", "team_id", "player_id"])
 
 
-def _talent_points_lookup(seasons: list[int], division: str) -> pl.DataFrame:
-    """Case-folded player name -> recruit-star talent points.
+_RECRUITS_MIN_SEASON = 2002  # load_cfb_recruits raises SeasonNotFoundError below this
 
-    Roster athlete ids (ESPN) and 247 recruit keys are different id spaces, so
-    the lookup keys on the normalized player name; unmatched movers fall back
-    to the 0-star default points.
+
+def _talent_points_lookup(seasons: list[int], division: str) -> pl.DataFrame:
+    """Case-folded player name -> recruit-star talent points from the ``cfb_recruits`` release.
+
+    Roster athlete ids (ESPN) and 247 ``recruit_id`` are different id spaces with
+    no crosswalk, so the lookup keys on the normalized player name. Known weak
+    join: homonyms collapse to the max-star rating and unmatched movers fall
+    back to the 0-star default points.
     """
-    rec = load_recruit_classes(seasons, division=division)
-    if isinstance(rec, pd.DataFrame):
-        rec = pl.from_pandas(rec)
+    wanted = [s for s in seasons if s >= _RECRUITS_MIN_SEASON]
+    rec = load_cfb_recruits(wanted) if wanted else pl.DataFrame()
+    assert isinstance(rec, pl.DataFrame)
     consts = get_constants(division)
     if rec.height == 0:
         return pl.DataFrame(schema={"_name": pl.Utf8, "talent_points": pl.Float64})
@@ -104,10 +108,11 @@ def cfb_transfer_moves(
 
     Returns:
         One row per move side: ``season`` (Int64, the destination season),
-        ``team_id`` (Utf8), ``player_id`` (Utf8), ``direction`` ("in" | "out"),
-        ``prior_team_id`` (Utf8, the season S-1 team), ``talent_points``
-        (Float64; the 0-star default when the player has no recruit rating).
-        Zero-row (typed) when rosters are unavailable.
+        ``team_id`` (Utf8 ESPN team id), ``player_id`` (Utf8 ESPN athlete id),
+        ``direction`` ("in" | "out"), ``prior_team_id`` (Utf8 ESPN team id of the
+        season S-1 team), ``talent_points`` (Float64, name-joined to the
+        ``cfb_recruits`` release; the 0-star default when the player has no
+        recruit rating). Zero-row (typed) when rosters are unavailable.
 
     Example:
         Quick start::
@@ -152,7 +157,10 @@ def cfb_transfer_moves(
         "prior_team_id",
         "talent_points",
     )
-    out = pl.concat([incoming, outgoing]).sort("season", "team_id", "direction", "player_id")
+    # A player on two S rosters is two "in" moves but ONE "out" from the S-1 team (identical rows).
+    out = (
+        pl.concat([incoming, outgoing]).unique(maintain_order=True).sort("season", "team_id", "direction", "player_id")
+    )
     return out.to_pandas() if return_as_pandas else out
 
 

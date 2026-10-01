@@ -2418,14 +2418,14 @@ cfb_transfer_impact:
   pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail
     gate).
   season: Season the net transfer talent describes.
-  team_id: School name key from the rosters dataset.
+  team_id: ESPN team id as a string (rosters team_id, cast Int64 to Utf8).
 cfb_transfer_moves:
   direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
   player_id: ESPN athlete id as a string.
-  prior_team_id: School name key of the season S-1 team.
+  prior_team_id: ESPN team id (as a string) of the season S-1 team.
   season: Destination season of the move (compares rosters S-1 to S).
   talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
-  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  team_id: ESPN team id (as a string) of the side this row describes (destination for "in", origin for "out").
 chl_leaders:
   photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
@@ -10167,6 +10167,21 @@ load_cfb_team_info:
   state: U.S. state where the school is located.
   twitter: The football program's Twitter/X handle including the leading at sign, populated for only a minority of listed
     teams.
+load_cfb_team_portal:
+  net_transfer_talent: Incoming minus outgoing transfer talent points (transfer_talent_in - transfer_talent_out); positive
+    means the team gained talent.
+  portal_share: Incoming D-I transfers as a share of the roster (transfers_in_n / roster_n); JUCO and non-D-I arrivals are
+    not counted.
+  roster_n: Distinct ESPN athletes on the team's roster this season (the portal_share denominator).
+  season: 'Destination season of the roster comparison: the prior season''s rosters are diffed against this one''s.'
+  team_id: ESPN team id of the team whose roster is counted (FBS and FCS mixed; filter on team_info classification).
+  transfer_talent_in: Recruit-star talent points summed over incoming transfers, name-joined to cfb_recruits (unmatched players
+    count the 0-star default).
+  transfer_talent_out: Recruit-star talent points summed over outgoing transfers, name-joined to cfb_recruits (unmatched players
+    count the 0-star default).
+  transfers_in_n: Players on this season's roster whose ESPN athlete id sat on a different D-I team's roster the prior season.
+  transfers_out_n: Players from the team's prior-season roster whose ESPN athlete id sits on a different D-I team's roster
+    this season.
 load_cfb_team_summaries:
   EPAdrive_def: EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents).
   EPAdrive_def_n: 'Sample size behind EPAdrive_def: the number of drives it is computed over, with the team on defense (i.e.

@@ -25,6 +25,7 @@ flowchart LR
 | `load_cfb_schedule` | [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_schedules) | — |
 | `load_cfb_team_info` | [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info) | — |
 | `load_cfb_teams` | [espn_cfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_teams) | — |
+| `load_cfb_team_portal` | [cfb_team_portal](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_portal) | — |
 | `load_cfb_team_talent` | [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent) | — |
 | `load_cfb_teams_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 | `load_cfb_schedule_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
@@ -994,6 +995,32 @@ Release: [espn_cfb_teams](https://github.com/sportsdataverse/sportsdataverse-dat
 
 ```python
 load_cfb_teams(seasons=2024)
+```
+
+## `load_cfb_team_portal`
+
+Release: [cfb_team_portal](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_portal) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_portal/cfb_team_portal_{season}.parquet`
+
+:::caution Coverage
+Portal counts are D-I to D-I moves visible in ESPN rosters (FBS and FCS mixed): an athlete id on a different team's roster the prior season. JUCO and non-D-I arrivals are not counted. Talent points name-join players to the cfb_recruits release, so an unmatched player carries the 0-star default.
+:::
+
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Destination season of the roster comparison: the prior season's rosters are diffed against this one's. |
+| `team_id` | Int64 | ESPN team id of the team whose roster is counted (FBS and FCS mixed; filter on team_info classification). |
+| `roster_n` | Int64 | Distinct ESPN athletes on the team's roster this season (the portal_share denominator). |
+| `transfers_in_n` | Int64 | Players on this season's roster whose ESPN athlete id sat on a different D-I team's roster the prior season. |
+| `transfers_out_n` | Int64 | Players from the team's prior-season roster whose ESPN athlete id sits on a different D-I team's roster this season. |
+| `portal_share` | Float64 | Incoming D-I transfers as a share of the roster (transfers_in_n / roster_n); JUCO and non-D-I arrivals are not counted. |
+| `transfer_talent_in` | Float64 | Recruit-star talent points summed over incoming transfers, name-joined to cfb_recruits (unmatched players count the 0-star default). |
+| `transfer_talent_out` | Float64 | Recruit-star talent points summed over outgoing transfers, name-joined to cfb_recruits (unmatched players count the 0-star default). |
+| `net_transfer_talent` | Float64 | Incoming minus outgoing transfer talent points (transfer_talent_in - transfer_talent_out); positive means the team gained talent. |
+
+```python
+load_cfb_team_portal(seasons=2024)
 ```
 
 ## `load_cfb_team_talent`

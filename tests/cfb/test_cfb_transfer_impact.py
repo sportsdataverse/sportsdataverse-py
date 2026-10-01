@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+import importlib
+import re
+from pathlib import Path
+
 import polars as pl
 
-import importlib
-
 _mod = importlib.import_module("sportsdataverse.cfb.cfb_transfer_impact")
-from sportsdataverse.cfb.cfb_transfer_impact import cfb_transfer_impact, cfb_transfer_moves
+from sportsdataverse.cfb.cfb_transfer_impact import _MOVES_SCHEMA, cfb_transfer_impact, cfb_transfer_moves
+
+# Real espn_cfb_rosters rows (2023 + 2024; teams 265, 2390, 38) -- see the fixture README.
+_ROSTER_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_transfer" / "rosters_2023_2024.parquet"
 
 
 def _rosters(season: int, rows: list[tuple[str, str]]) -> pl.DataFrame:
@@ -52,6 +57,20 @@ def test_transfer_moves_paired_in_out(monkeypatch) -> None:
     assert inc_row["talent_points"] > 0
 
 
+def test_transfer_moves_one_out_row_when_rostered_twice(monkeypatch) -> None:
+    # live 2024 shape (athlete 4696973 left team 16 and sits on two 2024 rosters): two "in", one "out"
+    two_rosters = pl.concat([_rosters(2022, [("A", "p1")]), _rosters(2023, [("B", "p1"), ("C", "p1")])])
+    monkeypatch.setattr(_mod, "_load_roster_keys", lambda *a, **k: two_rosters)
+    monkeypatch.setattr(
+        _mod,
+        "_talent_points_lookup",
+        lambda seasons, division: pl.DataFrame(schema={"_name": pl.Utf8, "talent_points": pl.Float64}),
+    )
+    moves = cfb_transfer_moves(2023)
+    assert moves.filter(pl.col("direction") == "in")["team_id"].sort().to_list() == ["B", "C"]
+    assert moves.filter(pl.col("direction") == "out").height == 1
+
+
 def test_transfer_impact_direction_and_boundary(monkeypatch) -> None:
     # synthetic history: net transfer talent linearly drives win delta (slope 0.05/pt)
     hist = []
@@ -88,3 +107,37 @@ def test_transfer_impact_empty_returns_schema(monkeypatch) -> None:
     assert out.height == 0
     for col in ("season", "team_id", "net_transfer_talent", "pred_win_delta"):
         assert col in out.columns
+
+
+def test_transfer_moves_keys_rosters_by_espn_team_id(monkeypatch) -> None:
+    """Goes THROUGH ``_load_roster_keys`` on real roster rows (the 85-col release has no ``team``).
+
+    Mutation proof: with ``pl.col("team")`` in ``_load_roster_keys`` this raises
+    ``polars.exceptions.ColumnNotFoundError`` before any assertion runs.
+    """
+    rosters = pl.read_parquet(_ROSTER_FIXTURE)
+    monkeypatch.setattr(_mod, "load_cfb_rosters", lambda season: rosters.filter(pl.col("season") == season))
+    recruit_calls: list[list[int]] = []
+
+    def _recruits(seasons):
+        recruit_calls.append(list(seasons))
+        # stand-in for the cfb_recruits release: one 3-star hit on the mover's name, one miss
+        return pl.DataFrame({"season": [2020, 2020], "player_name": ["Cam Ward", "Nobody Else"], "stars": [3, 5]})
+
+    monkeypatch.setattr(_mod, "load_cfb_recruits", _recruits)
+
+    moves = cfb_transfer_moves(2024)
+    assert isinstance(moves, pl.DataFrame)
+    assert moves.schema == _MOVES_SCHEMA
+    assert moves.height > 0
+    for col in ("team_id", "prior_team_id"):
+        assert all(re.fullmatch(r"[0-9]+", v) for v in moves[col].to_list()), col
+    # athlete 4688380 (Cam Ward): team 265 in 2023 -> team 2390 in 2024, exactly one pair
+    ward = moves.filter(pl.col("player_id") == "4688380").sort("direction")
+    assert ward.select("season", "team_id", "player_id", "direction", "prior_team_id").rows() == [
+        (2024, "2390", "4688380", "in", "265"),
+        (2024, "265", "4688380", "out", "265"),
+    ]
+    assert ward["talent_points"].to_list() == [45.0, 45.0]  # 3-star via the case-folded name join
+    # the talent lookup reads the cfb_recruits release, never a season below its floor
+    assert recruit_calls and min(recruit_calls[0]) >= 2002

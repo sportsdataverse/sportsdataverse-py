@@ -6749,6 +6749,25 @@ load_cfb_team_info:
   type: Boolean
 - name: dome
   type: Boolean
+load_cfb_team_portal:
+- name: season
+  type: Int64
+- name: team_id
+  type: Int64
+- name: roster_n
+  type: Int64
+- name: transfers_in_n
+  type: Int64
+- name: transfers_out_n
+  type: Int64
+- name: portal_share
+  type: Float64
+- name: transfer_talent_in
+  type: Float64
+- name: transfer_talent_out
+  type: Float64
+- name: net_transfer_talent
+  type: Float64
 load_cfb_team_summaries:
 - name: team_id
   type: Int64

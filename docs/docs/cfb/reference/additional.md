@@ -2358,7 +2358,7 @@ Per (season, team_id): `net_transfer_talent` (Float64), `pred_win_delta` (Float6
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season the net transfer talent describes. |
-| `team_id` | character | School name key from the rosters dataset. |
+| `team_id` | character | ESPN team id as a string (rosters team_id, cast Int64 to Utf8). |
 | `net_transfer_talent` | double | Incoming minus outgoing transfer talent points for the season. |
 | `pred_win_delta` | double | Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate). |
 
@@ -2384,15 +2384,15 @@ Transfer moves inferred from year-over-year roster diffs.
 
 **Returns**
 
-One row per move side: `season` (Int64, the destination season), `team_id` (Utf8), `player_id` (Utf8), `direction` ("in" | "out"), `prior_team_id` (Utf8, the season S-1 team), `talent_points` (Float64; the 0-star default when the player has no recruit rating). Zero-row (typed) when rosters are unavailable.
+One row per move side: `season` (Int64, the destination season), `team_id` (Utf8 ESPN team id), `player_id` (Utf8 ESPN athlete id), `direction` ("in" | "out"), `prior_team_id` (Utf8 ESPN team id of the season S-1 team), `talent_points` (Float64, name-joined to the `cfb_recruits` release; the 0-star default when the player has no recruit rating). Zero-row (typed) when rosters are unavailable.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Destination season of the move (compares rosters S-1 to S). |
-| `team_id` | character | School name key of the side this row describes (destination for "in", origin for "out"). |
+| `team_id` | character | ESPN team id (as a string) of the side this row describes (destination for "in", origin for "out"). |
 | `player_id` | character | ESPN athlete id as a string. |
 | `direction` | character | Move side - "in" (arriving at team_id) or "out" (leaving team_id). |
-| `prior_team_id` | character | School name key of the season S-1 team. |
+| `prior_team_id` | character | ESPN team id (as a string) of the season S-1 team. |
 | `talent_points` | double | Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated). |
 
 **Example**
