@@ -97,6 +97,20 @@ def test_a_construct_the_reader_was_not_written_for_raises():
         registry.parse("- key: EPAplay\n      deep: x\n")  # six-space row outside a block
 
 
+def test_a_duplicated_field_within_an_entry_raises():
+    with pytest.raises(ValueError, match="duplicate field 'label'"):
+        registry.parse("- key: EPAplay\n  label: a\n  label: b\n")
+    with pytest.raises(ValueError, match="duplicate field 'total'"):
+        registry.parse("- key: EPAplay\n  variants:\n    total: TEPA\n    total: TEPA\n")
+
+
+def test_a_value_pyyaml_would_read_as_a_comment_raises():
+    """``label: #x`` is null to PyYAML; the reader must not silently keep the string."""
+    with pytest.raises(ValueError, match="not a plain scalar"):
+        registry.parse("- key: EPAplay\n  label: #x\n")
+    assert yaml.safe_load("- key: EPAplay\n  label: #x\n") == [{"key": "EPAplay", "label": None}]
+
+
 def test_resolve_splits_side_phase_and_suffix():
     r = resolve("EPAplay_off_pass_rank")
     assert (r["key"], r["side"], r["phase"], r["suffix"], r["polarity"]) == (
@@ -126,9 +140,27 @@ def test_the_adjusted_columns_prefix_and_infix_spellings_resolve():
     assert resolve("adj_off_epa_rank")["side"] == "off"
     assert resolve("net_adj_epa")["side"] == "margin"
     assert resolve("def_strength_faced_rank")["side"] == "def"
+    # the prefix spelling is the adjusted family's alone: no other base takes it
+    assert resolve("def_pass_rate") is None
+    assert resolve("off_success") is None
+    assert resolve("net_success") is None
     # a base key that itself ends in a suffix token still resolves
     assert resolve("available_yards_pct")["key"] == "available_yards_pct"
     assert resolve("available_yards_pct_off_pct")["suffix"] == "_pct"
+
+
+def _entry(key: str, **over) -> dict:
+    base = dict(zip(KEYS, (key, key, key, key, "num2", "higher", "efficiency", None, None, {})))
+    return {**base, **over}
+
+
+def test_an_exact_key_wins_over_a_peeled_suffix(monkeypatch):
+    """A registered ``X_pct`` is its own entry, never ``X`` + ``_pct``."""
+    monkeypatch.setattr(registry, "_index", lambda: {"X": _entry("X"), "X_pct": _entry("X_pct", polarity="lower")})
+    assert (resolve("X_pct")["key"], resolve("X_pct")["suffix"]) == ("X_pct", None)
+    assert (resolve("X_pct_def")["key"], resolve("X_pct_def")["polarity"]) == ("X_pct", "higher")
+    assert (resolve("X_pct_pct")["key"], resolve("X_pct_pct")["suffix"]) == ("X_pct", "_pct")
+    assert (resolve("X_rank")["key"], resolve("X_rank")["suffix"]) == ("X", "_rank")
 
 
 def test_a_phase_rewrites_the_label_and_short():
@@ -159,6 +191,9 @@ def test_render_ts_is_deterministic_and_headed(entries):
     assert head[2] == f"// sha256: {hashlib.sha256(body.encode('utf-8')).hexdigest()}"
     assert render_ts(entries, target="web") != first  # indent differs, shape does not
     assert "    key: string;" in first and "  key: string;" in render_ts(entries, target="web")
+    assert "covers the body" in head[1]  # the consumer verifies the body, not the file
+    with pytest.raises(ValueError, match="target"):
+        render_ts(entries, target="astro")  # type: ignore[arg-type]
 
 
 def test_the_cli_writes_the_same_module(entries):
@@ -169,6 +204,17 @@ def test_the_cli_writes_the_same_module(entries):
         text=True,
     ).stdout
     assert out == render_ts(entries, target="web")
+
+
+def test_main_takes_target_with_or_without_ts(entries, capsys):
+    from sportsdataverse.registry.__main__ import main
+
+    assert main(["--target", "gop"]) == 0
+    without = capsys.readouterr().out
+    assert main(["--ts", "--target", "gop"]) == 0
+    assert capsys.readouterr().out == without == render_ts(entries, target="gop")
+    with pytest.raises(SystemExit):
+        main(["--ts"])  # --target is required
 
 
 def test_the_wheel_includes_the_yaml():
