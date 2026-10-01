@@ -33,8 +33,9 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 |---|---|---|
 | [`load_cfb_pbp`](../cfb/reference/loaders.md#load_cfb_pbp) | Full **play-by-play** with EPA/WPA, since 2003 | ⭐ release |
 | [`load_cfb_rosters`](../cfb/reference/loaders.md#load_cfb_rosters) | Season **rosters** (bio, position, hometown) | ⭐ release |
-| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | Season **schedule** + results + Elo | ⭐ release |
+| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | Season **schedule** + results | ⭐ release |
 | [`load_cfb_team_info`](../cfb/reference/loaders.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
+| [`load_cfb_ratings`](../cfb/reference/loaders.md#load_cfb_ratings) | Opponent-adjusted **EPA ratings** per team-season | ⭐ release |
 | [`load_cfb_betting_lines`](../cfb/reference/additional.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
 | [`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
 | [`espn_cfb_schedule`](../cfb/reference/additional.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
@@ -70,7 +71,7 @@ SEASON = most_recent_cfb_season()
 print('most recent CFB season:', SEASON)
 ```
 
-    most recent CFB season: 2025
+    most recent CFB season: 2026
 
 
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
@@ -95,11 +96,11 @@ def safe(label, thunk):
 The `load_cfb_*` family is the fastest way to get **clean, complete**
 season data. Each takes a `seasons=` int or list (≥ 2003) and returns one
 tidy frame. Let's start with the schedule — one row per game, with final
-scores, conference flags, and pre/post-game Elo ratings baked in.
+scores, conference flags, and playoff fields baked in.
 
 | Function | Grain | Highlights |
 |---|---|---|
-| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | one row / game | scores, Elo, neutral-site & conference flags |
+| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | one row / game | scores, neutral-site & conference flags, playoff rounds |
 
 
 
@@ -112,7 +113,7 @@ schedule.select([
 ]).head()
 ```
 
-    schedule shape: (3734, 31)
+    schedule shape: (3734, 43)
 
 
 
@@ -122,18 +123,17 @@ schedule.select([
     ┌───────────┬──────┬─────────────┬─────────────┬────────────┬────────────┬────────────┬────────────┐
     │ game_id   ┆ week ┆ home_team   ┆ away_team   ┆ home_point ┆ away_point ┆ home_confe ┆ neutral_si │
     │ ---       ┆ ---  ┆ ---         ┆ ---         ┆ s          ┆ s          ┆ rence      ┆ te         │
-    │ i32       ┆ i32  ┆ str         ┆ str         ┆ ---        ┆ ---        ┆ ---        ┆ ---        │
-    │           ┆      ┆             ┆             ┆ i32        ┆ i32        ┆ str        ┆ bool       │
+    │ i64       ┆ i64  ┆ str         ┆ str         ┆ ---        ┆ ---        ┆ ---        ┆ ---        │
+    │           ┆      ┆             ┆             ┆ i64        ┆ i64        ┆ str        ┆ bool       │
     ╞═══════════╪══════╪═════════════╪═════════════╪════════════╪════════════╪════════════╪════════════╡
-    │ 401525434 ┆ 1    ┆ Notre Dame  ┆ Navy        ┆ 42         ┆ 3          ┆ FBS Indepe ┆ true       │
-    │           ┆      ┆             ┆             ┆            ┆            ┆ ndents     ┆            │
-    │ 401540199 ┆ 1    ┆ Mercer      ┆ North       ┆ 17         ┆ 7          ┆ Southern   ┆ true       │
-    │           ┆      ┆             ┆ Alabama     ┆            ┆            ┆            ┆            │
     │ 401520145 ┆ 1    ┆ Jacksonvill ┆ UTEP        ┆ 17         ┆ 14         ┆ Conference ┆ false      │
     │           ┆      ┆ e State     ┆             ┆            ┆            ┆ USA        ┆            │
-    │ 401532392 ┆ 1    ┆ San Diego   ┆ Ohio        ┆ 20         ┆ 13         ┆ Mountain   ┆ false      │
-    │           ┆      ┆ State       ┆             ┆            ┆            ┆ West       ┆            │
-    │ 401540628 ┆ 1    ┆ UAlbany     ┆ Fordham     ┆ 34         ┆ 13         ┆ CAA        ┆ false      │
+    │ 401520146 ┆ 1    ┆ Louisiana   ┆ Florida Int ┆ 22         ┆ 17         ┆ Conference ┆ false      │
+    │           ┆      ┆ Tech        ┆ ernational  ┆            ┆            ┆ USA        ┆            │
+    │ 401520147 ┆ 1    ┆ Vanderbilt  ┆ Hawai'i     ┆ 35         ┆ 28         ┆ SEC        ┆ false      │
+    │ 401520148 ┆ 1    ┆ Minnesota   ┆ Nebraska    ┆ 13         ┆ 10         ┆ Big Ten    ┆ false      │
+    │ 401520149 ┆ 1    ┆ Alabama     ┆ Middle      ┆ 56         ┆ 7          ┆ SEC        ┆ false      │
+    │           ┆      ┆             ┆ Tennessee   ┆            ┆            ┆            ┆            │
     └───────────┴──────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴────────────┘
 
 
@@ -149,29 +149,29 @@ hometown. Perfect for joining onto play-by-play or building depth tables.
 rosters = sdv.cfb.load_cfb_rosters(seasons=[2023])
 print('rosters shape:', rosters.shape)
 rosters.select([
-    'athlete_id', 'first_name', 'last_name', 'team',
-    'position', 'jersey', 'home_state',
+    'athlete_id', 'first_name', 'last_name', 'team_location',
+    'position', 'jersey', 'cfbd_home_state',
 ]).head()
 ```
 
-    rosters shape: (22467, 18)
+    rosters shape: (26375, 85)
 
 
 
 
 
     shape: (5, 7)
-    ┌────────────┬────────────┬───────────┬───────────────────┬──────────┬────────┬────────────┐
-    │ athlete_id ┆ first_name ┆ last_name ┆ team              ┆ position ┆ jersey ┆ home_state │
-    │ ---        ┆ ---        ┆ ---       ┆ ---               ┆ ---      ┆ ---    ┆ ---        │
-    │ str        ┆ str        ┆ str       ┆ str               ┆ str      ┆ i32    ┆ str        │
-    ╞════════════╪════════════╪═══════════╪═══════════════════╪══════════╪════════╪════════════╡
-    │ 102597     ┆ Will       ┆ Rogers    ┆ Mississippi State ┆ QB       ┆ 7      ┆ MS         │
-    │ 107494     ┆ Trey       ┆ Sanders   ┆ TCU               ┆ RB       ┆ 2      ┆ FL         │
-    │ 146583     ┆ John       ┆ Adams     ┆ Temple            ┆ WR       ┆ 17     ┆ NJ         │
-    │ 160900     ┆ Will       ┆ Johnson   ┆ Michigan          ┆ null     ┆ null   ┆ null       │
-    │ 169499     ┆ Ryan       ┆ Johnson   ┆ Akron             ┆ DL       ┆ 4      ┆ MS         │
-    └────────────┴────────────┴───────────┴───────────────────┴──────────┴────────┴────────────┘
+    ┌────────────┬────────────┬───────────┬───────────────┬───────────────┬────────┬─────────────────┐
+    │ athlete_id ┆ first_name ┆ last_name ┆ team_location ┆ position      ┆ jersey ┆ cfbd_home_state │
+    │ ---        ┆ ---        ┆ ---       ┆ ---           ┆ ---           ┆ ---    ┆ ---             │
+    │ i64        ┆ str        ┆ str       ┆ str           ┆ str           ┆ str    ┆ str             │
+    ╞════════════╪════════════╪═══════════╪═══════════════╪═══════════════╪════════╪═════════════════╡
+    │ 4360930    ┆ Jyaire     ┆ Shorter   ┆ Auburn        ┆ Wide Receiver ┆ 4      ┆ TX              │
+    │ 4362310    ┆ Shane      ┆ Hooks     ┆ Auburn        ┆ Wide Receiver ┆ 3      ┆ FL              │
+    │ 4373489    ┆ Kassidy    ┆ Woods     ┆ Auburn        ┆ Wide Receiver ┆ 30     ┆ TX              │
+    │ 4373959    ┆ Nick       ┆ Mardner   ┆ Auburn        ┆ Wide Receiver ┆ 8      ┆ ON              │
+    │ 4431277    ┆ Koy        ┆ Moore     ┆ Auburn        ┆ Wide Receiver ┆ 5      ┆ LA              │
+    └────────────┴────────────┴───────────┴───────────────┴───────────────┴────────┴─────────────────┘
 
 
 
@@ -191,7 +191,7 @@ team_info.select([
 ]).head()
 ```
 
-    team_info shape: (1840, 28)
+    team_info shape: (672, 43)
 
 
 
@@ -201,7 +201,7 @@ team_info.select([
     ┌─────────┬───────────────┬───────────────┬──────────────┬──────────────┬──────────┬───────┬───────┐
     │ team_id ┆ school        ┆ conference    ┆ classificati ┆ venue_name   ┆ city     ┆ state ┆ dome  │
     │ ---     ┆ ---           ┆ ---           ┆ on           ┆ ---          ┆ ---      ┆ ---   ┆ ---   │
-    │ i32     ┆ str           ┆ str           ┆ ---          ┆ str          ┆ str      ┆ str   ┆ bool  │
+    │ i64     ┆ str           ┆ str           ┆ ---          ┆ str          ┆ str      ┆ str   ┆ bool  │
     │         ┆               ┆               ┆ str          ┆              ┆          ┆       ┆       │
     ╞═════════╪═══════════════╪═══════════════╪══════════════╪══════════════╪══════════╪═══════╪═══════╡
     │ 2000    ┆ Abilene       ┆ UAC           ┆ fcs          ┆ Wildcat      ┆ Abilene  ┆ TX    ┆ false │
@@ -212,10 +212,8 @@ team_info.select([
     │         ┆               ┆               ┆              ┆ Stadium      ┆          ┆       ┆       │
     │ 2005    ┆ Air Force     ┆ Mountain West ┆ fbs          ┆ Falcon       ┆ Colorado ┆ CO    ┆ false │
     │         ┆               ┆               ┆              ┆ Stadium      ┆ Springs  ┆       ┆       │
-    │ 2006    ┆ Akron         ┆ Mid-American  ┆ fbs          ┆ Summa Field  ┆ Akron    ┆ OH    ┆ false │
-    │         ┆               ┆               ┆              ┆ at           ┆          ┆       ┆       │
-    │         ┆               ┆               ┆              ┆ InfoCision   ┆          ┆       ┆       │
-    │         ┆               ┆               ┆              ┆ Stad…        ┆          ┆       ┆       │
+    │ 2006    ┆ Akron         ┆ Mid-American  ┆ fbs          ┆ InfoCision   ┆ Akron    ┆ OH    ┆ false │
+    │         ┆               ┆               ┆              ┆ Stadium      ┆          ┆       ┆       │
     └─────────┴───────────────┴───────────────┴──────────────┴──────────────┴──────────┴───────┴───────┘
 
 
@@ -249,7 +247,7 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
-    pbp season: 2023 | pbp shape: (153625, 460)
+    pbp season: 2023 | pbp shape: (153945, 506)
 
 
 
@@ -262,10 +260,10 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
     │ i64       ┆ str                 ┆ i64  ┆ i64      ┆ f64       ┆ f64       │
     ╞═══════════╪═════════════════════╪══════╪══════════╪═══════════╪═══════════╡
     │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.0       ┆ 0.0       │
-    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ -0.687781 ┆ -0.003872 │
-    │ 401523986 ┆ San José State      ┆ 2    ┆ 10       ┆ 2.339749  ┆ 0.019609  │
-    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.121639  ┆ 0.002179  │
-    │ 401523986 ┆ San José State      ┆ 2    ┆ 5        ┆ -1.149794 ┆ -0.006335 │
+    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ -0.687152 ┆ -0.002614 │
+    │ 401523986 ┆ San José State      ┆ 2    ┆ 10       ┆ 2.361556  ┆ 0.015136  │
+    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.106075  ┆ 0.00069   │
+    │ 401523986 ┆ San José State      ┆ 2    ┆ 5        ┆ -1.156004 ┆ -0.002393 │
     └───────────┴─────────────────────┴──────┴──────────┴───────────┴───────────┘
 
 
@@ -383,22 +381,22 @@ needed — the release frame already stores points as integers.
 
 
     shape: (10, 6)
-    ┌──────┬──────────────────────┬────────────────────┬─────────────┬─────────────┬──────────────┐
-    │ week ┆ home_team            ┆ away_team          ┆ home_points ┆ away_points ┆ total_points │
-    │ ---  ┆ ---                  ┆ ---                ┆ ---         ┆ ---         ┆ ---          │
-    │ i32  ┆ str                  ┆ str                ┆ i32         ┆ i32         ┆ i32          │
-    ╞══════╪══════════════════════╪════════════════════╪═════════════╪═════════════╪══════════════╡
-    │ 9    ┆ Colby College        ┆ Middlebury         ┆ null        ┆ null        ┆ null         │
-    │ 9    ┆ Bowdoin              ┆ Trinity (CT)       ┆ null        ┆ null        ┆ null         │
-    │ 9    ┆ Bates                ┆ Williams           ┆ null        ┆ null        ┆ null         │
-    │ 11   ┆ Worcester St         ┆ Framingham State   ┆ null        ┆ null        ┆ null         │
-    │ 10   ┆ Defiance College     ┆ Rose-Hulman        ┆ 54          ┆ 78          ┆ 132          │
-    │ 10   ┆ Muskingum University ┆ Wilmington (OH)    ┆ 64          ┆ 63          ┆ 127          │
-    │ 2    ┆ Coast Guard          ┆ Anna Maria College ┆ 93          ┆ 24          ┆ 117          │
-    │ 13   ┆ Oklahoma             ┆ TCU                ┆ 69          ┆ 45          ┆ 114          │
-    │ 3    ┆ Texas State          ┆ Jackson State      ┆ 77          ┆ 34          ┆ 111          │
-    │ 10   ┆ Cornell College (IA) ┆ Illinois College   ┆ 34          ┆ 76          ┆ 110          │
-    └──────┴──────────────────────┴────────────────────┴─────────────┴─────────────┴──────────────┘
+    ┌──────┬──────────────────┬────────────────────┬─────────────┬─────────────┬──────────────┐
+    │ week ┆ home_team        ┆ away_team          ┆ home_points ┆ away_points ┆ total_points │
+    │ ---  ┆ ---              ┆ ---                ┆ ---         ┆ ---         ┆ ---          │
+    │ i64  ┆ str              ┆ str                ┆ i64         ┆ i64         ┆ i64          │
+    ╞══════╪══════════════════╪════════════════════╪═════════════╪═════════════╪══════════════╡
+    │ 9    ┆ Bowdoin          ┆ Trinity (CT)       ┆ null        ┆ null        ┆ null         │
+    │ 9    ┆ Bates            ┆ Williams           ┆ null        ┆ null        ┆ null         │
+    │ 9    ┆ Colby            ┆ Middlebury         ┆ null        ┆ null        ┆ null         │
+    │ 11   ┆ Worcester State  ┆ Framingham State   ┆ null        ┆ null        ┆ null         │
+    │ 10   ┆ Defiance College ┆ Rose Hulman        ┆ 54          ┆ 78          ┆ 132          │
+    │ 10   ┆ Muskingum        ┆ Wilmington (OH)    ┆ 64          ┆ 63          ┆ 127          │
+    │ 2    ┆ Coast Guard      ┆ Anna Maria College ┆ 93          ┆ 24          ┆ 117          │
+    │ 13   ┆ Oklahoma         ┆ TCU                ┆ 69          ┆ 45          ┆ 114          │
+    │ 3    ┆ Texas State      ┆ Jackson State      ┆ 77          ┆ 34          ┆ 111          │
+    │ 10   ┆ Cornell (IA)     ┆ Illinois College   ┆ 34          ┆ 76          ┆ 110          │
+    └──────┴──────────────────┴────────────────────┴─────────────┴─────────────┴──────────────┘
 
 
 
@@ -436,23 +434,23 @@ out
 
 
     shape: (15, 3)
-    ┌────────────┬───────┬──────────────┐
-    │ offense    ┆ plays ┆ epa_per_play │
-    │ ---        ┆ ---   ┆ ---          │
-    │ str        ┆ u32   ┆ f64          │
-    ╞════════════╪═══════╪══════════════╡
-    │ LSU        ┆ 945   ┆ 0.374        │
-    │ Oregon     ┆ 1052  ┆ 0.343        │
-    │ Georgia    ┆ 1064  ┆ 0.268        │
-    │ USC        ┆ 956   ┆ 0.213        │
-    │ Liberty    ┆ 1079  ┆ 0.205        │
-    │ …          ┆ …     ┆ …            │
-    │ Missouri   ┆ 1003  ┆ 0.153        │
-    │ Alabama    ┆ 1030  ┆ 0.153        │
-    │ Ohio State ┆ 931   ┆ 0.151        │
-    │ Miami      ┆ 1005  ┆ 0.148        │
-    │ Ole Miss   ┆ 989   ┆ 0.147        │
-    └────────────┴───────┴──────────────┘
+    ┌──────────────┬───────┬──────────────┐
+    │ offense      ┆ plays ┆ epa_per_play │
+    │ ---          ┆ ---   ┆ ---          │
+    │ str          ┆ u32   ┆ f64          │
+    ╞══════════════╪═══════╪══════════════╡
+    │ LSU          ┆ 946   ┆ 0.377        │
+    │ Oregon       ┆ 1052  ┆ 0.351        │
+    │ Georgia      ┆ 1064  ┆ 0.272        │
+    │ USC          ┆ 958   ┆ 0.216        │
+    │ Liberty      ┆ 1080  ┆ 0.21         │
+    │ …            ┆ …     ┆ …            │
+    │ Missouri     ┆ 1004  ┆ 0.159        │
+    │ Alabama      ┆ 1030  ┆ 0.158        │
+    │ Oregon State ┆ 933   ┆ 0.158        │
+    │ North Texas  ┆ 1026  ┆ 0.154        │
+    │ Notre Dame   ┆ 917   ┆ 0.153        │
+    └──────────────┴───────┴──────────────┘
 
 
 
@@ -466,9 +464,9 @@ players, then count the depth at each position group.
 team_name = 'Michigan'
 squad = (
     rosters
-    .filter(pl.col('team') == team_name)
+    .filter(pl.col('team_location') == team_name)
     .select(['first_name', 'last_name', 'position', 'jersey',
-             'height', 'weight', 'home_state'])
+             'height', 'weight', 'cfbd_home_state'])
 )
 if squad.height:
     depth = (squad.group_by('position')
@@ -481,29 +479,29 @@ else:
 out
 ```
 
-    Michigan: 144 players
+    Michigan: 143 players
 
 
 
 
 
     shape: (10, 2)
-    ┌──────────┬─────────┐
-    │ position ┆ players │
-    │ ---      ┆ ---     │
-    │ str      ┆ u32     │
-    ╞══════════╪═════════╡
-    │ DB       ┆ 23      │
-    │ OL       ┆ 21      │
-    │ WR       ┆ 19      │
-    │ LB       ┆ 18      │
-    │ DL       ┆ 12      │
-    │ DE       ┆ 12      │
-    │ TE       ┆ 11      │
-    │ RB       ┆ 11      │
-    │ PK       ┆ 6       │
-    │ QB       ┆ 6       │
-    └──────────┴─────────┘
+    ┌───────────────────┬─────────┐
+    │ position          ┆ players │
+    │ ---               ┆ ---     │
+    │ str               ┆ u32     │
+    ╞═══════════════════╪═════════╡
+    │ Defensive Back    ┆ 26      │
+    │ Offensive Lineman ┆ 21      │
+    │ Linebacker        ┆ 18      │
+    │ Wide Receiver     ┆ 18      │
+    │ Defensive End     ┆ 12      │
+    │ Defensive Lineman ┆ 12      │
+    │ Running Back      ┆ 11      │
+    │ Tight End         ┆ 10      │
+    │ Place Kicker      ┆ 6       │
+    │ Quarterback       ┆ 6       │
+    └───────────────────┴─────────┘
 
 
 
@@ -601,68 +599,61 @@ standings_tbl.head(10)
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
+    │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
 
-### Recipe 6 — End-of-season Elo power ratings ⚡
+### Recipe 6 — End-of-season power ratings ⚡
 
-Every schedule row ships pre- and post-game **Elo** ratings. Grab each team's most recent post-game Elo (sort by week, take the first) for a tidy, ready-to-rank power table — no model to fit.
+[`load_cfb_ratings`](../cfb/reference/loaders.md#load_cfb_ratings) ships opponent-adjusted EPA ratings for every team-season: `adj_net` is adjusted offensive EPA per play minus adjusted defensive EPA per play, with ranks alongside. Join the schedule's team names onto its `team_id` for a ready-to-rank power table — no model to fit.
 
 
 ```python
-elo = (
-    pl.concat([
-        schedule.select(
-            pl.col('home_team').alias('team'),
-            pl.col('week'),
-            pl.col('home_postgame_elo').alias('elo'),
-        ),
-        schedule.select(
-            pl.col('away_team').alias('team'),
-            pl.col('week'),
-            pl.col('away_postgame_elo').alias('elo'),
-        ),
-    ])
-    .filter(pl.col('elo').is_not_null())
-    .sort('week', descending=True)
-    .group_by('team', maintain_order=True)
-    .agg(pl.first('elo').alias('final_elo'))
-    .sort('final_elo', descending=True)
+ratings = sdv.cfb.load_cfb_ratings(seasons=[2023])
+names = pl.concat([
+    schedule.select(pl.col('home_id').alias('team_id'), pl.col('home_team').alias('team')),
+    schedule.select(pl.col('away_id').alias('team_id'), pl.col('away_team').alias('team')),
+]).unique(subset=['team_id'])
+assert ratings.schema['team_id'] == names.schema['team_id']  # join keys share one dtype
+power = (
+    ratings
+    .join(names, on='team_id', how='left')
+    .sort('net_rank')
+    .select(['net_rank', 'team', 'adj_net', 'adj_off_epa', 'adj_def_epa', 'games'])
 )
-elo.head(15)
+power.head(15)
 ```
 
 
 
 
-    shape: (15, 2)
-    ┌───────────────┬───────────┐
-    │ team          ┆ final_elo │
-    │ ---           ┆ ---       │
-    │ str           ┆ i32       │
-    ╞═══════════════╪═══════════╡
-    │ Michigan      ┆ 2174      │
-    │ Georgia       ┆ 2111      │
-    │ Ohio State    ┆ 2108      │
-    │ Penn State    ┆ 2061      │
-    │ Texas         ┆ 2050      │
-    │ …             ┆ …         │
-    │ Florida State ┆ 1951      │
-    │ Kansas State  ┆ 1942      │
-    │ Washington    ┆ 1883      │
-    │ SMU           ┆ 1861      │
-    │ James Madison ┆ 1835      │
-    └───────────────┴───────────┘
+    shape: (15, 6)
+    ┌──────────┬───────────────┬──────────┬─────────────┬─────────────┬───────┐
+    │ net_rank ┆ team          ┆ adj_net  ┆ adj_off_epa ┆ adj_def_epa ┆ games │
+    │ ---      ┆ ---           ┆ ---      ┆ ---         ┆ ---         ┆ ---   │
+    │ i64      ┆ str           ┆ f64      ┆ f64         ┆ f64         ┆ i64   │
+    ╞══════════╪═══════════════╪══════════╪═════════════╪═════════════╪═══════╡
+    │ 1        ┆ Oregon        ┆ 0.486063 ┆ 0.328165    ┆ -0.157897   ┆ 13    │
+    │ 2        ┆ Ohio State    ┆ 0.46467  ┆ 0.182749    ┆ -0.281921   ┆ 12    │
+    │ 3        ┆ Michigan      ┆ 0.431085 ┆ 0.205671    ┆ -0.225414   ┆ 15    │
+    │ 4        ┆ Georgia       ┆ 0.420475 ┆ 0.26391     ┆ -0.156565   ┆ 13    │
+    │ 5        ┆ Oklahoma      ┆ 0.401535 ┆ 0.22448     ┆ -0.177056   ┆ 13    │
+    │ …        ┆ …             ┆ …        ┆ …           ┆ …           ┆ …     │
+    │ 11       ┆ Missouri      ┆ 0.293728 ┆ 0.13169     ┆ -0.162038   ┆ 12    │
+    │ 12       ┆ Florida State ┆ 0.274252 ┆ 0.094095    ┆ -0.180156   ┆ 13    │
+    │ 13       ┆ Tennessee     ┆ 0.268064 ┆ 0.123445    ┆ -0.14462    ┆ 12    │
+    │ 14       ┆ Kansas State  ┆ 0.264411 ┆ 0.155379    ┆ -0.109032   ┆ 12    │
+    │ 15       ┆ Washington    ┆ 0.248367 ┆ 0.208181    ┆ -0.040186   ┆ 15    │
+    └──────────┴───────────────┴──────────┴─────────────┴─────────────┴───────┘
 
 
 
@@ -705,11 +696,11 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     ┌──────┬───────────────┬─────────┬─────────────┬────────┬──────────────┐
     │ week ┆ opponent      ┆ pts_for ┆ pts_against ┆ margin ┆ neutral_site │
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
-    │ i32  ┆ str           ┆ i32     ┆ i32         ┆ i32    ┆ bool         │
+    │ i64  ┆ str           ┆ i64     ┆ i64         ┆ i64    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
     │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -759,33 +750,37 @@ out
     │ ---                ┆ ---     ┆ ---      ┆ ---          │
     │ str                ┆ u32     ┆ i64      ┆ f64          │
     ╞════════════════════╪═════════╪══════════╪══════════════╡
-    │ Ollie Gordon II    ┆ 280     ┆ 1762     ┆ 0.076        │
-    │ Kimani Vidal       ┆ 288     ┆ 1600     ┆ 0.044        │
-    │ Cody Schrader      ┆ 274     ┆ 1585     ┆ 0.14         │
-    │ Tahj Brooks        ┆ 289     ┆ 1570     ┆ 0.196        │
-    │ Omarion Hampton    ┆ 243     ┆ 1503     ┆ 0.121        │
+    │ Ollie Gordon II    ┆ 280     ┆ 1762     ┆ 0.077        │
+    │ Kimani Vidal       ┆ 288     ┆ 1600     ┆ 0.048        │
+    │ Cody Schrader      ┆ 274     ┆ 1585     ┆ 0.142        │
+    │ Tahj Brooks        ┆ 289     ┆ 1570     ┆ 0.202        │
+    │ Omarion Hampton    ┆ 243     ┆ 1503     ┆ 0.123        │
     │ …                  ┆ …       ┆ …        ┆ …            │
-    │ Makhi Hughes       ┆ 255     ┆ 1365     ┆ 0.073        │
-    │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.139        │
-    │ Jaydn Ott          ┆ 244     ┆ 1349     ┆ -0.007       │
-    │ Ashton Jeanty      ┆ 212     ┆ 1340     ┆ 0.112        │
-    │ Marcus Carroll     ┆ 272     ┆ 1336     ┆ 0.026        │
+    │ Makhi Hughes       ┆ 255     ┆ 1365     ┆ 0.075        │
+    │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.146        │
+    │ Jaydn Ott          ┆ 245     ┆ 1350     ┆ -0.008       │
+    │ Marcus Carroll     ┆ 273     ┆ 1340     ┆ 0.038        │
+    │ Ashton Jeanty      ┆ 212     ┆ 1340     ┆ 0.118        │
     └────────────────────┴─────────┴──────────┴──────────────┘
 
 
 
-### Recipe 9 — The most thrilling games of the year 🎢
+### Recipe 9 — The closest finishes of the year 🎢
 
-cfbfastR's schedule ships an `excitement_index` (a win-probability swinginess score). Sort it descending and you've ranked the season's white-knuckle finishes in one line.
+Rank completed FBS games by final margin, breaking ties toward the highest-scoring shootouts, and you've got the season's white-knuckle finishes in one expression.
 
 
 ```python
 thrillers = (
     schedule
-    .filter(pl.col('excitement_index').is_not_null())
-    .sort('excitement_index', descending=True)
+    .filter((pl.col('completed') == True) & (pl.col('home_division') == 'fbs'))
+    .with_columns(
+        (pl.col('home_points') - pl.col('away_points')).abs().alias('margin'),
+        (pl.col('home_points') + pl.col('away_points')).alias('total_points'),
+    )
+    .sort(['margin', 'total_points'], descending=[False, True])
     .select(['week', 'home_team', 'away_team',
-             'home_points', 'away_points', 'excitement_index'])
+             'home_points', 'away_points', 'margin'])
     .head(10)
 )
 thrillers
@@ -795,22 +790,22 @@ thrillers
 
 
     shape: (10, 6)
-    ┌──────┬──────────────────┬────────────────┬─────────────┬─────────────┬──────────────────┐
-    │ week ┆ home_team        ┆ away_team      ┆ home_points ┆ away_points ┆ excitement_index │
-    │ ---  ┆ ---              ┆ ---            ┆ ---         ┆ ---         ┆ ---              │
-    │ i32  ┆ str              ┆ str            ┆ i32         ┆ i32         ┆ f64              │
-    ╞══════╪══════════════════╪════════════════╪═════════════╪═════════════╪══════════════════╡
-    │ 7    ┆ Southern         ┆ Lincoln (CA)   ┆ 45          ┆ 18          ┆ 14.267416        │
-    │ 9    ┆ Western Carolina ┆ Mercer         ┆ 38          ┆ 45          ┆ 13.938438        │
-    │ 11   ┆ Bucknell         ┆ Georgetown     ┆ 47          ┆ 50          ┆ 12.731991        │
-    │ 3    ┆ Tennessee State  ┆ Gardner-Webb   ┆ 27          ┆ 25          ┆ 12.041674        │
-    │ 6    ┆ Brown            ┆ Rhode Island   ┆ 30          ┆ 34          ┆ 11.825262        │
-    │ 3    ┆ Eastern Illinois ┆ Illinois State ┆ 14          ┆ 13          ┆ 11.431072        │
-    │ 5    ┆ Robert Morris    ┆ Howard         ┆ 10          ┆ 35          ┆ 11.33141         │
-    │ 6    ┆ Lindenwood       ┆ Tennessee Tech ┆ 23          ┆ 0           ┆ 11.198615        │
-    │ 10   ┆ New Hampshire    ┆ Villanova      ┆ 33          ┆ 45          ┆ 11.10256         │
-    │ 4    ┆ Eastern Illinois ┆ McNeese        ┆ 31          ┆ 28          ┆ 10.873191        │
-    └──────┴──────────────────┴────────────────┴─────────────┴─────────────┴──────────────────┘
+    ┌──────┬────────────────┬───────────────┬─────────────┬─────────────┬────────┐
+    │ week ┆ home_team      ┆ away_team     ┆ home_points ┆ away_points ┆ margin │
+    │ ---  ┆ ---            ┆ ---           ┆ ---         ┆ ---         ┆ ---    │
+    │ i64  ┆ str            ┆ str           ┆ i64         ┆ i64         ┆ i64    │
+    ╞══════╪════════════════╪═══════════════╪═════════════╪═════════════╪════════╡
+    │ 9    ┆ California     ┆ USC           ┆ 49          ┆ 50          ┆ 1      │
+    │ 5    ┆ UL Monroe      ┆ App State     ┆ 40          ┆ 41          ┆ 1      │
+    │ 5    ┆ UCF            ┆ Baylor        ┆ 35          ┆ 36          ┆ 1      │
+    │ 2    ┆ Virginia       ┆ James Madison ┆ 35          ┆ 36          ┆ 1      │
+    │ 5    ┆ UConn          ┆ Utah State    ┆ 33          ┆ 34          ┆ 1      │
+    │ 12   ┆ Bowling Green  ┆ Toledo        ┆ 31          ┆ 32          ┆ 1      │
+    │ 7    ┆ Colorado State ┆ Boise State   ┆ 31          ┆ 30          ┆ 1      │
+    │ 10   ┆ Minnesota      ┆ Illinois      ┆ 26          ┆ 27          ┆ 1      │
+    │ 10   ┆ Baylor         ┆ Houston       ┆ 24          ┆ 25          ┆ 1      │
+    │ 13   ┆ Old Dominion   ┆ Georgia State ┆ 25          ┆ 24          ┆ 1      │
+    └──────┴────────────────┴───────────────┴─────────────┴─────────────┴────────┘
 
 
 
@@ -822,8 +817,8 @@ Roll the season roster up by `home_state` to map the recruiting footprint of col
 ```python
 talent_map = (
     rosters
-    .filter(pl.col('home_state').is_not_null())
-    .group_by('home_state')
+    .filter(pl.col('cfbd_home_state').is_not_null())
+    .group_by('cfbd_home_state')
     .agg(pl.len().alias('players'))
     .sort('players', descending=True)
     .head(15)
@@ -835,23 +830,23 @@ talent_map
 
 
     shape: (15, 2)
-    ┌────────────┬─────────┐
-    │ home_state ┆ players │
-    │ ---        ┆ ---     │
-    │ str        ┆ u32     │
-    ╞════════════╪═════════╡
-    │ TX         ┆ 2526    │
-    │ FL         ┆ 1853    │
-    │ CA         ┆ 1748    │
-    │ GA         ┆ 1584    │
-    │ OH         ┆ 825     │
-    │ …          ┆ …       │
-    │ PA         ┆ 574     │
-    │ TN         ┆ 559     │
-    │ NJ         ┆ 534     │
-    │ MD         ┆ 512     │
-    │ SC         ┆ 472     │
-    └────────────┴─────────┘
+    ┌─────────────────┬─────────┐
+    │ cfbd_home_state ┆ players │
+    │ ---             ┆ ---     │
+    │ str             ┆ u32     │
+    ╞═════════════════╪═════════╡
+    │ TX              ┆ 2510    │
+    │ FL              ┆ 1819    │
+    │ CA              ┆ 1723    │
+    │ GA              ┆ 1560    │
+    │ OH              ┆ 791     │
+    │ …               ┆ …       │
+    │ TN              ┆ 561     │
+    │ IL              ┆ 542     │
+    │ MD              ┆ 509     │
+    │ NJ              ┆ 502     │
+    │ SC              ┆ 467     │
+    └─────────────────┴─────────┘
 
 
 
@@ -937,8 +932,8 @@ out
     │ ---                            ┆ ---        ┆ ---        │
     │ str                            ┆ str        ┆ f64        │
     ╞════════════════════════════════╪════════════╪════════════╡
-    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Bethune-Cookman@Miami          ┆ Miami      ┆ -54.5      │
+    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Samford@Texas A&M              ┆ Texas A&M  ┆ -54.2      │
     │ Grambling@Ohio State           ┆ Ohio State ┆ -53.5      │
     │ Samford@Baylor                 ┆ Baylor     ┆ -52.0      │
@@ -946,7 +941,7 @@ out
     │ Eastern Illinois@Alabama       ┆ Alabama    ┆ -51.3      │
     │ East Texas A&M@SMU             ┆ SMU        ┆ -50.8      │
     │ SE Louisiana@LSU               ┆ LSU        ┆ -48.8      │
-    │ Northwestern State@Cincinnati  ┆ Cincinnati ┆ -48.5      │
+    │ Western Illinois@Illinois      ┆ Illinois   ┆ -48.5      │
     └────────────────────────────────┴────────────┴────────────┘
 
 
@@ -1016,7 +1011,7 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 
 
 
-    shape: (5, 26)
+    shape: (5, 27)
     ┌────────────┬────────────┬─────────┬────────────┬───┬────────────┬───────────┬───────────┬────────┐
     │ group_name ┆ group_abbr ┆ team_id ┆ team_name  ┆ … ┆ vs         ┆ vs. conf. ┆ vs ap top ┆ vs usa │
     │ ---        ┆ eviation   ┆ ---     ┆ ---        ┆   ┆ division   ┆ ---       ┆ 25        ┆ ranked │
@@ -1024,16 +1019,16 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
     │            ┆ str        ┆         ┆            ┆   ┆ str        ┆           ┆ str       ┆ ---    │
     │            ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆ str    │
     ╞════════════╪════════════╪═════════╪════════════╪═══╪════════════╪═══════════╪═══════════╪════════╡
-    │ American   ┆ American   ┆ 5       ┆ Blazers    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 58      ┆ Bulls      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ American   ┆ American   ┆ 2226    ┆ Owls       ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 202     ┆ Golden     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆ Hurricane  ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 218     ┆ Owls       ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 2636    ┆ Roadrunner ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆ s          ┆   ┆            ┆           ┆           ┆        │
     └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
 
 
@@ -1113,11 +1108,11 @@ out
     │ ---    ┆ ---      ┆ ---  ┆ ---      ┆ ---       │
     │ i64    ┆ i64      ┆ i64  ┆ i64      ┆ f64       │
     ╞════════╪══════════╪══════╪══════════╪═══════════╡
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.056855 │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.160273  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.005587  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.563137 │
-    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.052125  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.035415 │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.233441  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.028077  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.480993 │
+    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.096702  │
     └────────┴──────────┴──────┴──────────┴───────────┘
 
 
