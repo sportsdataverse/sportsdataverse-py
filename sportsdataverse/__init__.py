@@ -151,6 +151,10 @@ from sportsdataverse.rolling_windows import football_events, rolling_windows, sh
 # is the FUNCTION; import BUCKET_EDGES etc. from the submodule path.
 from sportsdataverse.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
 
+# Defense vs position (TFD-2d): same pattern -- sportsdataverse.defense_vs_position
+# is the FUNCTION; import PBP_COLUMNS etc. from the submodule path.
+from sportsdataverse.defense_vs_position import defense_vs_position
+
 # Paper Index deserved-win shares + season luck (CFBE-5d): ported from Game on Paper.
 from sportsdataverse.paper_index import deserved_wins, paper_index_game, paper_index_games
 from sportsdataverse.find import (

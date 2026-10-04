@@ -333,6 +333,86 @@ df = decompose_college_baseball_plays(
 print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
 ```
 
+### `defense_vs_position(pbp: 'pl.DataFrame', rosters: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'` {#defense_vs_position}
+
+EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and TEs.
+
+Population: plays from scrimmage on a numbered down (1-4) with an EPA, in the
+regular season or postseason -- CFB `EPA_scrimmage` not null and `seasonType`
+2/3 (the `sportsdataverse.rolling_windows` population), NFL `play_type`
+pass/run and `season_type` REG/POST. Filter season types first to narrow it.
+
+A dropback (`pass`: attempts and sacks, plus NFL scrambles) is the QB's; a
+carry (`rush`) goes to the rusher's roster group and a target to the
+receiver's, so one completion counts for QB and for its receiver's group. The
+roster is matched on `(season, player id)`: CFB `athlete_id` with
+`position_abbreviation` (or `position` when that is the abbreviation, the
+older shape), NFL `gsis_id` with `position`. A carrier or receiver with no
+roster row, an `other` position or two different groups that season counts
+in no group, and so does a target with no receiver id. CFB roster positions
+are usable from 2014; the 2004-2013 releases list nearly every player as
+unknown (`-`), so those seasons get QB dropbacks and little else.
+
+Rates: `success` is EPA > 0; `explosive` is a dropback with EPA >= 2.4 or
+a carry with EPA >= 1.8 (cfb_pbp's `EPA_explosive`). `sack_rate_allowed`
+is sacks per dropback, `rush_yards_per_carry_allowed` the carries' rushing
+yards (CFB `yds_rushed`, `statYardage` where it is null), `yards_per_target_allowed` receiving yards per target (0 on an
+incompletion or interception). Extras are null on groups whose plays do not
+make them real. `games` counts the games with at least one of the cell's
+plays, and `qualified` is `games >= MIN_GAMES`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `pl.DataFrame` |  | released plays, any number of seasons -- CFB `load_cfb_pbp` or NFL `load_nfl_model_pbp` (project to `PBP_COLUMNS[league]`). |
+| `rosters` | `pl.DataFrame` |  | the same seasons' rosters -- CFB `load_cfb_rosters` (`season`, `athlete_id`, `position_abbreviation` / `position`), NFL `load_nfl_rosters` (`season`, `gsis_id`, `position`). |
+| `league` | `str` |  | `"cfb"` or `"nfl"`. |
+
+**Returns**
+
+one row per `(season, team_id, position_group)` the defense faced, `OUTPUT_SCHEMA`, sorted by those keys. `team_id` is the defense's ESPN team id as text (CFB `def_pos_team_id`) or its nflverse abbreviation (NFL `defteam`). Empty pbp gives an empty frame with the schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the plays, keyed as the source pbp keys it (CFB and NFL starting year). |
+| `team_id` | character | The DEFENSE, as text: its ESPN team id (CFB def_pos_team_id) or its nflverse abbreviation (NFL defteam). |
+| `position_group` | character | Group of the offensive player the plays went to: QB (every dropback, plus carries and targets of roster QBs), RB (roster RB or FB), WR or TE, from the season roster position. |
+| `plays` | integer | Plays in the cell, each counted once per group; a completion counts for QB and for its receiver's group. |
+| `games` | integer | Games with at least one of the cell's plays; the qualified floor counts these. |
+| `epa_per_play_allowed` | double | Mean offensive EPA of the cell's plays (higher is worse for the defense). |
+| `success_rate_allowed` | double | Share of the cell's plays with EPA > 0. |
+| `explosive_rate_allowed` | double | Share of the cell's plays that were explosive (a dropback with EPA >= 2.4 or a carry with EPA >= 1.8, as cfb_pbp's EPA_explosive). |
+| `dropbacks` | integer | QB rows only, null for other groups; dropbacks faced (pass attempts and sacks, plus NFL scrambles). |
+| `sack_rate_allowed` | double | QB rows only, null for other groups; sacks per dropback. |
+| `carries` | integer | RB rows only, null for other groups; carries by roster RBs and FBs. |
+| `rush_yards_per_carry_allowed` | double | RB rows only, null for other groups; rushing yards per carry (CFB yds_rushed, statYardage where ESPN left it null). |
+| `targets` | integer | WR and TE rows only, null for other groups; targets to the group's players that name a receiver. |
+| `yards_per_target_allowed` | double | WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly completions and run high. |
+| `qualified` | logical | True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_rosters
+from sportsdataverse.defense_vs_position import PBP_COLUMNS, defense_vs_position
+
+pbp = load_cfb_pbp(2024).select(PBP_COLUMNS["cfb"])
+dvp = defense_vs_position(pbp, load_cfb_rosters(2024), "cfb")
+
+# The NFL twin (gsis ids, nflverse team abbreviations)
+
+from sportsdataverse.nfl import load_nfl_model_pbp, load_nfl_rosters
+
+pbp = load_nfl_model_pbp([2024]).select(PBP_COLUMNS["nfl"])
+dvp_nfl = defense_vs_position(pbp, load_nfl_rosters([2024]), "nfl")
+
+# Pipeline next step (one line)
+
+dvp.filter((pl.col("position_group") == "TE") & (pl.col("qualified") == True)).sort("epa_per_play_allowed")
+```
+
 ### `deserved_wins(games: 'pl.DataFrame') -> 'pl.DataFrame'` {#deserved_wins}
 
 Season deserved wins and luck per team from `paper_index_games` rows.
