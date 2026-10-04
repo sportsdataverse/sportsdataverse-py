@@ -2968,6 +2968,27 @@ defense_summary:
   yards: Receiving yards allowed in the player's coverage.
   yards_after_catch: Yards after the catch allowed in the player's coverage.
   yards_per_reception: Average yards allowed per reception.
+defense_vs_position:
+  season: Season of the plays, keyed as the source pbp keys it (CFB and NFL starting year).
+  team_id: 'The DEFENSE, as text: its ESPN team id (CFB def_pos_team_id) or its nflverse abbreviation (NFL defteam).'
+  position_group: 'Group of the offensive player the plays went to: QB (every dropback, plus carries and targets of roster
+    QBs), RB (roster RB or FB), WR or TE, from the season roster position.'
+  plays: Plays in the cell, each counted once per group; a completion counts for QB and for its receiver's group.
+  games: Games with at least one of the cell's plays; the qualified floor counts these.
+  epa_per_play_allowed: Mean offensive EPA of the cell's plays (higher is worse for the defense).
+  success_rate_allowed: Share of the cell's plays with EPA > 0.
+  explosive_rate_allowed: Share of the cell's plays that were explosive (a dropback with EPA >= 2.4 or a carry with EPA
+    >= 1.8, as cfb_pbp's EPA_explosive).
+  dropbacks: QB rows only, null for other groups; dropbacks faced (pass attempts and sacks, plus NFL scrambles).
+  sack_rate_allowed: QB rows only, null for other groups; sacks per dropback.
+  carries: RB rows only, null for other groups; carries by roster RBs and FBs.
+  rush_yards_per_carry_allowed: RB rows only, null for other groups; rushing yards per carry (CFB yds_rushed, statYardage
+    where ESPN left it null).
+  targets: WR and TE rows only, null for other groups; targets to the group's players that name a receiver.
+  yards_per_target_allowed: 'WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion
+    or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly
+    completions and run high.'
+  qualified: True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile.
 draft_latest:
   next_up: Indicates whether this draft slot is the next pick to be made in the current draft.
   pick_display_pick_number: The formatted overall pick number displayed publicly for this draft selection.

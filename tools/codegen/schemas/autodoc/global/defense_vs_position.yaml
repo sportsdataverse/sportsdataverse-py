@@ -1,0 +1,49 @@
+schema: defense_vs_position
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: position_group
+  type: character
+  description: ''
+- name: plays
+  type: integer
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: epa_per_play_allowed
+  type: double
+  description: ''
+- name: success_rate_allowed
+  type: double
+  description: ''
+- name: explosive_rate_allowed
+  type: double
+  description: ''
+- name: dropbacks
+  type: integer
+  description: ''
+- name: sack_rate_allowed
+  type: double
+  description: ''
+- name: carries
+  type: integer
+  description: ''
+- name: rush_yards_per_carry_allowed
+  type: double
+  description: ''
+- name: targets
+  type: integer
+  description: ''
+- name: yards_per_target_allowed
+  type: double
+  description: ''
+- name: qualified
+  type: logical
+  description: ''
