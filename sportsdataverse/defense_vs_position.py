@@ -141,6 +141,10 @@ def _flag(col: str) -> pl.Expr:
 
 def _plays(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
     """Scrimmage plays on a numbered down, one shape for both leagues."""
+    season_type = "seasonType" if league == "cfb" else "season_type"
+    if season_type not in pbp.columns:
+        # without it a preseason or out-of-season play would count silently
+        raise ValueError(f"pbp has no {season_type!r} column; select PBP_COLUMNS[{league!r}]")
     if league == "cfb":
         keep = (
             pl.col("EPA_scrimmage").is_not_null()
@@ -148,8 +152,7 @@ def _plays(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
             & pl.col("EPA").is_not_null()
             & pl.col("def_pos_team_id").is_not_null()
         )
-        if "seasonType" in pbp.columns:
-            keep = keep & pl.col("seasonType").cast(pl.Int64, strict=False).is_in(COUNTED_SEASON_TYPES)
+        keep = keep & pl.col("seasonType").cast(pl.Int64, strict=False).is_in(COUNTED_SEASON_TYPES)
         df = pbp.filter(keep)
         dropback, carry, sack = _flag("pass"), _flag("rush"), _flag("sack")
         target = _flag("target") & pl.col("receiver_player_id").is_not_null()
@@ -165,8 +168,7 @@ def _plays(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
             & pl.col("epa").is_not_null()
             & pl.col("defteam").is_not_null()
         )
-        if "season_type" in pbp.columns:
-            keep = keep & pl.col("season_type").is_in(_NFLFASTR_SEASON_TYPES)
+        keep = keep & pl.col("season_type").is_in(_NFLFASTR_SEASON_TYPES)
         df = pbp.filter(keep)
         # nflfastR: pass = dropback (sacks and scrambles in), rush = designed run
         dropback, carry, sack = _flag("pass"), _flag("rush"), _flag("sack")
@@ -276,7 +278,8 @@ def defense_vs_position(pbp: pl.DataFrame, rosters: pl.DataFrame, league: str) -
         (NFL ``defteam``). Empty pbp gives an empty frame with the schema.
 
     Raises:
-        ValueError: ``league`` is not ``"cfb"`` or ``"nfl"``.
+        ValueError: ``league`` is not ``"cfb"`` or ``"nfl"``, or a non-empty ``pbp``
+            has no ``seasonType`` (CFB) / ``season_type`` (NFL) column.
         TypeError: a team, game or player id column (pbp or roster) is float.
 
     Example:
