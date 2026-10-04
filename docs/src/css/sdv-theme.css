@@ -257,6 +257,36 @@ html[data-theme='light'] .navbar__title {
   --ifm-button-color: #06121f;
 }
 
+/* ---- light mode: the footer and the home hero follow sportsdataverse.org's light theme (the navbar stays navy
+   for the glow; dark mode keeps the navy footer and hero above) ---- */
+html[data-theme='light'] .footer--dark {
+  --ifm-footer-background-color: #ffffff;
+  --ifm-footer-color: #4d5b74;
+  --ifm-footer-title-color: #0e1626;
+  --ifm-footer-link-color: #08699e;
+  --ifm-footer-link-hover-color: #02507f;
+  border-top-color: #d8e0eb;
+}
+
+html[data-theme='light'] .hero--primary {
+  --ifm-hero-background-color: #ffffff;
+  --ifm-hero-text-color: #0e1626;
+  border-bottom-color: #d8e0eb;
+}
+
+html[data-theme='light'] .hero--primary .button.button--secondary:not(.button--outline),
+html[data-theme='light'] .hero--primary .button.button--secondary:not(.button--outline):hover {
+  --ifm-button-background-color: #02507f;
+  --ifm-button-border-color: #02507f;
+  --ifm-button-color: #f6f8fb;
+  color: #f6f8fb;
+}
+
+html[data-theme='light'] .hero--primary .button.button--secondary.button--outline:not(.button--active):not(:hover) {
+  color: #02507f;
+  border-color: #02507f;
+}
+
 /* ---- the page title (or the hero title) carries one short amber underline ---- */
 .markdown > header > h1::after,
 .sdv-404-title::after,
