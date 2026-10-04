@@ -167,7 +167,7 @@ html[data-theme='light'] .navbar__title {
   --search-local-input-active-border-color: #4fb6e8;
 }
 
-/* the wordmark's color in light mode (dark mode sets #FDFDFD on .navbar__title above) */
+/* the wordmark's color in light mode (dark mode sets #e9eef6 on .navbar__title above) */
 .navbar__brand {
   color: #e9eef6;
 }
@@ -309,9 +309,14 @@ html[data-theme='light'] .hero--primary .button.button--secondary.button--outlin
   --ifm-link-decoration: underline;
 }
 
-/* not the heading anchor "#", nor a link that wraps only a code chip (parity tables) */
-.markdown .hash-link,
-.markdown a:has(> code:only-child) {
+/* not the heading anchor "#" */
+.markdown .hash-link {
+  text-decoration: none;
+}
+
+/* nor, in tables only, a link that wraps only a code chip (parity tables); in prose the underline stays,
+   since link color alone is under 3:1 against body text. Its own rule: a browser without :has() drops only this */
+.markdown td a:has(> code:only-child) {
   text-decoration: none;
 }
 
@@ -339,10 +344,10 @@ h1 code {
   color: var(--ifm-font-color-base);
 }
 
+/* no fill, no side stripe; the 1 px border keeps Infima's per-type color so note, tip, caution and danger stay distinct */
 html .alert {
   --ifm-alert-background-color: var(--ifm-background-surface-color);
   --ifm-alert-foreground-color: var(--ifm-font-color-base);
-  --ifm-alert-border-color: var(--ifm-toc-border-color);
   --ifm-alert-border-left-width: var(--ifm-alert-border-width);
 }
 

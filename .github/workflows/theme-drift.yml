@@ -52,7 +52,7 @@ jobs:
             there="$RUNNER_TEMP/sdvplot/$(echo "$f" | tr / _)"
             if ! cmp -s "$there" "$f"; then
               echo "::error file=$f::differs from sportsdataverse/sdvplot main ($f); copy sdvplot's file here (sdvplot is the source)"
-              case "$f" in *.woff2) ;; *) diff -u "$there" "$f" | head -60 ;; esac
+              case "$f" in *.woff2) ;; *) diff -u "$there" "$f" | head -60 || true ;; esac  # diff exits 1 on a difference; keep listing the other files
               drift=1
             fi
           done
