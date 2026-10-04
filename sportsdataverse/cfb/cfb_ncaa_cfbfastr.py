@@ -444,9 +444,12 @@ _NO_PLAY_FALSE = (
     "kickoff_play",
     "kick_play",
     "fg_inds",
-    "fg_made",
 )
 _NO_PLAY_NULL = (
+    # not a flag here: this mapper leaves ``fg_made`` null on every row that is not a
+    # field-goal attempt (2013-2025 as published), so a wiped row is null too, never
+    # False -- False would count it as a miss in made / (made + missed)
+    "fg_made",
     "yards_gained",
     "yds_rushed",
     "yds_receiving",

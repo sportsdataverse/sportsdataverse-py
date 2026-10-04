@@ -966,3 +966,15 @@ def test_a_nullified_play_carries_no_yardage_and_no_outcome() -> None:
         assert nop[col].null_count() == nop.height, col
     for col in ("rush", "pass", "pass_attempt", "completion", "sack", "touchdown", "punt", "kickoff_play"):
         assert not nop[col].fill_null(False).any(), col
+
+
+def test_fg_made_is_set_only_on_field_goal_attempts() -> None:
+    """``fg_made`` is null off a field-goal attempt, a wiped-out play included.
+
+    The 2026 build set it False on every "... NO PLAY." row (5,394 Penalty rows), so
+    made / (made + missed) over the column read 17 % instead of 73 % (2025's rate).
+    """
+    df = _parsed_frame("6398950")
+    assert df.filter(pl.col("penalty_no_play"))["fg_made"].null_count() == 15
+    assert df.filter(pl.col("fg_inds") == False)["fg_made"].drop_nulls().len() == 0
+    assert df.filter(pl.col("fg_inds") == True)["fg_made"].null_count() == 0
