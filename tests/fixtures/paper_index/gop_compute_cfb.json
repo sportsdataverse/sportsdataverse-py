@@ -1,0 +1,461 @@
+{
+ "league": "cfb",
+ "games": [
+  {
+   "gameId": "401767224",
+   "homeId": 2634,
+   "awayId": 2449,
+   "homeShare": 1.7361037642681058e-07,
+   "margins": {
+    "success": -0.3018531717747684,
+    "explosive": 0.010691375623663575,
+    "explosive_epa": -0.22367132793773303,
+    "opp_conversion": -0.375,
+    "pts_per_opp": -5.25,
+    "field_position": -1.0050936318418608,
+    "havoc": -0.13007840342124022,
+    "turnovers": -1.0
+   },
+   "home": {
+    "successRate": 0.2391304347826087,
+    "explosiveRate": 0.043478260869565216,
+    "explosivenessEpa": 0.7983251701701771,
+    "oppConversion": 0.5,
+    "ptsPerOpp": 0.0,
+    "avgStartYardsToEndzone": 79.15384615384616,
+    "avgStartEp": 1.7622188842102704,
+    "havocAllowedRate": 0.1956521739130435,
+    "turnoversCommitted": 2.0
+   },
+   "away": {
+    "successRate": 0.5409836065573771,
+    "explosiveRate": 0.03278688524590164,
+    "explosivenessEpa": 1.0219964981079102,
+    "oppConversion": 0.875,
+    "ptsPerOpp": 5.25,
+    "avgStartYardsToEndzone": 53.583333333333336,
+    "avgStartEp": 2.7673125160521312,
+    "havocAllowedRate": 0.06557377049180328,
+    "turnoversCommitted": 1.0
+   }
+  },
+  {
+   "gameId": "401628337",
+   "homeId": 2,
+   "awayId": 25,
+   "homeShare": 0.002845737170299097,
+   "margins": {
+    "success": -0.05305383022774329,
+    "explosive": 0.0134575569358178,
+    "explosive_epa": 0.12482061757422658,
+    "opp_conversion": 0.06666666666666665,
+    "pts_per_opp": 0.4666666666666668,
+    "field_position": -0.5205095190784881,
+    "havoc": -0.04477225672877848,
+    "turnovers": -5.0
+   },
+   "home": {
+    "successRate": 0.4107142857142857,
+    "explosiveRate": 0.07142857142857142,
+    "explosivenessEpa": 1.1323199142580447,
+    "oppConversion": 0.6666666666666666,
+    "ptsPerOpp": 4.666666666666667,
+    "avgStartYardsToEndzone": 74.78571428571429,
+    "avgStartEp": 1.9831665545979271,
+    "havocAllowedRate": 0.16071428571428573,
+    "turnoversCommitted": 5.0
+   },
+   "away": {
+    "successRate": 0.463768115942029,
+    "explosiveRate": 0.057971014492753624,
+    "explosivenessEpa": 1.007499296683818,
+    "oppConversion": 0.6,
+    "ptsPerOpp": 4.2,
+    "avgStartYardsToEndzone": 60.0,
+    "avgStartEp": 2.503676073676415,
+    "havocAllowedRate": 0.11594202898550725,
+    "turnoversCommitted": 0.0
+   }
+  },
+  {
+   "gameId": "401643768",
+   "homeId": 21,
+   "awayId": 2005,
+   "homeShare": 0.03737949257277017,
+   "margins": {
+    "success": -0.12284730195177962,
+    "explosive": -0.002296211251435143,
+    "explosive_epa": 0.2634740903352697,
+    "opp_conversion": -0.20000000000000007,
+    "pts_per_opp": -0.20000000000000018,
+    "field_position": 0.11365984742098023,
+    "havoc": -0.05109070034443168,
+    "turnovers": -1.0
+   },
+   "home": {
+    "successRate": 0.4925373134328358,
+    "explosiveRate": 0.07462686567164178,
+    "explosivenessEpa": 1.3539934357007344,
+    "oppConversion": 0.6,
+    "ptsPerOpp": 4.0,
+    "avgStartYardsToEndzone": 71.42857142857143,
+    "avgStartEp": 2.0918895968143665,
+    "havocAllowedRate": 0.08955223880597014,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.6153846153846154,
+    "explosiveRate": 0.07692307692307693,
+    "explosivenessEpa": 1.0905193453654647,
+    "oppConversion": 0.8,
+    "ptsPerOpp": 4.2,
+    "avgStartYardsToEndzone": 73.375,
+    "avgStartEp": 1.9782297493933862,
+    "havocAllowedRate": 0.038461538461538464,
+    "turnoversCommitted": 0.0
+   }
+  },
+  {
+   "gameId": "401636915",
+   "homeId": 197,
+   "awayId": 9,
+   "homeShare": 0.2907412420199904,
+   "margins": {
+    "success": -0.025974025974025983,
+    "explosive": -0.018181818181818188,
+    "explosive_epa": -0.18788698154526795,
+    "opp_conversion": 0.16666666666666663,
+    "pts_per_opp": 1.166666666666667,
+    "field_position": 0.02792183998385367,
+    "havoc": 0.01558441558441559,
+    "turnovers": -1.0
+   },
+   "home": {
+    "successRate": 0.45454545454545453,
+    "explosiveRate": 0.07272727272727272,
+    "explosivenessEpa": 1.126495510339737,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 7.0,
+    "avgStartYardsToEndzone": 70.2,
+    "avgStartEp": 2.0631958054972666,
+    "havocAllowedRate": 0.03636363636363636,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.4805194805194805,
+    "explosiveRate": 0.09090909090909091,
+    "explosivenessEpa": 1.3143824918850049,
+    "oppConversion": 0.8333333333333334,
+    "ptsPerOpp": 5.833333333333333,
+    "avgStartYardsToEndzone": 72.0,
+    "avgStartEp": 2.035273965513413,
+    "havocAllowedRate": 0.05194805194805195,
+    "turnoversCommitted": 0.0
+   }
+  },
+  {
+   "gameId": "401640997",
+   "homeId": 2534,
+   "awayId": 2335,
+   "homeShare": 0.5214655746268854,
+   "margins": {
+    "success": -0.0446906035141329,
+    "explosive": -0.019862490450725745,
+    "explosive_epa": 0.23229910318668068,
+    "opp_conversion": 0.06666666666666665,
+    "pts_per_opp": -0.2666666666666666,
+    "field_position": 0.05423954738516201,
+    "havoc": 0.008594346829640956,
+    "turnovers": 0.0
+   },
+   "home": {
+    "successRate": 0.33766233766233766,
+    "explosiveRate": 0.03896103896103896,
+    "explosivenessEpa": 1.2138436448115568,
+    "oppConversion": 0.6666666666666666,
+    "ptsPerOpp": 2.3333333333333335,
+    "avgStartYardsToEndzone": 68.6923076923077,
+    "avgStartEp": 2.1793337864681424,
+    "havocAllowedRate": 0.06493506493506493,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.38235294117647056,
+    "explosiveRate": 0.058823529411764705,
+    "explosivenessEpa": 0.9815445416248761,
+    "oppConversion": 0.6,
+    "ptsPerOpp": 2.6,
+    "avgStartYardsToEndzone": 69.42857142857143,
+    "avgStartEp": 2.1250942390829803,
+    "havocAllowedRate": 0.07352941176470588,
+    "turnoversCommitted": 1.0
+   }
+  },
+  {
+   "gameId": "401636934",
+   "homeId": 197,
+   "awayId": 2641,
+   "homeShare": 0.8674356066221223,
+   "margins": {
+    "success": 0.06084959816303093,
+    "explosive": 0.08725602755453502,
+    "explosive_epa": 0.4102416322344824,
+    "opp_conversion": -0.25,
+    "pts_per_opp": -1.875,
+    "field_position": 0.2028189174642394,
+    "havoc": -0.027554535017221576,
+    "turnovers": -1.0
+   },
+   "home": {
+    "successRate": 0.5223880597014925,
+    "explosiveRate": 0.16417910447761194,
+    "explosivenessEpa": 1.7101056916373116,
+    "oppConversion": 0.75,
+    "ptsPerOpp": 5.125,
+    "avgStartYardsToEndzone": 67.85714285714286,
+    "avgStartEp": 2.1895167976070478,
+    "havocAllowedRate": 0.1044776119402985,
+    "turnoversCommitted": 2.0
+   },
+   "away": {
+    "successRate": 0.46153846153846156,
+    "explosiveRate": 0.07692307692307693,
+    "explosivenessEpa": 1.2998640594028292,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 7.0,
+    "avgStartYardsToEndzone": 72.61538461538461,
+    "avgStartEp": 1.9866978801428083,
+    "havocAllowedRate": 0.07692307692307693,
+    "turnoversCommitted": 1.0
+   }
+  },
+  {
+   "gameId": "401752665",
+   "homeId": 52,
+   "awayId": 333,
+   "homeShare": 0.8534822429822524,
+   "margins": {
+    "success": 0.012096774193548376,
+    "explosive": 0.0318100358422939,
+    "explosive_epa": 0.047759408614149956,
+    "opp_conversion": 0.33333333333333337,
+    "pts_per_opp": 2.3333333333333335,
+    "field_position": -0.09104971414460428,
+    "havoc": 0.0026881720430107503,
+    "turnovers": 0.0
+   },
+   "home": {
+    "successRate": 0.3870967741935484,
+    "explosiveRate": 0.12903225806451613,
+    "explosivenessEpa": 1.4835339623192947,
+    "oppConversion": 0.8333333333333334,
+    "ptsPerOpp": 4.666666666666667,
+    "avgStartYardsToEndzone": 72.5,
+    "avgStartEp": 1.9978018468377687,
+    "havocAllowedRate": 0.08064516129032258,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.375,
+    "explosiveRate": 0.09722222222222222,
+    "explosivenessEpa": 1.4357745537051447,
+    "oppConversion": 0.5,
+    "ptsPerOpp": 2.3333333333333335,
+    "avgStartYardsToEndzone": 69.5,
+    "avgStartEp": 2.088851560982373,
+    "havocAllowedRate": 0.08333333333333333,
+    "turnoversCommitted": 0.0
+   }
+  },
+  {
+   "gameId": "401752847",
+   "homeId": 30,
+   "awayId": 127,
+   "homeShare": 0.9722415956924404,
+   "margins": {
+    "success": 0.04242424242424242,
+    "explosive": 0.09999999999999999,
+    "explosive_epa": 0.24143631186555403,
+    "opp_conversion": 0.25,
+    "pts_per_opp": 2.5,
+    "field_position": 0.02455573585127091,
+    "havoc": 0.10909090909090909,
+    "turnovers": -1.0
+   },
+   "home": {
+    "successRate": 0.5151515151515151,
+    "explosiveRate": 0.13636363636363635,
+    "explosivenessEpa": 1.3776925521738388,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 6.0,
+    "avgStartYardsToEndzone": 72.0,
+    "avgStartEp": 2.02960711338744,
+    "havocAllowedRate": 0.0,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.4727272727272727,
+    "explosiveRate": 0.03636363636363636,
+    "explosivenessEpa": 1.1362562403082848,
+    "oppConversion": 0.75,
+    "ptsPerOpp": 3.5,
+    "avgStartYardsToEndzone": 71.72727272727273,
+    "avgStartEp": 2.005051377536169,
+    "havocAllowedRate": 0.10909090909090909,
+    "turnoversCommitted": 0.0
+   }
+  },
+  {
+   "gameId": "401761595",
+   "homeId": 2653,
+   "awayId": 2447,
+   "homeShare": 0.9929673531468363,
+   "margins": {
+    "success": 0.10746268656716418,
+    "explosive": 0.059402985074626866,
+    "explosive_epa": 0.07504728951436634,
+    "opp_conversion": -0.16666666666666663,
+    "pts_per_opp": 2.3333333333333335,
+    "field_position": 0.20510299470060156,
+    "havoc": 0.11522388059701494,
+    "turnovers": 1.0
+   },
+   "home": {
+    "successRate": 0.5074626865671642,
+    "explosiveRate": 0.11940298507462686,
+    "explosivenessEpa": 1.2781048189191258,
+    "oppConversion": 0.8333333333333334,
+    "ptsPerOpp": 4.666666666666667,
+    "avgStartYardsToEndzone": 66.4,
+    "avgStartEp": 2.261631161716344,
+    "havocAllowedRate": 0.04477611940298507,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.4,
+    "explosiveRate": 0.06,
+    "explosivenessEpa": 1.2030575294047594,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 2.3333333333333335,
+    "avgStartYardsToEndzone": 69.36363636363636,
+    "avgStartEp": 2.0565281670157423,
+    "havocAllowedRate": 0.16,
+    "turnoversCommitted": 1.0
+   }
+  },
+  {
+   "gameId": "401644764",
+   "homeId": 189,
+   "awayId": 2711,
+   "homeShare": 0.997331190636569,
+   "margins": {
+    "success": 0.07880133185349614,
+    "explosive": 0.020810210876803556,
+    "explosive_epa": 0.17303841634766082,
+    "opp_conversion": 0.22499999999999998,
+    "pts_per_opp": 0.8999999999999999,
+    "field_position": 0.19385453608251435,
+    "havoc": 0.08407325194228635,
+    "turnovers": 2.0
+   },
+   "home": {
+    "successRate": 0.49056603773584906,
+    "explosiveRate": 0.09433962264150944,
+    "explosivenessEpa": 1.2709504916117742,
+    "oppConversion": 0.625,
+    "ptsPerOpp": 3.5,
+    "avgStartYardsToEndzone": 64.55555555555556,
+    "avgStartEp": 2.3362043148333194,
+    "havocAllowedRate": 0.018867924528301886,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.4117647058823529,
+    "explosiveRate": 0.07352941176470588,
+    "explosivenessEpa": 1.0979120752641134,
+    "oppConversion": 0.4,
+    "ptsPerOpp": 2.6,
+    "avgStartYardsToEndzone": 70.7,
+    "avgStartEp": 2.142349778750805,
+    "havocAllowedRate": 0.10294117647058823,
+    "turnoversCommitted": 2.0
+   }
+  },
+  {
+   "gameId": "401752812",
+   "homeId": 84,
+   "awayId": 338,
+   "homeShare": 0.9999079716847736,
+   "margins": {
+    "success": 0.27758719268153226,
+    "explosive": -0.056317895940537446,
+    "explosive_epa": -0.4243130530322994,
+    "opp_conversion": -0.125,
+    "pts_per_opp": 6.125,
+    "field_position": 0.37071710654359835,
+    "havoc": 0.23756432246998282,
+    "turnovers": 1.0
+   },
+   "home": {
+    "successRate": 0.5606060606060606,
+    "explosiveRate": 0.07575757575757576,
+    "explosivenessEpa": 1.2221519246294692,
+    "oppConversion": 0.875,
+    "ptsPerOpp": 6.125,
+    "avgStartYardsToEndzone": 66.84615384615384,
+    "avgStartEp": 2.236732235369042,
+    "havocAllowedRate": 0.045454545454545456,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.2830188679245283,
+    "explosiveRate": 0.1320754716981132,
+    "explosivenessEpa": 1.6464649776617686,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 0.0,
+    "avgStartYardsToEndzone": 74.91666666666667,
+    "avgStartEp": 1.8660151288254436,
+    "havocAllowedRate": 0.2830188679245283,
+    "turnoversCommitted": 1.0
+   }
+  },
+  {
+   "gameId": "401756892",
+   "homeId": 2132,
+   "awayId": 2466,
+   "homeShare": 0.9999999998141551,
+   "margins": {
+    "success": 0.39600521059487626,
+    "explosive": 0.10204081632653061,
+    "explosive_epa": 0.8482712703530026,
+    "opp_conversion": 1.0,
+    "pts_per_opp": 7.0,
+    "field_position": 0.8617522621139722,
+    "havoc": 0.08684324793747286,
+    "turnovers": 2.0
+   },
+   "home": {
+    "successRate": 0.6938775510204082,
+    "explosiveRate": 0.10204081632653061,
+    "explosivenessEpa": 1.360857044949251,
+    "oppConversion": 1.0,
+    "ptsPerOpp": 7.0,
+    "avgStartYardsToEndzone": 58.5,
+    "avgStartEp": 2.5878943031514585,
+    "havocAllowedRate": 0.04081632653061224,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.2978723404255319,
+    "explosiveRate": 0.0,
+    "explosivenessEpa": 0.5125857745962483,
+    "oppConversion": 0.0,
+    "ptsPerOpp": 0.0,
+    "avgStartYardsToEndzone": 78.41666666666667,
+    "avgStartEp": 1.7261420410374864,
+    "havocAllowedRate": 0.1276595744680851,
+    "turnoversCommitted": 2.0
+   }
+  }
+ ]
+}
