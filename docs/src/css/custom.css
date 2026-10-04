@@ -60,20 +60,18 @@ body {
   font-weight: 500;
   font-size: 11px;
 }
+/* Size and line-height come from Infima's scale (h1 2rem, 3rem as a doc title; h2 1.5rem, 2rem in a doc; h3 1.25rem).
+   A fixed 13px / 14px here made every heading smaller than the 16px body text. */
 h1, h2, .h1, .h2 {
   font-family: "Chivo";
   letter-spacing: 0.6px;
-  line-height: 2.2rem; /* increases, so wrapping headers don't overlap */
   font-weight: 500;
-  font-size: 13px;
 }
 
 h3, h4, h5, h6, .h3, .h4{
   font-family: "Chivo";
   letter-spacing: 0.6px;
-  line-height: 1.8rem; /* increases, so wrapping headers don't overlap */
   font-weight: 500;
-  font-size: 14px;
 }
 .navbar__item.navbar__link,.navbar__link.navbar__link--active.navbar__link--active{
   font-family: "Fira Mono";
@@ -416,4 +414,28 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   .theme-doc-markdown table td:nth-child(2) {
     width: 4.5rem;
   }
+}
+
+/* ---- contrast and anchor repairs (2026-10 defect wave) --------------------- */
+/* Infima colors an outline-secondary button with the page text color, which is unreadable on the
+   primary hero (1.95:1 light, 2.88:1 dark). The selector mirrors Infima's own so it wins on
+   specificity whether or not Infima sits in a cascade layer. */
+.hero--primary .button.button--secondary.button--outline:not(.button--active):not(:hover) {
+  color: #fff;
+  border-color: #fff;
+}
+/* white on the dark-mode primary (#178AD9) is 3.70:1; on the darkest step (#106198) it is 6.59:1 */
+html[data-theme='dark'] .hero--primary {
+  --ifm-hero-background-color: var(--ifm-color-primary-darkest);
+}
+/* the two links in the copyright line took the page link color (1.38:1 on the dark footer) */
+.footer--dark .footer__copyright a {
+  color: var(--ifm-footer-link-color);
+  text-decoration: underline;
+}
+/* On the long generated reference pages the browser scrolls to a #hash before hydration, so the
+   navbar never hides and covers the heading: hideOnScroll gives anchors only a 0.5rem margin.
+   `[id]` lifts this above the theme's single-class rule whatever the stylesheet order. */
+.anchor[id] {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 0.5rem);
 }
