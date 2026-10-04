@@ -198,6 +198,14 @@ def test_empty_pbp_carries_the_schema(cfb_rosters):
     assert out.schema == pl.Schema(OUTPUT_SCHEMA)
 
 
+@pytest.mark.parametrize(("league", "col"), [("cfb", "seasonType"), ("nfl", "season_type")])
+def test_pbp_without_season_type_raises(cfb_pbp, cfb_rosters, league, col):
+    pbp = cfb_pbp if league == "cfb" else pl.read_parquet(FIX / "nfl_model_pbp_2024_phi_def_wk1_3.parquet")
+    rosters = cfb_rosters if league == "cfb" else pl.read_parquet(FIX / "nfl_rosters_2024_slice.parquet")
+    with pytest.raises(ValueError, match=col):
+        defense_vs_position(pbp.drop(col), rosters, league)
+
+
 def test_unknown_league_raises(cfb_pbp, cfb_rosters):
     with pytest.raises(ValueError, match="league"):
         defense_vs_position(cfb_pbp, cfb_rosters, "nba")
