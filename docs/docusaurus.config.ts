@@ -119,10 +119,10 @@ const config: Config = {
       {
         hashed: true,
         indexBlog: false,
-        // The generated returns tables were about two thirds of the indexed text on the reference pages.
-        // Leaving them out takes the index from 48 MB to 22 MB (8.3 MB to 3.5 MB over the wire). Titles,
-        // function headings and prose stay searchable; a column name no longer finds the function that
-        // returns it.
+        // Tables are 63.5% of the text on the generated reference pages. Leaving every table out takes
+        // the index from 48 MB to 22 MB (8.3 MB to 3.5 MB over the wire). Titles, headings and prose
+        // stay searchable. A name that appears only in a table no longer matches: a returned column,
+        // a row of the dataset catalog on a loaders page, a row of a tutorial's function table.
         ignoreCssSelectors: ['table'],
       },
     ],
