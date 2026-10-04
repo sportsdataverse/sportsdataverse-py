@@ -15,6 +15,12 @@ def _gamelog(*game_ids: str) -> dict:
     return {"resultSets": [{"name": "LeagueGameLog", "headers": ["GAME_ID"], "rowSet": [[g] for g in game_ids]}]}
 
 
+@pytest.fixture(autouse=True)
+def _no_retry_pause(monkeypatch):
+    """The empty-refresh retries wait between attempts; the tests do not."""
+    monkeypatch.setattr(sc, "_EMPTY_REFRESH_PAUSE_S", 0)
+
+
 @pytest.fixture
 def plan(monkeypatch):
     """Plan exactly one season-level capture, so the tests need no stats module."""
@@ -77,6 +83,54 @@ def test_refresh_never_downgrades_a_populated_capture(tmp_path, plan, answer, co
     _run(tmp_path, _gamelog("1", "2"), refresh=False)
     assert _run(tmp_path, answer, refresh=True) == counts
     assert len(json.loads(path.read_text())["resultSets"][0]["rowSet"]) == 2
+
+
+def _run_sequence(root, answers, *, log=None):
+    """One refresh pass whose fetches return ``answers`` in order (an Exception is raised)."""
+    calls: list[str] = []
+
+    def fetch(endpoint, _kwargs):
+        calls.append(endpoint)
+        answer = answers[min(len(calls), len(answers)) - 1]
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+    kwargs = {"log": log} if log else {}
+    counts = sc.capture_season(2026, root, fetch, SimpleNamespace(), "wnba_stats", "10", refresh=True, **kwargs)
+    return counts, calls
+
+
+@pytest.mark.parametrize(
+    "answers",
+    [
+        [_gamelog(), _gamelog("1", "2", "3")],  # one empty answer, then the real one
+        [_gamelog(), RuntimeError("proxy died"), _gamelog("1", "2", "3")],  # a retry may fail too
+    ],
+)
+def test_an_empty_refresh_is_asked_again_before_the_old_capture_is_kept(tmp_path, plan, answers):
+    """The 2026-10-04 WNBA case: the game index answered empty once and the daily run
+    indexed no new playoff game. The capture now asks again and lands the new games."""
+    path = sc.payload_path(tmp_path, "leaguegamelog", 2026, "regular-season")
+    _run(tmp_path, _gamelog("1", "2"), refresh=False)
+    messages: list[str] = []
+    counts, calls = _run_sequence(tmp_path, answers, log=messages.append)
+    assert counts == (1, 0, 0)
+    assert len(calls) == len(answers)
+    assert sc.game_ids_from_gamelog(json.loads(path.read_text())) == ["0000000001", "0000000002", "0000000003"]
+    assert any("retry" in m and "returned some" in m for m in messages)
+
+
+def test_a_refresh_that_stays_empty_keeps_the_capture_after_the_retries(tmp_path, plan):
+    """Still empty after every retry: the populated capture stays, and the log says so."""
+    path = sc.payload_path(tmp_path, "leaguegamelog", 2026, "regular-season")
+    _run(tmp_path, _gamelog("1", "2"), refresh=False)
+    messages: list[str] = []
+    counts, calls = _run_sequence(tmp_path, [_gamelog()], log=messages.append)
+    assert counts == (0, 1, 0)
+    assert len(calls) == 1 + sc._EMPTY_REFRESH_RETRIES
+    assert sc.game_ids_from_gamelog(json.loads(path.read_text())) == ["0000000001", "0000000002"]
+    assert any("kept previous capture" in m for m in messages)
 
 
 def test_refresh_keeps_populated_v3_capture_and_survives_bad_bytes(tmp_path, plan):

@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
@@ -155,6 +156,12 @@ def plan_season(
             yield endpoint, variant, kwargs
 
 
+#: A refresh that answers with no rows where the capture on disk has some is asked
+#: again this many times, this far apart, before the old capture is kept.
+_EMPTY_REFRESH_RETRIES = 2
+_EMPTY_REFRESH_PAUSE_S = 2.0
+
+
 def _read_payload(path: Path) -> Any:
     """The persisted payload at ``path``, or None when it is missing or unreadable."""
     try:
@@ -217,8 +224,9 @@ def capture_season(
     ``leaguegamelog`` (the game index the per-game passes read), the leaguedash
     aggregates and the rosters all change daily, and without ``refresh`` they freeze
     on first write -- a daily run then indexes the same games forever and still
-    exits 0. A refresh that fails, or that answers with no rows where the previous
-    capture had some, keeps the previous capture.
+    exits 0. A refresh that fails, or that still answers with no rows where the
+    previous capture had some after ``_EMPTY_REFRESH_RETRIES`` more attempts, keeps
+    the previous capture.
     """
     written = skipped = failed = 0
     team_source: Any = None
@@ -256,10 +264,24 @@ def capture_season(
             return None
         if existed and not is_contentless(payload) and _row_count(payload) == 0 < _row_count(_read_payload(path)):
             # A throttled or mid-rebuild answer must not replace real rows. ({} is a
-            # failed fetch, not an answer -- write_payload refuses it below.)
-            log(f"season {season} {label}: refresh returned no rows, kept previous capture")
-            skipped += 1
-            return None
+            # failed fetch, not an answer -- write_payload refuses it below.) Ask again
+            # before settling for the old capture: on 2026-10-04 one empty
+            # leaguegamelog answer left a WNBA daily run indexing no new playoff game
+            # and exiting 0, and the same call returned rows minutes later.
+            for attempt in range(1, _EMPTY_REFRESH_RETRIES + 1):
+                time.sleep(_EMPTY_REFRESH_PAUSE_S)
+                try:
+                    again = fetch(endpoint, kwargs)
+                except Exception:  # noqa: BLE001 - a failed retry is one more empty answer
+                    continue
+                if not is_contentless(again) and _row_count(again) > 0:
+                    log(f"season {season} {label}: refresh returned no rows, retry {attempt} returned some")
+                    payload = again
+                    break
+            else:
+                log(f"season {season} {label}: refresh returned no rows, kept previous capture")
+                skipped += 1
+                return None
         if not write_payload(path, payload):
             # Counted as a failure, not a write: leaving no file is what lets the
             # next sweep retry it.
