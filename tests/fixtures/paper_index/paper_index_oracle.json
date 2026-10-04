@@ -1,0 +1,608 @@
+{
+ "weights": {
+  "success": 23.844669107788008,
+  "explosive": 2.8098100518260463,
+  "explosive_epa": 3.270310793864572,
+  "opp_conversion": 3.427985571827914,
+  "pts_per_opp": 0.18600195381187068,
+  "field_position": 4.004593548338541,
+  "havoc": 5.9958116207259575,
+  "turnovers": 0.6005296241434517
+ },
+ "provenance": {
+  "script": "python/tools/fit_paper_index.py",
+  "league": "cfb",
+  "fitted_at": "2026-09-15T17:27:12+00:00",
+  "sportsdataverse": {
+   "version": "0.1.4",
+   "git_sha": "8dbbfa2eb371218deeac9d50c238d3457dc9ed4e"
+  },
+  "pbp_source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_{season}.parquet",
+  "train_seasons": "2016-2023",
+  "holdout_seasons": [
+   2024,
+   2025
+  ],
+  "seasons": {
+   "2016": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2016.parquet",
+     "bytes": 52074986,
+     "updated_at": "2026-09-07T20:18:42Z"
+    },
+    "games_in_pbp": 858,
+    "non_franchise_dropped": [],
+    "after_join": 857,
+    "after_filters": 856,
+    "games": 856
+   },
+   "2017": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2017.parquet",
+     "bytes": 51743262,
+     "updated_at": "2026-09-07T20:42:20Z"
+    },
+    "games_in_pbp": 872,
+    "non_franchise_dropped": [],
+    "after_join": 872,
+    "after_filters": 868,
+    "games": 868
+   },
+   "2018": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2018.parquet",
+     "bytes": 52499018,
+     "updated_at": "2026-09-07T09:36:22Z"
+    },
+    "games_in_pbp": 884,
+    "non_franchise_dropped": [],
+    "after_join": 884,
+    "after_filters": 881,
+    "games": 881
+   },
+   "2019": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2019.parquet",
+     "bytes": 52072547,
+     "updated_at": "2026-09-07T10:01:46Z"
+    },
+    "games_in_pbp": 890,
+    "non_franchise_dropped": [],
+    "after_join": 890,
+    "after_filters": 888,
+    "games": 888
+   },
+   "2020": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2020.parquet",
+     "bytes": 33396809,
+     "updated_at": "2026-09-07T10:24:44Z"
+    },
+    "games_in_pbp": 565,
+    "non_franchise_dropped": [],
+    "after_join": 565,
+    "after_filters": 565,
+    "games": 565
+   },
+   "2021": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2021.parquet",
+     "bytes": 49143293,
+     "updated_at": "2026-09-07T21:12:20Z"
+    },
+    "games_in_pbp": 842,
+    "non_franchise_dropped": [],
+    "after_join": 842,
+    "after_filters": 829,
+    "games": 829
+   },
+   "2022": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2022.parquet",
+     "bytes": 49831930,
+     "updated_at": "2026-09-07T21:40:10Z"
+    },
+    "games_in_pbp": 861,
+    "non_franchise_dropped": [],
+    "after_join": 861,
+    "after_filters": 851,
+    "games": 851
+   },
+   "2023": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2023.parquet",
+     "bytes": 50819931,
+     "updated_at": "2026-09-07T22:08:37Z"
+    },
+    "games_in_pbp": 903,
+    "non_franchise_dropped": [],
+    "after_join": 903,
+    "after_filters": 899,
+    "games": 899
+   },
+   "2024": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2024.parquet",
+     "bytes": 55269115,
+     "updated_at": "2026-09-07T22:37:16Z"
+    },
+    "games_in_pbp": 946,
+    "non_franchise_dropped": [],
+    "after_join": 946,
+    "after_filters": 943,
+    "games": 943
+   },
+   "2025": {
+    "input": {
+     "source": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2025.parquet",
+     "bytes": 59281459,
+     "updated_at": "2026-09-07T23:08:18Z"
+    },
+    "games_in_pbp": 956,
+    "non_franchise_dropped": [],
+    "after_join": 956,
+    "after_filters": 951,
+    "games": 951
+   }
+  },
+  "train_games": 6637,
+  "holdout_games": 1894,
+  "league_pts_per_opp": 3.3603,
+  "margins_pinned_to_zero": [],
+  "holdout_brier": 0.0657,
+  "holdout_log_loss": 0.2172,
+  "holdout_accuracy": 0.9108,
+  "holdout_resolution": 0.166,
+  "holdout_reliability": 0.0011,
+  "holdout_uncertainty": 0.2316,
+  "epa_only_brier": 0.0805,
+  "epa_only_paired": {
+   "n": 1894,
+   "mean_delta": -0.0147,
+   "se": 0.0039,
+   "ci95": [
+    -0.0223,
+    -0.0069
+   ],
+   "bootstrap_draws": 1000,
+   "seed": 0,
+   "rule": "mean_delta + 2 * se <= 0"
+  },
+  "calibration": [
+   {
+    "bin": "0.0-0.1",
+    "n": 460,
+    "mean_p": 0.0226,
+    "mean_y": 0.0413
+   },
+   {
+    "bin": "0.1-0.2",
+    "n": 93,
+    "mean_p": 0.1445,
+    "mean_y": 0.2043
+   },
+   {
+    "bin": "0.2-0.3",
+    "n": 64,
+    "mean_p": 0.2432,
+    "mean_y": 0.2188
+   },
+   {
+    "bin": "0.3-0.4",
+    "n": 50,
+    "mean_p": 0.3494,
+    "mean_y": 0.34
+   },
+   {
+    "bin": "0.4-0.5",
+    "n": 40,
+    "mean_p": 0.4503,
+    "mean_y": 0.6
+   },
+   {
+    "bin": "0.5-0.6",
+    "n": 45,
+    "mean_p": 0.5405,
+    "mean_y": 0.6444
+   },
+   {
+    "bin": "0.6-0.7",
+    "n": 61,
+    "mean_p": 0.6539,
+    "mean_y": 0.6885
+   },
+   {
+    "bin": "0.7-0.8",
+    "n": 68,
+    "mean_p": 0.7483,
+    "mean_y": 0.7794
+   },
+   {
+    "bin": "0.8-0.9",
+    "n": 113,
+    "mean_p": 0.8487,
+    "mean_y": 0.8761
+   },
+   {
+    "bin": "0.9-1.0",
+    "n": 900,
+    "mean_p": 0.9837,
+    "mean_y": 0.9867
+   }
+  ],
+  "fp_curve": {
+   "sha256": "b793c8d2ab93004d683c0d2067e33f6919730ee241b355fbe8dbfb0ab41e0fd5",
+   "points": {
+    "1": 0.857407,
+    "20": 1.774698,
+    "50": 2.820492,
+    "80": 3.877698,
+    "99": 6.0
+   }
+  },
+  "holdout_contamination": {
+   "field_position_curve": "cfb_field_position_ep.parquet: isotonic fit on 2018-2021 drives (predates the holdout)",
+   "ep_model": "cfb ep_model.ubj: training_seasons 2004-2025 per its model card, holdout seasons included; the EPA, success and explosiveness inputs carry it",
+   "curve_sensitivity": null
+  },
+  "gates": {
+   "league": {
+    "min_holdout": 1200,
+    "brier": 0.09,
+    "resolution": 0.1,
+    "reliability": 0.01
+   },
+   "paired_rule": "mean_delta + 2 * se <= 0"
+  }
+ },
+ "games": [
+  {
+   "gameId": "401767224",
+   "season": 2025,
+   "homeScore": 3,
+   "awayScore": 59,
+   "home": {
+    "successRate": 0.21739130434782608,
+    "explosiveRate": 0.043478260869565216,
+    "explosivenessEpa": 0.873620867729187,
+    "ptsPerOpp": 0.0,
+    "oppConversion": 0.5,
+    "avgStartYardsToEndzone": 79.15384615384616,
+    "avgStartEp": 1.7622188842102706,
+    "havocAllowedRate": 0.1956521739130435,
+    "turnoversCommitted": 2.0
+   },
+   "away": {
+    "successRate": 0.5573770491803278,
+    "explosiveRate": 0.03278688524590164,
+    "explosivenessEpa": 1.0227631488267113,
+    "ptsPerOpp": 5.25,
+    "oppConversion": 0.875,
+    "avgStartYardsToEndzone": 53.583333333333336,
+    "avgStartEp": 2.7673125160521312,
+    "havocAllowedRate": 0.06557377049180328,
+    "turnoversCommitted": 1.0
+   },
+   "expectedHomeShare": 8.923432155144392e-08
+  },
+  {
+   "gameId": "401628337",
+   "season": 2024,
+   "homeScore": 20,
+   "awayScore": 21,
+   "home": {
+    "successRate": 0.42857142857142855,
+    "explosiveRate": 0.07142857142857142,
+    "explosivenessEpa": 1.1101260253538687,
+    "ptsPerOpp": 4.666666666666667,
+    "oppConversion": 0.6666666666666666,
+    "avgStartYardsToEndzone": 74.78571428571429,
+    "avgStartEp": 1.9831665545979273,
+    "havocAllowedRate": 0.16071428571428573,
+    "turnoversCommitted": 5.0
+   },
+   "away": {
+    "successRate": 0.463768115942029,
+    "explosiveRate": 0.057971014492753624,
+    "explosivenessEpa": 1.0437145726755261,
+    "ptsPerOpp": 4.2,
+    "oppConversion": 0.6,
+    "avgStartYardsToEndzone": 60.0,
+    "avgStartEp": 2.503676073676415,
+    "havocAllowedRate": 0.11594202898550725,
+    "turnoversCommitted": 0.0
+   },
+   "expectedHomeShare": 0.0035955939531124572
+  },
+  {
+   "gameId": "401643768",
+   "season": 2024,
+   "homeScore": 20,
+   "awayScore": 31,
+   "home": {
+    "successRate": 0.4925373134328358,
+    "explosiveRate": 0.07462686567164178,
+    "explosivenessEpa": 1.3639412215261748,
+    "ptsPerOpp": 4.0,
+    "oppConversion": 0.6,
+    "avgStartYardsToEndzone": 71.42857142857143,
+    "avgStartEp": 2.0918895968143665,
+    "havocAllowedRate": 0.08955223880597014,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.6153846153846154,
+    "explosiveRate": 0.07692307692307693,
+    "explosivenessEpa": 1.1087314747273922,
+    "ptsPerOpp": 4.2,
+    "oppConversion": 0.8,
+    "avgStartYardsToEndzone": 73.375,
+    "avgStartEp": 1.978229749393386,
+    "havocAllowedRate": 0.038461538461538464,
+    "turnoversCommitted": 0.0
+   },
+   "expectedHomeShare": 0.036418301321997595
+  },
+  {
+   "gameId": "401636915",
+   "season": 2024,
+   "homeScore": 21,
+   "awayScore": 42,
+   "home": {
+    "successRate": 0.45454545454545453,
+    "explosiveRate": 0.07272727272727272,
+    "explosivenessEpa": 1.1157344377040863,
+    "ptsPerOpp": 7.0,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 70.2,
+    "avgStartEp": 2.0631958054972666,
+    "havocAllowedRate": 0.03636363636363636,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.5194805194805194,
+    "explosiveRate": 0.09090909090909091,
+    "explosivenessEpa": 1.2608100950717926,
+    "ptsPerOpp": 5.833333333333333,
+    "oppConversion": 0.8333333333333334,
+    "avgStartYardsToEndzone": 72.0,
+    "avgStartEp": 2.0352739655134133,
+    "havocAllowedRate": 0.05194805194805195,
+    "turnoversCommitted": 0.0
+   },
+   "expectedHomeShare": 0.15698630167367367
+  },
+  {
+   "gameId": "401640997",
+   "season": 2024,
+   "homeScore": 20,
+   "awayScore": 18,
+   "home": {
+    "successRate": 0.33766233766233766,
+    "explosiveRate": 0.03896103896103896,
+    "explosivenessEpa": 1.2157938721088262,
+    "ptsPerOpp": 2.3333333333333335,
+    "oppConversion": 0.6666666666666666,
+    "avgStartYardsToEndzone": 68.6923076923077,
+    "avgStartEp": 2.179333786468142,
+    "havocAllowedRate": 0.06493506493506493,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.39705882352941174,
+    "explosiveRate": 0.058823529411764705,
+    "explosivenessEpa": 0.9628478167233644,
+    "ptsPerOpp": 2.6,
+    "oppConversion": 0.6,
+    "avgStartYardsToEndzone": 69.42857142857143,
+    "avgStartEp": 2.125094239082981,
+    "havocAllowedRate": 0.07352941176470588,
+    "turnoversCommitted": 1.0
+   },
+   "expectedHomeShare": 0.4508547172396072
+  },
+  {
+   "gameId": "401636934",
+   "season": 2024,
+   "homeScore": 48,
+   "awayScore": 56,
+   "home": {
+    "successRate": 0.5223880597014925,
+    "explosiveRate": 0.16417910447761194,
+    "explosivenessEpa": 1.725964459351131,
+    "ptsPerOpp": 5.125,
+    "oppConversion": 0.75,
+    "avgStartYardsToEndzone": 67.85714285714286,
+    "avgStartEp": 2.1895167976070486,
+    "havocAllowedRate": 0.1044776119402985,
+    "turnoversCommitted": 2.0
+   },
+   "away": {
+    "successRate": 0.5054945054945055,
+    "explosiveRate": 0.07692307692307693,
+    "explosivenessEpa": 1.2045322021712428,
+    "ptsPerOpp": 7.0,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 72.61538461538461,
+    "avgStartEp": 1.9866978801428083,
+    "havocAllowedRate": 0.07692307692307693,
+    "turnoversCommitted": 1.0
+   },
+   "expectedHomeShare": 0.7674477483838223
+  },
+  {
+   "gameId": "401752665",
+   "season": 2025,
+   "homeScore": 31,
+   "awayScore": 17,
+   "home": {
+    "successRate": 0.4032258064516129,
+    "explosiveRate": 0.14516129032258066,
+    "explosivenessEpa": 1.502421306371689,
+    "ptsPerOpp": 4.666666666666667,
+    "oppConversion": 0.8333333333333334,
+    "avgStartYardsToEndzone": 72.5,
+    "avgStartEp": 1.9978018468377692,
+    "havocAllowedRate": 0.08064516129032258,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.3611111111111111,
+    "explosiveRate": 0.09722222222222222,
+    "explosivenessEpa": 1.4884652908031757,
+    "ptsPerOpp": 2.3333333333333335,
+    "oppConversion": 0.5,
+    "avgStartYardsToEndzone": 69.5,
+    "avgStartEp": 2.0888515609823735,
+    "havocAllowedRate": 0.08333333333333333,
+    "turnoversCommitted": 0.0
+   },
+   "expectedHomeShare": 0.917792006469798
+  },
+  {
+   "gameId": "401752847",
+   "season": 2025,
+   "homeScore": 45,
+   "awayScore": 31,
+   "home": {
+    "successRate": 0.5303030303030303,
+    "explosiveRate": 0.13636363636363635,
+    "explosivenessEpa": 1.3716916935784476,
+    "ptsPerOpp": 6.0,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 72.0,
+    "avgStartEp": 2.02960711338744,
+    "havocAllowedRate": 0.0,
+    "turnoversCommitted": 1.0
+   },
+   "away": {
+    "successRate": 0.4727272727272727,
+    "explosiveRate": 0.03636363636363636,
+    "explosivenessEpa": 1.2038338826252863,
+    "ptsPerOpp": 3.5,
+    "oppConversion": 0.75,
+    "avgStartYardsToEndzone": 71.72727272727273,
+    "avgStartEp": 2.005051377536169,
+    "havocAllowedRate": 0.10909090909090909,
+    "turnoversCommitted": 0.0
+   },
+   "expectedHomeShare": 0.9753182335223012
+  },
+  {
+   "gameId": "401761595",
+   "season": 2025,
+   "homeScore": 38,
+   "awayScore": 20,
+   "home": {
+    "successRate": 0.5074626865671642,
+    "explosiveRate": 0.11940298507462686,
+    "explosivenessEpa": 1.2512715756893158,
+    "ptsPerOpp": 4.666666666666667,
+    "oppConversion": 0.8333333333333334,
+    "avgStartYardsToEndzone": 66.4,
+    "avgStartEp": 2.2616311617163434,
+    "havocAllowedRate": 0.04477611940298507,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.4,
+    "explosiveRate": 0.04,
+    "explosivenessEpa": 1.1533016193658114,
+    "ptsPerOpp": 2.3333333333333335,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 69.36363636363636,
+    "avgStartEp": 2.0565281670157423,
+    "havocAllowedRate": 0.16,
+    "turnoversCommitted": 1.0
+   },
+   "expectedHomeShare": 0.9938267029169976
+  },
+  {
+   "gameId": "401644764",
+   "season": 2024,
+   "homeScore": 31,
+   "awayScore": 13,
+   "home": {
+    "successRate": 0.5471698113207547,
+    "explosiveRate": 0.11320754716981132,
+    "explosivenessEpa": 1.1782093849675408,
+    "ptsPerOpp": 3.5,
+    "oppConversion": 0.625,
+    "avgStartYardsToEndzone": 64.55555555555556,
+    "avgStartEp": 2.3362043148333194,
+    "havocAllowedRate": 0.018867924528301886,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.4117647058823529,
+    "explosiveRate": 0.07352941176470588,
+    "explosivenessEpa": 1.1220787380422865,
+    "ptsPerOpp": 2.6,
+    "oppConversion": 0.4,
+    "avgStartYardsToEndzone": 70.7,
+    "avgStartEp": 2.1423497787508046,
+    "havocAllowedRate": 0.10294117647058823,
+    "turnoversCommitted": 2.0
+   },
+   "expectedHomeShare": 0.9990364251851838
+  },
+  {
+   "gameId": "401752812",
+   "season": 2025,
+   "homeScore": 56,
+   "awayScore": 9,
+   "home": {
+    "successRate": 0.5606060606060606,
+    "explosiveRate": 0.07575757575757576,
+    "explosivenessEpa": 1.2677253500835315,
+    "ptsPerOpp": 6.125,
+    "oppConversion": 0.875,
+    "avgStartYardsToEndzone": 66.84615384615384,
+    "avgStartEp": 2.236732235369042,
+    "havocAllowedRate": 0.045454545454545456,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.2830188679245283,
+    "explosiveRate": 0.1320754716981132,
+    "explosivenessEpa": 1.6309298694133758,
+    "ptsPerOpp": 0.0,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 74.91666666666667,
+    "avgStartEp": 1.8660151288254438,
+    "havocAllowedRate": 0.2830188679245283,
+    "turnoversCommitted": 1.0
+   },
+   "expectedHomeShare": 0.999924642832995
+  },
+  {
+   "gameId": "401756892",
+   "season": 2025,
+   "homeScore": 70,
+   "awayScore": 0,
+   "home": {
+    "successRate": 0.7346938775510204,
+    "explosiveRate": 0.10204081632653061,
+    "explosivenessEpa": 1.347236078646448,
+    "ptsPerOpp": 7.0,
+    "oppConversion": 1.0,
+    "avgStartYardsToEndzone": 58.5,
+    "avgStartEp": 2.5878943031514585,
+    "havocAllowedRate": 0.04081632653061224,
+    "turnoversCommitted": 0.0
+   },
+   "away": {
+    "successRate": 0.2765957446808511,
+    "explosiveRate": 0.0,
+    "explosivenessEpa": 0.5976206878056893,
+    "ptsPerOpp": 0.0,
+    "oppConversion": 0.0,
+    "avgStartYardsToEndzone": 78.41666666666667,
+    "avgStartEp": 1.7261420410374866,
+    "havocAllowedRate": 0.1276595744680851,
+    "turnoversCommitted": 2.0
+   },
+   "expectedHomeShare": 0.9999999999416236
+  }
+ ]
+}

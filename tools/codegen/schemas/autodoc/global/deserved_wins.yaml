@@ -1,0 +1,25 @@
+schema: deserved_wins
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: wins
+  type: integer
+  description: ''
+- name: deserved_wins
+  type: double
+  description: ''
+- name: luck_wins
+  type: double
+  description: ''
+- name: luck_z
+  type: double
+  description: ''

@@ -2989,6 +2989,14 @@ defense_vs_position:
     or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly
     completions and run high.'
   qualified: True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile.
+deserved_wins:
+  season: Season of the games rolled up, as the pbp keys it (CFB and NFL starting year).
+  team_id: Team id as paper_index_games carries it (the released pbp's pos_team_id dtype, ESPN team id).
+  games: Games the team played that season that paper_index_games scored (completed, not tied, both sides at least 20 scrimmage snaps; NFL Pro Bowl excluded).
+  wins: Games the team won among those scored games.
+  deserved_wins: 'Sum of the team''s paper_share over the season: the wins the Paper Index says its play earned.'
+  luck_wins: wins minus deserved_wins; positive means the team won more games than its play deserved.
+  luck_z: 'luck_wins / sqrt(sum(p * (1 - p))) over the team''s game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0.'
 draft_latest:
   next_up: Indicates whether this draft slot is the next pick to be made in the current draft.
   pick_display_pick_number: The formatted overall pick number displayed publicly for this draft selection.
@@ -25625,6 +25633,23 @@ organizations_roster_header:
   prev_talent_rank: Program's roster-talent rank in the previous cycle.
   talent_rank: Program's current national roster-talent rank per On3.
   total_nil_value: Total On3 NIL valuation across the roster, in dollars.
+paper_index_games:
+  game_id: ESPN game id, typed as the released pbp's game_id (Int64 in espn_cfb_pbp and espn_nfl_pbp).
+  team_id: ESPN id of the team the row describes, typed as the released pbp's pos_team_id (Int64 in espn_cfb_pbp and espn_nfl_pbp).
+  season: Season of the game, as the pbp keys it (CFB and NFL starting year).
+  season_type: 'ESPN season type of the game (seasonType): 2 regular season, 3 postseason.'
+  week: ESPN week number of the game within its season type.
+  won: Whether the team outscored its opponent (final score from the game's last play).
+  paper_share: 'The team''s Paper Index share in [0, 1]: its deserved-win probability from the eight margins through the league''s fitted intercept-free logistic.'
+  opp_share: The opponent's Paper Index share; paper_share + opp_share = 1.
+  success_margin: Team EPA success rate minus the opponent's, over scrimmage snaps.
+  explosive_margin: Team explosive-play rate (EPA_explosive) minus the opponent's, over scrimmage snaps.
+  explosive_epa_margin: Team explosiveness (mean EPA per successful snap) minus the opponent's.
+  opp_conversion_margin: Team scoring-opportunity conversion (share of opportunity drives that scored; 0.5 with no opportunities) minus the opponent's.
+  pts_per_opp_margin: Team points per scoring opportunity minus the opponent's (NFL counts made field goals; no opportunities takes the league's train-season average).
+  field_position_margin: Expected points of the team's average drive start on the league's bundled EP-by-yardline curve minus the opponent's.
+  havoc_margin: Havoc rate the team's defense created (havoc allowed on opponent snaps) minus the havoc rate its offense allowed.
+  turnovers_margin: Turnovers the opponent's offense committed minus the team's.
 pass_blocking:
   declined_penalties: Penalties committed by the player that were declined.
   draft_season: Season of the player's NFL draft class, per PFF.
