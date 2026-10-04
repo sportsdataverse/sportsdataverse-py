@@ -1,0 +1,52 @@
+schema: paper_index_games
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: season_type
+  type: integer
+  description: ''
+- name: week
+  type: integer
+  description: ''
+- name: won
+  type: logical
+  description: ''
+- name: paper_share
+  type: double
+  description: ''
+- name: opp_share
+  type: double
+  description: ''
+- name: success_margin
+  type: double
+  description: ''
+- name: explosive_margin
+  type: double
+  description: ''
+- name: explosive_epa_margin
+  type: double
+  description: ''
+- name: opp_conversion_margin
+  type: double
+  description: ''
+- name: pts_per_opp_margin
+  type: double
+  description: ''
+- name: field_position_margin
+  type: double
+  description: ''
+- name: havoc_margin
+  type: double
+  description: ''
+- name: turnovers_margin
+  type: double
+  description: ''
