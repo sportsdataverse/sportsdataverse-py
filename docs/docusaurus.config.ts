@@ -103,6 +103,9 @@ const config: Config = {
             },
           },
         },
+        // No blog: release notes live on the CHANGELOG page. Left on, the plugin published an
+        // empty /blog and /blog/authors.
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
