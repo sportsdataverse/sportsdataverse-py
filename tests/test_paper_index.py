@@ -311,6 +311,11 @@ def test_bad_input_is_refused():
         paper_index_games(_pbp("nfl").drop("fg_made"), "nfl")
     with pytest.raises(ValueError, match="more than one game_id"):
         paper_index_game(pbp, 1, 2, "cfb")
+    # one team on both sides would score as a dead-even game; int and text ids compare alike
+    g = GOP["cfb"][3]
+    one_game = pbp.filter(pl.col("game_id") == int(g["gameId"]))
+    with pytest.raises(ValueError, match="same team"):
+        paper_index_game(one_game, g["homeId"], str(g["homeId"]), "cfb")
 
 
 def test_game_is_symmetric_and_fails_open():

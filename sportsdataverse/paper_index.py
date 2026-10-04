@@ -350,7 +350,8 @@ def paper_index_game(
         scrimmage snap, no drive id, or no successful play).
 
     Raises:
-        ValueError: unknown ``league``, missing columns, or plays from more than one game.
+        ValueError: unknown ``league``, missing columns, plays from more than one game,
+            or ``home_id`` and ``away_id`` naming the same team.
         TypeError: ``pos_team_id`` is float.
 
     Example:
@@ -375,6 +376,9 @@ def paper_index_game(
     _check_ids(pbp, ("pos_team_id",))
     if "game_id" in pbp.columns and pbp["game_id"].n_unique() > 1:
         raise ValueError("pbp holds more than one game_id; use paper_index_games for a batch")
+    if str(home_id) == str(away_id):
+        # a team scored against itself is a clean 50/50 with zero margins: a wrong answer, not an error
+        raise ValueError(f"home_id and away_id are the same team ({home_id!r})")
     inputs = _team_inputs(pbp, league, ["pos_team_id"])
     key = pl.col("pos_team_id").cast(pl.Utf8)
     home = inputs.filter(key == str(home_id))
