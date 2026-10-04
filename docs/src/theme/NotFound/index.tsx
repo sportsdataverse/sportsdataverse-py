@@ -15,7 +15,7 @@ export default function NotFound(): ReactNode {
         <main className="container margin-vert--xl">
           <div className="row">
             <div className="col col--6 col--offset-3">
-              <Heading as="h1">Page not found</Heading>
+              <Heading as="h1" className="sdv-404-title">Page not found</Heading>
               <p>
                 Nothing lives at this address. The page may have moved when the docs were
                 reorganized, or the link may have a typo.
