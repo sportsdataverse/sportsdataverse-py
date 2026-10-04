@@ -1,9 +1,11 @@
 # Weekly check that the docs site's shared family theme still matches sdvplot's copy.
 #
-# docs/src/css/sdv-theme.css is byte-identical in sportsdataverse/sdvplot, where it is changed first, and
-# here. A difference fails this job and the org workflow-health sweep reports it. It is deliberately not a
-# PR gate: a theme change lands in sdvplot first and is copied here afterwards. A failed fetch of sdvplot's
-# file (HTTP error, empty body) also fails the job: it never passes as "identical".
+# The files listed in FILES below are byte-identical in sportsdataverse/sdvplot, where they are changed first,
+# and here: the stylesheet, the ejected 404 page, the three self-hosted fonts and their licences. A difference
+# fails this job and the org workflow-health sweep reports it. It is deliberately not a PR gate: a theme
+# change lands in sdvplot first and is copied here afterwards. A failed fetch of any sdvplot file (HTTP
+# error, empty body) also fails the job: it never passes as "identical".
+# Exit codes: 0 all match, 1 drift, 2 a failed or empty fetch (checked before any comparison).
 name: theme-drift
 on:
   schedule:
@@ -16,23 +18,43 @@ permissions:
   contents: read
 jobs:
   compare:
-    name: sdv-theme.css matches sdvplot main
+    name: family theme files match sdvplot main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
-          sparse-checkout: docs/src/css
+          sparse-checkout: |
+            docs/src/css
+            docs/src/theme/NotFound
+            docs/static/fonts
       - name: Compare with sportsdataverse/sdvplot main
         run: |
-          here=docs/src/css/sdv-theme.css
-          there="$RUNNER_TEMP/sdvplot-theme.css"
-          url=https://raw.githubusercontent.com/sportsdataverse/sdvplot/main/docs/src/css/sdv-theme.css
-          if ! curl -fsSL --retry 3 --retry-delay 5 "$url" -o "$there" || [ ! -s "$there" ]; then
-            echo "::error::could not fetch a non-empty $url; cannot compare $here with sdvplot's copy"
-            exit 2
-          fi
-          if ! diff -u "$there" "$here"; then
-            echo "::error file=$here::differs from sportsdataverse/sdvplot main (docs/src/css/sdv-theme.css); copy sdvplot's file here (sdvplot is the source). $(diff "$there" "$here" | grep -c '^[<>]') changed lines"
-            exit 1
-          fi
-          echo "sdv-theme.css matches sdvplot main: $(sha256sum "$here" | cut -c1-12)"
+          FILES="docs/src/css/sdv-theme.css
+          docs/src/theme/NotFound/index.tsx
+          docs/static/fonts/inter-latin-wght-normal.woff2
+          docs/static/fonts/barlow-condensed-latin-700-normal.woff2
+          docs/static/fonts/bungee-latin-400-normal.woff2
+          docs/static/fonts/LICENSE-Inter.txt
+          docs/static/fonts/LICENSE-BarlowCondensed.txt
+          docs/static/fonts/LICENSE-Bungee.txt"
+          base=https://raw.githubusercontent.com/sportsdataverse/sdvplot/main
+          mkdir -p "$RUNNER_TEMP/sdvplot"
+          # fetch everything first, so a failed fetch is exit 2 and never reads as a match
+          for f in $FILES; do
+            there="$RUNNER_TEMP/sdvplot/$(echo "$f" | tr / _)"
+            if ! curl -fsSL --retry 3 --retry-delay 5 "$base/$f" -o "$there" || [ ! -s "$there" ]; then
+              echo "::error::could not fetch a non-empty $base/$f; cannot compare $f with sdvplot's copy"
+              exit 2
+            fi
+          done
+          drift=0
+          for f in $FILES; do
+            there="$RUNNER_TEMP/sdvplot/$(echo "$f" | tr / _)"
+            if ! cmp -s "$there" "$f"; then
+              echo "::error file=$f::differs from sportsdataverse/sdvplot main ($f); copy sdvplot's file here (sdvplot is the source)"
+              case "$f" in *.woff2) ;; *) diff -u "$there" "$f" | head -60 ;; esac
+              drift=1
+            fi
+          done
+          if [ "$drift" -ne 0 ]; then exit 1; fi
+          echo "family theme files match sdvplot main: $(echo "$FILES" | wc -l) files, sdv-theme.css $(sha256sum docs/src/css/sdv-theme.css | cut -c1-12)"
