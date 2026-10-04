@@ -6,10 +6,7 @@ sidebar_position: 1
 ---
 # NFL dataset loaders
 
-```mermaid
-flowchart LR
-  raw["scrape / raw"] --> enrich["enrich"] --> rel["release asset"] --> load["load_*()"]
-```
+Pipeline: scrape / raw → enrich → release asset → `load_*()`
 
 ## Automation status
 

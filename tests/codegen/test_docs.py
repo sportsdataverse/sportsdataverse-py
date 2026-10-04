@@ -103,9 +103,11 @@ def test_mbb_additional_page_has_a_highlights_group_first():
     assert "espn_mbb_schedule" in highlighted_fns
 
 
-def test_loaders_page_has_mermaid_and_per_loader_blocks():
+def test_loaders_page_states_the_pipeline_and_has_per_loader_blocks():
     md = generate.render_loaders_page("nhl")
-    assert "```mermaid" in md
+    # the docs site has no Mermaid theme, so a fence is published as raw `flowchart` source
+    assert "```mermaid" not in md
+    assert "scrape / raw → enrich → release asset → `load_*()`" in md
     assert "## Automation status" in md
     assert "## `load_nhl_pbp`" in md
     # a 404-safe loader example call
