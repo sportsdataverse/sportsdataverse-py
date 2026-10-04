@@ -1,0 +1,335 @@
+/* stylelint-disable docusaurus/copyright-header */
+/*
+ * sdv-theme.css: the SportsDataverse family theme for the Docusaurus docs sites.
+ *
+ * Byte-identical in sportsdataverse/sdvplot and sportsdataverse/sportsdataverse-py at
+ * docs/src/css/sdv-theme.css. Change it in sdvplot first, then copy the file to sdv-py:
+ * a weekly workflow in sdv-py fails while the two copies differ. What only one site needs
+ * goes in that site's custom.css, which loads after this file.
+ *
+ * Tokens come from sportsdataverse.org (sportsdataverse-web DESIGN.md, frontend/styles/globals.css).
+ * Amber is the one accent: at most three uses per view, never text on a light surface, never a fill
+ * behind text. Here it marks the active navbar item and underlines the page or hero title.
+ */
+
+/* ---- fonts: self-hosted woff2 (latin subsets), SIL Open Font License, see /fonts/LICENSE-*.txt ----
+   `webpackIgnore` keeps each url as /fonts/<file> from static/fonts. Without it Docusaurus copies the file
+   to /assets/fonts/<name>-<hash>.woff2, and the preload links in docusaurus.config.ts would fetch a second,
+   unused copy. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  /* webpackIgnore: true */
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  /* webpackIgnore: true */
+  src: url("/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Bungee";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  /* webpackIgnore: true */
+  src: url("/fonts/bungee-latin-400-normal.woff2") format("woff2");
+}
+
+/* ---- tokens ---- */
+:root {
+  --sdv-navy: #0b1220;
+  --sdv-navy-border: #223350;
+  --sdv-amber: #ffb43c;
+  --sdv-amber-ink: #8a5300;
+  --sdv-font-display: "Barlow Condensed", "Inter", system-ui, sans-serif;
+
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ifm-font-family-monospace: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ifm-code-font-size: 95%;
+  --ifm-global-radius: 0.375rem;
+
+  --ifm-background-color: #f6f8fb;
+  --ifm-background-surface-color: #ffffff;
+  --ifm-card-background-color: #ffffff;
+  --ifm-font-color-base: #0e1626;
+  --ifm-font-color-secondary: #4d5b74;
+  --ifm-menu-color: #4d5b74;
+  --ifm-toc-link-color: var(--ifm-font-color-secondary);
+  --ifm-color-primary: #02507f;
+  --ifm-color-primary-dark: #024872;
+  --ifm-color-primary-darker: #02446c;
+  --ifm-color-primary-darkest: #013859;
+  --ifm-color-primary-light: #02588c;
+  --ifm-color-primary-lighter: #025c92;
+  --ifm-color-primary-lightest: #0368a5;
+  --ifm-link-color: #08699e;
+  --ifm-toc-border-color: #d8e0eb;
+  --ifm-table-border-color: #d8e0eb;
+  --ifm-color-emphasis-300: #d8e0eb;
+  --ifm-code-background: #e7edf5;
+  --ifm-table-stripe-background: #e7edf5;
+  --ifm-menu-color-background-active: #e7edf5;
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: #0b1220;
+  --ifm-background-surface-color: #111b2e;
+  --ifm-card-background-color: #111b2e;
+  --ifm-font-color-base: #e9eef6;
+  --ifm-font-color-secondary: #93a1b8;
+  --ifm-menu-color: #93a1b8;
+  --ifm-color-primary: #4fb6e8;
+  --ifm-color-primary-dark: #33abe4;
+  --ifm-color-primary-darker: #26a5e3;
+  --ifm-color-primary-darkest: #198ac1;
+  --ifm-color-primary-light: #6bc1ec;
+  --ifm-color-primary-lighter: #78c7ed;
+  --ifm-color-primary-lightest: #a2d8f3;
+  --ifm-link-color: #2e9bd6;
+  --ifm-toc-border-color: #223350;
+  --ifm-table-border-color: #223350;
+  --ifm-color-emphasis-300: #223350;
+  --ifm-code-background: #1a2740;
+  --ifm-table-stripe-background: #1a2740;
+  --ifm-menu-color-background-active: #1a2740;
+}
+
+/* ---- type: Inter everywhere (from --ifm-font-family-base), Barlow Condensed for h1 only ---- */
+h1 {
+  font-family: var(--sdv-font-display);
+}
+
+/* ---- the wordmark glow (carried over unchanged) ---- */
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 8px #427FD4, 0 0 10px #39F8FF;
+  }
+
+  to {
+    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
+  }
+}
+
+@keyframes glow {
+  to {
+    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
+  }
+}
+
+html[data-theme='dark'] .navbar__title {
+  font-family: "Bungee";
+  letter-spacing: 0.1px;
+  line-height: 1.3rem;
+  color: #FDFDFD;
+  font-weight: 500;
+  font-size: 20px;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+html[data-theme='light'] .navbar__title {
+  font-family: "Bungee";
+  letter-spacing: 0.1px;
+  line-height: 1.3rem;
+  font-weight: 500;
+  font-size: 20px;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+/* With hideOnScroll the docs sidebar repeats the logo and title at its top (a bare <b>); it is the wordmark too. */
+.theme-doc-sidebar-container b {
+  font-family: "Bungee";
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+/* Reduced motion: the wordmark stays lit and stops pulsing. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme] .navbar__title,
+  .theme-doc-sidebar-container b {
+    animation: none;
+    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
+  }
+}
+
+/* ---- navbar: navy in both modes (navbar.style 'dark' in docusaurus.config.ts adds .navbar--dark) ---- */
+.navbar--dark {
+  --ifm-navbar-background-color: var(--sdv-navy);
+  --ifm-navbar-shadow: 0 1px 0 var(--sdv-navy-border);
+  --ifm-navbar-link-color: #93a1b8;
+  --ifm-navbar-link-hover-color: #e9eef6;
+  --ifm-navbar-search-input-background-color: #1a2740;
+  --ifm-navbar-search-input-color: #e9eef6;
+  --ifm-navbar-search-input-placeholder-color: #93a1b8;
+  --ifm-menu-color: #93a1b8;
+  --ifm-menu-color-active: #4fb6e8;
+  --ifm-menu-color-background-active: #1a2740;
+  --search-local-input-active-border-color: #4fb6e8;
+}
+
+/* the wordmark's color in light mode (dark mode sets #FDFDFD on .navbar__title above) */
+.navbar__brand {
+  color: #e9eef6;
+}
+
+/* the one amber marker in the bar */
+.navbar__link--active {
+  box-shadow: inset 0 -2px 0 var(--sdv-amber);
+}
+
+/*
+ * SDV packages dropdown — multi-column mega-menu.
+ *
+ * The full SportsDataverse package directory is ~30 entries (5 Python
+ * + 22 R + 2 Node.js + section headers). A single tall column overflows
+ * the viewport on a typical laptop and feels unwieldy. column-count
+ * keeps the dropdown compact without swizzling theme components.
+ *
+ * `sdv-packages-dropdown` is set on the dropdown navbar item in
+ * docusaurus.config.ts; `sdv-section-header` marks the
+ * "Python Packages" / "R Packages" / "Node.js Packages" / top-level
+ * "SportsDataverse" entries so they read as section dividers.
+ *
+ * On the mobile sidebar (≤ 996px) Docusaurus flattens the dropdown
+ * into the slide-in nav, so we collapse back to a single column there.
+ */
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(80vh, 640px);
+  overflow-y: auto;
+  column-count: 3;
+  column-gap: 0.5rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li {
+  break-inside: avoid;
+  display: block;
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__link.sdv-section-header {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  color: var(--ifm-color-primary);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li:first-child .dropdown__link.sdv-section-header {
+  margin-top: 0;
+  padding-top: 0.25rem;
+  border-top: none;
+}
+
+@media (max-width: 996px) {
+  .navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
+    width: auto;
+    max-height: none;
+    column-count: 1;
+    overflow-y: visible;
+  }
+}
+
+/* ---- footer: the same navy, a hairline where it meets a navy page ---- */
+.footer--dark {
+  --ifm-footer-background-color: var(--sdv-navy);
+  border-top: 1px solid var(--sdv-navy-border);
+}
+
+/* the two links in the copyright line took the page link color (1.38:1 on the dark footer) */
+.footer--dark .footer__copyright a {
+  color: var(--ifm-footer-link-color);
+  text-decoration: underline;
+}
+
+/* ---- home hero: the navy surface with the amber underline, never brighter than the page ---- */
+.hero--primary {
+  --ifm-hero-background-color: var(--sdv-navy);
+  border-bottom: 1px solid var(--sdv-navy-border);
+}
+
+/* Infima colors an outline-secondary button with the page text color; on the navy hero it is white.
+   The selector mirrors Infima's own. */
+.hero--primary .button.button--secondary.button--outline:not(.button--active):not(:hover) {
+  color: #fff;
+  border-color: #fff;
+}
+
+/* ---- the page title (or the hero title) carries one short amber underline ---- */
+.markdown > header > h1::after,
+.hero__title::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 4px;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+  background: var(--sdv-amber);
+}
+
+.hero__title::after {
+  margin-inline: auto;
+}
+
+/* ---- links in content are underlined ---- */
+.markdown {
+  --ifm-link-decoration: underline;
+}
+
+/* ---- code blocks: a hairline edge instead of a shadow (the surface color comes from the Prism theme) ---- */
+.theme-code-block {
+  border: 1px solid var(--ifm-toc-border-color);
+  box-shadow: none;
+}
+
+/* the copy and wrap buttons stay visible where nothing can hover */
+@media (hover: none) {
+  .theme-code-block button {
+    opacity: 1;
+  }
+}
+
+/* Rendered output, wrapped in .sdv-output by the generators (sub-projects 2 and 3): the page background and a
+   dashed edge instead of a raised code surface, so output does not read as more input. */
+.sdv-output .theme-code-block,
+.sdv-output pre {
+  background: var(--ifm-background-color);
+}
+
+.sdv-output .theme-code-block {
+  border-style: dashed;
+}
+
+/* ---- a fade at the right edge while a code block or a table has more to scroll ----
+   The scroll timeline is inactive when nothing overflows, so content that fits is never faded, and the
+   mask drops once the scroller reaches its end. Browsers without scroll-driven animations show no fade. */
+@keyframes sdv-more-right {
+  0%,
+  96% {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  }
+  100% {
+    mask-image: none;
+  }
+}
+
+.theme-code-block pre,
+.markdown table {
+  animation: sdv-more-right linear both;
+  animation-timeline: scroll(self inline);
+}
+
+/* ---- images: in dark mode a plot sits on a light card (add .sdv-img-dark to an image that is already dark) ---- */
+html[data-theme='dark'] .markdown p > img:only-child:not(.sdv-img-dark) {
+  background: #e9eef6;
+  padding: 0.5rem;
+  border-radius: var(--ifm-global-radius);
+}

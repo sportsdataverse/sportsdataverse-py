@@ -31,7 +31,8 @@
   gap: 0.75rem;
 }
 
-.buttons .button {
+/* `button` is Infima's global class; a bare `.button` here would be renamed by CSS Modules and match nothing. */
+.buttons :global(.button) {
   max-width: 100%;
   /* Infima sets `white-space: nowrap` on buttons; on a narrow screen that pushes
      the label outside the button box once the box is capped at 100%. */

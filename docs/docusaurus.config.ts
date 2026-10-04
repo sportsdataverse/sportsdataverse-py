@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {themes as prismThemes} from 'prism-react-renderer';
+import type {PrismTheme} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -22,6 +22,39 @@ const builtVersions: string[] = [
   'current',
   ...allReleasedVersions.slice(0, VERSIONS_TO_KEEP),
 ];
+
+// Preload the two self-hosted faces above the fold: Inter (body) and Barlow Condensed 700 (the page
+// title). The hrefs must equal the @font-face urls in src/css/sdv-theme.css or the browser fetches twice.
+const fontPreloads = ['inter-latin-wght-normal', 'barlow-condensed-latin-700-normal'].map((name) => ({
+  tagName: 'link',
+  attributes: {rel: 'preload', href: `/fonts/${name}.woff2`, as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
+}));
+
+// Code-block themes on the family surfaces (white / #111b2e). Every token color is a sportsdataverse.org
+// token and clears 4.5:1 on its background; builtins, variables and properties stay the plain text color.
+const sdvPrismLight: PrismTheme = {
+  plain: {color: '#0e1626', backgroundColor: '#ffffff'},
+  styles: [
+    {types: ['comment', 'prolog', 'doctype', 'cdata'], style: {color: '#4d5b74', fontStyle: 'italic'}},
+    {types: ['punctuation', 'operator'], style: {color: '#4d5b74'}},
+    {types: ['keyword', 'tag', 'selector', 'atrule', 'important'], style: {color: '#02507f'}},
+    {types: ['string', 'char', 'attr-value', 'regex', 'inserted', 'triple-quoted-string', 'url'], style: {color: '#047857'}},
+    {types: ['number', 'boolean', 'constant', 'symbol', 'deleted'], style: {color: '#be123c'}},
+    {types: ['function', 'class-name', 'decorator', 'annotation'], style: {color: '#4a3aa7'}},
+  ],
+};
+
+const sdvPrismDark: PrismTheme = {
+  plain: {color: '#e9eef6', backgroundColor: '#111b2e'},
+  styles: [
+    {types: ['comment', 'prolog', 'doctype', 'cdata'], style: {color: '#93a1b8', fontStyle: 'italic'}},
+    {types: ['punctuation', 'operator'], style: {color: '#93a1b8'}},
+    {types: ['keyword', 'tag', 'selector', 'atrule', 'important'], style: {color: '#4fb6e8'}},
+    {types: ['string', 'char', 'attr-value', 'regex', 'inserted', 'triple-quoted-string', 'url'], style: {color: '#10b981'}},
+    {types: ['number', 'boolean', 'constant', 'symbol', 'deleted'], style: {color: '#f0537a'}},
+    {types: ['function', 'class-name', 'decorator', 'annotation'], style: {color: '#9085e9'}},
+  ],
+};
 
 const config: Config = {
   // Rspack/SWC build pipeline (@docusaurus/faster). Adopted when the 0.0.72
@@ -71,6 +104,7 @@ const config: Config = {
       innerHTML:
         'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
     },
+    ...fontPreloads,
   ],
   presets: [
     [
@@ -107,7 +141,8 @@ const config: Config = {
         // empty /blog and /blog/authors.
         blog: false,
         theme: {
-          customCss: './src/css/custom.css',
+          // The shared family theme first, then what only this site needs.
+          customCss: ['./src/css/sdv-theme.css', './src/css/custom.css'],
         },
       } satisfies Preset.Options,
     ],
@@ -157,6 +192,8 @@ const config: Config = {
     ],
     navbar: {
       hideOnScroll: true,
+      // Navy in both color modes, like sportsdataverse.org; sdv-theme.css sets the colors.
+      style: 'dark',
       title: 'sdv-py',
       logo: {
         alt: 'sportsdataverse-py Logo',
@@ -393,11 +430,9 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} <strong>sportsdataverse-py</strong>, developed by <a href='https://twitter.com/saiemgilani'>Saiem Gilani</a>, part of the <a href='https://sportsdataverse.org'>SportsDataverse</a>.`,
     },
     prism: {
-      // Light mode: GitHub Light (clean light-on-white, matches the docs surface).
-      // Dark mode: okaidia — prism-react-renderer's Monokai port (bg #272822,
-      // green strings #a6e22e, pink keywords #f92672). Replaces dracula.
-      theme: prismThemes.github,
-      darkTheme: prismThemes.okaidia,
+      // The family themes defined above: one surface per mode, every token at 4.5:1 or better.
+      theme: sdvPrismLight,
+      darkTheme: sdvPrismDark,
     },
   } satisfies Preset.ThemeConfig,
 };
