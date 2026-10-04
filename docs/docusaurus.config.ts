@@ -221,7 +221,7 @@ const config: Config = {
         //   https://github.com/sportsdataverse/.github/blob/main/profile/README.md
         // Keep this dropdown in sync with those two pages.
         // The `sdv-packages-dropdown` className triggers the multi-column
-        // mega-menu layout in custom.css; without it the 30+ package list
+        // mega-menu layout in sdv-theme.css; without it the 30+ package list
         // overflows the viewport vertically on a typical laptop.
         {
           label: 'SDV',

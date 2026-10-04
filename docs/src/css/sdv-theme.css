@@ -48,7 +48,6 @@
   --sdv-navy: #0b1220;
   --sdv-navy-border: #223350;
   --sdv-amber: #ffb43c;
-  --sdv-amber-ink: #8a5300;
   --sdv-font-display: "Barlow Condensed", "Inter", system-ui, sans-serif;
 
   --ifm-font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -61,6 +60,7 @@
   --ifm-card-background-color: #ffffff;
   --ifm-font-color-base: #0e1626;
   --ifm-font-color-secondary: #4d5b74;
+  --ifm-color-content-secondary: #4d5b74;
   --ifm-menu-color: #4d5b74;
   --ifm-toc-link-color: var(--ifm-font-color-secondary);
   --ifm-color-primary: #02507f;
@@ -85,6 +85,7 @@ html[data-theme='dark'] {
   --ifm-card-background-color: #111b2e;
   --ifm-font-color-base: #e9eef6;
   --ifm-font-color-secondary: #93a1b8;
+  --ifm-color-content-secondary: #93a1b8;
   --ifm-menu-color: #93a1b8;
   --ifm-color-primary: #4fb6e8;
   --ifm-color-primary-dark: #33abe4;
@@ -100,6 +101,10 @@ html[data-theme='dark'] {
   --ifm-code-background: #1a2740;
   --ifm-table-stripe-background: #1a2740;
   --ifm-menu-color-background-active: #1a2740;
+  /* search-local: the selected hit is dark text on the primary, the other hits sit on the navy surfaces */
+  --search-local-hit-active-color: #06121f;
+  --search-local-hit-background: #111b2e;
+  --search-local-modal-background: #0f1828;
 }
 
 /* ---- type: Inter everywhere (from --ifm-font-family-base), Barlow Condensed for h1 only ---- */
@@ -108,16 +113,6 @@ h1 {
 }
 
 /* ---- the wordmark glow (carried over unchanged) ---- */
-@-webkit-keyframes glow {
-  from {
-    text-shadow: 0 0 8px #427FD4, 0 0 10px #39F8FF;
-  }
-
-  to {
-    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
-  }
-}
-
 @keyframes glow {
   to {
     text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
@@ -128,7 +123,7 @@ html[data-theme='dark'] .navbar__title {
   font-family: "Bungee";
   letter-spacing: 0.1px;
   line-height: 1.3rem;
-  color: #FDFDFD;
+  color: #e9eef6;
   font-weight: 500;
   font-size: 20px;
   animation: glow 3s ease-in-out infinite alternate;
@@ -183,22 +178,15 @@ html[data-theme='light'] .navbar__title {
 }
 
 /*
- * SDV packages dropdown — multi-column mega-menu.
+ * SDV packages dropdown: a multi-column mega-menu.
  *
- * The full SportsDataverse package directory is ~30 entries (5 Python
- * + 22 R + 2 Node.js + section headers). A single tall column overflows
- * the viewport on a typical laptop and feels unwieldy. column-count
- * keeps the dropdown compact without swizzling theme components.
- *
- * `sdv-packages-dropdown` is set on the dropdown navbar item in
- * docusaurus.config.ts; `sdv-section-header` marks the
- * "Python Packages" / "R Packages" / "Node.js Packages" / top-level
- * "SportsDataverse" entries so they read as section dividers.
- *
- * On the mobile sidebar (≤ 996px) Docusaurus flattens the dropdown
- * into the slide-in nav, so we collapse back to a single column there.
+ * The package directory is ~30 entries (Python, R, Node.js, plus section headers); one tall column runs
+ * past the fold on a laptop. Docusaurus puts `className: 'sdv-packages-dropdown'` on the toggle link, not
+ * on the dropdown, so the menu is reached from its parent: .dropdown:has(> .sdv-packages-dropdown).
+ * `sdv-section-header` marks the section entries so they read as dividers. The phone drawer does not
+ * render this markup, so there is no narrow-screen variant.
  */
-.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
+.dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu {
   width: min(640px, calc(100vw - 32px));
   max-height: min(80vh, 640px);
   overflow-y: auto;
@@ -207,12 +195,12 @@ html[data-theme='light'] .navbar__title {
   padding: 0.5rem 0.25rem;
 }
 
-.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li {
+.dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu > li {
   break-inside: avoid;
   display: block;
 }
 
-.navbar__item.dropdown.sdv-packages-dropdown .dropdown__link.sdv-section-header {
+.dropdown:has(> .sdv-packages-dropdown) .dropdown__link.sdv-section-header {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -223,24 +211,17 @@ html[data-theme='light'] .navbar__title {
   border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
-.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li:first-child .dropdown__link.sdv-section-header {
+.dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu > li:first-child .dropdown__link.sdv-section-header {
   margin-top: 0;
   padding-top: 0.25rem;
   border-top: none;
 }
 
-@media (max-width: 996px) {
-  .navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
-    width: auto;
-    max-height: none;
-    column-count: 1;
-    overflow-y: visible;
-  }
-}
-
 /* ---- footer: the same navy, a hairline where it meets a navy page ---- */
 .footer--dark {
   --ifm-footer-background-color: var(--sdv-navy);
+  --ifm-footer-link-color: #93a1b8;
+  --ifm-footer-link-hover-color: #e9eef6;
   border-top: 1px solid var(--sdv-navy-border);
 }
 
@@ -263,8 +244,22 @@ html[data-theme='light'] .navbar__title {
   border-color: #fff;
 }
 
+/* the filled hero button is the CTA: the primary, as on sportsdataverse.org (Infima fills it grey) */
+.hero--primary .button.button--secondary:not(.button--outline) {
+  --ifm-button-background-color: #4fb6e8;
+  --ifm-button-border-color: #4fb6e8;
+  --ifm-button-color: #06121f;
+}
+
+.hero--primary .button.button--secondary:not(.button--outline):hover {
+  --ifm-button-background-color: #6bc1ec;
+  --ifm-button-border-color: #6bc1ec;
+  --ifm-button-color: #06121f;
+}
+
 /* ---- the page title (or the hero title) carries one short amber underline ---- */
 .markdown > header > h1::after,
+.sdv-404-title::after,
 .hero__title::after {
   content: "";
   display: block;
@@ -284,6 +279,43 @@ html[data-theme='light'] .navbar__title {
   --ifm-link-decoration: underline;
 }
 
+/* not the heading anchor "#", nor a link that wraps only a code chip (parity tables) */
+.markdown .hash-link,
+.markdown a:has(> code:only-child) {
+  text-decoration: none;
+}
+
+/* ---- inline code: no chip on a striped table row (the chip equals the stripe), none inside a page title ---- */
+.markdown td code {
+  background: transparent;
+}
+
+h1 code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ---- form controls do not inherit the font ---- */
+.navbar__search-input {
+  font-family: inherit;
+}
+
+/* ---- the version badge and alerts: surface + border + text, no amber fill, no side stripe ---- */
+.theme-doc-version-badge {
+  background: var(--ifm-code-background);
+  border: 1px solid var(--ifm-toc-border-color);
+  color: var(--ifm-font-color-base);
+}
+
+html .alert {
+  --ifm-alert-background-color: var(--ifm-background-surface-color);
+  --ifm-alert-foreground-color: var(--ifm-font-color-base);
+  --ifm-alert-border-color: var(--ifm-toc-border-color);
+  --ifm-alert-border-left-width: var(--ifm-alert-border-width);
+}
+
 /* ---- code blocks: a hairline edge instead of a shadow (the surface color comes from the Prism theme) ---- */
 .theme-code-block {
   border: 1px solid var(--ifm-toc-border-color);
@@ -294,6 +326,11 @@ html[data-theme='light'] .navbar__title {
 @media (hover: none) {
   .theme-code-block button {
     opacity: 1;
+  }
+
+  /* the buttons get their own strip above the code instead of covering the end of the first line */
+  .theme-code-block pre {
+    padding-top: 2.75rem;
   }
 }
 
