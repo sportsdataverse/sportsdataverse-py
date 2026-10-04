@@ -150,6 +150,9 @@ from sportsdataverse.rolling_windows import football_events, rolling_windows, sh
 # Metric-by-continuous-axis curves (F4): same pattern -- sportsdataverse.metric_curves
 # is the FUNCTION; import BUCKET_EDGES etc. from the submodule path.
 from sportsdataverse.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
+
+# Paper Index deserved-win shares + season luck (CFBE-5d): ported from Game on Paper.
+from sportsdataverse.paper_index import deserved_wins, paper_index_game, paper_index_games
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,
