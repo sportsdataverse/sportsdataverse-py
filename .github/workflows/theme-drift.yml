@@ -1,0 +1,38 @@
+# Weekly check that the docs site's shared family theme still matches sdvplot's copy.
+#
+# docs/src/css/sdv-theme.css is byte-identical in sportsdataverse/sdvplot, where it is changed first, and
+# here. A difference fails this job and the org workflow-health sweep reports it. It is deliberately not a
+# PR gate: a theme change lands in sdvplot first and is copied here afterwards. A failed fetch of sdvplot's
+# file (HTTP error, empty body) also fails the job: it never passes as "identical".
+name: theme-drift
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Mondays 13:00 UTC, an hour after validation-cron
+  workflow_dispatch:
+concurrency:
+  group: theme-drift
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  compare:
+    name: sdv-theme.css matches sdvplot main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: docs/src/css
+      - name: Compare with sportsdataverse/sdvplot main
+        run: |
+          here=docs/src/css/sdv-theme.css
+          there="$RUNNER_TEMP/sdvplot-theme.css"
+          url=https://raw.githubusercontent.com/sportsdataverse/sdvplot/main/docs/src/css/sdv-theme.css
+          if ! curl -fsSL --retry 3 --retry-delay 5 "$url" -o "$there" || [ ! -s "$there" ]; then
+            echo "::error::could not fetch a non-empty $url; cannot compare $here with sdvplot's copy"
+            exit 2
+          fi
+          if ! diff -u "$there" "$here"; then
+            echo "::error file=$here::differs from sportsdataverse/sdvplot main (docs/src/css/sdv-theme.css); copy sdvplot's file here (sdvplot is the source). $(diff "$there" "$here" | grep -c '^[<>]') changed lines"
+            exit 1
+          fi
+          echo "sdv-theme.css matches sdvplot main: $(sha256sum "$here" | cut -c1-12)"
