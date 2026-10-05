@@ -125,8 +125,9 @@ now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working
   included), and the three WNBA endpoints wehoop does not wrap (`leaguedashptdefend`,
   `scheduleleaguev2`, `scheduleleaguev2int`) are per-season, so they take the NBA call like any
   other. `drafthistory`, `leaguegamefinder` and `playergamestreakfinder` therefore return one
-  season, as in hoopR / wehoop; pass an empty season (`season_nullable=""`) for all of them. The
-  catalog had also lost hoopR's season for `scheduleleaguev2` (`nbagl_schedule()`). Only
+  season, as in hoopR / wehoop; pass an empty season for all of them (`season_year_nullable=""`
+  for `drafthistory`, `season_nullable=""` for the finders). The catalog had also lost hoopR's
+  season for `scheduleleaguev2` (`nbagl_schedule()`). Only
   `cumestats*` and NBA `playercompare` keep hoopR's / wehoop's literal season, paired with their
   literal ids.
 - **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
