@@ -15,7 +15,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/ufl/schedule`
 
-**Valid URL:** [https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250115](https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250115)
+**Valid URL:** [https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250405](https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250405)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -27,6 +27,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 ### Returns {#espn_ufl_cdn_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
@@ -34,8 +35,8 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
+| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | Season slug. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
@@ -44,9 +45,9 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
-| `status_clock` | double | Game clock in seconds. |
+| `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Current period. |
+| `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
@@ -56,7 +57,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character | Injury status and description. |
+| `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -85,7 +86,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 ### Example {#espn_ufl_cdn_schedule-example}
 
 ```python
-espn_ufl_cdn_schedule(date='20250115')
+espn_ufl_cdn_schedule(date='20250405')
 ```
 
 _Last validated n/a._

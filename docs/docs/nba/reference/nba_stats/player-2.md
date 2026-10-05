@@ -34,6 +34,7 @@ GET /stats/playerindex
 ### Returns {#nba_stats_playerindex-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -90,6 +91,7 @@ GET /stats/playerprofilev2
 ### Returns {#nba_stats_playerprofilev2-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsPreseason`, `CareerTotalsPreseason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`, `NextGame`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **SeasonTotalsRegularSeason**
 
 | col_name | type | description |
@@ -554,6 +556,7 @@ GET /stats/playervsplayer
 ### Returns {#nba_stats_playervsplayer-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`, `PlayerInfo`, `VsPlayerInfo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |

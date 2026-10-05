@@ -44,6 +44,7 @@ GET /stats/playerdashboardbyyearoveryear
 ### Returns {#wnba_stats_playerdashboardbyyearoveryear-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallPlayerDashboard**
 
 | col_name | type | description |
@@ -228,6 +229,7 @@ GET /stats/playerdashptshotdefend
 ### Returns {#wnba_stats_playerdashptshotdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `matchupid` | integer | Stats API identifier for matchupid associated with this NBA or WNBA Stats row. |

@@ -22,6 +22,7 @@ GET /stats/playerawards
 ### Returns {#nba_stats_playerawards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -67,6 +68,7 @@ GET /stats/playercareerbycollegerollup
 ### Returns {#nba_stats_playercareerbycollegerollup-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`East`, `South`, `Midwest`, `West`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **East**
 
 | col_name | type | description |
@@ -210,6 +212,7 @@ GET /stats/playercareerstats
 ### Returns {#nba_stats_playercareerstats-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsShowcaseSeason`, `CareerTotalsShowcaseSeason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **SeasonTotalsRegularSeason**
 
 | col_name | type | description |
@@ -658,6 +661,7 @@ GET /stats/playercompare
 ### Returns {#nba_stats_playercompare-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallCompare`, `Individual`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallCompare**
 
 | col_name | type | description |
@@ -743,6 +747,7 @@ GET /stats/playerestimatedmetrics
 ### Returns {#nba_stats_playerestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -811,6 +816,7 @@ GET /stats/playerfantasyprofile
 ### Returns {#nba_stats_playerfantasyprofile-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Location`, `LastNGames`, `DaysRestModified`, `Opponent`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |
@@ -1025,6 +1031,7 @@ GET /stats/playerfantasyprofilebargraph
 ### Returns {#nba_stats_playerfantasyprofilebargraph-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonAvg`, `LastFiveGamesAvg`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **SeasonAvg**
 
 | col_name | type | description |
@@ -1095,6 +1102,7 @@ GET /stats/playergamelog
 ### Returns {#nba_stats_playergamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -1170,6 +1178,7 @@ GET /stats/playergamelogs
 ### Returns {#nba_stats_playergamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_year` | character | Season year string ('YYYY-YY' format). |
@@ -1356,6 +1365,7 @@ GET /stats/playergamestreakfinder
 ### Returns {#nba_stats_playergamestreakfinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |

@@ -24,6 +24,7 @@ Signature stat: time in pocket
 ### Returns {#pff_api_signature_passing_time_in_pocket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `more_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on dropbacks with time in pocket of 2.5 seconds or more, per PFF charting. |
@@ -169,6 +170,7 @@ Signature stat: pass-blocking efficiency, by line
 ### Returns {#pff_api_signature_pass_blocking_efficiency_line-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `attempts` | numeric | Pass plays the team's offensive line blocked on over the covered span, as counted by PFF (equal to pass_snaps in the captured rows). |
@@ -210,6 +212,7 @@ Signature stat: outside pass rush
 ### Returns {#pff_api_signature_defense_outside_pass_rush-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `lhs_sacks` | numeric | Sacks recorded when rushing from the left side. |
@@ -284,6 +287,7 @@ Signature stat: slot coverage
 ### Returns {#pff_api_signature_defense_slot_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `coverage_snaps` | numeric | Coverage snaps played while covering the slot. |

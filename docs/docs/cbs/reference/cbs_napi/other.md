@@ -153,6 +153,7 @@ Get the resource endpoint registry
 ### Returns {#cbs_endpoint_registry-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | character | Registry key for the endpoint, which is CBS's internal resource class name such as BoxscoreResource or PlayerResource; the parser lifts it out of the payload's top-level key into a column. |
@@ -422,6 +423,7 @@ Get a league resource
 ### Returns {#cbs_league-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | integer | League identifier ('10' = WNBA). |
@@ -560,6 +562,7 @@ Get team resources associated to a season
 ### Returns {#cbs_season_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

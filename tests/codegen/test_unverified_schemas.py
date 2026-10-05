@@ -39,3 +39,19 @@ def test_unverified_schema_has_reason_and_no_columns(path):
 def test_guard_fails_on_a_bad_schema(bad):
     with pytest.raises(AssertionError):
         _check(bad)
+
+
+def test_variant_frames_functions_are_not_described_as_returning_a_dict():
+    """`frames_by` = one table per value of a request parameter; the function returns ONE DataFrame."""
+    from sportsdataverse.nfl import pff_api
+
+    by = {
+        p.stem: yaml.safe_load(p.read_text(encoding="utf-8")).get("frames_by")
+        for p in (SCHEMAS / "native" / "pff_api").glob("*.yaml")
+        if yaml.safe_load(p.read_text(encoding="utf-8")).get("kind") == "frames"
+    }
+    assert set(by) == {"position_report", "team_stats", "team_leaders", "team_report"}
+    for short, param in by.items():
+        assert param, f"{short}: a variant-frames schema must name its request parameter in frames_by"
+        doc = getattr(pff_api, f"pff_api_{short}").__doc__
+        assert "dict of polars" not in doc and "dict of pandas" not in doc, short

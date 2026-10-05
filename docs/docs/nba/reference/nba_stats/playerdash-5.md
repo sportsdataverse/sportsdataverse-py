@@ -44,6 +44,7 @@ GET /stats/playerdashboardbyshootingsplits
 ### Returns {#nba_stats_playerdashboardbyshootingsplits-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `Shot5FTPlayerDashboard`, `Shot8FTPlayerDashboard`, `ShotAreaPlayerDashboard`, `AssitedShotPlayerDashboard`, `ShotTypeSummaryPlayerDashboard`, `ShotTypePlayerDashboard`, `AssistedBy`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallPlayerDashboard**
 
 | col_name | type | description |
@@ -358,6 +359,7 @@ GET /stats/playerdashboardbyteamperformance
 ### Returns {#nba_stats_playerdashboardbyteamperformance-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ScoreDifferentialPlayerDashboard`, `PointsScoredPlayerDashboard`, `PontsAgainstPlayerDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallPlayerDashboard**
 
 | col_name | type | description |

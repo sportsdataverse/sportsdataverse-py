@@ -22,6 +22,7 @@ GET /stats/teamdetails
 ### Returns {#wnba_stats_teamdetails-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamBackground`, `TeamHistory`, `TeamSocialSites`, `TeamAwardsChampionships`, `TeamAwardsConf`, `TeamAwardsDiv`, `TeamHof`, `TeamRetired`, `TeamAwardsCommCup`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **TeamBackground**
 
 | col_name | type | description |
@@ -132,6 +133,7 @@ GET /stats/teamestimatedmetrics
 ### Returns {#wnba_stats_teamestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -195,6 +197,7 @@ GET /stats/teamgamelog
 ### Returns {#wnba_stats_teamgamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -270,6 +273,7 @@ GET /stats/teamgamelogs
 ### Returns {#wnba_stats_teamgamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_year` | character | Season year string ('YYYY-YY' format). |
@@ -358,6 +362,7 @@ GET /stats/teaminfocommon
 ### Returns {#wnba_stats_teaminfocommon-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamInfoCommon`, `TeamSeasonRanks`, `AvailableSeasons`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **TeamInfoCommon**
 
 | col_name | type | description |
@@ -448,6 +453,7 @@ GET /stats/teamvsplayer
 ### Returns {#wnba_stats_teamvsplayer-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `vsPlayerOverall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |
@@ -760,6 +766,7 @@ GET /stats/teamyearbyyearstats
 ### Returns {#wnba_stats_teamyearbyyearstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

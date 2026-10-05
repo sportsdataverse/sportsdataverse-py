@@ -24,6 +24,7 @@ GET /rdb/v1/commits/latest
 ### Returns {#on3_commits_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 person key (stable athlete identifier) for the recruit. |

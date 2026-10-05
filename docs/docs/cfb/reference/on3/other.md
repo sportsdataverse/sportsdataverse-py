@@ -84,6 +84,7 @@ GET /rdb/v1/collective-groups
 ### Returns {#on3_collective_groups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the NIL collective group. |
@@ -358,6 +359,7 @@ GET /rdb/v1/drafts-by-stars
 ### Returns {#on3_drafts_by_stars-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `blue_chip_percent` | numeric | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
@@ -486,6 +488,7 @@ GET /rdb/v1/filters/draft-rounds
 ### Returns {#on3_filters_draft_rounds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Round of NFL draft the draftee was picked in. |
@@ -570,6 +573,7 @@ GET /rdb/v1/filters/status
 ### Returns {#on3_filters_status-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `value` | character | Metric value. |
@@ -830,6 +834,7 @@ GET /rdb/v1/quotes
 ### Returns {#on3_quotes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the quote record. |
@@ -1021,6 +1026,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 ### Returns {#on3_team_ranking_team_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 organization-ranking key for the class row. |

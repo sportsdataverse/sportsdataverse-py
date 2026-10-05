@@ -22,6 +22,7 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 ### Returns {#yahoo_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
@@ -90,6 +91,7 @@ Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 ### Returns {#yahoo_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_current_season` | character | Yahoo league-season identifier for the league's season currently in progress. |
@@ -121,6 +123,7 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 ### Returns {#yahoo_team_schedule_by_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
@@ -166,6 +169,7 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 ### Returns {#yahoo_team_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
@@ -215,6 +219,7 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 ### Returns {#yahoo_team_stats_leaders_v2-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **teams**
 
 | col_name | type | description |
@@ -250,6 +255,7 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 ### Returns {#yahoo_team_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
@@ -293,6 +299,7 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 ### Returns {#yahoo_teams_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |

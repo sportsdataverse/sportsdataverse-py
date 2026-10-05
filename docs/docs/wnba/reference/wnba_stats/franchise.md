@@ -22,6 +22,7 @@ GET /stats/franchisehistory
 ### Returns {#wnba_stats_franchisehistory-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`FranchiseHistory`, `DefunctTeams`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **FranchiseHistory**
 
 | col_name | type | description |
@@ -88,6 +89,7 @@ GET /stats/franchiseleaders
 ### Returns {#wnba_stats_franchiseleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -135,6 +137,7 @@ GET /stats/franchiseleaderswrank
 ### Returns {#wnba_stats_franchiseleaderswrank-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |
@@ -213,6 +216,7 @@ GET /stats/franchiseplayers
 ### Returns {#wnba_stats_franchiseplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |

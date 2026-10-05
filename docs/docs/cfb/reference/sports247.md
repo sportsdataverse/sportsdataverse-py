@@ -26,6 +26,7 @@ toc_max_heading_level: 2
 ### Returns {#sports247_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Team display name (school + nickname). |
@@ -67,6 +68,7 @@ _Last validated n/a._
 ### Returns {#sports247_institution_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Short display name of the institution as shown on the 247Sports class-ranking page (e.g. USC, Notre Dame). |
@@ -132,6 +134,7 @@ _Last validated n/a._
 ### Returns {#sports247_recruits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports player key of the recruit. |
@@ -196,6 +199,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_key` | integer | 247Sports player key of the transfer. |
@@ -266,6 +270,7 @@ _Last validated n/a._
 ### Returns {#sports247_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports coach key. |
@@ -314,6 +319,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfer_portal_player_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports player key. |
@@ -363,6 +369,7 @@ _Last validated n/a._
 ### Returns {#sports247_composite_team_ranking_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Short display name of the program. |
@@ -417,6 +424,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfer_portal_team_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Display name of the program. |
@@ -455,6 +463,7 @@ _Last validated n/a._
 ### Returns {#sports247_target_predictions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_key` | integer | 247Sports player key of the recruit the prediction is about. |
@@ -510,6 +519,7 @@ Class years for which the 247Sports RDB has data for a given sport.
 ### Returns {#sports247_sport_years-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `value` | integer | A class year for which the 247Sports RDB has data for the sport. |
@@ -540,6 +550,7 @@ _Last validated n/a._
 ### Returns {#sports247_tags_autocomplete-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | 247Sports tag id (prefixed key, e.g. Player_46151084). |
@@ -574,6 +585,7 @@ _Last validated n/a._
 ### Returns {#sports247_positions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Position group name (e.g. Quarterback, Running Back). |

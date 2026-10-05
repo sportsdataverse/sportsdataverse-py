@@ -22,6 +22,7 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 ### Returns {#yahoo_playbook_team_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |

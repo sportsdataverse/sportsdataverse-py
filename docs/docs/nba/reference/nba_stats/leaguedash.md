@@ -47,6 +47,7 @@ GET /stats/leaguedashlineups
 ### Returns {#nba_stats_leaguedashlineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
@@ -158,6 +159,7 @@ GET /stats/leaguedashoppptshot
 ### Returns {#nba_stats_leaguedashoppptshot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -234,6 +236,7 @@ GET /stats/leaguedashplayerbiostats
 ### Returns {#nba_stats_leaguedashplayerbiostats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -322,6 +325,7 @@ GET /stats/leaguedashplayerclutch
 ### Returns {#nba_stats_leaguedashplayerclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
@@ -452,6 +456,7 @@ GET /stats/leaguedashplayerptshot
 ### Returns {#nba_stats_leaguedashplayerptshot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -535,6 +540,7 @@ GET /stats/leaguedashplayershotlocations
 ### Returns {#nba_stats_leaguedashplayershotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -631,6 +637,7 @@ GET /stats/leaguedashplayerstats
 ### Returns {#nba_stats_leaguedashplayerstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -756,6 +763,7 @@ GET /stats/leaguedashptdefend
 ### Returns {#nba_stats_leaguedashptdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `close_def_person_id` | integer | Stats API identifier for close defensive person identifier associated with this NBA or WNBA Stats row. |
@@ -827,6 +835,7 @@ GET /stats/leaguedashptstats
 ### Returns {#nba_stats_leaguedashptstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -890,6 +899,7 @@ GET /stats/leaguedashptteamdefend
 ### Returns {#nba_stats_leaguedashptteamdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -960,6 +970,7 @@ GET /stats/leaguedashteamclutch
 ### Returns {#nba_stats_leaguedashteamclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

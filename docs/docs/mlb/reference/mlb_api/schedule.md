@@ -24,6 +24,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 ### Returns {#mlb_schedule_postseason-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character | The calendar date grouping postseason games in this response row, as returned by the MLB Stats API schedule endpoint. |
@@ -115,6 +116,7 @@ View tied game schedule info.
 ### Returns {#mlb_schedule_tied-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character | The calendar date grouping tied (suspended and resumed) games in this response row, as returned by the MLB Stats API schedule endpoint. |
@@ -205,6 +207,7 @@ View schedule info for postseason based on series.
 ### Returns {#mlb_schedule_postseason_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `total_items` | integer | Total schedule items on the date. |

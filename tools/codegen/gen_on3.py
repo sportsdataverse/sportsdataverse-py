@@ -211,19 +211,15 @@ _MEASURED = (
 )
 
 
-def _has_nested(spec: dict, schema: dict, seen: frozenset = frozenset()) -> bool:
-    """True when a row has a nested object or free-form map (flattened names then depend
-    on which of them are null in the data), or no fields at all (a bare scalar array)."""
-    props = schema.get("properties") or {}
-    if not props:
-        return True
-    for pv in props.values():
+def _has_nested(spec: dict, schema: dict) -> bool:
+    """True when a row has a nested object or free-form map, whose flattened column names
+    depend on which of them are null in the data."""
+    for pv in (schema.get("properties") or {}).values():
         pv = pv or {}
         if len(pv.get("allOf") or []) == 1:
             pv = pv["allOf"][0]
-        ref = pv.get("$ref", "")
         node = _resolve_ref(spec, pv)
-        if (node.get("properties") and ref not in seen) or "additionalProperties" in node:
+        if node.get("properties") or "additionalProperties" in node:
             return True
     return False
 
@@ -234,6 +230,8 @@ def _unverified_reason(short: str, op: dict, spec: dict) -> str:
         why = "its committed capture has 0 rows, so the parser emits no columns"
     elif op.get("x-source") != "on3_ts_api":
         why = f"no committed capture with rows, and the response type is only heuristically mapped (x-source: {op.get('x-source')})"
+    elif not _row_schema(op, spec).get("properties"):
+        why = "no committed capture with rows, and each row is a bare scalar with no named fields"
     elif _has_nested(spec, _row_schema(op, spec)):
         why = "no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data"
     else:

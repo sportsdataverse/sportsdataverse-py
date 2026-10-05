@@ -118,6 +118,12 @@ def _example_call(ep: spec.Endpoint, fn_name: str, league: str = "") -> str:
     return f"{fn_name}({args})"
 
 
+def _returns_dict(schema_doc: dict) -> bool:
+    """True when a ``kind: frames`` schema describes a returned dict of frames. A schema
+    with ``frames_by`` (one table per value of a REQUEST parameter) is ONE DataFrame."""
+    return schema_doc.get("kind") == "frames" and not schema_doc.get("frames_by")
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -758,7 +764,7 @@ class _EndpointView:
             league_param=league.league_param,
             doc_extras=doc_extras,
             import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
-            returns_frames=_schema_doc(ep.returns_schema, league.prefix).get("kind") == "frames",
+            returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
@@ -769,6 +775,8 @@ class _EndpointView:
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         schema_doc = _schema_doc(ep.returns_schema, league.prefix)
         self.return_frames = schema_doc.get("kind") == "frames"
+        self.returns_dict = _returns_dict(schema_doc)
+        self.frames_by = str(schema_doc.get("frames_by") or "")
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
         self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map

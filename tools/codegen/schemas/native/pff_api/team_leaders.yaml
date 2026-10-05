@@ -631,5 +631,6 @@ frames:
     name: grade_coverage_percentile
     type: integer
   section: defense
+frames_by: group
 kind: frames
 schema: pff_api_team_leaders

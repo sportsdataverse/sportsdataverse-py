@@ -32,6 +32,7 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 ### Returns {#yahoo_playbook_boxscore-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **football_positions**
 
 | col_name | type | description |
@@ -231,6 +232,7 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 ### Returns {#yahoo_playbook_boxscore_poll-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **football_positions**
 
 | col_name | type | description |
@@ -386,6 +388,7 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 ### Returns {#yahoo_playbook_boxscore_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -459,6 +462,7 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 ### Returns {#yahoo_playbook_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -572,6 +576,7 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 ### Returns {#yahoo_playbook_game_odds_poll-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -637,6 +642,7 @@ Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` en
 ### Returns {#yahoo_playbook_league_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `ncaaf_games` | character | JSON-encoded list of NCAAF game nodes carrying the pick or odds distribution for the slate. |
@@ -668,6 +674,7 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 ### Returns {#yahoo_playbook_player-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
@@ -743,6 +750,7 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 ### Returns {#yahoo_playbook_player_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_name` | character | Sport name (e.g., Major League Baseball). |
@@ -809,6 +817,7 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 ### Returns {#yahoo_playbook_team-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **teams**
 
 | col_name | type | description |
@@ -887,6 +896,7 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 ### Returns {#yahoo_playbook_team_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |

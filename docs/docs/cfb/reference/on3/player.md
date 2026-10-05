@@ -22,6 +22,7 @@ GET /rdb/v1/player/{personKey}/all-rankings
 ### Returns {#on3_player_all_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
@@ -67,6 +68,7 @@ GET /rdb/v1/player/{personKey}/database-updates
 ### Returns {#on3_player_database_updates-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the database-update entry. |
@@ -106,6 +108,7 @@ GET /rdb/v1/player/{personKey}/images
 ### Returns {#on3_player_images-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 asset key for the image. |
@@ -210,6 +213,7 @@ GET /rdb/v1/player/{personKey}/rankings
 ### Returns {#on3_player_person_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the player's ranking row. |
@@ -262,6 +266,7 @@ GET /rdb/v1/player/{personKey}/profile
 ### Returns {#on3_player_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the player profile. |
@@ -527,6 +532,7 @@ GET /rdb/v1/player/verified
 ### Returns {#on3_player_verified-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the player profile. |
@@ -673,6 +679,7 @@ GET /rdb/v1/player/{personKey}/videos
 ### Returns {#on3_player_videos-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the video record. |
@@ -746,6 +753,7 @@ GET /rdb/v1/players/industry-comparision
 ### Returns {#on3_players_industry_comparision-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `ratings` | character | List of per-service rating entries (On3, Rivals, 247, ESPN) composing the industry comparison. |

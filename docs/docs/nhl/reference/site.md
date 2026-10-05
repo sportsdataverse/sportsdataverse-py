@@ -28,6 +28,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
@@ -35,8 +36,8 @@ ESPN endpoint.
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `season_year` | integer | Season end year. |
-| `season_type` | integer | Season type code (echoed from arg). |
+| `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
+| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | Season type slug. |
 | `status_type_id` | character | Status type identifier. |
 | `status_type_name` | character | Status type name. |
@@ -45,9 +46,9 @@ ESPN endpoint.
 | `status_type_description` | character | Status description. |
 | `status_type_detail` | character | Status detail text. |
 | `status_type_short_detail` | character | Short status detail. |
-| `status_clock` | double | Game clock in seconds. |
+| `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
 | `status_display_clock` | character | Display clock string. |
-| `status_period` | integer | Current period. |
+| `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | character | Whether it is a conference competition. |
 | `attendance` | integer | Game attendance. |
@@ -57,7 +58,7 @@ ESPN endpoint.
 | `venue_state` | character | Venue state. |
 | `venue_indoor` | logical | Whether the venue is indoors. |
 | `broadcast` | character | Broadcast network(s). |
-| `note` | character | Game note or headline. |
+| `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character | Home team ESPN identifier. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team abbreviation. |
@@ -106,6 +107,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_summary-returns}
 
 **`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **boxscore_player**
 
 | col_name | type | description |
@@ -440,6 +442,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -484,6 +487,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -612,6 +616,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_teams_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
@@ -680,6 +685,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group name (e.g. Centers). |
@@ -765,6 +771,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric event identifier. |
@@ -856,6 +863,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -938,6 +946,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_team_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -1058,6 +1067,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_player_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -1105,6 +1115,7 @@ ESPN endpoint.
 ### Returns {#espn_nhl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_name` | character | Group name. |

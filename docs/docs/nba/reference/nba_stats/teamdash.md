@@ -44,6 +44,7 @@ GET /stats/teamdashboardbyclutch
 ### Returns {#nba_stats_teamdashboardbyclutch-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Last5Min5PointTeamDashboard`, `Last3Min5PointTeamDashboard`, `Last1Min5PointTeamDashboard`, `Last30Sec3PointTeamDashboard`, `Last10Sec3PointTeamDashboard`, `Last5MinPlusMinus5PointTeamDashboard`, `Last3MinPlusMinus5PointTeamDashboard`, `Last1MinPlusMinus5PointTeamDashboard`, `Last30Sec3Point2TeamDashboard`, `Last10Sec3Point2TeamDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallTeamDashboard**
 
 | col_name | type | description |

@@ -23,6 +23,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 ### Returns {#nhl_edge_skater_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | List of NHL seasons for which this skater has NHL EDGE player-tracking statistics available. |

@@ -53,6 +53,7 @@ GET /rdb/v2/nil-100
 ### Returns {#on3_nil_100_v2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_rating_consensus_rating` | numeric |  |
@@ -267,6 +268,7 @@ GET /rdb/v1/nil-rankings
 ### Returns {#on3_nil_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_default_sport_key` | integer |  |

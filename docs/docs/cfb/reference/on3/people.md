@@ -50,6 +50,7 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 ### Returns {#on3_people_latest_valuation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nil_status` | character | Status of the athlete's On3 NIL valuation (e.g. active, inactive). |
@@ -92,6 +93,7 @@ GET /rdb/v1/people/{personKey}/measurements
 ### Returns {#on3_people_measurements-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_measurements` | character |  |
@@ -123,6 +125,7 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 ### Returns {#on3_people_measurements_averages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `measurement_key` | integer | On3 key for the measurement category being averaged. |
@@ -191,6 +194,7 @@ GET /rdb/v1/people/{personKey}/social
 ### Returns {#on3_people_social-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
@@ -222,6 +226,7 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 ### Returns {#on3_people_social_post_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `social_type` | character | Social platform the post summary covers (e.g. Twitter/X, Instagram). |
@@ -281,6 +286,7 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 ### Returns {#on3_people_valuation_growth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nil_status` | character | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |

@@ -28,6 +28,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `event_id` | character | ESPN event id for the match. |
@@ -68,6 +69,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_summary-returns}
 
 **`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **header**
 
 | col_name | type | description |
@@ -321,6 +323,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -365,6 +368,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -493,6 +497,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_teams_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN numeric identifier for the team. |
@@ -560,6 +565,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `athlete_id` | character | ESPN numeric identifier for the athlete. |
@@ -610,6 +616,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric event identifier. |
@@ -701,6 +708,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -783,6 +791,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_team_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -903,6 +912,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_player_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -950,6 +960,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |

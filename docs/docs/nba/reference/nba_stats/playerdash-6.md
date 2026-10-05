@@ -44,6 +44,7 @@ GET /stats/playerdashboardbyyearoveryear
 ### Returns {#nba_stats_playerdashboardbyyearoveryear-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallPlayerDashboard**
 
 | col_name | type | description |
@@ -224,6 +225,7 @@ GET /stats/playerdashptpass
 ### Returns {#nba_stats_playerdashptpass-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PassesMade`, `PassesReceived`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PassesMade**
 
 | col_name | type | description |
@@ -318,6 +320,7 @@ GET /stats/playerdashptreb
 ### Returns {#nba_stats_playerdashptreb-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallRebounding`, `ShotTypeRebounding`, `NumContestedRebounding`, `ShotDistanceRebounding`, `RebDistanceRebounding`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallRebounding**
 
 | col_name | type | description |
@@ -469,6 +472,7 @@ GET /stats/playerdashptshotdefend
 ### Returns {#nba_stats_playerdashptshotdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `matchupid` | integer | Stats API identifier for matchupid associated with this NBA or WNBA Stats row. |
@@ -524,6 +528,7 @@ GET /stats/playerdashptshots
 ### Returns {#nba_stats_playerdashptshots-returns}
 
 **`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `GeneralShooting`, `ShotClockShooting`, `DribbleShooting`, `ClosestDefenderShooting`, `ClosestDefender10ftPlusShooting`, `TouchTimeShooting`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |

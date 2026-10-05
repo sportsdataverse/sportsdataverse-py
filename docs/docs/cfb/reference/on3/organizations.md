@@ -232,6 +232,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 ### Returns {#on3_organizations_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pso_key` | integer | On3 player-sport-organization (PSO) key for the roster entry. |
@@ -439,6 +440,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 ### Returns {#on3_organizations_roster_header-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `talent_rank` | character | Program's current national roster-talent rank per On3. |

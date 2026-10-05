@@ -27,6 +27,7 @@ League-wide special-teams leaderboard
 ### Returns {#pff_api_facet_special_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | numeric | Assisted tackles credited to the player on special-teams plays. |

@@ -25,7 +25,8 @@ A team's leaders for one position group, with rank and percentile
 
 ### Returns {#pff_api_team_leaders-returns}
 
-**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` whose columns depend on `group` (one table per value below); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 **receiving**
 
 | col_name | type | description |
@@ -282,6 +283,7 @@ A team's rushing by direction, one row per rusher and gap, plus totals
 ### Returns {#pff_api_team_rushing_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | PFF player id of the rusher (integer; matches the /players id and every player_id join key). |

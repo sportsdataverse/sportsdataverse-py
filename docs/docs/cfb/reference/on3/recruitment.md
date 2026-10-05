@@ -81,6 +81,7 @@ Latest RPM (prediction) picks feed — paged {list,pagination}
 ### Returns {#on3_recruitments_latest_rpm_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pick_key` | integer |  |
@@ -352,6 +353,7 @@ GET /rdb/v1/recruitments/{recKey}/profile
 ### Returns {#on3_recruitments_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `class_year` | integer | Recruiting class year of the recruitment. |
@@ -499,6 +501,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 ### Returns {#on3_recruitments_rpm_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `predictions` | character | Per-team RPM prediction percentages for the recruitment, as a stringified list. |

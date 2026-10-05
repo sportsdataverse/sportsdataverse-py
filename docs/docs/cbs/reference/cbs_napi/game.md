@@ -379,6 +379,7 @@ Get a drives resource for a particular game.
 ### Returns {#cbs_game_scoring_drives-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | CBS drive number within the game; joins drive_id of the scoring-plays frame. |
@@ -469,6 +470,7 @@ Get an scoring plays resource for a particular game.
 ### Returns {#cbs_game_scoring_plays-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games. |

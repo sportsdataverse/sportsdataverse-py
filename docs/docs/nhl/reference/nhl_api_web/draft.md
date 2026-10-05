@@ -23,6 +23,7 @@ Pull NHL draft picks for a year (and optionally one round).
 ### Returns {#nhl_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Shootout round number. |
@@ -75,6 +76,7 @@ Pull NHL Central Scouting rankings for a draft year.
 ### Returns {#nhl_draft_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `draft_year` | integer | Draft year the lottery applies to. |
@@ -119,6 +121,7 @@ Pull the current / most recent draft pick set.
 ### Returns {#nhl_draft_picks_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Shootout round number. |
@@ -168,6 +171,7 @@ Pull the current Central Scouting rankings.
 ### Returns {#nhl_draft_rankings_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `draft_year` | integer | Draft year the lottery applies to. |
@@ -212,6 +216,7 @@ Pull the live draft-tracker pick list (during the draft itself).
 ### Returns {#nhl_draft_tracker_picks_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pick_in_round` | integer | Pick number within the round. |
