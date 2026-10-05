@@ -238,3 +238,15 @@ def test_404_text_never_carries_the_key(monkeypatch):
         _call()
     assert secret not in _rendered(ei.value)
     assert ei.value.__context__ is None
+
+
+def test_unparseable_body_snippet_never_carries_the_key(monkeypatch):
+    """A truncated reply echoes its Parameters (key included) inside the first 80 chars."""
+    secret = "SECRETKEY12345678"
+    monkeypatch.setenv("SDV_PWHL_API_KEY", secret)
+    body = '{"SiteKit":{"Parameters":{"feed":"modulekit","key":"' + secret + '","client_code":"pwhl","vi'
+    _serve(monkeypatch, 200, body)
+    with pytest.raises(AssetFetchError, match="unparseable") as ei:
+        _call()
+    assert secret[:8] not in _rendered(ei.value)
+    assert ei.value.__cause__ is None and ei.value.__context__ is None

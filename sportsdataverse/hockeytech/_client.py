@@ -154,9 +154,11 @@ def hockeytech_api(
     if _ACCESS_DENIED_RE.match(text):
         return {}
     try:
-        payload = json.loads(_strip_jsonp(text))
-    except ValueError as exc:
-        raise AssetFetchError(f"{where}: empty or unparseable body {text[:80]!r}") from exc
+        payload, parsed = json.loads(_strip_jsonp(text)), True
+    except ValueError:  # its .doc is the whole body (key included): never chain it
+        payload, parsed = None, False
+    if not parsed:
+        raise AssetFetchError(f"{where}: empty or unparseable body {_redact(text[:80], key)!r}")
     reason = _invalid_view_reason(payload)
     if reason:
         raise AssetFetchError(
