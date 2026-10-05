@@ -57,6 +57,11 @@ def most_recent_pwhl_season() -> int:
     return most_recent_season_yr(pwhl_season_id(), _LG)
 
 
+def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
+    """The caller's season; the newest only when neither season nor season_id is given."""
+    return season if season is not None or season_id is not None else most_recent_pwhl_season()
+
+
 def pwhl_schedule(
     season: Optional[int] = None,
     season_id: Optional[int] = None,
@@ -122,9 +127,7 @@ def pwhl_standings(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL standings — one row per team."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -147,9 +150,7 @@ def pwhl_teams(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL teams for a given season."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_teams(hockeytech_api(_LG, "modulekit", "teamsbyseason", {"season": sid}), return_as_pandas)
 
 
@@ -160,9 +161,7 @@ def pwhl_team_roster(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL team roster for a given team + season."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_roster(
         hockeytech_api(_LG, "modulekit", "roster", {"team_id": team_id, "season_id": sid}),
         return_as_pandas,
@@ -188,9 +187,7 @@ def pwhl_leaders(
     by season, not ``season`` (name string). The resolved integer is passed as the
     ``season_id`` param so historical-season requests return results.
     """
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -283,9 +280,7 @@ def pwhl_stats(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL aggregate stats by season and position."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_stats(
         hockeytech_api(_LG, "modulekit", "statviewtype", {"type": position, "season_id": sid}),
         return_as_pandas,
@@ -345,7 +340,7 @@ def pwhl_playoff_bracket(
     """PWHL playoff bracket for a given season."""
     sid = resolve_season_id(
         _LG,
-        season=season if season is not None else most_recent_pwhl_season(),
+        season=_season_or_latest(season, season_id),
         game_type="playoffs",
         season_id=season_id,
     )

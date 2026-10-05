@@ -75,6 +75,10 @@ def build_family(league: str) -> dict[str, Any]:
         "Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails."
     )
 
+    def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
+        """The caller's season; the newest only when neither season nor season_id is given."""
+        return season if season is not None or season_id is not None else _most_recent_season()
+
     # ------------------------------------------------------------------
     # Schedule
     # ------------------------------------------------------------------
@@ -139,7 +143,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Standings — one row per team."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         payload = hockeytech_api(
@@ -173,7 +177,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Teams for a given season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         return P.parse_teams(
@@ -198,7 +202,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Team roster for a given team + season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         return P.parse_roster(
@@ -242,7 +246,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Statistical leaders for a given season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         payload = hockeytech_api(

@@ -205,6 +205,38 @@ def test_resolve_season_id_pwhl_does_not_swallow_programming_errors(monkeypatch)
         resolve_season_id("pwhl", season=2025)
 
 
+# Every wrapper that defaults its season: (module, function, extra positional args).
+SEASON_DEFAULTING = [("family", stem, args) for stem, args in (
+    ("standings", ()), ("teams", ()), ("team_roster", (1,)), ("leaders", ()),
+)] + [("pwhl_api", name, args) for name, args in (
+    ("pwhl_standings", ()), ("pwhl_teams", ()), ("pwhl_team_roster", (1,)),
+    ("pwhl_leaders", ()), ("pwhl_stats", ()), ("pwhl_playoff_bracket", ()),
+)]  # fmt: skip
+
+
+@pytest.mark.parametrize("seasons_reply", ["fails", "answered_empty"])
+@pytest.mark.parametrize("module, name, args", SEASON_DEFAULTING)
+def test_explicit_season_id_never_asks_for_seasons(monkeypatch, module, name, args, seasons_reply):
+    """An explicit season_id is all the call needs; a dead seasons feed must not break it."""
+    views = []
+
+    def fake(league, feed, view, *a, **k):
+        views.append(view)
+        if view == "seasons":
+            if seasons_reply == "fails":
+                raise AssetFetchError("HTTP 503")
+            return {"SiteKit": {"Seasons": []}}
+        return {}
+
+    _patch_all(monkeypatch, fake)
+    if module == "family":
+        fn = getattr(importlib.import_module("sportsdataverse.hockey.ahl"), f"ahl_{name}")
+    else:
+        fn = getattr(importlib.import_module(f"sportsdataverse.pwhl.{module}"), name)
+    fn(*args, season_id=11)
+    assert views and "seasons" not in views
+
+
 # ---------------------------------------------------------------------------
 # The documented graceful empty, end to end through the real client.
 # ---------------------------------------------------------------------------
