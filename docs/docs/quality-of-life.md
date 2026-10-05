@@ -57,8 +57,8 @@ find_athlete("LeBron", league="nba", team="lakers")["id"]   # '1966'
 find_athlete("Aaron Judge", league="mlb", team="Yankees")["id"]  # '33192'
 
 # Game date + teams → event ID
-find_event(date="2024-06-17", league="nba", home="Boston")["id"]
-# '401585607' — 2024 NBA Finals G5
+find_event(date="2024-03-17", league="nba", home="Orlando")["id"]
+# '401585607' — regular season, Toronto at Orlando
 
 find_event(date="20250209", league="nfl", away="KC")["name"]
 # 'Kansas City Chiefs at Philadelphia Eagles' — Super Bowl LIX

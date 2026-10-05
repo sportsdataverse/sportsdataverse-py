@@ -95,7 +95,10 @@ def _refs_root() -> Path:
     env = os.environ.get("SDV_INTERNAL_REFS_REPO")
     if env:
         return Path(env)
-    for cand in (Path("C:/Users/saiem/Documents/sdv-internal-refs"), ROOT.parent / "sdv-internal-refs"):
+    for cand in (
+        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
+        ROOT.parent / "sdv-internal-refs",
+    ):
         if cand.exists():
             return cand
     return ROOT.parent / "sdv-internal-refs"

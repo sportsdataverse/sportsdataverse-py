@@ -21,7 +21,7 @@ import yaml
 from sportsdataverse.dl_utils import underscore
 
 ROOT = Path(__file__).resolve().parents[2]
-_DEFAULT_REFS = Path(r"C:/Users/saiem/Documents/sdv-internal-refs")
+_DEFAULT_REFS = Path(r"C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
 SPEC = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(_DEFAULT_REFS))) / "247sports/site-pages.openapi.yaml"
 
 # raw OpenAPI path -> generator-derived short name (stable; see plan route table)
