@@ -181,7 +181,10 @@ GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
 
 ### Returns {#on3_commits_organizations_latest_commits-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_commits_organizations_latest_commits-example}
@@ -206,11 +209,9 @@ GET /rdb/v1/commits/organizations/{orgKey}
 
 ### Returns {#on3_commits_organizations_org_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `status_type` | character | Status type. |
-| `commits` | character | Number of commitments in the organization's recruiting class for the season. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

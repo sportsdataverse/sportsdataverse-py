@@ -23,7 +23,10 @@ GET /rdb/v1/coaches/{personKey}/history
 
 ### Returns {#on3_coaches_history-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_coaches_history-example}
@@ -48,7 +51,10 @@ GET /rdb/v1/coaches/{personKey}/profile
 
 ### Returns {#on3_coaches_profile-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_coaches_profile-example}
@@ -201,7 +207,10 @@ GET /rdb/v1/collective-groups/{key}/deals
 
 ### Returns {#on3_collective_groups_deals-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_collective_groups_deals-example}
@@ -226,7 +235,10 @@ GET /rdb/v1/collective-groups/{key}
 
 ### Returns {#on3_collective_groups_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_collective_groups_key-example}
@@ -254,7 +266,10 @@ GET /rdb/v1/draft-organization-rank
 
 ### Returns {#on3_draft_organization_rank-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_draft_organization_rank-example}
@@ -282,7 +297,10 @@ GET /rdb/v1/draft-pick-organization-rank
 
 ### Returns {#on3_draft_pick_organization_rank-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_draft_pick_organization_rank-example}
@@ -309,7 +327,10 @@ GET /rdb/v1/drafts
 
 ### Returns {#on3_drafts-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_drafts-example}
@@ -377,7 +398,10 @@ GET /rdb/v1/drafts-by-stars-summary
 
 ### Returns {#on3_drafts_by_stars_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_drafts_by_stars_summary-example}
@@ -403,7 +427,10 @@ GET /rdb/v1/drafts/{orgKey}/players
 
 ### Returns {#on3_drafts_players-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_drafts_players-example}
@@ -429,12 +456,9 @@ GET /rdb/v1/filters/conferences
 
 ### Returns {#on3_filters_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the conference filter option. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `abbreviation` | character | Metric abbreviation. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -491,12 +515,9 @@ GET /rdb/v1/filters/positions
 
 ### Returns {#on3_filters_positions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the position filter option. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `abbreviation` | character | Metric abbreviation. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -521,11 +542,9 @@ GET /rdb/v1/filters/sports
 
 ### Returns {#on3_filters_sports-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the sport filter option. |
-| `name` | character | Position name (e.g. `Quarterback`). |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -581,12 +600,9 @@ GET /rdb/v1/filters/teams
 
 ### Returns {#on3_filters_teams-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `conference_key` | integer | On3 RDB key of the conference the team belongs to. |
-| `conference_abbr` | character | Conference abbreviation. |
-| `teams` | character | Nested list of member-team membership spans. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -611,10 +627,9 @@ GET /rdb/v1/filters/years
 
 ### Returns {#on3_filters_years-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `value` | character | Metric value. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -640,7 +655,10 @@ GET /rdb/v1/person-connections/{connectionKey}
 
 ### Returns {#on3_person_connections_connection_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_person_connections_connection_key-example}
@@ -665,22 +683,9 @@ GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
 
 ### Returns {#on3_person_primary_recruitment_evaluation-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the scouting evaluation. |
-| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
-| `author_key` | integer | On3 user key of the evaluation's author. |
-| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
-| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
-| `title` | character | Specific role title for the assignment. |
-| `premium` | logical | Whether the article is premium content. |
-| `body` | character | Full text of the scouting evaluation. |
-| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
-| `date_added` | character | Date the evaluation was added. |
-| `date_updated` | character | Date the evaluation was last updated. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -706,22 +711,9 @@ GET /rdb/v1/person/{personKey}/recruitment-evaluations
 
 ### Returns {#on3_person_recruitment_evaluations-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the scouting evaluation. |
-| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
-| `author_key` | integer | On3 user key of the evaluation's author. |
-| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
-| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
-| `title` | character | Specific role title for the assignment. |
-| `premium` | logical | Whether the article is premium content. |
-| `body` | character | Full text of the scouting evaluation. |
-| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
-| `date_added` | character | Date the evaluation was added. |
-| `date_updated` | character | Date the evaluation was last updated. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -747,7 +739,10 @@ GET /rdb/v1/person-sport/{psKey}/profile-recruit
 
 ### Returns {#on3_person_sport_profile_recruit-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_person_sport_profile_recruit-example}
@@ -775,7 +770,10 @@ GET /rdb/v1/person-sport-rankings
 
 ### Returns {#on3_person_sport_rankings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_person_sport_rankings-example}
@@ -802,7 +800,10 @@ Expert prediction accuracy + feed (see PredictionAccuracies)
 
 ### Returns {#on3_predictions_user_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_predictions_user_key-example}
@@ -873,7 +874,10 @@ GET /rdb/v1/quotes/{key}
 
 ### Returns {#on3_quotes_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_quotes_key-example}
@@ -901,7 +905,10 @@ GET /rdb/v1/team-ranking
 
 ### Returns {#on3_team_ranking-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_team_ranking-example}
@@ -927,7 +934,10 @@ GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
 
 ### Returns {#on3_team_ranking_bluechips_team_rankings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_team_ranking_bluechips_team_rankings-example}
@@ -953,7 +963,10 @@ GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
 
 ### Returns {#on3_team_ranking_consensus_team_rankings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_team_ranking_consensus_team_rankings-example}
@@ -978,7 +991,10 @@ GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
 
 ### Returns {#on3_team_ranking_organizations_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_team_ranking_organizations_summary-example}
@@ -1082,7 +1098,10 @@ GET /rdb/v1/videos/{videoKey}
 
 ### Returns {#on3_videos_video_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_videos_video_key-example}

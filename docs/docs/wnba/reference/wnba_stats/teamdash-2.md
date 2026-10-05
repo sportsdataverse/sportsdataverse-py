@@ -43,7 +43,7 @@ GET /stats/teamdashboardbygeneralsplits
 
 ### Returns {#wnba_stats_teamdashboardbygeneralsplits-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `LocationTeamDashboard`, `WinsLossesTeamDashboard`, `MonthTeamDashboard`, `PrePostAllStarTeamDashboard`, `DaysRestTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `LocationTeamDashboard`, `WinsLossesTeamDashboard`, `MonthTeamDashboard`, `PrePostAllStarTeamDashboard`, `DaysRestTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
@@ -450,7 +450,7 @@ GET /stats/teamdashboardbylastngames
 
 ### Returns {#wnba_stats_teamdashboardbylastngames-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Last5TeamDashboard`, `Last10TeamDashboard`, `Last15TeamDashboard`, `Last20TeamDashboard`, `GameNumberTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Last5TeamDashboard`, `Last10TeamDashboard`, `Last15TeamDashboard`, `Last20TeamDashboard`, `GameNumberTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |

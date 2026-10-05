@@ -43,7 +43,7 @@ GET /stats/teamdashboardbyopponent
 
 ### Returns {#nba_stats_teamdashboardbyopponent-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ConferenceTeamDashboard`, `DivisionTeamDashboard`, `OpponentTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ConferenceTeamDashboard`, `DivisionTeamDashboard`, `OpponentTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
@@ -326,7 +326,7 @@ GET /stats/teamdashboardbyshootingsplits
 
 ### Returns {#nba_stats_teamdashboardbyshootingsplits-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Shot5FTTeamDashboard`, `Shot8FTTeamDashboard`, `ShotAreaTeamDashboard`, `AssitedShotTeamDashboard`, `ShotTypeTeamDashboard`, `AssistedBy`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Shot5FTTeamDashboard`, `Shot8FTTeamDashboard`, `ShotAreaTeamDashboard`, `AssitedShotTeamDashboard`, `ShotTypeTeamDashboard`, `AssistedBy`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
@@ -619,7 +619,7 @@ GET /stats/teamdashboardbyteamperformance
 
 ### Returns {#nba_stats_teamdashboardbyteamperformance-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ScoreDifferentialTeamDashboard`, `PointsScoredTeamDashboard`, `PontsAgainstTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ScoreDifferentialTeamDashboard`, `PointsScoredTeamDashboard`, `PontsAgainstTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |

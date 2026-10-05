@@ -567,21 +567,15 @@ def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str], moved
 
 
 @functools.lru_cache(maxsize=None)
-def _return_table(schema_name: str | None, league: str | None = None) -> str:
-    """Markdown ``@return`` table(s) for a ``returns_schema``.
+def _schema_doc(schema_name: str | None, league: str | None = None) -> dict:
+    """The parsed ``returns_schema`` YAML (``{}`` when none is registered/found).
 
     Resolution order:
     1. ``schemas/{schema_name}/{league}.yaml`` -- per-league file (when ``league`` is given).
     2. ``schemas/{schema_name}.yaml`` -- generic fallback.
-
-    Handles both on-disk shapes: ``kind: dataframe`` (top-level ``columns``) renders
-    one table; ``kind: frames`` (``frames: [{section, columns}]``) renders one bolded
-    table per non-empty sub-frame. Empty sub-frames (zero columns) are silently skipped
-    so sport-specific sections that are vacant for another sport produce no noise.
-    Empty string when no schema is registered/found or all columns are absent.
     """
     if not schema_name:
-        return ""
+        return {}
     import yaml
 
     base = ROOT / "tools" / "codegen" / "schemas"
@@ -589,8 +583,23 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
     if not (p and p.exists()):
         p = base / f"{schema_name}.yaml"  # fallback: generic
     if not p.exists():
+        return {}
+    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=None)
+def _return_table(schema_name: str | None, league: str | None = None) -> str:
+    """Markdown ``@return`` table(s) for a ``returns_schema`` (resolved by ``_schema_doc``).
+
+    Handles both on-disk shapes: ``kind: dataframe`` (top-level ``columns``) renders
+    one table; ``kind: frames`` (``frames: [{section, columns}]``) renders one bolded
+    table per non-empty sub-frame. Empty sub-frames (zero columns) are silently skipped
+    so sport-specific sections that are vacant for another sport produce no noise.
+    Empty string when no schema is registered/found or all columns are absent.
+    """
+    d = _schema_doc(schema_name, league)
+    if not d:
         return ""
-    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
 
     def tbl(cols) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
@@ -711,6 +720,9 @@ class _EndpointView:
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
+        schema_doc = _schema_doc(ep.returns_schema, league.prefix)
+        self.return_frames = schema_doc.get("kind") == "frames"
+        self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
         self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
         self.notebook: str | None = None

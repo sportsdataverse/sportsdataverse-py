@@ -23,7 +23,7 @@ GET /stats/scoreboardv2
 
 ### Returns {#wnba_stats_scoreboardv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`, `WinProbability`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`, `WinProbability`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GameHeader**
 
 | col_name | type | description |

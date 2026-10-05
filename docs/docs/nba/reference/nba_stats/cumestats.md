@@ -25,7 +25,7 @@ GET /stats/cumestatsplayer
 
 ### Returns {#nba_stats_cumestatsplayer-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalPlayerStats`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalPlayerStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GameByGameStats**
 
 | col_name | type | description |
@@ -178,7 +178,7 @@ GET /stats/cumestatsteam
 
 ### Returns {#nba_stats_cumestatsteam-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalTeamStats`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalTeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GameByGameStats**
 
 | col_name | type | description |

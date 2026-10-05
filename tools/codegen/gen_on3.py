@@ -4,16 +4,15 @@ Recruit Database OpenAPI spec (``api.on3.com/public/rdb``, auth-free).
 Idempotent: same spec -> byte-identical output. Modeled on ``gen_nba_stats.py``.
 
 The generator reads the frozen OpenAPI spec (path via the ``SDV_INTERNAL_REFS_REPO``
-env, default ``C:/Users/saiem/Documents/sdv-internal-refs``) and emits:
+env, default ``C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs``) and emits:
 
 * ``tools/codegen/endpoints/on3.yaml`` -- one endpoint per usable GET op, host
   ``https://api.on3.com/public/rdb/v1`` (the single ``/rdb/v2`` op carries an
   endpoint-level ``host`` override so ``host + path`` == the real URL for both).
 * ``tools/codegen/schemas/native/on3/<short>.yaml`` -- returns-schema per endpoint
   (see ``_schema``): the columns ``parse_on3_rdb`` emits on the committed capture
-  ``tests/fixtures/on3/<short>.json``; without one, the response type's own fields
-  when the parser's naming rule maps them unambiguously (``derived_by_rule``); else
-  no columns and an ``unverified`` reason. The two legacy scrape schemas
+  ``tests/fixtures/on3/<short>.json``; without one (or with zero rows), no columns
+  and an ``unverified`` reason. The two legacy scrape schemas
   (``on3_player_rankings`` / ``on3_team_rankings``) that back the demoted
   ``_next/data`` rankings shim are PRESERVED, never clobbered.
 
@@ -85,7 +84,7 @@ _TOKEN = re.compile(r"\{([^}]+)\}")
 
 
 def _spec_path() -> Path:
-    base = os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs")
+    base = os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
     return Path(base) / "on3" / "on3-recruit-database.openapi.yaml"
 
 
@@ -165,15 +164,11 @@ def _row_schema(op: dict, spec: dict) -> dict:
     return schema
 
 
-def _leaves(spec: dict, schema: dict, prefix: str = "", seen: frozenset = frozenset()) -> List[Tuple[str, str, bool]]:
-    """``(column, json type, nested)`` per leaf of a row schema, named the way
-    ``parse_on3_rdb`` names them: nested objects flatten with ``_`` (pandas
-    ``json_normalize(sep="_")``), then ``underscore``. ``nested`` marks a leaf whose
-    name depends on the data -- the parser only flattens an object that is non-null,
-    and a free-form map (``additionalProperties``) flattens to its runtime keys."""
-    if not schema.get("properties") and schema.get("type") in ("integer", "number", "string", "boolean"):
-        return [("value", "string", False)]  # bare scalar array -> one stringified `value` column
-    out: List[Tuple[str, str, bool]] = []
+def _spec_types(spec: dict, schema: dict, prefix: str = "", seen: frozenset = frozenset()) -> Dict[str, str]:
+    """``{column: json type}`` for a row schema's leaves, named the way ``parse_on3_rdb``
+    flattens them (``json_normalize(sep="_")`` then ``underscore``). Used only to type a
+    captured column that is all-null in its capture."""
+    out: Dict[str, str] = {}
     for name, pv in schema.get("properties", {}).items():
         pv = pv or {}
         if len(pv.get("allOf") or []) == 1:
@@ -181,9 +176,9 @@ def _leaves(spec: dict, schema: dict, prefix: str = "", seen: frozenset = frozen
         ref = pv.get("$ref", "")
         node = _resolve_ref(spec, pv)
         if node.get("properties") and ref not in seen:
-            out += [(n, t, True) for n, t, _ in _leaves(spec, node, f"{prefix}{name}_", seen | {ref})]
+            out.update(_spec_types(spec, node, f"{prefix}{name}_", seen | {ref}))
         else:
-            out.append((underscore(f"{prefix}{name}"), node.get("type") or "unknown", "additionalProperties" in node))
+            out[underscore(f"{prefix}{name}")] = node.get("type") or "unknown"
     return out
 
 
@@ -205,30 +200,23 @@ def _captured_columns(short: str, spec_types: Dict[str, str]) -> List[Dict[str, 
     return cols
 
 
+# Why a capture-less endpoint publishes no table. Measured 2026-10-05: of the 9
+# endpoints with a capture whose response type is authoritative (on3_ts_api) and flat
+# -- the best case -- the spec's field names matched parse_on3_rdb's columns on only 7
+# (filters_draft_rounds emits ``round``, not ``value``; people_latest_valuation emits 5
+# fields the spec lacks), and nullable integers come back Float64.
+_UNVERIFIED = (
+    "no committed capture with rows; names derived from the OpenAPI response type matched "
+    "parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published"
+)
+
+
 def _schema(short: str, op: dict, spec: dict) -> Dict[str, Any]:
-    """Returns-schema from the committed capture; else from the response type when the
-    parser's naming rule maps it unambiguously; else marked ``unverified``."""
-    leaves = _leaves(spec, _row_schema(op, spec))
+    """Returns-schema from the committed capture; else no columns, marked ``unverified``."""
     doc: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
-    doc["columns"] = _captured_columns(short, {n: t for n, t, _ in leaves})
-    if doc["columns"]:
-        return doc
-    if op.get("x-source") != "on3_ts_api":
-        doc["unverified"] = (
-            "no committed capture with rows, and the response type is only heuristically mapped "
-            f"(x-source: {op.get('x-source')})"
-        )
-    elif not leaves or any(nested for *_, nested in leaves):
-        doc["unverified"] = (
-            "no committed capture with rows, and the row has nested objects whose flattened "
-            "column names depend on which of them are null in the data"
-        )
-    else:
-        doc["columns"] = [{"name": n, "type": _DTYPE.get(t, "character"), "description": ""} for n, t, _ in leaves]
-        doc["derived_by_rule"] = (
-            "no committed capture with rows; names are the response type's own flat fields "
-            "through the parser's underscore rule"
-        )
+    doc["columns"] = _captured_columns(short, _spec_types(spec, _row_schema(op, spec)))
+    if not doc["columns"]:
+        doc["unverified"] = _UNVERIFIED
     return doc
 
 

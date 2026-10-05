@@ -43,7 +43,7 @@ GET /stats/playerdashboardbyyearoveryear
 
 ### Returns {#nba_stats_playerdashboardbyyearoveryear-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallPlayerDashboard**
 
 | col_name | type | description |
@@ -223,7 +223,7 @@ GET /stats/playerdashptpass
 
 ### Returns {#nba_stats_playerdashptpass-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PassesMade`, `PassesReceived`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PassesMade`, `PassesReceived`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PassesMade**
 
 | col_name | type | description |
@@ -317,7 +317,7 @@ GET /stats/playerdashptreb
 
 ### Returns {#nba_stats_playerdashptreb-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallRebounding`, `ShotTypeRebounding`, `NumContestedRebounding`, `ShotDistanceRebounding`, `RebDistanceRebounding`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallRebounding`, `ShotTypeRebounding`, `NumContestedRebounding`, `ShotDistanceRebounding`, `RebDistanceRebounding`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallRebounding**
 
 | col_name | type | description |
@@ -523,7 +523,7 @@ GET /stats/playerdashptshots
 
 ### Returns {#nba_stats_playerdashptshots-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `GeneralShooting`, `ShotClockShooting`, `DribbleShooting`, `ClosestDefenderShooting`, `ClosestDefender10ftPlusShooting`, `TouchTimeShooting`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `GeneralShooting`, `ShotClockShooting`, `DribbleShooting`, `ClosestDefenderShooting`, `ClosestDefender10ftPlusShooting`, `TouchTimeShooting`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **Overall**
 
 | col_name | type | description |

@@ -43,7 +43,7 @@ GET /stats/teamdashboardbyyearoveryear
 
 ### Returns {#nba_stats_teamdashboardbyyearoveryear-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ByYearTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ByYearTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
@@ -210,7 +210,7 @@ GET /stats/teamdashlineups
 
 ### Returns {#nba_stats_teamdashlineups-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Lineups`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Lineups`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **Overall**
 
 | col_name | type | description |
@@ -372,7 +372,7 @@ GET /stats/teamdashptpass
 
 ### Returns {#nba_stats_teamdashptpass-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PassesMade`, `PassesReceived`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PassesMade`, `PassesReceived`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PassesMade**
 
 | col_name | type | description |
@@ -459,7 +459,7 @@ GET /stats/teamdashptreb
 
 ### Returns {#nba_stats_teamdashptreb-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallRebounding`, `ShotTypeRebounding`, `NumContestedRebounding`, `ShotDistanceRebounding`, `RebDistanceRebounding`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallRebounding`, `ShotTypeRebounding`, `NumContestedRebounding`, `ShotDistanceRebounding`, `RebDistanceRebounding`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallRebounding**
 
 | col_name | type | description |
@@ -609,7 +609,7 @@ GET /stats/teamdashptshots
 
 ### Returns {#nba_stats_teamdashptshots-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GeneralShooting`, `ShotClockShooting`, `DribbleShooting`, `ClosestDefenderShooting`, `ClosestDefender10ftPlusShooting`, `TouchTimeShooting`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GeneralShooting`, `ShotClockShooting`, `DribbleShooting`, `ClosestDefenderShooting`, `ClosestDefender10ftPlusShooting`, `TouchTimeShooting`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GeneralShooting**
 
 | col_name | type | description |

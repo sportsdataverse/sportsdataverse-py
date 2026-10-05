@@ -43,7 +43,7 @@ GET /stats/teamplayerdashboard
 
 ### Returns {#nba_stats_teamplayerdashboard-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamOverall`, `PlayersSeasonTotals`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamOverall`, `PlayersSeasonTotals`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **TeamOverall**
 
 | col_name | type | description |
@@ -219,7 +219,7 @@ GET /stats/teamplayeronoffdetails
 
 ### Returns {#nba_stats_teamplayeronoffdetails-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamPlayerOnOffDetails`, `PlayersOnCourtTeamPlayerOnOffDetails`, `PlayersOffCourtTeamPlayerOnOffDetails`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamPlayerOnOffDetails`, `PlayersOnCourtTeamPlayerOnOffDetails`, `PlayersOffCourtTeamPlayerOnOffDetails`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamPlayerOnOffDetails**
 
 | col_name | type | description |
@@ -454,7 +454,7 @@ GET /stats/teamplayeronoffsummary
 
 ### Returns {#nba_stats_teamplayeronoffsummary-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamPlayerOnOffSummary`, `PlayersOnCourtTeamPlayerOnOffSummary`, `PlayersOffCourtTeamPlayerOnOffSummary`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamPlayerOnOffSummary`, `PlayersOnCourtTeamPlayerOnOffSummary`, `PlayersOffCourtTeamPlayerOnOffSummary`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamPlayerOnOffSummary**
 
 | col_name | type | description |

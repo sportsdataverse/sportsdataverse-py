@@ -2607,7 +2607,6 @@ commits_latest:
   weight: Recruit weight in pounds.
 commits_organizations_latest_commits:
 commits_organizations_org_key:
-  commits: Number of commitments in the organization's recruiting class for the season.
 commonallplayers:
   display_first_last: Player name formatted as "First Last".
   display_last_comma_first: Player name formatted as "Last, First".
@@ -4068,13 +4067,9 @@ field_goal_summary:
   twenty_made: Field goals made from 20-29 yards.
   twenty_percent: Field-goal percentage from 20-29 yards.
 filters_conferences:
-  key: On3 RDB key for the conference filter option.
 filters_positions:
-  key: On3 RDB key for the position filter option.
 filters_sports:
-  key: On3 RDB key for the sport filter option.
 filters_teams:
-  conference_key: On3 RDB key of the conference the team belongs to.
 fit_field_position_ep:
   ep: Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing).
   yardline_own: Starting yard line from the offense's own goal (1-99).
@@ -28341,27 +28336,7 @@ person_connections_connection_key:
 person_game_stats:
   exemptions: Serialized list of statistical exemptions or special-case flags applied to this player's game-log splits.
 person_primary_recruitment_evaluation:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 person_recruitment_evaluations:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 person_sport_profile_recruit:
 person_sport_rankings:
 pff_api_position_report:
@@ -34315,27 +34290,7 @@ receiving_summary:
   yards_per_reception: Average yards per reception.
   yprr: Yards per route run.
 recruitment_primary_recruitment_evaluation:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 recruitment_recruitment_evaluations:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 recruitments_profile:
   class_year: Recruiting class year of the recruitment.
 recruitments_rpm_picks:

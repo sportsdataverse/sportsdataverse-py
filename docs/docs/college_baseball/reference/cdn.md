@@ -23,7 +23,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 ### Returns {#espn_college_baseball_cdn_playbyplay-returns}
 
-**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -302,7 +302,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 ### Returns {#espn_college_baseball_cdn_boxscore-returns}
 
-**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |

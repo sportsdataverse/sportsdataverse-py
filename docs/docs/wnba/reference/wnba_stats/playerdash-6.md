@@ -43,7 +43,7 @@ GET /stats/playerdashboardbyyearoveryear
 
 ### Returns {#wnba_stats_playerdashboardbyyearoveryear-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallPlayerDashboard**
 
 | col_name | type | description |

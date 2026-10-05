@@ -32,12 +32,10 @@ Two families live here:
 
 The returns-table schemas under `tools/codegen/schemas/native/on3/` are
 generated from what `parse_on3_rdb` emits on these files (`gen_on3.py`). An
-endpoint without a capture that has rows is marked in its schema as one of two
-kinds:
-
-- `derived_by_rule`: the response type's own flat fields, passed through the
-  parser's `underscore` rule.
-- `unverified`: no columns are published.
+endpoint without a capture that has rows publishes no columns; its schema
+carries an `unverified` reason instead. The OpenAPI response types were not used
+as a fallback: on the 9 checkable endpoints, their field names matched the
+parser's output on only 7.
 
 The 31 non-legacy captures beyond the four listed above were copied from
 `sdv-internal-refs/on3/captures/_sample/` (commit `0d900c2`).

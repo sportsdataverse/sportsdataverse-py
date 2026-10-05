@@ -21,7 +21,7 @@ GET /stats/teamdetails
 
 ### Returns {#wnba_stats_teamdetails-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamBackground`, `TeamHistory`, `TeamSocialSites`, `TeamAwardsChampionships`, `TeamAwardsConf`, `TeamAwardsDiv`, `TeamHof`, `TeamRetired`, `TeamAwardsCommCup`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamBackground`, `TeamHistory`, `TeamSocialSites`, `TeamAwardsChampionships`, `TeamAwardsConf`, `TeamAwardsDiv`, `TeamHof`, `TeamRetired`, `TeamAwardsCommCup`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **TeamBackground**
 
 | col_name | type | description |
@@ -357,7 +357,7 @@ GET /stats/teaminfocommon
 
 ### Returns {#wnba_stats_teaminfocommon-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamInfoCommon`, `TeamSeasonRanks`, `AvailableSeasons`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamInfoCommon`, `TeamSeasonRanks`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **TeamInfoCommon**
 
 | col_name | type | description |
@@ -447,7 +447,7 @@ GET /stats/teamvsplayer
 
 ### Returns {#wnba_stats_teamvsplayer-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `vsPlayerOverall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `vsPlayerOverall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **Overall**
 
 | col_name | type | description |

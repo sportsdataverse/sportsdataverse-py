@@ -1,44 +1,6 @@
-columns:
-- description: ''
-  name: key
-  type: integer
-- description: ''
-  name: recruitment_key
-  type: integer
-- description: ''
-  name: author_key
-  type: integer
-- description: ''
-  name: author_name
-  type: character
-- description: ''
-  name: author_title
-  type: character
-- description: ''
-  name: title
-  type: character
-- description: ''
-  name: premium
-  type: logical
-- description: ''
-  name: body
-  type: character
-- description: ''
-  name: primary
-  type: logical
-- description: ''
-  name: category
-  type: character
-- description: ''
-  name: date_updated_unix
-  type: integer
-- description: ''
-  name: date_added
-  type: character
-- description: ''
-  name: date_updated
-  type: character
-derived_by_rule: no committed capture with rows; names are the response type's own
-  flat fields through the parser's underscore rule
+columns: []
 kind: dataframe
 schema: person_primary_recruitment_evaluation
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

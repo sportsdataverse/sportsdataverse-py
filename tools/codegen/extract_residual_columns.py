@@ -97,14 +97,16 @@ def _bucket_of(path: str) -> str:
 # unambiguous), documented every result set of a multi-set stats endpoint instead of
 # one representative set, and replaced On3's single object columns with the
 # json_normalize-flattened ones the parser actually returns. The newly surfaced
-# columns had no description to carry over: 312 nba_stats + 269 wnba_stats + 1841
-# on3 cells at that date (``deferred_columns()`` reports the live count). Promote a
-# bucket out again once its columns are authored.
-_DEFERRED_BUCKETS = {
-    "native/nflpro",
-    "native/nba_stats",
-    "native/wnba_stats",
-    "native/on3",
+# columns had no description to carry over. Each is CAPPED at the count measured
+# that day, so a newly blank column still fails the gate (test_manual_descriptions);
+# lower a cap as columns are authored, and promote the bucket out at 0.
+#
+# {bucket: max uncovered cells, or None for no cap}
+_DEFERRED_BUCKETS: dict[str, int | None] = {
+    "native/nflpro": None,
+    "native/nba_stats": 312,
+    "native/wnba_stats": 269,
+    "native/on3": 1841,
 }
 
 

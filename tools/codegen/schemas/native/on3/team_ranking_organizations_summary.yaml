@@ -1,5 +1,6 @@
 columns: []
 kind: dataframe
 schema: team_ranking_organizations_summary
-unverified: no committed capture with rows, and the row has nested objects whose flattened
-  column names depend on which of them are null in the data
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

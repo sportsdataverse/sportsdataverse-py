@@ -104,11 +104,10 @@ def test_on3_schema_matches_parser(short):
     capture = ROOT / "tests/fixtures/on3" / f"{short}.json"
     df = parse_on3_rdb(json.loads(capture.read_text(encoding="utf-8"))) if capture.exists() else None
     if df is None or df.width == 0:
-        # no capture with rows: never presented as verified
-        assert ("unverified" in doc) != ("derived_by_rule" in doc), short
-        assert bool(doc["columns"]) == ("derived_by_rule" in doc), short
+        # no capture with rows: no table is published, and the schema says why
+        assert doc["columns"] == [] and doc.get("unverified"), short
         return
-    assert "unverified" not in doc and "derived_by_rule" not in doc, short
+    assert "unverified" not in doc, short
     _assert_matches(df, doc, f"on3/{short}")
 
 

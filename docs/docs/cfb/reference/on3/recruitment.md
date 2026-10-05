@@ -21,22 +21,9 @@ GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
 
 ### Returns {#on3_recruitment_primary_recruitment_evaluation-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the scouting evaluation. |
-| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
-| `author_key` | integer | On3 user key of the evaluation's author. |
-| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
-| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
-| `title` | character | Specific role title for the assignment. |
-| `premium` | logical | Whether the article is premium content. |
-| `body` | character | Full text of the scouting evaluation. |
-| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
-| `date_added` | character | Date the evaluation was added. |
-| `date_updated` | character | Date the evaluation was last updated. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -62,22 +49,9 @@ GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 
 ### Returns {#on3_recruitment_recruitment_evaluations-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the scouting evaluation. |
-| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
-| `author_key` | integer | On3 user key of the evaluation's author. |
-| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
-| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
-| `title` | character | Specific role title for the assignment. |
-| `premium` | logical | Whether the article is premium content. |
-| `body` | character | Full text of the scouting evaluation. |
-| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
-| `date_added` | character | Date the evaluation was added. |
-| `date_updated` | character | Date the evaluation was last updated. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -496,7 +470,10 @@ GET /rdb/v1/recruitments/{recKey}/rpm-picks
 
 ### Returns {#on3_recruitments_rpm_picks-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_recruitments_rpm_picks-example}

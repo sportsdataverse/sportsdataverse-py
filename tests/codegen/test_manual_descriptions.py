@@ -50,6 +50,20 @@ def test_residual_total_matches_known_baseline():
     assert total <= 0, f"residual grew to {total} (>0) — new blank columns need descriptions"
 
 
+def test_deferred_buckets_do_not_grow():
+    # A deferred bucket is capped at its measured backlog, so a NEW blank column in it
+    # still fails; lower the cap (never raise it) as columns are authored.
+    counts: dict = {}
+    for r in extract.deferred_columns():
+        counts[r["bucket"]] = counts.get(r["bucket"], 0) + 1
+    grown = {
+        b: (counts.get(b, 0), cap)
+        for b, cap in extract._DEFERRED_BUCKETS.items()
+        if cap is not None and counts.get(b, 0) > cap
+    }
+    assert not grown, f"deferred buckets grew past their cap (count, cap): {grown}"
+
+
 def test_native_schemas_resolve_fallback_with_their_page_league():
     # A native schema's path names an API family, not a league, but its reference page renders
     # R-dict fallback text with the FLAT_APIS league (``_return_table(rs, prefix)``). The check

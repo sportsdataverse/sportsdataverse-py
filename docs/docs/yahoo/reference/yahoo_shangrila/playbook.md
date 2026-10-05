@@ -31,7 +31,7 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 
 ### Returns {#yahoo_playbook_boxscore-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
 
 | col_name | type | description |
@@ -230,7 +230,7 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 
 ### Returns {#yahoo_playbook_boxscore_poll-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
 
 | col_name | type | description |
@@ -808,7 +808,7 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
 ### Returns {#yahoo_playbook_team-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **teams**
 
 | col_name | type | description |

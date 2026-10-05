@@ -330,11 +330,15 @@ capture of each endpoint.
 - **Result sets.** 67 NBA and 63 WNBA endpoints return a dict of result sets. Their docs now
   show every set, and their docstrings say they return a dict.
 - **On3 tables.** These show the flattened nested-object columns that `parse_on3_rdb` returns.
-- **On3 without a capture.** An endpoint with no capture is marked in its schema as one of:
-  - `derived_by_rule` (10): the response type has only flat fields.
-  - `unverified` (38): no table is published, since the names would be guesses.
+- **On3 without a capture.** 48 On3 endpoints have no capture with rows. Each is marked
+  `unverified`, and its docs carry a one-line caveat in place of a table. The OpenAPI response
+  types were not used as a fallback: on the 9 endpoints where they could be checked against a
+  capture, their field names matched the parser on only 7.
 - **`nba_stats_playbyplayv3` / `wnba_stats_playbyplayv3`** are marked `unverified`. The generic
   parser returns no columns for their `{meta, game}` payload.
+- **`on3_people_measurements`** shows a single `player_measurements` column. `parse_on3_rdb` does
+  not unwrap the `{playerMeasurements: [...]}` envelope, and the table documents what the parser
+  returns.
 
 Wrapper behaviour is unchanged.
 

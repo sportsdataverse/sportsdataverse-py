@@ -29,9 +29,6 @@ from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT))  # run as a script: make ``tools.codegen`` importable
-from tools.codegen.gen_nba_stats import CAPTURE_OVERRIDES  # noqa: E402
-
 _KEEP = 2
 
 
@@ -97,6 +94,8 @@ def _endpoint_shorts(stem: str) -> Iterator[dict]:
 def vendor_nba(refs: Path) -> None:
     """Every ``nba_stats`` / ``wnba_stats`` endpoint from the 2026-08 capture sweep
     (except those whose schema comes from an earlier pilot capture)."""
+    from tools.codegen.gen_nba_stats import CAPTURE_OVERRIDES
+
     for stem, league_id in (("nba_stats", "00"), ("wnba_stats", "10")):
         n = size = 0
         for ep in _endpoint_shorts(stem):
@@ -135,10 +134,13 @@ def vendor_on3(refs: Path) -> None:
 
 
 def main() -> None:
-    refs = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs"))
+    refs = Path(
+        os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
+    )
     vendor_nba(refs)
     vendor_on3(refs)
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, str(ROOT))  # run as a script: make ``tools.codegen`` importable
     main()

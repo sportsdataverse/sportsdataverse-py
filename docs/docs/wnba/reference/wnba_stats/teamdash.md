@@ -43,7 +43,7 @@ GET /stats/teamdashboardbyclutch
 
 ### Returns {#wnba_stats_teamdashboardbyclutch-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Last5Min5PointTeamDashboard`, `Last3Min5PointTeamDashboard`, `Last1Min5PointTeamDashboard`, `Last30Sec3PointTeamDashboard`, `Last10Sec3PointTeamDashboard`, `Last5MinPlusMinus5PointTeamDashboard`, `Last3MinPlusMinus5PointTeamDashboard`, `Last1MinPlusMinus5PointTeamDashboard`, `Last30Sec3Point2TeamDashboard`, `Last10Sec3Point2TeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `Last5Min5PointTeamDashboard`, `Last3Min5PointTeamDashboard`, `Last1Min5PointTeamDashboard`, `Last30Sec3PointTeamDashboard`, `Last10Sec3PointTeamDashboard`, `Last5MinPlusMinus5PointTeamDashboard`, `Last3MinPlusMinus5PointTeamDashboard`, `Last1MinPlusMinus5PointTeamDashboard`, `Last30Sec3Point2TeamDashboard`, `Last10Sec3Point2TeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
@@ -739,7 +739,7 @@ GET /stats/teamdashboardbygamesplits
 
 ### Returns {#wnba_stats_teamdashboardbygamesplits-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ByHalfTeamDashboard`, `ByPeriodTeamDashboard`, `ByScoreMarginTeamDashboard`, `ByActualMarginTeamDashboard`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallTeamDashboard`, `ByHalfTeamDashboard`, `ByPeriodTeamDashboard`, `ByScoreMarginTeamDashboard`, `ByActualMarginTeamDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallTeamDashboard**
 
 | col_name | type | description |
