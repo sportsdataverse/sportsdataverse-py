@@ -23,6 +23,7 @@ from __future__ import annotations
 import os
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
+from sportsdataverse._codegen_runtime import _check_status
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.odds.the_odds_api_parsers import (
@@ -100,6 +101,7 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
 
     Raises:
         NoDataError: The API answered 404.
+        ValueError: The API answered 400 / 422 -- it rejects bad parameters with 422.
         AssetFetchError: Any other non-2xx answer -- a rejected key (401), spent
             quota (429), or a 5xx that outlived the retries -- or a 2xx whose body
             is not JSON. Its error body is not data, so it never reaches a parser.
@@ -120,8 +122,8 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
         _USAGE["last_cost"] = int(cost)
     except (TypeError, ValueError):
         pass
-    if not 200 <= resp.status_code < 300:
-        raise AssetFetchError(f"The Odds API /v4/{path} answered HTTP {resp.status_code}: {(resp.text or '')[:200]}")
+    # 422 is how this API rejects bad params: ValueError; any other non-2xx: AssetFetchError.
+    _check_status(f"{TOA_BASE}/{path}", resp.status_code, resp.text or "", label=f"The Odds API /v4/{path}")
     try:
         return resp.json()
     except ValueError:  # requests' JSONDecodeError, whose ``.doc`` is the whole unredacted body

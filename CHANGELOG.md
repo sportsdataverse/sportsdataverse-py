@@ -370,6 +370,9 @@ helpers and the `mlb_api_extra` helpers. Specifically:
 - `nfl_api_*` raised a bare `requests.HTTPError` (or `JSONDecodeError`); it now raises
   `AssetFetchError` / `ValueError` / `NoDataError`. Code that caught `HTTPError` or read
   `exc.response` breaks: read the status from the message, or catch the new types.
+- The 400 / 422 -> `ValueError` rule also covers `hockeytech_api` (every HockeyTech family,
+  PWHL included), The Odds API (`toa_*`, which rejects bad parameters with 422) and the
+  Statcast search windows; all three raised `AssetFetchError` for them.
 - The CFB crosswalks (`cfb_schedule_crosswalk`, through its ESPN calendar/schedule, Fox and
   Yahoo legs) swallowed every exception into an empty leg, recording a failed fetch as "no
   games". They now use the basketball crosswalk's `FetchTally`, one per leg: a 404 is an

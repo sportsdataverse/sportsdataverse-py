@@ -138,7 +138,7 @@ def _to_csv(rows: list) -> str:
 
 
 def _exact_ints(values: list) -> bool:
-    # type check, not just ==: 656305.0 == 656305 is True, so a float id would slip past a value compare.
+    # check the dtype, not just ==: 656305.0 == 656305 is True, so a float id would slip past a value compare.
     return all(type(v) is int for v in values)
 
 
@@ -309,6 +309,19 @@ def test_search_error_status_raises_instead_of_an_empty_window(monkeypatch):
 
     monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Err())
     with pytest.raises(AssetFetchError, match="503"):
+        ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01")
+
+
+def test_search_rejected_request_is_a_value_error(monkeypatch):
+    """A 400 means the search parameters are wrong: ValueError, not an empty window."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    class _Bad:
+        status_code = 400
+        text = "<html><title>400 Bad Request</title></html>"
+
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Bad())
+    with pytest.raises(ValueError, match=r"Savant .* rejected the request: HTTP 400"):
         ex.mlb_statcast_search_minors("2024-06-01", "2024-06-01")
 
 

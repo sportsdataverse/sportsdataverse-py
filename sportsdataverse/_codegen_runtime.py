@@ -77,7 +77,7 @@ def _excerpt(text: str) -> str:
     return " ".join((text or "").split())[:200]
 
 
-def _check_status(url: str, status: Any, text: str = "") -> None:
+def _check_status(url: str, status: Any, text: str = "", *, label: Optional[str] = None) -> None:
     """Raise unless ``status`` is 2xx, so a failed fetch never reaches a parser as data.
 
     * 404 -> :class:`~sportsdataverse.errors.NoDataError`: the host answered "nothing here".
@@ -85,16 +85,18 @@ def _check_status(url: str, status: Any, text: str = "") -> None:
     * anything else (a 401/403/429/5xx that outlived the retries) ->
       :class:`~sportsdataverse.errors.AssetFetchError`: the answer is unknown.
 
-    Every message names host, path and status plus a bounded excerpt of the body;
-    the error classes redact credentials, and the query string is never quoted.
+    Every message names host, path and status (or ``label``, for a caller with a more
+    telling name for the request) plus a bounded excerpt of the body; the error
+    classes redact credentials, and the query string is never quoted.
     """
     if isinstance(status, int) and 200 <= status < 300:
         return
+    where = label or _where(url)
     if status == 404:
-        raise NoDataError(f"{_where(url)} answered HTTP 404")
+        raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
-        raise ValueError(_redact_secrets(f"{_where(url)} rejected the request: HTTP {status}: {_excerpt(text)}"))
-    raise AssetFetchError(f"{_where(url)} answered HTTP {status}: {_excerpt(text)}")
+        raise ValueError(_redact_secrets(f"{where} rejected the request: HTTP {status}: {_excerpt(text)}"))
+    raise AssetFetchError(f"{where} answered HTTP {status}: {_excerpt(text)}")
 
 
 def _json_text(url: str, status: Any, text: str) -> Any:

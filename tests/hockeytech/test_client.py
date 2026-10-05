@@ -168,6 +168,17 @@ def test_failed_status_is_a_failed_fetch_not_none(monkeypatch, status):
     assert len(calls) == 2  # retried once (max_retries=1), then surfaced
 
 
+@pytest.mark.parametrize("status", [400, 422])
+def test_rejected_request_is_a_value_error(monkeypatch, status):
+    # The repo-wide rule: 400/422 mean the request is wrong (not a failed fetch).
+    calls = _serve(monkeypatch, status, "Bad Request")
+    with pytest.raises(
+        ValueError, match=rf"hockeytech_api\(pwhl/modulekit/seasons\) rejected the request: HTTP {status}"
+    ):
+        _call()
+    assert len(calls) == 1  # not retried
+
+
 def test_404_is_no_data(monkeypatch):
     _serve(monkeypatch, 404, "Not Found")
     with pytest.raises(NoDataError):
