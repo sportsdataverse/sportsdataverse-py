@@ -4078,6 +4078,7 @@ _LEAGUE_LABELS = {
     "laliga": "LaLiga",
     "ligamx": "Liga MX",
     "ligue1": "Ligue 1",
+    "nbagl": "NBA G League",
     "odds": "Betting odds",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",

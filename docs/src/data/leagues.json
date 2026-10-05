@@ -39,6 +39,10 @@
           "label": "WNBA"
         },
         {
+          "prefix": "nbagl",
+          "label": "NBA G League"
+        },
+        {
           "prefix": "mbb",
           "label": "MBB"
         },

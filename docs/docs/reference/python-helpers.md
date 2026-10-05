@@ -221,6 +221,10 @@ not covered by the generated API-endpoint reference above.
 | [get_cache_mode](python-helpers/other.md#get_cache_mode) | Return the current cache mode. |
 | [mch_ratings](python-helpers/other.md#mch_ratings) | MCH opponent-adjusted goal-margin ratings over a set of scoreboard dates. |
 | [metric_curves](python-helpers/other.md#metric_curves) | League, team and player rate curves from an `ATTEMPT_SCHEMA` frame. |
+| [nbagl_enhanced_pbp](python-helpers/other.md#nbagl_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a G-League game. |
+| [nbagl_on_court](python-helpers/other.md#nbagl_on_court) | Return the rotation-keyed on-court player frame for a G-League game. |
+| [nbagl_possessions](python-helpers/other.md#nbagl_possessions) | Return the possession-level lineup stint matrix for a G-League game. |
+| [nbagl_rapm_from_games](python-helpers/other.md#nbagl_rapm_from_games) | Compute per-player RAPM estimates over a sequence of G-League games. |
 | [nflfastr_attempts](python-helpers/other.md#nflfastr_attempts) | The same attempts from `nfl_model_pbp` (the nflfastR shape), which carries air yards. |
 | [paper_index_game](python-helpers/other.md#paper_index_game) | Paper Index of one game: each side's deserved-win share and the eight margins. |
 | [paper_index_games](python-helpers/other.md#paper_index_games) | Paper Index of every completed game in a pbp frame, one row per team per game. |

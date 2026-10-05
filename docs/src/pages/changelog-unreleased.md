@@ -8,6 +8,18 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — ESPN NBA G League wrappers (`espn_nbagl_*`)
+
+ESPN's G League (`basketball/nba-development`) is registered in `leagues.yaml` like every other
+ESPN league, so codegen now emits the full universal family (112 wrappers) as
+`sportsdataverse.nbagl.nbagl_espn_ext`: `espn_nbagl_standings`, `espn_nbagl_scoreboard`,
+`espn_nbagl_teams_site`, `espn_nbagl_summary`, `espn_nbagl_team_roster`, and the rest. They are
+exported from `sportsdataverse.nbagl` and the top-level package, and `return_parsed=True` (the
+default) routes through the shared ESPN parsers. Before this, G League standings needed the
+private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
+standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
+a gated live smoke test checks the teams and standings endpoints.
+
 ### Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows
 
 Three ESPN feed defects, sized on the 20,080 processed games of 2004-26:
@@ -111,6 +123,7 @@ ESPN's types stand. Found porting the relabel block to cfbfastR (sportsdataverse
 state. Polars (1.40–1.44) matches rows whose join key has four or more null columns despite
 `nulls_equal=False`, so plays with no drive, team, down or distance could be dropped as a stale
 batch. Null keys are now dropped before the join; no game in the raw corpus was affected.
+
 ### Added — the metric registry (`sportsdataverse.registry`)
 
 `sportsdataverse/registry/metrics.yaml` is the one source for how a published football metric is
