@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/athletes](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/athletes?active=true&limit=100&page=1](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/athletes?active=true&limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -29,7 +29,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_players_index-example}
 
 ```python
-espn_cricket_players_index()
+espn_cricket_players_index(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -54,7 +54,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_core-example}
 
 ```python
-espn_cricket_player_core(athlete_id='4239')
+espn_cricket_player_core(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -80,7 +80,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_career_stats-example}
 
 ```python
-espn_cricket_player_career_stats(athlete_id='4239')
+espn_cricket_player_career_stats(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -105,7 +105,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_statisticslog-example}
 
 ```python
-espn_cricket_player_statisticslog(athlete_id='4239')
+espn_cricket_player_statisticslog(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -130,7 +130,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_eventlog-example}
 
 ```python
-espn_cricket_player_eventlog(athlete_id='4239')
+espn_cricket_player_eventlog(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -155,7 +155,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_contracts-example}
 
 ```python
-espn_cricket_player_contracts(athlete_id='4239')
+espn_cricket_player_contracts(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -180,7 +180,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_awards-example}
 
 ```python
-espn_cricket_player_awards(athlete_id='4239')
+espn_cricket_player_awards(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -205,7 +205,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_seasons-example}
 
 ```python
-espn_cricket_player_seasons(athlete_id='4239')
+espn_cricket_player_seasons(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -230,7 +230,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_records-example}
 
 ```python
-espn_cricket_player_records(athlete_id='4239')
+espn_cricket_player_records(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -261,7 +261,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_injuries-example}
 
 ```python
-espn_cricket_player_injuries(athlete_id='4239')
+espn_cricket_player_injuries(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -286,7 +286,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_notes-example}
 
 ```python
-espn_cricket_player_notes(athlete_id='4239')
+espn_cricket_player_notes(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -312,7 +312,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_vs_player-example}
 
 ```python
-espn_cricket_player_vs_player(athlete_id='4239', opp_id='5')
+espn_cricket_player_vs_player(league='eng.1', athlete_id='4239', opp_id='5')
 ```
 
 _Last validated n/a._

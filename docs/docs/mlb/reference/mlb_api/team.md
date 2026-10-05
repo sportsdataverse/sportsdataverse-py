@@ -13,7 +13,7 @@ GET /api/v1/teams/{teamId} — single team detail.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10](https://statsapi.mlb.com/api/v1/teams/10)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10?sportId=1](https://statsapi.mlb.com/api/v1/teams/10?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -78,7 +78,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/roster](https://statsapi.mlb.com/api/v1/teams/10/roster)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/roster?rosterType=active](https://statsapi.mlb.com/api/v1/teams/10/roster?rosterType=active)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -121,7 +121,7 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}/alumni`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/alumni](https://statsapi.mlb.com/api/v1/teams/10/alumni)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/alumni?group=hitting](https://statsapi.mlb.com/api/v1/teams/10/alumni?group=hitting)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -198,7 +198,7 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/affiliates`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/affiliates](https://statsapi.mlb.com/api/v1/teams/affiliates)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/affiliates?sportId=1](https://statsapi.mlb.com/api/v1/teams/affiliates?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/events?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/venues](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/franchises](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/coaches/1/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/positions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/positions?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/tournaments](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/awards?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

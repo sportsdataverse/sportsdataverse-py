@@ -13,7 +13,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/standings`
 
-**Valid URL:** [https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18](https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18)
+**Valid URL:** [https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18&limit=40](https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18&limit=40)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -97,7 +97,7 @@ GET /football/v2/rosters — one row per team roster for the season.
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/rosters`
 
-**Valid URL:** [https://api.nfl.com/football/v2/rosters?season=2024](https://api.nfl.com/football/v2/rosters?season=2024)
+**Valid URL:** [https://api.nfl.com/football/v2/rosters?season=2024&limit=40](https://api.nfl.com/football/v2/rosters?season=2024&limit=40)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -141,7 +141,7 @@ GET /football/v2/teams/history — one row per team for a season.
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/teams/history`
 
-**Valid URL:** [https://api.nfl.com/football/v2/teams/history?season=2024](https://api.nfl.com/football/v2/teams/history?season=2024)
+**Valid URL:** [https://api.nfl.com/football/v2/teams/history?season=2024&limit=40](https://api.nfl.com/football/v2/teams/history?season=2024&limit=40)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -297,7 +297,7 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/combine/profiles`
 
-**Valid URL:** [https://api.nfl.com/football/v2/combine/profiles?year=2024](https://api.nfl.com/football/v2/combine/profiles?year=2024)
+**Valid URL:** [https://api.nfl.com/football/v2/combine/profiles?year=2024&limit=40](https://api.nfl.com/football/v2/combine/profiles?year=2024&limit=40)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -382,7 +382,7 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/draft/picks/report`
 
-**Valid URL:** [https://api.nfl.com/football/v2/draft/picks/report?year=2024](https://api.nfl.com/football/v2/draft/picks/report?year=2024)
+**Valid URL:** [https://api.nfl.com/football/v2/draft/picks/report?year=2024&limit=40](https://api.nfl.com/football/v2/draft/picks/report?year=2024&limit=40)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -470,7 +470,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/experience/weekly-game-details`
 
-**Valid URL:** [https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1](https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1)
+**Valid URL:** [https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1&includeDriveChart=true&includeReplays=false&includeStandings=false&includeTaggedVideos=false](https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1&includeDriveChart=true&includeReplays=false&includeStandings=false&includeTaggedVideos=false)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 27
+sidebar_position: 28
 description: "NBA — NBA Stats API (stats.nba.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -13,7 +13,7 @@ GET /stats/alltimeleadersgrids
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/alltimeleadersgrids`
 
-**Valid URL:** [https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00](https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=PerGame&SeasonType=Regular+Season&TopX=10](https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=PerGame&SeasonType=Regular+Season&TopX=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ GET /stats/assistleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assistleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00](https://stats.nba.com/stats/assistleaders?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season](https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -272,7 +272,7 @@ GET /stats/assisttracker
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assisttracker`
 
-**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00](https://stats.nba.com/stats/assisttracker?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0](https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -328,7 +328,7 @@ GET /stats/drafthistory
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/drafthistory`
 
-**Valid URL:** [https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024](https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024)
+**Valid URL:** [https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=](https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -377,7 +377,7 @@ GET /stats/fantasywidget
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/fantasywidget`
 
-**Valid URL:** [https://stats.nba.com/stats/fantasywidget?LeagueID=00](https://stats.nba.com/stats/fantasywidget?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=](https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -443,7 +443,7 @@ GET /stats/gamerotation
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/gamerotation`
 
-**Valid URL:** [https://stats.nba.com/stats/gamerotation?LeagueID=00](https://stats.nba.com/stats/gamerotation?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00](https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -503,7 +503,7 @@ GET /stats/homepageleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepageleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/homepageleaders?LeagueID=00](https://stats.nba.com/stats/homepageleaders?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points](https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -574,7 +574,7 @@ GET /stats/homepagev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepagev2`
 
-**Valid URL:** [https://stats.nba.com/stats/homepagev2?LeagueID=00](https://stats.nba.com/stats/homepagev2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional](https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -717,7 +717,7 @@ GET /stats/hustlestatsboxscore
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/hustlestatsboxscore`
 
-**Valid URL:** [https://stats.nba.com/stats/hustlestatsboxscore](https://stats.nba.com/stats/hustlestatsboxscore)
+**Valid URL:** [https://stats.nba.com/stats/hustlestatsboxscore?GameID=0022200021](https://stats.nba.com/stats/hustlestatsboxscore?GameID=0022200021)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -806,7 +806,7 @@ GET /stats/infographicfanduelplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/infographicfanduelplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer](https://stats.nba.com/stats/infographicfanduelplayer)
+**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034](https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -867,7 +867,7 @@ GET /stats/leaderstiles
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaderstiles`
 
-**Valid URL:** [https://stats.nba.com/stats/leaderstiles?LeagueID=00](https://stats.nba.com/stats/leaderstiles?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS](https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -946,7 +946,7 @@ GET /stats/matchupsrollup
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/matchupsrollup`
 
-**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?LeagueID=00](https://stats.nba.com/stats/matchupsrollup?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season](https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1003,7 +1003,7 @@ GET /stats/playbyplayv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playbyplayv3`
 
-**Valid URL:** [https://stats.nba.com/stats/playbyplayv3](https://stats.nba.com/stats/playbyplayv3)
+**Valid URL:** [https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0](https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1033,7 +1033,7 @@ GET /stats/playoffpicture
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playoffpicture`
 
-**Valid URL:** [https://stats.nba.com/stats/playoffpicture?LeagueID=00](https://stats.nba.com/stats/playoffpicture?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=22022](https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=22022)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1173,7 +1173,7 @@ GET /stats/synergyplaytypes
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/synergyplaytypes`
 
-**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1231,7 +1231,7 @@ GET /stats/videodetailsasset
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videodetailsasset`
 
-**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?LeagueID=00](https://stats.nba.com/stats/videodetailsasset?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=](https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1325,7 +1325,7 @@ GET /stats/videoevents
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoevents`
 
-**Valid URL:** [https://stats.nba.com/stats/videoevents](https://stats.nba.com/stats/videoevents)
+**Valid URL:** [https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075](https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1390,7 +1390,7 @@ GET /stats/videoeventsasset
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoeventsasset`
 
-**Valid URL:** [https://stats.nba.com/stats/videoeventsasset](https://stats.nba.com/stats/videoeventsasset)
+**Valid URL:** [https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807](https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1456,7 +1456,7 @@ GET /stats/videostatus
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videostatus`
 
-**Valid URL:** [https://stats.nba.com/stats/videostatus?LeagueID=00](https://stats.nba.com/stats/videostatus?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00](https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

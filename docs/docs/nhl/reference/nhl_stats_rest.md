@@ -38,7 +38,7 @@ Retrieve the component-season configuration.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/componentSeason`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/componentSeason](https://api.nhle.com/stats/rest/en/componentSeason)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ Retrieve the Stats REST API configuration payload.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/config`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/config](https://api.nhle.com/stats/rest/en/config)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -86,7 +86,7 @@ Retrieve a content module by template key.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/content/module/{template_key}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/content/module/X](https://api.nhle.com/stats/rest/en/content/module/X)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -111,7 +111,7 @@ Retrieve the list of countries used in NHL data.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/country`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/country](https://api.nhle.com/stats/rest/en/country)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -150,7 +150,7 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/draft`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/draft](https://api.nhle.com/stats/rest/en/draft)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ Retrieve franchise data.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/franchise`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/franchise](https://api.nhle.com/stats/rest/en/franchise)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -213,7 +213,7 @@ Retrieve game-level data.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/game`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/game](https://api.nhle.com/stats/rest/en/game)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -254,7 +254,7 @@ Retrieve the NHL Stats glossary of stat definitions.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/glossary`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/glossary](https://api.nhle.com/stats/rest/en/glossary)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -289,7 +289,7 @@ Retrieve a goalie statistical report.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/goalie/{report}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/goalie/summary](https://api.nhle.com/stats/rest/en/goalie/summary)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -341,7 +341,7 @@ Retrieve league leaders for a goalie statistical attribute.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/leaders/goalies/{attribute}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/leaders/goalies/X](https://api.nhle.com/stats/rest/en/leaders/goalies/X)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -385,7 +385,7 @@ Retrieve league leaders for a skater statistical attribute.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/leaders/skaters/{attribute}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/leaders/skaters/X](https://api.nhle.com/stats/rest/en/leaders/skaters/X)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -429,7 +429,7 @@ Retrieve milestone data for goalies.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/milestones/goalies`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/milestones/goalies](https://api.nhle.com/stats/rest/en/milestones/goalies)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -474,7 +474,7 @@ Retrieve milestone data for skaters.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/milestones/skaters`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/milestones/skaters](https://api.nhle.com/stats/rest/en/milestones/skaters)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -519,7 +519,7 @@ Retrieve the NHL player registry.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/players`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/players](https://api.nhle.com/stats/rest/en/players)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -544,7 +544,7 @@ Retrieve the list of all NHL seasons.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/season`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/season](https://api.nhle.com/stats/rest/en/season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -595,7 +595,7 @@ Retrieve shift-chart data.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/shiftcharts`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/shiftcharts](https://api.nhle.com/stats/rest/en/shiftcharts)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -642,7 +642,7 @@ Retrieve a skater statistical report.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/skater/{report}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/skater/summary](https://api.nhle.com/stats/rest/en/skater/summary)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -697,7 +697,7 @@ Retrieve the list of all NHL teams.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/team`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/team](https://api.nhle.com/stats/rest/en/team)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -731,7 +731,7 @@ Retrieve a single team by its numeric ID.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/team/id/{team_id}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/team/id/10](https://api.nhle.com/stats/rest/en/team/id/10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -766,7 +766,7 @@ Retrieve a team statistical report.
 
 **Endpoint URL:** `GET https://api.nhle.com/stats/rest/{lang}/team/{report}`
 
-**Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
+**Valid URL:** [https://api.nhle.com/stats/rest/en/team/summary](https://api.nhle.com/stats/rest/en/team/summary)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

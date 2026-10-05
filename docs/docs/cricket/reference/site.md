@@ -15,7 +15,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/scoreboard?dates=20240115&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -50,7 +50,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_scoreboard-example}
 
 ```python
-espn_cricket_scoreboard(dates='20240115')
+espn_cricket_scoreboard(league='eng.1', dates='20240115')
 ```
 
 _Last validated n/a._
@@ -69,7 +69,7 @@ ESPN endpoint.
 
 ### Returns {#espn_cricket_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **header**
 
 | col_name | type | description |
@@ -187,7 +187,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_summary-example}
 
 ```python
-espn_cricket_summary()
+espn_cricket_summary(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -211,7 +211,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_calendar-example}
 
 ```python
-espn_cricket_calendar()
+espn_cricket_calendar(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -222,7 +222,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/news?limit=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -256,7 +256,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_news-example}
 
 ```python
-espn_cricket_news()
+espn_cricket_news(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -286,7 +286,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_injuries-example}
 
 ```python
-espn_cricket_injuries()
+espn_cricket_injuries(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -297,7 +297,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions?limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/transactions?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -311,7 +311,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_transactions-example}
 
 ```python
-espn_cricket_transactions()
+espn_cricket_transactions(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -335,7 +335,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_conferences-example}
 
 ```python
-espn_cricket_conferences()
+espn_cricket_conferences(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -359,7 +359,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_statistics_league-example}
 
 ```python
-espn_cricket_statistics_league()
+espn_cricket_statistics_league(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -383,7 +383,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_draft-example}
 
 ```python
-espn_cricket_draft()
+espn_cricket_draft(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -394,7 +394,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -425,7 +425,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_teams_site-example}
 
 ```python
-espn_cricket_teams_site()
+espn_cricket_teams_site(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -450,7 +450,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team-example}
 
 ```python
-espn_cricket_team(team_id='4')
+espn_cricket_team(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -461,7 +461,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/roster`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/roster?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -547,7 +547,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_roster-example}
 
 ```python
-espn_cricket_team_roster(team_id='4')
+espn_cricket_team_roster(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -589,7 +589,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_schedule-example}
 
 ```python
-espn_cricket_team_schedule(team_id='4')
+espn_cricket_team_schedule(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -614,7 +614,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_record-example}
 
 ```python
-espn_cricket_team_record(team_id='4')
+espn_cricket_team_record(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -639,7 +639,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_depthcharts-example}
 
 ```python
-espn_cricket_team_depthcharts(team_id='4')
+espn_cricket_team_depthcharts(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -670,7 +670,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_injuries-example}
 
 ```python
-espn_cricket_team_injuries(team_id='4')
+espn_cricket_team_injuries(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -695,7 +695,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_transactions-example}
 
 ```python
-espn_cricket_team_transactions(team_id='4')
+espn_cricket_team_transactions(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -720,7 +720,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_history-example}
 
 ```python
-espn_cricket_team_history(team_id='4')
+espn_cricket_team_history(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -731,7 +731,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/{team_id}/news`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/cricket/eng.1/teams/4/news?limit=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -766,7 +766,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_news-example}
 
 ```python
-espn_cricket_team_news(team_id='4')
+espn_cricket_team_news(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -791,7 +791,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_leaders-example}
 
 ```python
-espn_cricket_team_leaders(team_id='4')
+espn_cricket_team_leaders(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -816,7 +816,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_info-example}
 
 ```python
-espn_cricket_player_info(athlete_id='4239')
+espn_cricket_player_info(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -841,7 +841,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_bio-example}
 
 ```python
-espn_cricket_player_bio(athlete_id='4239')
+espn_cricket_player_bio(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -886,7 +886,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_player_news-example}
 
 ```python
-espn_cricket_player_news(athlete_id='4239')
+espn_cricket_player_news(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -931,7 +931,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_standings-example}
 
 ```python
-espn_cricket_standings()
+espn_cricket_standings(league='eng.1')
 ```
 
 _Last validated n/a._

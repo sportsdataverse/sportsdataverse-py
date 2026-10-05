@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 25
+sidebar_position: 26
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -13,7 +13,7 @@ GET /stats/alltimeleadersgrids
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/alltimeleadersgrids`
 
-**Valid URL:** [https://stats.wnba.com/stats/alltimeleadersgrids?LeagueID=10](https://stats.wnba.com/stats/alltimeleadersgrids?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/alltimeleadersgrids?LeagueID=10&PerMode=PerGame&SeasonType=Regular+Season&TopX=10](https://stats.wnba.com/stats/alltimeleadersgrids?LeagueID=10&PerMode=PerGame&SeasonType=Regular+Season&TopX=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ GET /stats/assistleaders
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/assistleaders`
 
-**Valid URL:** [https://stats.wnba.com/stats/assistleaders?LeagueID=10](https://stats.wnba.com/stats/assistleaders?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season](https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -272,7 +272,7 @@ GET /stats/assisttracker
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/assisttracker`
 
-**Valid URL:** [https://stats.wnba.com/stats/assisttracker?LeagueID=10](https://stats.wnba.com/stats/assisttracker?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/assisttracker?LeagueID=10&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0](https://stats.wnba.com/stats/assisttracker?LeagueID=10&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -404,7 +404,7 @@ GET /stats/drafthistory
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/drafthistory`
 
-**Valid URL:** [https://stats.wnba.com/stats/drafthistory?LeagueID=10&Season=2024](https://stats.wnba.com/stats/drafthistory?LeagueID=10&Season=2024)
+**Valid URL:** [https://stats.wnba.com/stats/drafthistory?College=&LeagueID=10&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=](https://stats.wnba.com/stats/drafthistory?College=&LeagueID=10&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -453,7 +453,7 @@ GET /stats/fantasywidget
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/fantasywidget`
 
-**Valid URL:** [https://stats.wnba.com/stats/fantasywidget?LeagueID=10](https://stats.wnba.com/stats/fantasywidget?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=10&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=](https://stats.wnba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=10&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -519,7 +519,7 @@ GET /stats/gamerotation
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/gamerotation`
 
-**Valid URL:** [https://stats.wnba.com/stats/gamerotation?LeagueID=10](https://stats.wnba.com/stats/gamerotation?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/gamerotation?GameID=1022200034&LeagueID=10](https://stats.wnba.com/stats/gamerotation?GameID=1022200034&LeagueID=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -579,7 +579,7 @@ GET /stats/homepageleaders
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/homepageleaders`
 
-**Valid URL:** [https://stats.wnba.com/stats/homepageleaders?LeagueID=10](https://stats.wnba.com/stats/homepageleaders?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/homepageleaders?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points](https://stats.wnba.com/stats/homepageleaders?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -650,7 +650,7 @@ GET /stats/homepagev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/homepagev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/homepagev2?LeagueID=10](https://stats.wnba.com/stats/homepagev2?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/homepagev2?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional](https://stats.wnba.com/stats/homepagev2?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -761,7 +761,7 @@ GET /stats/hustlestatsboxscore
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/hustlestatsboxscore`
 
-**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore](https://stats.wnba.com/stats/hustlestatsboxscore)
+**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore?GameID=0022200021](https://stats.wnba.com/stats/hustlestatsboxscore?GameID=0022200021)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -850,7 +850,7 @@ GET /stats/infographicfanduelplayer
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/infographicfanduelplayer`
 
-**Valid URL:** [https://stats.wnba.com/stats/infographicfanduelplayer](https://stats.wnba.com/stats/infographicfanduelplayer)
+**Valid URL:** [https://stats.wnba.com/stats/infographicfanduelplayer?GameID=1022200034](https://stats.wnba.com/stats/infographicfanduelplayer?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -911,7 +911,7 @@ GET /stats/leaderstiles
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaderstiles`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaderstiles?LeagueID=10](https://stats.wnba.com/stats/leaderstiles?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/leaderstiles?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS](https://stats.wnba.com/stats/leaderstiles?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -990,7 +990,7 @@ GET /stats/playbyplayv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playbyplayv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/playbyplayv2](https://stats.wnba.com/stats/playbyplayv2)
+**Valid URL:** [https://stats.wnba.com/stats/playbyplayv2?GameID=1022200034](https://stats.wnba.com/stats/playbyplayv2?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1062,7 +1062,7 @@ GET /stats/playbyplayv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playbyplayv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/playbyplayv3](https://stats.wnba.com/stats/playbyplayv3)
+**Valid URL:** [https://stats.wnba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0](https://stats.wnba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1092,7 +1092,7 @@ GET /stats/videostatus
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/videostatus`
 
-**Valid URL:** [https://stats.wnba.com/stats/videostatus?LeagueID=10](https://stats.wnba.com/stats/videostatus?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=10](https://stats.wnba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

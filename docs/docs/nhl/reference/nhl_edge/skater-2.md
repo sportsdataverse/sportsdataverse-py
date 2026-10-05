@@ -13,7 +13,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-landing/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-landing](https://api-web.nhle.com/v1/edge/skater-landing)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-landing/now](https://api-web.nhle.com/v1/edge/skater-landing/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

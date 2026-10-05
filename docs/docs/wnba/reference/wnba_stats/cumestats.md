@@ -13,7 +13,7 @@ GET /stats/cumestatsplayer
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/cumestatsplayer`
 
-**Valid URL:** [https://stats.wnba.com/stats/cumestatsplayer?LeagueID=10](https://stats.wnba.com/stats/cumestatsplayer?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=10&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season](https://stats.wnba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=10&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -128,7 +128,7 @@ GET /stats/cumestatsplayergames
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/cumestatsplayergames`
 
-**Valid URL:** [https://stats.wnba.com/stats/cumestatsplayergames?LeagueID=10](https://stats.wnba.com/stats/cumestatsplayergames?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/cumestatsplayergames?LeagueID=10&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0](https://stats.wnba.com/stats/cumestatsplayergames?LeagueID=10&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -166,7 +166,7 @@ GET /stats/cumestatsteam
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/cumestatsteam`
 
-**Valid URL:** [https://stats.wnba.com/stats/cumestatsteam?LeagueID=10](https://stats.wnba.com/stats/cumestatsteam?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=10&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317](https://stats.wnba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=10&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -290,7 +290,7 @@ GET /stats/cumestatsteamgames
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/cumestatsteamgames`
 
-**Valid URL:** [https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10](https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0](https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

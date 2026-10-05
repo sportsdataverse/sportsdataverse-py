@@ -13,7 +13,7 @@ Pull NHL draft picks for a year (and optionally one round).
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/draft/picks/{year}/{round_}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/draft/picks/2024](https://api-web.nhle.com/v1/draft/picks/2024)
+**Valid URL:** [https://api-web.nhle.com/v1/draft/picks/2024/all](https://api-web.nhle.com/v1/draft/picks/2024/all)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -65,7 +65,7 @@ Pull NHL Central Scouting rankings for a draft year.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/draft/rankings/{year}/{category}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/draft/rankings/2024](https://api-web.nhle.com/v1/draft/rankings/2024)
+**Valid URL:** [https://api-web.nhle.com/v1/draft/rankings/2024/1](https://api-web.nhle.com/v1/draft/rankings/2024/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

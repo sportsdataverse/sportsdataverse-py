@@ -13,7 +13,7 @@ Pull a team's full-season schedule.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule-season/{team}/{season}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule-season/TOR](https://api-web.nhle.com/v1/club-schedule-season/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule-season/TOR/now](https://api-web.nhle.com/v1/club-schedule-season/TOR/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -121,7 +121,7 @@ Pull a team's schedule for one month.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule/{team}/month/{month}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/month](https://api-web.nhle.com/v1/club-schedule/TOR/month)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/month/now](https://api-web.nhle.com/v1/club-schedule/TOR/month/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -147,7 +147,7 @@ Pull a team's schedule for one week.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule/{team}/week/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/week](https://api-web.nhle.com/v1/club-schedule/TOR/week)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/week/now](https://api-web.nhle.com/v1/club-schedule/TOR/week/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -173,7 +173,7 @@ Pull a team's season stat block.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-stats/TOR](https://api-web.nhle.com/v1/club-stats/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/club-stats/TOR/now](https://api-web.nhle.com/v1/club-stats/TOR/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -26,7 +26,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_pointer-example}
 
 ```python
-espn_cricket_season_pointer()
+espn_cricket_season_pointer(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -51,7 +51,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_info-example}
 
 ```python
-espn_cricket_season_info(season=2024)
+espn_cricket_season_info(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -76,7 +76,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_types-example}
 
 ```python
-espn_cricket_season_types(season=2024)
+espn_cricket_season_types(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -102,7 +102,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_type-example}
 
 ```python
-espn_cricket_season_type(season=2024, season_type=2)
+espn_cricket_season_type(league='eng.1', season=2024, season_type=2)
 ```
 
 _Last validated n/a._
@@ -129,7 +129,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_group-example}
 
 ```python
-espn_cricket_season_group(season=2024, season_type=2, group_id=80)
+espn_cricket_season_group(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
 _Last validated n/a._
@@ -155,7 +155,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_groups-example}
 
 ```python
-espn_cricket_season_groups(season=2024, season_type=2)
+espn_cricket_season_groups(league='eng.1', season=2024, season_type=2)
 ```
 
 _Last validated n/a._
@@ -166,7 +166,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/types/{season_type}/groups/{group_id}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/teams](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/teams?limit=500](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/teams?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -183,7 +183,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_group_teams-example}
 
 ```python
-espn_cricket_season_group_teams(season=2024, season_type=2, group_id=80)
+espn_cricket_season_group_teams(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
 _Last validated n/a._
@@ -194,7 +194,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/types/{season_type}/groups/{group_id}/children`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/children](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/children)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/children?limit=500](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/groups/80/children?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -211,7 +211,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_group_children-example}
 
 ```python
-espn_cricket_season_group_children(season=2024, season_type=2, group_id=80)
+espn_cricket_season_group_children(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
 _Last validated n/a._
@@ -237,7 +237,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_type_leaders-example}
 
 ```python
-espn_cricket_season_type_leaders(season=2024, season_type=2)
+espn_cricket_season_type_leaders(league='eng.1', season=2024, season_type=2)
 ```
 
 _Last validated n/a._
@@ -263,7 +263,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_type_corrections-example}
 
 ```python
-espn_cricket_season_type_corrections(season=2024, season_type=2)
+espn_cricket_season_type_corrections(league='eng.1', season=2024, season_type=2)
 ```
 
 _Last validated n/a._
@@ -289,7 +289,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_weeks-example}
 
 ```python
-espn_cricket_season_weeks(season=2024, season_type=2)
+espn_cricket_season_weeks(league='eng.1', season=2024, season_type=2)
 ```
 
 _Last validated n/a._
@@ -316,7 +316,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_week-example}
 
 ```python
-espn_cricket_season_week(season=2024, season_type=2, week=1)
+espn_cricket_season_week(league='eng.1', season=2024, season_type=2, week=1)
 ```
 
 _Last validated n/a._
@@ -344,7 +344,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_week_powerindex-example}
 
 ```python
-espn_cricket_season_week_powerindex(season=2024, season_type=2, week=8)
+espn_cricket_season_week_powerindex(league='eng.1', season=2024, season_type=2, week=8)
 ```
 
 _Last validated n/a._
@@ -355,7 +355,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/types/{season_type}/weeks/{week}/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/weeks/1/events](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/weeks/1/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/weeks/1/events?limit=500](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/types/2/weeks/1/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -372,7 +372,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_week_games-example}
 
 ```python
-espn_cricket_season_week_games(season=2024, season_type=2, week=1)
+espn_cricket_season_week_games(league='eng.1', season=2024, season_type=2, week=1)
 ```
 
 _Last validated n/a._
@@ -383,7 +383,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/teams](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -399,7 +399,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_teams-example}
 
 ```python
-espn_cricket_season_teams(season=2024)
+espn_cricket_season_teams(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -425,7 +425,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_team-example}
 
 ```python
-espn_cricket_season_team(season=2024, team_id='4')
+espn_cricket_season_team(league='eng.1', season=2024, team_id='4')
 ```
 
 _Last validated n/a._
@@ -436,7 +436,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/athletes](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/athletes?limit=100&page=1](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/athletes?limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -452,7 +452,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_players-example}
 
 ```python
-espn_cricket_season_players(season=2024)
+espn_cricket_season_players(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -463,7 +463,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/coaches`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/coaches](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/coaches)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/coaches?limit=500](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/coaches?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -478,7 +478,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_coaches-example}
 
 ```python
-espn_cricket_season_coaches(season=2024)
+espn_cricket_season_coaches(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -503,7 +503,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_draft-example}
 
 ```python
-espn_cricket_season_draft(season=2024)
+espn_cricket_season_draft(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -529,7 +529,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_draft_round_picks-example}
 
 ```python
-espn_cricket_season_draft_round_picks(season=2024, round_num='1')
+espn_cricket_season_draft_round_picks(league='eng.1', season=2024, round_num='1')
 ```
 
 _Last validated n/a._
@@ -554,7 +554,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_futures-example}
 
 ```python
-espn_cricket_season_futures(season=2024)
+espn_cricket_season_futures(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -579,7 +579,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_freeagents-example}
 
 ```python
-espn_cricket_season_freeagents(season=2024)
+espn_cricket_season_freeagents(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -605,7 +605,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_powerindex-example}
 
 ```python
-espn_cricket_season_powerindex(season=2024)
+espn_cricket_season_powerindex(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -630,7 +630,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_powerindex_leaders-example}
 
 ```python
-espn_cricket_season_powerindex_leaders(season=2024)
+espn_cricket_season_powerindex_leaders(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._
@@ -641,7 +641,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/{season}/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/awards](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/awards?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons/2024/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -656,7 +656,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_season_awards-example}
 
 ```python
-espn_cricket_season_awards(season=2024)
+espn_cricket_season_awards(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._

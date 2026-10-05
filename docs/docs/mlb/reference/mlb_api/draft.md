@@ -13,7 +13,7 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/draft/{year}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2024](https://statsapi.mlb.com/api/v1/draft/2024)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2024?limit=100](https://statsapi.mlb.com/api/v1/draft/2024?limit=100)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -103,7 +103,7 @@ def mlb_schedule_postseason(
     """GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason``
-    Example URL: https://statsapi.mlb.com/api/v1/schedule/postseason
+    Example URL: https://statsapi.mlb.com/api/v1/schedule/postseason?sportId=1
 
     Args:
         season: season query parameter.
@@ -460,7 +460,7 @@ def mlb_team(
     """GET /api/v1/teams/{teamId} — single team detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}``
-    Example URL: https://statsapi.mlb.com/api/v1/teams/10
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10?sportId=1
 
     Args:
         team_id: team_id path parameter.
@@ -512,7 +512,7 @@ def mlb_team_roster(
     """GET /api/v1/teams/{teamId}/roster — team roster.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster``
-    Example URL: https://statsapi.mlb.com/api/v1/teams/10/roster
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10/roster?rosterType=active
 
     Args:
         team_id: team_id path parameter.
@@ -564,7 +564,7 @@ def mlb_team_alumni(
     """GET /api/v1/teams/{teamId}/alumni — players who played for this team in a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/alumni``
-    Example URL: https://statsapi.mlb.com/api/v1/teams/10/alumni
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10/alumni?group=hitting
 
     Args:
         team_id: team_id path parameter.
@@ -612,7 +612,7 @@ def mlb_team_affiliates(
     """GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/affiliates``
-    Example URL: https://statsapi.mlb.com/api/v1/teams/affiliates
+    Example URL: https://statsapi.mlb.com/api/v1/teams/affiliates?sportId=1
 
     Args:
         team_ids: teamIds query parameter.
@@ -799,7 +799,7 @@ def mlb_sport_players(
     """GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/sports/{sport_id}/players``
-    Example URL: https://statsapi.mlb.com/api/v1/sports
+    Example URL: https://statsapi.mlb.com/api/v1/sports/1/players
 
     Args:
         sport_id: sport_id path parameter.
@@ -886,7 +886,7 @@ def mlb_leagues(
     """GET /api/v1/leagues — list leagues.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/leagues``
-    Example URL: https://statsapi.mlb.com/api/v1/leagues
+    Example URL: https://statsapi.mlb.com/api/v1/leagues?sportId=1
 
     Args:
         sport_id: sportId query parameter.
@@ -931,7 +931,7 @@ def mlb_season(
     """GET /api/v1/seasons/{seasonId} — single season detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/seasons/{season_id}``
-    Example URL: https://statsapi.mlb.com/api/v1/seasons/X
+    Example URL: https://statsapi.mlb.com/api/v1/seasons/X?sportId=1
 
     Args:
         season_id: season_id path parameter.
@@ -1145,7 +1145,7 @@ def mlb_award_recipients(
     """GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients``
-    Example URL: https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients
+    Example URL: https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients?sportId=1
 
     Args:
         award_id: award_id path parameter.
@@ -1194,7 +1194,7 @@ def mlb_draft(
     """GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/draft/{year}``
-    Example URL: https://statsapi.mlb.com/api/v1/draft/2024
+    Example URL: https://statsapi.mlb.com/api/v1/draft/2024?limit=100
 
     Args:
         year: year path parameter.

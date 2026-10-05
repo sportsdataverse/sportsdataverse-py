@@ -1,11 +1,67 @@
 ---
-title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park"
-sidebar_label: "Leaderboard: timer–park"
+title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: year–park"
+sidebar_label: "Leaderboard: year–park"
 sidebar_position: 2
-description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: year–park — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park
+# MLB — MLB Statcast (Baseball Savant) — Leaderboard: year–park
+
+## mlb_statcast_leaderboard_year_to_year
+
+GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard.
+
+**Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year`
+
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year?csv=true](https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year?csv=true)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `type` | `type` |  |  | `Y` | type query parameter. |
+| `year` | `year` |  |  | `Y` | year query parameter. |
+| `team` | `team` |  |  | `Y` | team query parameter. |
+| `csv` | `csv` |  |  | `Y` | csv query parameter. |
+
+### Returns {#mlb_statcast_leaderboard_year_to_year-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `name` | character | Player (or entity) name. |
+| `entity_id` | integer | MLBAM id of the player/team entity. |
+| `2015` | character | 2015. |
+| `2016` | character | 2016. |
+| `delta_2015_2016` | character | Delta 2015 2016. |
+| `2017` | character | 2017. |
+| `delta_2016_2017` | character | Delta 2016 2017. |
+| `2018` | character | 2018. |
+| `delta_2017_2018` | character | Delta 2017 2018. |
+| `2019` | character | 2019. |
+| `delta_2018_2019` | character | Delta 2018 2019. |
+| `2020` | character | 2020. |
+| `delta_2019_2020` | character | Delta 2019 2020. |
+| `2021` | character | 2021. |
+| `delta_2020_2021` | character | Delta 2020 2021. |
+| `2022` | character | 2022. |
+| `delta_2021_2022` | character | Delta 2021 2022. |
+| `2023` | character | 2023. |
+| `delta_2022_2023` | character | Delta 2022 2023. |
+| `2024` | character | 2024. |
+| `delta_2023_2024` | character | Delta 2023 2024. |
+| `2025` | character | 2025. |
+| `delta_2024_2025` | character | Delta 2024 2025. |
+| `2026` | character | 2026. |
+| `delta_2025_2026` | character | Delta 2025 2026. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#mlb_statcast_leaderboard_year_to_year-example}
+
+```python
+mlb_statcast_leaderboard_year_to_year()
+```
+
+_Last validated n/a._
 
 ## mlb_statcast_leaderboard_timer_infractions
 
@@ -13,7 +69,7 @@ GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions](https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions?csv=true](https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -54,7 +110,7 @@ GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated s
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/custom`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/custom](https://baseballsavant.mlb.com/leaderboard/custom)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/custom?csv=true](https://baseballsavant.mlb.com/leaderboard/custom?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

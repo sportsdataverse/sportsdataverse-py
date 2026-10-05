@@ -13,7 +13,7 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-offense/overview/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -75,7 +75,7 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-offense/overview/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -144,7 +144,7 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-defense/overview/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -213,7 +213,7 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-defense/overview/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

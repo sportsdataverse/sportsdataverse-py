@@ -615,7 +615,7 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/sports/{sport_id}/players`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/sports](https://statsapi.mlb.com/api/v1/sports)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/sports/1/players](https://statsapi.mlb.com/api/v1/sports/1/players)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -731,7 +731,7 @@ GET /api/v1/leagues — list leagues.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/leagues`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/leagues](https://statsapi.mlb.com/api/v1/leagues)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/leagues?sportId=1](https://statsapi.mlb.com/api/v1/leagues?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -801,7 +801,7 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/seasons/{season_id}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/X](https://statsapi.mlb.com/api/v1/seasons/X)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/X?sportId=1](https://statsapi.mlb.com/api/v1/seasons/X?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -984,7 +984,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients](https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients?sportId=1](https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

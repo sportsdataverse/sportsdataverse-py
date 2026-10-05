@@ -13,7 +13,7 @@ GET /stats/teamdetails
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamdetails`
 
-**Valid URL:** [https://stats.nba.com/stats/teamdetails](https://stats.nba.com/stats/teamdetails)
+**Valid URL:** [https://stats.nba.com/stats/teamdetails?TeamID=1611661328](https://stats.nba.com/stats/teamdetails?TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -121,7 +121,7 @@ GET /stats/teamestimatedmetrics
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamestimatedmetrics`
 
-**Valid URL:** [https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00](https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00&SeasonType=Regular+Season](https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ GET /stats/teamgamelog
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamgamelog`
 
-**Valid URL:** [https://stats.nba.com/stats/teamgamelog?LeagueID=00](https://stats.nba.com/stats/teamgamelog?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328](https://stats.nba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -241,7 +241,7 @@ GET /stats/teamgamelogs
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamgamelogs`
 
-**Valid URL:** [https://stats.nba.com/stats/teamgamelogs?LeagueID=00](https://stats.nba.com/stats/teamgamelogs?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -346,7 +346,7 @@ GET /stats/teaminfocommon
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teaminfocommon`
 
-**Valid URL:** [https://stats.nba.com/stats/teaminfocommon?LeagueID=00](https://stats.nba.com/stats/teaminfocommon?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teaminfocommon?LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328](https://stats.nba.com/stats/teaminfocommon?LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -417,7 +417,7 @@ GET /stats/teamvsplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamvsplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/teamvsplayer?LeagueID=00](https://stats.nba.com/stats/teamvsplayer?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932](https://stats.nba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -748,7 +748,7 @@ GET /stats/teamyearbyyearstats
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamyearbyyearstats`
 
-**Valid URL:** [https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00](https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328](https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

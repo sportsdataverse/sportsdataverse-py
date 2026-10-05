@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/seasons](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/events](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/events?limit=500](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/teams](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/venues](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/franchises](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/coaches/1/record](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/positions](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/positions?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/tournaments](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/awards](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/awards?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba-development/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

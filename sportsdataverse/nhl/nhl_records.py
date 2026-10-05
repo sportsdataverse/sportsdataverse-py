@@ -1591,7 +1591,7 @@ def nhl_records_gm_career(
     """General Manager career records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/general-manager/{gm_id}``
-    Example URL: https://records.nhl.com/site/api/general-manager
+    Example URL: https://records.nhl.com/site/api/general-manager-career-records
 
     Args:
         gm_id: gm_id path parameter.

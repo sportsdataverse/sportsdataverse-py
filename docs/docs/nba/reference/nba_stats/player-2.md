@@ -1,11 +1,77 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — Player: playerprofilev2–playervsplayer"
-sidebar_label: "Player: playerprofilev2–playervsplayer"
+title: "NBA — NBA Stats API (stats.nba.com) — Player: playerindex–playervsplayer"
+sidebar_label: "Player: playerindex–playervsplayer"
 sidebar_position: 11
-description: "NBA — NBA Stats API (stats.nba.com) — Player: playerprofilev2–playervsplayer — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — NBA Stats API (stats.nba.com) — Player: playerindex–playervsplayer — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — Player: playerprofilev2–playervsplayer
+# NBA — NBA Stats API (stats.nba.com) — Player: playerindex–playervsplayer
+
+## nba_stats_playerindex
+
+GET /stats/playerindex
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playerindex`
+
+**Valid URL:** [https://stats.nba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=00&TeamID=0&Weight=](https://stats.nba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=00&TeamID=0&Weight=)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Active` | `active_nullable` |  |  | `Y` |  |
+| `AllStar` | `allstar_nullable` |  |  | `Y` |  |
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftRound` | `draft_round_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `Historical` | `historical_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_playerindex-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player_last_name` | character | Participant last name. |
+| `player_first_name` | character | Participant first name. |
+| `player_slug` | character | URL-safe player identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `is_defunct` | integer | Flag indicating is defunct for the requested NBA or WNBA Stats context. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `jersey_number` | character | Jersey number. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | character | Player weight in pounds. |
+| `college` | character | College. |
+| `country` | character | Venue country. |
+| `draft_year` | integer | Draft year (4-digit). |
+| `draft_round` | integer | Round of the draft selection. |
+| `draft_number` | integer | The number pick that was used to select a given player. |
+| `roster_status` | numeric | Payroll table the row came from: Active, IL, or Retained Salary. |
+| `from_year` | character | First season. |
+| `to_year` | character | Most recent season. |
+| `pts` | numeric | Points scored. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `stats_timeframe` | character | Time value for stats timeframe in the NBA or WNBA Stats result set. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_playerindex-example}
+
+```python
+nba_stats_playerindex(league_id='00')
+```
+
+_Last validated n/a._
 
 ## nba_stats_playerprofilev2
 
@@ -13,7 +79,7 @@ GET /stats/playerprofilev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playerprofilev2`
 
-**Valid URL:** [https://stats.nba.com/stats/playerprofilev2?LeagueID=00](https://stats.nba.com/stats/playerprofilev2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/playerprofilev2?LeagueID=00&PerMode=Totals&PlayerID=1628932](https://stats.nba.com/stats/playerprofilev2?LeagueID=00&PerMode=Totals&PlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -458,7 +524,7 @@ GET /stats/playervsplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playervsplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/playervsplayer?LeagueID=00](https://stats.nba.com/stats/playervsplayer?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488](https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

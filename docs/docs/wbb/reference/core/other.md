@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events?limit=500](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/teams](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/venues](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/franchises](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches/1/record](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/tournaments](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/awards](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/awards?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -633,7 +633,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/{year}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/athletes?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/athletes?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -140,7 +140,7 @@ def torvik_game_stats(
     """GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-factors log (one row per team-game, 31 positional fields).
 
     Endpoint: ``GET https://barttorvik.com/getgamestats.php``
-    Example URL: https://barttorvik.com/getgamestats.php?year=2025
+    Example URL: https://barttorvik.com/getgamestats.php?year=2025&json=1
 
     Args:
         year: 4-digit season ending year (2025 = the 2024-25 season).
@@ -196,7 +196,7 @@ def torvik_player_stats(
     """GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per player, 67 positional fields).
 
     Endpoint: ``GET https://barttorvik.com/getadvstats.php``
-    Example URL: https://barttorvik.com/getadvstats.php?year=2025
+    Example URL: https://barttorvik.com/getadvstats.php?year=2025&csv=1
 
     Args:
         year: 4-digit season ending year (2025 = the 2024-25 season).

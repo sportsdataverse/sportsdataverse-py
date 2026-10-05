@@ -15,7 +15,7 @@ toc_max_heading_level: 2
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/teams/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/teams/](https://ipa.247sports.com/rdb/v1/teams/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/teams/?sportKey=1](https://ipa.247sports.com/rdb/v1/teams/?sportKey=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -52,7 +52,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/institutionrankings/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/?pagesize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/?pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -118,7 +118,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/recruits/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026&pagesize=50](https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026&pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -184,7 +184,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/transfers/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026&pagesize=50](https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026&pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -254,7 +254,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/coaches/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026&pageSize=50](https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026&pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -303,7 +303,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -352,7 +352,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -406,7 +406,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -443,7 +443,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/](https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/?pageSize=50](https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -530,7 +530,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/tags/autocomplete/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith](https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith&items=10](https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith&items=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

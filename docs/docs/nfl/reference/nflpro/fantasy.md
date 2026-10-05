@@ -13,7 +13,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/fantasy/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -239,7 +239,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/fantasy/game`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB](https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&limit=500&positionGroup=QB](https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&limit=500&positionGroup=QB)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

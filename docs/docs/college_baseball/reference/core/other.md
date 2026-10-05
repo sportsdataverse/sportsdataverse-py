@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/seasons](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/events](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/events?limit=500](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/teams](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/venues](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/franchises](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/coaches/1/record](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/positions](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/positions?limit=200](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/tournaments](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/awards](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/awards?limit=200](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -637,7 +637,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/recruiting/{year}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/recruiting/2026/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/recruiting/2026/athletes?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-baseball/recruiting/2026/athletes?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -13,7 +13,7 @@ GET /stats/commonallplayers
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonallplayers`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?LeagueID=10](https://stats.wnba.com/stats/commonallplayers?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10](https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -60,7 +60,7 @@ GET /stats/commonplayerinfo
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonplayerinfo`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10](https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10&PlayerID=1628932](https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10&PlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -142,7 +142,7 @@ GET /stats/commonplayoffseries
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonplayoffseries`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -177,7 +177,7 @@ GET /stats/commonteamroster
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonteamroster`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10](https://stats.wnba.com/stats/commonteamroster?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317](https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

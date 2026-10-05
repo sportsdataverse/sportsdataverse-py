@@ -13,7 +13,7 @@ GET /stats/boxscoreadvancedv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreadvancedv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreadvancedv2](https://stats.wnba.com/stats/boxscoreadvancedv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreadvancedv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreadvancedv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -114,7 +114,7 @@ GET /stats/boxscoreadvancedv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreadvancedv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreadvancedv3](https://stats.wnba.com/stats/boxscoreadvancedv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -225,7 +225,7 @@ GET /stats/boxscoredefensivev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoredefensivev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoredefensivev2](https://stats.wnba.com/stats/boxscoredefensivev2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoredefensivev2?GameID=1022200034](https://stats.wnba.com/stats/boxscoredefensivev2?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -300,7 +300,7 @@ GET /stats/boxscorefourfactorsv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorefourfactorsv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorefourfactorsv2](https://stats.wnba.com/stats/boxscorefourfactorsv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorefourfactorsv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscorefourfactorsv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -372,7 +372,7 @@ GET /stats/boxscorefourfactorsv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorefourfactorsv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorefourfactorsv3](https://stats.wnba.com/stats/boxscorefourfactorsv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -454,7 +454,7 @@ GET /stats/boxscorehustlev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorehustlev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorehustlev2](https://stats.wnba.com/stats/boxscorehustlev2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorehustlev2?GameID=0022200021](https://stats.wnba.com/stats/boxscorehustlev2?GameID=0022200021)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -493,7 +493,7 @@ GET /stats/boxscorematchupsv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorematchupsv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorematchupsv3](https://stats.wnba.com/stats/boxscorematchupsv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorematchupsv3?GameID=1022200034](https://stats.wnba.com/stats/boxscorematchupsv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -553,7 +553,7 @@ GET /stats/boxscoremiscv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoremiscv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoremiscv2](https://stats.wnba.com/stats/boxscoremiscv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoremiscv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoremiscv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -633,7 +633,7 @@ GET /stats/boxscoremiscv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoremiscv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoremiscv3](https://stats.wnba.com/stats/boxscoremiscv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -723,7 +723,7 @@ GET /stats/boxscoreplayertrackv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreplayertrackv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreplayertrackv3](https://stats.wnba.com/stats/boxscoreplayertrackv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreplayertrackv3?GameID=1022200034](https://stats.wnba.com/stats/boxscoreplayertrackv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -823,7 +823,7 @@ GET /stats/boxscorescoringv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorescoringv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorescoringv2](https://stats.wnba.com/stats/boxscorescoringv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorescoringv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscorescoringv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -909,7 +909,7 @@ GET /stats/boxscorescoringv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorescoringv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorescoringv3](https://stats.wnba.com/stats/boxscorescoringv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1005,7 +1005,7 @@ GET /stats/boxscoresummaryv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv2](https://stats.wnba.com/stats/boxscoresummaryv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv2?GameID=1022200034](https://stats.wnba.com/stats/boxscoresummaryv2?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -179,7 +179,7 @@ Pull the single-day scoreboard for `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/score/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/score](https://api-web.nhle.com/v1/score)
+**Valid URL:** [https://api-web.nhle.com/v1/score/now](https://api-web.nhle.com/v1/score/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -255,7 +255,7 @@ Pull the calendar of game-days for the season.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule-calendar/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule-calendar](https://api-web.nhle.com/v1/schedule-calendar)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule-calendar/now](https://api-web.nhle.com/v1/schedule-calendar/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -280,7 +280,7 @@ Pull a single playoff series payload.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule/playoff-series/2025/a](https://api-web.nhle.com/v1/schedule/playoff-series/2025/a)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule/playoff-series/20242025/a](https://api-web.nhle.com/v1/schedule/playoff-series/20242025/a)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -353,7 +353,7 @@ Pull the NHL standings.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/standings/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/standings](https://api-web.nhle.com/v1/standings)
+**Valid URL:** [https://api-web.nhle.com/v1/standings/now](https://api-web.nhle.com/v1/standings/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -502,7 +502,7 @@ Pull a team's roster.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/roster/{team}/{season}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/roster/TOR](https://api-web.nhle.com/v1/roster/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/roster/TOR/current](https://api-web.nhle.com/v1/roster/TOR/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -577,7 +577,7 @@ Pull skater stat leaders.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/skater-stats-leaders/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/skater-stats-leaders](https://api-web.nhle.com/v1/skater-stats-leaders)
+**Valid URL:** [https://api-web.nhle.com/v1/skater-stats-leaders/current](https://api-web.nhle.com/v1/skater-stats-leaders/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -626,7 +626,7 @@ Pull goalie stat leaders.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/goalie-stats-leaders/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/goalie-stats-leaders](https://api-web.nhle.com/v1/goalie-stats-leaders)
+**Valid URL:** [https://api-web.nhle.com/v1/goalie-stats-leaders/current](https://api-web.nhle.com/v1/goalie-stats-leaders/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

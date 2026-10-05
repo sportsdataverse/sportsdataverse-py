@@ -15,7 +15,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates=20240115](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates=20240115)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates=20240115&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -105,7 +105,7 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -359,7 +359,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/news`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/news](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/news)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/news?limit=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -434,7 +434,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/transactions`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/transactions](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/transactions)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/transactions?limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/transactions?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -531,7 +531,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -598,7 +598,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/{team_id}/roster`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -844,7 +844,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/{team_id}/news`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/news](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/news)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/news?limit=50](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/news?limit=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

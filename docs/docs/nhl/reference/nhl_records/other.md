@@ -735,7 +735,7 @@ General Manager career records.
 
 **Endpoint URL:** `GET https://records.nhl.com/site/api/general-manager/{gm_id}`
 
-**Valid URL:** [https://records.nhl.com/site/api/general-manager](https://records.nhl.com/site/api/general-manager)
+**Valid URL:** [https://records.nhl.com/site/api/general-manager-career-records](https://records.nhl.com/site/api/general-manager-career-records)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
