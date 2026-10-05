@@ -222,8 +222,9 @@ and are never touched by edits to `current`.
      — edit them directly.
    - **Home page**: `docs/src/pages/index.tsx`.
    - **Changelog**: edit the repo-root `CHANGELOG.md`; the
-     `sync-docs-changelog` pre-commit hook mirrors it to
-     `docs/src/pages/CHANGELOG.md` (served at `/CHANGELOG`).
+     `sync-docs-changelog` pre-commit hook splits it into
+     `docs/src/pages/CHANGELOG.md` (the newest releases, served at `/CHANGELOG`),
+     `changelog-unreleased.md` and `changelog-archive.md`.
 2. Commit (pre-commit runs the drift gate, doctoc, markdownlint, and the
    changelog sync). Preview locally with `cd docs && yarn build` if you like.
 3. Push to `main`. Vercel rebuilds and the change is live at the default

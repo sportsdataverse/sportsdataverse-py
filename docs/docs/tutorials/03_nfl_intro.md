@@ -2,9 +2,12 @@
 title: NFL tutorial
 sidebar_label: NFL
 sidebar_position: 6
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/03_nfl_intro.ipynb
 ---
 
 # 🏈 The NFL with `sportsdataverse-py`
+
+> This page is the executed notebook [`03_nfl_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/03_nfl_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/03_nfl_intro.ipynb) to run it yourself.
 
 Welcome to gridiron data! 🎉 In a handful of lines you're about to pull
 **standings, rosters, weekly injury reports, NextGen Stats tracking
@@ -32,26 +35,26 @@ full reference.
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`nfl_standings`](../nfl/reference/nfl_api.md#nfl_standings) | Team standings for a season/week — one row per team | 🟢 premium (NFL.com) |
-| [`nfl_rosters`](../nfl/reference/nfl_api.md#nfl_rosters) | Season rosters, one row per team (players nested) | 🟢 premium (NFL.com) |
-| [`nfl_injuries`](../nfl/reference/nfl_api.md#nfl_injuries) | Weekly injury report, one row per player | 🟢 premium (NFL.com) |
-| [`nfl_weeks`](../nfl/reference/nfl_api.md#nfl_weeks) | The week calendar (bye weeks, date ranges) | 🟢 premium (NFL.com) |
-| [`nfl_weekly_game_details`](../nfl/reference/nfl_api.md#nfl_weekly_game_details) | Rich per-game details for a week (drive charts, standings) | 🟢 premium (NFL.com) |
-| [`nfl_game_summaries`](../nfl/reference/nfl_api.md#nfl_game_summaries) | Live game state, one row per game | 🟢 premium (NFL.com) |
-| [`nfl_team`](../nfl/reference/nfl_api.md#nfl_team) | Single-team detail by `team_id` | 🟢 premium (NFL.com) |
-| [`nfl_ngs_statboard`](../nfl/reference/additional.md#nfl_ngs_statboard) | NextGen Stats season leaderboard (passing/rushing/receiving) | 🟢 premium (NextGen Stats) |
-| [`nfl_ngs_leaders`](../nfl/reference/additional.md#nfl_ngs_leaders) | NextGen top-N highlight boards (speed, YAC over expected, …) | 🟢 premium (NextGen Stats) |
-| [`nfl_ngs_league_schedule`](../nfl/reference/additional.md#nfl_ngs_league_schedule) | NextGen schedule — source of NGS `gameId`s | 🟢 premium (NextGen Stats) |
-| [`nfl_ngs_gamecenter_overview`](../nfl/reference/additional.md#nfl_ngs_gamecenter_overview) | Per-game NextGen player splits (passers/rushers/…) | 🟢 premium (NextGen Stats) |
-| [`load_nfl_pbp`](../nfl/reference/loaders.md#load_nfl_pbp) | Full nflfastR play-by-play (370+ columns) | 📦 nflverse release |
-| [`load_nfl_player_stats`](../nfl/reference/additional.md#load_nfl_player_stats) | Weekly player box-score stats | 📦 nflverse release |
-| [`load_nfl_nextgen_stats`](../nfl/reference/additional.md#load_nfl_nextgen_stats) | NextGen Stats back to 2016 (release parquet) | 📦 nflverse release |
-| [`load_nfl_rosters`](../nfl/reference/loaders.md#load_nfl_rosters) | Season rosters with IDs & bios | 📦 nflverse release |
-| [`espn_nfl_schedule`](../nfl/reference/additional.md#espn_nfl_schedule) · [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard) | ESPN scoreboard/schedule (no auth) | 🔵 ESPN (secondary) |
-| [`load_nfl_snap_counts`](../nfl/reference/loaders.md#load_nfl_snap_counts) | Weekly snap counts & snap-share % per player | 📦 nflverse release |
-| [`load_nfl_depth_charts`](../nfl/reference/loaders.md#load_nfl_depth_charts) | Weekly depth charts, one row per slotted player | 📦 nflverse release |
-| [`load_nfl_schedule`](../nfl/reference/additional.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
-| [`load_nfl_draft_picks`](../nfl/reference/additional.md#load_nfl_draft_picks) | Every draft pick + career value, one row per pick | 📦 nflverse release |
+| [`nfl_standings`](../nfl/reference/nfl_api/other.md#nfl_standings) | Team standings for a season/week — one row per team | 🟢 premium (NFL.com) |
+| [`nfl_rosters`](../nfl/reference/nfl_api/other.md#nfl_rosters) | Season rosters, one row per team (players nested) | 🟢 premium (NFL.com) |
+| [`nfl_injuries`](../nfl/reference/nfl_api/other.md#nfl_injuries) | Weekly injury report, one row per player | 🟢 premium (NFL.com) |
+| [`nfl_weeks`](../nfl/reference/nfl_api/other.md#nfl_weeks) | The week calendar (bye weeks, date ranges) | 🟢 premium (NFL.com) |
+| [`nfl_weekly_game_details`](../nfl/reference/nfl_api/other.md#nfl_weekly_game_details) | Rich per-game details for a week (drive charts, standings) | 🟢 premium (NFL.com) |
+| [`nfl_game_summaries`](../nfl/reference/nfl_api/game.md#nfl_game_summaries) | Live game state, one row per game | 🟢 premium (NFL.com) |
+| [`nfl_team`](../nfl/reference/nfl_api/other.md#nfl_team) | Single-team detail by `team_id` | 🟢 premium (NFL.com) |
+| [`nfl_ngs_statboard`](../nfl/reference/additional/nfl-2.md#nfl_ngs_statboard) | NextGen Stats season leaderboard (passing/rushing/receiving) | 🟢 premium (NextGen Stats) |
+| [`nfl_ngs_leaders`](../nfl/reference/additional/nfl.md#nfl_ngs_leaders) | NextGen top-N highlight boards (speed, YAC over expected, …) | 🟢 premium (NextGen Stats) |
+| [`nfl_ngs_league_schedule`](../nfl/reference/additional/nfl.md#nfl_ngs_league_schedule) | NextGen schedule — source of NGS `gameId`s | 🟢 premium (NextGen Stats) |
+| [`nfl_ngs_gamecenter_overview`](../nfl/reference/additional/nfl.md#nfl_ngs_gamecenter_overview) | Per-game NextGen player splits (passers/rushers/…) | 🟢 premium (NextGen Stats) |
+| [`load_nfl_pbp`](../nfl/reference/loaders/pbp.md#load_nfl_pbp) | Full nflfastR play-by-play (370+ columns) | 📦 nflverse release |
+| [`load_nfl_player_stats`](../nfl/reference/additional/dataset-loaders-3.md#load_nfl_player_stats) | Weekly player box-score stats | 📦 nflverse release |
+| [`load_nfl_nextgen_stats`](../nfl/reference/additional/dataset-loaders-2.md#load_nfl_nextgen_stats) | NextGen Stats back to 2016 (release parquet) | 📦 nflverse release |
+| [`load_nfl_rosters`](../nfl/reference/loaders/other.md#load_nfl_rosters) | Season rosters with IDs & bios | 📦 nflverse release |
+| [`espn_nfl_schedule`](../nfl/reference/additional/play-by-play-schedule-rosters.md#espn_nfl_schedule) · [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard) | ESPN scoreboard/schedule (no auth) | 🔵 ESPN (secondary) |
+| [`load_nfl_snap_counts`](../nfl/reference/loaders/other.md#load_nfl_snap_counts) | Weekly snap counts & snap-share % per player | 📦 nflverse release |
+| [`load_nfl_depth_charts`](../nfl/reference/loaders/other.md#load_nfl_depth_charts) | Weekly depth charts, one row per slotted player | 📦 nflverse release |
+| [`load_nfl_schedule`](../nfl/reference/additional/dataset-loaders-3.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
+| [`load_nfl_draft_picks`](../nfl/reference/additional/dataset-loaders.md#load_nfl_draft_picks) | Every draft pick + career value, one row per pick | 📦 nflverse release |
 | `get_current_nfl_season` · `most_recent_nfl_season` | Season helpers | 🟢 helper |
 
 
@@ -108,7 +111,7 @@ SEASON = 2024
 
 ## 🟢 Premium first: NFL.com native standings
 
-The headliner. [`nfl_standings`](../nfl/reference/nfl_api.md#nfl_standings)
+The headliner. [`nfl_standings`](../nfl/reference/nfl_api/other.md#nfl_standings)
 returns **one row per team** with conference/division records, streaks,
 clinch flags, point differentials — the works. Pass `season`, `season_type`
 (`"REG"`/`"POST"`/`"PRE"` — *strings*, not ESPN's numeric codes) and `week`.
@@ -186,16 +189,16 @@ cols = [
 
 ## 👥 Rosters & the week calendar
 
-[`nfl_rosters`](../nfl/reference/nfl_api.md#nfl_rosters) gives one row per
+[`nfl_rosters`](../nfl/reference/nfl_api/other.md#nfl_rosters) gives one row per
 team for a season, with the player list nested under `persons` (great for a
-team directory). [`nfl_weeks`](../nfl/reference/nfl_api.md#nfl_weeks) is the
+team directory). [`nfl_weeks`](../nfl/reference/nfl_api/other.md#nfl_weeks) is the
 season's week calendar — handy for finding bye weeks and date ranges before
 you loop over a slate.
 
 | Function | One row per | Key columns |
 |---|---|---|
-| [`nfl_rosters`](../nfl/reference/nfl_api.md#nfl_rosters) | team | `team_abbreviation`, `team_conference_abbr`, `persons` |
-| [`nfl_weeks`](../nfl/reference/nfl_api.md#nfl_weeks) | week | `week`, `week_type`, `bye_teams`, `date_begin` |
+| [`nfl_rosters`](../nfl/reference/nfl_api/other.md#nfl_rosters) | team | `team_abbreviation`, `team_conference_abbr`, `persons` |
+| [`nfl_weeks`](../nfl/reference/nfl_api/other.md#nfl_weeks) | week | `week`, `week_type`, `bye_teams`, `date_begin` |
 
 
 ```python
@@ -265,7 +268,7 @@ cols = ["season", "week", "week_type", "date_begin", "date_end", "bye_teams"]
 
 ## 🏥 The weekly injury report
 
-[`nfl_injuries`](../nfl/reference/nfl_api.md#nfl_injuries) is the official
+[`nfl_injuries`](../nfl/reference/nfl_api/other.md#nfl_injuries) is the official
 weekly injury report — **one row per listed player** with their
 `injury_status` (Out / Doubtful / Questionable), practice participation, and
 team. This is the premium native feed, not a scrape.
@@ -319,11 +322,11 @@ cols = [
 ## 📋 Per-game details for a week
 
 Need the full slate with drive charts, broadcast info and embedded standings?
-[`nfl_weekly_game_details`](../nfl/reference/nfl_api.md#nfl_weekly_game_details)
+[`nfl_weekly_game_details`](../nfl/reference/nfl_api/other.md#nfl_weekly_game_details)
 returns **one row per game** for a week (toggle the heavy blocks with the
 `include_*` flags). For live in-game state (clock, down & distance, red-zone
 flags), reach for
-[`nfl_game_summaries`](../nfl/reference/nfl_api.md#nfl_game_summaries).
+[`nfl_game_summaries`](../nfl/reference/nfl_api/game.md#nfl_game_summaries).
 
 
 ```python
@@ -368,7 +371,7 @@ player-tracking metrics you won't find in a box score — time to throw,
 completion percentage over expectation (CPOE), separation, ball-carrier
 top speed. All token-free.
 
-[`nfl_ngs_statboard`](../nfl/reference/additional.md#nfl_ngs_statboard) is the
+[`nfl_ngs_statboard`](../nfl/reference/additional/nfl-2.md#nfl_ngs_statboard) is the
 season leaderboard. Ask for `stat_type` `"passing"`, `"rushing"`, or
 `"receiving"`.
 
@@ -421,7 +424,7 @@ cols = [
 
 
 
-And [`nfl_ngs_leaders`](../nfl/reference/additional.md#nfl_ngs_leaders)
+And [`nfl_ngs_leaders`](../nfl/reference/additional/nfl.md#nfl_ngs_leaders)
 serves the highlight-reel top-N boards — each row is the *play* that earned
 the leader their spot. Categories include `"speed"` (fastest ball carriers),
 `"yac_season"` (yards-after-catch over expected), `"completion_season"`
@@ -479,10 +482,10 @@ versioned, cached releases (very reliable), so we call them directly.
 
 | Function | Rows | Highlights |
 |---|---|---|
-| [`load_nfl_pbp`](../nfl/reference/loaders.md#load_nfl_pbp) | ~49k/season | EPA, WP, air yards, 370+ columns |
-| [`load_nfl_player_stats`](../nfl/reference/additional.md#load_nfl_player_stats) | weekly | passing/rushing/receiving box lines |
-| [`load_nfl_nextgen_stats`](../nfl/reference/additional.md#load_nfl_nextgen_stats) | weekly | NGS back to 2016 |
-| [`load_nfl_rosters`](../nfl/reference/loaders.md#load_nfl_rosters) | per player | IDs, bios, draft info |
+| [`load_nfl_pbp`](../nfl/reference/loaders/pbp.md#load_nfl_pbp) | ~49k/season | EPA, WP, air yards, 370+ columns |
+| [`load_nfl_player_stats`](../nfl/reference/additional/dataset-loaders-3.md#load_nfl_player_stats) | weekly | passing/rushing/receiving box lines |
+| [`load_nfl_nextgen_stats`](../nfl/reference/additional/dataset-loaders-2.md#load_nfl_nextgen_stats) | weekly | NGS back to 2016 |
+| [`load_nfl_rosters`](../nfl/reference/loaders/other.md#load_nfl_rosters) | per player | IDs, bios, draft info |
 
 
 ```python
@@ -581,7 +584,7 @@ ngs_release = nfl.load_nfl_nextgen_stats([SEASON], stat_type="passing")
 ## 🔵 Secondary path: ESPN (quick & no-auth)
 
 When you just want a fast scoreboard without minting a token, ESPN is right
-there. [`espn_nfl_schedule`](../nfl/reference/additional.md#espn_nfl_schedule)
+there. [`espn_nfl_schedule`](../nfl/reference/additional/play-by-play-schedule-rosters.md#espn_nfl_schedule)
 returns a tidy schedule frame; pass `dates=YYYYMMDD` for a single day. (There's
 also a raw [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard)
 if you want the unparsed JSON.)
@@ -784,7 +787,7 @@ winners
 ### Recipe 4 — A game's NextGen passer splits 🔬
 
 Grab an NGS `gameId` from the schedule, then pull
-[`nfl_ngs_gamecenter_overview`](../nfl/reference/additional.md#nfl_ngs_gamecenter_overview)
+[`nfl_ngs_gamecenter_overview`](../nfl/reference/additional/nfl.md#nfl_ngs_gamecenter_overview)
 to see each side's primary passer with tracking-derived splits.
 
 
@@ -833,7 +836,7 @@ out
 
 ### Recipe 5 — Season rushing leaders 🏃
 
-Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
+Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional/dataset-loaders-3.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
 
 
 ```python
@@ -883,7 +886,7 @@ rush_lb
 
 ### Recipe 6 — The most efficient offenses (EPA/play) 📈
 
-Expected points added is the modeller's favourite efficiency yardstick. Average `epa` over every run/pass in [`load_nfl_pbp`](../nfl/reference/loaders.md#load_nfl_pbp) to rank offenses.
+Expected points added is the modeller's favourite efficiency yardstick. Average `epa` over every run/pass in [`load_nfl_pbp`](../nfl/reference/loaders/pbp.md#load_nfl_pbp) to rank offenses.
 
 
 ```python
@@ -1024,7 +1027,7 @@ redzone
 
 ### Recipe 9 — Snap-share workhorse running backs 🐴
 
-[`load_nfl_snap_counts`](../nfl/reference/loaders.md#load_nfl_snap_counts) carries `offense_pct` per game — average it to find the backs their teams simply would not take off the field.
+[`load_nfl_snap_counts`](../nfl/reference/loaders/other.md#load_nfl_snap_counts) carries `offense_pct` per game — average it to find the backs their teams simply would not take off the field.
 
 
 ```python
@@ -1169,7 +1172,7 @@ sep
 
 ### Recipe 12 — The nail-biters: closest games of the season 😬
 
-[`load_nfl_schedule`](../nfl/reference/additional.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
+[`load_nfl_schedule`](../nfl/reference/additional/dataset-loaders-3.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
 
 
 ```python

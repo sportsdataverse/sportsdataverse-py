@@ -2,9 +2,12 @@
 title: Betting odds tutorial
 sidebar_label: Betting odds
 sidebar_position: 15
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/12_odds_intro.ipynb
 ---
 
 # 🎲 Betting odds with `sportsdataverse-py`
+
+> This page is the executed notebook [`12_odds_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/12_odds_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/12_odds_intro.ipynb) to run it yourself.
 
 Welcome! In a few lines of Python you're about to pull **live betting odds**
 from a whole market of sportsbooks — moneylines, spreads, totals, player

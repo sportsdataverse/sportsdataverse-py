@@ -7,3 +7,18 @@
 .anchor[id] {
   scroll-margin-top: calc(var(--ifm-navbar-height) + 0.5rem);
 }
+
+/* Finding 11: the server renders code blocks with the light Prism theme (inline colors), and React swaps in
+   the dark one only after hydration, seconds later on a long page. In dark mode keep them hidden until the
+   hydrated client module marks the page; the animation shows them after 6 s whatever happens. No !important
+   and no copy of the theme's colors: the block is hidden, not recolored. */
+@keyframes sdv-show-after-hydration {
+  to {
+    visibility: visible;
+  }
+}
+
+html[data-theme='dark']:not([data-hydrated]) .theme-code-block {
+  visibility: hidden;
+  animation: sdv-show-after-hydration 0s 6s forwards;
+}

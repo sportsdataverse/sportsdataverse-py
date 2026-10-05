@@ -2,9 +2,12 @@
 title: Quickstart tutorial
 sidebar_label: Quickstart
 sidebar_position: 1
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/01_quickstart.ipynb
 ---
 
 # 🏟️ Welcome to `sportsdataverse-py` — the cross-sport quickstart
+
+> This page is the executed notebook [`01_quickstart.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/01_quickstart.ipynb) to run it yourself.
 
 One `pip install`, **every** major league. `sportsdataverse` is a single Python
 package that speaks to the official, *premium* native data feeds across the

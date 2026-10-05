@@ -164,7 +164,8 @@ ignores:
   - "docs/versioned_docs/**" # frozen snapshots of docs/docs/ — same auto-generated content
   - "docs/build/**"
   - "docs/node_modules/**"
-  - "docs/src/pages/CHANGELOG.md" # regenerated copy of the canonical CHANGELOG.md
+  - "docs/src/pages/CHANGELOG.md" # generated from the canonical CHANGELOG.md (tools/hooks/sync_docs_changelog.py)
+  - "docs/src/pages/changelog-*.md" # the same script's unreleased and archive pages
   - "node_modules/**"
   - ".venv/**"
   - "dev/**"

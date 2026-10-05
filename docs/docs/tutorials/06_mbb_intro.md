@@ -2,9 +2,12 @@
 title: MBB tutorial
 sidebar_label: MBB
 sidebar_position: 4
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/06_mbb_intro.ipynb
 ---
 
 # 🏀 Men's college basketball with `sportsdataverse-py`
+
+> This page is the executed notebook [`06_mbb_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/06_mbb_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/06_mbb_intro.ipynb) to run it yourself.
 
 Welcome to **Selection-Sunday-grade** hoops data! 🎉 In a handful of lines of
 Python you're about to pull NCAA Division I men's basketball — full schedules,
@@ -34,26 +37,26 @@ no live API). Click any name for the full reference.
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`espn_mbb_teams`](../mbb/reference/additional.md#espn_mbb_teams) | Every D-I team (grab `team_id`s) | 🟥 ESPN ⭐ |
-| [`espn_mbb_schedule`](../mbb/reference/additional.md#espn_mbb_schedule) | Games + results for a date / window | 🟥 ESPN ⭐ |
+| [`espn_mbb_teams`](../mbb/reference/additional/highlights.md#espn_mbb_teams) | Every D-I team (grab `team_id`s) | 🟥 ESPN ⭐ |
+| [`espn_mbb_schedule`](../mbb/reference/additional/highlights.md#espn_mbb_schedule) | Games + results for a date / window | 🟥 ESPN ⭐ |
 | [`espn_mbb_scoreboard`](../mbb/reference/site.md#espn_mbb_scoreboard) | Rich scoreboard for a date (status, lines, odds) | 🟥 ESPN ⭐ |
 | [`espn_mbb_standings`](../mbb/reference/site.md#espn_mbb_standings) | Conference standings, one row per team | 🟥 ESPN ⭐ |
 | [`espn_mbb_rankings`](../mbb/reference/site.md#espn_mbb_rankings) | AP / Coaches poll (in-season) | 🟥 ESPN ⭐ |
 | [`espn_mbb_summary`](../mbb/reference/site.md#espn_mbb_summary) | Full game summary: box, plays, win prob | 🟥 ESPN ⭐ |
 | [`espn_mbb_team_roster`](../mbb/reference/site.md#espn_mbb_team_roster) | A team's roster | 🟥 ESPN ⭐ |
-| [`espn_mbb_pbp`](../mbb/reference/additional.md#espn_mbb_pbp) | Event-level play-by-play for a game | 🟥 ESPN ⭐ |
-| [`espn_mbb_game_rosters`](../mbb/reference/additional.md#espn_mbb_game_rosters) | Who dressed + started for one game | 🟥 ESPN ⭐ |
-| [`espn_mbb_player_stats`](../mbb/reference/additional.md#espn_mbb_player_stats) | A player's season stat line | 🟥 ESPN ⭐ |
-| [`fox_mbb_league_leaders`](../mbb/reference/additional.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
-| [`fox_mbb_standings`](../mbb/reference/additional.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
-| [`fox_mbb_team_roster`](../mbb/reference/additional.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
+| [`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) | Event-level play-by-play for a game | 🟥 ESPN ⭐ |
+| [`espn_mbb_game_rosters`](../mbb/reference/additional/highlights.md#espn_mbb_game_rosters) | Who dressed + started for one game | 🟥 ESPN ⭐ |
+| [`espn_mbb_player_stats`](../mbb/reference/additional/highlights.md#espn_mbb_player_stats) | A player's season stat line | 🟥 ESPN ⭐ |
+| [`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
+| [`fox_mbb_standings`](../mbb/reference/additional/fox.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
+| [`fox_mbb_team_roster`](../mbb/reference/additional/fox.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
 | [`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) | One team's full season schedule | 🟥 ESPN ⭐ |
 | [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
-| [`load_mbb_schedule`](../mbb/reference/loaders.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
-| [`load_mbb_player_boxscore`](../mbb/reference/loaders.md#load_mbb_player_boxscore) | Season player box scores | 📦 loader |
-| [`load_mbb_team_boxscore`](../mbb/reference/loaders.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
-| [`load_mbb_pbp`](../mbb/reference/loaders.md#load_mbb_pbp) | Season play-by-play parquet | 📦 loader |
-| [`most_recent_mbb_season`](../mbb/reference/additional.md#most_recent_mbb_season) | Current season-year helper | 🛠️ helper |
+| [`load_mbb_schedule`](../mbb/reference/loaders/other.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
+| [`load_mbb_player_boxscore`](../mbb/reference/loaders/player.md#load_mbb_player_boxscore) | Season player box scores | 📦 loader |
+| [`load_mbb_team_boxscore`](../mbb/reference/loaders/team.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
+| [`load_mbb_pbp`](../mbb/reference/loaders/other.md#load_mbb_pbp) | Season play-by-play parquet | 📦 loader |
+| [`most_recent_mbb_season`](../mbb/reference/additional/highlights.md#most_recent_mbb_season) | Current season-year helper | 🛠️ helper |
 
 ⭐ = premium live source.
 
@@ -99,7 +102,7 @@ def safe(label, thunk):
 
 ## 🏟️ Every team in Division I
 
-Start with [`espn_mbb_teams`](../mbb/reference/additional.md#espn_mbb_teams) —
+Start with [`espn_mbb_teams`](../mbb/reference/additional/highlights.md#espn_mbb_teams) —
 one row per program, with the `team_id` you'll pass into roster, schedule and
 summary calls. This is a plain catalog fetch, so it's reliable year-round.
 
@@ -133,7 +136,7 @@ teams.select(["team_id", "team_location", "team_name", "team_abbreviation", "tea
 
 ## 📅 Schedule & scores for a date window
 
-[`espn_mbb_schedule`](../mbb/reference/additional.md#espn_mbb_schedule) takes a
+[`espn_mbb_schedule`](../mbb/reference/additional/highlights.md#espn_mbb_schedule) takes a
 single `dates=YYYYMMDD` or a `'YYYYMMDD-YYYYMMDD'` window and returns one row
 per game with final scores. Here's championship day of the 2024 tournament.
 
@@ -261,7 +264,7 @@ offseason hiccup prints a note instead of breaking the page.
 
 ### Recipe 1 — National scoring leaders 🥇 (FoxSports)
 
-[`fox_mbb_league_leaders`](../mbb/reference/additional.md#fox_mbb_league_leaders)
+[`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders)
 serves the leaderboard direct from FoxSports — pick a `category` (`scoring`,
 `rebounds`, `assists`, …) and `who` (`player` or `team`). No IDs needed.
 
@@ -359,7 +362,7 @@ out
 
 The `load_*` loaders pull whole seasons from the data release — perfect for
 analysis that shouldn't depend on a live endpoint.
-[`load_mbb_player_boxscore`](../mbb/reference/loaders.md#load_mbb_player_boxscore)
+[`load_mbb_player_boxscore`](../mbb/reference/loaders/player.md#load_mbb_player_boxscore)
 gives every player-game; we aggregate to a per-player points-per-game board.
 
 
@@ -406,7 +409,7 @@ print("player box rows:", pbox.shape)
 
 ### Recipe 4 — Play-by-play slice for one game 🎬 (ESPN)
 
-[`espn_mbb_pbp`](../mbb/reference/additional.md#espn_mbb_pbp) returns a dict;
+[`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) returns a dict;
 its `plays` list is event-level. We frame it and pull just the scoring plays of
 the 2024 national championship (UConn vs. Purdue, `game_id=401638636`).
 
@@ -463,7 +466,7 @@ out
 
 ### Recipe 5 — Best net scoring margin 📊 (parquet)
 
-[`load_mbb_team_boxscore`](../mbb/reference/loaders.md#load_mbb_team_boxscore) gives one row per team-game with the opponent's score attached, so a single group-by ranks every program by points scored minus points allowed — the cleanest one-number power proxy. Pure parquet, no live endpoint.
+[`load_mbb_team_boxscore`](../mbb/reference/loaders/team.md#load_mbb_team_boxscore) gives one row per team-game with the opponent's score attached, so a single group-by ranks every program by points scored minus points allowed — the cleanest one-number power proxy. Pure parquet, no live endpoint.
 
 
 ```python
@@ -554,7 +557,7 @@ Same team-box parquet, different question: sum makes and attempts across the sea
 
 ### Recipe 7 — Most efficient scorers ⚡ (true shooting %)
 
-Points-per-game rewards volume; **true shooting %** rewards *efficiency* — it folds threes and free throws into one rate via `TS% = PTS / (2 · (FGA + 0.44·FTA))`. We compute it straight from [`load_mbb_player_boxscore`](../mbb/reference/loaders.md#load_mbb_player_boxscore), keeping only high-usage scorers.
+Points-per-game rewards volume; **true shooting %** rewards *efficiency* — it folds threes and free throws into one rate via `TS% = PTS / (2 · (FGA + 0.44·FTA))`. We compute it straight from [`load_mbb_player_boxscore`](../mbb/reference/loaders/player.md#load_mbb_player_boxscore), keeping only high-usage scorers.
 
 
 ```python
@@ -704,7 +707,7 @@ out
 
 ### Recipe 10 — Top rebounding teams 🧲 (FoxSports)
 
-[`fox_mbb_league_leaders`](../mbb/reference/additional.md#fox_mbb_league_leaders) isn't just a player board — flip `who="team"` and pick `category="rebounds"` to rank programs on the glass straight from FoxSports. No IDs needed.
+[`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders) isn't just a player board — flip `who="team"` and pick `category="rebounds"` to rank programs on the glass straight from FoxSports. No IDs needed.
 
 
 ```python
@@ -748,7 +751,7 @@ out
 
 ### Recipe 11 — Crunch-time buckets 🔥 (parquet PBP)
 
-[`load_mbb_pbp`](../mbb/reference/loaders.md#load_mbb_pbp) is the whole season's play-by-play in one parquet — no live game needed. We slice it to scoring plays in the final minute of the second half: every late-game dagger across the year.
+[`load_mbb_pbp`](../mbb/reference/loaders/other.md#load_mbb_pbp) is the whole season's play-by-play in one parquet — no live game needed. We slice it to scoring plays in the final minute of the second half: every late-game dagger across the year.
 
 
 ```python
@@ -897,7 +900,7 @@ out
 
 ## 🙌 Who suited up: game rosters
 
-[`espn_mbb_game_rosters`](../mbb/reference/additional.md#espn_mbb_game_rosters)
+[`espn_mbb_game_rosters`](../mbb/reference/additional/highlights.md#espn_mbb_game_rosters)
 returns one row per dressed player for a game, flagging starters — handy for
 joining onto play-by-play or box scores.
 

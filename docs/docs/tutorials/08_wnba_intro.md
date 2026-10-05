@@ -2,9 +2,12 @@
 title: WNBA tutorial
 sidebar_label: WNBA
 sidebar_position: 3
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/08_wnba_intro.ipynb
 ---
 
 # 🏀 Women's basketball with `sportsdataverse-py`
+
+> This page is the executed notebook [`08_wnba_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/08_wnba_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/08_wnba_intro.ipynb) to run it yourself.
 
 Welcome! In just a few lines of Python you're about to pull **WNBA** teams, rosters, schedules, play-by-play, season stats, standings and the draft — all as tidy [polars](https://pola.rs) DataFrames that are ready to model. 🚀
 
@@ -18,25 +21,25 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`espn_wnba_teams`](../wnba/reference/additional.md#espn_wnba_teams) | One row per franchise (grab `team_id`s) | ⭐ ESPN |
+| [`espn_wnba_teams`](../wnba/reference/additional/other.md#espn_wnba_teams) | One row per franchise (grab `team_id`s) | ⭐ ESPN |
 | [`espn_wnba_team_roster`](../wnba/reference/site.md#espn_wnba_team_roster) | A team's active roster for a season | ⭐ ESPN |
-| [`espn_wnba_schedule`](../wnba/reference/additional.md#espn_wnba_schedule) | Games + results for a date or date range | ⭐ ESPN |
+| [`espn_wnba_schedule`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_schedule) | Games + results for a date or date range | ⭐ ESPN |
 | [`espn_wnba_pbp`](../wnba/reference/additional.md#play-by-play-schedule--rosters) | Event-level play-by-play for one game | ⭐ ESPN |
-| [`espn_wnba_player_stats`](../wnba/reference/additional.md#espn_wnba_player_stats) | A player's season stat line (wide) | ⭐ ESPN |
-| [`espn_wnba_team_stats`](../wnba/reference/additional.md#espn_wnba_team_stats) | A team's season stats (Averages/Totals/Misc) | ⭐ ESPN |
+| [`espn_wnba_player_stats`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_player_stats) | A player's season stat line (wide) | ⭐ ESPN |
+| [`espn_wnba_team_stats`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_team_stats) | A team's season stats (Averages/Totals/Misc) | ⭐ ESPN |
 | [`espn_wnba_standings`](../wnba/reference/site.md#espn_wnba_standings) | League standings, one row per team | ⭐ ESPN |
 | [`espn_wnba_draft`](../wnba/reference/site.md#espn_wnba_draft) | Every draft pick for a season | ⭐ ESPN |
-| [`espn_wnba_game_officials`](../wnba/reference/additional.md#espn_wnba_game_officials) | The refs who worked a game | ⭐ ESPN |
-| [`load_wnba_schedule`](../wnba/reference/loaders.md#load_wnba_schedule) | Whole-season schedule (parquet release) | 📦 loader |
-| [`load_wnba_player_boxscore`](../wnba/reference/loaders.md#load_wnba_player_boxscore) | Whole-season player box scores | 📦 loader |
-| [`load_wnba_team_boxscore`](../wnba/reference/loaders.md#load_wnba_team_boxscore) | Whole-season team box scores | 📦 loader |
-| [`load_wnba_player_season_stats`](../wnba/reference/loaders.md#load_wnba_player_season_stats) | Season-aggregated player stats | 📦 loader |
-| [`load_wnba_pbp`](../wnba/reference/loaders.md#load_wnba_pbp) | Whole-season play-by-play | 📦 loader |
-| [`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) | Shot-location data | 📦 loader |
-| [`load_wnba_standings`](../wnba/reference/loaders.md#load_wnba_standings) | Whole-season standings (long) | 📦 loader |
-| [`load_wnba_rosters`](../wnba/reference/loaders.md#load_wnba_rosters) | Whole-season rosters | 📦 loader |
-| [`load_wnba_draft`](../wnba/reference/loaders.md#load_wnba_draft) | Whole-season draft picks | 📦 loader |
-| [`most_recent_wnba_season`](../wnba/reference/additional.md#most_recent_wnba_season) | The latest season year | 🛠️ helper |
+| [`espn_wnba_game_officials`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_game_officials) | The refs who worked a game | ⭐ ESPN |
+| [`load_wnba_schedule`](../wnba/reference/loaders/other.md#load_wnba_schedule) | Whole-season schedule (parquet release) | 📦 loader |
+| [`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) | Whole-season player box scores | 📦 loader |
+| [`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) | Whole-season team box scores | 📦 loader |
+| [`load_wnba_player_season_stats`](../wnba/reference/loaders/player.md#load_wnba_player_season_stats) | Season-aggregated player stats | 📦 loader |
+| [`load_wnba_pbp`](../wnba/reference/loaders/other.md#load_wnba_pbp) | Whole-season play-by-play | 📦 loader |
+| [`load_wnba_shots`](../wnba/reference/loaders/other.md#load_wnba_shots) | Shot-location data | 📦 loader |
+| [`load_wnba_standings`](../wnba/reference/loaders/other.md#load_wnba_standings) | Whole-season standings (long) | 📦 loader |
+| [`load_wnba_rosters`](../wnba/reference/loaders/other.md#load_wnba_rosters) | Whole-season rosters | 📦 loader |
+| [`load_wnba_draft`](../wnba/reference/loaders/other.md#load_wnba_draft) | Whole-season draft picks | 📦 loader |
+| [`most_recent_wnba_season`](../wnba/reference/additional/other.md#most_recent_wnba_season) | The latest season year | 🛠️ helper |
 
 ⭐ = the **premium ESPN live API** · 📦 = bulk parquet loaders · 🛠️ = helpers.
 
@@ -78,7 +81,7 @@ def safe(label, thunk):
 
 ## 🏟️ Teams
 
-[`espn_wnba_teams`](../wnba/reference/additional.md#espn_wnba_teams) returns one row per franchise. The `team_id`, location, name and abbreviation are the keys you'll reuse to fetch rosters, schedules and stats.
+[`espn_wnba_teams`](../wnba/reference/additional/other.md#espn_wnba_teams) returns one row per franchise. The `team_id`, location, name and abbreviation are the keys you'll reuse to fetch rosters, schedules and stats.
 
 
 ```python
@@ -158,7 +161,7 @@ aces = safe('Aces roster', lambda: wnba.espn_wnba_team_roster(team_id=17, season
 
 ## 📅 Schedule
 
-[`espn_wnba_schedule`](../wnba/reference/additional.md#espn_wnba_schedule) takes `dates=YYYYMMDD` for a single day, or a `'YYYYMMDD-YYYYMMDD'` string for a range. Team-name columns are `home_display_name` / `away_display_name`, and `home_score` / `away_score` come back as **strings** — cast before doing arithmetic.
+[`espn_wnba_schedule`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_schedule) takes `dates=YYYYMMDD` for a single day, or a `'YYYYMMDD-YYYYMMDD'` string for a range. Team-name columns are `home_display_name` / `away_display_name`, and `home_score` / `away_score` come back as **strings** — cast before doing arithmetic.
 
 The range below (Oct 16–20, 2024) is the back half of the 2024 WNBA Finals. Let's cast the scores and derive a winning margin to show a small polars transform.
 
@@ -280,7 +283,7 @@ Filter to scoring plays only to watch the lead change down the stretch.
 
 ## 🌟 Player season stats — Caitlin Clark
 
-[`espn_wnba_player_stats`](../wnba/reference/additional.md#espn_wnba_player_stats) returns a single **wide** row covering ESPN's `general` / `offensive` / `defensive` stat groups (averages and totals). The 2024 Rookie of the Year, Caitlin Clark, is `athlete_id=4433403`. Pass `total=True` for season totals instead of per-game averages.
+[`espn_wnba_player_stats`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_player_stats) returns a single **wide** row covering ESPN's `general` / `offensive` / `defensive` stat groups (averages and totals). The 2024 Rookie of the Year, Caitlin Clark, is `athlete_id=4433403`. Pass `total=True` for season totals instead of per-game averages.
 
 
 ```python
@@ -314,7 +317,7 @@ cc = safe('Caitlin Clark stats',
 
 ## 📊 Team season stats
 
-[`espn_wnba_team_stats`](../wnba/reference/additional.md#espn_wnba_team_stats) returns a **dict** keyed by category — `{'Averages', 'Totals', 'Misc'}`. Each value is a long frame of `stat_name` / `display_value` rows, so index into the dict rather than calling `.head()` on the return directly.
+[`espn_wnba_team_stats`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_team_stats) returns a **dict** keyed by category — `{'Averages', 'Totals', 'Misc'}`. Each value is a long frame of `stat_name` / `display_value` rows, so index into the dict rather than calling `.head()` on the return directly.
 
 
 ```python
@@ -433,7 +436,7 @@ draft = safe('2024 draft', lambda: wnba.espn_wnba_draft(season=SEASON))
 
 ### Recipe 3 — Top 10 scorers of the season 📈
 
-[`load_wnba_player_boxscore`](../wnba/reference/loaders.md#load_wnba_player_boxscore) reads a whole season's player box scores from a parquet release (no per-game API calls). Drop did-not-play rows, then aggregate points and assists per player with polars. Loaders are reliable, so this one runs bare.
+[`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) reads a whole season's player box scores from a parquet release (no per-game API calls). Drop did-not-play rows, then aggregate points and assists per player with polars. Loaders are reliable, so this one runs bare.
 
 
 ```python
@@ -480,7 +483,7 @@ top_scorers
 
 ### Recipe 4 — Who worked the whistle? 👀
 
-[`espn_wnba_game_officials`](../wnba/reference/additional.md#espn_wnba_game_officials) returns the referees assigned to a game — handy for officiating studies. Pair a `game_id` from the schedule with this call.
+[`espn_wnba_game_officials`](../wnba/reference/additional/play-by-play-schedule-rosters.md#espn_wnba_game_officials) returns the referees assigned to a game — handy for officiating studies. Pair a `game_id` from the schedule with this call.
 
 
 ```python
@@ -516,7 +519,7 @@ out
 
 ### Recipe 5 — Best net rating in the league ⚖️
 
-[`load_wnba_team_boxscore`](../wnba/reference/loaders.md#load_wnba_team_boxscore) carries each team's score **and** its opponent's score per game. Average points for minus points against gives a quick-and-dirty net rating — the single best one-number summary of who's good. We require 20+ games to drop the All-Star exhibition noise.
+[`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) carries each team's score **and** its opponent's score per game. Average points for minus points against gives a quick-and-dirty net rating — the single best one-number summary of who's good. We require 20+ games to drop the All-Star exhibition noise.
 
 
 ```python
@@ -663,7 +666,7 @@ true_shooting
 
 ### Recipe 8 — Where do the threes come from? 🎯
 
-[`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) is event-level shot data with a `score_value` (the point value of the attempt). Tally made vs. attempted threes per team to see who lives behind the arc — and who actually makes them.
+[`load_wnba_shots`](../wnba/reference/loaders/other.md#load_wnba_shots) is event-level shot data with a `score_value` (the point value of the attempt). Tally made vs. attempted threes per team to see who lives behind the arc — and who actually makes them.
 
 
 ```python
@@ -810,7 +813,7 @@ form
 
 ### Recipe 11 — Roster construction by position 👥
 
-[`load_wnba_rosters`](../wnba/reference/loaders.md#load_wnba_rosters) hands you every team's full roster. Pivot guards / forwards / centers per team to see how each front office balances its lineup — a clean join-free `pivot`.
+[`load_wnba_rosters`](../wnba/reference/loaders/other.md#load_wnba_rosters) hands you every team's full roster. Pivot guards / forwards / centers per team to see how each front office balances its lineup — a clean join-free `pivot`.
 
 
 ```python
@@ -852,7 +855,7 @@ position_mix
 
 ### Recipe 12 — Season scoring leaders, the pre-aggregated way 📐
 
-Don't want to roll up box scores yourself? [`load_wnba_player_season_stats`](../wnba/reference/loaders.md#load_wnba_player_season_stats) ships ESPN's own season aggregates in **long** format (`category` / `stat_name` / `value`). Filter to the `averages` category and the `avgPoints` stat for an instant scoring leaderboard — a great cross-check against Recipe 3.
+Don't want to roll up box scores yourself? [`load_wnba_player_season_stats`](../wnba/reference/loaders/player.md#load_wnba_player_season_stats) ships ESPN's own season aggregates in **long** format (`category` / `stat_name` / `value`). Filter to the `averages` category and the `avgPoints` stat for an instant scoring leaderboard — a great cross-check against Recipe 3.
 
 
 ```python
@@ -901,12 +904,12 @@ The `load_wnba_*` family reads pre-built **parquet releases** (whole seasons at 
 
 | Loader | Whole-season… |
 |---|---|
-| [`load_wnba_schedule`](../wnba/reference/loaders.md#load_wnba_schedule) | schedule + results |
-| [`load_wnba_player_boxscore`](../wnba/reference/loaders.md#load_wnba_player_boxscore) | player box scores |
-| [`load_wnba_team_boxscore`](../wnba/reference/loaders.md#load_wnba_team_boxscore) | team box scores |
-| [`load_wnba_player_season_stats`](../wnba/reference/loaders.md#load_wnba_player_season_stats) | season-aggregated player stats |
-| [`load_wnba_pbp`](../wnba/reference/loaders.md#load_wnba_pbp) | play-by-play |
-| [`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) | shot locations |
+| [`load_wnba_schedule`](../wnba/reference/loaders/other.md#load_wnba_schedule) | schedule + results |
+| [`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) | player box scores |
+| [`load_wnba_team_boxscore`](../wnba/reference/loaders/other.md#load_wnba_team_boxscore) | team box scores |
+| [`load_wnba_player_season_stats`](../wnba/reference/loaders/player.md#load_wnba_player_season_stats) | season-aggregated player stats |
+| [`load_wnba_pbp`](../wnba/reference/loaders/other.md#load_wnba_pbp) | play-by-play |
+| [`load_wnba_shots`](../wnba/reference/loaders/other.md#load_wnba_shots) | shot locations |
 
 Pass a list of seasons to combine several years in one frame.
 
