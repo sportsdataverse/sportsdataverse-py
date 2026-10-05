@@ -8,6 +8,44 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
+
+`hockeytech_api`, the one HTTP entry point behind the PWHL surface and the 19 other HockeyTech
+league families, caught every exception and returned `None`. A 403, a 5xx, a timeout or an
+unparseable body therefore parsed to a zero-row frame, so a failed fetch read as "no games".
+It now follows the package error vocabulary:
+
+- **HTTP 404** raises `NoDataError`.
+- **A failed fetch** raises `AssetFetchError`: a transport error, a non-2xx status that outlived
+  the retries, an empty or unparseable body, or one of the HTTP-200 error sentinels
+  (`Undefined Tab <view>`, `InvalidView error: <view>`). The sentinels used to warn and then
+  parse to an empty frame.
+- **`Feed type access denied.`**, the plain-text reply MJHL's public key gets on `gc`, is still
+  a graceful empty: `mjhl_game_summary` returns empty frames and `mjhl_pbp` returns plays without
+  game metadata.
+
+Every `<lg>_*` family function, the `pwhl_*` functions and the analytics fetches pass these errors
+to the caller. `resolve_season_id` keeps PWHL's fallback table for a failed seasons fetch and for
+a season the list lacks; other leagues re-raise. `pwhl_streaks` (deprecated, no such upstream
+view) no longer sends a request; it still warns and returns an empty frame.
+
+`most_recent_<lg>_season` / `most_recent_pwhl_season` no longer return a hard-coded 2026, which was
+already stale (the live PWHL seasons feed lists 2026-27, end-year 2027). A seasons list the feed
+answered with no season raises `NoDataError`; a failed fetch raises `AssetFetchError`. This
+matches sportsdataverse-js.
+
+**Breaking:** code that checked for `None` or an empty frame to detect a HockeyTech failure now
+gets `AssetFetchError` / `NoDataError`. Wrappers that default the season (`<lg>_standings`,
+`_teams`, `_team_roster`, `_leaders`, `pwhl_stats`, `pwhl_playoff_bracket`) raise the same way when
+the seasons lookup fails.
+
+Eleven PWHL return-column descriptions were also wrong and are corrected from real values. In
+`pwhl_scorebar`: `id` is the game id, `home_id` is the HockeyTech team id, `game_status` is the
+numeric code, `quick_score` is always `'0'` and `game_summary_url` is a game id or a site path. In
+`pwhl_player_search`: `score` is a search relevance score and `profile_image` is a file name. In
+`pwhl_stats`: `height` is feet-and-inches text, `rank` is the table rank, `namelink` is plain
+text and `division` is a name.
+
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
 The **Valid URL** on each generated reference page, and the `Example URL:` line in the
