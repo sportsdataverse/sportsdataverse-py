@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _check_status, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mlb.mlb_statcast_parsers import (
     _MLBAM_ID_COLUMNS,
     _csv_to_frame,
@@ -127,13 +127,11 @@ def _fetch_chunk(
     params.update(_translate_filters(filters))
     params.update(_ROUTE_FLAGS.get(base_url, {}))  # the route's population wins over a forwarded raw flag
     resp = download(base_url, params=params)
-    status = getattr(resp, "status_code", 200)
-    if status >= 400:
-        # download() returns the LAST response once the retry budget is exhausted on a
-        # retryable status (403/429/5xx), so without this the error page parses into an
-        # empty frame and the window silently looks like "no games".
-        raise AssetFetchError(f"Savant {base_url} answered HTTP {status} for {gt}..{lt} after retries.")
     text = getattr(resp, "text", resp if isinstance(resp, str) else "")
+    # download() returns the LAST response once the retry budget is exhausted on a
+    # retryable status (403/429/5xx), so without this the error page parses into an
+    # empty frame and the window silently looks like "no games". 400/422 -> ValueError.
+    _check_status(base_url, getattr(resp, "status_code", 200), text, label=f"Savant {base_url} ({gt}..{lt})")
     return _csv_to_frame(text, uncast_ids=uncast_ids)
 
 
@@ -367,13 +365,12 @@ def mlb_statcast_search_wbc(
 
 
 def _player_page_html(player_id: int, stats: Optional[str] = None, **kwargs: Any) -> str:
-    """Fetch the raw ``/savant-player/{id}`` HTML (``""`` on transport failure)."""
+    """Fetch the raw ``/savant-player/{id}`` HTML; a failed fetch raises (see ``_text_body``)."""
     url = f"{_SAVANT_BASE}/savant-player/{player_id}"
     params = {"stats": stats} if stats else None
-    resp = download(url=url, params=params, **kwargs)
-    if resp is None:
-        return ""
-    return resp.text if hasattr(resp, "text") else resp.content.decode("utf-8", errors="replace")
+    with _transport_errors(url):
+        resp = download(url=url, params=params, **kwargs)
+    return _text_body(resp, url)
 
 
 def mlb_statcast_player(

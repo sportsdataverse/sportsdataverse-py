@@ -26,8 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import NoDataError
 
 __all__ = ["_get"]
 
@@ -55,15 +55,15 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
             (``timeout``, ``proxy``, ``num_retries``, extra ``headers``).
 
     Returns:
-        The parsed JSON ``dict``; ``{}`` when the route 404s
-        (:class:`~sportsdataverse.errors.NoDataError`), when the body is not JSON,
-        or when it is not a JSON object. Yahoo answers a bad persisted query with
-        HTTP 400 and a ``{"errors": [...]}`` body, which is returned as-is so the
-        parser can turn it into a zero-row frame.
+        The parsed JSON ``dict``; ``{}`` for a 204/205 or a JSON body that is not
+        an object.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        NoDataError: the route answered 404.
+        ValueError: Yahoo answered 400 / 422 -- e.g. the HTTP 400
+            ``{"errors": [...]}`` a bad persisted query gets. An error body is not data.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            a 2xx whose body is empty (not 204/205) or not JSON.
 
     Example:
         Quick start::
@@ -74,12 +74,7 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
     """
     headers = {**_HEADERS, **(kwargs.pop("headers", None) or {})}
     query = {**_LOCALE, **{k: v for k, v in (params or {}).items() if v is not None}}
-    try:
+    with _transport_errors(url):
         resp = download(url=url, params=query, headers=headers, **kwargs)
-    except NoDataError:
-        return {}
-    try:
-        body = resp.json()
-    except ValueError:
-        return {}
+    body = _json_body(resp, url)
     return body if isinstance(body, dict) else {}

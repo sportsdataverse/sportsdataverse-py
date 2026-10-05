@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 REFERER = "https://www.nwslsoccer.com/"
@@ -29,7 +30,7 @@ __all__ = ["REFERER", "_get"]
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, list]:
-    """GET ``url`` as JSON with the NWSL site headers. Returns ``{}`` on failure.
+    """GET ``url`` as JSON with the NWSL site headers.
 
     Args:
         url: fully-built request URL (host + substituted path).
@@ -38,11 +39,14 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
             ``headers`` mapping is merged over the defaults.
 
     Returns:
-        The parsed JSON envelope, or ``{}`` when the response is missing or not
-        JSON.
+        The parsed JSON envelope; ``{}`` for a 204/205.
 
     Raises:
         sportsdataverse.errors.NoDataError: the host returned 404.
+        ValueError: the host answered 400 / 422 -- the request is wrong.
+        sportsdataverse.errors.AssetFetchError: any other non-2xx or a connection
+            failure after retries, or a 2xx whose body is empty (not 204/205) or not
+            JSON -- the answer is unknown, not empty.
 
     Example:
         Basic use::
@@ -57,10 +61,6 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
     """
     headers = {"Referer": REFERER, "User-Agent": _UA, **(kwargs.pop("headers", None) or {})}
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    resp = download(url=url, params=clean, headers=headers, **kwargs)
-    if resp is None:
-        return {}
-    try:
-        return resp.json()
-    except Exception:
-        return {}
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, headers=headers, **kwargs)
+    return _json_body(resp, url)

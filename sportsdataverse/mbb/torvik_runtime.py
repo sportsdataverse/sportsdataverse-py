@@ -24,6 +24,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
+from sportsdataverse._codegen_runtime import _check_response, _json_body, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 _UA = "Mozilla/5.0 (sportsdataverse-py; +https://py.sportsdataverse.org)"
@@ -34,8 +35,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
 
     Content-type drives the shape: ``application/json`` bodies are parsed to a
     ``dict``; anything else (CSV / HTML / text) is returned as raw response
-    text. ``None`` params are stripped. Returns ``{}`` when the request yields
-    no response so JSON consumers can chain without a null-check.
+    text. ``None`` params are stripped.
 
     Args:
         url: Fully-qualified endpoint URL.
@@ -43,21 +43,22 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
         **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        ``dict`` for JSON responses, ``str`` for CSV/HTML responses, ``{}``
-        when the request yields no response.
+        ``dict`` for JSON responses, ``str`` for CSV/HTML responses.
+
+    Raises:
+        NoDataError: barttorvik.com answered 404.
+        ValueError: barttorvik.com answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            the empty 200 barttorvik answers a blocked request with, or a
+            JSON-labelled body that does not decode.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     headers = kwargs.pop("headers", None) or {"User-Agent": _UA}
-    resp = download(url=url, params=clean, headers=headers, **kwargs)
-    if resp is None:
-        return {}
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, headers=headers, **kwargs)
+    _check_response(resp, url)
     ctype = (resp.headers.get("content-type") or "").lower() if getattr(resp, "headers", None) else ""
     if "json" in ctype:
-        try:
-            return resp.json()
-        except Exception:
-            pass
-    try:
-        return resp.text
-    except Exception:
-        return ""
+        # A JSON-labelled body that will not decode is a failed fetch, never text to parse.
+        return _json_body(resp, url)
+    return _text_body(resp, url)

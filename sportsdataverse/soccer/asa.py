@@ -55,7 +55,8 @@ def asa_games(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -125,7 +126,8 @@ def asa_games_xgoals(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -204,7 +206,8 @@ def asa_goalkeepers_goals_added(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -283,7 +286,8 @@ def asa_goalkeepers_xgoals(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -344,7 +348,8 @@ def asa_managers(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -396,7 +401,8 @@ def asa_players(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -466,7 +472,8 @@ def asa_players_goals_added(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -545,7 +552,8 @@ def asa_players_salaries(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -624,7 +632,8 @@ def asa_players_xgoals(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -685,7 +694,8 @@ def asa_referees(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -737,7 +747,8 @@ def asa_stadia(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -789,7 +800,8 @@ def asa_teams(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -859,7 +871,8 @@ def asa_teams_goals_added(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -938,7 +951,8 @@ def asa_teams_xgoals(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1017,7 +1031,8 @@ def asa_teams_xpass(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published for that league).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

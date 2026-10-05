@@ -221,3 +221,16 @@ def test_404_is_no_data(monkeypatch):
     _serve(monkeypatch, 404, '{"message": "Unknown sport"}')
     with pytest.raises(NoDataError):
         toa.toa_sports_odds(sport="not_a_sport", return_parsed=False)
+
+
+def test_422_bad_params_is_a_value_error(monkeypatch):
+    # The Odds API rejects bad parameters with 422: the request is wrong, not the fetch.
+    _serve(monkeypatch, 422, '{"message": "Invalid markets: notamarket", "error_code": "INVALID_MARKET"}')
+    key = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+    with pytest.raises(
+        ValueError,
+        match=r"The Odds API /v4/sports/americanfootball_nfl/odds rejected the request: HTTP 422: .*INVALID_MARKET",
+    ) as ei:
+        toa.toa_sports_odds(markets="notamarket", api_key=key, return_parsed=False)
+    assert not isinstance(ei.value, AssetFetchError)
+    assert key not in str(ei.value) and len(str(ei.value)) < 400

@@ -85,8 +85,8 @@ def fox_wnba_pbp(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a game's plays as a polars frame::
@@ -147,8 +147,8 @@ def fox_wnba_boxscore(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a game's boxscore in long form::
@@ -209,8 +209,8 @@ def fox_wnba_odds(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a game's odds six-pack::
@@ -271,8 +271,8 @@ def fox_wnba_team_roster(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a team's roster::
@@ -333,8 +333,8 @@ def fox_wnba_team_stats(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a team's stat leaders::
@@ -395,8 +395,8 @@ def fox_wnba_team_gamelog(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a team's per-game stat log::
@@ -457,8 +457,8 @@ def fox_wnba_standings(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch a team's conference standings::
@@ -537,8 +537,8 @@ def fox_wnba_league_leaders(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch the scoring leaders::
@@ -610,8 +610,8 @@ def fox_wnba_teams(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch the league team directory::

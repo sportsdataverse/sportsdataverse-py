@@ -102,17 +102,23 @@ def test_get_caller_locale_overrides_default(rt, monkeypatch):
     assert seen["params"]["lang"] == "fr-FR"
 
 
-def test_get_returns_empty_on_404_and_non_json(rt, monkeypatch):
-    from sportsdataverse.errors import NoDataError
+def test_get_raises_on_404_and_non_json(rt, monkeypatch):
+    # A 404 is NoDataError and a body that is not JSON is a failed fetch (both were ``{}``);
+    # a JSON body that is not an object is still ``{}``.
+    from sportsdataverse.errors import AssetFetchError, NoDataError
 
     def raiser(**kwargs):
         raise NoDataError("404")
 
     monkeypatch.setattr(rt, "download", raiser)
-    assert rt._get("https://x/y") == {}
+    with pytest.raises(NoDataError):
+        rt._get("https://x/y")
 
-    monkeypatch.setattr(rt, "download", lambda **kw: _Resp(None))
-    assert rt._get("https://x/y") == {}
+    bad = _Resp(None)
+    bad.text = "<html>Access Denied</html>"
+    monkeypatch.setattr(rt, "download", lambda **kw: bad)
+    with pytest.raises(AssetFetchError, match="non-JSON body"):
+        rt._get("https://x/y")
 
     monkeypatch.setattr(rt, "download", lambda **kw: _Resp([1, 2]))
     assert rt._get("https://x/y") == {}

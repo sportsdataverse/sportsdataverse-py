@@ -113,9 +113,13 @@ def test_503_past_the_retries_logs_without_the_key(path, monkeypatch, caplog):
 def test_connection_failure_and_its_chain_carry_no_key(path, monkeypatch, caplog):
     call, _ = PATHS[path]
     monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
-    with pytest.raises(requests.exceptions.ConnectionError) as ei:
+    with pytest.raises((requests.exceptions.ConnectionError, AssetFetchError)) as ei:
         call()
     exc = ei.value
+    if isinstance(exc, AssetFetchError):  # the flat-API getters wrap it, ``from`` the transport error
+        assert _leaks(exc, caplog) == []
+        exc = exc.__cause__
+        assert isinstance(exc, requests.exceptions.ConnectionError)
     assert "Max retries exceeded" in str(exc)  # requests quoted the request path
     assert exc.__context__ is not None  # urllib3's MaxRetryError is still chained, just clean
     assert _leaks(exc, caplog) == []

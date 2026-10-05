@@ -132,6 +132,47 @@ def _returns_dict(schema_doc: dict) -> bool:
     return schema_doc.get("kind") == "frames" and not schema_doc.get("frames_by")
 
 
+# Getters that raise the package error vocabulary (sportsdataverse/errors.py): a 404 is
+# ``NoDataError``, a 400/422 is ``ValueError``, any other failed fetch is ``AssetFetchError``
+# -- never ``{}``. Every generated wrapper on one of them names all three in ``Raises:``. Absent on purpose:
+# nba_stats / wnba_stats still answer a failed fetch with ``{}`` (PR #693), nflpro
+# raises its own types.
+_VOCAB_GETTERS = frozenset(
+    {
+        "sportsdataverse._codegen_runtime",
+        "sportsdataverse.cfb.on3_runtime",
+        "sportsdataverse.cfb.sports247_runtime",
+        "sportsdataverse.cfb.sports247_site_pages_runtime",
+        "sportsdataverse.mbb.kenpom_runtime",
+        "sportsdataverse.mbb.torvik_runtime",
+        "sportsdataverse.mlb.mlb_statcast_runtime",
+        "sportsdataverse.nfl.nfl_api_runtime",
+        "sportsdataverse.nfl.pff_api_runtime",
+        "sportsdataverse.nfl.pff_runtime",
+        "sportsdataverse.soccer.mls.mls_api_runtime",
+        "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
+        "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+    }
+)
+# (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
+_VOCAB_RAISES = (
+    (
+        ("NoDataError", "NoESPNDataError"),
+        "NoDataError: The host answered 404 -- the requested resource does not exist.",
+    ),
+    (
+        ("ValueError",),
+        "ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.",
+    ),
+    (
+        ("AssetFetchError",),
+        "AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after "
+        "retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer "
+        "is unknown, not empty.",
+    ),
+)
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -145,6 +186,7 @@ def _build_docstring(
     doc_extras: dict | None = None,
     import_from: str = "",
     returns_frames: bool = False,
+    vocab_raises: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -162,6 +204,8 @@ def _build_docstring(
     ``import_from`` is the importable module the Example's import line names.
     ``returns_frames`` marks a ``kind: frames`` returns schema (a dict of frames) whose
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
+    ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
+    ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name.
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -234,6 +278,9 @@ def _build_docstring(
     else:
         lines.append(f"    {raw_doc.capitalize() if raw_doc else 'The raw JSON ``Dict``'}.")
     raises = list(extras.get("raises") or [])
+    if vocab_raises:
+        named = " ".join(raises)
+        raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -780,6 +827,7 @@ class _EndpointView:
             doc_extras=doc_extras,
             import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
+            vocab_raises=getter_module in _VOCAB_GETTERS,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----

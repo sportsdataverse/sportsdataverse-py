@@ -343,6 +343,8 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
         # valid — the caller is responsible for parsing.
         return response
 
+    # Only ``code: 404`` has been observed in a 200 envelope; other ESPN error codes
+    # arrive with a matching HTTP status and are classified by the caller.
     if isinstance(body, dict) and body.get("code") == 404:
         raise NoDataError(_format_404(response.url, body=body))
     return response

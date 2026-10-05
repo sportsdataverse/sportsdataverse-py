@@ -72,7 +72,9 @@ def kenpom_ratings(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -128,7 +130,9 @@ def kenpom_efficiency(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -184,7 +188,9 @@ def kenpom_four_factors(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -240,7 +246,9 @@ def kenpom_point_distribution(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -296,7 +304,9 @@ def kenpom_height(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -352,7 +362,9 @@ def kenpom_foul_trouble(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -410,7 +422,9 @@ def kenpom_team_stats(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -473,7 +487,9 @@ def kenpom_player_stats(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -532,7 +548,9 @@ def kenpom_kpoy(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -590,7 +608,9 @@ def kenpom_team(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -649,7 +669,9 @@ def kenpom_team_players_expanded(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -708,7 +730,9 @@ def kenpom_game_plan(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -769,7 +793,9 @@ def kenpom_opponent_tracker(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -827,7 +853,9 @@ def kenpom_player_career(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -885,7 +913,9 @@ def kenpom_box(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -944,7 +974,9 @@ def kenpom_win_probability(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1001,7 +1033,9 @@ def kenpom_fan_match(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1057,7 +1091,9 @@ def kenpom_team_history(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1113,7 +1149,9 @@ def kenpom_coach_history(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1167,7 +1205,9 @@ def kenpom_program_ratings(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1221,7 +1261,9 @@ def kenpom_archive_ratings(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1279,7 +1321,9 @@ def kenpom_conference(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1336,7 +1380,9 @@ def kenpom_conference_stats(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1392,7 +1438,9 @@ def kenpom_conference_history(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1446,7 +1494,9 @@ def kenpom_trends(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1498,7 +1548,9 @@ def kenpom_home_court_advantage(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1552,7 +1604,9 @@ def kenpom_arenas(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1608,7 +1662,9 @@ def kenpom_officials(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1666,7 +1722,9 @@ def kenpom_referee(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1725,7 +1783,9 @@ def kenpom_game_attributes(
 
     Raises:
         RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``, or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
