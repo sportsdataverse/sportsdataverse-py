@@ -19,7 +19,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_cfb_recruits` | [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits) | — |
 | `load_cfb_returning_production` | [cfb_returning_production](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production) | — |
 | `load_cfb_rosters` | [espn_cfb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rosters) | — |
-| `load_cfb_rosters_cfbd` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
+| `load_cfb_rosters_cfbd` | [cfbfastR-data](https://github.com/sportsdataverse/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_schedules) | — |
 | `load_cfb_team_info` | [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info) | — |
 | `load_cfb_teams` | [espn_cfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_teams) | — |
