@@ -50,7 +50,8 @@ def torvik_ratings(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -101,7 +102,8 @@ def torvik_team_factors(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -155,6 +157,8 @@ def torvik_game_stats(
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -210,7 +214,8 @@ def torvik_player_stats(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -265,6 +270,8 @@ def torvik_game_schedule(
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

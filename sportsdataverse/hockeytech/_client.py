@@ -11,6 +11,7 @@ import time
 import urllib.parse
 from typing import Any, Dict, Optional, Union
 
+from sportsdataverse._codegen_runtime import _check_status
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.hockeytech._leagues import get_config, resolve_api_key
@@ -147,10 +148,9 @@ def hockeytech_api(
     if failure is not None:
         raise failure
 
-    status = getattr(resp, "status_code", 200)
-    if not 200 <= status < 300:
-        raise AssetFetchError(f"{where}: HTTP {status}")
     text = resp.text or ""
+    # 400/422 -> ValueError, any other non-2xx -> AssetFetchError (the shared rule).
+    _check_status(url, getattr(resp, "status_code", 200), _redact(text, key), label=where)
     if _ACCESS_DENIED_RE.match(text):
         return {}
     try:

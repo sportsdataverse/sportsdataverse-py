@@ -186,6 +186,11 @@ def espn_ucl_scoreboard(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -233,6 +238,11 @@ def espn_ucl_summary(
     Returns:
         a dict of ``polars.DataFrame``s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -272,6 +282,11 @@ def espn_ucl_calendar(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -313,6 +328,11 @@ def espn_ucl_news(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -352,6 +372,11 @@ def espn_ucl_injuries(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -393,6 +418,11 @@ def espn_ucl_transactions(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -433,6 +463,11 @@ def espn_ucl_conferences(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -471,6 +506,11 @@ def espn_ucl_statistics_league(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -508,6 +548,11 @@ def espn_ucl_draft(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -548,6 +593,11 @@ def espn_ucl_teams_site(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -591,6 +641,11 @@ def espn_ucl_team(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -632,6 +687,11 @@ def espn_ucl_team_roster(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -677,6 +737,11 @@ def espn_ucl_team_schedule(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -719,6 +784,11 @@ def espn_ucl_team_record(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -758,6 +828,11 @@ def espn_ucl_team_depthcharts(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -799,6 +874,11 @@ def espn_ucl_team_injuries(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -839,6 +919,11 @@ def espn_ucl_team_transactions(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -878,6 +963,11 @@ def espn_ucl_team_history(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -921,6 +1011,11 @@ def espn_ucl_team_news(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -963,6 +1058,11 @@ def espn_ucl_team_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1002,6 +1102,11 @@ def espn_ucl_player_info(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1043,6 +1148,11 @@ def espn_ucl_player_bio(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1082,6 +1192,11 @@ def espn_ucl_player_news(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1127,6 +1242,11 @@ def espn_ucl_standings(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1171,6 +1291,11 @@ def espn_ucl_player_overview(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1212,6 +1337,11 @@ def espn_ucl_player_stats(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1257,6 +1387,11 @@ def espn_ucl_player_gamelog(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1300,6 +1435,11 @@ def espn_ucl_player_splits(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1353,6 +1493,11 @@ def espn_ucl_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1398,6 +1543,11 @@ def espn_ucl_league_root(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1435,6 +1585,11 @@ def espn_ucl_season_pointer(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1475,6 +1630,11 @@ def espn_ucl_seasons(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1518,6 +1678,11 @@ def espn_ucl_season_info(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1557,6 +1722,11 @@ def espn_ucl_season_types(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1599,6 +1769,11 @@ def espn_ucl_season_type(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1644,6 +1819,11 @@ def espn_ucl_season_group(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1685,6 +1865,11 @@ def espn_ucl_season_groups(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1731,6 +1916,11 @@ def espn_ucl_season_group_teams(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1780,6 +1970,11 @@ def espn_ucl_season_group_children(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1824,6 +2019,11 @@ def espn_ucl_season_type_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1866,6 +2066,11 @@ def espn_ucl_season_type_corrections(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -1907,6 +2112,11 @@ def espn_ucl_season_weeks(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1951,6 +2161,11 @@ def espn_ucl_season_week(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1997,6 +2212,11 @@ def espn_ucl_season_week_powerindex(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2046,6 +2266,11 @@ def espn_ucl_season_week_games(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2092,6 +2317,11 @@ def espn_ucl_season_teams(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2137,6 +2367,11 @@ def espn_ucl_season_team(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2180,6 +2415,11 @@ def espn_ucl_season_players(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2226,6 +2466,11 @@ def espn_ucl_season_coaches(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2267,6 +2512,11 @@ def espn_ucl_season_draft(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2310,6 +2560,11 @@ def espn_ucl_season_draft_round_picks(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2350,6 +2605,11 @@ def espn_ucl_season_futures(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2389,6 +2649,11 @@ def espn_ucl_season_freeagents(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2431,6 +2696,11 @@ def espn_ucl_season_powerindex(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2476,6 +2746,11 @@ def espn_ucl_season_powerindex_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2517,6 +2792,11 @@ def espn_ucl_season_awards(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2564,6 +2844,11 @@ def espn_ucl_players_index(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2608,6 +2893,11 @@ def espn_ucl_player_core(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2649,6 +2939,11 @@ def espn_ucl_player_career_stats(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2695,6 +2990,11 @@ def espn_ucl_player_statisticslog(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2734,6 +3034,11 @@ def espn_ucl_player_eventlog(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2775,6 +3080,11 @@ def espn_ucl_player_contracts(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2814,6 +3124,11 @@ def espn_ucl_player_awards(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2855,6 +3170,11 @@ def espn_ucl_player_seasons(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2894,6 +3214,11 @@ def espn_ucl_player_records(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2935,6 +3260,11 @@ def espn_ucl_player_injuries(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -2974,6 +3304,11 @@ def espn_ucl_player_notes(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3017,6 +3352,11 @@ def espn_ucl_player_vs_player(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3058,6 +3398,11 @@ def espn_ucl_games(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3102,6 +3447,11 @@ def espn_ucl_game(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3143,6 +3493,11 @@ def espn_ucl_game_competition(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3190,6 +3545,11 @@ def espn_ucl_game_teams(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3235,6 +3595,11 @@ def espn_ucl_game_team(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3282,6 +3647,11 @@ def espn_ucl_game_team_roster(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3327,6 +3697,11 @@ def espn_ucl_game_team_linescores(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3374,6 +3749,11 @@ def espn_ucl_game_team_statistics(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3419,6 +3799,11 @@ def espn_ucl_game_team_record(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3466,6 +3851,11 @@ def espn_ucl_game_team_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3509,6 +3899,11 @@ def espn_ucl_game_odds(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3555,6 +3950,11 @@ def espn_ucl_game_probabilities(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3604,6 +4004,11 @@ def espn_ucl_game_plays(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3652,6 +4057,11 @@ def espn_ucl_game_play(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3698,6 +4108,11 @@ def espn_ucl_game_play_personnel(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3741,6 +4156,11 @@ def espn_ucl_game_situation(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3786,6 +4206,11 @@ def espn_ucl_game_status(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3829,6 +4254,11 @@ def espn_ucl_game_officials(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3874,6 +4304,11 @@ def espn_ucl_game_broadcasts(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3917,6 +4352,11 @@ def espn_ucl_game_predictor(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3962,6 +4402,11 @@ def espn_ucl_game_powerindex(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4005,6 +4450,11 @@ def espn_ucl_game_propbets(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4050,6 +4500,11 @@ def espn_ucl_game_leaders(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4093,6 +4548,11 @@ def espn_ucl_game_scoringplays(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4140,6 +4600,11 @@ def espn_ucl_game_official_detail(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4184,6 +4649,11 @@ def espn_ucl_teams_core(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4227,6 +4697,11 @@ def espn_ucl_team_core(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4266,6 +4741,11 @@ def espn_ucl_venues(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4309,6 +4789,11 @@ def espn_ucl_venue(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4348,6 +4833,11 @@ def espn_ucl_franchises(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4391,6 +4881,11 @@ def espn_ucl_franchise(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4430,6 +4925,11 @@ def espn_ucl_coach(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4473,6 +4973,11 @@ def espn_ucl_coach_record(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4515,6 +5020,11 @@ def espn_ucl_coach_season(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4554,6 +5064,11 @@ def espn_ucl_positions(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4597,6 +5112,11 @@ def espn_ucl_position(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4636,6 +5156,11 @@ def espn_ucl_tournaments(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4679,6 +5204,11 @@ def espn_ucl_awards(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4721,6 +5251,11 @@ def espn_ucl_award(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4758,6 +5293,11 @@ def espn_ucl_standings_core(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4797,6 +5337,11 @@ def espn_ucl_leaders_core(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4835,6 +5380,11 @@ def espn_ucl_league_notes(
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4872,6 +5422,11 @@ def espn_ucl_talentpicks(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4916,6 +5471,11 @@ def espn_ucl_fpi(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4966,6 +5526,11 @@ def espn_ucl_cdn_scoreboard(
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

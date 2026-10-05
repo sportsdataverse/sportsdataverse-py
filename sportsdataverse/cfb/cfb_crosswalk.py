@@ -56,6 +56,7 @@ if TYPE_CHECKING:
     from polars._typing import PolarsDataType
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._crosswalk_basketball_sources import FetchTally
 from sportsdataverse._common_espn_parsers import parse_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
@@ -74,6 +75,7 @@ __all__ = [
 ]
 
 DataFrameT = Union[pl.DataFrame, "pd.DataFrame"]
+
 
 logger = logging.getLogger(__name__)
 
@@ -359,30 +361,34 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
     Driven by the ESPN calendar so the exact (week, season_type) slots are used:
     regular weeks (season_type 2), bowls (season_type 3, week 1), and the CFP
-    (season_type 3, week 999). season_type 4 (all-star) is skipped. Each weekly
-    pull is best-effort -- an empty/failed week contributes nothing rather than
-    aborting the season.
+    (season_type 3, week 999). season_type 4 (all-star) is skipped. The weeks
+    share one :class:`FetchTally`: a 404 week contributes nothing, an isolated
+    failed week is skipped and logged, and a season where no WEEK answered raises
+    :class:`CrosswalkSourceError` -- a failed fetch is never an empty week. The
+    calendar is tallied apart (an answered calendar must not mask failed weeks); a
+    failed calendar is logged and falls back to the default week slots.
     """
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    slots: List[tuple[Any, Any]] = []
-    try:
-        cal = espn_cfb_calendar(season=season, **kwargs)
-        slots = [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
-    except Exception as exc:
-        logger.warning("ESPN calendar fetch failed for %s; using default week slots: %s", season, exc)
-        slots = []
+    cal_tally = FetchTally("espn_cfb_calendar")
+    cal = cal_tally.fetch(f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs))
+    if cal_tally.failed:
+        logger.warning(
+            "espn_cfb_calendar failed for %s; using the default week slots: %s", season, cal_tally.failed[0][1]
+        )
+    tally = FetchTally("espn_cfb_schedule")
+    slots: List[tuple[Any, Any]] = [] if cal is None else [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
     if not slots:  # calendar unavailable -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
     valid = [(w, st) for (w, st) in slots if w is not None and str(st) in ("2", "3")]
 
     def _fetch(slot: tuple[Any, Any]) -> List[Dict[str, Any]]:
         week, stype = slot
-        try:
-            return _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs))
-        except Exception as exc:
-            logger.warning("ESPN schedule fetch failed for %s week %s (st %s): %s", season, week, stype, exc)
-            return []
+        rows = tally.fetch(
+            f"season={season} week={week} season_type={stype}",
+            lambda: _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs)),
+        )
+        return rows or []
 
     # Fetch weeks concurrently; dedup sequentially (order preserved) so "first
     # wins" stays deterministic.
@@ -394,6 +400,7 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
             if gid is not None:
                 seen.add(gid)
             out.append(row)
+    tally.finish()
     return out
 
 
@@ -440,41 +447,41 @@ def _project_fox(df: DataFrameT) -> List[Dict[str, Any]]:
 
 def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # Fetch just the regular-season week segment ("{season}-{week}-1") -- one HTTP
-    # call -- and match its games onto ESPN's week by team. Fox is best-effort: a
-    # Fox outage must never break the ESPN<->Yahoo core, hence the deliberate
-    # broad guard returning an empty list.
-    try:
-        return _project_fox(fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs))
-    except Exception as exc:
-        logger.warning("Fox schedule fetch failed for %s week %s: %s", season, week, exc)
-        return []
+    # call -- and match its games onto ESPN's week by team. A 404 is "Fox has no
+    # such week" (empty); a failed fetch raises CrosswalkSourceError rather than
+    # leaving every fox_* column null in a well-formed result.
+    tally = FetchTally("fox_cfb_schedule")
+    df = tally.fetch(
+        f"segment_id={season}-{week}-1", lambda: fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs)
+    )
+    tally.finish()
+    return [] if df is None else _project_fox(df)
 
 
 def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # Fox's full season (regular weeks + conf championships + bowls + every CFP
-    # round), best-effort. Fox postseason matchups can be projections in the
-    # offseason -- those simply fail to match and fall through as null Fox ids.
-    try:
-        return _project_fox(fox_cfb_schedule(season, **kwargs))
-    except Exception as exc:
-        logger.warning("Fox full-season fetch failed for %s: %s", season, exc)
-        return []
+    # round). Fox postseason matchups can be projections in the offseason -- those
+    # simply fail to match and fall through as null Fox ids. fox_cfb_schedule raises
+    # on one bad segment (a partial season must not look complete); that failure
+    # surfaces here as CrosswalkSourceError, a 404 as no Fox games.
+    tally = FetchTally("fox_cfb_schedule")
+    df = tally.fetch(f"season={season}", lambda: fox_cfb_schedule(season, **kwargs))
+    tally.finish()
+    return [] if df is None else _project_fox(df)
 
 
 def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # Yahoo scoreboard is per-week; loop the regular season + postseason weeks
-    # (bowls/CFP run into the low 20s -- the national championship is ~week 21),
-    # swallowing the occasional per-week parser error so one bad week can't sink
-    # the whole season. Dedup by game id across weeks.
+    # (bowls/CFP run into the low 20s -- the national championship is ~week 21).
+    # One FetchTally: a 404 week is empty, an isolated failed week is skipped and
+    # logged, and a season where no week answered raises CrosswalkSourceError.
+    # Dedup by game id across weeks.
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
+    tally = FetchTally("yahoo_cfb_scoreboard")
 
     def _fetch(week: int) -> List[Dict[str, Any]]:
-        try:
-            return _yahoo_games(season, week, **kwargs)
-        except Exception as exc:
-            logger.warning("Yahoo scoreboard fetch/parse failed for %s week %s: %s", season, week, exc)
-            return []
+        return tally.fetch(f"season={season} week={week}", lambda: _yahoo_games(season, week, **kwargs)) or []
 
     # Fetch weeks concurrently; dedup sequentially (order preserved).
     for rows in _thread_map(_fetch, list(range(1, 24))):
@@ -485,6 +492,7 @@ def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
             if gid is not None:
                 seen.add(gid)
             out.append(row)
+    tally.finish()
     return out
 
 

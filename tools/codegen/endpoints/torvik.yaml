@@ -17,8 +17,6 @@ docstring:
   raises:
   - 'sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file
     for that season).'
-  - 'requests.exceptions.RequestException: Connection-level failure after
-    ``dl_utils.download`` exhausts its retries.'
   see_also:
   - name: hoopR
     url: https://hoopR.sportsdataverse.org

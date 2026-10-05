@@ -38,6 +38,7 @@ import warnings
 from datetime import timedelta
 from typing import Any, Callable, Dict, Optional
 
+from sportsdataverse._codegen_runtime import _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 
@@ -137,8 +138,9 @@ def _get(
         RuntimeError: No API key could be resolved.
         ValueError: PFF rejected the request (400 ``invalid_parameter`` / 422).
         NoDataError: PFF answered 404 (raised by the transport).
-        AssetFetchError: 401/403/429/5xx, a 200 whose body is not a JSON object, or (strict
-            mode) a body with columns withheld -- the answer is unknown or partial.
+        AssetFetchError: 401/403/429/5xx, a connection failure after retries, a 200 whose
+            body is not a JSON object, or (strict mode) a body with columns withheld -- the
+            answer is unknown or partial.
 
     Example:
         Offline, with an injected transport::
@@ -173,7 +175,8 @@ def _get(
             )
         hdrs["Authorization"] = f"Bearer {key}"
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    status, text = (transport or _default_transport)(url, clean, hdrs)
+    with _transport_errors(url):
+        status, text = (transport or _default_transport)(url, clean, hdrs)
     if status == 200:
         # every PFF operation answers a JSON object: anything else (a CDN interstitial, a
         # truncated body) is an UNKNOWN answer, never an empty one

@@ -42,8 +42,9 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
+from sportsdataverse._codegen_runtime import _json_body, _text_body, _transport_errors, _where
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 _HOST = "https://www.on3.com"
 _BUILD_ID_RE = re.compile(r'"buildId":"([A-Za-z0-9_-]+)"')
@@ -75,7 +76,7 @@ def _extract_build_id(text: str) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _discover_build_id(page_url: str, **kwargs: Any) -> Optional[str]:
+def _discover_build_id(page_url: str, **kwargs: Any) -> str:
     """Fetch ``page_url`` and extract the current Next.js buildId.
 
     Args:
@@ -84,14 +85,21 @@ def _discover_build_id(page_url: str, **kwargs: Any) -> Optional[str]:
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The current buildId, or ``None`` when the page 404s / carries no blob.
+        The current buildId.
+
+    Raises:
+        NoDataError: the page answered 404 -- the ranking does not exist.
+        AssetFetchError: the page answered any other non-2xx or a connection failure
+            outlived the retries, or a 2xx page carries no buildId (a bot-challenge
+            interstitial is a failed fetch, not an empty ranking).
     """
     headers = {**_headers(), **kwargs.pop("headers", {})}
-    try:
+    with _transport_errors(page_url):
         resp = download(url=page_url, headers=headers, **kwargs)
-    except NoDataError:
-        return None
-    return _extract_build_id(getattr(resp, "text", "") or "")
+    build_id = _extract_build_id(_text_body(resp, page_url))
+    if build_id is None:
+        raise AssetFetchError(f"{_where(page_url)}: page carries no Next.js buildId (a challenge page?)")
+    return build_id
 
 
 def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Any:
@@ -109,19 +117,20 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> An
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The parsed JSON ``dict`` or ``list``; ``{}`` when the route is
-        unreachable (``NoDataError``) or the body is not JSON.
+        The parsed JSON ``dict`` or ``list``; ``{}`` for a 204/205.
+
+    Raises:
+        NoDataError: the route answered 404.
+        ValueError: the RDB answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            a 2xx whose body is empty (not 204/205) or not JSON -- the answer is
+            unknown, not empty.
     """
     headers = {**_headers(), **kwargs.pop("headers", {})}
     query = {k: v for k, v in (params or {}).items() if v is not None}
-    try:
+    with _transport_errors(url):
         resp = download(url=url, params=query, headers=headers, **kwargs)
-    except NoDataError:
-        return {}
-    try:
-        body = resp.json()
-    except ValueError:
-        return {}
+    body = _json_body(resp, url)
     return body if isinstance(body, (dict, list)) else {}
 
 
@@ -142,9 +151,17 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The parsed JSON ``dict`` (``{"pageProps": {...}}``), or ``{}`` when the
-        route cannot be resolved (unknown path shape, unreachable page, or a
-        payload that is not JSON).
+        The parsed JSON ``dict`` (``{"pageProps": {...}}``), or ``{}`` for a path
+        shape no On3 route family matches.
+
+    Raises:
+        NoDataError: the ranking page 404s, or the data route 404s again after a
+            buildId refresh (or the buildId did not change) -- the ranking does not
+            exist.
+        ValueError: On3 answered 400 / 422 -- the request is wrong.
+        AssetFetchError: the page or data route answered any other non-2xx or a
+            connection failure outlived the retries, the page carries no buildId,
+            or a 2xx data body is empty or not JSON.
     """
     global _build_id
 
@@ -169,27 +186,23 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
 
     if _build_id is None:
         _build_id = _discover_build_id(page_url, headers=headers, **kwargs)
-        if _build_id is None:
-            return {}
 
     for attempt in range(2):
         data_url = f"{_HOST}/_next/data/{_build_id}{path}"
         try:
-            resp = download(url=data_url, params=query, headers=headers, **kwargs)
+            with _transport_errors(data_url):
+                resp = download(url=data_url, params=query, headers=headers, **kwargs)
         except NoDataError:
+            # The FIRST 404 on the data route means the buildId rotated (On3
+            # deployed): refresh once. A second 404, or an UNCHANGED buildId, is
+            # authoritative -- the resource genuinely does not exist.
             if attempt == 1:
-                return {}
-            # 404 on the data route == buildId rotated (On3 deployed). Refresh once;
-            # an UNCHANGED buildId means the 404 is authoritative (the resource
-            # genuinely doesn't exist) — don't burn a second data fetch on it.
+                raise
             stale = _build_id
             _build_id = _discover_build_id(page_url, headers=headers, **kwargs)
-            if _build_id is None or _build_id == stale:
-                return {}
+            if _build_id == stale:
+                raise
             continue
-        try:
-            body = resp.json()
-        except ValueError:
-            return {}
+        body = _json_body(resp, data_url)
         return body if isinstance(body, dict) else {}
-    return {}
+    raise AssertionError("unreachable: the second attempt returns or raises")

@@ -57,7 +57,8 @@ def mls_club(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -109,7 +110,8 @@ def mls_competition_seasons(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -159,7 +161,8 @@ def mls_competitions(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -211,7 +214,8 @@ def mls_content_season(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -265,7 +269,8 @@ def mls_content_seasons(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -319,7 +324,8 @@ def mls_match(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -383,7 +389,8 @@ def mls_season_matches(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -443,7 +450,8 @@ def mls_sportapi_club_players(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -496,7 +504,8 @@ def mls_sportapi_clubs_by_sportec_ids(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -548,7 +557,8 @@ def mls_sportapi_match(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -600,7 +610,8 @@ def mls_sportapi_matches_by_sportec_ids(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -660,7 +671,8 @@ def mls_standings(
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id, or an unplayed match on ``/matches/{matchId}``).
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

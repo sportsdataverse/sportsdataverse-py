@@ -89,7 +89,9 @@ def fox_api_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -147,7 +149,9 @@ def fox_api_scorechip(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -203,7 +207,9 @@ def fox_api_topevents_scoreboard_segment(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -260,7 +266,9 @@ def fox_api_league_conferences(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -317,7 +325,9 @@ def fox_api_league_header(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -376,7 +386,9 @@ def fox_api_league_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -434,7 +446,9 @@ def fox_api_league_playernews(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -491,7 +505,9 @@ def fox_api_league_polls(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -548,7 +564,9 @@ def fox_api_league_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -605,7 +623,9 @@ def fox_api_league_scores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -666,7 +686,9 @@ def fox_api_league_scores_segment(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -724,7 +746,9 @@ def fox_api_league_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -781,7 +805,9 @@ def fox_api_league_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -846,7 +872,9 @@ def fox_api_league_stats_con(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -904,7 +932,9 @@ def fox_api_league_teamnav(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -963,7 +993,9 @@ def fox_api_event_data(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1022,7 +1054,9 @@ def fox_api_event_matchup(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1081,7 +1115,9 @@ def fox_api_event_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1140,7 +1176,9 @@ def fox_api_event_recap(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1199,7 +1237,9 @@ def fox_api_event_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1258,7 +1298,9 @@ def fox_api_team_gamelog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1317,7 +1359,9 @@ def fox_api_team_header(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1376,7 +1420,9 @@ def fox_api_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1435,7 +1481,9 @@ def fox_api_team_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1494,7 +1542,9 @@ def fox_api_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1551,7 +1601,9 @@ def fox_api_explore_browse(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1606,7 +1658,9 @@ def fox_api_explore_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1663,7 +1717,9 @@ def fox_api_search_content(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1721,7 +1777,9 @@ def fox_api_search_entities(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1777,7 +1835,9 @@ def fox_api_search_popular(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1836,7 +1896,9 @@ def fox_api_trending_articles(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1897,7 +1959,9 @@ def fox_api_trending_videos(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1956,7 +2020,9 @@ def fox_api_foxpolls(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

@@ -168,8 +168,9 @@ def test_get_refreshes_build_id_after_deploy_rotation(on3_runtime, monkeypatch):
 
 def test_get_treats_unchanged_build_id_404_as_no_data(on3_runtime, monkeypatch):
     """When re-discovery returns the SAME buildId that just 404'd, the 404 is
-    authoritative (resource genuinely absent) — no second data fetch is spent."""
-    from sportsdataverse.errors import NoESPNDataError
+    authoritative (resource genuinely absent) — no second data fetch is spent,
+    and it surfaces as NoDataError (was ``{}``)."""
+    from sportsdataverse.errors import NoDataError, NoESPNDataError
 
     on3_runtime._build_id = "same-bid"
     calls = {"data": 0, "page": 0}
@@ -182,7 +183,8 @@ def test_get_treats_unchanged_build_id_404_as_no_data(on3_runtime, monkeypatch):
         return _Resp(text='"buildId":"same-bid"')
 
     monkeypatch.setattr(on3_runtime, "download", fake_download)
-    assert on3_runtime._scrape_get("https://www.on3.com/rivals/rankings/player/football/2031.json") == {}
+    with pytest.raises(NoDataError):
+        on3_runtime._scrape_get("https://www.on3.com/rivals/rankings/player/football/2031.json")
     assert calls == {"data": 1, "page": 1}
 
 

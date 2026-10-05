@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
   - [Fixed — HockeyTech season names read as their end year in every league (BREAKING)](#fixed--hockeytech-season-names-read-as-their-end-year-in-every-league-breaking)
   - [Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions](#fixed--pff-time-to-throw-aimed-passes-and-receiving-positive-epa-descriptions)
   - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
@@ -327,6 +328,74 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)
+
+`_codegen_runtime._get`, the getter behind every generated wrapper of the 30 `espn_*`
+league families, `fox_api_*`, `cbs_*` (NAPI), `mlb_api_*`, the four NHL families
+(`nhl_web_*`, `nhl_edge_*`, `nhl_stats_*`, `nhl_records_*`), `asa_*`, and the hand-written
+`fox_cfb_*`, `yahoo_cfb_*` and CFB crosswalk helpers, returned whatever came back. A
+401/403/429/5xx with a JSON body was handed over as if it were the payload (Fox's
+`{"fault": {"faultstring": "Invalid ApiKey"}}`, ESPN's `{"code": 400, ...}`); a non-JSON
+or empty answer became `{}`. Parsed, both were a zero-row frame: a failed fetch read as
+"no data". It now follows the package error vocabulary:
+
+| Answer | Before | Now |
+|---|---|---|
+| 2xx with a JSON body | the body | the body (unchanged) |
+| 204 / 205 | `{}` | `{}` (no content by definition) |
+| 200 with an empty body | `{}` | `AssetFetchError` (barttorvik's block, pro.nfl.com's rejected params and stats-host throttling all answer this way) |
+| 404, or ESPN 200 with `{"code": 404}` | `NoDataError` | `NoDataError` (unchanged) |
+| 400 / 422 | the error body as data | `ValueError`: the request is wrong, retrying cannot help |
+| 401 / 403 / 429 / 5xx after retries, any other non-2xx | the error body as data | `AssetFetchError` |
+| 2xx with a non-JSON body | `{}` | `AssetFetchError` |
+| connection failure (timeout, reset, DNS) after retries | a raw `requests` exception | `AssetFetchError`, chained to it |
+
+Every message names host, path and status plus a bounded excerpt of the body, never the
+query string (API keys travel there, including in ESPN `$ref` links) and with credentials
+redacted; the non-JSON case is raised outside the decode handler, so the `JSONDecodeError`
+(whose `.doc` is the whole body) is not chained. The same rule now applies to the other
+runtime getters: `mlb_statcast_*` (and the player page behind `mlb_statcast_player`),
+`torvik_*` / `bart_wbb` and `kenpom_*` (an error page was returned as CSV/HTML text), the MLS
+and NWSL stats-API wrappers (`mls_*`, `nwsl_*`), the Yahoo shangrila wrappers (`yahoo_*`,
+whose HTTP 400 `{"errors": [...]}` for a bad persisted query is now a `ValueError`),
+`on3_*`, `sports247_*` (RDB and site pages), the LEGACY `pff_*` premium wrappers,
+`pff_api_*` (connection failures), `nhl_scoreboard`, the hand-written `nhl_records_*`
+helpers and the `mlb_api_extra` helpers. Specifically:
+
+- `on3_*` and `yahoo_*` answered a 404 with `{}`; it is now `NoDataError`. On3's Next.js
+  data route still treats its FIRST 404 as "the buildId rotated" and refreshes once; a
+  second 404, or an unchanged buildId, raises `NoDataError`. A 2xx On3 page with no
+  buildId (a bot-challenge interstitial) raises `AssetFetchError` instead of returning `{}`.
+- `nfl_api_*` raised a bare `requests.HTTPError` (or `JSONDecodeError`); it now raises
+  `AssetFetchError` / `ValueError` / `NoDataError`. Code that caught `HTTPError` or read
+  `exc.response` breaks: read the status from the message, or catch the new types.
+- The 400 / 422 -> `ValueError` rule also covers `hockeytech_api` (every HockeyTech family,
+  PWHL included), The Odds API (`toa_*`, which rejects bad parameters with 422) and the
+  Statcast search windows; all three raised `AssetFetchError` for them.
+- `mlb_statcast_*` and `torvik_*`: a body labelled JSON that does not decode raises
+  `AssetFetchError` instead of being returned as text (which parsed to an empty frame);
+  CSV and HTML bodies are still returned as text.
+- The CFB crosswalks (`cfb_schedule_crosswalk`, through its ESPN calendar/schedule, Fox and
+  Yahoo legs) swallowed every exception into an empty leg, recording a failed fetch as "no
+  games". They now use the basketball crosswalk's `FetchTally`, one per leg: a 404 is an
+  answered empty item, an isolated failed week is skipped and logged once, and a leg where
+  no item answered raises `CrosswalkSourceError`. The ESPN calendar is tallied apart from
+  the ESPN weeks, so a season whose weeks all failed raises even when the calendar
+  answered; a failed calendar is logged and falls back to the default week slots. The Fox
+  week and full-season fetches are one item each, so a failed Fox fetch raises.
+  `fox_cfb_schedule` keeps raising on one bad segment: a partial season must not look
+  complete.
+
+The generated docstrings name `NoDataError`, `ValueError` and `AssetFetchError` under
+`Raises:` (the stale `requests.exceptions.RequestException` lines are gone).
+`nba_stats_*` / `wnba_stats_*` are unchanged here (a separate change); `nflpro_*` keeps
+its own errors.
+
+Migration: code that relied on an empty frame to keep a loop going should catch the error,
+e.g. `except AssetFetchError: log_and_retry_later()`; `except NoDataError` keeps skipping
+genuinely absent resources. `except SportsDataverseError` catches both, timeouts included.
+A `ValueError` means the call itself needs fixing.
 
 ### Fixed — HockeyTech season names read as their end year in every league (BREAKING)
 

@@ -139,8 +139,6 @@ def main() -> None:
             "raises": [
                 "sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 "
                 "(route not published for that league).",
-                "requests.exceptions.RequestException: Connection-level failure after "
-                "``dl_utils.download`` exhausts its retries.",
             ],
             "see_also": [
                 {

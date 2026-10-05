@@ -8,6 +8,8 @@ No network.
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import json
 from pathlib import Path
 from typing import Any, Dict
@@ -282,7 +284,11 @@ def test_runtime_caller_headers_win(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         mls_api_runtime,
         "download",
-        lambda url, params=None, headers=None, **kw: seen.update(headers=headers) or None,
+        lambda url, params=None, headers=None, **kw: (
+            seen.update(headers=headers) or SimpleNamespace(json=lambda: {"competitions": []})
+        ),
     )
-    assert mls_api_runtime._get("https://stats-api.mlssoccer.com/competitions", headers={"Referer": "x"}) == {}
+    assert mls_api_runtime._get("https://stats-api.mlssoccer.com/competitions", headers={"Referer": "x"}) == {
+        "competitions": []
+    }
     assert seen["headers"]["Referer"] == "x"

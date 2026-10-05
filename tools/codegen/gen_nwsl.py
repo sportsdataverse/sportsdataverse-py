@@ -221,8 +221,6 @@ def main() -> None:
             "raises": [
                 "sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 "
                 "(unknown composite id, or an unmapped match sub-resource).",
-                "requests.exceptions.RequestException: Connection-level failure after "
-                "``dl_utils.download`` exhausts its retries.",
             ],
             "see_also": [
                 {

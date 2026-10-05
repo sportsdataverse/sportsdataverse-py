@@ -15,13 +15,15 @@ from __future__ import annotations
 import json
 import logging
 import re
+import threading
 from datetime import date, datetime
 from typing import Any, Callable, Dict, List, Optional, Sequence
 
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import str_id, to_eastern
-from sportsdataverse.errors import AssetFetchError, NoDataError, SportsDataverseError
+from sportsdataverse._fox_layout import fox_get
+from sportsdataverse.errors import NoDataError, SportsDataverseError
 
 logger = logging.getLogger(__name__)
 
@@ -255,6 +257,8 @@ class FetchTally:
         self.strict = strict
         self.answered = 0
         self.failed: List[tuple[str, Exception]] = []
+        # The CFB crosswalk fetches weeks on a thread pool through one tally.
+        self._lock = threading.Lock()
 
     def fetch(self, item: str, call: Callable[[], Any]) -> Any:
         """Run one item's fetch: its result, or ``None`` when it 404'd or failed.
@@ -274,16 +278,19 @@ class FetchTally:
         try:
             out = call()
         except NoDataError:
-            self.answered += 1
+            with self._lock:
+                self.answered += 1
             return None
         except CrosswalkSourceError:
             raise
         except Exception as exc:
             if self.strict:
                 raise CrosswalkSourceError(f"{self.endpoint}({item}) failed: {type(exc).__name__}: {exc}") from exc
-            self.failed.append((item, exc))
+            with self._lock:
+                self.failed.append((item, exc))
             return None
-        self.answered += 1
+        with self._lock:
+            self.answered += 1
         return out
 
     def finish(self) -> None:
@@ -645,19 +652,6 @@ _FOX_SPORT = {"mbb": "cbk", "wbb": "wcbk"}
 _FOX_TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
 
 
-def _fox_json(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
-    """``fox_get`` that raises on a non-200 instead of reading it as an empty payload."""
-    from sportsdataverse._fox_layout import _HEADERS, API, DATA_KEY
-    from sportsdataverse.dl_utils import download
-
-    resp = download(
-        f"{API}/{path}", params={"apikey": DATA_KEY, "api-version": "1.1", **(params or {})}, headers=_HEADERS, **kwargs
-    )
-    if resp.status_code != 200:
-        raise AssetFetchError(f"Fox {path} {params or ''} answered HTTP {resp.status_code}")
-    return resp.json()
-
-
 def fox_season_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
     """Fox team directory AS OF one season: one ``league/standings`` call per conference.
 
@@ -678,7 +672,7 @@ def fox_season_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
         :data:`FOX_FIRST_SEASON`, which Fox cannot answer.
 
     Raises:
-        AssetFetchError: A Fox call answered anything but 200.
+        AssetFetchError: A Fox call failed (see :func:`sportsdataverse._fox_layout.fox_get`).
         CrosswalkSourceError: No conference returned standings for the season.
 
     Example:
@@ -696,14 +690,14 @@ def fox_season_teams(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
     label = f"{season - 1}-{season % 100:02d}"
     groups = [
         r["fox_id"]
-        for r in parse_nav_items(_fox_json(f"{sport}/league/conferences", **kwargs))
+        for r in parse_nav_items(fox_get(f"{sport}/league/conferences", **kwargs))
         if r["fox_id"] and "/groups/" in (r["content_uri"] or "")
     ]
     rows: List[Dict[str, Any]] = []
     seen: set = set()
     for gid in groups:
         try:
-            raw = _fox_json(f"{sport}/league/standings", {"groupId": gid, "season": season - 1}, **kwargs)
+            raw = fox_get(f"{sport}/league/standings", {"groupId": gid, "season": season - 1}, **kwargs)
         except NoDataError:
             continue
         sections = [

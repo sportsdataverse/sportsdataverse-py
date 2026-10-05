@@ -1,0 +1,1 @@
+{"code":400,"message":"Error invoking GET: http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/nba/teams/99999, status=400, duration=8 ms, message=null, cache=CACHE_MISS"}

@@ -481,8 +481,8 @@ def fox_mbb_teams(
 
     Raises:
         sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Fetch one conference's team directory::
@@ -529,8 +529,8 @@ def fox_mbb_teams_all(
         ``fox_team_id`` / ``fox_team_name`` / ``fox_section``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after
-            ``dl_utils.download`` exhausts its retries. A 404 on an individual
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body). A 404 on an individual
             candidate id (``NoDataError``) is expected during the scan and is
             skipped; every other failure propagates rather than silently
             truncating the directory.

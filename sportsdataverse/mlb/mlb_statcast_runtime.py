@@ -25,6 +25,7 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 
 from sportsdataverse._codegen_runtime import _as_season_list, _csv, bool_str  # noqa: F401  (re-export for generated imports)
+from sportsdataverse._codegen_runtime import _check_response, _json_body, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 
@@ -34,9 +35,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
     Content-type drives the shape: ``application/json`` is parsed to a ``dict``;
     anything else (``text/csv``, ``application/download`` for the search export,
     ``text/html`` for embedded-JSON leaderboards) is returned as the raw response
-    text. ``None`` params are stripped. Returns ``{}`` on transport failure (no
-    response) so JSON consumers can chain without a null-check, and ``""`` only
-    if a body is present but unreadable.
+    text. ``None`` params are stripped.
 
     Args:
         url: fully-qualified endpoint URL.
@@ -44,24 +43,21 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        ``dict`` for JSON responses, ``str`` for CSV/HTML responses, ``{}`` when
-        the request yields no response.
+        ``dict`` for JSON responses, ``str`` for CSV/HTML responses.
+
+    Raises:
+        NoDataError: Savant answered 404.
+        ValueError: Savant answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            an empty 200, or a JSON-labelled body that does not decode -- its error
+            page is not data.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    resp = download(url=url, params=clean, **kwargs)
-    if resp is None:
-        return {}
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, **kwargs)
+    _check_response(resp, url)
     ctype = (resp.headers.get("content-type") or "").lower() if getattr(resp, "headers", None) else ""
     if "json" in ctype:
-        try:
-            return resp.json()
-        except Exception:
-            pass
-    try:
-        return resp.text
-    except Exception:
-        # No content-type hint and no text -- last-ditch JSON attempt.
-        try:
-            return resp.json()
-        except Exception:
-            return ""
+        # A JSON-labelled body that will not decode is a failed fetch, never text to parse.
+        return _json_body(resp, url)
+    return _text_body(resp, url)
