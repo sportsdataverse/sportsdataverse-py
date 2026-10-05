@@ -173,11 +173,11 @@ def _stats_result_set(label: str, fetch: Callable[[], Any], name: str) -> pl.Dat
     """One named result set from a RAW NBA/WNBA Stats payload, raising unless it was produced.
 
     ``parse_nba_stats_result_sets`` alone cannot tell a real empty answer from
-    a failed one: the Stats runtime answers a refused request (non-200, rate
-    limit, blank body) with ``{}``, and the parser drops rows whose field count
-    does not match the headers. Both render as zero rows. So the envelope is
-    read first -- only a present ``name`` set is an answer, and only an empty
-    ``rowSet`` is an empty one.
+    a failed one: the Stats runtime raises for a refused request (non-2xx, rate
+    limit, blank body) but returns a bare ``{}`` envelope as-is, and the parser
+    drops rows whose field count does not match the headers. Both of the latter
+    render as zero rows. So the envelope is read first -- only a present ``name``
+    set is an answer, and only an empty ``rowSet`` is an empty one.
 
     Args:
         label: The call, with its league / team / season, quoted into errors.

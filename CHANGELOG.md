@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)](#fixed--a-failed-statsnbacom--statswnbacom-fetch-raises-instead-of-returning--breaking)
   - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
   - [Fixed — HockeyTech season names read as their end year in every league (BREAKING)](#fixed--hockeytech-season-names-read-as-their-end-year-in-every-league-breaking)
   - [Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions](#fixed--pff-time-to-throw-aimed-passes-and-receiving-positive-epa-descriptions)
@@ -328,6 +329,53 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)
+
+The `nba_stats_*` / `wnba_stats_*` getter (`nba_stats_runtime._get`, and the WNBA shim
+over it) turned every failed fetch into `{}` plus an `EmptyResponseWarning`, so a
+rate-limited, blocked or erroring request parsed to a zero-row frame: "no data". It now
+uses the shared error vocabulary of the other runtime getters:
+
+| Answer | Before | Now |
+|---|---|---|
+| 2xx with a JSON body | the body | the body (unchanged) |
+| 2xx with an empty JSON object `{}`, or a 204 / 205 | `{}` + `EmptyResponseWarning` | `{}` + `EmptyResponseWarning` (unchanged) |
+| 404 | `{}` + warning | `NoDataError` |
+| 400 / 422 (e.g. `{"MeasureType":["Parameter must be valid"]}`) | `{}` + warning | `ValueError` |
+| 401 / 403 / 429 / 5xx, an EMPTY HTTP 500 included | `{}` + warning | `AssetFetchError` |
+| 2xx with a blank or non-JSON body | `{}` + warning | `AssetFetchError` |
+| connection failure (curl_cffi timeout, reset) | the raw curl_cffi exception | `AssetFetchError`, chained to it |
+
+`SDV_PY_NBA_STATS_RETRIES` still retries every failed fetch (and a bare `{}`) before it
+raises; a 404 or 400/422 is an answer and is never retried. A missing `curl_cffi` still
+raises `ImportError` and is no longer retried.
+
+stats.nba.com answers a request without a required `Season` with an empty HTTP 500
+(captured 2026-10-05: 0 bytes, no Content-Type). That is a failed request, so it raises
+`AssetFetchError` too. Since the season defaults below ("a season where the API needs one"),
+every season-keyed wrapper sends a season by default, so only an explicit `season=""` (or a hand-built request) still
+gets it.
+
+The same vocabulary now covers the cdn.nba.com / cdn.wnba.com liveData fetch
+(`nba_live_*`, `wnba_live_*`) and the official.nba.com fetch (`nba_l2m*`,
+`nba_referee_assignments`), which already raised for a failed fetch: a 400 / 422 is now a
+`ValueError` (was `AssetFetchError`), a liveData 204 / 205 is `NoDataError`, an
+official.nba.com 204 / 205 is `{}`, and their messages name host, path, status and a
+bounded body excerpt (still prefixed `fetch failed`).
+
+Callers that looped over stats fetches and dropped a failed one as an empty frame
+(synergy play types, shot charts, per-season bulk stats, the possession engines'
+rotation and quarter-box fetches) now stop on it. `nba_possessions(lineup_source="auto")`
+still falls back from rotation to quarter-box to pbp on any failure, and the season
+compile still logs and skips a failed game. `wnba_on_court` / `wnba_possessions` (and their
+G League twins) raise when the rotation fetch fails (stats.wnba.com 5xx's `gamerotation`
+below 2016) instead of returning an empty on-court frame, or possessions whose ten lineup
+slots are all null.
+
+Migration: catch `AssetFetchError` where a loop must keep going; `except NoDataError`
+keeps skipping absent resources; `EmptyResponseWarning` now fires only for a 2xx with an
+empty object.
 
 ### Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)
 

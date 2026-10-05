@@ -49,7 +49,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     stats_schedule_games,
     torvik_teams,
 )
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import AssetFetchError, EmptyResponseWarning, NoDataError
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 FIXTURES = {
@@ -610,20 +610,32 @@ def test_stats_rosters_raises_when_the_transport_fails(league: str) -> None:
     """A timeout (the observed droplet failure) must not read as an empty roster."""
     with pytest.raises(CrosswalkSourceError, match="commonteamroster") as exc:
         _stats_rosters(league, _raising(TimeoutError("stats.nba.com timed out")))
-    assert isinstance(exc.value.__cause__, TimeoutError)
+    assert isinstance(exc.value.__cause__, AssetFetchError)  # the runtime's failed-fetch error
+    assert isinstance(exc.value.__cause__.__cause__, TimeoutError)
 
 
 @pytest.mark.usefixtures("_no_stats_retries")
 @pytest.mark.parametrize("league", ["nba", "wnba"])
 @pytest.mark.parametrize(("status", "body"), [(403, ""), (429, ""), (500, "<html>"), (200, "")])
 def test_stats_rosters_raises_when_the_request_is_refused(league: str, status: int, body: str) -> None:
-    """The runtime answers a refused request with ``{}``, not an exception."""
+    """The runtime raises AssetFetchError for a refused request; the crosswalk names the call."""
     _, team_id, season = _ROSTER_FIXTURES[league]
-    with pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set") as exc:
+    with pytest.raises(CrosswalkSourceError, match=f"failed: AssetFetchError: .*answered HTTP {status}") as exc:
         _stats_rosters(league, lambda *a: (status, body))
     message = str(exc.value)
     assert f"{league}_stats_commonteamroster" in message and team_id in message and season in message
     assert "SDV_PY_NBA_STATS_RETRIES" in message, "the error must say how to ride out a throttle"
+
+
+@pytest.mark.usefixtures("_no_stats_retries")
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_stats_rosters_raises_on_a_bare_empty_envelope(league: str) -> None:
+    """A 200 ``{}`` comes back from the runtime as data; it is still not a roster."""
+    with (
+        pytest.warns(EmptyResponseWarning),
+        pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set"),
+    ):
+        _stats_rosters(league, lambda *a: (200, "{}"))
 
 
 @pytest.mark.usefixtures("_no_stats_retries")
@@ -657,7 +669,7 @@ def test_stats_rosters_retries_a_transient_throttle_when_retries_are_set(monkeyp
 def test_stats_rosters_raises_once_retries_are_exhausted(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "1")
     monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
-    with pytest.raises(CrosswalkSourceError, match="no CommonTeamRoster result set"):
+    with pytest.raises(CrosswalkSourceError, match="answered HTTP 429"):
         _stats_rosters("nba", _sequence((429, ""), (429, "")))
 
 

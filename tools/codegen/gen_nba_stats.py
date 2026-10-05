@@ -53,17 +53,18 @@ CAPTURE_OVERRIDES = {
 _POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
 
 
-# What actually propagates out of nba_stats_runtime._get. A non-200 / blank /
-# undecodable body is NOT an exception there -- it returns {} and the parser
-# yields a zero-row frame -- so only these two reach the caller.
+# What propagates out of nba_stats_runtime._get: the shared error vocabulary
+# (_codegen_runtime._json_text / _transport_errors) plus a missing curl_cffi.
 _STATS_RAISES = [
     "ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com "
     "TLS-fingerprint-block plain ``requests``, so the live transport requires it "
     "(``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).",
-    "curl_cffi.requests.errors.RequestsError: Connection-level failure (timeout, "
-    "reset) raised by the transport once ``SDV_PY_NBA_STATS_RETRIES`` retries are "
-    "exhausted. A non-200 or empty body does NOT raise -- ``_get`` returns ``{}`` "
-    "and the parser yields a zero-row frame.",
+    "NoDataError: The host answered HTTP 404.",
+    "ValueError: The host answered HTTP 400 / 422 (it rejected a parameter value).",
+    "AssetFetchError: Any other non-2xx (401 / 403 / 429 / 5xx; a missing required "
+    "``Season`` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a "
+    "connection failure (timeout, reset), once ``SDV_PY_NBA_STATS_RETRIES`` retries "
+    "are exhausted.",
 ]
 _SIBLING = {"nba_stats": ("wnba_stats", "wnba", "10"), "wnba_stats": ("nba_stats", "nba", "00")}
 _R_COMPANION = {

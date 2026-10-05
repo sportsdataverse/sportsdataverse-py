@@ -7,7 +7,6 @@ is injectable (``transport=``) so wrappers/tests stay offline-friendly.
 
 from __future__ import annotations
 
-import json
 import os
 import time
 import warnings
@@ -15,7 +14,8 @@ from datetime import date
 from typing import Any, Callable, Optional
 from urllib.parse import urlparse
 
-from sportsdataverse.errors import EmptyResponseWarning
+from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse.errors import AssetFetchError, EmptyResponseWarning
 
 __all__ = ["_get", "season_latest_with_data", "stats_headers"]
 
@@ -238,9 +238,17 @@ def _get(
         **kwargs: Accepted for forward-compatibility with generated callers; unused.
 
     Returns:
-        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error. Returning
-        ``{}`` also warns :class:`~sportsdataverse.errors.EmptyResponseWarning`, naming the URL
-        and status; silence it with ``warnings.filterwarnings("ignore", category=EmptyResponseWarning)``.
+        Parsed JSON dict. A 2xx with an empty JSON object (or a 204 / 205) returns ``{}`` and
+        warns :class:`~sportsdataverse.errors.EmptyResponseWarning`, naming the URL and status;
+        silence it with ``warnings.filterwarnings("ignore", category=EmptyResponseWarning)``.
+
+    Raises:
+        NoDataError: The host answered HTTP 404.
+        ValueError: The host answered HTTP 400 / 422 (the request is wrong).
+        AssetFetchError: Any other non-2xx (401 / 403 / 429 / 5xx; stats.nba.com answers a
+            missing required ``Season`` with an EMPTY HTTP 500), a 2xx whose body is blank or
+            not JSON, or a connection failure, once ``SDV_PY_NBA_STATS_RETRIES`` is spent.
+        ImportError: ``curl_cffi`` is not installed (never retried).
 
     Example:
         Quick start (offline — inject a transport)::
@@ -282,43 +290,37 @@ def _get(
     _headers = headers or stats_headers(host)
 
     # Optional retry-with-backoff for the throttle/slowness failure modes.
-    # stats.nba.com intermittently hangs (curl timeout) or returns a blank /
+    # stats.nba.com intermittently hangs (curl timeout), errs or returns a blank /
     # bare ``{}`` body under load for historical endpoints even though the data
-    # exists — a retry recovers it. Defaults to 0 retries so behavior is
-    # byte-identical unless SDV_PY_NBA_STATS_RETRIES is set (back-fill sweeps
-    # set it; the tight-timeout single-shot path is unchanged for everyone else).
+    # exists — a retry recovers it. Defaults to 0 retries (a single shot) unless
+    # SDV_PY_NBA_STATS_RETRIES is set (back-fill sweeps set it). A 404 (NoDataError)
+    # and a 400/422 (ValueError) are answers, never retried.
     retries = int(os.environ.get("SDV_PY_NBA_STATS_RETRIES", "0"))
     backoff = float(os.environ.get("SDV_PY_NBA_STATS_BACKOFF", "1.5"))
     for attempt in range(retries + 1):
         try:
-            status, text = _transport(url, clean, _headers, proxy_url)
-        except Exception:
-            if attempt < retries:
-                time.sleep(backoff * (attempt + 1))
-                continue
-            raise  # exhausted: preserve the "timeout propagates" contract
-        if status == 200 and text.strip():
-            try:
-                payload = json.loads(text)
-            except json.JSONDecodeError:
-                payload = None
+            with _transport_errors(url):
+                status, text = _transport(url, clean, _headers, proxy_url)
+            payload = _json_text(url, status, text)
+        except AssetFetchError:  # 401/403/429/5xx, a blank or non-JSON 2xx, a dead connection
+            if attempt == retries:
+                raise
+        else:
             if payload:  # a valid, non-empty envelope
                 return payload
-        # non-200 / blank / undecodable / bare {} — a transient throttle; retry
-        if attempt < retries:
-            time.sleep(backoff * (attempt + 1))
-            continue
-        if not text.strip():
-            reason = " with an empty body"
-        elif status != 200:
-            reason = ""
-        else:
-            reason = " with a body that is not JSON" if payload is None else " with an empty object"
-        warnings.warn(
-            f"{url} answered HTTP {status}{reason}; returning {{}}. {host} answers this way when a "
-            "parameter it needs is missing or invalid (most often Season), and when it throttles.",
-            EmptyResponseWarning,
-            stacklevel=3 + kwargs.get("_shim_frames", 0),  # the caller, past the WNBA shim's frame
-        )
-        return {}
-    return {}  # unreachable; keeps type-checkers happy
+            if attempt == retries:  # a bare {} (or a 204/205) that outlived the retries
+                break
+        time.sleep(backoff * (attempt + 1))
+    if not text.strip():
+        reason = " with an empty body"
+    elif status != 200:
+        reason = ""
+    else:
+        reason = " with a body that is not JSON" if payload is None else " with an empty object"
+    warnings.warn(
+        f"{url} answered HTTP {status}{reason}; returning {{}}. {host} answers this way when a "
+        "parameter it needs is missing or invalid (most often Season), and when it throttles.",
+        EmptyResponseWarning,
+        stacklevel=3 + kwargs.get("_shim_frames", 0),  # the caller, past the WNBA shim's frame
+    )
+    return {}

@@ -258,11 +258,12 @@ class InsufficientInputError(SportsDataverseError):
 class EmptyResponseWarning(UserWarning):
     """Warned when a stats.nba.com / stats.wnba.com request comes back with nothing to parse.
 
-    ``nba_stats_*`` / ``wnba_stats_*`` return ``{}`` (an empty frame when parsed) instead of
-    raising when the API answers a non-200 status, a blank body or an empty object, because
-    pipelines expect routine misses (``gamerotation`` 500s on pre-tracking games). This warning
-    names the URL and status so an interactive empty result is not silent. The usual cause is a
-    missing or invalid parameter, most often ``Season``. Silence it in a pipeline with
+    ``nba_stats_*`` / ``wnba_stats_*`` return ``{}`` (an empty frame when parsed) when the API
+    answers a 2xx with an empty JSON object (or a 204 / 205). A failed fetch -- a non-2xx, a
+    blank or non-JSON body -- raises instead (``AssetFetchError``; ``NoDataError`` for a 404,
+    ``ValueError`` for a 400 / 422). This warning names the URL and status so an interactive
+    empty result is not silent. The usual cause is a missing or invalid parameter, most often
+    ``Season``. Silence it in a pipeline with
     ``warnings.filterwarnings("ignore", category=EmptyResponseWarning)``.
 
     Example:
