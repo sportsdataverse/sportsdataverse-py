@@ -335,15 +335,16 @@ Fox `apikey`. A connection failure was re-raised as requests' own exception, whi
 the request path and chains urllib3's `MaxRetryError`, which quotes it again.
 
 - The value of a credential pair now reads `REDACTED` in every log line `download` writes,
-  in every sportsdataverse error message, in urllib3's request, retry and redirect log
-  lines (including a caller's own `Retry` adapter), and in the re-raised transport
+  in every sportsdataverse error message, in urllib3's request, retry, redirect and
+  header-parse log lines (including a caller's own `Retry` adapter), and in the re-raised transport
   exception and every exception chained to it. That covers the exception's attributes as
   well as its text: `err.url`, `err.request.url` and urllib3's pickled message are
   redacted, and the request's `Authorization` / `Proxy-Authorization` / `Cookie` headers
   are dropped. Covered names are
   `apiKey` / `api_key` / `apikey`, `token` / `access_token`, `password`, `secret` /
   `client_secret` and the rest of the sportsdataverse-js list, case-insensitively and in
-  URL-encoded and `'name': 'value'` form. A bare `key` is redacted when its value has 16 or
+  URL-encoded and `'name': 'value'` form; a quoted value is redacted up to its closing
+  quote, spaces included. A bare `key` is redacted when its value has 16 or
   more characters, as every HockeyTech key does. The host, path, status and other params
   are kept, so the line still says which request failed.
 - The Odds API wrappers raise `AssetFetchError` on a non-2xx answer: a rejected key (401),
@@ -353,7 +354,9 @@ the request path and chains urllib3's `MaxRetryError`, which quotes it again.
   reads The Odds API, so it now raises these too, where it used to parse the error body as
   an event list.
 
-No signature changes. `tests/test_credential_redaction.py` sends a synthetic key through
+No signature changes. One behaviour change: the `args[0]` of a re-raised requests
+`ConnectionError` is now its redacted message string, not urllib3's `MaxRetryError`
+object; that object is still chained as `__context__`. `tests/test_credential_redaction.py` sends a synthetic key through
 each of the three providers on a 404, a 503 and a connection failure, and checks the
 message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
 logs.
