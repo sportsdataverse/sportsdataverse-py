@@ -114,7 +114,7 @@ GET /stats/shotchartleaguewide
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_shotchartleaguewide-returns}
 

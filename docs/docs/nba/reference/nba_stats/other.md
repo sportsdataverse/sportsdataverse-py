@@ -238,7 +238,7 @@ GET /stats/assistleaders
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_assistleaders-returns}
@@ -956,7 +956,7 @@ GET /stats/matchupsrollup
 | `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
 | `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_matchupsrollup-returns}
@@ -1182,7 +1182,7 @@ GET /stats/synergyplaytypes
 | `PlayType` | `play_type_nullable` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `SeasonYear` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonYear` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `TypeGrouping` | `type_grouping_nullable` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_synergyplaytypes-returns}
@@ -1241,7 +1241,7 @@ GET /stats/videodetailsasset
 | `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
 | `Period` | `period` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |

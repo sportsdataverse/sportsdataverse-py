@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse.nba.nba_stats_runtime import _get
+from sportsdataverse.nba.nba_stats_runtime import _get, season_or_current, season_or_previous
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
@@ -215,7 +215,7 @@ def nba_stats_assistleaders(
         league_id: LeagueID query parameter.
         per_mode_simple: PerMode query parameter.
         player_or_team: PlayerOrTeam query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -233,7 +233,7 @@ def nba_stats_assistleaders(
         "LeagueID": league_id,
         "PerMode": per_mode_simple,
         "PlayerOrTeam": player_or_team,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -371,7 +371,7 @@ def nba_stats_assisttracker(
 def nba_stats_boxscoreadvancedv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -425,7 +425,7 @@ def nba_stats_boxscoreadvancedv3(
 
 
 def nba_stats_boxscoredefensivev2(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -468,7 +468,7 @@ def nba_stats_boxscoredefensivev2(
 def nba_stats_boxscorefourfactorsv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -563,7 +563,7 @@ def nba_stats_boxscorehustlev2(
 
 
 def nba_stats_boxscorematchupsv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -606,7 +606,7 @@ def nba_stats_boxscorematchupsv3(
 def nba_stats_boxscoremiscv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -660,7 +660,7 @@ def nba_stats_boxscoremiscv3(
 
 
 def nba_stats_boxscoreplayertrackv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -703,7 +703,7 @@ def nba_stats_boxscoreplayertrackv3(
 def nba_stats_boxscorescoringv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -757,7 +757,7 @@ def nba_stats_boxscorescoringv3(
 
 
 def nba_stats_boxscoresummaryv2(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -798,7 +798,7 @@ def nba_stats_boxscoresummaryv2(
 
 
 def nba_stats_boxscoresummaryv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -841,7 +841,7 @@ def nba_stats_boxscoresummaryv3(
 def nba_stats_boxscoretraditionalv2(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -897,7 +897,7 @@ def nba_stats_boxscoretraditionalv2(
 def nba_stats_boxscoretraditionalv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -953,7 +953,7 @@ def nba_stats_boxscoretraditionalv3(
 def nba_stats_boxscoreusagev3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -1023,7 +1023,7 @@ def nba_stats_commonallplayers(
     Args:
         is_only_current_season: IsOnlyCurrentSeason query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1039,7 +1039,7 @@ def nba_stats_commonallplayers(
     _params = {
         "IsOnlyCurrentSeason": is_only_current_season,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1054,7 +1054,7 @@ def nba_stats_commonallplayers(
 
 def nba_stats_commonplayerinfo(
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1112,7 +1112,7 @@ def nba_stats_commonplayoffseries(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time, as hoopR does (the last finished playoffs: ``2025-26`` from October 2026).
         series_id_nullable: SeriesID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1128,7 +1128,7 @@ def nba_stats_commonplayoffseries(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeriesID": series_id_nullable,
     }
     _params.update(_caller_params)
@@ -1145,7 +1145,7 @@ def nba_stats_commonplayoffseries(
 def nba_stats_commonteamroster(
     league_id: Optional[str] = "00",
     season: Optional[str] = None,
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1158,7 +1158,7 @@ def nba_stats_commonteamroster(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1175,7 +1175,7 @@ def nba_stats_commonteamroster(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "TeamID": team_id,
     }
     _params.update(_caller_params)
@@ -1230,10 +1230,10 @@ def nba_stats_commonteamyears(
 
 
 def nba_stats_cumestatsplayer(
-    game_ids: Optional[str] = "1022200018",
+    game_ids: Optional[str] = "0022000756",
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "204319",
-    season: Optional[str] = "2021-22",
+    player_id: Optional[str] = "1629611",
+    season: Optional[str] = "2020-21",
     season_type_all_star: Optional[str] = "Regular Season",
     *,
     return_parsed: bool = True,
@@ -1286,8 +1286,8 @@ def nba_stats_cumestatsplayergames(
     league_id: Optional[str] = "00",
     location_nullable: Optional[str] = "",
     outcome_nullable: Optional[str] = "",
-    player_id: Optional[str] = "204319",
-    season: Optional[str] = "2021-22",
+    player_id: Optional[str] = "2544",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
@@ -1307,7 +1307,7 @@ def nba_stats_cumestatsplayergames(
         location_nullable: Location query parameter.
         outcome_nullable: Outcome query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
@@ -1329,7 +1329,7 @@ def nba_stats_cumestatsplayergames(
         "Location": location_nullable,
         "Outcome": outcome_nullable,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
         "VsConference": vs_conference_nullable,
         "VsDivision": vs_division_nullable,
@@ -1347,11 +1347,11 @@ def nba_stats_cumestatsplayergames(
 
 
 def nba_stats_cumestatsteam(
-    game_ids: Optional[str] = "1022200018",
+    game_ids: Optional[str] = "0022201094",
     league_id: Optional[str] = "00",
-    season: Optional[str] = "2021-22",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1365,7 +1365,7 @@ def nba_stats_cumestatsteam(
     Args:
         game_ids: GameIDs query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -1384,7 +1384,7 @@ def nba_stats_cumestatsteam(
     _params = {
         "GameIDs": game_ids,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -1403,10 +1403,10 @@ def nba_stats_cumestatsteamgames(
     league_id: Optional[str] = "00",
     location_nullable: Optional[str] = "",
     outcome_nullable: Optional[str] = "",
-    season: Optional[str] = "2021-22",
+    season: Optional[str] = None,
     season_id_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     vs_team_id_nullable: Optional[str] = "0",
@@ -1424,7 +1424,7 @@ def nba_stats_cumestatsteamgames(
         league_id: LeagueID query parameter.
         location_nullable: Location query parameter.
         outcome_nullable: Outcome query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_id_nullable: SeasonID query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -1447,7 +1447,7 @@ def nba_stats_cumestatsteamgames(
         "LeagueID": league_id,
         "Location": location_nullable,
         "Outcome": outcome_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonID": season_id_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -1481,7 +1481,7 @@ def nba_stats_draftcombinedrillresults(
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1496,7 +1496,7 @@ def nba_stats_draftcombinedrillresults(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_current(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1524,7 +1524,7 @@ def nba_stats_draftcombinenonstationaryshooting(
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1539,7 +1539,7 @@ def nba_stats_draftcombinenonstationaryshooting(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_current(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1567,7 +1567,7 @@ def nba_stats_draftcombineplayeranthro(
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1582,7 +1582,7 @@ def nba_stats_draftcombineplayeranthro(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_current(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1610,7 +1610,7 @@ def nba_stats_draftcombinespotshooting(
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1625,7 +1625,7 @@ def nba_stats_draftcombinespotshooting(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_current(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1653,7 +1653,7 @@ def nba_stats_draftcombinestats(
 
     Args:
         league_id: LeagueID query parameter.
-        season_all_time: SeasonYear query parameter.
+        season_all_time: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1668,7 +1668,7 @@ def nba_stats_draftcombinestats(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_all_time,
+        "SeasonYear": season_or_current(season_all_time),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1894,7 +1894,7 @@ def nba_stats_franchisehistory(
 
 def nba_stats_franchiseleaders(
     league_id: Optional[str] = "00",
-    team_id: Optional[str] = "1611661324",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1939,7 +1939,7 @@ def nba_stats_franchiseleaderswrank(
     league_id: Optional[str] = "00",
     per_mode: Optional[str] = "Totals",
     season_type: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661324",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1988,7 +1988,7 @@ def nba_stats_franchiseplayers(
     league_id: Optional[str] = "00",
     per_mode_detailed: Optional[str] = "Totals",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661319",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2034,7 +2034,7 @@ def nba_stats_franchiseplayers(
 
 
 def nba_stats_gamerotation(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -2237,7 +2237,7 @@ def nba_stats_hustlestatsboxscore(
 
 
 def nba_stats_infographicfanduelplayer(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022201086",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2392,7 +2392,7 @@ def nba_stats_leaguedashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2431,7 +2431,7 @@ def nba_stats_leaguedashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2505,7 +2505,7 @@ def nba_stats_leaguedashoppptshot(
         po_round_nullable: PORound query parameter.
         per_mode_simple: PerMode query parameter.
         period_nullable: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2544,7 +2544,7 @@ def nba_stats_leaguedashoppptshot(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2630,7 +2630,7 @@ def nba_stats_leaguedashplayerbiostats(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_abbreviation_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2674,7 +2674,7 @@ def nba_stats_leaguedashplayerbiostats(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_abbreviation_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2774,7 +2774,7 @@ def nba_stats_leaguedashplayerclutch(
         plus_minus: PlusMinus query parameter.
         point_diff: PointDiff query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2825,7 +2825,7 @@ def nba_stats_leaguedashplayerclutch(
         "PlusMinus": plus_minus,
         "PointDiff": point_diff,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2917,7 +2917,7 @@ def nba_stats_leaguedashplayerptshot(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2965,7 +2965,7 @@ def nba_stats_leaguedashplayerptshot(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3063,7 +3063,7 @@ def nba_stats_leaguedashplayershotlocations(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3112,7 +3112,7 @@ def nba_stats_leaguedashplayershotlocations(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3207,7 +3207,7 @@ def nba_stats_leaguedashplayerstats(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3256,7 +3256,7 @@ def nba_stats_leaguedashplayerstats(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3583,7 +3583,7 @@ def nba_stats_leaguedashptteamdefend(
         po_round_nullable: PORound query parameter.
         per_mode_simple: PerMode query parameter.
         period_nullable: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -3617,7 +3617,7 @@ def nba_stats_leaguedashptteamdefend(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4465,7 +4465,7 @@ def nba_stats_leaguegamelog(
         direction: Direction query parameter.
         league_id: LeagueID query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         sorter: Sorter query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4487,7 +4487,7 @@ def nba_stats_leaguegamelog(
         "Direction": direction,
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team_abbreviation,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
         "Sorter": sorter,
     }
@@ -4557,7 +4557,7 @@ def nba_stats_leaguehustlestatsplayer(
         per_mode_time: PerMode query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -4595,7 +4595,7 @@ def nba_stats_leaguehustlestatsplayer(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4669,7 +4669,7 @@ def nba_stats_leaguehustlestatsteam(
         per_mode_time: PerMode query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -4707,7 +4707,7 @@ def nba_stats_leaguehustlestatsteam(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4843,7 +4843,7 @@ def nba_stats_leaguelineupviz(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4883,7 +4883,7 @@ def nba_stats_leaguelineupviz(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -4921,7 +4921,7 @@ def nba_stats_leagueplayerondetails(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661313",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -4950,7 +4950,7 @@ def nba_stats_leagueplayerondetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -4984,7 +4984,7 @@ def nba_stats_leagueplayerondetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -5028,7 +5028,7 @@ def nba_stats_leagueseasonmatchups(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5049,7 +5049,7 @@ def nba_stats_leagueseasonmatchups(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5080,7 +5080,7 @@ def nba_stats_leaguestandings(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -5097,7 +5097,7 @@ def nba_stats_leaguestandings(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5129,7 +5129,7 @@ def nba_stats_leaguestandingsv3(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -5146,7 +5146,7 @@ def nba_stats_leaguestandingsv3(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5187,7 +5187,7 @@ def nba_stats_matchupsrollup(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5208,7 +5208,7 @@ def nba_stats_matchupsrollup(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5224,7 +5224,7 @@ def nba_stats_matchupsrollup(
 
 def nba_stats_playbyplayv3(
     end_period: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022201086",
     start_period: Optional[str] = "0",
     *,
     return_parsed: bool = True,
@@ -5269,7 +5269,7 @@ def nba_stats_playbyplayv3(
 
 
 def nba_stats_playerawards(
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5361,7 +5361,7 @@ def nba_stats_playercareerbycollegerollup(
 def nba_stats_playercareerstats(
     league_id: Optional[str] = "00",
     per_mode36: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5421,7 +5421,7 @@ def nba_stats_playercompare(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id_list: Optional[str] = None,
+    player_id_list: Optional[str] = "202681,203078,2544,201567,203954",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = "2020-21",
@@ -5430,7 +5430,7 @@ def nba_stats_playercompare(
     shot_clock_range_nullable: Optional[str] = "",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id_list: Optional[str] = None,
+    vs_player_id_list: Optional[str] = "201566,201939,201935,201142,203076",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5533,7 +5533,7 @@ def nba_stats_playerdashboardbyclutch(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5570,7 +5570,7 @@ def nba_stats_playerdashboardbyclutch(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5607,7 +5607,7 @@ def nba_stats_playerdashboardbyclutch(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5640,7 +5640,7 @@ def nba_stats_playerdashboardbygamesplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5677,7 +5677,7 @@ def nba_stats_playerdashboardbygamesplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5714,7 +5714,7 @@ def nba_stats_playerdashboardbygamesplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5747,7 +5747,7 @@ def nba_stats_playerdashboardbygeneralsplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5784,7 +5784,7 @@ def nba_stats_playerdashboardbygeneralsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5821,7 +5821,7 @@ def nba_stats_playerdashboardbygeneralsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5854,7 +5854,7 @@ def nba_stats_playerdashboardbylastngames(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5891,7 +5891,7 @@ def nba_stats_playerdashboardbylastngames(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5928,7 +5928,7 @@ def nba_stats_playerdashboardbylastngames(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5961,7 +5961,7 @@ def nba_stats_playerdashboardbyopponent(
     pace_adjust: Optional[str] = "N",
     per_mode: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5998,7 +5998,7 @@ def nba_stats_playerdashboardbyopponent(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -6035,7 +6035,7 @@ def nba_stats_playerdashboardbyopponent(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -6068,7 +6068,7 @@ def nba_stats_playerdashboardbyshootingsplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6105,7 +6105,7 @@ def nba_stats_playerdashboardbyshootingsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -6142,7 +6142,7 @@ def nba_stats_playerdashboardbyshootingsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6175,7 +6175,7 @@ def nba_stats_playerdashboardbyteamperformance(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6212,7 +6212,7 @@ def nba_stats_playerdashboardbyteamperformance(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -6249,7 +6249,7 @@ def nba_stats_playerdashboardbyteamperformance(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6282,7 +6282,7 @@ def nba_stats_playerdashboardbyyearoveryear(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6412,7 +6412,7 @@ def nba_stats_playerdashptpass(
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -6442,7 +6442,7 @@ def nba_stats_playerdashptpass(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6594,7 +6594,7 @@ def nba_stats_playerdashptshotdefend(
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -6625,7 +6625,7 @@ def nba_stats_playerdashptshotdefend(
         "PerMode": per_mode_simple,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6786,7 +6786,7 @@ def nba_stats_playerfantasyprofile(
     measure_type: Optional[str] = "Base",
     pace_adjust: Optional[str] = "N",
     per_mode: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6848,7 +6848,7 @@ def nba_stats_playerfantasyprofile(
 
 def nba_stats_playerfantasyprofilebargraph(
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     season: Optional[str] = None,
     season_type_all_star_nullable: Optional[str] = "Regular Season",
     *,
@@ -6864,7 +6864,7 @@ def nba_stats_playerfantasyprofilebargraph(
     Args:
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star_nullable: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -6882,7 +6882,7 @@ def nba_stats_playerfantasyprofilebargraph(
     _params = {
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star_nullable,
     }
     _params.update(_caller_params)
@@ -6900,7 +6900,7 @@ def nba_stats_playergamelog(
     date_from_nullable: Optional[str] = "",
     date_to_nullable: Optional[str] = "",
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     *,
@@ -6918,7 +6918,7 @@ def nba_stats_playergamelog(
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -6937,7 +6937,7 @@ def nba_stats_playergamelog(
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
     }
     _params.update(_caller_params)
@@ -6998,7 +6998,7 @@ def nba_stats_playergamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7032,7 +7032,7 @@ def nba_stats_playergamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_nullable,
+        "Season": season_or_current(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -7390,7 +7390,7 @@ def nba_stats_playerindex(
         height_nullable: Height query parameter.
         historical_nullable: Historical query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         team_id_nullable: TeamID query parameter.
         weight_nullable: Weight query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -7416,7 +7416,7 @@ def nba_stats_playerindex(
         "Height": height_nullable,
         "Historical": historical_nullable,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "TeamID": team_id_nullable,
         "Weight": weight_nullable,
     }
@@ -7434,7 +7434,7 @@ def nba_stats_playerindex(
 def nba_stats_playerprofilev2(
     league_id: Optional[str] = "00",
     per_mode36: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -7492,7 +7492,7 @@ def nba_stats_playervsplayer(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -7500,7 +7500,7 @@ def nba_stats_playervsplayer(
     season_type_playoffs: Optional[str] = "Regular Season",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id: Optional[str] = "1629488",
+    vs_player_id: Optional[str] = "203076",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -7528,7 +7528,7 @@ def nba_stats_playervsplayer(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
@@ -7564,7 +7564,7 @@ def nba_stats_playervsplayer(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "VsConference": vs_conference_nullable,
@@ -7714,7 +7714,7 @@ def nba_stats_scheduleleaguev2int(
 
 def nba_stats_scoreboardv2(
     day_offset: Optional[str] = "0",
-    game_date: Optional[str] = "2022-07-20",
+    game_date: Optional[str] = "2021-07-20",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -7760,7 +7760,7 @@ def nba_stats_scoreboardv2(
 
 
 def nba_stats_scoreboardv3(
-    game_date: Optional[str] = "2022-06-26",
+    game_date: Optional[str] = "2023-03-26",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -7820,7 +7820,7 @@ def nba_stats_shotchartdetail(
     opponent_team_id: Optional[str] = "0",
     outcome_nullable: Optional[str] = "",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "202696",
     player_position_nullable: Optional[str] = "",
     point_diff_nullable: Optional[str] = None,
     position_nullable: Optional[str] = None,
@@ -7948,7 +7948,7 @@ def nba_stats_shotchartleaguewide(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -7963,7 +7963,7 @@ def nba_stats_shotchartleaguewide(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -7981,7 +7981,7 @@ def nba_stats_shotchartlineupdetail(
     context_measure_detailed: Optional[str] = "FGA",
     date_from_nullable: Optional[str] = "",
     date_to_nullable: Optional[str] = "",
-    group_id: Optional[str] = "-1628899-1629481-1630096-1631019-1642784-",
+    group_id: Optional[str] = "-202689-203493-203501-1626174-1627827-",
     game_id_nullable: Optional[str] = "",
     game_segment_nullable: Optional[str] = "",
     last_n_games_nullable: Optional[str] = "0",
@@ -8098,7 +8098,7 @@ def nba_stats_synergyplaytypes(
         play_type_nullable: PlayType query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
         season_type_all_star: SeasonType query parameter.
-        season: SeasonYear query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         type_grouping_nullable: TypeGrouping query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -8118,7 +8118,7 @@ def nba_stats_synergyplaytypes(
         "PlayType": play_type_nullable,
         "PlayerOrTeam": player_or_team_abbreviation,
         "SeasonType": season_type_all_star,
-        "SeasonYear": season,
+        "SeasonYear": season_or_current(season),
         "TypeGrouping": type_grouping_nullable,
     }
     _params.update(_caller_params)
@@ -8153,7 +8153,7 @@ def nba_stats_teamdashboardbyclutch(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8183,7 +8183,7 @@ def nba_stats_teamdashboardbyclutch(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8220,7 +8220,7 @@ def nba_stats_teamdashboardbyclutch(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8260,7 +8260,7 @@ def nba_stats_teamdashboardbygamesplits(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8290,7 +8290,7 @@ def nba_stats_teamdashboardbygamesplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8327,7 +8327,7 @@ def nba_stats_teamdashboardbygamesplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8367,7 +8367,7 @@ def nba_stats_teamdashboardbygeneralsplits(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -8397,7 +8397,7 @@ def nba_stats_teamdashboardbygeneralsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8434,7 +8434,7 @@ def nba_stats_teamdashboardbygeneralsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8474,7 +8474,7 @@ def nba_stats_teamdashboardbylastngames(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8504,7 +8504,7 @@ def nba_stats_teamdashboardbylastngames(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8541,7 +8541,7 @@ def nba_stats_teamdashboardbylastngames(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8581,7 +8581,7 @@ def nba_stats_teamdashboardbyopponent(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8611,7 +8611,7 @@ def nba_stats_teamdashboardbyopponent(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8648,7 +8648,7 @@ def nba_stats_teamdashboardbyopponent(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8688,7 +8688,7 @@ def nba_stats_teamdashboardbyshootingsplits(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -8718,7 +8718,7 @@ def nba_stats_teamdashboardbyshootingsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8755,7 +8755,7 @@ def nba_stats_teamdashboardbyshootingsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8795,7 +8795,7 @@ def nba_stats_teamdashboardbyteamperformance(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8825,7 +8825,7 @@ def nba_stats_teamdashboardbyteamperformance(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8862,7 +8862,7 @@ def nba_stats_teamdashboardbyteamperformance(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8902,7 +8902,7 @@ def nba_stats_teamdashboardbyyearoveryear(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -9011,7 +9011,7 @@ def nba_stats_teamdashlineups(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9043,7 +9043,7 @@ def nba_stats_teamdashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -9082,7 +9082,7 @@ def nba_stats_teamdashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9137,7 +9137,7 @@ def nba_stats_teamdashptpass(
         opponent_team_id: OpponentTeamID query parameter.
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9166,7 +9166,7 @@ def nba_stats_teamdashptpass(
         "OpponentTeamID": opponent_team_id,
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9313,7 +9313,7 @@ def nba_stats_teamdashptshots(
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9344,7 +9344,7 @@ def nba_stats_teamdashptshots(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "Period": period,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9363,7 +9363,7 @@ def nba_stats_teamdashptshots(
 
 
 def nba_stats_teamdetails(
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9455,7 +9455,7 @@ def nba_stats_teamgamelog(
     league_id: Optional[str] = "00",
     season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9470,7 +9470,7 @@ def nba_stats_teamgamelog(
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -9489,7 +9489,7 @@ def nba_stats_teamgamelog(
         "DateFrom": date_from_nullable,
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -9551,7 +9551,7 @@ def nba_stats_teamgamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -9585,7 +9585,7 @@ def nba_stats_teamgamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_nullable,
+        "Season": season_or_current(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9608,7 +9608,7 @@ def nba_stats_teaminfocommon(
     league_id: Optional[str] = "00",
     season_nullable: Optional[str] = None,
     season_type_nullable: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9675,7 +9675,7 @@ def nba_stats_teamplayerdashboard(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9780,7 +9780,7 @@ def nba_stats_teamplayeronoffdetails(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9809,7 +9809,7 @@ def nba_stats_teamplayeronoffdetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9844,7 +9844,7 @@ def nba_stats_teamplayeronoffdetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9881,7 +9881,7 @@ def nba_stats_teamplayeronoffsummary(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9910,7 +9910,7 @@ def nba_stats_teamplayeronoffsummary(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9945,7 +9945,7 @@ def nba_stats_teamplayeronoffsummary(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9983,10 +9983,10 @@ def nba_stats_teamvsplayer(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_playoffs: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id: Optional[str] = "1628932",
+    vs_player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -10014,7 +10014,7 @@ def nba_stats_teamvsplayer(
         player_id_nullable: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -10051,7 +10051,7 @@ def nba_stats_teamvsplayer(
         "PlayerID": player_id_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "TeamID": team_id,
@@ -10074,7 +10074,7 @@ def nba_stats_teamyearbyyearstats(
     league_id: Optional[str] = "00",
     per_mode_simple: Optional[str] = "Totals",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -10126,7 +10126,7 @@ def nba_stats_videodetailsasset(
     opponent_team_id: Optional[str] = "0",
     period: Optional[str] = "0",
     player_id: Optional[str] = "2544",
-    season: Optional[str] = "2022-23",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     team_id: Optional[str] = "1610612747",
     vs_division_nullable: Optional[str] = "",
@@ -10167,7 +10167,7 @@ def nba_stats_videodetailsasset(
         opponent_team_id: OpponentTeamID query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         vs_division_nullable: VsDivision query parameter.
@@ -10211,7 +10211,7 @@ def nba_stats_videodetailsasset(
         "OpponentTeamID": opponent_team_id,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_current(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
         "VsDivision": vs_division_nullable,
@@ -10249,7 +10249,7 @@ def nba_stats_videodetailsasset(
 
 def nba_stats_videoevents(
     game_event_id: Optional[str] = "10",
-    game_id: Optional[str] = "1022200075",
+    game_id: Optional[str] = "0021700807",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -10336,7 +10336,7 @@ def nba_stats_videoeventsasset(
 
 
 def nba_stats_videostatus(
-    game_date: Optional[str] = "2022-06-10",
+    game_date: Optional[str] = "2023-03-10",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,

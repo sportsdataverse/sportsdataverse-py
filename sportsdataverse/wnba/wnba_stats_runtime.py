@@ -8,7 +8,76 @@ from typing import Any, Optional
 from sportsdataverse.nba.nba_stats_runtime import _get as _nba_get
 from sportsdataverse.nba.nba_stats_runtime import stats_headers
 
-__all__ = ["_get", "stats_headers"]
+__all__ = ["_get", "season_or_current", "season_or_previous", "stats_headers"]
+
+
+def season_or_current(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the current WNBA season year when it is ``None``.
+
+    The codegen transform behind every generated ``wnba_stats_*`` season argument whose wehoop
+    default is a ``most_recent_wnba_season()`` call. stats.wnba.com answers those endpoints with
+    an empty HTTP 500 when ``Season`` is missing. wehoop often writes
+    ``most_recent_wnba_season() - 1``, which is always one season behind the most recent one
+    (last season while one is being played, the season before last in the offseason). hoopR's
+    matching default is the current season, so that is what this returns.
+
+    Args:
+        season: The caller's season (e.g. ``"2025"``), or ``None`` for the current one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season year to send as ``Season`` / ``SeasonYear``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wnba.wnba_stats_runtime import season_or_current
+            season_or_current(None)     # e.g. "2026"
+            season_or_current("2024")   # "2024"
+
+        See Also:
+            * `wehoop`_ -- the R sister package these defaults are mined from
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
+
+    return str(most_recent_wnba_season())
+
+
+def season_or_previous(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the previous WNBA season year when it is ``None``.
+
+    The codegen transform for the season arguments whose hoopR counterpart defaults to the last
+    finished season (``commonplayoffseries``); wehoop's own default there is
+    ``most_recent_wnba_season() - 1``, which this returns.
+
+    Args:
+        season: The caller's season (e.g. ``"2024"``), or ``None`` for the previous one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season year to send as ``Season``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wnba.wnba_stats_runtime import season_or_previous
+            season_or_previous(None)     # e.g. "2025"
+            season_or_previous("2023")   # "2023"
+
+        See Also:
+            * `wehoop`_ -- the R sister package these defaults are mined from
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
+
+    return str(most_recent_wnba_season() - 1)
 
 
 def _get(

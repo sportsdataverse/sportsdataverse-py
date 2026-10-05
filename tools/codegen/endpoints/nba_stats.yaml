@@ -46,8 +46,12 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -190,7 +194,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -215,7 +219,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``)
   example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -236,7 +240,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -274,7 +278,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``)
   example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -295,7 +299,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -320,7 +324,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``)
   example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -341,7 +345,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -368,7 +372,7 @@ endpoints:
       ``SeasonSeries``, ``AvailableVideo``)
   example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -382,7 +386,7 @@ endpoints:
       ``Officials``)
   example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -404,7 +408,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -437,7 +441,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -470,7 +474,7 @@ endpoints:
     name: end_range
     query_key: EndRange
     type: str
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -503,8 +507,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/commonallplayers
@@ -521,7 +529,7 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -538,8 +546,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults to the previous season
+      at call time, as hoopR does (the last finished playoffs: ``2025-26`` from October
+      2026).'
     name: season
     query_key: Season
+    transform: season_or_previous
     type: str
   - default: ''
     name: series_id_nullable
@@ -561,10 +573,14 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
-  - default: '1611661317'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -591,7 +607,7 @@ endpoints:
   example_args:
     league_id: '00'
   extra_params:
-  - default: '1022200018'
+  - default: '0022000756'
     name: game_ids
     query_key: GameIDs
     type: str
@@ -599,11 +615,11 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: '204319'
+  - default: '1629611'
     name: player_id
     query_key: PlayerID
     type: str
-  - default: 2021-22
+  - default: 2020-21
     name: season
     query_key: Season
     type: str
@@ -631,13 +647,17 @@ endpoints:
     name: outcome_nullable
     query_key: Outcome
     type: str
-  - default: '204319'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
-  - default: 2021-22
+  - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -666,7 +686,7 @@ endpoints:
   example_args:
     league_id: '00'
   extra_params:
-  - default: '1022200018'
+  - default: 0022201094
     name: game_ids
     query_key: GameIDs
     type: str
@@ -674,15 +694,19 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: 2021-22
+  - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661317'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -706,9 +730,13 @@ endpoints:
     name: outcome_nullable
     query_key: Outcome
     type: str
-  - default: 2021-22
+  - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_id_nullable
@@ -718,7 +746,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661317'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -747,8 +775,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_year
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/draftcombinedrillresults
@@ -763,8 +795,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_year
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/draftcombinenonstationaryshooting
@@ -779,8 +815,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_year
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/draftcombineplayeranthro
@@ -795,8 +835,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_year
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/draftcombinespotshooting
@@ -811,8 +855,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_all_time
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/draftcombinestats
@@ -987,7 +1035,7 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: '1611661324'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -1011,7 +1059,7 @@ endpoints:
     name: season_type
     query_key: SeasonType
     type: str
-  - default: '1611661324'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -1035,7 +1083,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661319'
+  - default: '1610612739'
     name: team_id
     query_key: TeamID
     type: str
@@ -1049,7 +1097,7 @@ endpoints:
   example_args:
     league_id: '00'
   extra_params:
-  - default: '1022200034'
+  - default: '0022200021'
     name: game_id
     query_key: GameID
     type: str
@@ -1157,7 +1205,7 @@ endpoints:
   summary: GET /stats/hustlestatsboxscore
 - example_args: {}
   extra_params:
-  - default: '1022200034'
+  - default: 0022201086
     name: game_id
     query_key: GameID
     type: str
@@ -1285,8 +1333,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1389,8 +1441,12 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1521,8 +1577,12 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1681,8 +1741,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1821,8 +1885,12 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1981,8 +2049,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2129,8 +2201,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2497,8 +2573,12 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3417,8 +3497,12 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -3509,8 +3593,12 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3617,8 +3705,12 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3769,8 +3861,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3865,8 +3961,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3876,7 +3976,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661313'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -3921,8 +4021,12 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -3941,8 +4045,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type
@@ -3965,8 +4073,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type
@@ -4009,8 +4121,12 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -4027,7 +4143,7 @@ endpoints:
     name: end_period
     query_key: EndPeriod
     type: str
-  - default: '1022200034'
+  - default: 0022201086
     name: game_id
     query_key: GameID
     type: str
@@ -4042,7 +4158,7 @@ endpoints:
   summary: GET /stats/playbyplayv3
 - example_args: {}
   extra_params:
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4096,7 +4212,7 @@ endpoints:
     name: per_mode36
     query_key: PerMode
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4171,7 +4287,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: null
+  - default: 202681,203078,2544,201567,203954
     name: player_id_list
     query_key: PlayerIDList
     type: str
@@ -4207,7 +4323,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: null
+  - default: 201566,201939,201935,201142,203076
     name: vs_player_id_list
     query_key: VsPlayerIDList
     type: str
@@ -4281,7 +4397,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4294,8 +4410,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4385,7 +4505,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4398,8 +4518,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4489,7 +4613,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4502,8 +4626,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4593,7 +4721,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4606,8 +4734,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4696,7 +4828,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4709,8 +4841,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -4801,7 +4937,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4814,8 +4950,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4904,7 +5044,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -4917,8 +5057,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5007,7 +5151,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -5094,8 +5238,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5258,8 +5406,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5412,7 +5564,7 @@ endpoints:
     name: per_mode
     query_key: PerMode
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -5446,13 +5598,17 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star_nullable
@@ -5478,13 +5634,17 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -5555,8 +5715,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_nullable
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5995,8 +6159,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: '0'
     name: team_id_nullable
@@ -6029,7 +6197,7 @@ endpoints:
     name: per_mode36
     query_key: PerMode
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -6098,7 +6266,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: player_id
     query_key: PlayerID
     type: str
@@ -6111,8 +6279,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6130,7 +6302,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: '1629488'
+  - default: '203076'
     name: vs_player_id
     query_key: VsPlayerID
     type: str
@@ -6202,7 +6374,7 @@ endpoints:
     name: day_offset
     query_key: DayOffset
     type: str
-  - default: '2022-07-20'
+  - default: '2021-07-20'
     name: game_date
     query_key: GameDate
     type: str
@@ -6218,7 +6390,7 @@ endpoints:
 - example_args:
     league_id: '00'
   extra_params:
-  - default: '2022-06-26'
+  - default: '2023-03-26'
     name: game_date
     query_key: GameDate
     type: str
@@ -6305,7 +6477,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: '202696'
     name: player_id
     query_key: PlayerID
     type: str
@@ -6374,8 +6546,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/shotchartleaguewide
@@ -6404,7 +6580,7 @@ endpoints:
     name: date_to_nullable
     query_key: DateTo
     type: str
-  - default: -1628899-1629481-1630096-1631019-1642784-
+  - default: -202689-203493-203501-1626174-1627827-
     name: group_id
     query_key: GROUP_ID
     type: str
@@ -6497,8 +6673,12 @@ endpoints:
     query_key: SeasonType
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   - default: Offensive
     name: type_grouping_nullable
@@ -6583,8 +6763,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -6598,7 +6782,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -6687,8 +6871,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -6702,7 +6890,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -6791,8 +6979,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6806,7 +6998,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -6895,8 +7087,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -6910,7 +7106,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -6998,8 +7194,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -7013,7 +7213,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7102,8 +7302,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -7117,7 +7321,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7205,8 +7409,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -7220,7 +7428,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7323,7 +7531,7 @@ endpoints:
     name: shot_clock_range
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7418,8 +7626,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -7433,7 +7645,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7492,8 +7704,12 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -7652,8 +7868,12 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -7686,7 +7906,7 @@ endpoints:
       ``TeamAwardsDiv``, ``TeamHof``, ``TeamRetired``, ``TeamAwardsCommCup``)
   example_args: {}
   extra_params:
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7731,14 +7951,18 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7807,8 +8031,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season_nullable
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -7857,7 +8085,7 @@ endpoints:
     name: season_type_nullable
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -7951,7 +8179,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -8035,8 +8263,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -8046,7 +8278,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -8130,8 +8362,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -8141,7 +8377,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -8230,8 +8466,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -8241,7 +8481,7 @@ endpoints:
     name: season_type_playoffs
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -8253,7 +8493,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: '1628932'
+  - default: '2544'
     name: vs_player_id
     query_key: VsPlayerID
     type: str
@@ -8277,7 +8517,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661328'
+  - default: '1610612749'
     name: team_id
     query_key: TeamID
     type: str
@@ -8316,9 +8556,13 @@ endpoints:
     name: player_id
     query_key: PlayerID
     type: str
-  - default: 2022-23
+  - default: null
+    description: Season label, e.g. ``2025-26``. Defaults to the current season at
+      call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers
+      a request without a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -8426,7 +8670,7 @@ endpoints:
     name: game_event_id
     query_key: GameEventID
     type: str
-  - default: '1022200075'
+  - default: 0021700807
     name: game_id
     query_key: GameID
     type: str
@@ -8456,7 +8700,7 @@ endpoints:
 - example_args:
     league_id: '00'
   extra_params:
-  - default: '2022-06-10'
+  - default: '2023-03-10'
     name: game_date
     query_key: GameDate
     type: str

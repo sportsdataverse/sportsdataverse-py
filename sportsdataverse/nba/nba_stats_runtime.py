@@ -12,9 +12,82 @@ import os
 import time
 from typing import Any, Callable, Optional
 
-__all__ = ["_get", "stats_headers"]
+__all__ = ["_get", "season_or_current", "season_or_previous", "stats_headers"]
 
 Transport = Callable[[str, dict, dict, Optional[str]], tuple]
+
+
+def season_or_current(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the current NBA season label when it is ``None``.
+
+    The codegen transform behind the generated ``nba_stats_*`` season arguments whose hoopR
+    default is a current-season call: ``year_to_season(most_recent_nba_season() - 1)`` for
+    ``Season``, or the bare year ``most_recent_nba_season() - 1`` for the draft-combine
+    ``SeasonYear`` (the API reads the leading year, so ``"2026-27"`` asks for the 2026 combine).
+    Resolving it per call (not as a signature default) keeps a long-running process on the right
+    season after a rollover. stats.nba.com answers those endpoints with an empty HTTP 500 when
+    the season is missing.
+
+    ``most_recent_nba_season()`` is an END year, so ``- 1`` is the current season's START year:
+    October 2026 gives ``"2026-27"``. G League and Summer League accept the same label.
+
+    Args:
+        season: The caller's season (e.g. ``"2025-26"``), or ``None`` for the current one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season label to send as ``Season`` / ``SeasonYear``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_stats_runtime import season_or_current
+            season_or_current(None)        # e.g. "2026-27"
+            season_or_current("2023-24")   # "2023-24"
+
+        See Also:
+            * `hoopR`_ -- the R default this mirrors
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.nba.nba_schedule import most_recent_nba_season, year_to_season
+
+    return str(year_to_season(most_recent_nba_season() - 1))
+
+
+def season_or_previous(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the previous NBA season label when it is ``None``.
+
+    The codegen transform for the season arguments hoopR defaults to
+    ``year_to_season(most_recent_nba_season() - 2)``: the last season whose playoffs have
+    finished (``commonplayoffseries``). October 2026 gives ``"2025-26"``.
+
+    Args:
+        season: The caller's season (e.g. ``"2024-25"``), or ``None`` for the previous one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season label to send as ``Season``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_stats_runtime import season_or_previous
+            season_or_previous(None)        # e.g. "2025-26"
+            season_or_previous("2023-24")   # "2023-24"
+
+        See Also:
+            * `hoopR`_ -- the R default this mirrors
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.nba.nba_schedule import most_recent_nba_season, year_to_season
+
+    return str(year_to_season(most_recent_nba_season() - 2))
 
 
 def stats_headers(host: str = "stats.nba.com") -> dict:

@@ -1,11 +1,11 @@
 ---
-title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playernextngames"
-sidebar_label: "Player: playerawards–playernextngames"
+title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex"
+sidebar_label: "Player: playerawards–playerindex"
 sidebar_position: 8
-description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playernextngames — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playernextngames
+# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex
 
 ## wnba_stats_playerawards
 
@@ -649,7 +649,7 @@ GET /stats/playercompare
 | `PlayerIDList` | `player_id_list` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -1021,7 +1021,7 @@ GET /stats/playerfantasyprofilebargraph
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_playerfantasyprofilebargraph-returns}
@@ -1091,7 +1091,7 @@ GET /stats/playergamelog
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_playergamelog-returns}
@@ -1161,7 +1161,7 @@ GET /stats/playergamelogs
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -1400,7 +1400,7 @@ GET /stats/playerindex
 | `Height` | `height_nullable` |  |  | `Y` |  |
 | `Historical` | `historical_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
@@ -1441,51 +1441,6 @@ GET /stats/playerindex
 
 ```python
 wnba_stats_playerindex(league_id='10')
-```
-
-_Last validated n/a._
-
-## wnba_stats_playernextngames
-
-GET /stats/playernextngames
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/playernextngames`
-
-**Valid URL:** [https://stats.wnba.com/stats/playernextngames?LeagueID=10](https://stats.wnba.com/stats/playernextngames?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `NumberOfGames` | `number_of_games` |  |  | `Y` |  |
-| `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season_all` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_playernextngames-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `home_team_name` | character | Home team name. |
-| `visitor_team_name` | character | Full name of the visiting team in the upcoming game. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
-| `visitor_team_abbreviation` | character | Abbreviation of the visiting team in the upcoming game. |
-| `home_team_nickname` | character | Home team nickname label; `team_detail = TRUE` only. |
-| `visitor_team_nickname` | character | Nickname of the visiting team in the upcoming game. |
-| `game_time` | character | Game start time. |
-| `home_wl` | character | Home team's win-loss record entering the upcoming game. |
-| `visitor_wl` | character | Visiting team's win-loss record entering the upcoming game. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_playernextngames-example}
-
-```python
-wnba_stats_playernextngames(league_id='10')
 ```
 
 _Last validated n/a._

@@ -46,8 +46,12 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -328,7 +332,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``)
   example_args: {}
   extra_params:
-  - default: '0022200021'
+  - default: null
     name: game_id
     query_key: GameID
     type: str
@@ -672,8 +676,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   parser: parse_wnba_stats_result_sets
   path: /stats/commonallplayers
@@ -707,8 +715,11 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2024``. Defaults to the previous WNBA season
+      at call time, as wehoop does (``2025`` during 2026).
     name: season
     query_key: Season
+    transform: season_or_previous
     type: str
   - default: ''
     name: series_id_nullable
@@ -730,8 +741,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: '1611661317'
     name: team_id
@@ -916,8 +931,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season_all_time
     query_key: SeasonYear
+    transform: season_or_current
     type: str
   parser: parse_wnba_stats_result_sets
   path: /stats/draftcombinestats
@@ -1251,7 +1270,7 @@ endpoints:
       ``PlayerStats``, ``TeamStats``)
   example_args: {}
   extra_params:
-  - default: '0022200021'
+  - default: null
     name: game_id
     query_key: GameID
     type: str
@@ -1390,8 +1409,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1514,8 +1537,12 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1674,8 +1701,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1826,8 +1857,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1974,8 +2009,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2930,8 +2969,12 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -3066,8 +3109,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3162,8 +3209,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3218,8 +3269,12 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -3238,8 +3293,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type
@@ -3258,7 +3317,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PlayByPlay``, ``AvailableVideo``)
   example_args: {}
   extra_params:
-  - default: null
+  - default: '0'
     name: end_period
     query_key: EndPeriod
     type: str
@@ -3266,7 +3325,7 @@ endpoints:
     name: game_id
     query_key: GameID
     type: str
-  - default: null
+  - default: '0'
     name: start_period
     query_key: StartPeriod
     type: str
@@ -3425,7 +3484,7 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: null
+  - default: 100720,202250,204319,1627668,1628931
     name: player_id_list
     query_key: PlayerIDList
     type: str
@@ -3437,9 +3496,13 @@ endpoints:
     name: rank
     query_key: Rank
     type: str
-  - default: 2020-21
+  - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3461,7 +3524,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: null
+  - default: 202252,203399,1631022,1628878,204333
     name: vs_player_id_list
     query_key: VsPlayerIDList
     type: str
@@ -3548,8 +3611,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3652,8 +3719,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3756,8 +3827,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3860,8 +3935,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3963,8 +4042,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -4068,8 +4151,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4171,8 +4258,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4349,13 +4440,17 @@ endpoints:
     name: period
     query_key: Period
     type: str
-  - default: '2544'
+  - default: null
     name: player_id
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -4463,8 +4558,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star_nullable
@@ -4495,8 +4594,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -4567,8 +4670,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season_nullable
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5007,8 +5114,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: '0'
     name: team_id_nullable
@@ -5039,8 +5150,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season_all
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -5151,8 +5266,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5394,8 +5513,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   parser: parse_wnba_stats_result_sets
   path: /stats/shotchartleaguewide
@@ -5567,8 +5690,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -5671,8 +5798,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -5775,8 +5906,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5879,8 +6014,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -5982,8 +6121,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -6086,8 +6229,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6189,8 +6336,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment
@@ -6402,8 +6553,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6485,8 +6640,12 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -6561,8 +6720,12 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season_nullable
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6789,8 +6952,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6884,8 +7051,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6984,8 +7155,12 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: Season year, e.g. ``2025``. Defaults to the current WNBA season at
+      call time (``2026`` from May 2026); stats.wnba.com answers a request without
+      a season with an empty HTTP 500.
     name: season
     query_key: Season
+    transform: season_or_current
     type: str
   - default: ''
     name: season_segment_nullable

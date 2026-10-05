@@ -101,7 +101,7 @@ toc_max_heading_level: 2
 | [wnba_stats_playergamelogs](wnba_stats/player.md#wnba_stats_playergamelogs) | GET /stats/playergamelogs |
 | [wnba_stats_playergamestreakfinder](wnba_stats/player.md#wnba_stats_playergamestreakfinder) | GET /stats/playergamestreakfinder |
 | [wnba_stats_playerindex](wnba_stats/player.md#wnba_stats_playerindex) | GET /stats/playerindex |
-| [wnba_stats_playernextngames](wnba_stats/player.md#wnba_stats_playernextngames) | GET /stats/playernextngames |
+| [wnba_stats_playernextngames](wnba_stats/player-2.md#wnba_stats_playernextngames) | GET /stats/playernextngames |
 | [wnba_stats_playerprofilev2](wnba_stats/player-2.md#wnba_stats_playerprofilev2) | GET /stats/playerprofilev2 |
 | [wnba_stats_playervsplayer](wnba_stats/player-2.md#wnba_stats_playervsplayer) | GET /stats/playervsplayer |
 

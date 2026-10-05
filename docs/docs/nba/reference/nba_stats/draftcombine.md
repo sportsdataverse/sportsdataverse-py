@@ -18,7 +18,7 @@ GET /stats/draftcombinedrillresults
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinedrillresults-returns}
 
@@ -59,7 +59,7 @@ GET /stats/draftcombinenonstationaryshooting
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinenonstationaryshooting-returns}
 
@@ -118,7 +118,7 @@ GET /stats/draftcombineplayeranthro
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombineplayeranthro-returns}
 
@@ -165,7 +165,7 @@ GET /stats/draftcombinespotshooting
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinespotshooting-returns}
 
@@ -245,7 +245,7 @@ GET /stats/draftcombinestats
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_all_time` |  |  | `Y` |  |
+| `SeasonYear` | `season_all_time` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinestats-returns}
 

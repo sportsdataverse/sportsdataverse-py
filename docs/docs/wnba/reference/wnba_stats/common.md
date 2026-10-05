@@ -19,7 +19,7 @@ GET /stats/commonallplayers
 |---|---|:---:|:---:|:---:|---|
 | `IsOnlyCurrentSeason` | `is_only_current_season` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#wnba_stats_commonallplayers-returns}
 
@@ -147,7 +147,7 @@ GET /stats/commonplayoffseries
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time, as wehoop does (``2025`` during 2026). |
 | `SeriesID` | `series_id_nullable` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_commonplayoffseries-returns}
@@ -182,7 +182,7 @@ GET /stats/commonteamroster
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_commonteamroster-returns}
