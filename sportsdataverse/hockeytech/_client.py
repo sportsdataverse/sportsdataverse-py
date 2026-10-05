@@ -50,14 +50,15 @@ def _invalid_view_reason(payload: Any) -> Optional[str]:
     frame; :func:`hockeytech_api` raises on it instead. Two shapes exist:
 
     - ``modulekit`` / ``gc``: ``{"SiteKit"|"GC": {..., "Undefined": "Undefined Tab <view>"}}``
-    - ``statviewfeed``: ``{"error": "InvalidView error: <view>"}``
+    - ``statviewfeed``: ``{"error": "InvalidView error: <view>"}``; any non-empty
+      top-level ``error`` string is treated the same way (as sportsdataverse-js does).
 
     Returns ``None`` for any healthy payload.
     """
     if not isinstance(payload, dict):
         return None
     err = payload.get("error")
-    if isinstance(err, str) and "invalidview" in err.replace(" ", "").lower():
+    if isinstance(err, str) and err:
         return err
     for root in ("SiteKit", "GC"):
         node = payload.get(root)

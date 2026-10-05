@@ -76,6 +76,14 @@ def test_invalid_view_reason_passes_healthy_payloads():
     assert _invalid_view_reason({"SiteKit": {"Streaks": []}}) is None  # genuinely empty != sentinel
     assert _invalid_view_reason([]) is None
     assert _invalid_view_reason(None) is None
+    assert _invalid_view_reason({"error": ""}) is None  # empty string is not a reason
+
+
+def test_invalid_view_reason_any_top_level_error_string():
+    """Like sportsdataverse-js: any non-empty top-level ``error`` is a sentinel, not just InvalidView."""
+    from sportsdataverse.hockeytech._client import _invalid_view_reason
+
+    assert _invalid_view_reason({"error": "Invalid season"}) == "Invalid season"
 
 
 # ---------------------------------------------------------------------------
