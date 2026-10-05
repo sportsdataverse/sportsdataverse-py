@@ -38374,6 +38374,171 @@ toa_usage:
     session; null until a call has been made.
   requests_used: Requests the API key has used, from the x-requests-used header of the most recent call in this Python session;
     null until a call has been made.
+torvik_game_schedule:
+  blowout: Torvik's blowout rating.
+  conf: Conference-game flag/code as Torvik ships it (observed 0 and 99).
+  conmatch: Conference matchup descriptor, e.g. 'D2 at Amer'.
+  date: Game date as Torvik prints it (m/d/yy).
+  game_date: date parsed to a Date (null when it does not parse).
+  gameppp: Combined points per possession in the game.
+  gamestats: Per-game stat array collapsed to a ';'-joined string.
+  gamevalue: Torvik's single-game quality value for the matchup (0 for games between unrated teams).
+  gp: Game-played flag (1 if completed).
+  loser: Losing team name; blank until played.
+  matchup: Rank-annotated matchup text, e.g. '0 Northeastern St. at 243 Tulsa'.
+  mismatch: Torvik's mismatch rating (how lopsided the matchup is).
+  muid: Torvik matchup id; equals the game_stats muid.
+  ord_date: Proleptic Gregorian ordinal of the game date (Python date.toordinal).
+  overtimes: Overtime field as Torvik ships it; blank on the captured games.
+  possessions: Actual possessions; blank until played.
+  prediction: Pre-game prediction text (favorite, margin, score, win probability).
+  result: Final result text from team1's view; blank until played.
+  results: Results blob as Torvik ships it (text).
+  t1adjd: Game-level adjusted defensive efficiency for team1 as Torvik ships it (0 when unrated).
+  t1adjo: Game-level adjusted offensive efficiency for team1 as Torvik ships it (0 when unrated).
+  t1adjt: team1 adjusted tempo.
+  t1de: team1 adjusted defensive efficiency going into the game.
+  t1elite: Torvik elite-performance component for team1 (0-1).
+  t1fun: Torvik fun/watchability component for team1 (0-1).
+  t1gs: team1 Gscore as a fraction 0-1; '-' when unrated.
+  t1oe: team1 adjusted offensive efficiency going into the game.
+  t1ppp: team1 points per possession in the game.
+  t1propt: team1 projected points.
+  t1pts: team1 final points; blank until played.
+  t1py: team1 pre-game win probability (fraction 0-1).
+  t1qual: 'Torvik quality marker for team1: the team name when set, blank otherwise.'
+  t1rk: team1 T-Rank rank at game time.
+  t1wp: team1 win indicator as Torvik ships it (1 when team1 won).
+  t2adjd: Game-level adjusted defensive efficiency for team2 as Torvik ships it (0 when unrated).
+  t2adjo: Game-level adjusted offensive efficiency for team2 as Torvik ships it (0 when unrated).
+  t2adjt: team2 adjusted tempo.
+  t2de: team2 adjusted defensive efficiency going into the game.
+  t2elite: Torvik elite-performance component for team2 (0-1).
+  t2fun: Torvik fun/watchability component for team2 (0-1).
+  t2gs: team2 Gscore as a fraction 0-1; '-' when unrated.
+  t2oe: team2 adjusted offensive efficiency going into the game.
+  t2ppp: team2 points per possession in the game.
+  t2propt: team2 projected points.
+  t2pts: team2 final points; blank until played.
+  t2py: team2 pre-game win probability (fraction 0-1).
+  t2qual: 'Torvik quality marker for team2: the team name when set, blank otherwise.'
+  t2rk: team2 T-Rank rank at game time.
+  t2wp: team2 win indicator as Torvik ships it (1 when team2 won).
+  team1: First-listed team name.
+  team2: Second-listed team name.
+  tempo: Actual tempo (possessions per 40 minutes); blank until played.
+  tpro: Projected tempo (possessions) for the game.
+  ttq: Torvik Thrill Quotient (game excitement).
+  venue: Venue / neutral-site flag as Torvik ships it (0 observed on home/away games).
+  winner: Winning team name; blank until played.
+  year: Season ending year inferred from game_date (July onward is the next season).
+torvik_game_stats:
+  adj_de: Row team's pre-game adjusted defensive efficiency (points allowed per 100 possessions).
+  adj_oe: Row team's pre-game adjusted offensive efficiency (points per 100 possessions).
+  coach: Head coach of the row team.
+  conf: Torvik conference abbreviation of the row's team (e.g. B12, ACC).
+  date: Game date as Torvik prints it (m/d/yy).
+  de: Row team's raw defensive efficiency in this game (points allowed per 100 possessions).
+  def_efg: Opponent's effective field-goal percentage against the row team.
+  def_ftr: Opponent's free-throw rate against the row team.
+  def_or: Opponent's offensive rebound percentage against the row team.
+  def_to: Opponent's turnover percentage against the row team.
+  game_date: date parsed to a Date (null when it does not parse).
+  game_score: Torvik's Gscore, a 0-100 single-game performance rating for the row team.
+  game_stats: JSON-encoded array of raw per-game box-score counts exactly as Torvik ships it; the positional layout is Torvik's
+    and undocumented.
+  margin: Signed margin from the row team's view (positive for a win, negative for a loss); Torvik ships it adjusted, so it
+    differs from the raw score difference (-15.37 for an 88-57 loss).
+  muid: 'Torvik matchup id: opponent-order-free concatenation of team names, date and venue; the same value appears in both
+    teams'' rows and in the schedule''s muid.'
+  oe: Row team's raw offensive efficiency in this game (points per 100 possessions).
+  off_efg: Row team's offensive effective field-goal percentage in this game.
+  off_ftr: Row team's free-throw rate on offense in this game.
+  off_or: Row team's offensive rebound percentage in this game.
+  off_to: Row team's offensive turnover percentage in this game.
+  opp: Torvik team name of the opponent.
+  opp_coach: Head coach of the opponent.
+  opp_conf: Torvik conference abbreviation of the opponent.
+  overtimes: Torvik 'overtimes' field as shipped; observed integers 0-13, which is too large for an overtime count, so treat
+    it as opaque.
+  quad: 'Torvik ''quad'' field: observed values are only 1 and 2, tagging which side of the game the row is (each game appears
+    once with each); not the NCAA quadrant.'
+  result: Result from the row team's view, e.g. 'L, 88-57' (W/L, team points, opponent points).
+  team: Torvik team name for the row's team (the perspective of every other column).
+  tempo: Possessions per 40 minutes in this game.
+  type: Torvik game-type code (observed 0-3; 1 is the most common); Torvik does not document the codes.
+  venue: 'Venue from the row team''s view: H home, A away, N neutral.'
+  win_prob: Torvik 'win_prob' field as shipped; it is not the row team's own pre-game win probability (a 31-point loser carries
+    0.92), so treat it as opaque.
+  year: Season ending year (2025 = the 2024-25 season).
+torvik_player_stats:
+  adj_oe: Player's adjusted offensive efficiency.
+  adrtg: Adjusted defensive rating.
+  ast: Assists per game.
+  ast_pct: Assist percentage.
+  ast_to: Assist-to-turnover ratio.
+  blk: Blocks per game.
+  blk_pct: Block percentage.
+  bpm: Box plus/minus.
+  class: Class year (Fr, So, Jr, Sr).
+  conf: Torvik conference abbreviation.
+  dbpm: Defensive box plus/minus.
+  dgbpm: Defensive game box plus/minus.
+  dporpag: Defensive points over replacement per adjusted game.
+  drb_pct: Defensive rebound percentage.
+  dreb: Defensive rebounds per game.
+  drtg: Defensive rating (points allowed per 100 individual defensive possessions).
+  dunks_attempts: Dunks attempted.
+  dunks_made: Dunks made over the season.
+  dunks_pct: Dunk percentage as a fraction (0-1).
+  e_fg: Effective field-goal percentage.
+  ft_pct: Free-throw percentage as a fraction (0-1).
+  fta: Free throws attempted.
+  ftm: Free throws made.
+  ftr: Free-throw rate (FTA per FGA, in percent).
+  games: Games the player appeared in this season.
+  gbpm: Torvik's game-level box plus/minus.
+  height: Listed height as feet-inches, e.g. 6-4.
+  hometown: Hometown as listed, e.g. 'Mars, PA'; blank for some players.
+  mid_attempts: Attempted two-point jump shots (non-rim twos).
+  mid_made: Made two-point jump shots (non-rim twos).
+  mid_pct: Field-goal percentage on non-rim twos as a fraction (0-1).
+  min_pct: Share of team minutes played, in percent.
+  minutes: Share of team minutes played, in percent (as on the Torvik player page).
+  number: Jersey number as listed (Int64).
+  o_rtg: Offensive rating (points produced per 100 individual possessions).
+  obpm: Offensive box plus/minus.
+  ogbpm: Offensive game box plus/minus.
+  orb_pct: Offensive rebound percentage.
+  oreb: Offensive rebounds per game.
+  pfr: Personal fouls committed per 40 minutes.
+  pick: NBA draft pick number; null for players not drafted.
+  player_id: Torvik numeric player id (Int64); the join key to other Torvik player pages.
+  player_name: Player name as Torvik lists it, 'First Last' (e.g. Robby Carmody).
+  porpag: Points over replacement per adjusted game (Torvik's PRPG!).
+  pts: Points per game.
+  rec_rank: High-school recruiting rating; null for unranked players.
+  recruit_date: Torvik's 'recruit_date' field; the values are ISO dates that look like birth dates, kept verbatim as text.
+  rim_attempts: Attempted shots at the rim.
+  rim_made: Made shots at the rim.
+  rim_pct: Field-goal percentage at the rim as a fraction (0-1).
+  role: Torvik's position/role label, e.g. 'Combo G' or 'Scoring PG'.
+  stl: Steals per game.
+  stl_pct: Steal percentage.
+  stops: Defensive stops.
+  team: Torvik team name the player is listed with (e.g. Le Moyne); matches the ratings team column.
+  threat: Torvik's scoring-threat rating.
+  three_p_pct: Three-point field-goal percentage as a fraction (0-1).
+  three_pa: Three-point field goals attempted.
+  three_pm: Three-point field goals made.
+  to_pct: Turnover percentage.
+  treb: Total rebounds per game.
+  ts_pct: True shooting percentage.
+  two_p_pct: Two-point field-goal percentage as a fraction (0-1).
+  two_pa: Two-point field goals attempted.
+  two_pm: Two-point field goals made.
+  usage: 'Usage rate: share of team possessions used while on the floor, in percent.'
+  year: Season ending year (2025 = the 2024-25 season).
 transfers_best_available:
   athlete_verified: Whether the athlete has verified their own On3 profile.
   class_year: Player's original recruiting class year.

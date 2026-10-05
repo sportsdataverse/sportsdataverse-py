@@ -7,7 +7,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse.mbb.torvik_runtime import _get
-from sportsdataverse.mbb.torvik_parsers import parse_torvik_csv
+from sportsdataverse.mbb.torvik_parsers import (
+    parse_torvik_csv,
+    parse_torvik_game_schedule,
+    parse_torvik_game_stats,
+    parse_torvik_player_stats,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -16,6 +21,9 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
 __all__ = [
     "torvik_ratings",
     "torvik_team_factors",
+    "torvik_game_stats",
+    "torvik_player_stats",
+    "torvik_game_schedule",
 ]
 
 
@@ -118,4 +126,167 @@ def torvik_team_factors(
     )
     if return_parsed:
         return parse_torvik_csv(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def torvik_game_stats(
+    year: int,
+    json: Optional[int] = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
+    """GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-factors log (one row per team-game, 31 positional fields).
+
+    Endpoint: ``GET https://barttorvik.com/getgamestats.php``
+    Example URL: https://barttorvik.com/getgamestats.php?year=2025
+
+    Args:
+        year: 4-digit season ending year (2025 = the 2024-25 season).
+        json: Response format switch; leave at 1 (the parser expects the headerless JSON array).
+        return_parsed: parse the payload through parse_torvik_game_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import torvik_game_stats
+            torvik_game_stats(year=2025)
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "json": json,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://barttorvik.com/getgamestats.php",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_torvik_game_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def torvik_player_stats(
+    year: int,
+    csv: Optional[int] = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
+    """GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per player, 67 positional fields).
+
+    Endpoint: ``GET https://barttorvik.com/getadvstats.php``
+    Example URL: https://barttorvik.com/getadvstats.php?year=2025
+
+    Args:
+        year: 4-digit season ending year (2025 = the 2024-25 season).
+        csv: Response format switch; leave at 1 (the parser expects the headerless CSV).
+        return_parsed: parse the payload through parse_torvik_player_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import torvik_player_stats
+            torvik_player_stats(year=2025)
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "csv": csv,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://barttorvik.com/getadvstats.php",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_torvik_player_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def torvik_game_schedule(
+    year: int,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
+    """GET /{year}_super_sked.json — men's season schedule/results with T-Rank projections (one row per game, 55 positional fields).
+
+    Endpoint: ``GET https://barttorvik.com/{year}_super_sked.json``
+    Example URL: https://barttorvik.com/2025_super_sked.json
+
+    Args:
+        year: year path parameter.
+        return_parsed: parse the payload through parse_torvik_game_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import torvik_game_schedule
+            torvik_game_schedule(year=2025)
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://barttorvik.com/{year}_super_sked.json",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_torvik_game_schedule(raw, return_as_pandas=return_as_pandas)
     return raw

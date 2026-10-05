@@ -179,6 +179,9 @@ from sportsdataverse.mbb import kenpom_team_players_expanded as _raw_kenpom_team
 from sportsdataverse.mbb import kenpom_team_stats as _raw_kenpom_team_stats
 from sportsdataverse.mbb import kenpom_trends as _raw_kenpom_trends
 from sportsdataverse.mbb import kenpom_win_probability as _raw_kenpom_win_probability
+from sportsdataverse.mbb import torvik_game_schedule as _raw_torvik_game_schedule
+from sportsdataverse.mbb import torvik_game_stats as _raw_torvik_game_stats
+from sportsdataverse.mbb import torvik_player_stats as _raw_torvik_player_stats
 from sportsdataverse.mbb import torvik_ratings as _raw_torvik_ratings
 from sportsdataverse.mbb import torvik_team_factors as _raw_torvik_team_factors
 from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
@@ -572,6 +575,9 @@ from sportsdataverse.mbb import parse_three_pointer_made as parse_three_pointer_
 from sportsdataverse.mbb import parse_three_pointer_missed as parse_three_pointer_missed  # noqa: F401
 from sportsdataverse.mbb import parse_timeout as parse_timeout  # noqa: F401
 from sportsdataverse.mbb import parse_torvik_csv as parse_torvik_csv  # noqa: F401
+from sportsdataverse.mbb import parse_torvik_game_schedule as parse_torvik_game_schedule  # noqa: F401
+from sportsdataverse.mbb import parse_torvik_game_stats as parse_torvik_game_stats  # noqa: F401
+from sportsdataverse.mbb import parse_torvik_player_stats as parse_torvik_player_stats  # noqa: F401
 from sportsdataverse.mbb import parse_turnover as parse_turnover  # noqa: F401
 from sportsdataverse.mbb import parse_two_pointer_made as parse_two_pointer_made  # noqa: F401
 from sportsdataverse.mbb import parse_two_pointer_missed as parse_two_pointer_missed  # noqa: F401
@@ -1177,6 +1183,9 @@ __all__ = [
     "parse_three_pointer_missed",
     "parse_timeout",
     "parse_torvik_csv",
+    "parse_torvik_game_schedule",
+    "parse_torvik_game_stats",
+    "parse_torvik_player_stats",
     "parse_turnover",
     "parse_two_pointer_made",
     "parse_two_pointer_missed",
@@ -1224,6 +1233,9 @@ __all__ = [
     "td_at",
     "test_positional_aware_filter",
     "tidy_player",
+    "torvik_game_schedule",
+    "torvik_game_stats",
+    "torvik_player_stats",
     "torvik_ratings",
     "torvik_team_factors",
     "transfer_cohort",
@@ -3420,6 +3432,48 @@ def kenpom_win_probability(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_kenpom_win_probability(*args, **kwargs)
+
+
+def torvik_game_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.torvik_game_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.torvik_game_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.torvik_game_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_torvik_game_schedule(*args, **kwargs)
+
+
+def torvik_game_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.torvik_game_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.torvik_game_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.torvik_game_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_torvik_game_stats(*args, **kwargs)
+
+
+def torvik_player_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.torvik_player_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.torvik_player_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.torvik_player_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_torvik_player_stats(*args, **kwargs)
 
 
 def torvik_ratings(*args, **kwargs):

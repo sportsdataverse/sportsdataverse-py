@@ -1190,7 +1190,7 @@ def stats_rosters(
     )
 
 
-def parse_super_sked(payload: Any, year: int) -> pl.DataFrame:
+def parse_super_sked(payload: Any, year: Optional[int] = None) -> pl.DataFrame:
     """Parse Torvik's positional ``{year}_super_sked.json`` into a tidy frame.
 
     The file is a JSON array of arrays: 55 positional fields per game, with no
@@ -1199,7 +1199,10 @@ def parse_super_sked(payload: Any, year: int) -> pl.DataFrame:
 
     Args:
         payload: Raw JSON text (or an already-decoded list) from Torvik.
-        year: Season year, stamped onto the ``year`` column.
+        year: Season year, stamped onto the ``year`` column. ``None`` infers
+            each game's season end-year from its date (July onward belongs to
+            the next year), which is how the public ``torvik_game_schedule``
+            -- whose request carries no year to the parser -- fills it.
 
     Returns:
         ``pl.DataFrame`` with :data:`SUPER_SKED_FIELDS` plus ``game_date`` and
@@ -1247,9 +1250,12 @@ def parse_super_sked(payload: Any, year: int) -> pl.DataFrame:
             return None
 
     df = pl.DataFrame(rows, schema={name: pl.Utf8 for name in SUPER_SKED_FIELDS})
+    dates = [parse_date(v) for v in df["date"].to_list()]
+    # year=None: the season end-year of each game (July onward is next season)
+    years = [year if year is not None else (None if d is None else d.year + (d.month >= 7)) for d in dates]
     return df.with_columns(
-        pl.Series("game_date", [parse_date(v) for v in df["date"].to_list()], dtype=pl.Date),
-        pl.lit(year, dtype=pl.Int32).alias("year"),
+        pl.Series("game_date", dates, dtype=pl.Date),
+        pl.Series("year", years, dtype=pl.Int32),
     )
 
 

@@ -12,7 +12,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 87 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 2 | `https://barttorvik.com` |
+| [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 5 | `https://barttorvik.com` |
 | [KenPom (kenpom.com, subscription)](reference/kenpom) | 30 | `https://kenpom.com` |
 | [Dataset loaders](reference/loaders) | 34 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 320 | hand-written wrappers, loaders & helpers |
@@ -139,5 +139,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`mbb_schedule_crosswalk`](reference/additional/mbb#mbb_schedule_crosswalk) | [`mbb_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/mbb_schedule_crosswalk.html) |
 | [`mbb_team_crosswalk`](reference/additional/mbb#mbb_team_crosswalk) | [`mbb_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/mbb_team_crosswalk.html) |
 | [`most_recent_mbb_season`](reference/additional/highlights#most_recent_mbb_season) | [`most_recent_mbb_season`](https://hoopR.sportsdataverse.org/reference/most_recent_mbb_season.html) |
+| [`torvik_game_schedule`](reference/torvik#torvik_game_schedule) | [`torvik_game_schedule`](https://hoopR.sportsdataverse.org/reference/torvik_game_schedule.html) |
+| [`torvik_game_stats`](reference/torvik#torvik_game_stats) | [`torvik_game_stats`](https://hoopR.sportsdataverse.org/reference/torvik_game_stats.html) |
+| [`torvik_player_stats`](reference/torvik#torvik_player_stats) | [`torvik_player_stats`](https://hoopR.sportsdataverse.org/reference/torvik_player_stats.html) |
 | [`torvik_ratings`](reference/torvik#torvik_ratings) | [`torvik_ratings`](https://hoopR.sportsdataverse.org/reference/torvik_ratings.html) |
 | [`torvik_team_factors`](reference/torvik#torvik_team_factors) | [`torvik_team_factors`](https://hoopR.sportsdataverse.org/reference/torvik_team_factors.html) |
