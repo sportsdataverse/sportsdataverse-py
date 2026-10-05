@@ -1,3 +1,6 @@
+import pytest
+
+from sportsdataverse.errors import EmptyResponseWarning
 from sportsdataverse.nba.nba_stats_runtime import _get, stats_headers
 
 
@@ -29,13 +32,20 @@ def test_get_builds_url_strips_none_and_pads_gameid():
 
 
 def test_get_returns_empty_dict_on_non_200():
-    out = _get("x", {}, transport=lambda *a: (500, "boom"))
+    with pytest.warns(EmptyResponseWarning, match=r"stats/x answered HTTP 500.*Season"):
+        out = _get("x", {}, transport=lambda *a: (500, "boom"))
     assert out == {}
 
 
 def test_get_returns_empty_dict_on_blank_body():
-    out = _get("x", {}, transport=lambda *a: (200, "   "))
+    with pytest.warns(EmptyResponseWarning, match="HTTP 200 with an empty body"):
+        out = _get("x", {}, transport=lambda *a: (200, "   "))
     assert out == {}
+
+
+def test_get_does_not_warn_on_data(recwarn):
+    _get("x", {}, transport=lambda *a: (200, '{"resultSets": []}'))
+    assert not [w for w in recwarn if issubclass(w.category, EmptyResponseWarning)]
 
 
 def test_get_passes_full_url_through():

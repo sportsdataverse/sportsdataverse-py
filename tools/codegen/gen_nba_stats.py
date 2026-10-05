@@ -201,8 +201,8 @@ def _stats_eps(league_id: str) -> List[dict]:
 
 
 # Season / SeasonYear params whose hoopR/wehoop default is a call (``year_to_season(
-# most_recent_nba_season() - 1)``, ``most_recent_wnba_season()``) get the current season at call
-# time via the runtime ``season_or_current`` transform: the API answers a request without one with
+# most_recent_nba_season() - 1)``, ``most_recent_wnba_season()``) get the previous season at call
+# time via the runtime ``season_or_previous`` transform: the API answers a request without one with
 # an empty HTTP 500 that the runtime turns into ``{}``. The endpoints below are the exception. A
 # live sweep on 2026-10-05 (every wrapper with a None season, example args, no season, through the
 # proxy pool) found they answer 200 with data WITHOUT a season, so they keep the API's own default,
@@ -279,40 +279,20 @@ _SEASON_OPTIONAL: Dict[str, frozenset] = {
 _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference
     # row as "already documented" and drops the helper's own section from the docs.
-    "season_or_current": {
-        "nba_stats": (
-            "Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR "
-            "does (``2026-27`` from October 2026); stats.nba.com answers a request without a season "
-            "with an empty HTTP 500."
-        ),
-        "wnba_stats": (
-            "Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` "
-            "from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500."
-        ),
-    },
-    "season_or_previous": {
-        "nba_stats": (
-            "Season label, e.g. ``2024-25``. Defaults to the previous season at call time, as hoopR "
-            "does (the last finished playoffs: ``2025-26`` from October 2026)."
-        ),
-        "wnba_stats": (
-            "Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time, as wehoop "
-            "does (``2025`` during 2026)."
-        ),
-    },
+    "nba_stats": (
+        "Season label, e.g. ``2024-25``. Defaults to the previous season at call time "
+        "(``2025-26`` from October 2026), the latest one that is sure to have data; "
+        "stats.nba.com answers a request without a season with an empty HTTP 500."
+    ),
+    "wnba_stats": (
+        "Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time "
+        "(``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a "
+        "season with an empty HTTP 500."
+    ),
 }
 
 
 _LEAGUE_SPECIFIC = re.compile(r"(?i)(id(s|list)?\d*|season(year)?)$")
-
-
-def _season_transform(per_league: Dict[str, str]) -> str:
-    """hoopR spells "the last finished season" as ``most_recent_nba_season() - 2`` (commonplayoffseries)."""
-    return (
-        "season_or_previous"
-        if any("most_recent_nba_season() - 2" in v for v in per_league.values())
-        else "season_or_current"
-    )
 
 
 def _league_default(p: dict, league: str) -> Any:
@@ -387,9 +367,10 @@ def _endpoint_entry(
             }
             if isinstance(default, str) and default.startswith("="):
                 if p["query_key"] in _SEASON_KEYS and ep["slug"] not in _SEASON_OPTIONAL[stem]:
-                    transform = _season_transform(p.get("league_defaults") or {})
-                    param["transform"] = transform
-                    param["description"] = _SEASON_DOC[transform][stem]
+                    # the previous season, not the current one: it always has data, while the
+                    # current season returns empty frames until it tips off
+                    param["transform"] = "season_or_previous"
+                    param["description"] = _SEASON_DOC[stem]
                 default = None  # an R call has no literal; the transform (if any) resolves it per call
             param["default"] = _clean_default(p["name"], p["query_key"], default)
             extra.append(param)

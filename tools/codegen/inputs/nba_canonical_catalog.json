@@ -19,7 +19,7 @@
       "deprecation": {},
       "family": "live-cdn",
       "hosts": [
-        "cdn.nba.com"
+        "cdn-gleague.nba.com"
       ],
       "league_applicability": {},
       "params": [],
@@ -45,19 +45,12 @@
       ]
     },
     {
-      "deprecation": {
-        "capture": "dead"
-      },
+      "deprecation": {},
       "family": "live-cdn",
       "hosts": [
         "cdn.nba.com"
       ],
-      "league_applicability": {
-        "00": "dead",
-        "10": "dead",
-        "15": "dead",
-        "20": "dead"
-      },
+      "league_applicability": {},
       "params": [],
       "result_sets": {},
       "slug": "playbyplay",
@@ -72,9 +65,7 @@
       "hosts": [
         "cdn.nba.com"
       ],
-      "league_applicability": {
-        "10": "dead"
-      },
+      "league_applicability": {},
       "params": [],
       "result_sets": {},
       "slug": "scoreboard",
@@ -11722,7 +11713,7 @@
         "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
-        "wehoop": "unknown"
+        "wehoop": "deprecated"
       },
       "family": "stats",
       "hosts": [
@@ -11843,7 +11834,7 @@
         "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
-        "wehoop": "unknown"
+        "wehoop": "deprecated"
       },
       "family": "stats",
       "hosts": [
@@ -12054,7 +12045,7 @@
         "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
-        "wehoop": "unknown"
+        "wehoop": "deprecated"
       },
       "family": "stats",
       "hosts": [
@@ -12205,7 +12196,7 @@
         "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
-        "wehoop": "unknown"
+        "wehoop": "deprecated"
       },
       "family": "stats",
       "hosts": [
@@ -14907,7 +14898,7 @@
           {
             "description": "",
             "name": "rank",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -14927,7 +14918,7 @@
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
@@ -14957,14 +14948,14 @@
           {
             "description": "",
             "name": "pts_per48",
-            "type": "string"
+            "type": "number"
           }
         ],
         "LeagueAverage": [
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
@@ -14994,14 +14985,14 @@
           {
             "description": "",
             "name": "pts_per48",
-            "type": "string"
+            "type": "number"
           }
         ],
         "LeagueMax": [
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
@@ -15031,7 +15022,7 @@
           {
             "description": "",
             "name": "pts_per48",
-            "type": "string"
+            "type": "number"
           }
         ]
       },
@@ -32304,6 +32295,7 @@
     },
     {
       "deprecation": {
+        "capture": "dead",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -32314,8 +32306,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested"
+        "00": "dead",
+        "10": "dead",
+        "15": "dead",
+        "20": "dead"
       },
       "params": [
         {
@@ -33324,7 +33318,7 @@
           {
             "description": "",
             "name": "seed",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33334,7 +33328,7 @@
           {
             "description": "",
             "name": "players",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33344,17 +33338,17 @@
           {
             "description": "",
             "name": "min",
-            "type": "integer"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33364,12 +33358,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33379,12 +33373,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33394,47 +33388,47 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "Midwest": [
@@ -33446,7 +33440,7 @@
           {
             "description": "",
             "name": "seed",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33456,7 +33450,7 @@
           {
             "description": "",
             "name": "players",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33466,17 +33460,17 @@
           {
             "description": "",
             "name": "min",
-            "type": "integer"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33486,12 +33480,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33501,12 +33495,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33516,47 +33510,47 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "South": [
@@ -33568,7 +33562,7 @@
           {
             "description": "",
             "name": "seed",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33578,7 +33572,7 @@
           {
             "description": "",
             "name": "players",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33588,17 +33582,17 @@
           {
             "description": "",
             "name": "min",
-            "type": "integer"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33608,12 +33602,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33623,12 +33617,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33638,47 +33632,47 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "West": [
@@ -33690,7 +33684,7 @@
           {
             "description": "",
             "name": "seed",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33700,7 +33694,7 @@
           {
             "description": "",
             "name": "players",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33710,17 +33704,17 @@
           {
             "description": "",
             "name": "min",
-            "type": "integer"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33730,12 +33724,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33745,12 +33739,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -33760,47 +33754,47 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           }
         ]
       },
@@ -63006,72 +63000,72 @@
         "SeasonGames": [
           {
             "description": "",
-            "name": "arena_city",
+            "name": "arenacity",
             "type": "string"
           },
           {
             "description": "",
-            "name": "arena_name",
+            "name": "arenaname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "arena_state",
+            "name": "arenastate",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_city",
+            "name": "awayteamtime",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_id",
+            "name": "awayteam_losses",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_losses",
+            "name": "awayteam_score",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "away_team_score",
+            "name": "awayteam_seed",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_seed",
+            "name": "awayteam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamid",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_slug",
+            "name": "awayteam_teamname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_time",
+            "name": "awayteam_teamslug",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_tricode",
+            "name": "awayteam_teamtricode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_wins",
+            "name": "awayteam_wins",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "branch_link",
+            "name": "branchlink",
             "type": "string"
           },
           {
@@ -63081,187 +63075,167 @@
           },
           {
             "description": "",
-            "name": "game_code",
+            "name": "gamecode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date",
+            "name": "gamedate",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_est",
+            "name": "gamedateest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_time_est",
+            "name": "gamedatetimeest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_time_utc",
+            "name": "gamedatetimeutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_utc",
+            "name": "gamedateutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_id",
+            "name": "gameid",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_label",
+            "name": "gamelabel",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_sequence",
+            "name": "gamesequence",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "game_status",
+            "name": "gamestatus",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "game_status_text",
+            "name": "gamestatustext",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_sub_label",
+            "name": "gamesublabel",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_subtype",
+            "name": "gamesubtype",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_time_est",
+            "name": "gametimeest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_time_utc",
+            "name": "gametimeutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_city",
+            "name": "hometeamtime",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_id",
+            "name": "hometeam_losses",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_losses",
+            "name": "hometeam_score",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "home_team_score",
+            "name": "hometeam_seed",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_seed",
+            "name": "hometeam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamid",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_slug",
+            "name": "hometeam_teamname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_time",
+            "name": "hometeam_teamslug",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_tricode",
+            "name": "hometeam_teamtricode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_wins",
+            "name": "hometeam_wins",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "if_necessary",
+            "name": "ifnecessary",
             "type": "string"
           },
           {
             "description": "",
-            "name": "is_neutral",
+            "name": "isneutral",
             "type": "boolean"
           },
           {
             "description": "",
-            "name": "league_id",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "month_num",
+            "name": "monthnum",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "postponed_status",
+            "name": "postponedstatus",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season",
+            "name": "seriesgamenumber",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season_type_description",
+            "name": "seriestext",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season_type_id",
+            "name": "weekname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "series_game_number",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "series_text",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "week_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "week_number",
+            "name": "weeknumber",
             "type": "integer"
           }
         ],
@@ -63375,72 +63349,72 @@
         "SeasonGames": [
           {
             "description": "",
-            "name": "arena_city",
+            "name": "arenacity",
             "type": "string"
           },
           {
             "description": "",
-            "name": "arena_name",
+            "name": "arenaname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "arena_state",
+            "name": "arenastate",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_city",
+            "name": "awayteamtime",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_id",
+            "name": "awayteam_losses",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_losses",
+            "name": "awayteam_score",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "away_team_score",
+            "name": "awayteam_seed",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_seed",
+            "name": "awayteam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamid",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "away_team_slug",
+            "name": "awayteam_teamname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_time",
+            "name": "awayteam_teamslug",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_tricode",
+            "name": "awayteam_teamtricode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "away_team_wins",
+            "name": "awayteam_wins",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "branch_link",
+            "name": "branchlink",
             "type": "string"
           },
           {
@@ -63450,187 +63424,167 @@
           },
           {
             "description": "",
-            "name": "game_code",
+            "name": "gamecode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date",
+            "name": "gamedate",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_est",
+            "name": "gamedateest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_time_est",
+            "name": "gamedatetimeest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_time_utc",
+            "name": "gamedatetimeutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_date_utc",
+            "name": "gamedateutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_id",
+            "name": "gameid",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_label",
+            "name": "gamelabel",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_sequence",
+            "name": "gamesequence",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "game_status",
+            "name": "gamestatus",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "game_status_text",
+            "name": "gamestatustext",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_sub_label",
+            "name": "gamesublabel",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_subtype",
+            "name": "gamesubtype",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_time_est",
+            "name": "gametimeest",
             "type": "string"
           },
           {
             "description": "",
-            "name": "game_time_utc",
+            "name": "gametimeutc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_city",
+            "name": "hometeamtime",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_id",
+            "name": "hometeam_losses",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_losses",
+            "name": "hometeam_score",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "home_team_score",
+            "name": "hometeam_seed",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_seed",
+            "name": "hometeam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamid",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "home_team_slug",
+            "name": "hometeam_teamname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_time",
+            "name": "hometeam_teamslug",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_tricode",
+            "name": "hometeam_teamtricode",
             "type": "string"
           },
           {
             "description": "",
-            "name": "home_team_wins",
+            "name": "hometeam_wins",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "if_necessary",
+            "name": "ifnecessary",
             "type": "string"
           },
           {
             "description": "",
-            "name": "is_neutral",
+            "name": "isneutral",
             "type": "boolean"
           },
           {
             "description": "",
-            "name": "league_id",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "month_num",
+            "name": "monthnum",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "postponed_status",
+            "name": "postponedstatus",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season",
+            "name": "seriesgamenumber",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season_type_description",
+            "name": "seriestext",
             "type": "string"
           },
           {
             "description": "",
-            "name": "season_type_id",
+            "name": "weekname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "series_game_number",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "series_text",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "week_name",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "week_number",
+            "name": "weeknumber",
             "type": "integer"
           }
         ],
@@ -63736,7 +63690,7 @@
     {
       "deprecation": {
         "capture": "live",
-        "hoopR": "deprecated",
+        "hoopR": "unknown",
         "nba_api": "deprecated",
         "wehoop": "unknown"
       },
@@ -63803,12 +63757,12 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
             "name": "pt_available",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "EastConfStandingsByDay": [
@@ -63820,12 +63774,12 @@
           {
             "description": "",
             "name": "league_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
             "name": "season_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -63845,17 +63799,17 @@
           {
             "description": "",
             "name": "g",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "w",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "l",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -63871,11 +63825,6 @@
             "description": "",
             "name": "road_record",
             "type": "string"
-          },
-          {
-            "description": "",
-            "name": "returntoplay",
-            "type": "string"
           }
         ],
         "GameHeader": [
@@ -63887,12 +63836,12 @@
           {
             "description": "",
             "name": "game_sequence",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -63927,7 +63876,7 @@
           {
             "description": "",
             "name": "live_period",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -63962,19 +63911,24 @@
           {
             "description": "",
             "name": "wh_status",
-            "type": "string"
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "wnba_commissioner_flag",
+            "type": "integer"
           }
         ],
         "LastMeeting": [
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
             "name": "last_game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -64004,7 +63958,7 @@
           {
             "description": "",
             "name": "last_game_home_team_points",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -64029,7 +63983,7 @@
           {
             "description": "",
             "name": "last_game_visitor_team_points",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "LineScore": [
@@ -64041,12 +63995,12 @@
           {
             "description": "",
             "name": "game_sequence",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -64076,77 +64030,77 @@
           {
             "description": "",
             "name": "pts_qtr1",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_qtr2",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_qtr3",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_qtr4",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot1",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot2",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot3",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot4",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot5",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot6",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot7",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot8",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot9",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts_ot10",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -64166,24 +64120,24 @@
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "SeriesStandings": [
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -64203,12 +64157,12 @@
           {
             "description": "",
             "name": "home_team_wins",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "home_team_losses",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -64220,7 +64174,7 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -64255,7 +64209,7 @@
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -64270,7 +64224,7 @@
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -64285,19 +64239,19 @@
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           }
         ],
         "TicketLinks": [
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "unknown"
           },
           {
             "description": "",
             "name": "leag_tix",
-            "type": "string"
+            "type": "unknown"
           }
         ],
         "WestConfStandingsByDay": [
@@ -64309,12 +64263,12 @@
           {
             "description": "",
             "name": "league_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
             "name": "season_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -64334,17 +64288,17 @@
           {
             "description": "",
             "name": "g",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "w",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "l",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -94814,7 +94768,7 @@
           "type": "str"
         },
         {
-          "default": "2022-23",
+          "default": null,
           "enum": null,
           "example": null,
           "league_defaults": {
@@ -95154,7 +95108,12 @@
         "playlist": [
           {
             "description": "",
-            "name": "gi",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "dsc",
             "type": "string"
           },
           {
@@ -95164,32 +95123,12 @@
           },
           {
             "description": "",
-            "name": "y",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "m",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "d",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "gc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "p",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "dsc",
+            "name": "gi",
             "type": "string"
           },
           {
@@ -95204,6 +95143,31 @@
           },
           {
             "description": "",
+            "name": "hpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          },
+          {
+            "description": "",
             "name": "va",
             "type": "string"
           },
@@ -95214,12 +95178,7 @@
           },
           {
             "description": "",
-            "name": "hpb",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "hpa",
+            "name": "vpa",
             "type": "integer"
           },
           {
@@ -95229,34 +95188,24 @@
           },
           {
             "description": "",
-            "name": "vpa",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "pta",
+            "name": "y",
             "type": "integer"
           }
         ],
         "videoUrls": [
           {
             "description": "",
-            "name": "uuid",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "sdur",
+            "name": "ldur",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "surl",
+            "name": "lth",
             "type": "string"
           },
           {
             "description": "",
-            "name": "sth",
+            "name": "lurl",
             "type": "string"
           },
           {
@@ -95266,32 +95215,12 @@
           },
           {
             "description": "",
-            "name": "murl",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "mth",
             "type": "string"
           },
           {
             "description": "",
-            "name": "ldur",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "lurl",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "lth",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "vtt",
+            "name": "murl",
             "type": "string"
           },
           {
@@ -95301,7 +95230,32 @@
           },
           {
             "description": "",
+            "name": "sdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
             "name": "srt",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "surl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vtt",
             "type": "string"
           }
         ]
@@ -95318,7 +95272,7 @@
         "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
-        "wehoop": "unknown"
+        "wehoop": "deprecated"
       },
       "family": "stats",
       "hosts": [
@@ -95367,7 +95321,12 @@
         "playlist": [
           {
             "description": "",
-            "name": "gi",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "dsc",
             "type": "string"
           },
           {
@@ -95377,32 +95336,12 @@
           },
           {
             "description": "",
-            "name": "y",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "m",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "d",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "gc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "p",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "dsc",
+            "name": "gi",
             "type": "string"
           },
           {
@@ -95412,8 +95351,8 @@
           },
           {
             "description": "",
-            "name": "va",
-            "type": "string"
+            "name": "hpa",
+            "type": "integer"
           },
           {
             "description": "",
@@ -95422,7 +95361,27 @@
           },
           {
             "description": "",
-            "name": "hpa",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "va",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vpa",
             "type": "integer"
           },
           {
@@ -95432,74 +95391,14 @@
           },
           {
             "description": "",
-            "name": "vpa",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "pta",
+            "name": "y",
             "type": "integer"
           }
         ],
         "videoUrls": [
           {
             "description": "",
-            "name": "uuid",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "dur",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "stt",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "stp",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "sth",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "stw",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "mtt",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "mtp",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "mth",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "mtw",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "ltt",
-            "type": "unknown"
-          },
-          {
-            "description": "",
-            "name": "ltp",
             "type": "unknown"
           },
           {
@@ -95509,8 +95408,63 @@
           },
           {
             "description": "",
+            "name": "ltp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "ltt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
             "name": "ltw",
             "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mth",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtw",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stw",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
           }
         ]
       },
@@ -95570,7 +95524,12 @@
         "playlist": [
           {
             "description": "",
-            "name": "gi",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "dsc",
             "type": "string"
           },
           {
@@ -95580,32 +95539,12 @@
           },
           {
             "description": "",
-            "name": "y",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "m",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "d",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "gc",
             "type": "string"
           },
           {
             "description": "",
-            "name": "p",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "dsc",
+            "name": "gi",
             "type": "string"
           },
           {
@@ -95620,6 +95559,31 @@
           },
           {
             "description": "",
+            "name": "hpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          },
+          {
+            "description": "",
             "name": "va",
             "type": "string"
           },
@@ -95630,12 +95594,7 @@
           },
           {
             "description": "",
-            "name": "hpb",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "hpa",
+            "name": "vpa",
             "type": "integer"
           },
           {
@@ -95645,34 +95604,24 @@
           },
           {
             "description": "",
-            "name": "vpa",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "pta",
+            "name": "y",
             "type": "integer"
           }
         ],
         "videoUrls": [
           {
             "description": "",
-            "name": "uuid",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "sdur",
+            "name": "ldur",
             "type": "integer"
           },
           {
             "description": "",
-            "name": "surl",
+            "name": "lth",
             "type": "string"
           },
           {
             "description": "",
-            "name": "sth",
+            "name": "lurl",
             "type": "string"
           },
           {
@@ -95682,32 +95631,12 @@
           },
           {
             "description": "",
-            "name": "murl",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "mth",
             "type": "string"
           },
           {
             "description": "",
-            "name": "ldur",
-            "type": "integer"
-          },
-          {
-            "description": "",
-            "name": "lurl",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "lth",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "vtt",
+            "name": "murl",
             "type": "string"
           },
           {
@@ -95717,7 +95646,32 @@
           },
           {
             "description": "",
+            "name": "sdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
             "name": "srt",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "surl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vtt",
             "type": "string"
           }
         ]
@@ -95782,7 +95736,7 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -95832,7 +95786,7 @@
           {
             "description": "",
             "name": "game_status",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -95842,12 +95796,12 @@
           {
             "description": "",
             "name": "is_available",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pt_xyz_available",
-            "type": "string"
+            "type": "integer"
           }
         ]
       },

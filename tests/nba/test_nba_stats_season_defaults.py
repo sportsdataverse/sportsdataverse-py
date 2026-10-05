@@ -9,9 +9,9 @@ the regenerated defaults offline; the live sweep re-measures them against the AP
 import pytest
 
 from sportsdataverse.nba import nba_stats
-from sportsdataverse.nba.nba_stats_runtime import season_or_current as nba_season
+from sportsdataverse.nba.nba_stats_runtime import season_or_previous as nba_season
 from sportsdataverse.wnba import wnba_stats
-from sportsdataverse.wnba.wnba_stats_runtime import season_or_current as wnba_season
+from sportsdataverse.wnba.wnba_stats_runtime import season_or_previous as wnba_season
 from tests.conftest import skip_if_no_nba_stats_live
 
 
@@ -32,24 +32,20 @@ def frozen_seasons(monkeypatch):
     monkeypatch.setattr("sportsdataverse.wnba.wnba_schedule.most_recent_wnba_season", lambda: 2026)
 
 
-def test_season_or_current_follows_each_league(frozen_seasons):
-    assert nba_season(None) == "2026-27"  # hoopR: year_to_season(most_recent_nba_season() - 1)
-    assert wnba_season(None) == "2026"  # the current WNBA season, not wehoop's "- 1"
+def test_season_default_is_the_previous_season_in_each_league(frozen_seasons):
+    # The previous season always has data; the current one is empty until it tips off.
+    assert nba_season(None) == "2025-26"  # year_to_season(most_recent_nba_season() - 2)
+    assert wnba_season(None) == "2025"  # wehoop: most_recent_wnba_season() - 1
     assert nba_season("2023-24") == "2023-24" and wnba_season("") == ""
 
 
-def test_season_required_wrappers_send_the_current_season(frozen_seasons):
-    assert _sent(nba_stats.nba_stats_playergamelogs)["Season"] == "2026-27"
-    assert _sent(nba_stats.nba_stats_commonteamroster)["Season"] == "2026-27"
-    assert _sent(nba_stats.nba_stats_draftcombinestats)["SeasonYear"] == "2026-27"
-    assert _sent(wnba_stats.wnba_stats_playergamelogs)["Season"] == "2026"
-    assert _sent(wnba_stats.wnba_stats_playerdashptshotdefend)["Season"] == "2026"
-
-
-def test_last_finished_season_where_hoopr_asks_for_it(frozen_seasons):
-    # hoopR: year_to_season(most_recent_nba_season() - 2), the last finished playoffs
+def test_season_required_wrappers_send_the_previous_season(frozen_seasons):
+    assert _sent(nba_stats.nba_stats_playergamelogs)["Season"] == "2025-26"
+    assert _sent(nba_stats.nba_stats_commonteamroster)["Season"] == "2025-26"
     assert _sent(nba_stats.nba_stats_commonplayoffseries)["Season"] == "2025-26"
-    assert _sent(wnba_stats.wnba_stats_commonplayoffseries)["Season"] == "2025"
+    assert _sent(nba_stats.nba_stats_draftcombinestats)["SeasonYear"] == "2025-26"
+    assert _sent(wnba_stats.wnba_stats_playergamelogs)["Season"] == "2025"
+    assert _sent(wnba_stats.wnba_stats_playerdashptshotdefend)["Season"] == "2025"
 
 
 def test_all_season_endpoints_keep_the_api_default():

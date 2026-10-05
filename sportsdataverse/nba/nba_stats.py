@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse.nba.nba_stats_runtime import _get, season_or_current, season_or_previous
+from sportsdataverse.nba.nba_stats_runtime import _get, season_or_previous
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
@@ -233,7 +233,7 @@ def nba_stats_assistleaders(
         "LeagueID": league_id,
         "PerMode": per_mode_simple,
         "PlayerOrTeam": player_or_team,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -1039,7 +1039,7 @@ def nba_stats_commonallplayers(
     _params = {
         "IsOnlyCurrentSeason": is_only_current_season,
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1175,7 +1175,7 @@ def nba_stats_commonteamroster(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "TeamID": team_id,
     }
     _params.update(_caller_params)
@@ -1329,7 +1329,7 @@ def nba_stats_cumestatsplayergames(
         "Location": location_nullable,
         "Outcome": outcome_nullable,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "VsConference": vs_conference_nullable,
         "VsDivision": vs_division_nullable,
@@ -1384,7 +1384,7 @@ def nba_stats_cumestatsteam(
     _params = {
         "GameIDs": game_ids,
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -1447,7 +1447,7 @@ def nba_stats_cumestatsteamgames(
         "LeagueID": league_id,
         "Location": location_nullable,
         "Outcome": outcome_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonID": season_id_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -1496,7 +1496,7 @@ def nba_stats_draftcombinedrillresults(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_or_current(season_year),
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1539,7 +1539,7 @@ def nba_stats_draftcombinenonstationaryshooting(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_or_current(season_year),
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1582,7 +1582,7 @@ def nba_stats_draftcombineplayeranthro(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_or_current(season_year),
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1625,7 +1625,7 @@ def nba_stats_draftcombinespotshooting(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_or_current(season_year),
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1668,7 +1668,7 @@ def nba_stats_draftcombinestats(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_or_current(season_all_time),
+        "SeasonYear": season_or_previous(season_all_time),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -2431,7 +2431,7 @@ def nba_stats_leaguedashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2544,7 +2544,7 @@ def nba_stats_leaguedashoppptshot(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2674,7 +2674,7 @@ def nba_stats_leaguedashplayerbiostats(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_abbreviation_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2825,7 +2825,7 @@ def nba_stats_leaguedashplayerclutch(
         "PlusMinus": plus_minus,
         "PointDiff": point_diff,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2965,7 +2965,7 @@ def nba_stats_leaguedashplayerptshot(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3112,7 +3112,7 @@ def nba_stats_leaguedashplayershotlocations(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3256,7 +3256,7 @@ def nba_stats_leaguedashplayerstats(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3617,7 +3617,7 @@ def nba_stats_leaguedashptteamdefend(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4487,7 +4487,7 @@ def nba_stats_leaguegamelog(
         "Direction": direction,
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team_abbreviation,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "Sorter": sorter,
     }
@@ -4595,7 +4595,7 @@ def nba_stats_leaguehustlestatsplayer(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4707,7 +4707,7 @@ def nba_stats_leaguehustlestatsteam(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4883,7 +4883,7 @@ def nba_stats_leaguelineupviz(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -4984,7 +4984,7 @@ def nba_stats_leagueplayerondetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -5049,7 +5049,7 @@ def nba_stats_leagueseasonmatchups(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5097,7 +5097,7 @@ def nba_stats_leaguestandings(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5146,7 +5146,7 @@ def nba_stats_leaguestandingsv3(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5208,7 +5208,7 @@ def nba_stats_matchupsrollup(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5607,7 +5607,7 @@ def nba_stats_playerdashboardbyclutch(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5714,7 +5714,7 @@ def nba_stats_playerdashboardbygamesplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5821,7 +5821,7 @@ def nba_stats_playerdashboardbygeneralsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5928,7 +5928,7 @@ def nba_stats_playerdashboardbylastngames(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6035,7 +6035,7 @@ def nba_stats_playerdashboardbyopponent(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -6142,7 +6142,7 @@ def nba_stats_playerdashboardbyshootingsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6249,7 +6249,7 @@ def nba_stats_playerdashboardbyteamperformance(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6442,7 +6442,7 @@ def nba_stats_playerdashptpass(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6625,7 +6625,7 @@ def nba_stats_playerdashptshotdefend(
         "PerMode": per_mode_simple,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6882,7 +6882,7 @@ def nba_stats_playerfantasyprofilebargraph(
     _params = {
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star_nullable,
     }
     _params.update(_caller_params)
@@ -6937,7 +6937,7 @@ def nba_stats_playergamelog(
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
     }
     _params.update(_caller_params)
@@ -7032,7 +7032,7 @@ def nba_stats_playergamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_or_current(season_nullable),
+        "Season": season_or_previous(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -7416,7 +7416,7 @@ def nba_stats_playerindex(
         "Height": height_nullable,
         "Historical": historical_nullable,
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "TeamID": team_id_nullable,
         "Weight": weight_nullable,
     }
@@ -7564,7 +7564,7 @@ def nba_stats_playervsplayer(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "VsConference": vs_conference_nullable,
@@ -7963,7 +7963,7 @@ def nba_stats_shotchartleaguewide(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -8118,7 +8118,7 @@ def nba_stats_synergyplaytypes(
         "PlayType": play_type_nullable,
         "PlayerOrTeam": player_or_team_abbreviation,
         "SeasonType": season_type_all_star,
-        "SeasonYear": season_or_current(season),
+        "SeasonYear": season_or_previous(season),
         "TypeGrouping": type_grouping_nullable,
     }
     _params.update(_caller_params)
@@ -8220,7 +8220,7 @@ def nba_stats_teamdashboardbyclutch(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8327,7 +8327,7 @@ def nba_stats_teamdashboardbygamesplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8434,7 +8434,7 @@ def nba_stats_teamdashboardbygeneralsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8541,7 +8541,7 @@ def nba_stats_teamdashboardbylastngames(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8648,7 +8648,7 @@ def nba_stats_teamdashboardbyopponent(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8755,7 +8755,7 @@ def nba_stats_teamdashboardbyshootingsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8862,7 +8862,7 @@ def nba_stats_teamdashboardbyteamperformance(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -9082,7 +9082,7 @@ def nba_stats_teamdashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9166,7 +9166,7 @@ def nba_stats_teamdashptpass(
         "OpponentTeamID": opponent_team_id,
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9344,7 +9344,7 @@ def nba_stats_teamdashptshots(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "Period": period,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9489,7 +9489,7 @@ def nba_stats_teamgamelog(
         "DateFrom": date_from_nullable,
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -9585,7 +9585,7 @@ def nba_stats_teamgamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_or_current(season_nullable),
+        "Season": season_or_previous(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9844,7 +9844,7 @@ def nba_stats_teamplayeronoffdetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9945,7 +9945,7 @@ def nba_stats_teamplayeronoffsummary(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -10051,7 +10051,7 @@ def nba_stats_teamvsplayer(
         "PlayerID": player_id_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "TeamID": team_id,
@@ -10211,7 +10211,7 @@ def nba_stats_videodetailsasset(
         "OpponentTeamID": opponent_team_id,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season_or_current(season),
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
         "VsDivision": vs_division_nullable,
