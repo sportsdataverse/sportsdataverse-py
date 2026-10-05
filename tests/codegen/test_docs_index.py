@@ -1,7 +1,11 @@
+import io
 import json
+import tarfile
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+import yaml
 
 from tools.codegen import build_docs_index as B
 from tools.codegen import spec
@@ -63,3 +67,71 @@ def test_codegen_wrappers_cover_espn_and_flat():
     assert len(roster) == 1 and roster[0][2].startswith("https://site.api.espn.com/")
     shot = [r for r in rows.endpoints if r[0] == "wnba_stats" and r[5] == "wnba_stats_shotchartdetail"]
     assert len(shot) == 1 and shot[0][2].startswith("https://stats.wnba.com")
+
+
+FIX = Path(__file__).parent / "fixtures" / "docs_index"
+
+
+def _tarball(files: dict) -> bytes:
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+        for name, data in files.items():
+            info = tarfile.TarInfo(f"sdv-swagger-abc123/{name}")
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+    return buf.getvalue()
+
+
+def test_parse_swagger_tarball_keeps_top_level_specs_only():
+    mini = (FIX / "mini.openapi.yaml").read_bytes()
+    specs = B.parse_swagger_tarball(
+        _tarball(
+            {
+                "mini.openapi.yaml": mini,
+                "README.md": b"# x",
+                "notes.yaml": b"a: 1",
+                "sub/other.openapi.yaml": mini,
+                "broken.yaml": b"a: [1",
+                "spec.json": b'{"swagger": "2.0", "paths": {"/x": {}}}',
+            }
+        )
+    )
+    assert sorted(specs) == ["mini.openapi.yaml", "spec.json"]
+
+
+def test_openapi_rows_resolve_refs_and_servers():
+    rows = B.Rows()
+    B.openapi_rows({"mini.openapi.yaml": yaml.safe_load((FIX / "mini.openapi.yaml").read_text())}, "abc123", rows)
+    ((api, method, path, summary, params_json, wrapper, notes, source, url),) = rows.endpoints
+    assert (api, method, path, summary, wrapper, source) == (
+        "Mini API",
+        "GET",
+        "https://api.example.com/v1/teams/{team_id}/roster",
+        "Team roster",
+        "",
+        "openapi",
+    )
+    params = json.loads(params_json)
+    assert [p["name"] for p in params] == ["team_id", "season"] and params[1]["required"] is True
+    assert notes == "Returns the roster."
+    assert url == "https://github.com/saiemgilani/sdv-swagger/blob/abc123/mini.openapi.yaml"
+
+
+def test_parse_pkgdown_llms_reads_the_package_index_only():
+    rows = B.Rows()
+    n = B.parse_pkgdown_llms("hoopR", (FIX / "hoopr_llms_excerpt.txt").read_text(encoding="utf-8"), rows)
+    assert n == 3
+    assert rows.functions[0] == (
+        "load_nba_pbp",
+        "r",
+        "hoopR",
+        None,
+        None,
+        "function",
+        "NBA Data Functions",
+        "Load hoopR NBA play-by-play",
+        None,
+        "https://hoopR.sportsdataverse.org/reference/load_nba_pbp.md",
+    )
+    assert rows.functions[1][0] == "load_nba_team_box" and rows.functions[1][7] == "Load hoopR NBA play-by-play"
+    assert rows.functions[2][7] == "Update or create a hoopR NBA play-by-play database"

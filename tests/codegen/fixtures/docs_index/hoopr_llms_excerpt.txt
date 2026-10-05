@@ -1,0 +1,28 @@
+# hoopR
+
+README text with **bold words** that must not become functions.
+
+# Package index
+
+## hoopR Data
+
+### NBA Data Functions
+
+Functions exported by hoopR to access the hoopR-data repository’s NBA
+Data
+
+- [`load_nba_pbp()`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.md)
+  [`load_nba_team_box()`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.md)
+  :
+
+  **Load hoopR NBA play-by-play**
+
+- [`update_nba_db()`](https://hoopR.sportsdataverse.org/reference/update_nba_db.md)
+  :
+
+  **Update or create a hoopR NBA play-by-play database**
+
+# Articles
+
+- [`intro`](https://hoopR.sportsdataverse.org/articles/intro.md)
+  **Not a function**

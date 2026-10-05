@@ -1,0 +1,15 @@
+openapi: 3.1.0
+info: {title: Mini API, version: "1"}
+servers: [{url: "https://api.example.com/v1/"}]
+components:
+  parameters:
+    Season: {name: season, in: query, required: true, description: Season year.}
+paths:
+  /teams/{team_id}/roster:
+    parameters:
+      - {name: team_id, in: path, required: true}
+    get:
+      summary: Team roster
+      description: Returns the roster.
+      parameters:
+        - $ref: '#/components/parameters/Season'

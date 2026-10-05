@@ -13,13 +13,18 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import io
 import json
 import re
+import subprocess
 import sys
+import tarfile
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
+import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from tools.codegen import generate as G  # noqa: E402
@@ -303,3 +308,128 @@ def equivalent_rows(funcs: dict[str, str], rows: Rows) -> None:
         r_fn = alias or name
         if r_fn in exports.get(pkg, set()):
             rows.equivalents.append((name, pkg, r_fn, "alias" if alias else "identity"))
+
+
+def http_get(url: str, timeout: float = 60.0) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": "sdv-docs-builder"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 -- fixed public https URLs
+        data: bytes = resp.read()
+    return data
+
+
+def swagger_sha() -> str:
+    """Current sdv-swagger main SHA, via git ls-remote (no GitHub API quota)."""
+    out = subprocess.run(
+        ["git", "ls-remote", f"https://github.com/{SWAGGER_REPO}.git", "refs/heads/main"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    return out.split()[0]
+
+
+def fetch_swagger(sha: str) -> dict[str, dict]:
+    return parse_swagger_tarball(http_get(f"https://codeload.github.com/{SWAGGER_REPO}/tar.gz/{sha}"))
+
+
+def parse_swagger_tarball(data: bytes) -> dict[str, dict]:
+    """Every top-level OpenAPI/Swagger document in a GitHub tarball, keyed by file name. Nothing touches disk."""
+    loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+    out: dict[str, dict] = {}
+    with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
+        for m in tar.getmembers():
+            name = m.name.split("/", 1)[-1]
+            if not m.isfile() or "/" in name or not name.endswith((".yaml", ".yml", ".json")):
+                continue
+            f = tar.extractfile(m)
+            if f is None:
+                continue
+            raw = f.read()
+            try:
+                doc = json.loads(raw) if name.endswith(".json") else yaml.load(raw, Loader=loader)  # noqa: S506 -- SafeLoader
+            except (ValueError, yaml.YAMLError):
+                continue
+            if isinstance(doc, dict) and ("openapi" in doc or "swagger" in doc) and doc.get("paths"):
+                out[name] = doc
+    return out
+
+
+def _server_url(doc: dict) -> str:
+    servers = doc.get("servers") or []
+    if servers and isinstance(servers[0], dict):
+        return str(servers[0].get("url", "")).rstrip("/")
+    if doc.get("host"):
+        return f"https://{doc['host']}{doc.get('basePath', '')}".rstrip("/")
+    return ""
+
+
+def _param(doc: dict, p: Any) -> Optional[dict]:
+    if isinstance(p, dict) and "$ref" in p:
+        node: Any = doc
+        for part in str(p["$ref"]).lstrip("#/").split("/"):
+            node = node.get(part, {}) if isinstance(node, dict) else {}
+        p = node
+    if not isinstance(p, dict) or "name" not in p:
+        return None
+    return {
+        "name": p["name"],
+        "in": p.get("in"),
+        "required": bool(p.get("required")),
+        "description": str(p.get("description") or "")[:300],
+    }
+
+
+def openapi_rows(specs: dict[str, dict], sha: str, rows: Rows) -> None:
+    for fname, doc in sorted(specs.items()):
+        title = str((doc.get("info") or {}).get("title") or fname)
+        base, url = _server_url(doc), f"https://github.com/{SWAGGER_REPO}/blob/{sha}/{fname}"
+        for path, item in (doc.get("paths") or {}).items():
+            if not isinstance(item, dict):
+                continue
+            shared = item.get("parameters") or []
+            for method in ("get", "post", "put", "patch", "delete"):
+                op = item.get(method)
+                if not isinstance(op, dict):
+                    continue
+                params = [q for q in (_param(doc, p) for p in (*shared, *(op.get("parameters") or []))) if q]
+                rows.endpoints.append(
+                    (
+                        title,
+                        method.upper(),
+                        base + path,
+                        str(op.get("summary") or op.get("operationId") or ""),
+                        json.dumps(params),
+                        "",
+                        str(op.get("description") or "")[:2000],
+                        "openapi",
+                        url,
+                    )
+                )
+
+
+_R_ALIAS = re.compile(r"\[`([^`]+?)`\]\((\S+?)\)")
+_R_TITLE = re.compile(r"^\s*\*\*(.+?)\*\*\s*$")
+
+
+def parse_pkgdown_llms(package: str, text: str, rows: Rows) -> int:
+    """R functions from the ``# Package index`` of a pkgdown llms.txt. One help page = aliases + a bold title."""
+    _, _, index = text.partition("\n# Package index")
+    category: Optional[str] = None
+    pending: list[tuple[str, str]] = []
+    added = 0
+    for line in index.splitlines():
+        if line.startswith("# "):
+            break
+        if line.startswith(("## ", "### ")):
+            category, pending = line.lstrip("#").strip(), []
+            continue
+        if line.startswith("- "):
+            pending = []
+        pending += [(n.removesuffix("()"), u) for n, u in _R_ALIAS.findall(line)]
+        m = _R_TITLE.match(line)
+        if m and pending:
+            for n, u in pending:
+                rows.functions.append((n, "r", package, None, None, "function", category, m.group(1).strip(), None, u))
+                added += 1
+            pending = []
+    return added
