@@ -51,7 +51,7 @@ GET /stats/shotchartdetail
 
 ### Returns {#wnba_stats_shotchartdetail-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Shot_Chart_Detail`, `LeagueAverages`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Shot_Chart_Detail`, `LeagueAverages`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **Shot_Chart_Detail**
 
 | col_name | type | description |
@@ -172,7 +172,7 @@ GET /stats/shotchartlineupdetail
 
 ### Returns {#wnba_stats_shotchartlineupdetail-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`ShotChartLineupDetail`, `ShotChartLineupLeagueAverage`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`ShotChartLineupDetail`, `ShotChartLineupLeagueAverage`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **ShotChartLineupDetail**
 
 | col_name | type | description |

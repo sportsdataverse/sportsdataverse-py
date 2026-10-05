@@ -25,7 +25,7 @@ A team's leaders for one position group, with rank and percentile
 
 ### Returns {#pff_api_team_leaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **receiving**
 
 | col_name | type | description |

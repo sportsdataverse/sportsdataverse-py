@@ -4305,12 +4305,12 @@ def pff_api_position_report(
         week: Narrow the report to one week of the weekGroup — or, with weekTo, to a span of weeks.
         week_to: The last week of a span that starts at week; requires week.
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_v2_table -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_v2_table -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
@@ -4436,12 +4436,12 @@ def pff_api_team_stats(
         category: Which stat category the table covers.
         scope: Which teams the ranks are computed against — and which rows come back: league (every team, the default), a conference (afc, nfc) or a division (afc-east … nfc-west).
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_v2_table -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_v2_table -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
@@ -4630,12 +4630,12 @@ def pff_api_team_leaders(
         week_group: Which part of the season to cover: REG (regular season), PO (playoffs) or REGPO (both, the default).
         group: Which position group the leaders come from — receiving (the default), passing, rushing or defense.
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_v2_table -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_v2_table -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
@@ -4767,12 +4767,12 @@ def pff_api_team_report(
         week: Narrow the report to one week of the weekGroup — or, with weekTo, to a span of weeks.
         week_to: The last week of a span that starts at week; requires week.
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_v2_table -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_v2_table -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).

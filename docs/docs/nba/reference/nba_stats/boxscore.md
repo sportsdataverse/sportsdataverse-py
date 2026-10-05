@@ -26,7 +26,7 @@ GET /stats/boxscoreadvancedv3
 
 ### Returns {#nba_stats_boxscoreadvancedv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -132,7 +132,7 @@ GET /stats/boxscoredefensivev2
 
 ### Returns {#nba_stats_boxscoredefensivev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -212,7 +212,7 @@ GET /stats/boxscorefourfactorsv3
 
 ### Returns {#nba_stats_boxscorefourfactorsv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -289,7 +289,7 @@ GET /stats/boxscorehustlev2
 
 ### Returns {#nba_stats_boxscorehustlev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -382,7 +382,7 @@ GET /stats/boxscorematchupsv3
 
 ### Returns {#nba_stats_boxscorematchupsv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -447,7 +447,7 @@ GET /stats/boxscoremiscv3
 
 ### Returns {#nba_stats_boxscoremiscv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -532,7 +532,7 @@ GET /stats/boxscoreplayertrackv3
 
 ### Returns {#nba_stats_boxscoreplayertrackv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -637,7 +637,7 @@ GET /stats/boxscorescoringv3
 
 ### Returns {#nba_stats_boxscorescoringv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -728,7 +728,7 @@ GET /stats/boxscoresummaryv2
 
 ### Returns {#nba_stats_boxscoresummaryv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GameSummary**
 
 | col_name | type | description |
@@ -891,7 +891,7 @@ GET /stats/boxscoresummaryv3
 
 ### Returns {#nba_stats_boxscoresummaryv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |
@@ -1024,7 +1024,7 @@ GET /stats/boxscoretraditionalv2
 
 ### Returns {#nba_stats_boxscoretraditionalv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayerStats**
 
 | col_name | type | description |

@@ -26,7 +26,7 @@ One of nineteen player reports for the whole league, one row per player
 
 ### Returns {#pff_api_position_report-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **offense**
 
 | col_name | type | description |

@@ -130,6 +130,7 @@ def _build_docstring(
     league_param: bool = False,
     doc_extras: dict | None = None,
     import_from: str = "",
+    returns_frames: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -145,6 +146,8 @@ def _build_docstring(
     before; new families declare it to meet the repo's Google-style contract
     (``Args`` / ``Returns`` / ``Raises`` + a runnable ``Example`` + ``See Also``).
     ``import_from`` is the importable module the Example's import line names.
+    ``returns_frames`` marks a ``kind: frames`` returns schema (a dict of frames) whose
+    endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -189,12 +192,13 @@ def _build_docstring(
             )
         )
     if ep.parser:
-        parsed_kind = "dict of polars DataFrames" if parsed_doc else "polars DataFrame"
+        is_dict = bool(parsed_doc) or returns_frames
+        parsed_kind = "dict of polars DataFrames" if is_dict else "polars DataFrame"
         lines.append(
             f"    return_parsed: parse the payload through {ep.parser} -> {parsed_kind} "
             f"(default True). Pass return_parsed=False for {raw_doc or 'the raw JSON Dict'}."
         )
-        if parsed_doc:
+        if is_dict:
             lines.append(
                 "    return_as_pandas: with return_parsed, return a dict of pandas "
                 "DataFrames (same keys) instead of polars."
@@ -210,7 +214,7 @@ def _build_docstring(
     lines.append("Returns:")
     if ep.parser:
         lines.append(
-            f"    {parsed_doc or 'A polars/pandas DataFrame'} by default; "
+            f"    {parsed_doc or ('A dict of polars/pandas DataFrames' if returns_frames else 'A polars/pandas DataFrame')} by default; "
             f"{raw_doc or 'the raw JSON ``Dict``'} when ``return_parsed=False``."
         )
     else:
@@ -754,6 +758,7 @@ class _EndpointView:
             league_param=league.league_param,
             doc_extras=doc_extras,
             import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
+            returns_frames=_schema_doc(ep.returns_schema, league.prefix).get("kind") == "frames",
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
@@ -1957,6 +1962,7 @@ def _render_all() -> dict[str, str]:
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+    spec.validate_league_keys(apis, cfg)
     return {f"{lg.prefix}_espn_ext.py": _league_module_source(lg, apis, cfg.hosts) for lg in cfg.leagues}
 
 

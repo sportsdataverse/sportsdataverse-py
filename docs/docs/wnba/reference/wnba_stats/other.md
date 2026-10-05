@@ -24,7 +24,7 @@ GET /stats/alltimeleadersgrids
 
 ### Returns {#wnba_stats_alltimeleadersgrids-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GPLeaders`, `PTSLeaders`, `ASTLeaders`, `STLLeaders`, `OREBLeaders`, `DREBLeaders`, `REBLeaders`, `BLKLeaders`, `FGMLeaders`, `FGALeaders`, `FG_PCTLeaders`, `TOVLeaders`, `FG3MLeaders`, `FG3ALeaders`, `FG3_PCTLeaders`, `PFLeaders`, `FTMLeaders`, `FTALeaders`, `FT_PCTLeaders`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GPLeaders`, `PTSLeaders`, `ASTLeaders`, `STLLeaders`, `OREBLeaders`, `DREBLeaders`, `REBLeaders`, `BLKLeaders`, `FGMLeaders`, `FGALeaders`, `FG_PCTLeaders`, `TOVLeaders`, `FG3MLeaders`, `FG3ALeaders`, `FG3_PCTLeaders`, `PFLeaders`, `FTMLeaders`, `FTALeaders`, `FT_PCTLeaders`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **GPLeaders**
 
 | col_name | type | description |
@@ -528,7 +528,7 @@ GET /stats/gamerotation
 
 ### Returns {#wnba_stats_gamerotation-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`AwayTeam`, `HomeTeam`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`AwayTeam`, `HomeTeam`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **AwayTeam**
 
 | col_name | type | description |
@@ -593,7 +593,7 @@ GET /stats/homepageleaders
 
 ### Returns {#wnba_stats_homepageleaders-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageLeaders`, `LeagueAverage`, `LeagueMax`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageLeaders`, `LeagueAverage`, `LeagueMax`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **HomePageLeaders**
 
 | col_name | type | description |
@@ -664,7 +664,7 @@ GET /stats/homepagev2
 
 ### Returns {#wnba_stats_homepagev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageStat1`, `HomePageStat2`, `HomePageStat3`, `HomePageStat4`, `HomePageStat5`, `HomePageStat6`, `HomePageStat7`, `HomePageStat8`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageStat1`, `HomePageStat2`, `HomePageStat3`, `HomePageStat4`, `HomePageStat5`, `HomePageStat6`, `HomePageStat7`, `HomePageStat8`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **HomePageStat1**
 
 | col_name | type | description |
@@ -769,7 +769,7 @@ GET /stats/hustlestatsboxscore
 
 ### Returns {#wnba_stats_hustlestatsboxscore-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HustleStatsAvailable`, `PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HustleStatsAvailable`, `PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **HustleStatsAvailable**
 
 | col_name | type | description |
@@ -925,7 +925,7 @@ GET /stats/leaderstiles
 
 ### Returns {#wnba_stats_leaderstiles-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`LeadersTiles`, `AllTimeSeasonHigh`, `LastSeasonHigh`, `LowSeasonHigh`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`LeadersTiles`, `AllTimeSeasonHigh`, `LastSeasonHigh`, `LowSeasonHigh`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **LeadersTiles**
 
 | col_name | type | description |
@@ -1000,7 +1000,7 @@ GET /stats/playbyplayv2
 
 ### Returns {#wnba_stats_playbyplayv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayByPlay`, `AvailableVideo`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayByPlay`, `AvailableVideo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **PlayByPlay**
 
 | col_name | type | description |

@@ -68,7 +68,7 @@ GET /stats/commonplayerinfo
 
 ### Returns {#nba_stats_commonplayerinfo-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **CommonPlayerInfo**
 
 | col_name | type | description |
@@ -186,7 +186,7 @@ GET /stats/commonteamroster
 
 ### Returns {#nba_stats_commonteamroster-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **CommonTeamRoster**
 
 | col_name | type | description |

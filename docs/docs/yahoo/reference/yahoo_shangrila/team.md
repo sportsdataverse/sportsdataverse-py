@@ -214,7 +214,7 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
 ### Returns {#yahoo_team_stats_leaders_v2-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **teams**
 
 | col_name | type | description |

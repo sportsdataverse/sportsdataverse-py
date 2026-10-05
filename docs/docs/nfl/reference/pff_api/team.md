@@ -206,7 +206,7 @@ Team stats table for one category, every value ranked against the scope
 
 ### Returns {#pff_api_team_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **offense-overall-success**
 
 | col_name | type | description |

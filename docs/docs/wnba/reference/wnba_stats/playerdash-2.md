@@ -43,7 +43,7 @@ GET /stats/playerdashboardbygamesplits
 
 ### Returns {#wnba_stats_playerdashboardbygamesplits-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByHalfPlayerDashboard`, `ByPeriodPlayerDashboard`, `ByScoreMarginPlayerDashboard`, `ByActualMarginPlayerDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByHalfPlayerDashboard`, `ByPeriodPlayerDashboard`, `ByScoreMarginPlayerDashboard`, `ByActualMarginPlayerDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallPlayerDashboard**
 
 | col_name | type | description |

@@ -31,7 +31,7 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 
 ### Returns {#yahoo_playbook_boxscore-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
 
 | col_name | type | description |
@@ -230,7 +230,7 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 
 ### Returns {#yahoo_playbook_boxscore_poll-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
 
 | col_name | type | description |
@@ -808,7 +808,7 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
 ### Returns {#yahoo_playbook_team-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **teams**
 
 | col_name | type | description |
@@ -935,40 +935,6 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 
 ```python
 yahoo_playbook_team_basic()
-```
-
-_Last validated n/a._
-
-## yahoo_playbook_team_social_share
-
-Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry
-
-**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare`
-
-**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
-
-### Returns {#yahoo_playbook_team_social_share-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `team_id` | character | Unique team identifier. |
-| `primary_color` | character | Primary team color (hex). |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#yahoo_playbook_team_social_share-example}
-
-```python
-yahoo_playbook_team_social_share()
 ```
 
 _Last validated n/a._

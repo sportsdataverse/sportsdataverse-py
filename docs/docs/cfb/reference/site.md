@@ -105,7 +105,7 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_summary-returns}
 
-**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |

@@ -910,7 +910,7 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 
 ### Returns {#yahoo_nav_dropdown_tray-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **nfl**
 
 | col_name | type | description |

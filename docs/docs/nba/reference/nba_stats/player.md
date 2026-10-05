@@ -66,7 +66,7 @@ GET /stats/playercareerbycollegerollup
 
 ### Returns {#nba_stats_playercareerbycollegerollup-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`East`, `South`, `Midwest`, `West`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`East`, `South`, `Midwest`, `West`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **East**
 
 | col_name | type | description |
@@ -209,7 +209,7 @@ GET /stats/playercareerstats
 
 ### Returns {#nba_stats_playercareerstats-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsShowcaseSeason`, `CareerTotalsShowcaseSeason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsShowcaseSeason`, `CareerTotalsShowcaseSeason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **SeasonTotalsRegularSeason**
 
 | col_name | type | description |
@@ -657,7 +657,7 @@ GET /stats/playercompare
 
 ### Returns {#nba_stats_playercompare-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallCompare`, `Individual`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallCompare`, `Individual`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **OverallCompare**
 
 | col_name | type | description |
@@ -810,7 +810,7 @@ GET /stats/playerfantasyprofile
 
 ### Returns {#nba_stats_playerfantasyprofile-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Location`, `LastNGames`, `DaysRestModified`, `Opponent`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Location`, `LastNGames`, `DaysRestModified`, `Opponent`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **Overall**
 
 | col_name | type | description |
@@ -1024,7 +1024,7 @@ GET /stats/playerfantasyprofilebargraph
 
 ### Returns {#nba_stats_playerfantasyprofilebargraph-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonAvg`, `LastFiveGamesAvg`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonAvg`, `LastFiveGamesAvg`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **SeasonAvg**
 
 | col_name | type | description |

@@ -23,7 +23,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 
 ### Returns {#yahoo_editorial_boxscore-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **player_stats**
 
 | col_name | type | description |
