@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
   - [Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict](#fixed--reference-docs-valid-urls-are-the-urls-the-example-calls-request-summary-documents-its-dict)
   - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
   - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
@@ -319,6 +320,31 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Security — a credential in a query string no longer reaches a log or an error message
+
+`dl_utils.download` wrote the request URL and its `params` dict into its retry and failure
+log lines, and the `NoDataError` a 404 raises quoted the URL. Any key sent in the query
+string went with them: The Odds API's private, paid `apiKey`, the HockeyTech `key`, and the
+Fox `apikey`. A connection failure was re-raised as requests' own exception, which quotes
+the request path and chains urllib3's `MaxRetryError`, which quotes it again.
+
+- The value of a credential pair now reads `REDACTED` in every log line `download` writes,
+  in every sportsdataverse error message, in urllib3's DEBUG request lines, and in the
+  re-raised transport exception and every exception chained to it. Covered names are
+  `apiKey` / `api_key` / `apikey`, `token` / `access_token`, `password`, `secret` /
+  `client_secret` and the rest of the sportsdataverse-js list, case-insensitively and in
+  URL-encoded and `'name': 'value'` form. A bare `key` is redacted when its value has 16 or
+  more characters, as every HockeyTech key does. The host, path, status and other params
+  are kept, so the line still says which request failed.
+- The Odds API wrappers raise `AssetFetchError` on a non-2xx answer: a rejected key (401),
+  spent quota (429), or a 5xx that outlived the retries. Before, the error body came back
+  as if it were odds. A 404 still raises `NoDataError`.
+
+No signature changes. `tests/test_credential_redaction.py` sends a synthetic key through
+each of the three providers on a 404, a 503 and a connection failure, and checks the
+message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
+logs.
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
