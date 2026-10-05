@@ -19,7 +19,7 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 |---|---|:---:|:---:|:---:|---|
 | `game_pk` | `game_pk` |  | `Y` |  |  |
 | `language` | `language` |  |  | `Y` |  |
-| `language` | `timecode` |  |  | `Y` |  |
+| `timecode` | `timecode` |  |  | `Y` |  |
 | `hydrate` | `hydrate` |  |  | `Y` |  |
 | `fields` | `fields` |  |  | `Y` |  |
 
