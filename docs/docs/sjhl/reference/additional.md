@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_sjhl_season() -> 'int'` {#most_recent_sjhl_season}
+### most_recent_sjhl_season {#most_recent_sjhl_season}
+
+`most_recent_sjhl_season() -> 'int'`
 
 Most-recent SJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `sjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_game_corsi}
+### sjhl_game_corsi {#sjhl_game_corsi}
+
+`sjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single SJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single SJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_game_shifts}
+### sjhl_game_shifts {#sjhl_game_shifts}
+
+`sjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single SJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single SJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_game_summary(game_id: 'int') -> 'dict'` {#sjhl_game_summary}
+### sjhl_game_summary {#sjhl_game_summary}
+
+`sjhl_game_summary(game_id: 'int') -> 'dict'`
 
 SJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ SJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `sjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_leaders}
+### sjhl_leaders {#sjhl_leaders}
+
+`sjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ SJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `sjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_pbp}
+### sjhl_pbp {#sjhl_pbp}
+
+`sjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ SJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_player_stats}
+### sjhl_player_stats {#sjhl_player_stats}
+
+`sjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ SJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_player_toi}
+### sjhl_player_toi {#sjhl_player_toi}
+
+`sjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single SJHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single SJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_schedule}
+### sjhl_schedule {#sjhl_schedule}
+
+`sjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ SJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `sjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_season_id}
+### sjhl_season_id {#sjhl_season_id}
+
+`sjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All SJHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All SJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `sjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_standings}
+### sjhl_standings {#sjhl_standings}
+
+`sjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL standings — one row per team.
 
@@ -226,7 +250,9 @@ SJHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `sjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_team_roster}
+### sjhl_team_roster {#sjhl_team_roster}
+
+`sjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL team roster for a given team + season.
 
@@ -239,7 +265,9 @@ SJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sjhl_teams}
+### sjhl_teams {#sjhl_teams}
+
+`sjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SJHL teams for a given season.
 

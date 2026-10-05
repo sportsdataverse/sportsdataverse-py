@@ -3,6 +3,7 @@ title: NFL dataset loaders
 sidebar_label: Loaders
 description: "NFL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # NFL dataset loaders
 
@@ -42,10 +43,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nfl_group_aliases` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
 | `load_nfl_team_group_seasons` | [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) | — |
 
-## `load_nfl_pbp`
+## load_nfl_pbp
 
 Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · asset `https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_nfl_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -426,10 +427,10 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 load_nfl_pbp(seasons=2024)
 ```
 
-## `load_nfl_model_pbp`
+## load_nfl_model_pbp
 
 Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_model_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_pbp/model_pbp_{season}.parquet`
-### Returns
+### Returns {#load_nfl_model_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -764,10 +765,10 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 load_nfl_model_pbp(seasons=2024)
 ```
 
-## `load_nfl_ratings_weekly`
+## load_nfl_ratings_weekly
 
 Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ratings_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet`
-### Returns
+### Returns {#load_nfl_ratings_weekly-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -788,10 +789,10 @@ Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse
 load_nfl_ratings_weekly(seasons=2024)
 ```
 
-## `load_nfl_ngs`
+## load_nfl_ngs
 
 Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ngs_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_ngs_passing/ngs_passing_{season}.parquet`
-### Returns
+### Returns {#load_nfl_ngs-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -848,10 +849,10 @@ Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-da
 load_nfl_ngs(seasons=2024)
 ```
 
-## `load_nfl_rosters`
+## load_nfl_rosters
 
 Release: [rosters](https://github.com/nflverse/nflverse-data/releases/tag/rosters) · asset `https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.parquet`
-### Returns
+### Returns {#load_nfl_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -896,10 +897,10 @@ Release: [rosters](https://github.com/nflverse/nflverse-data/releases/tag/roster
 load_nfl_rosters(seasons=2024)
 ```
 
-## `load_nfl_weekly_rosters`
+## load_nfl_weekly_rosters
 
 Release: [weekly_rosters](https://github.com/nflverse/nflverse-data/releases/tag/weekly_rosters) · asset `https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_{season}.parquet`
-### Returns
+### Returns {#load_nfl_weekly_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -944,10 +945,10 @@ Release: [weekly_rosters](https://github.com/nflverse/nflverse-data/releases/tag
 load_nfl_weekly_rosters(seasons=2024)
 ```
 
-## `load_nfl_depth_charts`
+## load_nfl_depth_charts
 
 Release: [depth_charts](https://github.com/nflverse/nflverse-data/releases/tag/depth_charts) · asset `https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_{season}.parquet`
-### Returns
+### Returns {#load_nfl_depth_charts-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -968,10 +969,10 @@ Release: [depth_charts](https://github.com/nflverse/nflverse-data/releases/tag/d
 load_nfl_depth_charts(seasons=2024)
 ```
 
-## `load_nfl_injuries`
+## load_nfl_injuries
 
 Release: [injuries](https://github.com/nflverse/nflverse-data/releases/tag/injuries) · asset `https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.parquet`
-### Returns
+### Returns {#load_nfl_injuries-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -996,10 +997,10 @@ Release: [injuries](https://github.com/nflverse/nflverse-data/releases/tag/injur
 load_nfl_injuries(seasons=2024)
 ```
 
-## `load_nfl_snap_counts`
+## load_nfl_snap_counts
 
 Release: [snap_counts](https://github.com/nflverse/nflverse-data/releases/tag/snap_counts) · asset `https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_{season}.parquet`
-### Returns
+### Returns {#load_nfl_snap_counts-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1024,10 +1025,10 @@ Release: [snap_counts](https://github.com/nflverse/nflverse-data/releases/tag/sn
 load_nfl_snap_counts(seasons=2024)
 ```
 
-## `load_nfl_pbp_participation`
+## load_nfl_pbp_participation
 
 Release: [pbp_participation](https://github.com/nflverse/nflverse-data/releases/tag/pbp_participation) · asset `https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_{season}.parquet`
-### Returns
+### Returns {#load_nfl_pbp_participation-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1062,10 +1063,10 @@ Release: [pbp_participation](https://github.com/nflverse/nflverse-data/releases/
 load_nfl_pbp_participation(seasons=2024)
 ```
 
-## `load_nfl_ftn_charting`
+## load_nfl_ftn_charting
 
 Release: [ftn_charting](https://github.com/nflverse/nflverse-data/releases/tag/ftn_charting) · asset `https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_{season}.parquet`
-### Returns
+### Returns {#load_nfl_ftn_charting-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1103,15 +1104,15 @@ Release: [ftn_charting](https://github.com/nflverse/nflverse-data/releases/tag/f
 load_nfl_ftn_charting(seasons=2024)
 ```
 
-## `load_nfl_usage_players`
+## load_nfl_usage_players
 
 Release: [espn_nfl_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_players/usage_players_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 2005 has no asset: ESPN's 2005 NFL feed carries no play text, so no usage rows exist for it. position_group is null before 2014, when the feed starts carrying participant positions. A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_players-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1165,15 +1166,15 @@ Release: [espn_nfl_usage_players](https://github.com/sportsdataverse/sportsdatav
 load_nfl_usage_players(seasons=2024)
 ```
 
-## `load_nfl_usage_position_groups`
+## load_nfl_usage_position_groups
 
 Release: [espn_nfl_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_position_groups/usage_position_groups_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Built from ESPN play participants, which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError).
 :::
 
-### Returns
+### Returns {#load_nfl_usage_position_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1225,15 +1226,15 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 load_nfl_usage_position_groups(seasons=2024)
 ```
 
-## `load_nfl_usage_tackles`
+## load_nfl_usage_tackles
 
 Release: [espn_nfl_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_tackles/usage_tackles_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Built from ESPN play participants (tackler / assist ids), which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError).
 :::
 
-### Returns
+### Returns {#load_nfl_usage_tackles-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1256,15 +1257,15 @@ Built from ESPN play participants (tackler / assist ids), which the NFL feed car
 load_nfl_usage_tackles(seasons=2024)
 ```
 
-## `load_nfl_usage_position_group_tackles`
+## load_nfl_usage_position_group_tackles
 
 Release: [espn_nfl_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Built from ESPN play participants, which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError).
 :::
 
-### Returns
+### Returns {#load_nfl_usage_position_group_tackles-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1285,15 +1286,15 @@ Built from ESPN play participants, which the NFL feed carries from 2014; earlier
 load_nfl_usage_position_group_tackles(seasons=2024)
 ```
 
-## `load_nfl_usage_teams`
+## load_nfl_usage_teams
 
 Release: [espn_nfl_usage_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_teams/usage_teams_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Published 2002-2026 (2005 is built from ESPN's play-text-less 2005 feed, so it is thin). A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_teams-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1347,15 +1348,15 @@ Published 2002-2026 (2005 is built from ESPN's play-text-less 2005 feed, so it i
 load_nfl_usage_teams(seasons=2024)
 ```
 
-## `load_nfl_usage_drive_scripting`
+## load_nfl_usage_drive_scripting
 
 Release: [espn_nfl_usage_drive_scripting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_drive_scripting) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_drive_scripting/usage_drive_scripting_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_drive_scripting-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1383,15 +1384,15 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 load_nfl_usage_drive_scripting(seasons=2024)
 ```
 
-## `load_nfl_usage_st_kickers`
+## load_nfl_usage_st_kickers
 
 Release: [espn_nfl_usage_st_kickers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_st_kickers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_st_kickers/usage_st_kickers_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_st_kickers-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1433,15 +1434,15 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 load_nfl_usage_st_kickers(seasons=2024)
 ```
 
-## `load_nfl_usage_st_punters`
+## load_nfl_usage_st_punters
 
 Release: [espn_nfl_usage_st_punters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_st_punters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_st_punters/usage_st_punters_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_st_punters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1474,15 +1475,15 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 load_nfl_usage_st_punters(seasons=2024)
 ```
 
-## `load_nfl_usage_st_returners`
+## load_nfl_usage_st_returners
 
 Release: [espn_nfl_usage_st_returners](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_st_returners) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_st_returners/usage_st_returners_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_st_returners-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1509,15 +1510,15 @@ No asset for 2005-2007 (2005 has no play text upstream); a season with no asset 
 load_nfl_usage_st_returners(seasons=2024)
 ```
 
-## `load_nfl_usage_st_blocks`
+## load_nfl_usage_st_blocks
 
 Release: [espn_nfl_usage_st_blocks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_st_blocks) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_st_blocks/usage_st_blocks_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Published from 2007 (no block participants earlier); a season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_st_blocks-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1535,15 +1536,15 @@ Published from 2007 (no block participants earlier); a season with no asset rais
 load_nfl_usage_st_blocks(seasons=2024)
 ```
 
-## `load_nfl_usage_st_team`
+## load_nfl_usage_st_team
 
 Release: [espn_nfl_usage_st_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_usage_st_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_usage_st_team/usage_st_team_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_usage_st_team-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1593,15 +1594,15 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 load_nfl_usage_st_team(seasons=2024)
 ```
 
-## `load_nfl_team_tendencies`
+## load_nfl_team_tendencies
 
 Release: [espn_nfl_team_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_team_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_team_tendencies/team_tendencies_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_team_tendencies-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2188,15 +2189,15 @@ Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A sea
 load_nfl_team_tendencies(seasons=2024)
 ```
 
-## `load_nfl_coach_tendencies`
+## load_nfl_coach_tendencies
 
 Release: [espn_nfl_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_coach_tendencies/coach_tendencies_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per (season, team, head coach). The coach comes from the nflverse schedule (home_coach / away_coach) per game, so a midseason change splits the season between both coaches; role is always "HC". Published 2002-2026 (2005 is thin). A season with no asset raises NoDataError.
 :::
 
-### Returns
+### Returns {#load_nfl_coach_tendencies-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2785,15 +2786,15 @@ One row per (season, team, head coach). The coach comes from the nflverse schedu
 load_nfl_coach_tendencies(seasons=2024)
 ```
 
-## `load_nfl_coach_careers`
+## load_nfl_coach_careers
 
 Release: [espn_nfl_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nfl_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nfl_coach_careers/coach_careers.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag.
 :::
 
-### Returns
+### Returns {#load_nfl_coach_careers-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3383,15 +3384,15 @@ One season-less file: every published coach_tendencies season summed per head co
 load_nfl_coach_careers()
 ```
 
-## `load_nfl_groups`
+## load_nfl_groups
 
 Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nfl:afc-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the 2025-26 season).
 :::
 
-### Returns
+### Returns {#load_nfl_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3406,15 +3407,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_nfl_groups()
 ```
 
-## `load_nfl_group_seasons`
+## load_nfl_group_seasons
 
 Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the 2025-26 season).
 :::
 
-### Returns
+### Returns {#load_nfl_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3432,15 +3433,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_nfl_group_seasons()
 ```
 
-## `load_nfl_group_aliases`
+## load_nfl_group_aliases
 
 Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (espn, nflverse, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_nfl_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3457,15 +3458,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_nfl_group_aliases()
 ```
 
-## `load_nfl_team_group_seasons`
+## load_nfl_team_group_seasons
 
 Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the STARTING year (2025 = the 2025-26 season); seasons 1970-2026.
 :::
 
-### Returns
+### Returns {#load_nfl_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|

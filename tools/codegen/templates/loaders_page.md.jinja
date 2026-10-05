@@ -3,6 +3,7 @@ title: {{ prefix|upper }} dataset loaders
 sidebar_label: Loaders
 description: "{{ prefix|upper }} dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: {{ sidebar_position }}
+toc_max_heading_level: 2
 ---
 # {{ prefix|upper }} dataset loaders
 
@@ -16,18 +17,18 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 {% endfor %}
 
 {% for ld in loaders %}
-## `{{ ld.fn }}`
+## {{ ld.fn }}
 
 Release: {% if ld.tag_url %}[{{ ld.tag }}]({{ ld.tag_url }}){% else %}`{{ ld.tag }}`{% endif %}{% if ld.url %} · asset `{{ ld.url }}`{% endif %}
 {% if ld.notes %}
 
 
-:::caution Coverage
+:::caution[Coverage]
 {{ ld.notes }}
 :::
 {% endif %}
 
-{% if ld.return_table %}### Returns
+{% if ld.return_table %}### Returns {{ "{#" ~ ld.fn ~ "-returns}" }}
 
 {{ ld.return_table }}
 {% endif %}

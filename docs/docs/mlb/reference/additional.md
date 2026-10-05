@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_mlb_game_rosters(game_id: 'int', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)` {#espn_mlb_game_rosters}
+### espn_mlb_game_rosters {#espn_mlb_game_rosters}
+
+`espn_mlb_game_rosters(game_id: 'int', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)`
 
 espn_mlb_game_rosters - pull the active game rosters for both teams.
 
@@ -36,7 +38,9 @@ print(ros.shape)
 ros.group_by("home_away").len()
 ```
 
-### `espn_mlb_pbp(game_id: 'int', raw: 'bool' = False, **kwargs) -> 'Dict'` {#espn_mlb_pbp}
+### espn_mlb_pbp {#espn_mlb_pbp}
+
+`espn_mlb_pbp(game_id: 'int', raw: 'bool' = False, **kwargs) -> 'Dict'`
 
 espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game.
 
@@ -67,7 +71,9 @@ for p in plays[:3]:
     print(p.get("text"))
 ```
 
-### `espn_mlb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_mlb_player_stats}
+### espn_mlb_player_stats {#espn_mlb_player_stats}
+
+`espn_mlb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull an MLB athlete's ESPN **season** stat line as one wide row.
 
@@ -239,7 +245,9 @@ df = espn_mlb_player_stats(athlete_id=33192, season=2023)
 df.select(["full_name", "team_display_name", "batting_home_runs"])
 ```
 
-### `espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mlb_schedule}
+### espn_mlb_schedule {#espn_mlb_schedule}
+
+`espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 
@@ -302,7 +310,9 @@ espn_mlb_schedule(dates=20240328, return_as_pandas=True).head()
 
 ## Utilities & helpers
 
-### `most_recent_mlb_season() -> 'int'` {#most_recent_mlb_season}
+### most_recent_mlb_season {#most_recent_mlb_season}
+
+`most_recent_mlb_season() -> 'int'`
 
 most_recent_mlb_season - return the most recent / current MLB season year.
 
@@ -315,7 +325,9 @@ The most recent MLB season year (e.g. `2024`).
 
 ## Other
 
-### `add_sequence_features(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#add_sequence_features}
+### add_sequence_features {#add_sequence_features}
+
+`add_sequence_features(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Add within-game sequence, times-through-order, and workload features.
 
@@ -359,7 +371,9 @@ feats = add_sequence_features(pitch_features(raw))
 print(feats.select("times_through_order", "cum_pitches_game").tail())
 ```
 
-### `advancement_opportunities(events: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#advancement_opportunities}
+### advancement_opportunities {#advancement_opportunities}
+
+`advancement_opportunities(events: "'pl.DataFrame'") -> "'pl.DataFrame'"`
 
 Extract first-to-third / second-to-home / tag-up opportunities and outcomes.
 
@@ -385,7 +399,9 @@ from sportsdataverse.mlb.mlb_baserunning import advancement_opportunities
 opps = advancement_opportunities(pitches)
 ```
 
-### `as_of_split(events: "'pl.DataFrame'", cutoff_date: 'Any', *, date_col: 'str' = 'game_date') -> "'pl.DataFrame'"` {#as_of_split}
+### as_of_split {#as_of_split}
+
+`as_of_split(events: "'pl.DataFrame'", cutoff_date: 'Any', *, date_col: 'str' = 'game_date') -> "'pl.DataFrame'"`
 
 Leakage boundary: rows strictly before `cutoff_date` only.
 
@@ -413,7 +429,9 @@ from sportsdataverse.mlb.mlb_run_values import as_of_split
 history = as_of_split(events, cutoff_date=dt.date(2024, 6, 15))
 ```
 
-### `bip_trajectory_features(bip: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#bip_trajectory_features}
+### bip_trajectory_features {#bip_trajectory_features}
+
+`bip_trajectory_features(bip: "'pl.DataFrame'") -> "'pl.DataFrame'"`
 
 Add spray angle / hit distance / launch-angle bin / out label / position.
 
@@ -438,7 +456,9 @@ from sportsdataverse.mlb.mlb_fielding_oaa import bip_trajectory_features
 feats = bip_trajectory_features(bip)
 ```
 
-### `build_we_table(states: 'pl.DataFrame', results: 'pl.DataFrame', *, laplace: 'float' = 1.0) -> 'pl.DataFrame'` {#build_we_table}
+### build_we_table {#build_we_table}
+
+`build_we_table(states: 'pl.DataFrame', results: 'pl.DataFrame', *, laplace: 'float' = 1.0) -> 'pl.DataFrame'`
 
 Empirical, Laplace-smoothed home win-expectancy table.
 
@@ -473,7 +493,9 @@ states = pbp_base_out_states(pbp)
 table = build_we_table(states, results)
 ```
 
-### `called_strike_prob_grid(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0) -> "'pl.DataFrame'"` {#called_strike_prob_grid}
+### called_strike_prob_grid {#called_strike_prob_grid}
+
+`called_strike_prob_grid(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0) -> "'pl.DataFrame'"`
 
 Empirical called-strike-probability grid over `(stand, plate_x, pz_norm)`.
 
@@ -503,7 +525,9 @@ from sportsdataverse.mlb.mlb_catcher_framing import called_strike_prob_grid
 grid = called_strike_prob_grid(pitches, alpha=1.0)
 ```
 
-### `catch_prob_surface(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0) -> "'pl.DataFrame'"` {#catch_prob_surface}
+### catch_prob_surface {#catch_prob_surface}
+
+`catch_prob_surface(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0) -> "'pl.DataFrame'"`
 
 Empirical catch-probability surface over `(position, distance, spray, launch angle)`.
 
@@ -529,7 +553,9 @@ from sportsdataverse.mlb.mlb_fielding_oaa import catch_prob_surface
 surface = catch_prob_surface(bip, alpha=2.0)
 ```
 
-### `count_strike_run_value(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#count_strike_run_value}
+### count_strike_run_value {#count_strike_run_value}
+
+`count_strike_run_value(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"`
 
 Ball-to-strike run-expectancy delta per count, from `delta_run_exp`.
 
@@ -556,7 +582,9 @@ from sportsdataverse.mlb.mlb_run_values import count_strike_run_value
 rv = count_strike_run_value(pitches)
 ```
 
-### `espn_mlb_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mlb_teams}
+### espn_mlb_teams {#espn_mlb_teams}
+
+`espn_mlb_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_mlb_teams - look up MLB teams from ESPN's Site v2 API.
 
@@ -607,7 +635,9 @@ teams_pd = espn_mlb_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
 
-### `event_run_value(pitches: "'pl.DataFrame'", events: "'List[str]'") -> 'float'` {#event_run_value}
+### event_run_value {#event_run_value}
+
+`event_run_value(pitches: "'pl.DataFrame'", events: "'List[str]'") -> 'float'`
 
 Empirical run value of an event set, from mean `delta_run_exp`.
 
@@ -629,7 +659,9 @@ from sportsdataverse.mlb.mlb_run_values import event_run_value
 rv_sb = event_run_value(pitches, ["stolen_base_2b", "stolen_base_3b"])
 ```
 
-### `fit_zone_model(pitches: 'pl.DataFrame') -> 'Dict[str, Any]'` {#fit_zone_model}
+### fit_zone_model {#fit_zone_model}
+
+`fit_zone_model(pitches: 'pl.DataFrame') -> 'Dict[str, Any]'`
 
 Fit a logistic P(called strike | zone coordinates) on called pitches.
 
@@ -654,7 +686,9 @@ from sportsdataverse.mlb.mlb_umpire_zone import fit_zone_model
 model = fit_zone_model(pitches)
 ```
 
-### `fox_mlb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_matchup}
+### fox_mlb_event_matchup {#fox_mlb_event_matchup}
+
+`fox_mlb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb pregame team-stat comparison (one row per stat).
 
@@ -671,7 +705,9 @@ from sportsdataverse.mlb import fox_mlb_event_matchup
 df = fox_mlb_event_matchup("...")
 ```
 
-### `fox_mlb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_recap}
+### fox_mlb_event_recap {#fox_mlb_event_recap}
+
+`fox_mlb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb postgame top performers (one row per player).
 
@@ -688,7 +724,9 @@ from sportsdataverse.mlb import fox_mlb_event_recap
 df = fox_mlb_event_recap("...")
 ```
 
-### `fox_mlb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_standings}
+### fox_mlb_event_standings {#fox_mlb_event_standings}
+
+`fox_mlb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb the two teams' standings context.
 
@@ -705,7 +743,9 @@ from sportsdataverse.mlb import fox_mlb_event_standings
 df = fox_mlb_event_standings("...")
 ```
 
-### `fox_mlb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_conferences}
+### fox_mlb_league_conferences {#fox_mlb_league_conferences}
+
+`fox_mlb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb conference / group directory.
 
@@ -722,7 +762,9 @@ from sportsdataverse.mlb import fox_mlb_league_conferences
 df = fox_mlb_league_conferences()
 ```
 
-### `fox_mlb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_header}
+### fox_mlb_league_header {#fox_mlb_league_header}
+
+`fox_mlb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league header (one row).
 
@@ -752,7 +794,9 @@ from sportsdataverse.mlb import fox_mlb_league_header
 df = fox_mlb_league_header()
 ```
 
-### `fox_mlb_league_leaders(category: 'str' = 'batting', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_league_leaders}
+### fox_mlb_league_leaders {#fox_mlb_league_leaders}
+
+`fox_mlb_league_leaders(category: 'str' = 'batting', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB statistical leaders (`stats-con`); who=player|team.
 
@@ -787,7 +831,9 @@ from sportsdataverse.mlb import fox_mlb_league_leaders
 df = fox_mlb_league_leaders("batting")
 ```
 
-### `fox_mlb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_odds}
+### fox_mlb_league_odds {#fox_mlb_league_odds}
+
+`fox_mlb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league odds board (one row per team per game).
 
@@ -815,7 +861,9 @@ from sportsdataverse.mlb import fox_mlb_league_odds
 df = fox_mlb_league_odds()
 ```
 
-### `fox_mlb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_player_news}
+### fox_mlb_league_player_news {#fox_mlb_league_player_news}
+
+`fox_mlb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league-wide player news feed.
 
@@ -846,7 +894,9 @@ from sportsdataverse.mlb import fox_mlb_league_player_news
 df = fox_mlb_league_player_news()
 ```
 
-### `fox_mlb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_polls}
+### fox_mlb_league_polls {#fox_mlb_league_polls}
+
+`fox_mlb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb rankings / polls rendered as standings tables.
 
@@ -863,7 +913,9 @@ from sportsdataverse.mlb import fox_mlb_league_polls
 df = fox_mlb_league_polls()
 ```
 
-### `fox_mlb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_schedule}
+### fox_mlb_league_schedule {#fox_mlb_league_schedule}
+
+`fox_mlb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league schedule nav selections.
 
@@ -891,7 +943,9 @@ from sportsdataverse.mlb import fox_mlb_league_schedule
 df = fox_mlb_league_schedule()
 ```
 
-### `fox_mlb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_scores}
+### fox_mlb_league_scores {#fox_mlb_league_scores}
+
+`fox_mlb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league scores nav selections.
 
@@ -919,7 +973,9 @@ from sportsdataverse.mlb import fox_mlb_league_scores
 df = fox_mlb_league_scores()
 ```
 
-### `fox_mlb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_standings}
+### fox_mlb_league_standings {#fox_mlb_league_standings}
+
+`fox_mlb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league-wide standings tables.
 
@@ -962,7 +1018,9 @@ from sportsdataverse.mlb import fox_mlb_league_standings
 df = fox_mlb_league_standings()
 ```
 
-### `fox_mlb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_stat_leaders}
+### fox_mlb_league_stat_leaders {#fox_mlb_league_stat_leaders}
+
+`fox_mlb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb league stats landing leaders.
 
@@ -987,7 +1045,9 @@ from sportsdataverse.mlb import fox_mlb_league_stat_leaders
 df = fox_mlb_league_stat_leaders()
 ```
 
-### `fox_mlb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_odds}
+### fox_mlb_odds {#fox_mlb_odds}
+
+`fox_mlb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB game odds six-pack (run line / to-win / total per team).
 
@@ -1010,7 +1070,9 @@ from sportsdataverse.mlb import fox_mlb_odds
 df = fox_mlb_odds("...")
 ```
 
-### `fox_mlb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scoreboard}
+### fox_mlb_scoreboard {#fox_mlb_scoreboard}
+
+`fox_mlb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb scoreboard nav selections (weeks / dates / groups).
 
@@ -1038,7 +1100,9 @@ from sportsdataverse.mlb import fox_mlb_scoreboard
 df = fox_mlb_scoreboard()
 ```
 
-### `fox_mlb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scorechip}
+### fox_mlb_scorechip {#fox_mlb_scorechip}
+
+`fox_mlb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -1055,7 +1119,9 @@ from sportsdataverse.mlb import fox_mlb_scorechip
 df = fox_mlb_scorechip("nfl12345")
 ```
 
-### `fox_mlb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scores_segment}
+### fox_mlb_scores_segment {#fox_mlb_scores_segment}
+
+`fox_mlb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb one row per game in a scoreboard segment.
 
@@ -1072,7 +1138,9 @@ from sportsdataverse.mlb import fox_mlb_scores_segment
 df = fox_mlb_scores_segment("...")
 ```
 
-### `fox_mlb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_standings}
+### fox_mlb_standings {#fox_mlb_standings}
+
+`fox_mlb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB standings for a team's division/league.
 
@@ -1095,7 +1163,9 @@ from sportsdataverse.mlb import fox_mlb_standings
 df = fox_mlb_standings("...")
 ```
 
-### `fox_mlb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_team_gamelog}
+### fox_mlb_team_gamelog {#fox_mlb_team_gamelog}
+
+`fox_mlb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB team game log (long: one row per game-stat).
 
@@ -1118,7 +1188,9 @@ from sportsdataverse.mlb import fox_mlb_team_gamelog
 df = fox_mlb_team_gamelog("...")
 ```
 
-### `fox_mlb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_team_header}
+### fox_mlb_team_header {#fox_mlb_team_header}
+
+`fox_mlb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb team header (one row).
 
@@ -1135,7 +1207,9 @@ from sportsdataverse.mlb import fox_mlb_team_header
 df = fox_mlb_team_header("...")
 ```
 
-### `fox_mlb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_team_roster}
+### fox_mlb_team_roster {#fox_mlb_team_roster}
+
+`fox_mlb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB team roster (one row per player).
 
@@ -1158,7 +1232,9 @@ from sportsdataverse.mlb import fox_mlb_team_roster
 df = fox_mlb_team_roster("...")
 ```
 
-### `fox_mlb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_team_stats}
+### fox_mlb_team_stats {#fox_mlb_team_stats}
+
+`fox_mlb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MLB team stat leaders by category.
 
@@ -1181,7 +1257,9 @@ from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
 ```
 
-### `fox_mlb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_teamnav}
+### fox_mlb_teamnav {#fox_mlb_teamnav}
+
+`fox_mlb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports mlb team directory (one row per team).
 
@@ -1210,7 +1288,9 @@ from sportsdataverse.mlb import fox_mlb_teamnav
 df = fox_mlb_teamnav()
 ```
 
-### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+### mae {#mae}
+
+`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Mean absolute error between two arrays.
 
@@ -1233,7 +1313,9 @@ from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
-### `mlb_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_attendance}
+### mlb_attendance {#mlb_attendance}
+
+`mlb_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/attendance — game attendance figures.
 
@@ -1247,7 +1329,9 @@ GET /api/v1/attendance — game attendance figures.
 | `league_list_id` | `Optional[str]` | `None` |  |
 | `game_type` | `Optional[str]` | `None` |  |
 
-### `mlb_baserunning_value(events: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", *, speed_bin: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_baserunning_value}
+### mlb_baserunning_value {#mlb_baserunning_value}
+
+`mlb_baserunning_value(events: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", *, speed_bin: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-runner baserunning runs from extra-bases-taken above expected.
 
@@ -1275,7 +1359,9 @@ from sportsdataverse.mlb.mlb_baserunning import mlb_baserunning_value
 baserunning = mlb_baserunning_value(pitches, sprint_speed)
 ```
 
-### `mlb_batter_projection(target_season: 'int', *, history: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_batter_projection}
+### mlb_batter_projection {#mlb_batter_projection}
+
+`mlb_batter_projection(target_season: 'int', *, history: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Next-season xwOBA projection (Marcel + delta-method aging) for every batter.
 
@@ -1317,7 +1403,9 @@ print(proj.shape)
 proj.sort("proj_xwoba", descending=True).head()
 ```
 
-### `mlb_catcher_blocking(pitches: "'pl.DataFrame'", *, dirt_bin_width: 'float' = 0.2, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_blocking}
+### mlb_catcher_blocking {#mlb_catcher_blocking}
+
+`mlb_catcher_blocking(pitches: "'pl.DataFrame'", *, dirt_bin_width: 'float' = 0.2, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-catcher blocking runs from a dirt-pitch block-probability model.
 
@@ -1353,7 +1441,9 @@ blocking = mlb_catcher_blocking(pitches)
 blocking.filter(pl.col("block_opps") >= 50).sort("blocking_runs", descending=True)
 ```
 
-### `mlb_catcher_framing(pitches: "'pl.DataFrame'", *, shadow_lo: 'float' = 0.1, shadow_hi: 'float' = 0.9, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_framing}
+### mlb_catcher_framing {#mlb_catcher_framing}
+
+`mlb_catcher_framing(pitches: "'pl.DataFrame'", *, shadow_lo: 'float' = 0.1, shadow_hi: 'float' = 0.9, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-catcher framing runs from a smooth called-strike logistic (Savant method).
 
@@ -1397,7 +1487,9 @@ framing_pd = mlb_catcher_framing(pitches, shadow_lo=0.15, shadow_hi=0.85, return
 framing.filter(pl.col("takes") >= 500).sort("framing_runs", descending=True)
 ```
 
-### `mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'Optional[pl.DataFrame]'" = None, *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_throwing}
+### mlb_catcher_throwing {#mlb_catcher_throwing}
+
+`mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'Optional[pl.DataFrame]'" = None, *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-catcher caught-stealing (throwing) value = caught-stealing above average.
 
@@ -1438,7 +1530,9 @@ from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_throwing
 throwing = mlb_catcher_throwing(sb_attempts)
 ```
 
-### `mlb_command_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_command_plus}
+### mlb_command_plus {#mlb_command_plus}
+
+`mlb_command_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score pitches with the bundled Command+/Location+ (②) run-value model.
 
@@ -1475,7 +1569,9 @@ print(out.select("pitcher", "command_plus").head())
 out.group_by("pitcher").agg(pl.col("command_plus").mean()).sort("command_plus", descending=True)
 ```
 
-### `mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'` {#mlb_divisions}
+### mlb_divisions {#mlb_divisions}
+
+`mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/divisions — list divisions.
 
@@ -1487,7 +1583,9 @@ GET /api/v1/divisions — list divisions.
 | `league_id` | `Optional[Union[int, str]]` | `None` |  |
 | `division_id` | `Optional[int]` | `None` |  |
 
-### `mlb_draft_prospects(year: 'Union[int, str]', scouting_report: 'Optional[bool]' = None, limit: 'int' = 100, **kwargs) -> 'Dict'` {#mlb_draft_prospects}
+### mlb_draft_prospects {#mlb_draft_prospects}
+
+`mlb_draft_prospects(year: 'Union[int, str]', scouting_report: 'Optional[bool]' = None, limit: 'int' = 100, **kwargs) -> 'Dict'`
 
 GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 
@@ -1499,7 +1597,9 @@ GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 | `scouting_report` | `Optional[bool]` | `None` |  |
 | `limit` | `int` | `100` |  |
 
-### `mlb_expected_home_runs(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, park_factors: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_home_runs}
+### mlb_expected_home_runs {#mlb_expected_home_runs}
+
+`mlb_expected_home_runs(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, park_factors: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per player-season park-neutral xHR, park-adjusted xHR, and HR-above-expected.
 
@@ -1546,7 +1646,9 @@ print(df.shape)
 df.sort("hr_above_expected", descending=True).head()
 ```
 
-### `mlb_expected_stats(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_stats}
+### mlb_expected_stats {#mlb_expected_stats}
+
+`mlb_expected_stats(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per player-season xwOBA/xBA/xSLG from an on-the-fly EV x LA empirical grid.
 
@@ -1615,7 +1717,9 @@ print(df.shape)
 df.sort("xwoba", descending=True).head()
 ```
 
-### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, by_direction: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
+### mlb_fielding_oaa {#mlb_fielding_oaa}
+
+`mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, by_direction: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-fielder outs above average from a per-position catch-probability logistic.
 
@@ -1666,7 +1770,9 @@ mlb_fielding_oaa(bip, by_direction=True)
 oaa.filter(pl.col("opportunities") >= 100).sort("oaa", descending=True)
 ```
 
-### `mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_injury_risk}
+### mlb_injury_risk {#mlb_injury_risk}
+
+`mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Composite pitcher injury-risk index from leakage-safe trailing trends.
 
@@ -1698,7 +1804,9 @@ out = mlb_injury_risk(raw_pitches)
 print(out.sort("injury_risk_index", descending=True).head())
 ```
 
-### `mlb_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_diff}
+### mlb_pbp_diff {#mlb_pbp_diff}
+
+`mlb_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/game/{gamePk}/feed/live/diffPatch — JSON-patch diff of the live feed.
 
@@ -1712,7 +1820,9 @@ Replays of in-game state for low-bandwidth clients.
 | `start_timecode` | `str` |  |  |
 | `end_timecode` | `Optional[str]` | `None` |  |
 
-### `mlb_pbp_live(game_pk: 'int', language: 'Optional[str]' = None, timecode: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_live}
+### mlb_pbp_live {#mlb_pbp_live}
+
+`mlb_pbp_live(game_pk: 'int', language: 'Optional[str]' = None, timecode: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
@@ -1730,7 +1840,9 @@ Includes Statcast metrics where available. The historical name
 | `hydrate` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_person_stats(person_id: 'int', stats: 'str', group: 'str' = 'hitting', season: 'Optional[Union[int, str]]' = None, season_type: 'Optional[str]' = None, sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_person_stats}
+### mlb_person_stats {#mlb_person_stats}
+
+`mlb_person_stats(person_id: 'int', stats: 'str', group: 'str' = 'hitting', season: 'Optional[Union[int, str]]' = None, season_type: 'Optional[str]' = None, sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/people/{personId}/stats — player aggregate stats.
 
@@ -1750,7 +1862,9 @@ GET /api/v1/people/{personId}/stats — player aggregate stats.
 | `game_type` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_pitch_classify(pitches: 'pl.DataFrame', *, max_components: 'int' = 6, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_classify}
+### mlb_pitch_classify {#mlb_pitch_classify}
+
+`mlb_pitch_classify(pitches: 'pl.DataFrame', *, max_components: 'int' = 6, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-pitcher Gaussian-mixture pitch reclassification.
 
@@ -1784,7 +1898,9 @@ out = mlb_pitch_classify(feats, seed=0)
 print(out.filter(out["pitch_type"] != out["pitch_type_reclass"]).head())
 ```
 
-### `mlb_pitch_era(pitches: 'pl.DataFrame', seasons: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_era}
+### mlb_pitch_era {#mlb_pitch_era}
+
+`mlb_pitch_era(pitches: 'pl.DataFrame', seasons: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Combined xERA + SIERA-like estimator (model ③).
 
@@ -1819,7 +1935,9 @@ out = mlb_pitch_era(raw_pitches, 2024)
 print(out.select("pitcher", "x_era", "siera_like").head())
 ```
 
-### `mlb_pitch_tunneling(pitches: 'pl.DataFrame', *, eps: 'float' = 0.01, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_tunneling}
+### mlb_pitch_tunneling {#mlb_pitch_tunneling}
+
+`mlb_pitch_tunneling(pitches: 'pl.DataFrame', *, eps: 'float' = 0.01, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-pitch release/plate distance from the previous pitch + tunnel ratio.
 
@@ -1855,7 +1973,9 @@ out = mlb_pitch_tunneling(feats)
 print(out.select("tunnel_ratio").describe())
 ```
 
-### `mlb_prop_strikeouts(team_k9: 'float', opp_k_rate: 'float', lg_k_rate: 'float', *, innings: 'float' = 9.0) -> 'float'` {#mlb_prop_strikeouts}
+### mlb_prop_strikeouts {#mlb_prop_strikeouts}
+
+`mlb_prop_strikeouts(team_k9: 'float', opp_k_rate: 'float', lg_k_rate: 'float', *, innings: 'float' = 9.0) -> 'float'`
 
 Expected pitcher/team strikeouts via a K/9-and-opponent-K-rate blend.
 
@@ -1881,7 +2001,9 @@ from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_strikeouts
 mlb_prop_strikeouts(9.0, 0.22, 0.22)
 ```
 
-### `mlb_prop_team_runs(home_off: 'float', away_def: 'float', lg_rpg: 'float', *, park_factor: 'float' = 1.0) -> 'float'` {#mlb_prop_team_runs}
+### mlb_prop_team_runs {#mlb_prop_team_runs}
+
+`mlb_prop_team_runs(home_off: 'float', away_def: 'float', lg_rpg: 'float', *, park_factor: 'float' = 1.0) -> 'float'`
 
 Expected team runs via a log5-style rate blend.
 
@@ -1907,7 +2029,9 @@ from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_team_runs
 mlb_prop_team_runs(5.5, 5.0, 4.5)
 ```
 
-### `mlb_props(matchups: 'pl.DataFrame', ratings: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_props}
+### mlb_props {#mlb_props}
+
+`mlb_props(matchups: 'pl.DataFrame', ratings: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Expected team runs + strikeouts for a slate of matchups.
 
@@ -1940,7 +2064,9 @@ from sportsdataverse.mlb.mlb_prop_projection import mlb_props
 props = mlb_props(matchups, ratings)
 ```
 
-### `mlb_pythagenpat(runs_scored: 'float', runs_allowed: 'float', games: 'int', *, exponent: 'float' = 0.287) -> 'float'` {#mlb_pythagenpat}
+### mlb_pythagenpat {#mlb_pythagenpat}
+
+`mlb_pythagenpat(runs_scored: 'float', runs_allowed: 'float', games: 'int', *, exponent: 'float' = 0.287) -> 'float'`
 
 Pythagenpat expected win percentage (Smyth-Patriot, run-environment adaptive exponent).
 
@@ -1967,7 +2093,9 @@ from sportsdataverse.mlb.mlb_team_projection import mlb_pythagenpat
 mlb_pythagenpat(800, 600, 162)
 ```
 
-### `mlb_pythagenpat_table(results: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_pythagenpat_table}
+### mlb_pythagenpat_table {#mlb_pythagenpat_table}
+
+`mlb_pythagenpat_table(results: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per-(season, team) pythagenpat table from game-level results.
 
@@ -2008,7 +2136,9 @@ from sportsdataverse.mlb.mlb_team_projection import mlb_pythagenpat_table
 table = mlb_pythagenpat_table(results)
 ```
 
-### `mlb_run_expectancy_matrix(seasons: 'Union[int, List[int], None]' = None, *, pbp: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_run_expectancy_matrix}
+### mlb_run_expectancy_matrix {#mlb_run_expectancy_matrix}
+
+`mlb_run_expectancy_matrix(seasons: 'Union[int, List[int], None]' = None, *, pbp: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Empirical RE24 run-expectancy matrix by base-out state.
 
@@ -2050,7 +2180,9 @@ matrix = mlb_run_expectancy_matrix(pbp=pbp)
 matrix.filter(pl.col("base_state") == "___").sort("outs")
 ```
 
-### `mlb_schedule(date: 'Optional[str]' = None, start_date: 'Optional[str]' = None, end_date: 'Optional[str]' = None, team_id: 'Optional[int]' = None, opponent_id: 'Optional[int]' = None, season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, game_type: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_schedule}
+### mlb_schedule {#mlb_schedule}
+
+`mlb_schedule(date: 'Optional[str]' = None, start_date: 'Optional[str]' = None, end_date: 'Optional[str]' = None, team_id: 'Optional[int]' = None, opponent_id: 'Optional[int]' = None, season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, game_type: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/schedule — schedule of games for a date, range, team, or season.
 
@@ -2072,7 +2204,9 @@ Response: `dates[].games[]`.
 | `hydrate` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_seasons(sport_id: 'int' = 1, season: 'Optional[Union[int, str]]' = None, all_seasons: 'bool' = False, **kwargs) -> 'Dict'` {#mlb_seasons}
+### mlb_seasons {#mlb_seasons}
+
+`mlb_seasons(sport_id: 'int' = 1, season: 'Optional[Union[int, str]]' = None, all_seasons: 'bool' = False, **kwargs) -> 'Dict'`
 
 GET /api/v1/seasons — list of seasons for a sport.
 
@@ -2084,7 +2218,9 @@ GET /api/v1/seasons — list of seasons for a sport.
 | `season` | `Optional[Union[int, str]]` | `None` |  |
 | `all_seasons` | `bool` | `False` |  |
 
-### `mlb_sequence_run_value(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_sequence_run_value}
+### mlb_sequence_run_value {#mlb_sequence_run_value}
+
+`mlb_sequence_run_value(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Mean run value grouped by the ordered `(prev_pitch_type, pitch_type)` sequence.
 
@@ -2114,7 +2250,9 @@ out = mlb_sequence_run_value(feats)
 print(out.sort("mean_run_value").head())
 ```
 
-### `mlb_standings(league_id: 'Union[int, str, List[int]]' = '103,104', season: 'Optional[Union[int, str]]' = None, date: 'Optional[str]' = None, standings_types: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_standings}
+### mlb_standings {#mlb_standings}
+
+`mlb_standings(league_id: 'Union[int, str, List[int]]' = '103,104', season: 'Optional[Union[int, str]]' = None, date: 'Optional[str]' = None, standings_types: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/standings — league standings.
 
@@ -2132,7 +2270,9 @@ GET /api/v1/standings — league standings.
 | `hydrate` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_statcast_player(player_id: 'int', stats: 'Optional[str]' = None, *, section: 'str' = 'statcast', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame, str]'"` {#mlb_statcast_player}
+### mlb_statcast_player {#mlb_statcast_player}
+
+`mlb_statcast_player(player_id: 'int', stats: 'Optional[str]' = None, *, section: 'str' = 'statcast', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame, str]'"`
 
 GET /savant-player/{player_id} and parse one embedded table into a tidy frame.
 
@@ -2433,7 +2573,9 @@ df = mlb_statcast_player(592450)
 html = mlb_statcast_player(592450, raw=True)
 ```
 
-### `mlb_statcast_search(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search}
+### mlb_statcast_search {#mlb_statcast_search}
+
+`mlb_statcast_search(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Pitch-by-pitch MLB Statcast search (`/statcast_search/csv`), date-chunked.
 
@@ -2584,7 +2726,9 @@ from sportsdataverse.mlb import mlb_statcast_search
 df = mlb_statcast_search("2024-06-15", "2024-06-16", batters_lookup=592450)
 ```
 
-### `mlb_statcast_search_minors(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search_minors}
+### mlb_statcast_search_minors {#mlb_statcast_search_minors}
+
+`mlb_statcast_search_minors(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Minor-league Statcast search (`/statcast-search-minors/csv`), date-chunked.
 
@@ -2738,7 +2882,9 @@ from sportsdataverse.mlb import mlb_statcast_search_minors
 df = mlb_statcast_search_minors("2024-06-01", "2024-06-02")
 ```
 
-### `mlb_statcast_search_wbc(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search_wbc}
+### mlb_statcast_search_wbc {#mlb_statcast_search_wbc}
+
+`mlb_statcast_search_wbc(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 World Baseball Classic Statcast search (`/statcast-search-world-baseball-classic/csv`).
 
@@ -2893,7 +3039,9 @@ from sportsdataverse.mlb import mlb_statcast_search_wbc
 df = mlb_statcast_search_wbc("2023-03-08", "2023-03-22")
 ```
 
-### `mlb_stats(stats: 'str', group: 'str', season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, team_id: 'Optional[int]' = None, player_pool: 'Optional[str]' = None, game_type: 'Optional[str]' = None, limit: 'int' = 50, offset: 'int' = 0, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_stats}
+### mlb_stats {#mlb_stats}
+
+`mlb_stats(stats: 'str', group: 'str', season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, team_id: 'Optional[int]' = None, player_pool: 'Optional[str]' = None, game_type: 'Optional[str]' = None, limit: 'int' = 50, offset: 'int' = 0, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/stats — generic stats query.
 
@@ -2917,7 +3065,9 @@ Filters: `season`, `team_id`, `league_id`, `game_type`, `player_pool`.
 | `offset` | `int` | `0` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_stats_leaders(leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, stat_group: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_stats_leaders}
+### mlb_stats_leaders {#mlb_stats_leaders}
+
+`mlb_stats_leaders(leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, stat_group: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, limit: 'int' = 10, **kwargs) -> 'Dict'`
 
 GET /api/v1/stats/leaders — top-N leaders for a stat category.
 
@@ -2933,7 +3083,9 @@ GET /api/v1/stats/leaders — top-N leaders for a stat category.
 | `sport_id` | `int` | `1` |  |
 | `limit` | `int` | `10` |  |
 
-### `mlb_stats_streaks(streak_type: 'str', streak_threshold: 'int' = 1, season: 'Optional[Union[int, str]]' = None, stat_group: 'Optional[str]' = None, active_streak: 'Optional[bool]' = None, sport_id: 'int' = 1, **kwargs) -> 'Dict'` {#mlb_stats_streaks}
+### mlb_stats_streaks {#mlb_stats_streaks}
+
+`mlb_stats_streaks(streak_type: 'str', streak_threshold: 'int' = 1, season: 'Optional[Union[int, str]]' = None, stat_group: 'Optional[str]' = None, active_streak: 'Optional[bool]' = None, sport_id: 'int' = 1, **kwargs) -> 'Dict'`
 
 GET /api/v1/stats/streaks — active or historical streaks.
 
@@ -2950,7 +3102,9 @@ GET /api/v1/stats/streaks — active or historical streaks.
 | `active_streak` | `Optional[bool]` | `None` |  |
 | `sport_id` | `int` | `1` |  |
 
-### `mlb_stolen_base_value(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_stolen_base_value}
+### mlb_stolen_base_value {#mlb_stolen_base_value}
+
+`mlb_stolen_base_value(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-runner stolen-base run value: realized-vs-expected run contribution.
 
@@ -2985,7 +3139,9 @@ from sportsdataverse.mlb.mlb_stolen_base import mlb_stolen_base_value
 sb_value = mlb_stolen_base_value(sb_attempts, sprint_speed, poptime)
 ```
 
-### `mlb_stuff_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_stuff_plus}
+### mlb_stuff_plus {#mlb_stuff_plus}
+
+`mlb_stuff_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score pitches with the bundled Stuff+ (①) run-value model.
 
@@ -3022,7 +3178,9 @@ print(out.sort("stuff_plus", descending=True).head())
 out.filter(pl.col("pitch_type") == "FF").sort("stuff_plus", descending=True)
 ```
 
-### `mlb_swing_decision(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_swing_decision}
+### mlb_swing_decision {#mlb_swing_decision}
+
+`mlb_swing_decision(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per player-season swing/take run value + selective-aggression (SEAGER analog).
 
@@ -3078,7 +3236,9 @@ print(df.shape)
 df.sort("selective_agg", descending=True).head()
 ```
 
-### `mlb_team_elo(results: 'pl.DataFrame', *, k: 'float' = 4.0, hfa: 'float' = 24.0, init: 'float' = 1500.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_team_elo}
+### mlb_team_elo {#mlb_team_elo}
+
+`mlb_team_elo(results: 'pl.DataFrame', *, k: 'float' = 4.0, hfa: 'float' = 24.0, init: 'float' = 1500.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 As-of-date iterative Elo run-differential rating.
 
@@ -3125,7 +3285,9 @@ elo = mlb_team_elo(results)
 elo.group_by("home_team_id").agg(pl.col("home_rating_post").last())
 ```
 
-### `mlb_team_leaders(team_id: 'int', leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_team_leaders}
+### mlb_team_leaders {#mlb_team_leaders}
+
+`mlb_team_leaders(team_id: 'int', leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, limit: 'int' = 10, **kwargs) -> 'Dict'`
 
 GET /api/v1/teams/{teamId}/leaders — team leaders.
 
@@ -3142,7 +3304,9 @@ GET /api/v1/teams/{teamId}/leaders — team leaders.
 | `leader_game_types` | `Optional[str]` | `None` |  |
 | `limit` | `int` | `10` |  |
 
-### `mlb_team_projection(seasons: 'Union[int, List[int], None]' = None, *, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_team_projection}
+### mlb_team_projection {#mlb_team_projection}
+
+`mlb_team_projection(seasons: 'Union[int, List[int], None]' = None, *, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Combined pythagenpat + Elo team projection.
 
@@ -3174,7 +3338,9 @@ from sportsdataverse.mlb.mlb_team_projection import mlb_team_projection
 projection = mlb_team_projection(results=results)
 ```
 
-### `mlb_team_stats(team_id: 'int', season: 'Union[int, str]', stats: 'str' = 'season', group: 'str' = 'hitting', sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_team_stats}
+### mlb_team_stats {#mlb_team_stats}
+
+`mlb_team_stats(team_id: 'int', season: 'Union[int, str]', stats: 'str' = 'season', group: 'str' = 'hitting', sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/teams/{teamId}/stats — team-level stats.
 
@@ -3193,7 +3359,9 @@ GET /api/v1/teams/{teamId}/stats — team-level stats.
 | `game_type` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_teams}
+### mlb_teams {#mlb_teams}
+
+`mlb_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
 GET /api/v1/teams — list teams. `sport_id=1` = MLB.
 
@@ -3209,7 +3377,9 @@ GET /api/v1/teams — list teams. `sport_id=1` = MLB.
 | `hydrate` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
 
-### `mlb_times_through_order(pitches: 'pl.DataFrame', *, season: 'int' = 2024, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_times_through_order}
+### mlb_times_through_order {#mlb_times_through_order}
+
+`mlb_times_through_order(pitches: 'pl.DataFrame', *, season: 'int' = 2024, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-pitch fitted times-through-order fatigue adjustment.
 
@@ -3244,7 +3414,9 @@ out = mlb_times_through_order(feats, season=2024)
 print(out.select("times_through_order", "fatigue_rv_adj").unique())
 ```
 
-### `mlb_umpire_bias(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_umpire_bias}
+### mlb_umpire_bias {#mlb_umpire_bias}
+
+`mlb_umpire_bias(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per-umpire called-strike bias residual (observed minus expected).
 
@@ -3275,7 +3447,9 @@ from sportsdataverse.mlb.mlb_umpire_zone import mlb_umpire_bias
 bias = mlb_umpire_bias(pitches)
 ```
 
-### `mlb_umpire_called_strike_prob(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_umpire_called_strike_prob}
+### mlb_umpire_called_strike_prob {#mlb_umpire_called_strike_prob}
+
+`mlb_umpire_called_strike_prob(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 P(called strike) per pitch from the zone logistic.
 
@@ -3302,7 +3476,9 @@ from sportsdataverse.mlb.mlb_umpire_zone import mlb_umpire_called_strike_prob
 prob = mlb_umpire_called_strike_prob(pitches)
 ```
 
-### `mlb_win_expectancy(pbp: 'pl.DataFrame', results: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_win_expectancy}
+### mlb_win_expectancy {#mlb_win_expectancy}
+
+`mlb_win_expectancy(pbp: 'pl.DataFrame', results: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per-play home win expectancy from the empirical state table.
 
@@ -3336,7 +3512,9 @@ we = mlb_win_expectancy(pbp, results)
 we.filter(pl.col("game_id") == "716390").sort("at_bat_index")
 ```
 
-### `mlb_win_probability_added(we: 'pl.DataFrame', *, perspective: 'str' = 'home', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_win_probability_added}
+### mlb_win_probability_added {#mlb_win_probability_added}
+
+`mlb_win_probability_added(we: 'pl.DataFrame', *, perspective: 'str' = 'home', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Per-play win-probability-added from a `mlb_win_expectancy` frame.
 
@@ -3368,7 +3546,9 @@ from sportsdataverse.mlb.mlb_win_expectancy import mlb_win_probability_added
 wpa = mlb_win_probability_added(we)
 ```
 
-### `pbp_base_out_states(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#pbp_base_out_states}
+### pbp_base_out_states {#pbp_base_out_states}
+
+`pbp_base_out_states(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Reconstruct pre-play base-out state from statsapi play-by-play.
 
@@ -3399,7 +3579,9 @@ from sportsdataverse.mlb.mlb_run_expectancy import pbp_base_out_states
 states = pbp_base_out_states(pbp)
 ```
 
-### `pearson_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#pearson_corr}
+### pearson_corr {#pearson_corr}
+
+`pearson_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'`
 
 Pearson correlation coefficient between two 1-D arrays.
 
@@ -3421,7 +3603,9 @@ from sportsdataverse.mlb.mlb_run_values import pearson_corr
 r = pearson_corr(mine["framing_runs"].to_numpy(), sav["runs_extra_strikes"].to_numpy())
 ```
 
-### `pitch_features(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pitch_features}
+### pitch_features {#pitch_features}
+
+`pitch_features(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Build the per-pitch feature substrate every pitching model consumes.
 
@@ -3471,7 +3655,9 @@ print(feats.select("pitch_type", "in_zone", "run_value").head())
 feats.filter(pl.col("in_zone") == 1).group_by("pitch_type").agg(pl.col("run_value").mean())
 ```
 
-### `pitcher_appearance_trends(pitches: 'pl.DataFrame', *, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pitcher_appearance_trends}
+### pitcher_appearance_trends {#pitcher_appearance_trends}
+
+`pitcher_appearance_trends(pitches: 'pl.DataFrame', *, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Leakage-safe per-appearance trailing velocity/workload trends.
 
@@ -3507,7 +3693,9 @@ out = pitcher_appearance_trends(raw_pitches, window=5)
 print(out.select("game_date", "velo_drop", "days_rest").tail())
 ```
 
-### `predict_sb_success(upcoming: "'pl.DataFrame'", history: "'pl.DataFrame'", cutoff_date: 'Any', *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#predict_sb_success}
+### predict_sb_success {#predict_sb_success}
+
+`predict_sb_success(upcoming: "'pl.DataFrame'", history: "'pl.DataFrame'", cutoff_date: 'Any', *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 As-of-date predictive P(success): the surface is fit on history strictly before `cutoff_date`.
 
@@ -3540,7 +3728,9 @@ from sportsdataverse.mlb.mlb_stolen_base import predict_sb_success
 preds = predict_sb_success(upcoming, history, cutoff_date=dt.date(2024, 6, 15))
 ```
 
-### `prop_over_prob(line: 'float', expected: 'float') -> 'float'` {#prop_over_prob}
+### prop_over_prob {#prop_over_prob}
+
+`prop_over_prob(line: 'float', expected: 'float') -> 'float'`
 
 P(realized count > line) under a Poisson(expected) model.
 
@@ -3564,7 +3754,9 @@ from sportsdataverse.mlb.mlb_prop_projection import prop_over_prob
 prop_over_prob(3.5, 4.5)
 ```
 
-### `sb_attempts_from_pitches(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#sb_attempts_from_pitches}
+### sb_attempts_from_pitches {#sb_attempts_from_pitches}
+
+`sb_attempts_from_pitches(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"`
 
 Extract stolen-base / caught-stealing attempts from pitch-level Statcast rows.
 
@@ -3591,7 +3783,9 @@ from sportsdataverse.mlb.mlb_stolen_base import sb_attempts_from_pitches
 sb_attempts = sb_attempts_from_pitches(pitches)
 ```
 
-### `sb_success_surface(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0) -> "'pl.DataFrame'"` {#sb_success_surface}
+### sb_success_surface {#sb_success_surface}
+
+`sb_success_surface(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0) -> "'pl.DataFrame'"`
 
 Empirical P(stolen-base success) surface over `(sprint speed, pop time, base)`.
 
@@ -3620,7 +3814,9 @@ from sportsdataverse.mlb.mlb_stolen_base import sb_success_surface
 surface = sb_success_surface(sb_attempts, sprint_speed, poptime)
 ```
 
-### `siera_like(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#siera_like}
+### siera_like {#siera_like}
+
+`siera_like(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**).
 
@@ -3659,7 +3855,9 @@ out = siera_like(raw_pitches, 2024)
 print(out.sort("siera_like").head())
 ```
 
-### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+### spearman_corr {#spearman_corr}
+
+`spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Spearman rank correlation between two arrays.
 
@@ -3682,7 +3880,9 @@ from sportsdataverse._common.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
-### `tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#tto_penalty_table}
+### tto_penalty_table {#tto_penalty_table}
+
+`tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Observed mean run value by times-through-order, with the penalty vs TTO=1.
 

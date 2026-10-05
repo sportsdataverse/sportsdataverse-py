@@ -3,12 +3,13 @@ title: NHL — ESPN FPI API (fitt v3)
 sidebar_label: ESPN FPI API (fitt v3)
 description: "NHL — ESPN FPI API (fitt v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 23
+toc_max_heading_level: 2
 ---
 # NHL — ESPN FPI API (fitt v3)
 
 `sportsdataverse.nhl` — 1 endpoint.
 
-## `espn_nhl_fpi`
+## espn_nhl_fpi
 
 ESPN endpoint.
 
@@ -22,12 +23,12 @@ ESPN endpoint.
 | `limit` | `limit` |  |  | `Y` | Page size. The response is a single page for every league observed, so the default suffices. |
 | `page` | `page` |  |  | `Y` | Page number, for the paginated envelope. |
 
-### Returns
+### Returns {#espn_nhl_fpi-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fpi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_nhl_fpi-example}
 
 ```python
 espn_nhl_fpi(season=2024)

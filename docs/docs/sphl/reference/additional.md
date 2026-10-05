@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_sphl_season() -> 'int'` {#most_recent_sphl_season}
+### most_recent_sphl_season {#most_recent_sphl_season}
+
+`most_recent_sphl_season() -> 'int'`
 
 Most-recent SPHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `sphl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_game_corsi}
+### sphl_game_corsi {#sphl_game_corsi}
+
+`sphl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single SPHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single SPHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_game_shifts}
+### sphl_game_shifts {#sphl_game_shifts}
+
+`sphl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single SPHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single SPHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_game_summary(game_id: 'int') -> 'dict'` {#sphl_game_summary}
+### sphl_game_summary {#sphl_game_summary}
+
+`sphl_game_summary(game_id: 'int') -> 'dict'`
 
 SPHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ SPHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `sphl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_leaders}
+### sphl_leaders {#sphl_leaders}
+
+`sphl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL statistical leaders for a given season.
 
@@ -79,7 +91,9 @@ SPHL statistical leaders for a given season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_pbp}
+### sphl_pbp {#sphl_pbp}
+
+`sphl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL play-by-play — one row per event, fully enriched.
 
@@ -90,7 +104,9 @@ SPHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_player_stats}
+### sphl_player_stats {#sphl_player_stats}
+
+`sphl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL player season stats across all seasons.
 
@@ -101,7 +117,9 @@ SPHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_player_toi}
+### sphl_player_toi {#sphl_player_toi}
+
+`sphl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single SPHL game.
 
@@ -112,7 +130,9 @@ Per-player time-on-ice totals for a single SPHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_schedule}
+### sphl_schedule {#sphl_schedule}
+
+`sphl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL schedule — one row per game.
 
@@ -142,7 +162,9 @@ SPHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `sphl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_season_id}
+### sphl_season_id {#sphl_season_id}
+
+`sphl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All SPHL seasons with end-year + game-type labels.
 
@@ -167,7 +189,9 @@ All SPHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `sphl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_standings}
+### sphl_standings {#sphl_standings}
+
+`sphl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL standings — one row per team.
 
@@ -200,7 +224,9 @@ SPHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `sphl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_team_roster}
+### sphl_team_roster {#sphl_team_roster}
+
+`sphl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL team roster for a given team + season.
 
@@ -213,7 +239,9 @@ SPHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `sphl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#sphl_teams}
+### sphl_teams {#sphl_teams}
+
+`sphl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 SPHL teams for a given season.
 

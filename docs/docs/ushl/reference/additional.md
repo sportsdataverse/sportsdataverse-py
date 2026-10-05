@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_ushl_season() -> 'int'` {#most_recent_ushl_season}
+### most_recent_ushl_season {#most_recent_ushl_season}
+
+`most_recent_ushl_season() -> 'int'`
 
 Most-recent USHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `ushl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_game_corsi}
+### ushl_game_corsi {#ushl_game_corsi}
+
+`ushl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single USHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single USHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_game_shifts}
+### ushl_game_shifts {#ushl_game_shifts}
+
+`ushl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single USHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single USHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_game_summary(game_id: 'int') -> 'dict'` {#ushl_game_summary}
+### ushl_game_summary {#ushl_game_summary}
+
+`ushl_game_summary(game_id: 'int') -> 'dict'`
 
 USHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ USHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `ushl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_leaders}
+### ushl_leaders {#ushl_leaders}
+
+`ushl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ USHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `ushl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_pbp}
+### ushl_pbp {#ushl_pbp}
+
+`ushl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ USHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_player_stats}
+### ushl_player_stats {#ushl_player_stats}
+
+`ushl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ USHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_player_toi}
+### ushl_player_toi {#ushl_player_toi}
+
+`ushl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single USHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single USHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_schedule}
+### ushl_schedule {#ushl_schedule}
+
+`ushl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ USHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `ushl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_season_id}
+### ushl_season_id {#ushl_season_id}
+
+`ushl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All USHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All USHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `ushl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_standings}
+### ushl_standings {#ushl_standings}
+
+`ushl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL standings — one row per team.
 
@@ -223,7 +247,9 @@ USHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `ushl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_team_roster}
+### ushl_team_roster {#ushl_team_roster}
+
+`ushl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL team roster for a given team + season.
 
@@ -236,7 +262,9 @@ USHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ushl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ushl_teams}
+### ushl_teams {#ushl_teams}
+
+`ushl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 USHL teams for a given season.
 

@@ -3,12 +3,13 @@ title: NFL — NFL.com API
 sidebar_label: NFL.com API
 description: "NFL — NFL.com API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # NFL — NFL.com API
 
 `sportsdataverse.nfl` — 15 endpoints.
 
-## `nfl_standings`
+## nfl_standings
 
 GET /football/v2/standings — one row per team standing across the returned week(s).
 
@@ -23,7 +24,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 | `week` | `week` |  |  | `Y` | Week number within the season. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#nfl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -84,7 +85,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_standings-example}
 
 ```python
 nfl_standings(season=2024, season_type='REG', week=18)
@@ -92,7 +93,7 @@ nfl_standings(season=2024, season_type='REG', week=18)
 
 _Last validated n/a._
 
-## `nfl_rosters`
+## nfl_rosters
 
 GET /football/v2/rosters — one row per team roster for the season.
 
@@ -106,7 +107,7 @@ GET /football/v2/rosters — one row per team roster for the season.
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `teamId` | `team_id` |  |  | `Y` | Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB). |
 
-### Returns
+### Returns {#nfl_rosters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -128,7 +129,7 @@ GET /football/v2/rosters — one row per team roster for the season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_rosters-example}
 
 ```python
 nfl_rosters(season=2024)
@@ -136,7 +137,7 @@ nfl_rosters(season=2024)
 
 _Last validated n/a._
 
-## `nfl_teams_history`
+## nfl_teams_history
 
 GET /football/v2/teams/history — one row per team for a season.
 
@@ -149,7 +150,7 @@ GET /football/v2/teams/history — one row per team for a season.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#nfl_teams_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -170,7 +171,7 @@ GET /football/v2/teams/history — one row per team for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_teams_history-example}
 
 ```python
 nfl_teams_history(season=2024)
@@ -178,7 +179,7 @@ nfl_teams_history(season=2024)
 
 _Last validated n/a._
 
-## `nfl_team`
+## nfl_team
 
 GET /football/v2/teams/{team_id} — single-team detail (one row).
 
@@ -190,7 +191,7 @@ GET /football/v2/teams/{team_id} — single-team detail (one row).
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#nfl_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -213,7 +214,7 @@ GET /football/v2/teams/{team_id} — single-team detail (one row).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_team-example}
 
 ```python
 nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
@@ -221,7 +222,7 @@ nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
 
 _Last validated n/a._
 
-## `nfl_weeks`
+## nfl_weeks
 
 GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
 
@@ -234,7 +235,7 @@ GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calenda
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `season_type` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 
-### Returns
+### Returns {#nfl_weeks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -249,7 +250,7 @@ GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calenda
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_weeks-example}
 
 ```python
 nfl_weeks(season=2024, season_type='REG')
@@ -257,7 +258,7 @@ nfl_weeks(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_weeks_by_date`
+## nfl_weeks_by_date
 
 GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row).
 
@@ -269,7 +270,7 @@ GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  | `Y` |  | date path parameter. |
 
-### Returns
+### Returns {#nfl_weeks_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -284,7 +285,7 @@ GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_weeks_by_date-example}
 
 ```python
 nfl_weeks_by_date(date='2024-09-08')
@@ -292,7 +293,7 @@ nfl_weeks_by_date(date='2024-09-08')
 
 _Last validated n/a._
 
-## `nfl_combine_profiles`
+## nfl_combine_profiles
 
 GET /football/v2/combine/profiles — one row per combine prospect.
 
@@ -305,7 +306,7 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#nfl_combine_profiles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -369,7 +370,7 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_combine_profiles-example}
 
 ```python
 nfl_combine_profiles(year=2024)
@@ -377,7 +378,7 @@ nfl_combine_profiles(year=2024)
 
 _Last validated n/a._
 
-## `nfl_draft_picks`
+## nfl_draft_picks
 
 GET /football/v2/draft/picks/report — one row per draft pick.
 
@@ -390,7 +391,7 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#nfl_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -408,7 +409,7 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_draft_picks-example}
 
 ```python
 nfl_draft_picks(year=2024)
@@ -416,7 +417,7 @@ nfl_draft_picks(year=2024)
 
 _Last validated n/a._
 
-## `nfl_injuries`
+## nfl_injuries
 
 GET /football/v2/injuries — one row per injured player.
 
@@ -430,7 +431,7 @@ GET /football/v2/injuries — one row per injured player.
 | `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season. |
 
-### Returns
+### Returns {#nfl_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -457,7 +458,7 @@ GET /football/v2/injuries — one row per injured player.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_injuries-example}
 
 ```python
 nfl_injuries(season=2024, season_type='REG', week=1)
@@ -465,7 +466,7 @@ nfl_injuries(season=2024, season_type='REG', week=1)
 
 _Last validated n/a._
 
-## `nfl_game_summaries`
+## nfl_game_summaries
 
 GET /football/v2/stats/live/game-summaries — one row per game (live state).
 
@@ -479,7 +480,7 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 | `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season. |
 
-### Returns
+### Returns {#nfl_game_summaries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -521,7 +522,7 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_game_summaries-example}
 
 ```python
 nfl_game_summaries(season=2024, season_type='REG', week=1)
@@ -529,7 +530,7 @@ nfl_game_summaries(season=2024, season_type='REG', week=1)
 
 _Last validated n/a._
 
-## `nfl_weekly_game_details`
+## nfl_weekly_game_details
 
 GET /football/v2/experience/weekly-game-details — one row per game (bare list).
 
@@ -547,7 +548,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 | `includeStandings` | `include_standings` |  |  | `Y` | includeStandings query parameter. |
 | `includeTaggedVideos` | `include_tagged_videos` |  |  | `Y` | includeTaggedVideos query parameter. |
 
-### Returns
+### Returns {#nfl_weekly_game_details-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -631,7 +632,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_weekly_game_details-example}
 
 ```python
 nfl_weekly_game_details(season=2024, season_type='REG', week=1)
@@ -639,7 +640,7 @@ nfl_weekly_game_details(season=2024, season_type='REG', week=1)
 
 _Last validated n/a._
 
-## `nfl_live_team_statistics`
+## nfl_live_team_statistics
 
 GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away, home): the live team box score.
 
@@ -651,7 +652,7 @@ GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Shield uuid game id -- the ``id`` column of the week games and weekly game details listings. |
 
-### Returns
+### Returns {#nfl_live_team_statistics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -768,7 +769,7 @@ GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_live_team_statistics-example}
 
 ```python
 nfl_live_team_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
@@ -776,7 +777,7 @@ nfl_live_team_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 
 _Last validated n/a._
 
-## `nfl_live_player_statistics`
+## nfl_live_player_statistics
 
 GET /football/v2/stats/live/player-statistics/{game_id} — one row per player per side: the live player box score.
 
@@ -788,7 +789,7 @@ GET /football/v2/stats/live/player-statistics/{game_id} — one row per player p
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Shield uuid game id -- the ``id`` column of the week games and weekly game details listings. |
 
-### Returns
+### Returns {#nfl_live_player_statistics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -918,7 +919,7 @@ GET /football/v2/stats/live/player-statistics/{game_id} — one row per player p
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_live_player_statistics-example}
 
 ```python
 nfl_live_player_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
@@ -926,7 +927,7 @@ nfl_live_player_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 
 _Last validated n/a._
 
-## `nfl_game_details_v2`
+## nfl_game_details_v2
 
 GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings).
 
@@ -942,7 +943,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 | `includeStandings` | `include_standings` |  |  | `Y` | includeStandings query parameter. |
 | `includeTaggedVideos` | `include_tagged_videos` |  |  | `Y` | includeTaggedVideos query parameter. |
 
-### Returns
+### Returns {#nfl_game_details_v2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1130,7 +1131,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_game_details_v2-example}
 
 ```python
 nfl_game_details_v2(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
@@ -1138,7 +1139,7 @@ nfl_game_details_v2(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 
 _Last validated n/a._
 
-## `nfl_game_details_by_slug`
+## nfl_game_details_by_slug
 
 GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug.
 
@@ -1151,7 +1152,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 | `slug` | `slug` |  | `Y` |  | nfl.com game slug, e.g. ``broncos-at-chiefs-2026-reg-1`` -- the last segment of the nfl.com game page URL and the ``slug`` external id. |
 | `includeReplays` | `include_replays` |  |  | `Y` | includeReplays query parameter. |
 
-### Returns
+### Returns {#nfl_game_details_by_slug-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1338,7 +1339,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_game_details_by_slug-example}
 
 ```python
 nfl_game_details_by_slug(slug='broncos-at-chiefs-2026-reg-1')

@@ -3,12 +3,13 @@ title: CBS — CBS Sports NAPI (api.cbssports.com/napi)
 sidebar_label: CBS Sports NAPI (api.cbssports.com/napi)
 description: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # CBS — CBS Sports NAPI (api.cbssports.com/napi)
 
 `sportsdataverse.cbs` — 82 endpoints.
 
-## `cbs_bulk`
+## cbs_bulk
 
 Resolve resources in bulk to save HTTP traffic.
 
@@ -26,12 +27,12 @@ Resolve resources in bulk to save HTTP traffic.
 | `FeaturedGameResource` | `featured_game_resource` |  |  | `Y` | CSV list of game IDs to retrieve. |
 | `GolfEventMarketsResource` | `golf_event_markets_resource` |  |  | `Y` | CSV list of golf event markets IDs to retrieve |
 
-### Returns
+### Returns {#cbs_bulk-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_bulk-example}
 
 ```python
 cbs_bulk()
@@ -39,7 +40,7 @@ cbs_bulk()
 
 _Last validated n/a._
 
-## `cbs_client_config`
+## cbs_client_config
 
 Get configuration for how a client should access our APIs, or any additional settings they want supplied to them.
 
@@ -55,12 +56,12 @@ Get configuration for how a client should access our APIs, or any additional set
 | `classifier` | `classifier` |  |  | `Y` | View option.  Filter by a certain classifier. |
 | `keyName` | `key_name` |  |  | `Y` | View option.  Filter by a custom key name. |
 
-### Returns
+### Returns {#cbs_client_config-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_client_config-example}
 
 ```python
 cbs_client_config(client_name='cbs')
@@ -68,7 +69,7 @@ cbs_client_config(client_name='cbs')
 
 _Last validated n/a._
 
-## `cbs_coach_rankings`
+## cbs_coach_rankings
 
 Get rankings resource for a coach.
 
@@ -80,12 +81,12 @@ Get rankings resource for a coach.
 |---|---|:---:|:---:|:---:|---|
 | `coach_id` | `coach_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_coach_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_coach_rankings-example}
 
 ```python
 cbs_coach_rankings()
@@ -93,7 +94,7 @@ cbs_coach_rankings()
 
 _Last validated n/a._
 
-## `cbs_coach_team_associations`
+## cbs_coach_team_associations
 
 Get team associations for a particular coach.
 
@@ -106,12 +107,12 @@ Get team associations for a particular coach.
 | `coach_id` | `coach_id` |  | `Y` |  | Numerical player ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: team. |
 
-### Returns
+### Returns {#cbs_coach_team_associations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_coach_team_associations-example}
 
 ```python
 cbs_coach_team_associations()
@@ -119,7 +120,7 @@ cbs_coach_team_associations()
 
 _Last validated n/a._
 
-## `cbs_division_subdivisions`
+## cbs_division_subdivisions
 
 Get subdivisions for a division from Atlas.
 
@@ -133,12 +134,12 @@ Get subdivisions for a division from Atlas.
 | `subDivisionId` | `sub_division_id` |  |  | `Y` | View option for rendering only a certain subdivision |
 | `name` | `name` |  |  | `Y` | View option for a csv of subdivsion names to render |
 
-### Returns
+### Returns {#cbs_division_subdivisions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_division_subdivisions-example}
 
 ```python
 cbs_division_subdivisions()
@@ -146,7 +147,7 @@ cbs_division_subdivisions()
 
 _Last validated n/a._
 
-## `cbs_endpoint_registry`
+## cbs_endpoint_registry
 
 Get the resource endpoint registry
 
@@ -157,7 +158,7 @@ Get the resource endpoint registry
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#cbs_endpoint_registry-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -187,7 +188,7 @@ Get the resource endpoint registry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_endpoint_registry-example}
 
 ```python
 cbs_endpoint_registry()
@@ -195,7 +196,7 @@ cbs_endpoint_registry()
 
 _Last validated n/a._
 
-## `cbs_event`
+## cbs_event
 
 Get an event resource
 
@@ -209,12 +210,12 @@ Get an event resource
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: entrants, venues, leaderboard, weather, markets. |
 
-### Returns
+### Returns {#cbs_event-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_event-example}
 
 ```python
 cbs_event()
@@ -222,7 +223,7 @@ cbs_event()
 
 _Last validated n/a._
 
-## `cbs_event_entrants`
+## cbs_event_entrants
 
 Get players entered in a particular event.
 
@@ -234,12 +235,12 @@ Get players entered in a particular event.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
 
-### Returns
+### Returns {#cbs_event_entrants-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_event_entrants-example}
 
 ```python
 cbs_event_entrants()
@@ -247,7 +248,7 @@ cbs_event_entrants()
 
 _Last validated n/a._
 
-## `cbs_event_leaderboard`
+## cbs_event_leaderboard
 
 Get a leaderboard data resource for a particular event.
 
@@ -259,12 +260,12 @@ Get a leaderboard data resource for a particular event.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
 
-### Returns
+### Returns {#cbs_event_leaderboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_event_leaderboard-example}
 
 ```python
 cbs_event_leaderboard()
@@ -272,7 +273,7 @@ cbs_event_leaderboard()
 
 _Last validated n/a._
 
-## `cbs_event_seasons`
+## cbs_event_seasons
 
 Get seasons associated to a particular event.
 
@@ -284,12 +285,12 @@ Get seasons associated to a particular event.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
 
-### Returns
+### Returns {#cbs_event_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_event_seasons-example}
 
 ```python
 cbs_event_seasons()
@@ -297,7 +298,7 @@ cbs_event_seasons()
 
 _Last validated n/a._
 
-## `cbs_event_venues`
+## cbs_event_venues
 
 Get venues associated to a particular event.
 
@@ -309,12 +310,12 @@ Get venues associated to a particular event.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
 
-### Returns
+### Returns {#cbs_event_venues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_event_venues-example}
 
 ```python
 cbs_event_venues()
@@ -322,7 +323,7 @@ cbs_event_venues()
 
 _Last validated n/a._
 
-## `cbs_game`
+## cbs_game
 
 Get a game resource
 
@@ -336,12 +337,12 @@ Get a game resource
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: homeTeam, awayTeam, league, lineup, odds, players, standings, conference, division, probablePlayers, player, playerTeamAssociations, injuries, transactions, depthCharts, metaData, boxscore, venue, scoringLeaders, scoringPlayerStats, scoringScoreboard, scoringScores, scoringYtdPlayerStats, scoringYtdTeamStats, scoringRosters, scoringPlays, scoringTeamStats, scoringBoxscores, gameOdds, gameOutcomes, ticket, scoringDrives, scoringWinProb, gameHqOdds, weather, featured, gameProps, bettingSplits, gameRTWP. |
 
-### Returns
+### Returns {#cbs_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game-example}
 
 ```python
 cbs_game()
@@ -349,7 +350,7 @@ cbs_game()
 
 _Last validated n/a._
 
-## `cbs_game_betting_splits`
+## cbs_game_betting_splits
 
 Get a BettingSplits resource for a particular game.
 
@@ -361,12 +362,12 @@ Get a BettingSplits resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_betting_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_betting_splits-example}
 
 ```python
 cbs_game_betting_splits()
@@ -374,7 +375,7 @@ cbs_game_betting_splits()
 
 _Last validated n/a._
 
-## `cbs_game_boxscore`
+## cbs_game_boxscore
 
 Get boxscore resource
 
@@ -386,12 +387,12 @@ Get boxscore resource
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_boxscore-example}
 
 ```python
 cbs_game_boxscore()
@@ -399,7 +400,7 @@ cbs_game_boxscore()
 
 _Last validated n/a._
 
-## `cbs_game_content_preview`
+## cbs_game_content_preview
 
 Get content for game preview
 
@@ -411,12 +412,12 @@ Get content for game preview
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_content_preview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_content_preview-example}
 
 ```python
 cbs_game_content_preview()
@@ -424,7 +425,7 @@ cbs_game_content_preview()
 
 _Last validated n/a._
 
-## `cbs_game_content_recap`
+## cbs_game_content_recap
 
 Get content for game recap
 
@@ -436,12 +437,12 @@ Get content for game recap
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_content_recap-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_content_recap-example}
 
 ```python
 cbs_game_content_recap()
@@ -449,7 +450,7 @@ cbs_game_content_recap()
 
 _Last validated n/a._
 
-## `cbs_game_content_story`
+## cbs_game_content_story
 
 Get content for game story
 
@@ -462,12 +463,12 @@ Get content for game story
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 | `gameIdsStoryTags` | `game_ids_story_tags` |  |  | `Y` | The tags used to retrieve stories |
 
-### Returns
+### Returns {#cbs_game_content_story-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_content_story-example}
 
 ```python
 cbs_game_content_story()
@@ -475,7 +476,7 @@ cbs_game_content_story()
 
 _Last validated n/a._
 
-## `cbs_game_featured`
+## cbs_game_featured
 
 Get a FeaturedGame resource.
 
@@ -487,12 +488,12 @@ Get a FeaturedGame resource.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_featured-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_featured-example}
 
 ```python
 cbs_game_featured()
@@ -500,7 +501,7 @@ cbs_game_featured()
 
 _Last validated n/a._
 
-## `cbs_game_lineup`
+## cbs_game_lineup
 
 Get a lineup resource for a particular game.
 
@@ -513,12 +514,12 @@ Get a lineup resource for a particular game.
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, metaData, playerStats. |
 
-### Returns
+### Returns {#cbs_game_lineup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_lineup-example}
 
 ```python
 cbs_game_lineup()
@@ -526,7 +527,7 @@ cbs_game_lineup()
 
 _Last validated n/a._
 
-## `cbs_game_odds`
+## cbs_game_odds
 
 Get an odds resource for a particular game.
 
@@ -543,12 +544,12 @@ Get an odds resource for a particular game.
 | `model` | `model` |  |  | `Y` | This value can be used set the model to be used |
 | `showHiddenOdds` | `show_hidden_odds` |  |  | `Y` | If set to 1, show the odds that has been hidden within the market and/or consensus nodes |
 
-### Returns
+### Returns {#cbs_game_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_odds-example}
 
 ```python
 cbs_game_odds()
@@ -556,7 +557,7 @@ cbs_game_odds()
 
 _Last validated n/a._
 
-## `cbs_game_odds_hq`
+## cbs_game_odds_hq
 
 Get an HQ odds resource for a particular game.
 
@@ -568,12 +569,12 @@ Get an HQ odds resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_odds_hq-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_odds_hq-example}
 
 ```python
 cbs_game_odds_hq()
@@ -581,7 +582,7 @@ cbs_game_odds_hq()
 
 _Last validated n/a._
 
-## `cbs_game_outcomes`
+## cbs_game_outcomes
 
 Get an odds outcome for a particular game.
 
@@ -593,12 +594,12 @@ Get an odds outcome for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_outcomes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_outcomes-example}
 
 ```python
 cbs_game_outcomes()
@@ -606,7 +607,7 @@ cbs_game_outcomes()
 
 _Last validated n/a._
 
-## `cbs_game_probable_players`
+## cbs_game_probable_players
 
 Get a list of players who are probably playing in a particular game.
 
@@ -620,12 +621,12 @@ Get a list of players who are probably playing in a particular game.
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: player, playerTeamAssociations, injuries, transactions, depthCharts, metaData. |
 
-### Returns
+### Returns {#cbs_game_probable_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_probable_players-example}
 
 ```python
 cbs_game_probable_players()
@@ -633,7 +634,7 @@ cbs_game_probable_players()
 
 _Last validated n/a._
 
-## `cbs_game_props`
+## cbs_game_props
 
 Get game props for a game.
 
@@ -650,12 +651,12 @@ Get game props for a game.
 | `state` | `state` |  |  | `Y` | This value can be used to specify a state. |
 | `includeInactiveMarkets` | `include_inactive_markets` |  |  | `Y` | This value can be used to filter out inactive markets. |
 
-### Returns
+### Returns {#cbs_game_props-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_props-example}
 
 ```python
 cbs_game_props()
@@ -663,7 +664,7 @@ cbs_game_props()
 
 _Last validated n/a._
 
-## `cbs_game_rtwp`
+## cbs_game_rtwp
 
 Get a rtwp resource for a particular game.
 
@@ -675,12 +676,12 @@ Get a rtwp resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_rtwp-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_rtwp-example}
 
 ```python
 cbs_game_rtwp()
@@ -688,7 +689,7 @@ cbs_game_rtwp()
 
 _Last validated n/a._
 
-## `cbs_game_ruwt_highlights`
+## cbs_game_ruwt_highlights
 
 Get the RUWT highlights resource for a particular game.
 
@@ -700,12 +701,12 @@ Get the RUWT highlights resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_ruwt_highlights-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_ruwt_highlights-example}
 
 ```python
 cbs_game_ruwt_highlights()
@@ -713,7 +714,7 @@ cbs_game_ruwt_highlights()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_boxscores`
+## cbs_game_scoring_boxscores
 
 Get an scoring box scores resource for a particular game.
 
@@ -725,12 +726,12 @@ Get an scoring box scores resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_boxscores-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_boxscores-example}
 
 ```python
 cbs_game_scoring_boxscores()
@@ -738,7 +739,7 @@ cbs_game_scoring_boxscores()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_drives`
+## cbs_game_scoring_drives
 
 Get a drives resource for a particular game.
 
@@ -750,7 +751,7 @@ Get a drives resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_drives-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -776,7 +777,7 @@ Get a drives resource for a particular game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_drives-example}
 
 ```python
 cbs_game_scoring_drives()
@@ -784,7 +785,7 @@ cbs_game_scoring_drives()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_leaders`
+## cbs_game_scoring_leaders
 
 Get an scoring leaders resource for a particular game.
 
@@ -796,12 +797,12 @@ Get an scoring leaders resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_leaders-example}
 
 ```python
 cbs_game_scoring_leaders()
@@ -809,7 +810,7 @@ cbs_game_scoring_leaders()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_player_stats`
+## cbs_game_scoring_player_stats
 
 Get an scoring player stats resource for a particular game.
 
@@ -821,12 +822,12 @@ Get an scoring player stats resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_player_stats-example}
 
 ```python
 cbs_game_scoring_player_stats()
@@ -834,7 +835,7 @@ cbs_game_scoring_player_stats()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_plays`
+## cbs_game_scoring_plays
 
 Get an scoring plays resource for a particular game.
 
@@ -846,7 +847,7 @@ Get an scoring plays resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_plays-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -875,7 +876,7 @@ Get an scoring plays resource for a particular game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_plays-example}
 
 ```python
 cbs_game_scoring_plays()
@@ -883,7 +884,7 @@ cbs_game_scoring_plays()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_rosters`
+## cbs_game_scoring_rosters
 
 Get an scoring rosters resource for a particular game.
 
@@ -895,12 +896,12 @@ Get an scoring rosters resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_rosters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_rosters-example}
 
 ```python
 cbs_game_scoring_rosters()
@@ -908,7 +909,7 @@ cbs_game_scoring_rosters()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_scoreboard`
+## cbs_game_scoring_scoreboard
 
 Get an scoring scoreboard resource for a particular game.
 
@@ -920,12 +921,12 @@ Get an scoring scoreboard resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_scoreboard-example}
 
 ```python
 cbs_game_scoring_scoreboard()
@@ -933,7 +934,7 @@ cbs_game_scoring_scoreboard()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_scores`
+## cbs_game_scoring_scores
 
 Get an scoring scores resource for a particular game.
 
@@ -945,12 +946,12 @@ Get an scoring scores resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_scores-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_scores-example}
 
 ```python
 cbs_game_scoring_scores()
@@ -958,7 +959,7 @@ cbs_game_scoring_scores()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_team_stats`
+## cbs_game_scoring_team_stats
 
 Get an scoring team stats resource for a particular game.
 
@@ -970,12 +971,12 @@ Get an scoring team stats resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_team_stats-example}
 
 ```python
 cbs_game_scoring_team_stats()
@@ -983,7 +984,7 @@ cbs_game_scoring_team_stats()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_winprob`
+## cbs_game_scoring_winprob
 
 Get an scoring winprob resource for a particular game.
 
@@ -995,12 +996,12 @@ Get an scoring winprob resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_winprob-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_winprob-example}
 
 ```python
 cbs_game_scoring_winprob()
@@ -1008,7 +1009,7 @@ cbs_game_scoring_winprob()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_ytd_player_stats`
+## cbs_game_scoring_ytd_player_stats
 
 Get an scoring YTD player stats resource for a particular game.
 
@@ -1020,12 +1021,12 @@ Get an scoring YTD player stats resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_ytd_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_ytd_player_stats-example}
 
 ```python
 cbs_game_scoring_ytd_player_stats()
@@ -1033,7 +1034,7 @@ cbs_game_scoring_ytd_player_stats()
 
 _Last validated n/a._
 
-## `cbs_game_scoring_ytd_team_stats`
+## cbs_game_scoring_ytd_team_stats
 
 Get an scoring YTD team stats resource for a particular game.
 
@@ -1045,12 +1046,12 @@ Get an scoring YTD team stats resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_scoring_ytd_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_scoring_ytd_team_stats-example}
 
 ```python
 cbs_game_scoring_ytd_team_stats()
@@ -1058,7 +1059,7 @@ cbs_game_scoring_ytd_team_stats()
 
 _Last validated n/a._
 
-## `cbs_game_ticket`
+## cbs_game_ticket
 
 Get a ticket resource for a particular game.
 
@@ -1070,12 +1071,12 @@ Get a ticket resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_ticket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_ticket-example}
 
 ```python
 cbs_game_ticket()
@@ -1083,7 +1084,7 @@ cbs_game_ticket()
 
 _Last validated n/a._
 
-## `cbs_game_weather`
+## cbs_game_weather
 
 Get a Weather resource for a particular game.
 
@@ -1095,12 +1096,12 @@ Get a Weather resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_game_weather-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_game_weather-example}
 
 ```python
 cbs_game_weather()
@@ -1108,7 +1109,7 @@ cbs_game_weather()
 
 _Last validated n/a._
 
-## `cbs_golf_event_markets`
+## cbs_golf_event_markets
 
 Get markets for an event.
 
@@ -1120,12 +1121,12 @@ Get markets for an event.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
 
-### Returns
+### Returns {#cbs_golf_event_markets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_golf_event_markets-example}
 
 ```python
 cbs_golf_event_markets()
@@ -1133,7 +1134,7 @@ cbs_golf_event_markets()
 
 _Last validated n/a._
 
-## `cbs_golf_player_markets`
+## cbs_golf_player_markets
 
 Get markets for a golfer.
 
@@ -1146,12 +1147,12 @@ Get markets for a golfer.
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 | `eventId` | `event_id` |  |  | `Y` | View option.  Filter by eventId. |
 
-### Returns
+### Returns {#cbs_golf_player_markets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_golf_player_markets-example}
 
 ```python
 cbs_golf_player_markets(player_id=1751796)
@@ -1159,7 +1160,7 @@ cbs_golf_player_markets(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_golfer_results`
+## cbs_golfer_results
 
 Get golfer tournament results resource for a particular player.
 
@@ -1173,12 +1174,12 @@ Get golfer tournament results resource for a particular player.
 | `seasonYear` | `season_year` |  |  | `Y` | View option.  Filter by seasonType. |
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 
-### Returns
+### Returns {#cbs_golfer_results-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_golfer_results-example}
 
 ```python
 cbs_golfer_results(player_id=1751796)
@@ -1186,7 +1187,7 @@ cbs_golfer_results(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_league`
+## cbs_league
 
 Get a league resource
 
@@ -1199,7 +1200,7 @@ Get a league resource
 | `league_id` | `league_id` |  | `Y` |  | Numerical league ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: teams, players, standings, conference, division, polls, teamSeasons. |
 
-### Returns
+### Returns {#cbs_league-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1215,7 +1216,7 @@ Get a league resource
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_league-example}
 
 ```python
 cbs_league(league_id=59)
@@ -1223,7 +1224,7 @@ cbs_league(league_id=59)
 
 _Last validated n/a._
 
-## `cbs_league_teams`
+## cbs_league_teams
 
 Get team resources on a league with optional vendor overlay
 
@@ -1236,12 +1237,12 @@ Get team resources on a league with optional vendor overlay
 | `league_id` | `league_id` |  | `Y` |  | Numerical league Id - gets team from team table not teams for season |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: players, standings, conference, division, playerTeamAssociations, injuries, transactions, depthCharts, polls, teamSeasons, sportsLineStandings. |
 
-### Returns
+### Returns {#cbs_league_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_league_teams-example}
 
 ```python
 cbs_league_teams(league_id=59)
@@ -1249,7 +1250,7 @@ cbs_league_teams(league_id=59)
 
 _Last validated n/a._
 
-## `cbs_odds`
+## cbs_odds
 
 Get an odds resource for a particular game.
 
@@ -1261,12 +1262,12 @@ Get an odds resource for a particular game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
 
-### Returns
+### Returns {#cbs_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_odds-example}
 
 ```python
 cbs_odds()
@@ -1274,7 +1275,7 @@ cbs_odds()
 
 _Last validated n/a._
 
-## `cbs_player`
+## cbs_player
 
 Get a player resource
 
@@ -1289,12 +1290,12 @@ Get a player resource
 | `year` | `year` |  |  | `Y` | Optional year in YYYY format (for Transactions only) |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, transactions, depthCharts, metaData, playerStats, standings, rankings, playerOutlook, draftInfo, combineData, positionRankings, gameStats, encyclopedia, golferResults, playerGolfMetadata, playerFutures, golferMarkets, recruitTeamAssociations, coachTeamAssociations, recruitRankings, coachRankings. |
 
-### Returns
+### Returns {#cbs_player-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player-example}
 
 ```python
 cbs_player(player_id=1751796)
@@ -1302,7 +1303,7 @@ cbs_player(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_combine_data`
+## cbs_player_combine_data
 
 Get draft related info for a particular player.
 
@@ -1314,12 +1315,12 @@ Get draft related info for a particular player.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_player_combine_data-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_combine_data-example}
 
 ```python
 cbs_player_combine_data(player_id=1751796)
@@ -1327,7 +1328,7 @@ cbs_player_combine_data(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_depth_charts`
+## cbs_player_depth_charts
 
 Get depth charts for a particular player.
 
@@ -1341,12 +1342,12 @@ Get depth charts for a particular player.
 | `position` | `position` |  |  | `Y` | A csv of positions to filter with |
 | `pitchPos` | `pitch_pos` |  |  | `Y` | A csv of pitch positions to filter with (baseball only) |
 
-### Returns
+### Returns {#cbs_player_depth_charts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_depth_charts-example}
 
 ```python
 cbs_player_depth_charts(player_id=1751796)
@@ -1354,7 +1355,7 @@ cbs_player_depth_charts(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_draft_info`
+## cbs_player_draft_info
 
 Get draft info for a particular player.
 
@@ -1369,12 +1370,12 @@ Get draft info for a particular player.
 | `seasonType` | `season_type` |  |  | `Y` | View option, filter by seasonType Allowed: regular, pre, post. |
 | `seasonId` | `season_id` |  |  | `Y` | View option, filter by seasonId |
 
-### Returns
+### Returns {#cbs_player_draft_info-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_draft_info-example}
 
 ```python
 cbs_player_draft_info(player_id=1751796)
@@ -1382,7 +1383,7 @@ cbs_player_draft_info(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_encyclopedia`
+## cbs_player_encyclopedia
 
 Get encyclopedia resource for a particular player.
 
@@ -1396,12 +1397,12 @@ Get encyclopedia resource for a particular player.
 | `seasonYear` | `season_year` |  |  | `Y` | View option.  Filter by seasonType. |
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 
-### Returns
+### Returns {#cbs_player_encyclopedia-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_encyclopedia-example}
 
 ```python
 cbs_player_encyclopedia(player_id=1751796)
@@ -1409,7 +1410,7 @@ cbs_player_encyclopedia(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_futures`
+## cbs_player_futures
 
 Get futures for a player.
 
@@ -1421,12 +1422,12 @@ Get futures for a player.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_player_futures-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_futures-example}
 
 ```python
 cbs_player_futures(player_id=1751796)
@@ -1434,7 +1435,7 @@ cbs_player_futures(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_game_stats`
+## cbs_player_game_stats
 
 Get game stats for a particular player.
 
@@ -1449,12 +1450,12 @@ Get game stats for a particular player.
 | `seasonYear` | `season_year` |  |  | `Y` | Season Year in YYYY format |
 | `seasonType` | `season_type` |  |  | `Y` | Csv list of pre, regular, or post Allowed: pre, regular, post. |
 
-### Returns
+### Returns {#cbs_player_game_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_game_stats-example}
 
 ```python
 cbs_player_game_stats(player_id=1751796)
@@ -1462,7 +1463,7 @@ cbs_player_game_stats(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_hockey_meta`
+## cbs_player_hockey_meta
 
 Get the hockey meta data resource for a particular player.
 
@@ -1474,12 +1475,12 @@ Get the hockey meta data resource for a particular player.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_player_hockey_meta-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_hockey_meta-example}
 
 ```python
 cbs_player_hockey_meta(player_id=1751796)
@@ -1487,7 +1488,7 @@ cbs_player_hockey_meta(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_injuries`
+## cbs_player_injuries
 
 Get injuries for a particular player.
 
@@ -1500,12 +1501,12 @@ Get injuries for a particular player.
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 
-### Returns
+### Returns {#cbs_player_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_injuries-example}
 
 ```python
 cbs_player_injuries(player_id=1751796)
@@ -1513,7 +1514,7 @@ cbs_player_injuries(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_meta_baseball`
+## cbs_player_meta_baseball
 
 Get meta data associated to a particular baseball player.
 
@@ -1525,12 +1526,12 @@ Get meta data associated to a particular baseball player.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_player_meta_baseball-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_meta_baseball-example}
 
 ```python
 cbs_player_meta_baseball(player_id=1751796)
@@ -1538,7 +1539,7 @@ cbs_player_meta_baseball(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_meta_golf`
+## cbs_player_meta_golf
 
 Get a metadata resource for a particular golf player.
 
@@ -1550,12 +1551,12 @@ Get a metadata resource for a particular golf player.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_player_meta_golf-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_meta_golf-example}
 
 ```python
 cbs_player_meta_golf(player_id=1751796)
@@ -1563,7 +1564,7 @@ cbs_player_meta_golf(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_outlook`
+## cbs_player_outlook
 
 Get outlook for a player (context is now)
 
@@ -1576,12 +1577,12 @@ Get outlook for a player (context is now)
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 | `dateFormat` | `date_format` |  |  | `Y` | Optional format for dateCreated field. Available options here: http://momentjs.com/docs/#/displaying/format/ |
 
-### Returns
+### Returns {#cbs_player_outlook-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_outlook-example}
 
 ```python
 cbs_player_outlook(player_id=1751796)
@@ -1589,7 +1590,7 @@ cbs_player_outlook(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_position_rankings`
+## cbs_player_position_rankings
 
 Get position rankings for a player
 
@@ -1602,12 +1603,12 @@ Get position rankings for a player
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 | `position` | `position` |  |  | `Y` | Filter by position |
 
-### Returns
+### Returns {#cbs_player_position_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_position_rankings-example}
 
 ```python
 cbs_player_position_rankings(player_id=1751796)
@@ -1615,7 +1616,7 @@ cbs_player_position_rankings(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_rankings`
+## cbs_player_rankings
 
 Get all rankings for a player.
 
@@ -1632,12 +1633,12 @@ Get all rankings for a player.
 | `isCurrent` | `is_current` |  |  | `Y` | View option.  Only show stats for seasons where isCurrent is true. Allowed: 1. |
 | `categories` | `categories` |  |  | `Y` | View option.  Only return the specified rankings categories. |
 
-### Returns
+### Returns {#cbs_player_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_rankings-example}
 
 ```python
 cbs_player_rankings(player_id=1751796)
@@ -1645,7 +1646,7 @@ cbs_player_rankings(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_recruit_associations`
+## cbs_player_recruit_associations
 
 Get recruit associations for a particular player.
 
@@ -1658,12 +1659,12 @@ Get recruit associations for a particular player.
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: team. |
 
-### Returns
+### Returns {#cbs_player_recruit_associations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_recruit_associations-example}
 
 ```python
 cbs_player_recruit_associations(player_id=1751796)
@@ -1671,7 +1672,7 @@ cbs_player_recruit_associations(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_standings`
+## cbs_player_standings
 
 Get standings for a particular player
 
@@ -1688,12 +1689,12 @@ Get standings for a particular player
 | `isCurrent` | `is_current` |  |  | `Y` | View option.  Only show standings for seasons where isCurrent is true. Allowed: 1. |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: league. |
 
-### Returns
+### Returns {#cbs_player_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_standings-example}
 
 ```python
 cbs_player_standings(player_id=1751796)
@@ -1701,7 +1702,7 @@ cbs_player_standings(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_stats`
+## cbs_player_stats
 
 Get all statistics for a player.
 
@@ -1720,12 +1721,12 @@ Get all statistics for a player.
 | `teamAbbr` | `team_abbr` |  |  | `Y` | View option.  Filter by a specific team abbreviation. |
 | `isTotal` | `is_total` |  |  | `Y` | View option.  Filter only the isTotal record for players who played for multiple teams. Allowed: 1. |
 
-### Returns
+### Returns {#cbs_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_stats-example}
 
 ```python
 cbs_player_stats(player_id=1751796)
@@ -1733,7 +1734,7 @@ cbs_player_stats(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_team_associations`
+## cbs_player_team_associations
 
 Get team associations for a particular player.
 
@@ -1748,12 +1749,12 @@ Get team associations for a particular player.
 | `rosterStatus` | `roster_status` |  |  | `Y` | Filter associations by roster status Allowed: ACT, NWT, MIN, MNR, RET, DEV, CUT, DIS, DL, IR, UFA, UDF, EXE, TRA, SUS, PUP, FA, RFA, KIA, INA. |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: team. |
 
-### Returns
+### Returns {#cbs_player_team_associations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_team_associations-example}
 
 ```python
 cbs_player_team_associations(player_id=1751796)
@@ -1761,7 +1762,7 @@ cbs_player_team_associations(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_player_transactions`
+## cbs_player_transactions
 
 Get transactions resource for a particular player.
 
@@ -1778,12 +1779,12 @@ Get transactions resource for a particular player.
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: targetTeam, currentTeam, fromTeam. |
 
-### Returns
+### Returns {#cbs_player_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_player_transactions-example}
 
 ```python
 cbs_player_transactions(player_id=1751796)
@@ -1791,7 +1792,7 @@ cbs_player_transactions(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_recruit_rankings`
+## cbs_recruit_rankings
 
 Get rankings resource for a recruit.
 
@@ -1803,12 +1804,12 @@ Get rankings resource for a recruit.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | Numerical player ID |
 
-### Returns
+### Returns {#cbs_recruit_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_recruit_rankings-example}
 
 ```python
 cbs_recruit_rankings(player_id=1751796)
@@ -1816,7 +1817,7 @@ cbs_recruit_rankings(player_id=1751796)
 
 _Last validated n/a._
 
-## `cbs_season`
+## cbs_season
 
 Get a season resource from Atlas.
 
@@ -1830,12 +1831,12 @@ Get a season resource from Atlas.
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: sport, league, teams. |
 
-### Returns
+### Returns {#cbs_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_season-example}
 
 ```python
 cbs_season(season_id=59)
@@ -1843,7 +1844,7 @@ cbs_season(season_id=59)
 
 _Last validated n/a._
 
-## `cbs_season_teams`
+## cbs_season_teams
 
 Get team resources associated to a season
 
@@ -1856,7 +1857,7 @@ Get team resources associated to a season
 | `season_id` | `season_id` |  | `Y` |  | Optional seasonYear for leagues that change teams each year. |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: players, standings, conference, division, playerTeamAssociations, injuries, transactions, depthCharts, polls, teamSeasons, sportsLineStandings, league. |
 
-### Returns
+### Returns {#cbs_season_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1894,7 +1895,7 @@ Get team resources associated to a season
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_season_teams-example}
 
 ```python
 cbs_season_teams(season_id=59)
@@ -1902,7 +1903,7 @@ cbs_season_teams(season_id=59)
 
 _Last validated n/a._
 
-## `cbs_sport`
+## cbs_sport
 
 Get a sport resource from Atlas.
 
@@ -1915,12 +1916,12 @@ Get a sport resource from Atlas.
 | `sport_id` | `sport_id` |  | `Y` |  | Numerical sport ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: leagues. |
 
-### Returns
+### Returns {#cbs_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_sport-example}
 
 ```python
 cbs_sport(sport_id=1)
@@ -1928,7 +1929,7 @@ cbs_sport(sport_id=1)
 
 _Last validated n/a._
 
-## `cbs_sport_leagues`
+## cbs_sport_leagues
 
 Get league resources for a sport.
 
@@ -1940,12 +1941,12 @@ Get league resources for a sport.
 |---|---|:---:|:---:|:---:|---|
 | `sport_id` | `sport_id` |  | `Y` |  | Numerical league ID |
 
-### Returns
+### Returns {#cbs_sport_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_sport_leagues-example}
 
 ```python
 cbs_sport_leagues(sport_id=1)
@@ -1953,7 +1954,7 @@ cbs_sport_leagues(sport_id=1)
 
 _Last validated n/a._
 
-## `cbs_team_futures`
+## cbs_team_futures
 
 Get futures for a team.
 
@@ -1965,12 +1966,12 @@ Get futures for a team.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | Numerical team ID |
 
-### Returns
+### Returns {#cbs_team_futures-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_futures-example}
 
 ```python
 cbs_team_futures(team_id=404)
@@ -1978,7 +1979,7 @@ cbs_team_futures(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_metadata`
+## cbs_team_metadata
 
 Get a team metadata resource
 
@@ -1991,12 +1992,12 @@ Get a team metadata resource
 | `team_id` | `team_id` |  | `Y` |  | Numerical team ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: team. |
 
-### Returns
+### Returns {#cbs_team_metadata-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_metadata-example}
 
 ```python
 cbs_team_metadata(team_id=404)
@@ -2004,7 +2005,7 @@ cbs_team_metadata(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_players`
+## cbs_team_players
 
 Get player resources on a team.
 
@@ -2017,7 +2018,7 @@ Get player resources on a team.
 | `team_id` | `team_id` |  | `Y` |  | Numerical team ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, transactions, depthCharts. |
 
-### Returns
+### Returns {#cbs_team_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2056,7 +2057,7 @@ Get player resources on a team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_players-example}
 
 ```python
 cbs_team_players(team_id=404)
@@ -2064,7 +2065,7 @@ cbs_team_players(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_polls`
+## cbs_team_polls
 
 Retrieve team rankings data from our various polls.
 
@@ -2078,12 +2079,12 @@ Retrieve team rankings data from our various polls.
 | `polls` | `polls` |  |  | `Y` | View option.  Filter by a certain poll name. Allowed: coaches, ap, fcscoachespoll, statstsnfcspoll, rpi, playoffselectioncommitteepoll, net. |
 | `seasonId` | `season_id` |  |  | `Y` | View option. Filter by seasonId. |
 
-### Returns
+### Returns {#cbs_team_polls-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_polls-example}
 
 ```python
 cbs_team_polls(team_id=404)
@@ -2091,7 +2092,7 @@ cbs_team_polls(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_rankings`
+## cbs_team_rankings
 
 Get rankings for a team (by season)
 
@@ -2106,12 +2107,12 @@ Get rankings for a team (by season)
 | `seasonType` | `season_type` |  |  | `Y` | View option.  Filter by seasonType. Allowed: regular, pre, post. |
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 
-### Returns
+### Returns {#cbs_team_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_rankings-example}
 
 ```python
 cbs_team_rankings(team_id=404)
@@ -2119,7 +2120,7 @@ cbs_team_rankings(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_rankings_sportsline`
+## cbs_team_rankings_sportsline
 
 Get sportsline rankings for a team
 
@@ -2131,12 +2132,12 @@ Get sportsline rankings for a team
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | Numerical team id |
 
-### Returns
+### Returns {#cbs_team_rankings_sportsline-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_rankings_sportsline-example}
 
 ```python
 cbs_team_rankings_sportsline(team_id=404)
@@ -2144,7 +2145,7 @@ cbs_team_rankings_sportsline(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_seasons`
+## cbs_team_seasons
 
 Get a list of Season resources associated to a Team.
 
@@ -2161,12 +2162,12 @@ Get a list of Season resources associated to a Team.
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve.  Defaults to none. Allowed: league. |
 
-### Returns
+### Returns {#cbs_team_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_seasons-example}
 
 ```python
 cbs_team_seasons(team_id=404)
@@ -2174,7 +2175,7 @@ cbs_team_seasons(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_standings`
+## cbs_team_standings
 
 Get standings for a particular team.
 
@@ -2189,7 +2190,7 @@ Get standings for a particular team.
 | `seasonType` | `season_type` |  |  | `Y` | View option.  Filter by seasonType. v3 only! Allowed: regular, pre, post. |
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. v3 only! |
 
-### Returns
+### Returns {#cbs_team_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2320,7 +2321,7 @@ Get standings for a particular team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_standings-example}
 
 ```python
 cbs_team_standings(team_id=404)
@@ -2328,7 +2329,7 @@ cbs_team_standings(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_standings_sportsline`
+## cbs_team_standings_sportsline
 
 Get SportsLine standings for a particular team.
 
@@ -2341,12 +2342,12 @@ Get SportsLine standings for a particular team.
 | `team_id` | `team_id` |  | `Y` |  | Numerical team ID |
 | `dateFormat` | `date_format` |  |  | `Y` | Optional.  Options here: http://momentjs.com/docs/#/displaying/format/ |
 
-### Returns
+### Returns {#cbs_team_standings_sportsline-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_standings_sportsline-example}
 
 ```python
 cbs_team_standings_sportsline(team_id=404)
@@ -2354,7 +2355,7 @@ cbs_team_standings_sportsline(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_team_stats`
+## cbs_team_stats
 
 Get all statistics for a team.
 
@@ -2370,12 +2371,12 @@ Get all statistics for a team.
 | `seasonId` | `season_id` |  |  | `Y` | View option.  Filter by seasonId. |
 | `isCurrent` | `is_current` |  |  | `Y` | View option.  Only show stats for seasons where isCurrent is true. Allowed: 1. |
 
-### Returns
+### Returns {#cbs_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_team_stats-example}
 
 ```python
 cbs_team_stats(team_id=404)
@@ -2383,7 +2384,7 @@ cbs_team_stats(team_id=404)
 
 _Last validated n/a._
 
-## `cbs_venue`
+## cbs_venue
 
 Get a venue resource
 
@@ -2396,12 +2397,12 @@ Get a venue resource
 | `venue_id` | `venue_id` |  | `Y` |  | Numerical venue ID |
 | `resources` | `resources` |  |  | `Y` | Specify specific sub-resources to resolve. Defaults to none. Allowed: metaData. |
 
-### Returns
+### Returns {#cbs_venue-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_venue-example}
 
 ```python
 cbs_venue()
@@ -2409,7 +2410,7 @@ cbs_venue()
 
 _Last validated n/a._
 
-## `cbs_venue_metadata`
+## cbs_venue_metadata
 
 Get a venues metadata resource
 
@@ -2421,12 +2422,12 @@ Get a venues metadata resource
 |---|---|:---:|:---:|:---:|---|
 | `venue_id` | `venue_id` |  | `Y` |  | Numerical venue ID |
 
-### Returns
+### Returns {#cbs_venue_metadata-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_cbs_napi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#cbs_venue_metadata-example}
 
 ```python
 cbs_venue_metadata()

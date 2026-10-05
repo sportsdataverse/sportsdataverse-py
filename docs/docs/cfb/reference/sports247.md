@@ -3,12 +3,13 @@ title: CFB — 247Sports Recruit Database (ipa.247sports.com)
 sidebar_label: 247Sports Recruit Database (ipa.247sports.com)
 description: "CFB — 247Sports Recruit Database (ipa.247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
+toc_max_heading_level: 2
 ---
 # CFB — 247Sports Recruit Database (ipa.247sports.com)
 
 `sportsdataverse.cfb` — 12 endpoints.
 
-## `sports247_teams`
+## sports247_teams
 
 247Sports RDB college team directory (teamId / institutionKey / conference) for a sport.
 
@@ -22,7 +23,7 @@ sidebar_position: 11
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `institutionType` | `institution_type` |  |  | `Y` | institutionType query parameter. |
 
-### Returns
+### Returns {#sports247_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -37,7 +38,7 @@ sidebar_position: 11
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_teams-example}
 
 ```python
 sports247_teams()
@@ -45,7 +46,7 @@ sports247_teams()
 
 _Last validated n/a._
 
-## `sports247_institution_rankings`
+## sports247_institution_rankings
 
 247Sports team recruiting-class rankings (247 rank/rating + industry composite) for a sport and class year.
 
@@ -63,7 +64,7 @@ _Last validated n/a._
 | `conferenceAbbreviation` | `conference_abbreviation` |  |  | `Y` | conferenceAbbreviation query parameter. |
 | `institutionKey` | `institution_key` |  |  | `Y` | institutionKey query parameter. |
 
-### Returns
+### Returns {#sports247_institution_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -103,7 +104,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_institution_rankings-example}
 
 ```python
 sports247_institution_rankings(year=2026, sport_key=1)
@@ -111,7 +112,7 @@ sports247_institution_rankings(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_recruits`
+## sports247_recruits
 
 247Sports individual recruit rankings for a sport and class year (247 + industry-composite ratings, stars, commit status; paginated).
 
@@ -128,7 +129,7 @@ _Last validated n/a._
 | `positionAbbreviation` | `position_abbreviation` |  |  | `Y` | positionAbbreviation query parameter. |
 | `stateAbbreviation` | `state_abbreviation` |  |  | `Y` | stateAbbreviation query parameter. |
 
-### Returns
+### Returns {#sports247_recruits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -169,7 +170,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_recruits-example}
 
 ```python
 sports247_recruits(year=2026, sport_key=1)
@@ -177,7 +178,7 @@ sports247_recruits(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_transfers`
+## sports247_transfers
 
 247Sports transfer-portal player entries for a sport and year (paginated).
 
@@ -192,7 +193,7 @@ _Last validated n/a._
 | `pagesize` | `page_size` |  |  | `Y` | pagesize query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
-### Returns
+### Returns {#sports247_transfers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -239,7 +240,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_transfers-example}
 
 ```python
 sports247_transfers(year=2026, sport_key=1)
@@ -247,7 +248,7 @@ sports247_transfers(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_coaches`
+## sports247_coaches
 
 247Sports coach recruiting rankings for a sport and year (paginated).
 
@@ -262,7 +263,7 @@ _Last validated n/a._
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
-### Returns
+### Returns {#sports247_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -288,7 +289,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_coaches-example}
 
 ```python
 sports247_coaches(year=2026, sport_key=1)
@@ -296,7 +297,7 @@ sports247_coaches(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_transfer_portal_player_feed`
+## sports247_transfer_portal_player_feed
 
 247Sports transfer-portal player ranking feed for a sport and class year.
 
@@ -310,7 +311,7 @@ _Last validated n/a._
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#sports247_transfer_portal_player_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -337,7 +338,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_transfer_portal_player_feed-example}
 
 ```python
 sports247_transfer_portal_player_feed(year=2026, sport_key=1)
@@ -345,7 +346,7 @@ sports247_transfer_portal_player_feed(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_composite_team_ranking_feed`
+## sports247_composite_team_ranking_feed
 
 247Sports composite team recruiting-class ranking feed for a sport and class year.
 
@@ -359,7 +360,7 @@ _Last validated n/a._
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#sports247_composite_team_ranking_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -391,7 +392,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_composite_team_ranking_feed-example}
 
 ```python
 sports247_composite_team_ranking_feed(year=2026, sport_key=1)
@@ -399,7 +400,7 @@ sports247_composite_team_ranking_feed(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_transfer_portal_team_feed`
+## sports247_transfer_portal_team_feed
 
 247Sports transfer-portal team ranking feed for a sport and class year.
 
@@ -413,7 +414,7 @@ _Last validated n/a._
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#sports247_transfer_portal_team_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -428,7 +429,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_transfer_portal_team_feed-example}
 
 ```python
 sports247_transfer_portal_team_feed(year=2026, sport_key=1)
@@ -436,7 +437,7 @@ sports247_transfer_portal_team_feed(year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_target_predictions`
+## sports247_target_predictions
 
 247Sports current expert target predictions ("crystal ball") for a site, class year, and sport.
 
@@ -451,7 +452,7 @@ _Last validated n/a._
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#sports247_target_predictions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -486,7 +487,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_target_predictions-example}
 
 ```python
 sports247_target_predictions(site_key=1, year=2026, sport_key=1)
@@ -494,7 +495,7 @@ sports247_target_predictions(site_key=1, year=2026, sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_sport_years`
+## sports247_sport_years
 
 Class years for which the 247Sports RDB has data for a given sport.
 
@@ -506,7 +507,7 @@ Class years for which the 247Sports RDB has data for a given sport.
 |---|---|:---:|:---:|:---:|---|
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 
-### Returns
+### Returns {#sports247_sport_years-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -515,7 +516,7 @@ Class years for which the 247Sports RDB has data for a given sport.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_sport_years-example}
 
 ```python
 sports247_sport_years(sport_key=1)
@@ -523,7 +524,7 @@ sports247_sport_years(sport_key=1)
 
 _Last validated n/a._
 
-## `sports247_tags_autocomplete`
+## sports247_tags_autocomplete
 
 247Sports taggable-entity autocomplete (players / teams / institutions) by name prefix.
 
@@ -536,7 +537,7 @@ _Last validated n/a._
 | `defaultName` | `default_name` |  |  | `Y` | defaultName query parameter. |
 | `items` | `items` |  |  | `Y` | items query parameter. |
 
-### Returns
+### Returns {#sports247_tags_autocomplete-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -548,7 +549,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_tags_autocomplete-example}
 
 ```python
 sports247_tags_autocomplete(default_name='smith')
@@ -556,7 +557,7 @@ sports247_tags_autocomplete(default_name='smith')
 
 _Last validated n/a._
 
-## `sports247_positions`
+## sports247_positions
 
 247Sports position lookup for a sport (position group, abbreviation, and key).
 
@@ -570,7 +571,7 @@ _Last validated n/a._
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `rankingKey` | `ranking_key` |  |  | `Y` | rankingKey query parameter. |
 
-### Returns
+### Returns {#sports247_positions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -583,7 +584,7 @@ _Last validated n/a._
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_positions-example}
 
 ```python
 sports247_positions(sport_key=1)

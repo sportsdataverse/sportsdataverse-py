@@ -3,12 +3,13 @@ title: MLB — MLB Stats API
 sidebar_label: MLB Stats API
 description: "MLB — MLB Stats API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # MLB — MLB Stats API
 
 `sportsdataverse.mlb` — 64 endpoints.
 
-## `mlb_schedule_postseason`
+## mlb_schedule_postseason
 
 GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
@@ -22,7 +23,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_schedule_postseason-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -90,7 +91,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_schedule_postseason-example}
 
 ```python
 mlb_schedule_postseason()
@@ -98,7 +99,7 @@ mlb_schedule_postseason()
 
 _Last validated n/a._
 
-## `mlb_pbp`
+## mlb_pbp
 
 GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
@@ -114,12 +115,12 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 | `hydrate` | `hydrate` |  |  | `Y` |  |
 | `fields` | `fields` |  |  | `Y` |  |
 
-### Returns
+### Returns {#mlb_pbp-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_pbp-example}
 
 ```python
 mlb_pbp(game_pk=716390)
@@ -127,7 +128,7 @@ mlb_pbp(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_boxscore`
+## mlb_boxscore
 
 GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
@@ -141,7 +142,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -380,7 +381,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_boxscore-example}
 
 ```python
 mlb_boxscore(game_pk=716390)
@@ -388,7 +389,7 @@ mlb_boxscore(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_linescore`
+## mlb_linescore
 
 GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
@@ -402,7 +403,7 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_linescore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -420,7 +421,7 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_linescore-example}
 
 ```python
 mlb_linescore(game_pk=716390)
@@ -428,7 +429,7 @@ mlb_linescore(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_play_by_play`
+## mlb_play_by_play
 
 GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
@@ -442,7 +443,7 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_play_by_play-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -507,7 +508,7 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_play_by_play-example}
 
 ```python
 mlb_play_by_play(game_pk=716390)
@@ -515,7 +516,7 @@ mlb_play_by_play(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_context_metrics`
+## mlb_game_context_metrics
 
 GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context.
 
@@ -528,12 +529,12 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_game_context_metrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_context_metrics-example}
 
 ```python
 mlb_game_context_metrics(game_pk=716390)
@@ -541,7 +542,7 @@ mlb_game_context_metrics(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_win_probability`
+## mlb_win_probability
 
 GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
@@ -554,7 +555,7 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_win_probability-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -626,7 +627,7 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_win_probability-example}
 
 ```python
 mlb_win_probability(game_pk=716390)
@@ -634,7 +635,7 @@ mlb_win_probability(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_content`
+## mlb_game_content
 
 GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
@@ -646,12 +647,12 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 |---|---|:---:|:---:|:---:|---|
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
-### Returns
+### Returns {#mlb_game_content-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_content-example}
 
 ```python
 mlb_game_content(game_pk=716390)
@@ -659,7 +660,7 @@ mlb_game_content(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_team`
+## mlb_team
 
 GET /api/v1/teams/{teamId} — single team detail.
 
@@ -675,7 +676,7 @@ GET /api/v1/teams/{teamId} — single team detail.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -716,7 +717,7 @@ GET /api/v1/teams/{teamId} — single team detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team-example}
 
 ```python
 mlb_team(team_id=10)
@@ -724,7 +725,7 @@ mlb_team(team_id=10)
 
 _Last validated n/a._
 
-## `mlb_team_roster`
+## mlb_team_roster
 
 GET /api/v1/teams/{teamId}/roster — team roster.
 
@@ -741,7 +742,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -759,7 +760,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_roster-example}
 
 ```python
 mlb_team_roster(team_id=10)
@@ -767,7 +768,7 @@ mlb_team_roster(team_id=10)
 
 _Last validated n/a._
 
-## `mlb_team_alumni`
+## mlb_team_alumni
 
 GET /api/v1/teams/{teamId}/alumni — players who played for this team in a season.
 
@@ -782,7 +783,7 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 | `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_team_alumni-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -836,7 +837,7 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_alumni-example}
 
 ```python
 mlb_team_alumni(team_id=10)
@@ -844,7 +845,7 @@ mlb_team_alumni(team_id=10)
 
 _Last validated n/a._
 
-## `mlb_team_affiliates`
+## mlb_team_affiliates
 
 GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
 
@@ -859,7 +860,7 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_team_affiliates-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -902,7 +903,7 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_affiliates-example}
 
 ```python
 mlb_team_affiliates()
@@ -910,7 +911,7 @@ mlb_team_affiliates()
 
 _Last validated n/a._
 
-## `mlb_people`
+## mlb_people
 
 GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
@@ -924,7 +925,7 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_people-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -975,7 +976,7 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_people-example}
 
 ```python
 mlb_people()
@@ -983,7 +984,7 @@ mlb_people()
 
 _Last validated n/a._
 
-## `mlb_person`
+## mlb_person
 
 GET /api/v1/people/{personId} — single person detail.
 
@@ -998,7 +999,7 @@ GET /api/v1/people/{personId} — single person detail.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_person-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1046,7 +1047,7 @@ GET /api/v1/people/{personId} — single person detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_person-example}
 
 ```python
 mlb_person(person_id=660271)
@@ -1054,7 +1055,7 @@ mlb_person(person_id=660271)
 
 _Last validated n/a._
 
-## `mlb_person_game_stats`
+## mlb_person_game_stats
 
 GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
@@ -1068,7 +1069,7 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_person_game_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1081,7 +1082,7 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_person_game_stats-example}
 
 ```python
 mlb_person_game_stats(person_id=660271, game_pk=716390)
@@ -1089,7 +1090,7 @@ mlb_person_game_stats(person_id=660271, game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_sport_players`
+## mlb_sport_players
 
 GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
@@ -1104,7 +1105,7 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_sport_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1162,7 +1163,7 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_sport_players-example}
 
 ```python
 mlb_sport_players()
@@ -1170,7 +1171,7 @@ mlb_sport_players()
 
 _Last validated n/a._
 
-## `mlb_sports`
+## mlb_sports
 
 GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
@@ -1182,7 +1183,7 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 |---|---|:---:|:---:|:---:|---|
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
-### Returns
+### Returns {#mlb_sports-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1197,7 +1198,7 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_sports-example}
 
 ```python
 mlb_sports()
@@ -1205,7 +1206,7 @@ mlb_sports()
 
 _Last validated n/a._
 
-## `mlb_leagues`
+## mlb_leagues
 
 GET /api/v1/leagues — list leagues.
 
@@ -1219,7 +1220,7 @@ GET /api/v1/leagues — list leagues.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
 
-### Returns
+### Returns {#mlb_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1267,7 +1268,7 @@ GET /api/v1/leagues — list leagues.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_leagues-example}
 
 ```python
 mlb_leagues()
@@ -1275,7 +1276,7 @@ mlb_leagues()
 
 _Last validated n/a._
 
-## `mlb_season`
+## mlb_season
 
 GET /api/v1/seasons/{seasonId} — single season detail.
 
@@ -1288,7 +1289,7 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 | `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
-### Returns
+### Returns {#mlb_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1317,7 +1318,7 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_season-example}
 
 ```python
 mlb_season(season_id='X')
@@ -1325,7 +1326,7 @@ mlb_season(season_id='X')
 
 _Last validated n/a._
 
-## `mlb_venues`
+## mlb_venues
 
 GET /api/v1/venues — list venues.
 
@@ -1339,7 +1340,7 @@ GET /api/v1/venues — list venues.
 | `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_venues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1352,7 +1353,7 @@ GET /api/v1/venues — list venues.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_venues-example}
 
 ```python
 mlb_venues()
@@ -1360,7 +1361,7 @@ mlb_venues()
 
 _Last validated n/a._
 
-## `mlb_venue`
+## mlb_venue
 
 GET /api/v1/venues/{venueId} — single venue detail.
 
@@ -1374,7 +1375,7 @@ GET /api/v1/venues/{venueId} — single venue detail.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_venue-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1387,7 +1388,7 @@ GET /api/v1/venues/{venueId} — single venue detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_venue-example}
 
 ```python
 mlb_venue(venue_id=15)
@@ -1395,7 +1396,7 @@ mlb_venue(venue_id=15)
 
 _Last validated n/a._
 
-## `mlb_meta`
+## mlb_meta
 
 GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 
@@ -1407,12 +1408,12 @@ GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 |---|---|:---:|:---:|:---:|---|
 | `meta_type` | `meta_type` |  | `Y` |  | meta_type path parameter. |
 
-### Returns
+### Returns {#mlb_meta-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_meta-example}
 
 ```python
 mlb_meta(meta_type='leagueLeaderTypes')
@@ -1420,7 +1421,7 @@ mlb_meta(meta_type='leagueLeaderTypes')
 
 _Last validated n/a._
 
-## `mlb_awards`
+## mlb_awards
 
 GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
@@ -1432,7 +1433,7 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 |---|---|:---:|:---:|:---:|---|
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
-### Returns
+### Returns {#mlb_awards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1450,7 +1451,7 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_awards-example}
 
 ```python
 mlb_awards()
@@ -1458,7 +1459,7 @@ mlb_awards()
 
 _Last validated n/a._
 
-## `mlb_award_recipients`
+## mlb_award_recipients
 
 GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
@@ -1473,7 +1474,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
-### Returns
+### Returns {#mlb_award_recipients-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1495,7 +1496,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_award_recipients-example}
 
 ```python
 mlb_award_recipients(award_id='MLBHOF')
@@ -1503,7 +1504,7 @@ mlb_award_recipients(award_id='MLBHOF')
 
 _Last validated n/a._
 
-## `mlb_draft`
+## mlb_draft
 
 GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
@@ -1519,12 +1520,12 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#mlb_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_draft-example}
 
 ```python
 mlb_draft(year=2024)
@@ -1532,7 +1533,7 @@ mlb_draft(year=2024)
 
 _Last validated n/a._
 
-## `mlb_umpires`
+## mlb_umpires
 
 GET /api/v1/jobs/umpires — current umpire crew assignments.
 
@@ -1543,7 +1544,7 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#mlb_umpires-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1558,7 +1559,7 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_umpires-example}
 
 ```python
 mlb_umpires()
@@ -1566,7 +1567,7 @@ mlb_umpires()
 
 _Last validated n/a._
 
-## `mlb_conferences`
+## mlb_conferences
 
 View all PCL conferences.
 
@@ -1580,7 +1581,7 @@ View all PCL conferences.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1598,7 +1599,7 @@ View all PCL conferences.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_conferences-example}
 
 ```python
 mlb_conferences()
@@ -1606,7 +1607,7 @@ mlb_conferences()
 
 _Last validated n/a._
 
-## `mlb_conference`
+## mlb_conference
 
 View PCL conferences by conferenceId.
 
@@ -1620,7 +1621,7 @@ View PCL conferences by conferenceId.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_conference-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1638,7 +1639,7 @@ View PCL conferences by conferenceId.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_conference-example}
 
 ```python
 mlb_conference(conference_id=301)
@@ -1646,7 +1647,7 @@ mlb_conference(conference_id=301)
 
 _Last validated n/a._
 
-## `mlb_draft_latest`
+## mlb_draft_latest
 
 View latest player drafted, endpoint best used when draft is currently open.
 
@@ -1658,7 +1659,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#mlb_draft_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1760,7 +1761,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_draft_latest-example}
 
 ```python
 mlb_draft_latest(year=2023)
@@ -1768,7 +1769,7 @@ mlb_draft_latest(year=2023)
 
 _Last validated n/a._
 
-## `mlb_game_timestamps`
+## mlb_game_timestamps
 
 Retrieve all of the play timecodes for a game in GUMBO feed.
 
@@ -1780,7 +1781,7 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 |---|---|:---:|:---:|:---:|---|
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
-### Returns
+### Returns {#mlb_game_timestamps-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1789,7 +1790,7 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_timestamps-example}
 
 ```python
 mlb_game_timestamps(game_pk=716390)
@@ -1797,7 +1798,7 @@ mlb_game_timestamps(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_changes`
+## mlb_game_changes
 
 View corrected non Statcast information for games
 
@@ -1811,7 +1812,7 @@ View corrected non Statcast information for games
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_game_changes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1883,7 +1884,7 @@ View corrected non Statcast information for games
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_changes-example}
 
 ```python
 mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
@@ -1891,7 +1892,7 @@ mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
 
 _Last validated n/a._
 
-## `mlb_analytics_games`
+## mlb_analytics_games
 
 View timestamps of most recent data corrections made to games.
 
@@ -1909,12 +1910,12 @@ View timestamps of most recent data corrections made to games.
 | `offset` | `offset` |  |  | `Y` | offset query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_analytics_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_analytics_games-example}
 
 ```python
 mlb_analytics_games()
@@ -1922,7 +1923,7 @@ mlb_analytics_games()
 
 _Last validated n/a._
 
-## `mlb_analytics_guids`
+## mlb_analytics_guids
 
 View timestamps of most recent data corrections made to GUIDs.
 
@@ -1940,12 +1941,12 @@ View timestamps of most recent data corrections made to GUIDs.
 | `offset` | `offset` |  |  | `Y` | offset query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_analytics_guids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_analytics_guids-example}
 
 ```python
 mlb_analytics_guids()
@@ -1953,7 +1954,7 @@ mlb_analytics_guids()
 
 _Last validated n/a._
 
-## `mlb_game_guids`
+## mlb_game_guids
 
 View Statcast data for a specific game.
 
@@ -1973,12 +1974,12 @@ View Statcast data for a specific game.
 | `parsed/raw` | `parsed_raw` |  |  | `Y` | parsed/raw query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_game_guids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_guids-example}
 
 ```python
 mlb_game_guids(game_pk=716390)
@@ -1986,7 +1987,7 @@ mlb_game_guids(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_play_analytics`
+## mlb_play_analytics
 
 View Statcast data for a specific play.
 
@@ -2001,12 +2002,12 @@ View Statcast data for a specific play.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_play_analytics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_play_analytics-example}
 
 ```python
 mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
@@ -2014,7 +2015,7 @@ mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
 
 _Last validated n/a._
 
-## `mlb_play_context_metrics_averages`
+## mlb_play_context_metrics_averages
 
 View Statcast contextMetrics data for a specific play.
 
@@ -2028,12 +2029,12 @@ View Statcast contextMetrics data for a specific play.
 | `guid` | `guid` |  | `Y` |  | guid path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_play_context_metrics_averages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_play_context_metrics_averages-example}
 
 ```python
 mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
@@ -2041,7 +2042,7 @@ mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-
 
 _Last validated n/a._
 
-## `mlb_game_color`
+## mlb_game_color
 
 View game color commentary info.
 
@@ -2055,12 +2056,12 @@ View game color commentary info.
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_game_color-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_color-example}
 
 ```python
 mlb_game_color(game_pk=716390)
@@ -2068,7 +2069,7 @@ mlb_game_color(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_color_diff`
+## mlb_game_color_diff
 
 View game color feed.
 
@@ -2082,12 +2083,12 @@ View game color feed.
 | `startTimecode` | `start_timecode` |  |  | `Y` | startTimecode query parameter. |
 | `endTimecode` | `end_timecode` |  |  | `Y` | endTimecode query parameter. |
 
-### Returns
+### Returns {#mlb_game_color_diff-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_color_diff-example}
 
 ```python
 mlb_game_color_diff(game_pk=716390)
@@ -2095,7 +2096,7 @@ mlb_game_color_diff(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_color_timestamps`
+## mlb_game_color_timestamps
 
 View all of the color timecodes for a game.
 
@@ -2107,12 +2108,12 @@ View all of the color timecodes for a game.
 |---|---|:---:|:---:|:---:|---|
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
-### Returns
+### Returns {#mlb_game_color_timestamps-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_timecodes`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_color_timestamps-example}
 
 ```python
 mlb_game_color_timestamps(game_pk=716390)
@@ -2120,7 +2121,7 @@ mlb_game_color_timestamps(game_pk=716390)
 
 _Last validated n/a._
 
-## `mlb_game_pace`
+## mlb_game_pace
 
 View time of game info.
 
@@ -2143,7 +2144,7 @@ View time of game info.
 | `includeChildren` | `include_children` |  |  | `Y` | includeChildren query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_game_pace-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2200,7 +2201,7 @@ View time of game info.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_game_pace-example}
 
 ```python
 mlb_game_pace(season='2023')
@@ -2208,7 +2209,7 @@ mlb_game_pace(season='2023')
 
 _Last validated n/a._
 
-## `mlb_high_low`
+## mlb_high_low
 
 View high/low stats by player or team.
 
@@ -2229,7 +2230,7 @@ View high/low stats by player or team.
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_high_low-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2255,7 +2256,7 @@ View high/low stats by player or team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_high_low-example}
 
 ```python
 mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
@@ -2263,7 +2264,7 @@ mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', seas
 
 _Last validated n/a._
 
-## `mlb_home_run_derby`
+## mlb_home_run_derby
 
 View a home run derby object based on gamePk.
 
@@ -2276,7 +2277,7 @@ View a home run derby object based on gamePk.
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_home_run_derby-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2365,7 +2366,7 @@ View a home run derby object based on gamePk.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_home_run_derby-example}
 
 ```python
 mlb_home_run_derby(game_pk=511101)
@@ -2373,7 +2374,7 @@ mlb_home_run_derby(game_pk=511101)
 
 _Last validated n/a._
 
-## `mlb_home_run_derby_bracket`
+## mlb_home_run_derby_bracket
 
 View a home run derby object based on bracket.
 
@@ -2386,7 +2387,7 @@ View a home run derby object based on bracket.
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_home_run_derby_bracket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2475,7 +2476,7 @@ View a home run derby object based on bracket.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_home_run_derby_bracket-example}
 
 ```python
 mlb_home_run_derby_bracket(game_pk=511101)
@@ -2483,7 +2484,7 @@ mlb_home_run_derby_bracket(game_pk=511101)
 
 _Last validated n/a._
 
-## `mlb_home_run_derby_pool`
+## mlb_home_run_derby_pool
 
 View a home run derby object based on pool.
 
@@ -2496,7 +2497,7 @@ View a home run derby object based on pool.
 | `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_home_run_derby_pool-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2585,7 +2586,7 @@ View a home run derby object based on pool.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_home_run_derby_pool-example}
 
 ```python
 mlb_home_run_derby_pool(game_pk=511101)
@@ -2593,7 +2594,7 @@ mlb_home_run_derby_pool(game_pk=511101)
 
 _Last validated n/a._
 
-## `mlb_all_star_ballot`
+## mlb_all_star_ballot
 
 View All-Star Ballots per league.
 
@@ -2607,7 +2608,7 @@ View All-Star Ballots per league.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_all_star_ballot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2662,7 +2663,7 @@ View All-Star Ballots per league.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_all_star_ballot-example}
 
 ```python
 mlb_all_star_ballot(league_id='103', season='2023')
@@ -2670,7 +2671,7 @@ mlb_all_star_ballot(league_id='103', season='2023')
 
 _Last validated n/a._
 
-## `mlb_all_star_write_ins`
+## mlb_all_star_write_ins
 
 View All-Star Write-ins per league.
 
@@ -2684,7 +2685,7 @@ View All-Star Write-ins per league.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_all_star_write_ins-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2735,7 +2736,7 @@ View All-Star Write-ins per league.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_all_star_write_ins-example}
 
 ```python
 mlb_all_star_write_ins(league_id='103', season='2023')
@@ -2743,7 +2744,7 @@ mlb_all_star_write_ins(league_id='103', season='2023')
 
 _Last validated n/a._
 
-## `mlb_all_star_final_vote`
+## mlb_all_star_final_vote
 
 View All-Star Final Vote per league.
 
@@ -2757,7 +2758,7 @@ View All-Star Final Vote per league.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_all_star_final_vote-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2812,7 +2813,7 @@ View All-Star Final Vote per league.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_all_star_final_vote-example}
 
 ```python
 mlb_all_star_final_vote(league_id='103', season='2023')
@@ -2820,7 +2821,7 @@ mlb_all_star_final_vote(league_id='103', season='2023')
 
 _Last validated n/a._
 
-## `mlb_free_agents`
+## mlb_free_agents
 
 View biographical information and stats for Free Agents.
 
@@ -2835,7 +2836,7 @@ View biographical information and stats for Free Agents.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_free_agents-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2860,7 +2861,7 @@ View biographical information and stats for Free Agents.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_free_agents-example}
 
 ```python
 mlb_free_agents(season='2023')
@@ -2868,7 +2869,7 @@ mlb_free_agents(season='2023')
 
 _Last validated n/a._
 
-## `mlb_jobs`
+## mlb_jobs
 
 View directory by jobType.
 
@@ -2883,7 +2884,7 @@ View directory by jobType.
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_jobs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2898,7 +2899,7 @@ View directory by jobType.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_jobs-example}
 
 ```python
 mlb_jobs(job_type='UMPR')
@@ -2906,7 +2907,7 @@ mlb_jobs(job_type='UMPR')
 
 _Last validated n/a._
 
-## `mlb_datacasters`
+## mlb_datacasters
 
 View datacasters directory.
 
@@ -2921,7 +2922,7 @@ View datacasters directory.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_datacasters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2936,7 +2937,7 @@ View datacasters directory.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_datacasters-example}
 
 ```python
 mlb_datacasters()
@@ -2944,7 +2945,7 @@ mlb_datacasters()
 
 _Last validated n/a._
 
-## `mlb_official_scorers`
+## mlb_official_scorers
 
 View official scorer directory.
 
@@ -2959,7 +2960,7 @@ View official scorer directory.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_official_scorers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2974,7 +2975,7 @@ View official scorer directory.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_official_scorers-example}
 
 ```python
 mlb_official_scorers()
@@ -2982,7 +2983,7 @@ mlb_official_scorers()
 
 _Last validated n/a._
 
-## `mlb_umpire_games`
+## mlb_umpire_games
 
 Get umpires and associated game for umpireId.
 
@@ -2997,12 +2998,12 @@ Get umpires and associated game for umpireId.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_umpire_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_umpire_games-example}
 
 ```python
 mlb_umpire_games(umpire_id=596809, season='2023')
@@ -3010,7 +3011,7 @@ mlb_umpire_games(umpire_id=596809, season='2023')
 
 _Last validated n/a._
 
-## `mlb_schedule_tied`
+## mlb_schedule_tied
 
 View tied game schedule info.
 
@@ -3025,7 +3026,7 @@ View tied game schedule info.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_schedule_tied-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3090,7 +3091,7 @@ View tied game schedule info.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_schedule_tied-example}
 
 ```python
 mlb_schedule_tied(season='2016')
@@ -3098,7 +3099,7 @@ mlb_schedule_tied(season='2016')
 
 _Last validated n/a._
 
-## `mlb_schedule_postseason_series`
+## mlb_schedule_postseason_series
 
 View schedule info for postseason based on series.
 
@@ -3115,7 +3116,7 @@ View schedule info for postseason based on series.
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_schedule_postseason_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3132,7 +3133,7 @@ View schedule info for postseason based on series.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_schedule_postseason_series-example}
 
 ```python
 mlb_schedule_postseason_series(season='2023')
@@ -3140,7 +3141,7 @@ mlb_schedule_postseason_series(season='2023')
 
 _Last validated n/a._
 
-## `mlb_schedule_postseason_tunein`
+## mlb_schedule_postseason_tunein
 
 View schedule info for the tuneIn application.
 
@@ -3156,12 +3157,12 @@ View schedule info for the tuneIn application.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_schedule_postseason_tunein-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_schedule_postseason_tunein-example}
 
 ```python
 mlb_schedule_postseason_tunein(season='2023')
@@ -3169,7 +3170,7 @@ mlb_schedule_postseason_tunein(season='2023')
 
 _Last validated n/a._
 
-## `mlb_seasons_all`
+## mlb_seasons_all
 
 View information for all seasons based on id.
 
@@ -3185,7 +3186,7 @@ View information for all seasons based on id.
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_seasons_all-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3214,7 +3215,7 @@ View information for all seasons based on id.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_seasons_all-example}
 
 ```python
 mlb_seasons_all(sport_id=1)
@@ -3222,7 +3223,7 @@ mlb_seasons_all(sport_id=1)
 
 _Last validated n/a._
 
-## `mlb_sport`
+## mlb_sport
 
 View information for any given sportId.
 
@@ -3235,7 +3236,7 @@ View information for any given sportId.
 | `sport_id` | `sport_id` |  | `Y` |  | sport_id path parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3250,7 +3251,7 @@ View information for any given sportId.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_sport-example}
 
 ```python
 mlb_sport(sport_id=1)
@@ -3258,7 +3259,7 @@ mlb_sport(sport_id=1)
 
 _Last validated n/a._
 
-## `mlb_stats_metrics`
+## mlb_stats_metrics
 
 View Statcast stats.
 
@@ -3284,12 +3285,12 @@ View Statcast stats.
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_stats_metrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_stats_metrics-example}
 
 ```python
 mlb_stats_metrics()
@@ -3297,7 +3298,7 @@ mlb_stats_metrics()
 
 _Last validated n/a._
 
-## `mlb_teams_history`
+## mlb_teams_history
 
 View historical records for a list of teams.
 
@@ -3312,7 +3313,7 @@ View historical records for a list of teams.
 | `endSeason` | `end_season` |  |  | `Y` | endSeason query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_teams_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3346,7 +3347,7 @@ View historical records for a list of teams.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_teams_history-example}
 
 ```python
 mlb_teams_history(team_ids='147')
@@ -3354,7 +3355,7 @@ mlb_teams_history(team_ids='147')
 
 _Last validated n/a._
 
-## `mlb_teams_stats`
+## mlb_teams_stats
 
 View team stats.
 
@@ -3373,7 +3374,7 @@ View team stats.
 | `sortStat` | `sort_stat` |  |  | `Y` | sortStat query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_teams_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3388,7 +3389,7 @@ View team stats.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_teams_stats-example}
 
 ```python
 mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
@@ -3396,7 +3397,7 @@ mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='seaso
 
 _Last validated n/a._
 
-## `mlb_teams_stats_leaders`
+## mlb_teams_stats_leaders
 
 View leaders for a statistic.
 
@@ -3419,7 +3420,7 @@ View leaders for a statistic.
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_teams_stats_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3434,7 +3435,7 @@ View leaders for a statistic.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_teams_stats_leaders-example}
 
 ```python
 mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
@@ -3442,7 +3443,7 @@ mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
 
 _Last validated n/a._
 
-## `mlb_team_coaches`
+## mlb_team_coaches
 
 View biographical  information on all coaches for a given club.
 
@@ -3457,7 +3458,7 @@ View biographical  information on all coaches for a given club.
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_team_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3472,7 +3473,7 @@ View biographical  information on all coaches for a given club.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_coaches-example}
 
 ```python
 mlb_team_coaches(team_id=147, season='2023')
@@ -3480,7 +3481,7 @@ mlb_team_coaches(team_id=147, season='2023')
 
 _Last validated n/a._
 
-## `mlb_team_personnel`
+## mlb_team_personnel
 
 View biographical  information on all personnel for a given club.
 
@@ -3494,7 +3495,7 @@ View biographical  information on all personnel for a given club.
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_team_personnel-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3509,7 +3510,7 @@ View biographical  information on all personnel for a given club.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_personnel-example}
 
 ```python
 mlb_team_personnel(team_id=147)
@@ -3517,7 +3518,7 @@ mlb_team_personnel(team_id=147)
 
 _Last validated n/a._
 
-## `mlb_team_roster_type`
+## mlb_team_roster_type
 
 View biographical and statistical information for a club's roster based on roster type.
 
@@ -3534,7 +3535,7 @@ View biographical and statistical information for a club's roster based on roste
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
-### Returns
+### Returns {#mlb_team_roster_type-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3552,7 +3553,7 @@ View biographical and statistical information for a club's roster based on roste
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_team_roster_type-example}
 
 ```python
 mlb_team_roster_type(team_id=147, roster_type='active', season='2023')

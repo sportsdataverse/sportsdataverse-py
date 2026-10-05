@@ -3,6 +3,7 @@ title: NBA dataset loaders
 sidebar_label: Loaders
 description: "NBA dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # NBA dataset loaders
 
@@ -54,10 +55,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nba_group_aliases` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
 | `load_nba_team_group_seasons` | [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) | — |
 
-## `load_nba_pbp`
+## load_nba_pbp
 
 Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_nba_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -133,10 +134,10 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 load_nba_pbp(seasons=2024)
 ```
 
-## `load_nba_player_boxscore`
+## load_nba_player_boxscore
 
 Release: [espn_nba_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_nba_player_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -202,10 +203,10 @@ Release: [espn_nba_player_boxscores](https://github.com/sportsdataverse/sportsda
 load_nba_player_boxscore(seasons=2024)
 ```
 
-## `load_nba_schedule`
+## load_nba_schedule
 
 Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_{season}.parquet`
-### Returns
+### Returns {#load_nba_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -291,10 +292,10 @@ Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse
 load_nba_schedule(seasons=2024)
 ```
 
-## `load_nba_team_boxscore`
+## load_nba_team_boxscore
 
 Release: [espn_nba_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_nba_team_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -362,10 +363,10 @@ Release: [espn_nba_team_boxscores](https://github.com/sportsdataverse/sportsdata
 load_nba_team_boxscore(seasons=2024)
 ```
 
-## `load_nba_game_rosters`
+## load_nba_game_rosters
 
 Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_game_rosters/game_rosters_{season}.parquet`
-### Returns
+### Returns {#load_nba_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -396,10 +397,10 @@ Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdatave
 load_nba_game_rosters(seasons=2002)
 ```
 
-## `load_nba_officials`
+## load_nba_officials
 
 Release: [espn_nba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet`
-### Returns
+### Returns {#load_nba_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -415,10 +416,10 @@ Release: [espn_nba_officials](https://github.com/sportsdataverse/sportsdataverse
 load_nba_officials(seasons=2002)
 ```
 
-## `load_nba_shots`
+## load_nba_shots
 
 Release: [espn_nba_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_shots/shots_{season}.parquet`
-### Returns
+### Returns {#load_nba_shots-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -447,10 +448,10 @@ Release: [espn_nba_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 load_nba_shots(seasons=2002)
 ```
 
-## `load_nba_standings`
+## load_nba_standings
 
 Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet`
-### Returns
+### Returns {#load_nba_standings-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -483,10 +484,10 @@ Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse
 load_nba_standings(seasons=2002)
 ```
 
-## `load_nba_player_season_stats`
+## load_nba_player_season_stats
 
 Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_player_season_stats/player_season_stats_{season}.parquet`
-### Returns
+### Returns {#load_nba_player_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -510,10 +511,10 @@ Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sport
 load_nba_player_season_stats(seasons=2025)
 ```
 
-## `load_nba_team_season_stats`
+## load_nba_team_season_stats
 
 Release: [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_team_season_stats/team_season_stats_{season}.parquet`
-### Returns
+### Returns {#load_nba_team_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -538,10 +539,10 @@ Release: [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsd
 load_nba_team_season_stats(seasons=2025)
 ```
 
-## `load_nba_draft`
+## load_nba_draft
 
 Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet`
-### Returns
+### Returns {#load_nba_draft-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -585,10 +586,10 @@ Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-dat
 load_nba_draft(seasons=2025)
 ```
 
-## `load_nba_rosters`
+## load_nba_rosters
 
 Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet`
-### Returns
+### Returns {#load_nba_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -633,10 +634,10 @@ Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_nba_rosters(seasons=2025)
 ```
 
-## `load_nba_stats_schedules`
+## load_nba_stats_schedules
 
 Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_schedule_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_schedules-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -660,10 +661,10 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 load_nba_stats_schedules(seasons=2025)
 ```
 
-## `load_nba_stats_coaches`
+## load_nba_stats_coaches
 
 Release: [nba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_coaches) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_coaches/coaches_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_coaches-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -683,10 +684,10 @@ Release: [nba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-
 load_nba_stats_coaches(seasons=2025)
 ```
 
-## `load_nba_stats_game_rosters`
+## load_nba_stats_game_rosters
 
 Release: [nba_stats_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_rosters/game_rosters_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -706,10 +707,10 @@ Release: [nba_stats_game_rosters](https://github.com/sportsdataverse/sportsdatav
 load_nba_stats_game_rosters(seasons=2025)
 ```
 
-## `load_nba_stats_lineups`
+## load_nba_stats_lineups
 
 Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups/lineups_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_lineups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -900,10 +901,10 @@ Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-
 load_nba_stats_lineups(seasons=2025)
 ```
 
-## `load_nba_stats_lineups_v3`
+## load_nba_stats_lineups_v3
 
 Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_lineups_v3-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -926,10 +927,10 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 load_nba_stats_lineups_v3(seasons=2025)
 ```
 
-## `load_nba_stats_officials`
+## load_nba_stats_officials
 
 Release: [nba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -945,10 +946,10 @@ Release: [nba_stats_officials](https://github.com/sportsdataverse/sportsdatavers
 load_nba_stats_officials(seasons=2025)
 ```
 
-## `load_nba_stats_pbp`
+## load_nba_stats_pbp
 
 Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1006,10 +1007,10 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 load_nba_stats_pbp(seasons=2025)
 ```
 
-## `load_nba_stats_possessions`
+## load_nba_stats_possessions
 
 Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_possessions-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1053,10 +1054,10 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 load_nba_stats_possessions(seasons=2025)
 ```
 
-## `load_nba_stats_game_lineups`
+## load_nba_stats_game_lineups
 
 Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_game_lineups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1079,10 +1080,10 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 load_nba_stats_game_lineups(seasons=2025)
 ```
 
-## `load_nba_stats_game_matchups`
+## load_nba_stats_game_matchups
 
 Release: [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_matchups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_matchups/game_matchups_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_game_matchups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1141,10 +1142,10 @@ Release: [nba_stats_game_matchups](https://github.com/sportsdataverse/sportsdata
 load_nba_stats_game_matchups(seasons=2025)
 ```
 
-## `load_nba_stats_pbp_v3`
+## load_nba_stats_pbp_v3
 
 Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_pbp_v3-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1202,10 +1203,10 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 load_nba_stats_pbp_v3(seasons=2025)
 ```
 
-## `load_nba_stats_player_boxscores`
+## load_nba_stats_player_boxscores
 
 Release: [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_boxscores/player_boxscores_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_player_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1251,10 +1252,10 @@ Release: [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsd
 load_nba_stats_player_boxscores(seasons=2025)
 ```
 
-## `load_nba_stats_player_game_logs`
+## load_nba_stats_player_game_logs
 
 Release: [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_game_logs/player_game_logs_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_player_game_logs-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1294,10 +1295,10 @@ Release: [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsd
 load_nba_stats_player_game_logs(seasons=2025)
 ```
 
-## `load_nba_stats_player_season_stats`
+## load_nba_stats_player_season_stats
 
 Release: [nba_stats_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_season_stats/player_season_stats_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_player_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1516,10 +1517,10 @@ Release: [nba_stats_player_season_stats](https://github.com/sportsdataverse/spor
 load_nba_stats_player_season_stats(seasons=2025)
 ```
 
-## `load_nba_stats_possessions_v3`
+## load_nba_stats_possessions_v3
 
 Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_possessions_v3-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1563,10 +1564,10 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 load_nba_stats_possessions_v3(seasons=2025)
 ```
 
-## `load_nba_stats_rosters`
+## load_nba_stats_rosters
 
 Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1593,10 +1594,10 @@ Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-
 load_nba_stats_rosters(seasons=2025)
 ```
 
-## `load_nba_stats_shots`
+## load_nba_stats_shots
 
 Release: [nba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_shots-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1624,10 +1625,10 @@ Release: [nba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-da
 load_nba_stats_shots(seasons=2025)
 ```
 
-## `load_nba_stats_standings`
+## load_nba_stats_standings
 
 Release: [nba_stats_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_standings/standings_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_standings-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1730,10 +1731,10 @@ Release: [nba_stats_standings](https://github.com/sportsdataverse/sportsdatavers
 load_nba_stats_standings(seasons=2025)
 ```
 
-## `load_nba_stats_team_boxscores`
+## load_nba_stats_team_boxscores
 
 Release: [nba_stats_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_boxscores/team_boxscores_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_team_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1771,10 +1772,10 @@ Release: [nba_stats_team_boxscores](https://github.com/sportsdataverse/sportsdat
 load_nba_stats_team_boxscores(seasons=2025)
 ```
 
-## `load_nba_stats_team_season_stats`
+## load_nba_stats_team_season_stats
 
 Release: [nba_stats_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_season_stats/team_season_stats_{season + 1}.parquet`
-### Returns
+### Returns {#load_nba_stats_team_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1961,10 +1962,10 @@ Release: [nba_stats_team_season_stats](https://github.com/sportsdataverse/sports
 load_nba_stats_team_season_stats(seasons=2025)
 ```
 
-## `load_nba_player_crosswalk`
+## load_nba_player_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_nba_player_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1994,10 +1995,10 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_nba_player_crosswalk(seasons=2026)
 ```
 
-## `load_nba_schedule_crosswalk`
+## load_nba_schedule_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_nba_schedule_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2022,10 +2023,10 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_nba_schedule_crosswalk(seasons=2026)
 ```
 
-## `load_nba_team_crosswalk`
+## load_nba_team_crosswalk
 
 Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_nba_team_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2055,10 +2056,10 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_nba_team_crosswalk(seasons=2026)
 ```
 
-## `load_nba_player_core`
+## load_nba_player_core
 
 Release: [espn_nba_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_player_core/player_core_{season}.parquet`
-### Returns
+### Returns {#load_nba_player_core-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2103,10 +2104,10 @@ Release: [espn_nba_player_core](https://github.com/sportsdataverse/sportsdataver
 load_nba_player_core(seasons=2025)
 ```
 
-## `load_nba_player_impact`
+## load_nba_player_impact
 
 Release: [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_player_impact/nba_player_impact_{season}.parquet`
-### Returns
+### Returns {#load_nba_player_impact-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2143,15 +2144,15 @@ Release: [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-
 load_nba_player_impact(seasons=2024)
 ```
 
-## `load_nba_groups`
+## load_nba_groups
 
 Release: [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nba:atlantic) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_nba_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2166,15 +2167,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_nba_groups()
 ```
 
-## `load_nba_group_seasons`
+## load_nba_group_seasons
 
 Release: [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_nba_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2192,15 +2193,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_nba_group_seasons()
 ```
 
-## `load_nba_group_aliases`
+## load_nba_group_aliases
 
 Release: [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (espn, nba_stats, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_nba_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2217,15 +2218,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_nba_group_aliases()
 ```
 
-## `load_nba_team_group_seasons`
+## load_nba_team_group_seasons
 
 Release: [nba_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 1971-2027.
 :::
 
-### Returns
+### Returns {#load_nba_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|

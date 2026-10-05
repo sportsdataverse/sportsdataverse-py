@@ -3,6 +3,7 @@ title: WBB dataset loaders
 sidebar_label: Loaders
 description: "WBB dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # WBB dataset loaders
 
@@ -47,10 +48,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_wbb_group_aliases` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
 | `load_wbb_team_group_seasons` | [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) | — |
 
-## `load_wbb_pbp`
+## load_wbb_pbp
 
 Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_wbb_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -129,10 +130,10 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 load_wbb_pbp(seasons=2024)
 ```
 
-## `load_wbb_player_boxscore`
+## load_wbb_player_boxscore
 
 Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_wbb_player_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -196,10 +197,10 @@ Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sp
 load_wbb_player_boxscore(seasons=2024)
 ```
 
-## `load_wbb_schedule`
+## load_wbb_schedule
 
 Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet`
-### Returns
+### Returns {#load_wbb_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -303,10 +304,10 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 load_wbb_schedule(seasons=2024)
 ```
 
-## `load_wbb_team_boxscore`
+## load_wbb_team_boxscore
 
 Release: [espn_womens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_wbb_team_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -373,10 +374,10 @@ Release: [espn_womens_college_basketball_team_boxscores](https://github.com/spor
 load_wbb_team_boxscore(seasons=2024)
 ```
 
-## `load_wbb_ratings`
+## load_wbb_ratings
 
 Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet`
-### Returns
+### Returns {#load_wbb_ratings-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -396,10 +397,10 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_wbb_ratings(seasons=2025)
 ```
 
-## `load_wbb_player_value`
+## load_wbb_player_value
 
 Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_player_value) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_player_value/wbb_player_value_{season}.parquet`
-### Returns
+### Returns {#load_wbb_player_value-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -417,10 +418,10 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 load_wbb_player_value(seasons=2025)
 ```
 
-## `load_wbb_game_rosters`
+## load_wbb_game_rosters
 
 Release: [espn_womens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_game_rosters/game_rosters_{season}.parquet`
-### Returns
+### Returns {#load_wbb_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -451,10 +452,10 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 load_wbb_game_rosters(seasons=2026)
 ```
 
-## `load_wbb_officials`
+## load_wbb_officials
 
 Release: [espn_womens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_officials/officials_{season}.parquet`
-### Returns
+### Returns {#load_wbb_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -474,10 +475,10 @@ Release: [espn_womens_college_basketball_officials](https://github.com/sportsdat
 load_wbb_officials(seasons=2026)
 ```
 
-## `load_wbb_player_season_stats`
+## load_wbb_player_season_stats
 
 Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
-### Returns
+### Returns {#load_wbb_player_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -502,10 +503,10 @@ Release: [espn_womens_college_basketball_player_season_stats](https://github.com
 load_wbb_player_season_stats(seasons=2026)
 ```
 
-## `load_wbb_rosters`
+## load_wbb_rosters
 
 Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_rosters/rosters_{season}.parquet`
-### Returns
+### Returns {#load_wbb_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -550,10 +551,10 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 load_wbb_rosters(seasons=2026)
 ```
 
-## `load_wbb_shots`
+## load_wbb_shots
 
 Release: [espn_womens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_shots/shots_{season}.parquet`
-### Returns
+### Returns {#load_wbb_shots-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -582,10 +583,10 @@ Release: [espn_womens_college_basketball_shots](https://github.com/sportsdataver
 load_wbb_shots(seasons=2026)
 ```
 
-## `load_wbb_standings`
+## load_wbb_standings
 
 Release: [espn_womens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet`
-### Returns
+### Returns {#load_wbb_standings-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -618,10 +619,10 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 load_wbb_standings(seasons=2026)
 ```
 
-## `load_wbb_team_season_stats`
+## load_wbb_team_season_stats
 
 Release: [espn_womens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
-### Returns
+### Returns {#load_wbb_team_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -646,10 +647,10 @@ Release: [espn_womens_college_basketball_team_season_stats](https://github.com/s
 load_wbb_team_season_stats(seasons=2026)
 ```
 
-## `load_wbb_player_crosswalk`
+## load_wbb_player_crosswalk
 
 Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_wbb_player_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -675,10 +676,10 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_wbb_player_crosswalk(seasons=2026)
 ```
 
-## `load_wbb_schedule_crosswalk`
+## load_wbb_schedule_crosswalk
 
 Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_wbb_schedule_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -700,10 +701,10 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_wbb_schedule_crosswalk(seasons=2026)
 ```
 
-## `load_wbb_team_crosswalk`
+## load_wbb_team_crosswalk
 
 Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_wbb_team_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -730,10 +731,10 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_wbb_team_crosswalk(seasons=2026)
 ```
 
-## `load_wbb_player_core`
+## load_wbb_player_core
 
 Release: [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet`
-### Returns
+### Returns {#load_wbb_player_core-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -778,10 +779,10 @@ Release: [espn_womens_college_basketball_player_core](https://github.com/sportsd
 load_wbb_player_core(seasons=2025)
 ```
 
-## `load_ncaa_wbb_rapm`
+## load_ncaa_wbb_rapm
 
 Release: [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rapm) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_rapm/ncaa_wbb_rapm_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_rapm-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -801,10 +802,10 @@ Release: [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data
 load_ncaa_wbb_rapm(seasons=2024)
 ```
 
-## `load_ncaa_wbb_pbp`
+## load_ncaa_wbb_pbp
 
 Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_pbp/ncaa_wbb_pbp_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -900,10 +901,10 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 load_ncaa_wbb_pbp(seasons=2024)
 ```
 
-## `load_ncaa_wbb_schedule`
+## load_ncaa_wbb_schedule
 
 Release: [ncaa_wbb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_schedule) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_schedule/ncaa_wbb_schedule_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -919,10 +920,10 @@ Release: [ncaa_wbb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 load_ncaa_wbb_schedule(seasons=2024)
 ```
 
-## `load_ncaa_wbb_player_box`
+## load_ncaa_wbb_player_box
 
 Release: [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_player_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_player_box/ncaa_wbb_player_box_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_player_box-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1056,10 +1057,10 @@ Release: [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdatavers
 load_ncaa_wbb_player_box(seasons=2024)
 ```
 
-## `load_ncaa_wbb_team_box`
+## load_ncaa_wbb_team_box
 
 Release: [ncaa_wbb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_team_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_team_box/ncaa_wbb_team_box_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_team_box-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1149,10 +1150,10 @@ Release: [ncaa_wbb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 load_ncaa_wbb_team_box(seasons=2024)
 ```
 
-## `load_ncaa_wbb_rosters`
+## load_ncaa_wbb_rosters
 
 Release: [ncaa_wbb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_rosters/ncaa_wbb_rosters_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1165,10 +1166,10 @@ Release: [ncaa_wbb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_ncaa_wbb_rosters(seasons=2024)
 ```
 
-## `load_ncaa_wbb_team_rosters`
+## load_ncaa_wbb_team_rosters
 
 Release: [ncaa_wbb_team_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_team_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_team_rosters/ncaa_wbb_team_rosters_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_team_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1193,10 +1194,10 @@ Release: [ncaa_wbb_team_rosters](https://github.com/sportsdataverse/sportsdatave
 load_ncaa_wbb_team_rosters(seasons=2024)
 ```
 
-## `load_ncaa_wbb_team_ids`
+## load_ncaa_wbb_team_ids
 
 Release: [ncaa_wbb_team_ids](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_team_ids) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_team_ids/ncaa_wbb_team_ids_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_team_ids-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1209,10 +1210,10 @@ Release: [ncaa_wbb_team_ids](https://github.com/sportsdataverse/sportsdataverse-
 load_ncaa_wbb_team_ids(seasons=2024)
 ```
 
-## `load_ncaa_wbb_possessions`
+## load_ncaa_wbb_possessions
 
 Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_possessions/ncaa_wbb_possessions_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_possessions-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1277,10 +1278,10 @@ Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataver
 load_ncaa_wbb_possessions(seasons=2024)
 ```
 
-## `load_ncaa_wbb_lineups`
+## load_ncaa_wbb_lineups
 
 Release: [ncaa_wbb_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_lineups/ncaa_wbb_lineups_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_lineups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1366,10 +1367,10 @@ Release: [ncaa_wbb_lineups](https://github.com/sportsdataverse/sportsdataverse-d
 load_ncaa_wbb_lineups(seasons=2024)
 ```
 
-## `load_ncaa_wbb_matchup_stints`
+## load_ncaa_wbb_matchup_stints
 
 Release: [ncaa_wbb_matchup_stints](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_matchup_stints) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_matchup_stints/ncaa_wbb_matchup_stints_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_matchup_stints-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1411,10 +1412,10 @@ Release: [ncaa_wbb_matchup_stints](https://github.com/sportsdataverse/sportsdata
 load_ncaa_wbb_matchup_stints(seasons=2024)
 ```
 
-## `load_ncaa_wbb_shots`
+## load_ncaa_wbb_shots
 
 Release: [ncaa_wbb_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_shots/ncaa_wbb_shots_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_shots-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1442,10 +1443,10 @@ Release: [ncaa_wbb_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 load_ncaa_wbb_shots(seasons=2024)
 ```
 
-## `load_ncaa_wbb_rapm_within_team`
+## load_ncaa_wbb_rapm_within_team
 
 Release: [ncaa_wbb_rapm_within_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rapm_within_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_rapm_within_team/ncaa_wbb_rapm_within_team_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_wbb_rapm_within_team-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1465,15 +1466,15 @@ Release: [ncaa_wbb_rapm_within_team](https://github.com/sportsdataverse/sportsda
 load_ncaa_wbb_rapm_within_team(seasons=2024)
 ```
 
-## `load_wbb_groups`
+## load_wbb_groups
 
 Release: [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. wbb:big-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_wbb_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1488,15 +1489,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_wbb_groups()
 ```
 
-## `load_wbb_group_seasons`
+## load_wbb_group_seasons
 
 Release: [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_wbb_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1514,15 +1515,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_wbb_group_seasons()
 ```
 
-## `load_wbb_group_aliases`
+## load_wbb_group_aliases
 
 Release: [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (espn, ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_wbb_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1539,15 +1540,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_wbb_group_aliases()
 ```
 
-## `load_wbb_team_group_seasons`
+## load_wbb_team_group_seasons
 
 Release: [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 2002-2027.
 :::
 
-### Returns
+### Returns {#load_wbb_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|

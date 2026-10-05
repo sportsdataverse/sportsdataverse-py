@@ -3,12 +3,13 @@ title: CFB — 247Sports Site Pages (247sports.com)
 sidebar_label: 247Sports Site Pages (247sports.com)
 description: "CFB — 247Sports Site Pages (247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
+toc_max_heading_level: 2
 ---
 # CFB — 247Sports Site Pages (247sports.com)
 
 `sportsdataverse.cfb` — 35 endpoints.
 
-## `sports247_site_pages_coach`
+## sports247_site_pages_coach
 
 Coach identity detail.
 
@@ -20,7 +21,7 @@ Coach identity detail.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_coach-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -43,7 +44,7 @@ Coach identity detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_coach-example}
 
 ```python
 sports247_site_pages_coach()
@@ -51,7 +52,7 @@ sports247_site_pages_coach()
 
 _Last validated n/a._
 
-## `sports247_site_pages_coach_alma_mater`
+## sports247_site_pages_coach_alma_mater
 
 Coach alma-mater Institution.
 
@@ -63,7 +64,7 @@ Coach alma-mater Institution.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_coach_alma_mater-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -92,7 +93,7 @@ Coach alma-mater Institution.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_coach_alma_mater-example}
 
 ```python
 sports247_site_pages_coach_alma_mater(key=1504)
@@ -100,7 +101,7 @@ sports247_site_pages_coach_alma_mater(key=1504)
 
 _Last validated n/a._
 
-## `sports247_site_pages_coach_hometown`
+## sports247_site_pages_coach_hometown
 
 Coach hometown Location.
 
@@ -112,7 +113,7 @@ Coach hometown Location.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_coach_hometown-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -131,7 +132,7 @@ Coach hometown Location.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_coach_hometown-example}
 
 ```python
 sports247_site_pages_coach_hometown(key=1504)
@@ -139,7 +140,7 @@ sports247_site_pages_coach_hometown(key=1504)
 
 _Last validated n/a._
 
-## `sports247_site_pages_coach_ranking`
+## sports247_site_pages_coach_ranking
 
 Single CoachRanking row.
 
@@ -151,7 +152,7 @@ Single CoachRanking row.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_coach_ranking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -198,7 +199,7 @@ Single CoachRanking row.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_coach_ranking-example}
 
 ```python
 sports247_site_pages_coach_ranking()
@@ -206,7 +207,7 @@ sports247_site_pages_coach_ranking()
 
 _Last validated n/a._
 
-## `sports247_site_pages_coach_rankings`
+## sports247_site_pages_coach_rankings
 
 Coach's recruiting-ranking history (one row per Ranking snapshot).
 
@@ -218,7 +219,7 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_coach_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -265,7 +266,7 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_coach_rankings-example}
 
 ```python
 sports247_site_pages_coach_rankings(key=1531)
@@ -273,7 +274,7 @@ sports247_site_pages_coach_rankings(key=1531)
 
 _Last validated n/a._
 
-## `sports247_site_pages_event`
+## sports247_site_pages_event
 
 Recruiting event detail (camp/combine/regional).
 
@@ -285,7 +286,7 @@ Recruiting event detail (camp/combine/regional).
 |---|---|:---:|:---:|:---:|---|
 | `slug` | `slug` |  | `Y` |  | slug path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_event-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -302,7 +303,7 @@ Recruiting event detail (camp/combine/regional).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_event-example}
 
 ```python
 sports247_site_pages_event()
@@ -310,7 +311,7 @@ sports247_site_pages_event()
 
 _Last validated n/a._
 
-## `sports247_site_pages_institution`
+## sports247_site_pages_institution
 
 Institution (school/team) detail.
 
@@ -322,7 +323,7 @@ Institution (school/team) detail.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -351,7 +352,7 @@ Institution (school/team) detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_institution-example}
 
 ```python
 sports247_site_pages_institution()
@@ -359,7 +360,7 @@ sports247_site_pages_institution()
 
 _Last validated n/a._
 
-## `sports247_site_pages_institution_list`
+## sports247_site_pages_institution_list
 
 Institution directory (paginated list).
 
@@ -371,7 +372,7 @@ Institution directory (paginated list).
 |---|---|:---:|:---:|:---:|---|
 | `items` | `items` |  |  | `Y` | items query parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_institution_list-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -400,7 +401,7 @@ Institution directory (paginated list).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_institution_list-example}
 
 ```python
 sports247_site_pages_institution_list()
@@ -408,7 +409,7 @@ sports247_site_pages_institution_list()
 
 _Last validated n/a._
 
-## `sports247_site_pages_institution_location`
+## sports247_site_pages_institution_location
 
 Institution location (city/state/coords/tax).
 
@@ -420,7 +421,7 @@ Institution location (city/state/coords/tax).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_institution_location-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -439,7 +440,7 @@ Institution location (city/state/coords/tax).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_institution_location-example}
 
 ```python
 sports247_site_pages_institution_location(key=24099)
@@ -447,7 +448,7 @@ sports247_site_pages_institution_location(key=24099)
 
 _Last validated n/a._
 
-## `sports247_site_pages_institution_timeline_events`
+## sports247_site_pages_institution_timeline_events
 
 Institution recruiting timeline (site-authored event blurbs).
 
@@ -460,7 +461,7 @@ Institution recruiting timeline (site-authored event blurbs).
 | `school_slug` | `school_slug` |  | `Y` |  | school_slug path parameter. |
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_institution_timeline_events-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -473,7 +474,7 @@ Institution recruiting timeline (site-authored event blurbs).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_institution_timeline_events-example}
 
 ```python
 sports247_site_pages_institution_timeline_events(key=24099, school_slug='florida')
@@ -481,7 +482,7 @@ sports247_site_pages_institution_timeline_events(key=24099, school_slug='florida
 
 _Last validated n/a._
 
-## `sports247_site_pages_league_draft_picks`
+## sports247_site_pages_league_draft_picks
 
 Pro-draft picks embed for a league/year/round.
 
@@ -495,7 +496,7 @@ Pro-draft picks embed for a league/year/round.
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `round` | `round` |  |  | `Y` | round query parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_league_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -521,7 +522,7 @@ Pro-draft picks embed for a league/year/round.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_league_draft_picks-example}
 
 ```python
 sports247_site_pages_league_draft_picks(league_slug='NFL')
@@ -529,7 +530,7 @@ sports247_site_pages_league_draft_picks(league_slug='NFL')
 
 _Last validated n/a._
 
-## `sports247_site_pages_league_institutions`
+## sports247_site_pages_league_institutions
 
 Institutions belonging to a league.
 
@@ -542,7 +543,7 @@ Institutions belonging to a league.
 | `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 | `items` | `items` |  |  | `Y` | items query parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_league_institutions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -571,7 +572,7 @@ Institutions belonging to a league.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_league_institutions-example}
 
 ```python
 sports247_site_pages_league_institutions(league_id=6)
@@ -579,7 +580,7 @@ sports247_site_pages_league_institutions(league_id=6)
 
 _Last validated n/a._
 
-## `sports247_site_pages_page_feeds`
+## sports247_site_pages_page_feeds
 
 News/headline feed items for a site Page.
 
@@ -591,7 +592,7 @@ News/headline feed items for a site Page.
 |---|---|:---:|:---:|:---:|---|
 | `page_id` | `page_id` |  | `Y` |  | page_id path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_page_feeds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -604,7 +605,7 @@ News/headline feed items for a site Page.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_page_feeds-example}
 
 ```python
 sports247_site_pages_page_feeds(page_id=100134)
@@ -612,7 +613,7 @@ sports247_site_pages_page_feeds(page_id=100134)
 
 _Last validated n/a._
 
-## `sports247_site_pages_player`
+## sports247_site_pages_player
 
 Player detail (identity + primary-sport rating/ranks).
 
@@ -624,7 +625,7 @@ Player detail (identity + primary-sport rating/ranks).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -669,7 +670,7 @@ Player detail (identity + primary-sport rating/ranks).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player-example}
 
 ```python
 sports247_site_pages_player()
@@ -677,7 +678,7 @@ sports247_site_pages_player()
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_current_institution`
+## sports247_site_pages_player_current_institution
 
 Player's current PlayerInstitution (committed/enrolled school).
 
@@ -689,7 +690,7 @@ Player's current PlayerInstitution (committed/enrolled school).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_current_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -727,7 +728,7 @@ Player's current PlayerInstitution (committed/enrolled school).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_current_institution-example}
 
 ```python
 sports247_site_pages_player_current_institution(key=46083769)
@@ -735,7 +736,7 @@ sports247_site_pages_player_current_institution(key=46083769)
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_high_school`
+## sports247_site_pages_player_high_school
 
 Player's high-school PlayerInstitution row.
 
@@ -747,7 +748,7 @@ Player's high-school PlayerInstitution row.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_high_school-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -785,7 +786,7 @@ Player's high-school PlayerInstitution row.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_high_school-example}
 
 ```python
 sports247_site_pages_player_high_school(key=46051367)
@@ -793,7 +794,7 @@ sports247_site_pages_player_high_school(key=46051367)
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_institution`
+## sports247_site_pages_player_institution
 
 Player-at-institution association detail.
 
@@ -805,7 +806,7 @@ Player-at-institution association detail.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -843,7 +844,7 @@ Player-at-institution association detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_institution-example}
 
 ```python
 sports247_site_pages_player_institution()
@@ -851,7 +852,7 @@ sports247_site_pages_player_institution()
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_institution_evaluation`
+## sports247_site_pages_player_institution_evaluation
 
 Scout evaluation of a player-institution fit.
 
@@ -863,7 +864,7 @@ Scout evaluation of a player-institution fit.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_institution_evaluation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -881,7 +882,7 @@ Scout evaluation of a player-institution fit.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_institution_evaluation-example}
 
 ```python
 sports247_site_pages_player_institution_evaluation()
@@ -889,7 +890,7 @@ sports247_site_pages_player_institution_evaluation()
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_primary_sport`
+## sports247_site_pages_player_primary_sport
 
 Player's primary PlayerSport (rating/class/positions).
 
@@ -901,7 +902,7 @@ Player's primary PlayerSport (rating/class/positions).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_primary_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -946,7 +947,7 @@ Player's primary PlayerSport (rating/class/positions).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_primary_sport-example}
 
 ```python
 sports247_site_pages_player_primary_sport(key=46051367)
@@ -954,7 +955,7 @@ sports247_site_pages_player_primary_sport(key=46051367)
 
 _Last validated n/a._
 
-## `sports247_site_pages_player_search`
+## sports247_site_pages_player_search
 
 Player name search.
 
@@ -967,7 +968,7 @@ Player name search.
 | `FirstName` | `first_name` |  |  | `Y` | FirstName query parameter. |
 | `LastName` | `last_name` |  |  | `Y` | LastName query parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_player_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1012,7 +1013,7 @@ Player name search.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_player_search-example}
 
 ```python
 sports247_site_pages_player_search()
@@ -1020,7 +1021,7 @@ sports247_site_pages_player_search()
 
 _Last validated n/a._
 
-## `sports247_site_pages_playersport`
+## sports247_site_pages_playersport
 
 PlayerSport detail (note lowercase route segment).
 
@@ -1032,7 +1033,7 @@ PlayerSport detail (note lowercase route segment).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_playersport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1077,7 +1078,7 @@ PlayerSport detail (note lowercase route segment).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_playersport-example}
 
 ```python
 sports247_site_pages_playersport()
@@ -1085,7 +1086,7 @@ sports247_site_pages_playersport()
 
 _Last validated n/a._
 
-## `sports247_site_pages_playersport_institution`
+## sports247_site_pages_playersport_institution
 
 PlayerInstitution linked to a PlayerSport.
 
@@ -1097,7 +1098,7 @@ PlayerInstitution linked to a PlayerSport.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_playersport_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1135,7 +1136,7 @@ PlayerInstitution linked to a PlayerSport.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_playersport_institution-example}
 
 ```python
 sports247_site_pages_playersport_institution(key=279200)
@@ -1143,7 +1144,7 @@ sports247_site_pages_playersport_institution(key=279200)
 
 _Last validated n/a._
 
-## `sports247_site_pages_playersport_rank_history`
+## sports247_site_pages_playersport_rank_history
 
 Ranking history for a PlayerSport (one row per Ranking snapshot).
 
@@ -1155,7 +1156,7 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_playersport_rank_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1191,7 +1192,7 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_playersport_rank_history-example}
 
 ```python
 sports247_site_pages_playersport_rank_history(key=250563)
@@ -1199,7 +1200,7 @@ sports247_site_pages_playersport_rank_history(key=250563)
 
 _Last validated n/a._
 
-## `sports247_site_pages_position_rankings`
+## sports247_site_pages_position_rankings
 
 Player-sport rankings for a position.
 
@@ -1211,7 +1212,7 @@ Player-sport rankings for a position.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_position_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1247,7 +1248,7 @@ Player-sport rankings for a position.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_position_rankings-example}
 
 ```python
 sports247_site_pages_position_rankings(key=14)
@@ -1255,7 +1256,7 @@ sports247_site_pages_position_rankings(key=14)
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruit_interest`
+## sports247_site_pages_recruit_interest
 
 Single recruit-interest (school<->recruit link) detail.
 
@@ -1267,7 +1268,7 @@ Single recruit-interest (school<->recruit link) detail.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruit_interest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1303,7 +1304,7 @@ Single recruit-interest (school<->recruit link) detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruit_interest-example}
 
 ```python
 sports247_site_pages_recruit_interest()
@@ -1311,7 +1312,7 @@ sports247_site_pages_recruit_interest()
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruitment_final_choice`
+## sports247_site_pages_recruitment_final_choice
 
 Final-choice PlayerSport/commit for a recruitment.
 
@@ -1323,7 +1324,7 @@ Final-choice PlayerSport/commit for a recruitment.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruitment_final_choice-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1368,7 +1369,7 @@ Final-choice PlayerSport/commit for a recruitment.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruitment_final_choice-example}
 
 ```python
 sports247_site_pages_recruitment_final_choice(key=114978)
@@ -1376,7 +1377,7 @@ sports247_site_pages_recruitment_final_choice(key=114978)
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruitment_institution`
+## sports247_site_pages_recruitment_institution
 
 Committed institution for a recruitment.
 
@@ -1388,7 +1389,7 @@ Committed institution for a recruitment.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruitment_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1417,7 +1418,7 @@ Committed institution for a recruitment.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruitment_institution-example}
 
 ```python
 sports247_site_pages_recruitment_institution(key=114978)
@@ -1425,7 +1426,7 @@ sports247_site_pages_recruitment_institution(key=114978)
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruitment_interests`
+## sports247_site_pages_recruitment_interests
 
 All institutions the recruit has interest links with.
 
@@ -1437,7 +1438,7 @@ All institutions the recruit has interest links with.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruitment_interests-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1466,7 +1467,7 @@ All institutions the recruit has interest links with.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruitment_interests-example}
 
 ```python
 sports247_site_pages_recruitment_interests(key=114978)
@@ -1474,7 +1475,7 @@ sports247_site_pages_recruitment_interests(key=114978)
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruitment_offers`
+## sports247_site_pages_recruitment_offers
 
 Institutions that have offered the recruit.
 
@@ -1486,7 +1487,7 @@ Institutions that have offered the recruit.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruitment_offers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1515,7 +1516,7 @@ Institutions that have offered the recruit.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruitment_offers-example}
 
 ```python
 sports247_site_pages_recruitment_offers(key=114978)
@@ -1523,7 +1524,7 @@ sports247_site_pages_recruitment_offers(key=114978)
 
 _Last validated n/a._
 
-## `sports247_site_pages_recruitment_player_sport`
+## sports247_site_pages_recruitment_player_sport
 
 PlayerSport underlying a recruitment.
 
@@ -1535,7 +1536,7 @@ PlayerSport underlying a recruitment.
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_recruitment_player_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1580,7 +1581,7 @@ PlayerSport underlying a recruitment.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_recruitment_player_sport-example}
 
 ```python
 sports247_site_pages_recruitment_player_sport(key=114978)
@@ -1588,7 +1589,7 @@ sports247_site_pages_recruitment_player_sport(key=114978)
 
 _Last validated n/a._
 
-## `sports247_site_pages_season_current_expert_predictions`
+## sports247_site_pages_season_current_expert_predictions
 
 Current expert 'crystal ball' predictions for a season.
 
@@ -1600,7 +1601,7 @@ Current expert 'crystal ball' predictions for a season.
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`. |
 
-### Returns
+### Returns {#sports247_site_pages_season_current_expert_predictions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1621,7 +1622,7 @@ Current expert 'crystal ball' predictions for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_season_current_expert_predictions-example}
 
 ```python
 sports247_site_pages_season_current_expert_predictions(season='2026-Football')
@@ -1629,7 +1630,7 @@ sports247_site_pages_season_current_expert_predictions(season='2026-Football')
 
 _Last validated n/a._
 
-## `sports247_site_pages_season_recruit_interest_events`
+## sports247_site_pages_season_recruit_interest_events
 
 Recruit-interest timeline events for a season (offers/visits/commits).
 
@@ -1641,7 +1642,7 @@ Recruit-interest timeline events for a season (offers/visits/commits).
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`. |
 
-### Returns
+### Returns {#sports247_site_pages_season_recruit_interest_events-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1656,7 +1657,7 @@ Recruit-interest timeline events for a season (offers/visits/commits).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_season_recruit_interest_events-example}
 
 ```python
 sports247_site_pages_season_recruit_interest_events(season='2026-Football')
@@ -1664,7 +1665,7 @@ sports247_site_pages_season_recruit_interest_events(season='2026-Football')
 
 _Last validated n/a._
 
-## `sports247_site_pages_season_recruit_interests`
+## sports247_site_pages_season_recruit_interests
 
 All recruit interests for a season (paginated).
 
@@ -1676,7 +1677,7 @@ All recruit interests for a season (paginated).
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`. |
 
-### Returns
+### Returns {#sports247_site_pages_season_recruit_interests-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1712,7 +1713,7 @@ All recruit interests for a season (paginated).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_season_recruit_interests-example}
 
 ```python
 sports247_site_pages_season_recruit_interests(season='2026-Football')
@@ -1720,7 +1721,7 @@ sports247_site_pages_season_recruit_interests(season='2026-Football')
 
 _Last validated n/a._
 
-## `sports247_site_pages_season_recruits`
+## sports247_site_pages_season_recruits
 
 Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 
@@ -1736,7 +1737,7 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 | `Player.FullName` | `player_full_name` |  |  | `Y` | Player.FullName query parameter. |
 | `Institution` | `institution` |  |  | `Y` | Institution query parameter. |
 
-### Returns
+### Returns {#sports247_site_pages_season_recruits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1803,7 +1804,7 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_season_recruits-example}
 
 ```python
 sports247_site_pages_season_recruits(season='2026-Football')
@@ -1811,7 +1812,7 @@ sports247_site_pages_season_recruits(season='2026-Football')
 
 _Last validated n/a._
 
-## `sports247_site_pages_season_roster_embed`
+## sports247_site_pages_season_roster_embed
 
 Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 
@@ -1823,7 +1824,7 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`. |
 
-### Returns
+### Returns {#sports247_site_pages_season_roster_embed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1868,7 +1869,7 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#sports247_site_pages_season_roster_embed-example}
 
 ```python
 sports247_site_pages_season_roster_embed(season='2020-Football')

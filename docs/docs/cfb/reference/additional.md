@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Highlights
 
-### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, game_roster=None, participants=None, join_participants=True, **kwargs)` {#CFBPlayProcess}
+### CFBPlayProcess {#CFBPlayProcess}
+
+`CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, game_roster=None, participants=None, join_participants=True, **kwargs)`
 
 Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -52,7 +54,9 @@ result = proc.run_processing_pipeline()
 
 **Methods**
 
-#### `CFBPlayProcess.add_2pt_probs()`
+#### CFBPlayProcess.add_2pt_probs
+
+`CFBPlayProcess.add_2pt_probs()`
 
 Add the cfb4th two-point-conversion decision surface to the processed plays.
 
@@ -85,7 +89,9 @@ print(out.filter(pl.col("two_pt_recommendation").is_not_null())
          .head())
 ```
 
-#### `CFBPlayProcess.add_fourth_down_probs()`
+#### CFBPlayProcess.add_fourth_down_probs
+
+`CFBPlayProcess.add_fourth_down_probs()`
 
 Add the cfb4th 4th-down decision surface to the processed plays.
 
@@ -119,7 +125,9 @@ print(fourth.filter(pl.col("start.down") == 4)
             .head())
 ```
 
-#### `CFBPlayProcess.cfb_pbp_disk()`
+#### CFBPlayProcess.cfb_pbp_disk
+
+`CFBPlayProcess.cfb_pbp_disk()`
 
 Load a previously cached ESPN summary JSON for this game from disk.
 
@@ -139,7 +147,9 @@ pbp = game.cfb_pbp_disk()
 print(list(pbp.keys()))
 ```
 
-#### `CFBPlayProcess.cfb_pbp_json(**kwargs)`
+#### CFBPlayProcess.cfb_pbp_json
+
+`CFBPlayProcess.cfb_pbp_json(**kwargs)`
 
 Return the JSON payload currently attached to this `CFBPlayProcess`
 
@@ -158,7 +168,9 @@ game.espn_cfb_pbp()
 cached = game.cfb_pbp_json()
 ```
 
-#### `CFBPlayProcess.corrupt_pbp_check()`
+#### CFBPlayProcess.corrupt_pbp_check
+
+`CFBPlayProcess.corrupt_pbp_check()`
 
 Heuristic check for corrupt or incomplete play-by-play.
 
@@ -181,7 +193,9 @@ if not game.corrupt_pbp_check():
     game.run_processing_pipeline()
 ```
 
-#### `CFBPlayProcess.create_box_score(play_df)`
+#### CFBPlayProcess.create_box_score
+
+`CFBPlayProcess.create_box_score(play_df)`
 
 Build a per-team and per-player advanced box score from a processed
 
@@ -211,7 +225,9 @@ box = game.create_box_score(game.plays_json)
 print(list(box.keys()))
 ```
 
-#### `CFBPlayProcess.create_drive_summary(play_df, drives, periods=None) -> 'dict | None'`
+#### CFBPlayProcess.create_drive_summary
+
+`CFBPlayProcess.create_drive_summary(play_df, drives, periods=None) -> 'dict | None'`
 
 Build the StatBroadcast-style drive summary for this game.
 
@@ -232,7 +248,9 @@ sibling of `create_box_score`.
 
 the drive summary, or `None` when inputs are unusable.
 
-#### `CFBPlayProcess.create_situational_stats(play_df, window_expr=None) -> 'dict | None'`
+#### CFBPlayProcess.create_situational_stats
+
+`CFBPlayProcess.create_situational_stats(play_df, window_expr=None) -> 'dict | None'`
 
 Build the situational team-stats block for this game.
 
@@ -251,7 +269,9 @@ with the team ids read from the plays frame.
 
 the situational stats, or `None` when the frame is unusable or the window is empty.
 
-#### `CFBPlayProcess.espn_cfb_pbp(summary=None, **kwargs)`
+#### CFBPlayProcess.espn_cfb_pbp
+
+`CFBPlayProcess.espn_cfb_pbp(summary=None, **kwargs)`
 
 espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
 
@@ -286,7 +306,9 @@ game.espn_cfb_pbp()
 processed = game.run_processing_pipeline()  # adds EPA, WPA, box score
 ```
 
-#### `CFBPlayProcess.run_cleaning_pipeline()`
+#### CFBPlayProcess.run_cleaning_pipeline
+
+`CFBPlayProcess.run_cleaning_pipeline()`
 
 Run the lighter cleaning pipeline (no EPA/WPA/QBR/box-score).
 
@@ -309,7 +331,9 @@ cleaned = game.run_cleaning_pipeline()
 print(len(cleaned["plays"]))
 ```
 
-#### `CFBPlayProcess.run_processing_pipeline(fourth_down_probs: 'bool' = True, two_pt_probs: 'bool' = True, validate: 'bool' = False)`
+#### CFBPlayProcess.run_processing_pipeline
+
+`CFBPlayProcess.run_processing_pipeline(fourth_down_probs: 'bool' = True, two_pt_probs: 'bool' = True, validate: 'bool' = False)`
 
 Run the full play-by-play processing pipeline.
 
@@ -349,7 +373,9 @@ game.espn_cfb_pbp()
 trimmed = game.run_processing_pipeline()
 ```
 
-### `cfb_advanced_stats(seasons: 'Union[int, list[int]]', *, adjust: 'bool' = True, exclude_garbage: 'bool' = True, as_of_date: 'Optional[datetime.date]' = None, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_advanced_stats}
+### cfb_advanced_stats {#cfb_advanced_stats}
+
+`cfb_advanced_stats(seasons: 'Union[int, list[int]]', *, adjust: 'bool' = True, exclude_garbage: 'bool' = True, as_of_date: 'Optional[datetime.date]' = None, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team-season CFB advanced stats: efficiency, explosiveness, havoc.
 
@@ -417,7 +443,9 @@ df_raw = cfb_advanced_stats(2021, adjust=False, exclude_garbage=False)
 df.sort("adj_off_epa_play", descending=True).head()
 ```
 
-### `cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, tiebreaker_data: 'Optional[Dict[str, FrameLike]]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'` {#cfb_standings}
+### cfb_standings {#cfb_standings}
+
+`cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, tiebreaker_data: 'Optional[Dict[str, FrameLike]]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'`
 
 Compute college football standings with conference ranks and champions.
 
@@ -492,7 +520,9 @@ st = cfb_standings(games, teams, tiebreaker_data={"analytics_ratings": ratings})
 print(st.tiebreak_notes)
 ```
 
-### `espn_cfb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_cfb_player_stats}
+### espn_cfb_player_stats {#espn_cfb_player_stats}
+
+`espn_cfb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull a college-football athlete's ESPN **season** stat line.
 
@@ -695,7 +725,9 @@ df = espn_cfb_player_stats(athlete_id=4426338, season=2023)
 df.select(["full_name", "team_display_name", "passing_passing_yards"])
 ```
 
-### `espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_schedule}
+### espn_cfb_schedule {#espn_cfb_schedule}
+
+`espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_cfb_schedule - look up the college football schedule for a given season
 
@@ -814,7 +846,9 @@ finals = espn_cfb_schedule(dates=2023, week=5).filter(
 )
 ```
 
-### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#get_cfb_teams}
+### get_cfb_teams {#get_cfb_teams}
+
+`get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'`
 
 Load college football team ID information and logos
 
@@ -862,7 +896,9 @@ teams = get_cfb_teams()
 logo_map = dict(zip(teams["team_id"], teams["logo"]))
 ```
 
-### `most_recent_cfb_season()` {#most_recent_cfb_season}
+### most_recent_cfb_season {#most_recent_cfb_season}
+
+`most_recent_cfb_season()`
 
 Return the most recent college football season year based on today's date.
 
@@ -887,7 +923,9 @@ from sportsdataverse.cfb import load_cfb_schedule, most_recent_cfb_season
 sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 ```
 
-### `to_cfbfastr(pbp: 'pl.DataFrame', *, season: "'Optional[int]'" = None, week: "'Optional[int]'" = None, drives: "'Optional[pl.DataFrame]'" = None, linescore: "'Optional[pl.DataFrame]'" = None, drive_titles: "'Optional[pl.DataFrame]'" = None, ot_drives: "'Optional[pl.DataFrame]'" = None, scoring_summary: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#to_cfbfastr}
+### to_cfbfastr {#to_cfbfastr}
+
+`to_cfbfastr(pbp: 'pl.DataFrame', *, season: "'Optional[int]'" = None, week: "'Optional[int]'" = None, drives: "'Optional[pl.DataFrame]'" = None, linescore: "'Optional[pl.DataFrame]'" = None, drive_titles: "'Optional[pl.DataFrame]'" = None, ot_drives: "'Optional[pl.DataFrame]'" = None, scoring_summary: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 cfbfastR-named play frame from the NCAA structural pbp frame.
 
@@ -924,7 +962,9 @@ df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").ro
 
 ## Dataset loaders
 
-### `load_cfb_betting_lines(return_as_pandas=False) -> 'pl.DataFrame'` {#load_cfb_betting_lines}
+### load_cfb_betting_lines {#load_cfb_betting_lines}
+
+`load_cfb_betting_lines(return_as_pandas=False) -> 'pl.DataFrame'`
 
 Load college football betting lines information
 
@@ -977,7 +1017,9 @@ consensus_2023 = load_cfb_betting_lines().filter(
 )
 ```
 
-### `load_cfb_rosters_crosswalk(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_cfb_rosters_crosswalk}
+### load_cfb_rosters_crosswalk {#load_cfb_rosters_crosswalk}
+
+`load_cfb_rosters_crosswalk(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load the current ESPN x Fox CFB rosters crosswalk (single snapshot).
 
@@ -1034,7 +1076,9 @@ import polars as pl
 osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
 ```
 
-### `load_draft_outcomes(years: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_draft_outcomes}
+### load_draft_outcomes {#load_draft_outcomes}
+
+`load_draft_outcomes(years: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 NFL draft picks with the college of each pick, for the requested draft years.
 
@@ -1067,7 +1111,9 @@ picks = load_draft_outcomes([2023, 2024])
 picks.group_by("college").len().sort("len", descending=True).head()
 ```
 
-### `load_fp_curve() -> 'pl.DataFrame'` {#load_fp_curve}
+### load_fp_curve {#load_fp_curve}
+
+`load_fp_curve() -> 'pl.DataFrame'`
 
 Load the bundled EP-by-yardline curve (no network, no first-use download).
 
@@ -1087,7 +1133,9 @@ from sportsdataverse.cfb.cfb_field_position import load_fp_curve
 curve = load_fp_curve()
 ```
 
-### `load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_recruit_classes}
+### load_recruit_classes {#load_recruit_classes}
+
+`load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load recruiting classes as per-recruit rows from the 247 RDB feed.
 
@@ -1123,7 +1171,9 @@ rec.group_by("team").len().sort("len", descending=True).head()
 
 ## Other
 
-### `add_era_columns(df: 'pl.DataFrame', model: 'str', season: 'int | None' = None) -> 'pl.DataFrame'` {#add_era_columns}
+### add_era_columns {#add_era_columns}
+
+`add_era_columns(df: 'pl.DataFrame', model: 'str', season: 'int | None' = None) -> 'pl.DataFrame'`
 
 Add the era column(s) `model` consumes, using ITS card's cuts.
 
@@ -1151,7 +1201,9 @@ from sportsdataverse.cfb.model_calculators import add_era_columns
 add_era_columns(pl.DataFrame({"season": [2018]}), "xpass_model")
 ```
 
-### `add_play_type_canonical(df: 'pl.DataFrame', *, source: 'str' = 'type.text', with_family: 'bool' = True) -> 'pl.DataFrame'` {#add_play_type_canonical}
+### add_play_type_canonical {#add_play_type_canonical}
+
+`add_play_type_canonical(df: 'pl.DataFrame', *, source: 'str' = 'type.text', with_family: 'bool' = True) -> 'pl.DataFrame'`
 
 Append `play_type_canonical` (and optionally `play_type_family`).
 
@@ -1178,7 +1230,9 @@ out = add_play_type_canonical(pbp)
 out.group_by("play_type_family").agg(pl.len())
 ```
 
-### `assert_rating_scale(ratings: 'pl.DataFrame', *, era: 'str' = 'modern', tol: 'float' = 1.6) -> 'float'` {#assert_rating_scale}
+### assert_rating_scale {#assert_rating_scale}
+
+`assert_rating_scale(ratings: 'pl.DataFrame', *, era: 'str' = 'modern', tol: 'float' = 1.6) -> 'float'`
 
 Warn if the ratings have drifted off the scale the constants were fit on.
 
@@ -1217,7 +1271,9 @@ ratio = assert_rating_scale(ratings)
 assert ratio < 1.6, "refit the constants before trusting predictions"
 ```
 
-### `calculate_completion_probability(df, *, season=None, return_as_pandas=False)` {#calculate_completion_probability}
+### calculate_completion_probability {#calculate_completion_probability}
+
+`calculate_completion_probability(df, *, season=None, return_as_pandas=False)`
 
 Completion probability for each pass attempt.
 
@@ -1245,7 +1301,9 @@ from sportsdataverse.cfb import calculate_completion_probability
 calculate_completion_probability(df, season=2024)
 ```
 
-### `calculate_epa(df, *, season=None, return_as_pandas=False)` {#calculate_epa}
+### calculate_epa {#calculate_epa}
+
+`calculate_epa(df, *, season=None, return_as_pandas=False)`
 
 Expected points added: the change in EP across a play.
 
@@ -1272,7 +1330,9 @@ from sportsdataverse.cfb import calculate_epa
 calculate_epa(pbp)
 ```
 
-### `calculate_expected_points(df, *, season=None, return_as_pandas=False)` {#calculate_expected_points}
+### calculate_expected_points {#calculate_expected_points}
+
+`calculate_expected_points(df, *, season=None, return_as_pandas=False)`
 
 Expected points for each row.
 
@@ -1300,7 +1360,9 @@ from sportsdataverse.cfb import calculate_expected_points
 calculate_expected_points(pbp)
 ```
 
-### `calculate_field_goal_probability(df, *, season=None, return_as_pandas=False)` {#calculate_field_goal_probability}
+### calculate_field_goal_probability {#calculate_field_goal_probability}
+
+`calculate_field_goal_probability(df, *, season=None, return_as_pandas=False)`
 
 Field-goal make probability for each row.
 
@@ -1328,7 +1390,9 @@ from sportsdataverse.cfb import calculate_field_goal_probability
 calculate_field_goal_probability(df, season=2024)
 ```
 
-### `calculate_fourth_down(df, *, season=None, return_as_pandas=False)` {#calculate_fourth_down}
+### calculate_fourth_down {#calculate_fourth_down}
+
+`calculate_fourth_down(df, *, season=None, return_as_pandas=False)`
 
 Fourth-down conversion model output for each row.
 
@@ -1356,7 +1420,9 @@ from sportsdataverse.cfb import calculate_fourth_down
 calculate_fourth_down(df, season=2024)
 ```
 
-### `calculate_qbr(df, *, season=None, return_as_pandas=False)` {#calculate_qbr}
+### calculate_qbr {#calculate_qbr}
+
+`calculate_qbr(df, *, season=None, return_as_pandas=False)`
 
 Model QBR for each row.
 
@@ -1384,7 +1450,9 @@ from sportsdataverse.cfb import calculate_qbr
 calculate_qbr(df, season=2024)
 ```
 
-### `calculate_two_point_probability(df, *, season=None, return_as_pandas=False)` {#calculate_two_point_probability}
+### calculate_two_point_probability {#calculate_two_point_probability}
+
+`calculate_two_point_probability(df, *, season=None, return_as_pandas=False)`
 
 Two-point conversion success probability.
 
@@ -1412,7 +1480,9 @@ from sportsdataverse.cfb import calculate_two_point_probability
 calculate_two_point_probability(df, season=2024)
 ```
 
-### `calculate_win_probability(df, *, season=None, return_as_pandas=False)` {#calculate_win_probability}
+### calculate_win_probability {#calculate_win_probability}
+
+`calculate_win_probability(df, *, season=None, return_as_pandas=False)`
 
 Win probability for each row.
 
@@ -1440,7 +1510,9 @@ from sportsdataverse.cfb import calculate_win_probability
 calculate_win_probability(pbp)
 ```
 
-### `calculate_wpa(df, *, season=None, return_as_pandas=False)` {#calculate_wpa}
+### calculate_wpa {#calculate_wpa}
+
+`calculate_wpa(df, *, season=None, return_as_pandas=False)`
 
 Win probability added: the change in WP across a play.
 
@@ -1466,7 +1538,9 @@ from sportsdataverse.cfb import calculate_wpa
 calculate_wpa(pbp)
 ```
 
-### `calculate_xpass(df, *, season=None, return_as_pandas=False)` {#calculate_xpass}
+### calculate_xpass {#calculate_xpass}
+
+`calculate_xpass(df, *, season=None, return_as_pandas=False)`
 
 Expected pass probability for each row.
 
@@ -1494,7 +1568,9 @@ from sportsdataverse.cfb import calculate_xpass
 calculate_xpass(df, season=2024)
 ```
 
-### `canonical_play_type_expr(source: 'str' = 'type.text') -> 'pl.Expr'` {#canonical_play_type_expr}
+### canonical_play_type_expr {#canonical_play_type_expr}
+
+`canonical_play_type_expr(source: 'str' = 'type.text') -> 'pl.Expr'`
 
 Build the polars expression mapping raw `type.text` to a canonical type.
 
@@ -1518,7 +1594,9 @@ pbp = pl.DataFrame({"type.text": ["Pass Reception", "Punt Return"]})
 pbp.with_columns(canonical_play_type_expr())
 ```
 
-### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
+### cfb_adjusted_epa {#cfb_adjusted_epa}
+
+`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season opponent-adjusted per-team EPA from a season's play-by-play.
 
@@ -1555,7 +1633,9 @@ cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
 ```
 
-### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
+### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
+
+`cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
@@ -1588,7 +1668,9 @@ tg = cfb.cfb_adjusted_epa_by_game(pbp)
 tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```
 
-### `cfb_adjusted_tempo(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_adjusted_tempo}
+### cfb_adjusted_tempo {#cfb_adjusted_tempo}
+
+`cfb_adjusted_tempo(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team-season situation-neutral, opponent-adjusted tempo / pace.
 
@@ -1633,7 +1715,9 @@ print(df.shape)
 df.sort("pace_rank").head()
 ```
 
-### `cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Dict[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'` {#cfb_compute_results}
+### cfb_compute_results {#cfb_compute_results}
+
+`cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Dict[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'`
 
 Default results generator — nflseedR's dynamic ELO model for CFB.
 
@@ -1675,7 +1759,9 @@ out = cfb_compute_results(teams, games, 5, rng=rng)
 teams, games = out["teams"], out["games"]
 ```
 
-### `cfb_draft_projection(target_draft_year: 'int', *, division: 'str' = 'fbs', history_years: 'list[int] | None' = None, l2: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'` {#cfb_draft_projection}
+### cfb_draft_projection {#cfb_draft_projection}
+
+`cfb_draft_projection(target_draft_year: 'int', *, division: 'str' = 'fbs', history_years: 'list[int] | None' = None, l2: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
 
 Project NFL-draft probability per player + expected picks per team.
 
@@ -1706,7 +1792,9 @@ out = cfb_draft_projection(2024)
 out["teams"].sort("proj_draft_picks", descending=True).head(10)
 ```
 
-### `cfb_field_position(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_field_position}
+### cfb_field_position {#cfb_field_position}
+
+`cfb_field_position(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team-season field-position value: avg start, drive EP, margin, pts/drive.
 
@@ -1753,7 +1841,9 @@ print(df.shape)
 df.sort("fp_margin", descending=True).head()
 ```
 
-### `cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_games_from_schedule}
+### cfb_games_from_schedule {#cfb_games_from_schedule}
+
+`cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
 
 Map a `load_cfb_schedule()` frame into the seedr engine `games` schema.
 
@@ -1806,7 +1896,9 @@ st = cfb_standings(games, teams)
 print(st.head())
 ```
 
-### `cfb_odds_events_crosswalk(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, sport: 'str' = 'americanfootball_ncaaf', api_key: 'Optional[str]' = None, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_odds_events_crosswalk}
+### cfb_odds_events_crosswalk {#cfb_odds_events_crosswalk}
+
+`cfb_odds_events_crosswalk(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, sport: 'str' = 'americanfootball_ncaaf', api_key: 'Optional[str]' = None, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
 
 Match The Odds API CFB events to ESPN game ids.
 
@@ -1850,7 +1942,9 @@ xwalk = cfb_odds_events_crosswalk(season=2024, week=5)
 matched = xwalk.filter(pl.col("espn_game_id").is_not_null())
 ```
 
-### `cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_playoff_seeds}
+### cfb_playoff_seeds {#cfb_playoff_seeds}
+
+`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'`
 
 Assign College Football Playoff seeds (current straight-seeding rule).
 
@@ -1910,7 +2004,9 @@ seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
 ```
 
-### `cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_predict_games}
+### cfb_predict_games {#cfb_predict_games}
+
+`cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Predict a whole schedule of games from a ratings frame (vectorized).
 
@@ -1954,7 +2050,9 @@ ratings = cfb_ratings(2023)
 preds = cfb_predict_games(schedule_2023, ratings)
 ```
 
-### `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_recruiting_projection}
+### cfb_recruiting_projection {#cfb_recruiting_projection}
+
+`cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Project team wins / scoring margin for a season from preseason roster features.
 
@@ -1995,7 +2093,9 @@ proj = cfb_recruiting_projection(2024)
 proj.sort("pred_wins", descending=True).head(10)
 ```
 
-### `cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_resume}
+### cfb_resume {#cfb_resume}
+
+`cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
 
@@ -2043,7 +2143,9 @@ resume = cfb_resume(2023)
 resume.sort("sos_rank").head()
 ```
 
-### `cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, max_class_size: 'int' = 25, rank_decay: 'float' = 0.75, recruits: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_roster_talent}
+### cfb_roster_talent {#cfb_roster_talent}
+
+`cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, max_class_size: 'int' = 25, rank_decay: 'float' = 0.75, recruits: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Team-talent composite per team-season (247 Team Talent Composite style).
 
@@ -2087,7 +2189,9 @@ tal = cfb_roster_talent(2023)
 tal.sort("talent_rank").head(10)
 ```
 
-### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
+### cfb_rosters_crosswalk {#cfb_rosters_crosswalk}
+
+`cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
 
 Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
 
@@ -2132,7 +2236,9 @@ matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
 espn_fox = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
 ```
 
-### `cfb_schedule_crosswalk(season: 'int', week: 'Optional[int]' = None, *, season_type: 'int' = 2, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
+### cfb_schedule_crosswalk {#cfb_schedule_crosswalk}
+
+`cfb_schedule_crosswalk(season: 'int', week: 'Optional[int]' = None, *, season_type: 'int' = 2, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
 
 Build the ESPN x Fox x Yahoo CFB game-id crosswalk.
 
@@ -2182,7 +2288,9 @@ all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 wk5 = cfb_schedule_crosswalk(2024, 5)
 ```
 
-### `cfb_season_odds(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, playoff_seeds: 'int' = 12, seed: 'int' = 0, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_season_odds}
+### cfb_season_odds {#cfb_season_odds}
+
+`cfb_season_odds(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, playoff_seeds: 'int' = 12, seed: 'int' = 0, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Ratings-driven season Monte Carlo: conference / playoff / championship odds.
 
@@ -2230,7 +2338,9 @@ odds = cfb_season_odds(2023, n_sims=2000)
 odds.sort("cfp_champ_prob", descending=True).head()
 ```
 
-### `cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'` {#cfb_simulations}
+### cfb_simulations {#cfb_simulations}
+
+`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'`
 
 Simulate college football seasons (nflseedR-style week loop).
 
@@ -2286,7 +2396,9 @@ out = cfb_simulations(games, teams, simulations=100,
                       sim_include="REG", seed=1)
 ```
 
-### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
+### cfb_teams_crosswalk {#cfb_teams_crosswalk}
+
+`cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'`
 
 Build the ESPN x Fox x Yahoo CFB team-id crosswalk.
 
@@ -2334,7 +2446,9 @@ row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
 ```
 
-### `cfb_transfer_impact(target_season: 'int | list[int]', *, division: 'str' = 'fbs', alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_transfer_impact}
+### cfb_transfer_impact {#cfb_transfer_impact}
+
+`cfb_transfer_impact(target_season: 'int | list[int]', *, division: 'str' = 'fbs', alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Net transfer talent and its projected win-total impact per team-season.
 
@@ -2370,7 +2484,9 @@ imp = cfb_transfer_impact(2024)
 imp.sort("net_transfer_talent", descending=True).head(10)
 ```
 
-### `cfb_transfer_moves(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_transfer_moves}
+### cfb_transfer_moves {#cfb_transfer_moves}
+
+`cfb_transfer_moves(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Transfer moves inferred from year-over-year roster diffs.
 
@@ -2403,7 +2519,9 @@ moves = cfb_transfer_moves(2024)
 moves.filter(pl.col("direction") == "in").group_by("team_id").len()
 ```
 
-### `check_box_invariants(drive_summary: 'dict | None' = None, situational: 'dict | None' = None) -> 'list[str]'` {#check_box_invariants}
+### check_box_invariants {#check_box_invariants}
+
+`check_box_invariants(drive_summary: 'dict | None' = None, situational: 'dict | None' = None) -> 'list[str]'`
 
 Every identity the two aggregates must satisfy; violations as strings.
 
@@ -2424,7 +2542,9 @@ one line per violation, `[]` when everything holds.
 assert check_box_invariants(summary, stats) == []
 ```
 
-### `create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None` {#create_drive_summary}
+### create_drive_summary {#create_drive_summary}
+
+`create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None`
 
 Build the StatBroadcast-style drive summary, chart, and long-play lists.
 
@@ -2458,7 +2578,9 @@ and only `largest_lead` ships.
 summary = create_drive_summary(drives, game.plays_frame, "52", "61")
 ```
 
-### `create_situational_stats(frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, window_expr: polars.expr.expr.Expr | None = None) -> dict | None` {#create_situational_stats}
+### create_situational_stats {#create_situational_stats}
+
+`create_situational_stats(frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, window_expr: polars.expr.expr.Expr | None = None) -> dict | None`
 
 Build the situational team-stats block from a plays frame.
 
@@ -2487,7 +2609,9 @@ ships with it.
 stats = create_situational_stats(game.plays_frame, "52", "61")
 ```
 
-### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
+### efficiency_ratings {#efficiency_ratings}
+
+`efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
 
 One row per team: opponent-adjusted offensive/defensive efficiency.
 
@@ -2525,7 +2649,9 @@ from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
 ratings = efficiency_ratings(pbp, config=RatingsConfig(ridge_lambda=100.0))
 ```
 
-### `fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#fei_ratings}
+### fei_ratings {#fei_ratings}
+
+`fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
 
 One row per team: opponent-adjusted per-drive efficiency (FEI-style).
 
@@ -2563,7 +2689,9 @@ fei = fei_ratings(pbp)
 fei.sort("fei_net", descending=True).head()
 ```
 
-### `fit_field_position_ep(drives: 'pl.DataFrame', *, start_col: 'str' = 'drive_start_yardline', pts_col: 'str' = 'drive_next_score_pts') -> 'pl.DataFrame'` {#fit_field_position_ep}
+### fit_field_position_ep {#fit_field_position_ep}
+
+`fit_field_position_ep(drives: 'pl.DataFrame', *, start_col: 'str' = 'drive_start_yardline', pts_col: 'str' = 'drive_next_score_pts') -> 'pl.DataFrame'`
 
 Fit the monotone EP-by-starting-yardline curve from a drives frame.
 
@@ -2597,7 +2725,9 @@ from sportsdataverse.cfb.cfb_field_position import fit_field_position_ep
 curve = fit_field_position_ep(drives_frame)
 ```
 
-### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_boxscore}
+### fox_cfb_boxscore {#fox_cfb_boxscore}
+
+`fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB boxscore (long: one row per player-stat).
 
@@ -2623,7 +2753,9 @@ from sportsdataverse.cfb import fox_cfb_boxscore
 df = fox_cfb_boxscore("41616")
 ```
 
-### `fox_cfb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_matchup}
+### fox_cfb_event_matchup {#fox_cfb_event_matchup}
+
+`fox_cfb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb pregame team-stat comparison (one row per stat).
 
@@ -2640,7 +2772,9 @@ from sportsdataverse.cfb import fox_cfb_event_matchup
 df = fox_cfb_event_matchup("...")
 ```
 
-### `fox_cfb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_recap}
+### fox_cfb_event_recap {#fox_cfb_event_recap}
+
+`fox_cfb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb postgame top performers (one row per player).
 
@@ -2657,7 +2791,9 @@ from sportsdataverse.cfb import fox_cfb_event_recap
 df = fox_cfb_event_recap("...")
 ```
 
-### `fox_cfb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_standings}
+### fox_cfb_event_standings {#fox_cfb_event_standings}
+
+`fox_cfb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb the two teams' standings context.
 
@@ -2674,7 +2810,9 @@ from sportsdataverse.cfb import fox_cfb_event_standings
 df = fox_cfb_event_standings("...")
 ```
 
-### `fox_cfb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_conferences}
+### fox_cfb_league_conferences {#fox_cfb_league_conferences}
+
+`fox_cfb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb conference / group directory.
 
@@ -2703,7 +2841,9 @@ from sportsdataverse.cfb import fox_cfb_league_conferences
 df = fox_cfb_league_conferences()
 ```
 
-### `fox_cfb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_header}
+### fox_cfb_league_header {#fox_cfb_league_header}
+
+`fox_cfb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league header (one row).
 
@@ -2733,7 +2873,9 @@ from sportsdataverse.cfb import fox_cfb_league_header
 df = fox_cfb_league_header()
 ```
 
-### `fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_league_leaders}
+### fox_cfb_league_leaders {#fox_cfb_league_leaders}
+
+`fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB statistical leaders (one row per player/team).
 
@@ -2771,7 +2913,9 @@ from sportsdataverse.cfb import fox_cfb_league_leaders
 df = fox_cfb_league_leaders("passing")
 ```
 
-### `fox_cfb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_odds}
+### fox_cfb_league_odds {#fox_cfb_league_odds}
+
+`fox_cfb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league odds board (one row per team per game).
 
@@ -2799,7 +2943,9 @@ from sportsdataverse.cfb import fox_cfb_league_odds
 df = fox_cfb_league_odds()
 ```
 
-### `fox_cfb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_player_news}
+### fox_cfb_league_player_news {#fox_cfb_league_player_news}
+
+`fox_cfb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league-wide player news feed.
 
@@ -2830,7 +2976,9 @@ from sportsdataverse.cfb import fox_cfb_league_player_news
 df = fox_cfb_league_player_news()
 ```
 
-### `fox_cfb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_polls}
+### fox_cfb_league_polls {#fox_cfb_league_polls}
+
+`fox_cfb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb rankings / polls rendered as standings tables.
 
@@ -2856,7 +3004,9 @@ from sportsdataverse.cfb import fox_cfb_league_polls
 df = fox_cfb_league_polls()
 ```
 
-### `fox_cfb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_schedule}
+### fox_cfb_league_schedule {#fox_cfb_league_schedule}
+
+`fox_cfb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league schedule nav selections.
 
@@ -2884,7 +3034,9 @@ from sportsdataverse.cfb import fox_cfb_league_schedule
 df = fox_cfb_league_schedule()
 ```
 
-### `fox_cfb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_scores}
+### fox_cfb_league_scores {#fox_cfb_league_scores}
+
+`fox_cfb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league scores nav selections.
 
@@ -2912,7 +3064,9 @@ from sportsdataverse.cfb import fox_cfb_league_scores
 df = fox_cfb_league_scores()
 ```
 
-### `fox_cfb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_standings}
+### fox_cfb_league_standings {#fox_cfb_league_standings}
+
+`fox_cfb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league-wide standings tables.
 
@@ -2929,7 +3083,9 @@ from sportsdataverse.cfb import fox_cfb_league_standings
 df = fox_cfb_league_standings()
 ```
 
-### `fox_cfb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_stat_leaders}
+### fox_cfb_league_stat_leaders {#fox_cfb_league_stat_leaders}
+
+`fox_cfb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb league stats landing leaders.
 
@@ -2954,7 +3110,9 @@ from sportsdataverse.cfb import fox_cfb_league_stat_leaders
 df = fox_cfb_league_stat_leaders()
 ```
 
-### `fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_odds}
+### fox_cfb_odds {#fox_cfb_odds}
+
+`fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB game odds six-pack (spread / to win / total per team).
 
@@ -2979,7 +3137,9 @@ from sportsdataverse.cfb import fox_cfb_odds
 df = fox_cfb_odds("41616")
 ```
 
-### `fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_pbp}
+### fox_cfb_pbp {#fox_cfb_pbp}
+
+`fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB play-by-play (one row per play).
 
@@ -3004,7 +3164,9 @@ from sportsdataverse.cfb import fox_cfb_pbp
 df = fox_cfb_pbp("41616")
 ```
 
-### `fox_cfb_play_process(event_id, odds_override: 'Optional[Dict[str, Any]]' = None, process: 'bool' = True, raw: 'bool' = False, **kwargs) -> 'Dict[str, Any]'` {#fox_cfb_play_process}
+### fox_cfb_play_process {#fox_cfb_play_process}
+
+`fox_cfb_play_process(event_id, odds_override: 'Optional[Dict[str, Any]]' = None, process: 'bool' = True, raw: 'bool' = False, **kwargs) -> 'Dict[str, Any]'`
 
 Build a *processed* CFB play-by-play game from FoxSports as a backup to ESPN.
 
@@ -3038,7 +3200,9 @@ game = fox_cfb_play_process(41616)
 print(len(game["plays"]), game["source"])
 ```
 
-### `fox_cfb_schedule(season: 'Optional[int]' = None, *, segment_id: 'Optional[str]' = None, group_id: 'Union[int, str]' = '2', return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_schedule}
+### fox_cfb_schedule {#fox_cfb_schedule}
+
+`fox_cfb_schedule(season: 'Optional[int]' = None, *, segment_id: 'Optional[str]' = None, group_id: 'Union[int, str]' = '2', return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB full-season schedule (one row per game).
 
@@ -3095,7 +3259,9 @@ wk5 = fox_cfb_schedule(segment_id="2025-5-1")
 cfp = fox_cfb_schedule(segment_id="2025-cfp-2")
 ```
 
-### `fox_cfb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scoreboard}
+### fox_cfb_scoreboard {#fox_cfb_scoreboard}
+
+`fox_cfb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb scoreboard nav selections (weeks / dates / groups).
 
@@ -3123,7 +3289,9 @@ from sportsdataverse.cfb import fox_cfb_scoreboard
 df = fox_cfb_scoreboard()
 ```
 
-### `fox_cfb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scorechip}
+### fox_cfb_scorechip {#fox_cfb_scorechip}
+
+`fox_cfb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -3140,7 +3308,9 @@ from sportsdataverse.cfb import fox_cfb_scorechip
 df = fox_cfb_scorechip("nfl12345")
 ```
 
-### `fox_cfb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scores_segment}
+### fox_cfb_scores_segment {#fox_cfb_scores_segment}
+
+`fox_cfb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb one row per game in a scoreboard segment.
 
@@ -3157,7 +3327,9 @@ from sportsdataverse.cfb import fox_cfb_scores_segment
 df = fox_cfb_scores_segment("...")
 ```
 
-### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_standings}
+### fox_cfb_standings {#fox_cfb_standings}
+
+`fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB conference standings for a team's conference.
 
@@ -3184,7 +3356,9 @@ from sportsdataverse.cfb import fox_cfb_standings
 df = fox_cfb_standings("11")
 ```
 
-### `fox_cfb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_gamelog}
+### fox_cfb_team_gamelog {#fox_cfb_team_gamelog}
+
+`fox_cfb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB team game log -- tidy long: one row per (game, stat).
 
@@ -3212,7 +3386,9 @@ from sportsdataverse.cfb import fox_cfb_team_gamelog
 df = fox_cfb_team_gamelog("11")
 ```
 
-### `fox_cfb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_team_header}
+### fox_cfb_team_header {#fox_cfb_team_header}
+
+`fox_cfb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb team header (one row).
 
@@ -3229,7 +3405,9 @@ from sportsdataverse.cfb import fox_cfb_team_header
 df = fox_cfb_team_header("...")
 ```
 
-### `fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_roster}
+### fox_cfb_team_roster {#fox_cfb_team_roster}
+
+`fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB team roster (one row per player).
 
@@ -3254,7 +3432,9 @@ from sportsdataverse.cfb import fox_cfb_team_roster
 df = fox_cfb_team_roster("11")
 ```
 
-### `fox_cfb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_stats}
+### fox_cfb_team_stats {#fox_cfb_team_stats}
+
+`fox_cfb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB team stat leaders (one row per category leader).
 
@@ -3279,7 +3459,9 @@ from sportsdataverse.cfb import fox_cfb_team_stats
 df = fox_cfb_team_stats("11")
 ```
 
-### `fox_cfb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_teamnav}
+### fox_cfb_teamnav {#fox_cfb_teamnav}
+
+`fox_cfb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cfb team directory (one row per team).
 
@@ -3308,7 +3490,9 @@ from sportsdataverse.cfb import fox_cfb_teamnav
 df = fox_cfb_teamnav()
 ```
 
-### `fox_cfb_teams(*, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_teams}
+### fox_cfb_teams {#fox_cfb_teams}
+
+`fox_cfb_teams(*, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Fox Sports CFB team directory (one row per team).
 
@@ -3348,7 +3532,9 @@ teams = fox_cfb_teams()
 fox_id = dict(zip(teams["abbreviation"], teams["fox_team_id"]))
 ```
 
-### `fox_to_espn_summary(fox_data: 'Dict[str, Any]') -> 'Dict[str, Any]'` {#fox_to_espn_summary}
+### fox_to_espn_summary {#fox_to_espn_summary}
+
+`fox_to_espn_summary(fox_data: 'Dict[str, Any]') -> 'Dict[str, Any]'`
 
 Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 
@@ -3362,7 +3548,9 @@ Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 
 A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
 
-### `get_2pt_probs(pbp_df: 'Any') -> 'pd.DataFrame'` {#get_2pt_probs}
+### get_2pt_probs {#get_2pt_probs}
+
+`get_2pt_probs(pbp_df: 'Any') -> 'pd.DataFrame'`
 
 Two-point-conversion decision surface (cfb4th `get_2pt_wp`).
 
@@ -3391,7 +3579,9 @@ out = get_2pt_probs(touchdown_rows)
 print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
 ```
 
-### `get_4th_down_probs(pbp_df) -> 'pd.DataFrame'` {#get_4th_down_probs}
+### get_4th_down_probs {#get_4th_down_probs}
+
+`get_4th_down_probs(pbp_df) -> 'pd.DataFrame'`
 
 Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation.
 
@@ -3453,7 +3643,9 @@ out = get_4th_down_probs(fourth_down_rows)
 print(out[["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"]].head())
 ```
 
-### `get_fg_wp(pbp_df) -> 'pd.DataFrame'` {#get_fg_wp}
+### get_fg_wp {#get_fg_wp}
+
+`get_fg_wp(pbp_df) -> 'pd.DataFrame'`
 
 Expected win probability of attempting a field goal (cfb4th `get_fg_wp`).
 
@@ -3503,7 +3695,9 @@ out = get_fg_wp(fourth_down_rows)
 print(out[["fg_make_prob", "fg_wp"]].head())
 ```
 
-### `get_go_wp(pbp_df) -> 'pd.DataFrame'` {#get_go_wp}
+### get_go_wp {#get_go_wp}
+
+`get_go_wp(pbp_df) -> 'pd.DataFrame'`
 
 Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
 
@@ -3553,7 +3747,9 @@ out = get_go_wp(fourth_down_rows)
 print(out[["go_wp", "first_down_prob"]].head())
 ```
 
-### `get_punt_wp(pbp_df) -> 'pd.DataFrame'` {#get_punt_wp}
+### get_punt_wp {#get_punt_wp}
+
+`get_punt_wp(pbp_df) -> 'pd.DataFrame'`
 
 Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 
@@ -3603,7 +3799,9 @@ out = get_punt_wp(fourth_down_rows)
 print(out[["punt_wp"]].head())
 ```
 
-### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
+### make_ratings_compute_results {#make_ratings_compute_results}
+
+`make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'`
 
 Build a `cfb_simulations` `compute_results` closure from fixed ratings.
 
@@ -3639,7 +3837,9 @@ games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": 
 cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
 ```
 
-### `normalize_pbp_columns(df: 'pl.DataFrame', model: 'str') -> 'pl.DataFrame'` {#normalize_pbp_columns}
+### normalize_pbp_columns {#normalize_pbp_columns}
+
+`normalize_pbp_columns(df: 'pl.DataFrame', model: 'str') -> 'pl.DataFrame'`
 
 Add card-named copies of any play-by-play columns `df` already carries.
 
@@ -3664,7 +3864,9 @@ nothing the caller passed in is removed.
 normalize_pbp_columns(pbp, "xpass_model")
 ```
 
-### `on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_player_rankings}
+### on3_industry_player_rankings {#on3_industry_player_rankings}
+
+`on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 On3 Industry Comparison player rankings (**deprecated** next/data` scrape).
 
@@ -3690,7 +3892,9 @@ df = on3_players_industry_comparision(sport_key=1, year=2026)
 print(df.shape)
 ```
 
-### `on3_industry_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_team_rankings}
+### on3_industry_team_rankings {#on3_industry_team_rankings}
+
+`on3_industry_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 On3 Industry Comparison team rankings (**deprecated** next/data` scrape).
 
@@ -3716,7 +3920,9 @@ df = on3_team_ranking_consensus_team_rankings(sport_slug="football", year=2025)
 print(df.shape)
 ```
 
-### `on3_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_player_rankings}
+### on3_player_rankings {#on3_player_rankings}
+
+`on3_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 On3 player rankings for a class year (**deprecated** next/data` scrape).
 
@@ -3742,7 +3948,9 @@ df = on3_person_sport_rankings(sport_key=1, year=2026)
 print(df.shape)
 ```
 
-### `on3_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_team_rankings}
+### on3_team_rankings {#on3_team_rankings}
+
+`on3_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 On3 team recruiting-class rankings (**deprecated** next/data` scrape).
 
@@ -3768,7 +3976,9 @@ df = on3_team_ranking_team_rankings(sport_slug="football", year=2025)
 print(df.shape)
 ```
 
-### `play_type_family_expr(source: 'str' = 'play_type_canonical') -> 'pl.Expr'` {#play_type_family_expr}
+### play_type_family_expr {#play_type_family_expr}
+
+`play_type_family_expr(source: 'str' = 'play_type_canonical') -> 'pl.Expr'`
 
 Build the polars expression mapping a canonical type to its phase family.
 
@@ -3794,7 +4004,9 @@ add_play_type_canonical(pbp).filter(
 )
 ```
 
-### `predict_from_card(df: 'pl.DataFrame', model: 'str', booster: 'Any') -> 'np.ndarray'` {#predict_from_card}
+### predict_from_card {#predict_from_card}
+
+`predict_from_card(df: 'pl.DataFrame', model: 'str', booster: 'Any') -> 'np.ndarray'`
 
 Score `df` with `booster`, validated and ordered by the model's card.
 
@@ -3817,7 +4029,9 @@ from sportsdataverse.cfb.model_calculators import predict_from_card
 predict_from_card(pbp, "xpass_model", booster)
 ```
 
-### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern', games_played: 'float | None' = None) -> 'float'` {#predict_margin}
+### predict_margin {#predict_margin}
+
+`predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern', games_played: 'float | None' = None) -> 'float'`
 
 Expected home scoring margin from the two net ratings.
 
@@ -3846,7 +4060,9 @@ predict_margin(0.30, 0.10, neutral=False)
 predict_margin(0.30, 0.10, neutral=False, games_played=9)
 ```
 
-### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', game_pace: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+### predict_total {#predict_total}
+
+`predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', game_pace: 'float', *, era: 'str' = 'modern') -> 'float'`
 
 Expected combined point total from the four efficiency ratings + tempo.
 
@@ -3882,7 +4098,9 @@ from sportsdataverse.cfb.cfb_game_predict import predict_total
 predict_total(0.20, -0.05, 0.10, 0.02, game_pace=66.0)
 ```
 
-### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
+### scoreboard_event_parsing {#scoreboard_event_parsing}
+
+`scoreboard_event_parsing(event)`
 
 Internal helper that flattens an ESPN scoreboard event dict into a shape
 
@@ -3905,7 +4123,9 @@ from sportsdataverse.cfb import espn_cfb_schedule
 sched = espn_cfb_schedule(dates=2023, week=5)
 ```
 
-### `slope_for_games(games_played: 'float | None', *, era: 'str' = 'modern') -> 'float'` {#slope_for_games}
+### slope_for_games {#slope_for_games}
+
+`slope_for_games(games_played: 'float | None', *, era: 'str' = 'modern') -> 'float'`
 
 Points per unit of rating differential, given how many games back it.
 
@@ -3941,7 +4161,9 @@ slope_for_games(11)     # late season -- near the full slope
 slope_for_games(None)
 ```
 
-### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
+### special_teams_ratings {#special_teams_ratings}
+
+`special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
 
 One row per team: a per-unit special-teams EPA composite.
 
@@ -3996,7 +4218,9 @@ st = special_teams_ratings(pbp)
 st.sort("adj_st_epa", descending=True).head()
 ```
 
-### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
+### win_prob_from_margin {#win_prob_from_margin}
+
+`win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'`
 
 Home win probability from an expected margin via the Gaussian CDF.
 
@@ -4018,7 +4242,9 @@ from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
 win_prob_from_margin(7.0)
 ```
 
-### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_boxscore}
+### yahoo_cfb_boxscore {#yahoo_cfb_boxscore}
+
+`yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB box score: team and player stats, one row per entity stat.
 
@@ -4059,7 +4285,9 @@ raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
 box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
 ```
 
-### `yahoo_cfb_player_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, qualified: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_player_season_stats}
+### yahoo_cfb_player_season_stats {#yahoo_cfb_player_season_stats}
+
+`yahoo_cfb_player_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, qualified: 'bool' = False, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB player season stats (modern; one wide row per player).
 
@@ -4089,7 +4317,9 @@ from sportsdataverse.cfb import yahoo_cfb_player_season_stats
 df = yahoo_cfb_player_season_stats(season=2024)
 ```
 
-### `yahoo_cfb_player_season_stats_legacy(season: 'int' = 2024, category: 'str' = 'Passing', sort_stat: 'str' = 'PASSING_YARDS', *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_player_season_stats_legacy}
+### yahoo_cfb_player_season_stats_legacy {#yahoo_cfb_player_season_stats_legacy}
+
+`yahoo_cfb_player_season_stats_legacy(season: 'int' = 2024, category: 'str' = 'Passing', sort_stat: 'str' = 'PASSING_YARDS', *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB legacy per-category player leaders (one wide row per player).
 
@@ -4121,7 +4351,9 @@ df = yahoo_cfb_player_season_stats_legacy(
 )
 ```
 
-### `yahoo_cfb_scoreboard(season: 'int', week: 'int' = 1, *, count: 'int' = 500, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_scoreboard}
+### yahoo_cfb_scoreboard {#yahoo_cfb_scoreboard}
+
+`yahoo_cfb_scoreboard(season: 'int', week: 'int' = 1, *, count: 'int' = 500, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB scoreboard (one row per game).
 
@@ -4151,7 +4383,9 @@ from sportsdataverse.cfb import yahoo_cfb_scoreboard
 df = yahoo_cfb_scoreboard(season=2024, week=1)
 ```
 
-### `yahoo_cfb_team_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_team_season_stats}
+### yahoo_cfb_team_season_stats {#yahoo_cfb_team_season_stats}
+
+`yahoo_cfb_team_season_stats(season: 'int' = 2024, *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB team season stats (modern; one wide row per team).
 
@@ -4179,7 +4413,9 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats
 df = yahoo_cfb_team_season_stats(season=2024)
 ```
 
-### `yahoo_cfb_team_season_stats_legacy(season: 'int' = 2024, category: 'str' = 'Passing', sort_stat: 'str' = 'PASSING_YARDS', *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_team_season_stats_legacy}
+### yahoo_cfb_team_season_stats_legacy {#yahoo_cfb_team_season_stats_legacy}
+
+`yahoo_cfb_team_season_stats_legacy(season: 'int' = 2024, category: 'str' = 'Passing', sort_stat: 'str' = 'PASSING_YARDS', *, league_structure: 'str' = 'ncaaf.struct.div.1', count: 'int' = 200, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB legacy per-category team stats (one wide row per team).
 
@@ -4211,7 +4447,9 @@ df = yahoo_cfb_team_season_stats_legacy(
 )
 ```
 
-### `yahoo_cfb_teams(season: 'int', week: 'int' = 1, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_teams}
+### yahoo_cfb_teams {#yahoo_cfb_teams}
+
+`yahoo_cfb_teams(season: 'int', week: 'int' = 1, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 Yahoo CFB team directory (one row per team).
 

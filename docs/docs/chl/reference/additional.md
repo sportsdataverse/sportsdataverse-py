@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_chl_season() -> 'int'` {#most_recent_chl_season}
+### most_recent_chl_season {#most_recent_chl_season}
+
+`most_recent_chl_season() -> 'int'`
 
 Most-recent CHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `chl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#chl_game_corsi}
+### chl_game_corsi {#chl_game_corsi}
+
+`chl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single CHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single CHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#chl_game_shifts}
+### chl_game_shifts {#chl_game_shifts}
+
+`chl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single CHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single CHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_game_summary(game_id: 'int') -> 'dict'` {#chl_game_summary}
+### chl_game_summary {#chl_game_summary}
+
+`chl_game_summary(game_id: 'int') -> 'dict'`
 
 CHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ CHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `chl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#chl_leaders}
+### chl_leaders {#chl_leaders}
+
+`chl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ CHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `chl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#chl_pbp}
+### chl_pbp {#chl_pbp}
+
+`chl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ CHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#chl_player_stats}
+### chl_player_stats {#chl_player_stats}
+
+`chl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ CHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#chl_player_toi}
+### chl_player_toi {#chl_player_toi}
+
+`chl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single CHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single CHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#chl_schedule}
+### chl_schedule {#chl_schedule}
+
+`chl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ CHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `chl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#chl_season_id}
+### chl_season_id {#chl_season_id}
+
+`chl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All CHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All CHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `chl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#chl_standings}
+### chl_standings {#chl_standings}
+
+`chl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL standings — one row per team.
 
@@ -234,7 +258,9 @@ CHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `chl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#chl_team_roster}
+### chl_team_roster {#chl_team_roster}
+
+`chl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL team roster for a given team + season.
 
@@ -247,7 +273,9 @@ CHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `chl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#chl_teams}
+### chl_teams {#chl_teams}
+
+`chl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 CHL teams for a given season.
 

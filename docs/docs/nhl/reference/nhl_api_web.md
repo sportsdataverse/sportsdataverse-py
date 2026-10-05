@@ -3,12 +3,13 @@ title: NHL — NHL Web API
 sidebar_label: NHL Web API
 description: "NHL — NHL Web API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # NHL — NHL Web API
 
 `sportsdataverse.nhl` — 27 endpoints.
 
-## `nhl_web_pbp`
+## nhl_web_pbp
 
 Pull the play-by-play feed for one NHL game.
 
@@ -20,7 +21,7 @@ Pull the play-by-play feed for one NHL game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
-### Returns
+### Returns {#nhl_web_pbp-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -76,7 +77,7 @@ Pull the play-by-play feed for one NHL game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_web_pbp-example}
 
 ```python
 nhl_web_pbp(game_id=2024020001)
@@ -84,7 +85,7 @@ nhl_web_pbp(game_id=2024020001)
 
 _Last validated n/a._
 
-## `nhl_boxscore`
+## nhl_boxscore
 
 Pull the boxscore for one NHL game.
 
@@ -96,7 +97,7 @@ Pull the boxscore for one NHL game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
-### Returns
+### Returns {#nhl_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -140,7 +141,7 @@ Pull the boxscore for one NHL game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_boxscore-example}
 
 ```python
 nhl_boxscore(game_id=2024020001)
@@ -148,7 +149,7 @@ nhl_boxscore(game_id=2024020001)
 
 _Last validated n/a._
 
-## `nhl_landing`
+## nhl_landing
 
 Pull the gamecenter landing payload for one NHL game.
 
@@ -160,7 +161,7 @@ Pull the gamecenter landing payload for one NHL game.
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
-### Returns
+### Returns {#nhl_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -217,7 +218,7 @@ Pull the gamecenter landing payload for one NHL game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_landing-example}
 
 ```python
 nhl_landing(game_id=2024020001)
@@ -225,7 +226,7 @@ nhl_landing(game_id=2024020001)
 
 _Last validated n/a._
 
-## `nhl_right_rail`
+## nhl_right_rail
 
 Pull the gamecenter right-rail payload (in-game widgets).
 
@@ -237,12 +238,12 @@ Pull the gamecenter right-rail payload (in-game widgets).
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
-### Returns
+### Returns {#nhl_right_rail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_right_rail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_right_rail-example}
 
 ```python
 nhl_right_rail(game_id=2024020001)
@@ -250,7 +251,7 @@ nhl_right_rail(game_id=2024020001)
 
 _Last validated n/a._
 
-## `nhl_web_schedule`
+## nhl_web_schedule
 
 Pull the week-of NHL schedule rooted at `date`.
 
@@ -262,7 +263,7 @@ Pull the week-of NHL schedule rooted at `date`.
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  |  | `Y` | date path parameter. |
 
-### Returns
+### Returns {#nhl_web_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -330,7 +331,7 @@ Pull the week-of NHL schedule rooted at `date`.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_web_schedule-example}
 
 ```python
 nhl_web_schedule()
@@ -338,7 +339,7 @@ nhl_web_schedule()
 
 _Last validated n/a._
 
-## `nhl_score`
+## nhl_score
 
 Pull the single-day scoreboard for `date`.
 
@@ -350,7 +351,7 @@ Pull the single-day scoreboard for `date`.
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  |  | `Y` | date path parameter. |
 
-### Returns
+### Returns {#nhl_score-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -406,7 +407,7 @@ Pull the single-day scoreboard for `date`.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_score-example}
 
 ```python
 nhl_score()
@@ -414,7 +415,7 @@ nhl_score()
 
 _Last validated n/a._
 
-## `nhl_schedule_calendar`
+## nhl_schedule_calendar
 
 Pull the calendar of game-days for the season.
 
@@ -426,12 +427,12 @@ Pull the calendar of game-days for the season.
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  |  | `Y` | date path parameter. |
 
-### Returns
+### Returns {#nhl_schedule_calendar-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_schedule_calendar-example}
 
 ```python
 nhl_schedule_calendar()
@@ -439,7 +440,7 @@ nhl_schedule_calendar()
 
 _Last validated n/a._
 
-## `nhl_playoff_series`
+## nhl_playoff_series
 
 Pull a single playoff series payload.
 
@@ -452,7 +453,7 @@ Pull a single playoff series payload.
 | `season` | `season` |  | `Y` |  | season path parameter. |
 | `series_letter` | `series_letter` |  | `Y` |  | series_letter path parameter. |
 
-### Returns
+### Returns {#nhl_playoff_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -504,7 +505,7 @@ Pull a single playoff series payload.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_playoff_series-example}
 
 ```python
 nhl_playoff_series(season=2025, series_letter='a')
@@ -512,7 +513,7 @@ nhl_playoff_series(season=2025, series_letter='a')
 
 _Last validated n/a._
 
-## `nhl_standings`
+## nhl_standings
 
 Pull the NHL standings.
 
@@ -524,7 +525,7 @@ Pull the NHL standings.
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  |  | `Y` | date path parameter. |
 
-### Returns
+### Returns {#nhl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -616,7 +617,7 @@ Pull the NHL standings.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_standings-example}
 
 ```python
 nhl_standings()
@@ -624,7 +625,7 @@ nhl_standings()
 
 _Last validated n/a._
 
-## `nhl_standings_season`
+## nhl_standings_season
 
 Pull the per-season standings cutover dates.
 
@@ -635,7 +636,7 @@ Pull the per-season standings cutover dates.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_standings_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -653,7 +654,7 @@ Pull the per-season standings cutover dates.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_standings_season-example}
 
 ```python
 nhl_standings_season()
@@ -661,7 +662,7 @@ nhl_standings_season()
 
 _Last validated n/a._
 
-## `nhl_club_schedule_season`
+## nhl_club_schedule_season
 
 Pull a team's full-season schedule.
 
@@ -674,7 +675,7 @@ Pull a team's full-season schedule.
 | `team` | `team` |  | `Y` |  | team path parameter. |
 | `season` | `season` |  |  | `Y` | season path parameter. |
 
-### Returns
+### Returns {#nhl_club_schedule_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -761,7 +762,7 @@ Pull a team's full-season schedule.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_club_schedule_season-example}
 
 ```python
 nhl_club_schedule_season(team='TOR')
@@ -769,7 +770,7 @@ nhl_club_schedule_season(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_club_schedule_month`
+## nhl_club_schedule_month
 
 Pull a team's schedule for one month.
 
@@ -782,12 +783,12 @@ Pull a team's schedule for one month.
 | `team` | `team` |  | `Y` |  | team path parameter. |
 | `month` | `month` |  |  | `Y` | month path parameter. |
 
-### Returns
+### Returns {#nhl_club_schedule_month-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_club_schedule_month-example}
 
 ```python
 nhl_club_schedule_month(team='TOR')
@@ -795,7 +796,7 @@ nhl_club_schedule_month(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_club_schedule_week`
+## nhl_club_schedule_week
 
 Pull a team's schedule for one week.
 
@@ -808,12 +809,12 @@ Pull a team's schedule for one week.
 | `team` | `team` |  | `Y` |  | team path parameter. |
 | `date` | `date` |  |  | `Y` | date path parameter. |
 
-### Returns
+### Returns {#nhl_club_schedule_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_club_schedule_week-example}
 
 ```python
 nhl_club_schedule_week(team='TOR')
@@ -821,7 +822,7 @@ nhl_club_schedule_week(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_club_stats`
+## nhl_club_stats
 
 Pull a team's season stat block.
 
@@ -835,12 +836,12 @@ Pull a team's season stat block.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_club_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_club_stats-example}
 
 ```python
 nhl_club_stats(team='TOR')
@@ -848,7 +849,7 @@ nhl_club_stats(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_club_stats_season`
+## nhl_club_stats_season
 
 Pull the seasons a team has stats for.
 
@@ -860,12 +861,12 @@ Pull the seasons a team has stats for.
 |---|---|:---:|:---:|:---:|---|
 | `team` | `team` |  | `Y` |  | team path parameter. |
 
-### Returns
+### Returns {#nhl_club_stats_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_club_stats_season-example}
 
 ```python
 nhl_club_stats_season(team='TOR')
@@ -873,7 +874,7 @@ nhl_club_stats_season(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_roster`
+## nhl_roster
 
 Pull a team's roster.
 
@@ -886,7 +887,7 @@ Pull a team's roster.
 | `team` | `team` |  | `Y` |  | team path parameter. |
 | `season` | `season` |  |  | `Y` | season path parameter. |
 
-### Returns
+### Returns {#nhl_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -915,7 +916,7 @@ Pull a team's roster.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_roster-example}
 
 ```python
 nhl_roster(team='TOR')
@@ -923,7 +924,7 @@ nhl_roster(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_roster_season`
+## nhl_roster_season
 
 Pull every season a team has had on file.
 
@@ -935,12 +936,12 @@ Pull every season a team has had on file.
 |---|---|:---:|:---:|:---:|---|
 | `team` | `team` |  | `Y` |  | team path parameter. |
 
-### Returns
+### Returns {#nhl_roster_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_roster`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_roster_season-example}
 
 ```python
 nhl_roster_season(team='TOR')
@@ -948,7 +949,7 @@ nhl_roster_season(team='TOR')
 
 _Last validated n/a._
 
-## `nhl_player_landing`
+## nhl_player_landing
 
 Pull the player profile / overview.
 
@@ -960,7 +961,7 @@ Pull the player profile / overview.
 |---|---|:---:|:---:|:---:|---|
 | `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
 
-### Returns
+### Returns {#nhl_player_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1098,7 +1099,7 @@ Pull the player profile / overview.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_player_landing-example}
 
 ```python
 nhl_player_landing(player_id=8480801)
@@ -1106,7 +1107,7 @@ nhl_player_landing(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_player_game_log`
+## nhl_player_game_log
 
 Pull a player's game-by-game log.
 
@@ -1120,7 +1121,7 @@ Pull a player's game-by-game log.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_player_game_log-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1150,7 +1151,7 @@ Pull a player's game-by-game log.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_player_game_log-example}
 
 ```python
 nhl_player_game_log(player_id=8480801)
@@ -1158,7 +1159,7 @@ nhl_player_game_log(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_player_spotlight`
+## nhl_player_spotlight
 
 Pull the league's currently featured players.
 
@@ -1169,7 +1170,7 @@ Pull the league's currently featured players.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_player_spotlight-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1190,7 +1191,7 @@ Pull the league's currently featured players.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_player_spotlight-example}
 
 ```python
 nhl_player_spotlight()
@@ -1198,7 +1199,7 @@ nhl_player_spotlight()
 
 _Last validated n/a._
 
-## `nhl_skater_leaders`
+## nhl_skater_leaders
 
 Pull skater stat leaders.
 
@@ -1211,7 +1212,7 @@ Pull skater stat leaders.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_skater_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1239,7 +1240,7 @@ Pull skater stat leaders.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_skater_leaders-example}
 
 ```python
 nhl_skater_leaders()
@@ -1247,7 +1248,7 @@ nhl_skater_leaders()
 
 _Last validated n/a._
 
-## `nhl_goalie_leaders`
+## nhl_goalie_leaders
 
 Pull goalie stat leaders.
 
@@ -1260,7 +1261,7 @@ Pull goalie stat leaders.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_goalie_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1284,7 +1285,7 @@ Pull goalie stat leaders.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_goalie_leaders-example}
 
 ```python
 nhl_goalie_leaders()
@@ -1292,7 +1293,7 @@ nhl_goalie_leaders()
 
 _Last validated n/a._
 
-## `nhl_draft_picks`
+## nhl_draft_picks
 
 Pull NHL draft picks for a year (and optionally one round).
 
@@ -1305,7 +1306,7 @@ Pull NHL draft picks for a year (and optionally one round).
 | `year` | `year` |  | `Y` |  | year path parameter. |
 | `round_` | `round_` |  |  | `Y` | round_ path parameter. |
 
-### Returns
+### Returns {#nhl_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1336,7 +1337,7 @@ Pull NHL draft picks for a year (and optionally one round).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_draft_picks-example}
 
 ```python
 nhl_draft_picks(year=2024)
@@ -1344,7 +1345,7 @@ nhl_draft_picks(year=2024)
 
 _Last validated n/a._
 
-## `nhl_draft_rankings`
+## nhl_draft_rankings
 
 Pull NHL Central Scouting rankings for a draft year.
 
@@ -1357,7 +1358,7 @@ Pull NHL Central Scouting rankings for a draft year.
 | `year` | `year` |  | `Y` |  | year path parameter. |
 | `category` | `category` |  |  | `Y` | category path parameter. |
 
-### Returns
+### Returns {#nhl_draft_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1382,7 +1383,7 @@ Pull NHL Central Scouting rankings for a draft year.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_draft_rankings-example}
 
 ```python
 nhl_draft_rankings(year=2024)
@@ -1390,7 +1391,7 @@ nhl_draft_rankings(year=2024)
 
 _Last validated n/a._
 
-## `nhl_draft_picks_now`
+## nhl_draft_picks_now
 
 Pull the current / most recent draft pick set.
 
@@ -1401,7 +1402,7 @@ Pull the current / most recent draft pick set.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_draft_picks_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1431,7 +1432,7 @@ Pull the current / most recent draft pick set.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_draft_picks_now-example}
 
 ```python
 nhl_draft_picks_now()
@@ -1439,7 +1440,7 @@ nhl_draft_picks_now()
 
 _Last validated n/a._
 
-## `nhl_draft_rankings_now`
+## nhl_draft_rankings_now
 
 Pull the current Central Scouting rankings.
 
@@ -1450,7 +1451,7 @@ Pull the current Central Scouting rankings.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_draft_rankings_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1475,7 +1476,7 @@ Pull the current Central Scouting rankings.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_draft_rankings_now-example}
 
 ```python
 nhl_draft_rankings_now()
@@ -1483,7 +1484,7 @@ nhl_draft_rankings_now()
 
 _Last validated n/a._
 
-## `nhl_draft_tracker_picks_now`
+## nhl_draft_tracker_picks_now
 
 Pull the live draft-tracker pick list (during the draft itself).
 
@@ -1494,7 +1495,7 @@ Pull the live draft-tracker pick list (during the draft itself).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_draft_tracker_picks_now-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1517,7 +1518,7 @@ Pull the live draft-tracker pick list (during the draft itself).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_draft_tracker_picks_now-example}
 
 ```python
 nhl_draft_tracker_picks_now()

@@ -3,12 +3,13 @@ title: UCL — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
 description: "UCL — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
+toc_max_heading_level: 2
 ---
 # UCL — ESPN web API (v3)
 
 `sportsdataverse.ucl` — 5 endpoints.
 
-## `espn_ucl_player_overview`
+## espn_ucl_player_overview
 
 ESPN endpoint.
 
@@ -20,12 +21,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_ucl_player_overview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_overview`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_ucl_player_overview-example}
 
 ```python
 espn_ucl_player_overview(athlete_id='4239')
@@ -33,7 +34,7 @@ espn_ucl_player_overview(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_ucl_player_stats`
+## espn_ucl_player_stats
 
 ESPN endpoint.
 
@@ -46,12 +47,12 @@ ESPN endpoint.
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#espn_ucl_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_ucl_player_stats-example}
 
 ```python
 espn_ucl_player_stats(athlete_id='4239')
@@ -59,7 +60,7 @@ espn_ucl_player_stats(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_ucl_player_gamelog`
+## espn_ucl_player_gamelog
 
 ESPN endpoint.
 
@@ -72,12 +73,12 @@ ESPN endpoint.
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#espn_ucl_player_gamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_gamelog`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_ucl_player_gamelog-example}
 
 ```python
 espn_ucl_player_gamelog(athlete_id='4239')
@@ -85,7 +86,7 @@ espn_ucl_player_gamelog(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_ucl_player_splits`
+## espn_ucl_player_splits
 
 ESPN endpoint.
 
@@ -98,12 +99,12 @@ ESPN endpoint.
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#espn_ucl_player_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_splits`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_ucl_player_splits-example}
 
 ```python
 espn_ucl_player_splits(athlete_id='4239')
@@ -111,7 +112,7 @@ espn_ucl_player_splits(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_ucl_leaders`
+## espn_ucl_leaders
 
 ESPN endpoint.
 
@@ -128,7 +129,7 @@ ESPN endpoint.
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `sort` | `sort` |  |  | `Y` | sort query parameter. |
 
-### Returns
+### Returns {#espn_ucl_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -170,7 +171,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_ucl_leaders-example}
 
 ```python
 espn_ucl_leaders()

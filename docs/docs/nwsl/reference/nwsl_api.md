@@ -3,12 +3,13 @@ title: NWSL — NWSL official web API (StatsPerform SDP)
 sidebar_label: NWSL official web API (StatsPerform SDP)
 description: "NWSL — NWSL official web API (StatsPerform SDP) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # NWSL — NWSL official web API (StatsPerform SDP)
 
 `sportsdataverse.nwsl` — 9 endpoints.
 
-## `nwsl_competitions`
+## nwsl_competitions
 
 All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
@@ -20,7 +21,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 |---|---|:---:|:---:|:---:|---|
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 
-### Returns
+### Returns {#nwsl_competitions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -34,7 +35,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_competitions-example}
 
 ```python
 nwsl_competitions()
@@ -42,7 +43,7 @@ nwsl_competitions()
 
 _Last validated n/a._
 
-## `nwsl_match_lineups`
+## nwsl_match_lineups
 
 Team lineups (starting XI + bench + staff) for a match.
 
@@ -56,7 +57,7 @@ Team lineups (starting XI + bench + staff) for a match.
 | `match_id` | `match_id` |  | `Y` |  | match_id path parameter. |
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 
-### Returns
+### Returns {#nwsl_match_lineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -87,7 +88,7 @@ Team lineups (starting XI + bench + staff) for a match.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_match_lineups-example}
 
 ```python
 nwsl_match_lineups(match_id='nwsl::Football_Match::0b6761e4701749f593690c0f338da74c', season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -95,7 +96,7 @@ nwsl_match_lineups(match_id='nwsl::Football_Match::0b6761e4701749f593690c0f338da
 
 _Last validated n/a._
 
-## `nwsl_matchdays`
+## nwsl_matchdays
 
 Match days (rounds) for a season.
 
@@ -108,7 +109,7 @@ Match days (rounds) for a season.
 | `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 
-### Returns
+### Returns {#nwsl_matchdays-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -130,7 +131,7 @@ Match days (rounds) for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_matchdays-example}
 
 ```python
 nwsl_matchdays(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -138,7 +139,7 @@ nwsl_matchdays(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74
 
 _Last validated n/a._
 
-## `nwsl_player_stats`
+## nwsl_player_stats
 
 Player-stats leaderboard for a season (paginated).
 
@@ -156,7 +157,7 @@ Player-stats leaderboard for a season (paginated).
 | `page` | `page` |  |  | `Y` | 1-based page number. |
 | `pageNumElement` | `page_num_element` |  |  | `Y` | Page size (e.g. 400). |
 
-### Returns
+### Returns {#nwsl_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -211,7 +212,7 @@ Player-stats leaderboard for a season (paginated).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_player_stats-example}
 
 ```python
 nwsl_player_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -219,7 +220,7 @@ nwsl_player_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338d
 
 _Last validated n/a._
 
-## `nwsl_season_matches`
+## nwsl_season_matches
 
 Matches across one or more seasons within a US-format date window.
 
@@ -234,7 +235,7 @@ Matches across one or more seasons within a US-format date window.
 | `startDate` | `start_date` |  |  | `Y` | Window start, `MM/DD/YYYY` (US format). |
 | `endDate` | `end_date` |  |  | `Y` | Window end, `MM/DD/YYYY` (US format). |
 
-### Returns
+### Returns {#nwsl_season_matches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -354,7 +355,7 @@ Matches across one or more seasons within a US-format date window.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_season_matches-example}
 
 ```python
 nwsl_season_matches()
@@ -362,7 +363,7 @@ nwsl_season_matches()
 
 _Last validated n/a._
 
-## `nwsl_stages`
+## nwsl_stages
 
 Competition stages for a season (may be empty for league play).
 
@@ -375,7 +376,7 @@ Competition stages for a season (may be empty for league play).
 | `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 
-### Returns
+### Returns {#nwsl_stages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -385,7 +386,7 @@ Competition stages for a season (may be empty for league play).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_stages-example}
 
 ```python
 nwsl_stages(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -393,7 +394,7 @@ nwsl_stages(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
 _Last validated n/a._
 
-## `nwsl_standings`
+## nwsl_standings
 
 Overall standings table for a season (table/home/away splits).
 
@@ -408,7 +409,7 @@ Overall standings table for a season (table/home/away splits).
 | `orderBy` | `order_by` |  |  | `Y` | Sort field, e.g. `rank`. |
 | `direction` | `direction` |  |  | `Y` | `asc` or `desc`. |
 
-### Returns
+### Returns {#nwsl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -448,7 +449,7 @@ Overall standings table for a season (table/home/away splits).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_standings-example}
 
 ```python
 nwsl_standings(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -456,7 +457,7 @@ nwsl_standings(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74
 
 _Last validated n/a._
 
-## `nwsl_team_stats`
+## nwsl_team_stats
 
 Team-stats leaderboard for a season.
 
@@ -470,7 +471,7 @@ Team-stats leaderboard for a season.
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 | `category` | `category` |  |  | `Y` | Stat family: `general` (default), `attack`, `defence`, etc. |
 
-### Returns
+### Returns {#nwsl_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -511,7 +512,7 @@ Team-stats leaderboard for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_team_stats-example}
 
 ```python
 nwsl_team_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
@@ -519,7 +520,7 @@ nwsl_team_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da7
 
 _Last validated n/a._
 
-## `nwsl_teams`
+## nwsl_teams
 
 Teams participating in a season.
 
@@ -532,7 +533,7 @@ Teams participating in a season.
 | `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 | `locale` | `locale` |  |  | `Y` | UI locale, always `en-US`. |
 
-### Returns
+### Returns {#nwsl_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -575,7 +576,7 @@ Teams participating in a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nwsl_teams-example}
 
 ```python
 nwsl_teams(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')

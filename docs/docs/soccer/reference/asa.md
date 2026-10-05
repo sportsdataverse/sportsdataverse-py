@@ -3,12 +3,13 @@ title: SOCCER — American Soccer Analysis (app.americansocceranalysis.com)
 sidebar_label: American Soccer Analysis (app.americansocceranalysis.com)
 description: "SOCCER — American Soccer Analysis (app.americansocceranalysis.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # SOCCER — American Soccer Analysis (app.americansocceranalysis.com)
 
 `sportsdataverse.soccer` — 15 endpoints.
 
-## `asa_games`
+## asa_games
 
 Games/fixtures with final scores, venue/official/manager FKs.
 
@@ -20,7 +21,7 @@ Games/fixtures with final scores, venue/official/manager FKs.
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -45,7 +46,7 @@ Games/fixtures with final scores, venue/official/manager FKs.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_games-example}
 
 ```python
 asa_games(league_slug='mls')
@@ -53,7 +54,7 @@ asa_games(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_games_xgoals`
+## asa_games_xgoals
 
 Per-game expected-goals + expected points for both sides.
 
@@ -74,7 +75,7 @@ Per-game expected-goals + expected points for both sides.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_games_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -98,7 +99,7 @@ Per-game expected-goals + expected points for both sides.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_games_xgoals-example}
 
 ```python
 asa_games_xgoals(league_slug='mls')
@@ -106,7 +107,7 @@ asa_games_xgoals(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_goalkeepers_goals_added`
+## asa_goalkeepers_goals_added
 
 Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 
@@ -127,7 +128,7 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_goalkeepers_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -138,7 +139,7 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_goalkeepers_goals_added-example}
 
 ```python
 asa_goalkeepers_goals_added(league_slug='mls')
@@ -146,7 +147,7 @@ asa_goalkeepers_goals_added(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_goalkeepers_xgoals`
+## asa_goalkeepers_xgoals
 
 Per-goalkeeper shot-stopping vs post-shot expected goals.
 
@@ -167,7 +168,7 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_goalkeepers_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -185,7 +186,7 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_goalkeepers_xgoals-example}
 
 ```python
 asa_goalkeepers_xgoals(league_slug='mls')
@@ -193,7 +194,7 @@ asa_goalkeepers_xgoals(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_managers`
+## asa_managers
 
 Managers/head coaches.
 
@@ -205,7 +206,7 @@ Managers/head coaches.
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_managers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -216,7 +217,7 @@ Managers/head coaches.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_managers-example}
 
 ```python
 asa_managers(league_slug='mls')
@@ -224,7 +225,7 @@ asa_managers(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_players`
+## asa_players
 
 Players in the league (identity + biometrics + positions).
 
@@ -236,7 +237,7 @@ Players in the league (identity + biometrics + positions).
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -255,7 +256,7 @@ Players in the league (identity + biometrics + positions).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_players-example}
 
 ```python
 asa_players(league_slug='mls')
@@ -263,7 +264,7 @@ asa_players(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_players_goals_added`
+## asa_players_goals_added
 
 Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 
@@ -284,7 +285,7 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_players_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -296,7 +297,7 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_players_goals_added-example}
 
 ```python
 asa_players_goals_added(league_slug='mls')
@@ -304,7 +305,7 @@ asa_players_goals_added(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_players_salaries`
+## asa_players_salaries
 
 Player salaries (MLS only; server caps the response at 10000 rows).
 
@@ -325,7 +326,7 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_players_salaries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -340,7 +341,7 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_players_salaries-example}
 
 ```python
 asa_players_salaries(league_slug='mls')
@@ -348,7 +349,7 @@ asa_players_salaries(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_players_xgoals`
+## asa_players_xgoals
 
 Per-player expected-goals + attacking production.
 
@@ -369,7 +370,7 @@ Per-player expected-goals + attacking production.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_players_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -395,7 +396,7 @@ Per-player expected-goals + attacking production.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_players_xgoals-example}
 
 ```python
 asa_players_xgoals(league_slug='mls')
@@ -403,7 +404,7 @@ asa_players_xgoals(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_referees`
+## asa_referees
 
 Match referees.
 
@@ -415,7 +416,7 @@ Match referees.
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_referees-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -427,7 +428,7 @@ Match referees.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_referees-example}
 
 ```python
 asa_referees(league_slug='mls')
@@ -435,7 +436,7 @@ asa_referees(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_stadia`
+## asa_stadia
 
 Stadia (venue metadata incl. coordinates + pitch dimensions).
 
@@ -447,7 +448,7 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_stadia-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -470,7 +471,7 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_stadia-example}
 
 ```python
 asa_stadia(league_slug='mls')
@@ -478,7 +479,7 @@ asa_stadia(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_teams`
+## asa_teams
 
 Teams in the league (full table, no filter params).
 
@@ -490,7 +491,7 @@ Teams in the league (full table, no filter params).
 |---|---|:---:|:---:|:---:|---|
 | `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
 
-### Returns
+### Returns {#asa_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -502,7 +503,7 @@ Teams in the league (full table, no filter params).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_teams-example}
 
 ```python
 asa_teams(league_slug='mls')
@@ -510,7 +511,7 @@ asa_teams(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_teams_goals_added`
+## asa_teams_goals_added
 
 Per-team Goals Added for/against with a per-action-type data[] breakdown.
 
@@ -531,7 +532,7 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_teams_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -541,7 +542,7 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_teams_goals_added-example}
 
 ```python
 asa_teams_goals_added(league_slug='mls')
@@ -549,7 +550,7 @@ asa_teams_goals_added(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_teams_xgoals`
+## asa_teams_xgoals
 
 Per-team expected-goals for/against + expected points.
 
@@ -570,7 +571,7 @@ Per-team expected-goals for/against + expected points.
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_teams_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -591,7 +592,7 @@ Per-team expected-goals for/against + expected points.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_teams_xgoals-example}
 
 ```python
 asa_teams_xgoals(league_slug='mls')
@@ -599,7 +600,7 @@ asa_teams_xgoals(league_slug='mls')
 
 _Last validated n/a._
 
-## `asa_teams_xpass`
+## asa_teams_xpass
 
 Per-team expected-passing (completion over expected, vertical distance).
 
@@ -620,7 +621,7 @@ Per-team expected-passing (completion over expected, vertical distance).
 | `start_date` | `start_date` |  |  | `Y` | Lower date bound (`YYYY-MM-DD`), where the route supports date windows. |
 | `end_date` | `end_date` |  |  | `Y` | Upper date bound (`YYYY-MM-DD`), where the route supports date windows. |
 
-### Returns
+### Returns {#asa_teams_xpass-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -644,7 +645,7 @@ Per-team expected-passing (completion over expected, vertical distance).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#asa_teams_xpass-example}
 
 ```python
 asa_teams_xpass(league_slug='mls')

@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_vijhl_season() -> 'int'` {#most_recent_vijhl_season}
+### most_recent_vijhl_season {#most_recent_vijhl_season}
+
+`most_recent_vijhl_season() -> 'int'`
 
 Most-recent VIJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `vijhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_game_corsi}
+### vijhl_game_corsi {#vijhl_game_corsi}
+
+`vijhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single VIJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single VIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_game_shifts}
+### vijhl_game_shifts {#vijhl_game_shifts}
+
+`vijhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single VIJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single VIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_game_summary(game_id: 'int') -> 'dict'` {#vijhl_game_summary}
+### vijhl_game_summary {#vijhl_game_summary}
+
+`vijhl_game_summary(game_id: 'int') -> 'dict'`
 
 VIJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ VIJHL game summary — dict of frames (game/goals/penalties/shots_by_period/thre
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `vijhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_leaders}
+### vijhl_leaders {#vijhl_leaders}
+
+`vijhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ VIJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `vijhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_pbp}
+### vijhl_pbp {#vijhl_pbp}
+
+`vijhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ VIJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_player_stats}
+### vijhl_player_stats {#vijhl_player_stats}
+
+`vijhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ VIJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_player_toi}
+### vijhl_player_toi {#vijhl_player_toi}
+
+`vijhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single VIJHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single VIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_schedule}
+### vijhl_schedule {#vijhl_schedule}
+
+`vijhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ VIJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `vijhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_season_id}
+### vijhl_season_id {#vijhl_season_id}
+
+`vijhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All VIJHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All VIJHL seasons with end-year + game-type labels.
 | `season_yr` | double | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `vijhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_standings}
+### vijhl_standings {#vijhl_standings}
+
+`vijhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL standings — one row per team.
 
@@ -221,7 +245,9 @@ VIJHL standings — one row per team.
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team-side label or team identifier. |
 
-### `vijhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_team_roster}
+### vijhl_team_roster {#vijhl_team_roster}
+
+`vijhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL team roster for a given team + season.
 
@@ -234,7 +260,9 @@ VIJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `vijhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#vijhl_teams}
+### vijhl_teams {#vijhl_teams}
+
+`vijhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 VIJHL teams for a given season.
 

@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Dataset loaders
 
-### `load_pwhl_games(return_as_pandas: 'bool' = False)` {#load_pwhl_games}
+### load_pwhl_games {#load_pwhl_games}
+
+`load_pwhl_games(return_as_pandas: 'bool' = False)`
 
 Load the PWHL games-in-data-repo manifest (no `seasons` argument).
 
@@ -69,7 +71,9 @@ A polars (or pandas) DataFrame of all games in the data repository.
 load_pwhl_games()
 ```
 
-### `load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_goalie_box}
+### load_pwhl_goalie_box {#load_pwhl_goalie_box}
+
+`load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
@@ -80,7 +84,9 @@ Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_player_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_player_box}
+### load_pwhl_player_box {#load_pwhl_player_box}
+
+`load_pwhl_player_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
 
@@ -91,7 +97,9 @@ Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_schedule(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_schedule}
+### load_pwhl_schedule {#load_pwhl_schedule}
+
+`load_pwhl_schedule(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
 
@@ -102,7 +110,9 @@ Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_skater_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_skater_box}
+### load_pwhl_skater_box {#load_pwhl_skater_box}
+
+`load_pwhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
 
@@ -113,7 +123,9 @@ Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_team_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_team_box}
+### load_pwhl_team_box {#load_pwhl_team_box}
+
+`load_pwhl_team_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
@@ -126,13 +138,17 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 ## Utilities & helpers
 
-### `most_recent_pwhl_season() -> 'int'` {#most_recent_pwhl_season}
+### most_recent_pwhl_season {#most_recent_pwhl_season}
+
+`most_recent_pwhl_season() -> 'int'`
 
 Most-recent PWHL season as an end-year integer (max `season_yr`).
 
 ## Other
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+### LeagueConstants {#LeagueConstants}
+
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None`
 
 Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
@@ -152,7 +168,9 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
 | `min_season` | `int` |  | earliest season this league's prediction spine supports. |
 
-### `as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+### as_of_ratings_split {#as_of_ratings_split}
+
+`as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'`
 
 Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
 
@@ -178,7 +196,9 @@ df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
 as_of_ratings_split(df, dt.date(2023, 1, 2))
 ```
 
-### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+### brier_score {#brier_score}
+
+`brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'`
 
 Mean squared error between predicted probabilities and binary outcomes.
 
@@ -201,7 +221,9 @@ from sportsdataverse._common.metrics import brier_score
 brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+### calibration_table {#calibration_table}
+
+`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
 
 Bucket predicted probabilities into bins and compare to actual outcome rates.
 
@@ -225,7 +247,9 @@ from sportsdataverse._common.metrics import calibration_table
 calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
-### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+### log_loss_score {#log_loss_score}
+
+`log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
 
 Binary cross-entropy loss between predicted probabilities and outcomes.
 
@@ -249,7 +273,9 @@ from sportsdataverse._common.metrics import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+### mae {#mae}
+
+`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Mean absolute error between two arrays.
 
@@ -272,7 +298,9 @@ from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
-### `pwhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_game_corsi}
+### pwhl_game_corsi {#pwhl_game_corsi}
+
+`pwhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Player-level on-ice Corsi and Fenwick for a single PWHL game.
 
@@ -308,7 +336,9 @@ One row per on-ice player with columns: - `player_id` (Utf8) - `corsi_for`, `cor
 | `toi_seconds` | double | Total time on ice in seconds for this team at the tracked strength during the PWHL game. |
 | `corsi_for_per60` | double | This team's Corsi For rate projected to a full 60 minutes of ice time. |
 
-### `pwhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_game_shifts}
+### pwhl_game_shifts {#pwhl_game_shifts}
+
+`pwhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Parsed shift stints for a single PWHL game.
 
@@ -343,7 +373,9 @@ Columns include `player_id`, `first_name`, `last_name`, `home`, `period`, `start
 | `goal_on_shift` | integer | Number of goals scored while this shift was active (0 or 1 in most cases). |
 | `penalty_on_shift` | integer | Number of penalties called while this shift was active. |
 
-### `pwhl_game_summary(game_id: 'int') -> 'dict'` {#pwhl_game_summary}
+### pwhl_game_summary {#pwhl_game_summary}
+
+`pwhl_game_summary(game_id: 'int') -> 'dict'`
 
 PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -353,7 +385,9 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `pwhl_game_total(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_game_total}
+### pwhl_game_total {#pwhl_game_total}
+
+`pwhl_game_total(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
 
 PWHL per-game expected total goals (re-export of the expected-goals helper).
 
@@ -379,7 +413,9 @@ from sportsdataverse.pwhl.pwhl_player_props import pwhl_game_total
 totals = pwhl_game_total(games, ratings)
 ```
 
-### `pwhl_in_game_win_prob(pbp: 'Any', pregame_home_prob: 'float', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_in_game_win_prob}
+### pwhl_in_game_win_prob {#pwhl_in_game_win_prob}
+
+`pwhl_in_game_win_prob(pbp: 'Any', pregame_home_prob: 'float', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
 
 PWHL per-play live home win probability from the bundled in-game model.
 
@@ -408,7 +444,9 @@ from sportsdataverse.pwhl.pwhl_market import pwhl_in_game_win_prob
 wp = pwhl_in_game_win_prob(pbp, pregame_home_prob=0.5)
 ```
 
-### `pwhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_leaders}
+### pwhl_leaders {#pwhl_leaders}
+
+`pwhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL statistical leaders for a given season.
 
@@ -445,7 +483,9 @@ by season, not `season` (name string). The resolved integer is passed as the
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
-### `pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_box}
+### pwhl_player_box {#pwhl_player_box}
+
+`pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL player box score for a single game.
 
@@ -459,7 +499,9 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `pwhl_player_game_log(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_game_log}
+### pwhl_player_game_log {#pwhl_player_game_log}
+
+`pwhl_player_game_log(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL player game-by-game log.
 
@@ -470,7 +512,9 @@ PWHL player game-by-game log.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `pwhl_player_info(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_info}
+### pwhl_player_info {#pwhl_player_info}
+
+`pwhl_player_info(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL player biographical info.
 
@@ -484,7 +528,9 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `pwhl_player_props(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_player_props}
+### pwhl_player_props {#pwhl_player_props}
+
+`pwhl_player_props(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
 
 PWHL empirical-Bayes shots/points player-prop projections.
 
@@ -509,7 +555,9 @@ from sportsdataverse.pwhl.pwhl_player_props import pwhl_player_props
 props = pwhl_player_props(2024)
 ```
 
-### `pwhl_player_search(name: 'str', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_search}
+### pwhl_player_search {#pwhl_player_search}
+
+`pwhl_player_search(name: 'str', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Search for PWHL players by name.
 
@@ -554,7 +602,9 @@ Search for PWHL players by name.
 | `score` | character | Final score string. |
 | `last_active_date` | character | ISO-formatted date string of the player's most recent recorded activity or roster transaction in the PWHL HockeyTech system. |
 
-### `pwhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_stats}
+### pwhl_player_stats {#pwhl_player_stats}
+
+`pwhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL player season stats across all seasons.
 
@@ -621,7 +671,9 @@ PWHL player season stats across all seasons.
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `pwhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_player_toi}
+### pwhl_player_toi {#pwhl_player_toi}
+
+`pwhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-player time-on-ice totals for a single PWHL game.
 
@@ -648,7 +700,9 @@ One row per player with `player_id`, `first_name`, `last_name`, `toi_seconds`, `
 | `num_shifts` | integer | Total number of shifts the player took during the game or reporting period. |
 | `avg_shift_s` | double | Average duration of a single shift for the player during the game or reporting period, measured in seconds. |
 
-### `pwhl_playoff_bracket(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_playoff_bracket}
+### pwhl_playoff_bracket {#pwhl_playoff_bracket}
+
+`pwhl_playoff_bracket(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL playoff bracket for a given season.
 
@@ -660,7 +714,9 @@ PWHL playoff bracket for a given season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `pwhl_predict_games(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_predict_games}
+### pwhl_predict_games {#pwhl_predict_games}
+
+`pwhl_predict_games(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
 
 PWHL vectorized pregame margin/win-prob/total (+ market edge).
 
@@ -686,7 +742,9 @@ from sportsdataverse.pwhl.pwhl_market import pwhl_predict_games
 preds = pwhl_predict_games(games, ratings)
 ```
 
-### `pwhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_schedule}
+### pwhl_schedule {#pwhl_schedule}
+
+`pwhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL schedule — one row per game (matches fastRhockey `pwhl_schedule`).
 
@@ -716,7 +774,9 @@ PWHL schedule — one row per game (matches fastRhockey `pwhl_schedule`).
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### `pwhl_scorebar(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_scorebar}
+### pwhl_scorebar {#pwhl_scorebar}
+
+`pwhl_scorebar(return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL live scorebar (today ± 3 days).
 
@@ -797,7 +857,9 @@ PWHL live scorebar (today ± 3 days).
 | `flo_hockey_url` | character | URL to the FloHockey streaming page for this PWHL game. |
 | `combined_client_code` | character | Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments. |
 
-### `pwhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_season_id}
+### pwhl_season_id {#pwhl_season_id}
+
+`pwhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 
@@ -822,7 +884,9 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_rapm}
+### pwhl_skater_rapm {#pwhl_skater_rapm}
+
+`pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`.
 
@@ -849,7 +913,9 @@ from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
 rapm = pwhl_skater_rapm(pbp, shifts)
 ```
 
-### `pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_war}
+### pwhl_skater_war {#pwhl_skater_war}
+
+`pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`.
 
@@ -874,7 +940,9 @@ from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
 war = pwhl_skater_war(pbp, shifts)
 ```
 
-### `pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_special_teams_value}
+### pwhl_special_teams_value {#pwhl_special_teams_value}
+
+`pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑥ PWHL special-teams value -- shim over `nhl_special_teams_value` with `league='pwhl'`.
 
@@ -899,7 +967,9 @@ from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
 st = pwhl_special_teams_value(pbp, shifts)
 ```
 
-### `pwhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_standings}
+### pwhl_standings {#pwhl_standings}
+
+`pwhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL standings — one row per team.
 
@@ -933,7 +1003,9 @@ PWHL standings — one row per team.
 | `team` | character | Team name. |
 | `wins` | integer | Wins. |
 
-### `pwhl_stats(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, position: 'str' = 'skaters', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_stats}
+### pwhl_stats {#pwhl_stats}
+
+`pwhl_stats(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, position: 'str' = 'skaters', return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL aggregate stats by season and position.
 
@@ -1040,7 +1112,9 @@ PWHL aggregate stats by season and position.
 | `team_breakdown` | integer | Per-team statistical breakdown. |
 | `is_total` | double | Whether the row is a season total. |
 
-### `pwhl_streaks(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_streaks}
+### pwhl_streaks {#pwhl_streaks}
+
+`pwhl_streaks(return_as_pandas: 'bool' = False) -> 'Any'`
 
 Current PWHL player/team streaks — **non-functional: no such upstream view**.
 
@@ -1054,7 +1128,9 @@ Current PWHL player/team streaks — **non-functional: no such upstream view**.
 
 An empty frame (the upstream view does not exist).
 
-### `pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_team_ratings}
+### pwhl_team_ratings {#pwhl_team_ratings}
+
+`pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
 
 PWHL opponent-adjusted, shrunk even-strength xG team ratings.
 
@@ -1080,7 +1156,9 @@ from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
 ratings = pwhl_team_ratings(2024)
 ```
 
-### `pwhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_team_roster}
+### pwhl_team_roster {#pwhl_team_roster}
+
+`pwhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL team roster for a given team + season.
 
@@ -1144,7 +1222,9 @@ PWHL team roster for a given team + season.
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
 | `catches` | character | Catching hand (goalies). |
 
-### `pwhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_teams}
+### pwhl_teams {#pwhl_teams}
+
+`pwhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL teams for a given season.
 
@@ -1169,7 +1249,9 @@ PWHL teams for a given season.
 | `division` | character | Division identifier. |
 | `team_logo` | character | URL to the team logo image. |
 
-### `pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_transactions}
+### pwhl_transactions {#pwhl_transactions}
+
+`pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'`
 
 PWHL roster transactions.
 
@@ -1179,7 +1261,9 @@ PWHL roster transactions.
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_unit_ratings}
+### pwhl_unit_ratings {#pwhl_unit_ratings}
+
+`pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"`
 
 ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`.
 
@@ -1204,7 +1288,9 @@ from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
 units = pwhl_unit_ratings(pbp, shifts)
 ```
 
-### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+### spearman_corr {#spearman_corr}
+
+`spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Spearman rank correlation between two arrays.
 

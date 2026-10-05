@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Other
 
-### `cache_stats() -> 'Dict[str, Any]'` {#cache_stats}
+### cache_stats {#cache_stats}
+
+`cache_stats() -> 'Dict[str, Any]'`
 
 Return a snapshot of the cache for debugging / inspection.
 
@@ -19,7 +21,9 @@ Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
-### `college_baseball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_re24}
+### college_baseball_re24 {#college_baseball_re24}
+
+`college_baseball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_baseball"`.
 
@@ -50,7 +54,9 @@ state = college_baseball_state(raw)
 matrix = college_baseball_re24(state=state)
 ```
 
-### `college_baseball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_baseball_state}
+### college_baseball_state {#college_baseball_state}
+
+`college_baseball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_baseball"`.
 
@@ -71,7 +77,9 @@ from sportsdataverse.baseball.college_baseball.college_baseball_re import colleg
 state = college_baseball_state(raw)
 ```
 
-### `college_baseball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_wpa}
+### college_baseball_wpa {#college_baseball_wpa}
+
+`college_baseball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_baseball"`.
 
@@ -104,7 +112,9 @@ from sportsdataverse.baseball.college_baseball.college_baseball_re import colleg
 wpa = college_baseball_wpa(state=state, results=results)
 ```
 
-### `college_softball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_re24}
+### college_softball_re24 {#college_softball_re24}
+
+`college_softball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_softball"`.
 
@@ -135,7 +145,9 @@ state = college_softball_state(raw)
 matrix = college_softball_re24(state=state)
 ```
 
-### `college_softball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_softball_state}
+### college_softball_state {#college_softball_state}
+
+`college_softball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_softball"`.
 
@@ -156,7 +168,9 @@ from sportsdataverse.baseball.college_softball.college_softball_re import colleg
 state = college_softball_state(raw)
 ```
 
-### `college_softball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_wpa}
+### college_softball_wpa {#college_softball_wpa}
+
+`college_softball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 `sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_softball"`.
 
@@ -189,7 +203,9 @@ from sportsdataverse.baseball.college_softball.college_softball_re import colleg
 wpa = college_softball_wpa(state=state, results=results)
 ```
 
-### `cricket_expected_runs(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_expected_runs}
+### cricket_expected_runs {#cricket_expected_runs}
+
+`cricket_expected_runs(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Expected remaining runs + run rate from a win-probability-scored state frame.
 
@@ -215,7 +231,9 @@ er = cricket_expected_runs(scored)
 er.select("exp_runs_remaining", "exp_run_rate").head()
 ```
 
-### `cricket_match_state(summary: 'dict', *, fmt: 'str', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_match_state}
+### cricket_match_state {#cricket_match_state}
+
+`cricket_match_state(summary: 'dict', *, fmt: 'str', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Extract over-level match state from an ESPN cricket summary/scoreboard payload.
 
@@ -244,7 +262,9 @@ state = cricket_match_state(espn_cricket_summary(event="1385691", return_parsed=
 print(state.shape)
 ```
 
-### `cricket_win_probability(state: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_win_probability}
+### cricket_win_probability {#cricket_win_probability}
+
+`cricket_win_probability(state: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 In-play win probability for the batting/chasing team from match state.
 
@@ -270,7 +290,9 @@ st = pl.DataFrame([{ "event_id": "M1", "innings_number": 2,
 cricket_win_probability(st).select("win_prob").item()
 ```
 
-### `cricket_wpa(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_wpa}
+### cricket_wpa {#cricket_wpa}
+
+`cricket_wpa(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Batting/bowling win-probability added per over/wicket transition.
 
@@ -300,7 +322,9 @@ wpa = cricket_wpa(cricket_win_probability(state))
 wpa.select("wpa_batting", "wpa_bowling").head()
 ```
 
-### `decompose_college_baseball_plays(rows: "'list[dict]'", *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#decompose_college_baseball_plays}
+### decompose_college_baseball_plays {#decompose_college_baseball_plays}
+
+`decompose_college_baseball_plays(rows: "'list[dict]'", *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Decompose pre-extracted play rows into the full `PBP_SCHEMA` frame.
 
@@ -333,7 +357,9 @@ df = decompose_college_baseball_plays(
 print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
 ```
 
-### `defense_vs_position(pbp: 'pl.DataFrame', rosters: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'` {#defense_vs_position}
+### defense_vs_position {#defense_vs_position}
+
+`defense_vs_position(pbp: 'pl.DataFrame', rosters: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'`
 
 EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and TEs.
 
@@ -413,7 +439,9 @@ dvp_nfl = defense_vs_position(pbp, load_nfl_rosters([2024]), "nfl")
 dvp.filter((pl.col("position_group") == "TE") & (pl.col("qualified") == True)).sort("epa_per_play_allowed")
 ```
 
-### `deserved_wins(games: 'pl.DataFrame') -> 'pl.DataFrame'` {#deserved_wins}
+### deserved_wins {#deserved_wins}
+
+`deserved_wins(games: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Season deserved wins and luck per team from `paper_index_games` rows.
 
@@ -454,7 +482,9 @@ luck = deserved_wins(paper_index_games(load_cfb_pbp(2024).select(PBP_COLUMNS), "
 luck.sort("luck_z", descending=True).head(10)  # the season's luckiest teams
 ```
 
-### `football_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_attempts}
+### football_attempts {#football_attempts}
+
+`football_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Field-goal, air-yards, fourth-down and down-x-distance attempts from released `espn_{cfb,nfl}_pbp`.
 
@@ -514,7 +544,9 @@ att.filter(pl.col("metric") == "fg_pct_by_distance").head()
 att.group_by("metric").agg(pl.len(), pl.col("success").mean())
 ```
 
-### `football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#football_events}
+### football_events {#football_events}
+
+`football_events(pbp: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays.
 
@@ -558,11 +590,15 @@ ev.filter(pl.col("window_unit") == "dropback").head()
 ev.group_by("entity_id", "season").agg(pl.col("value").mean())
 ```
 
-### `get_cache_mode() -> 'str'` {#get_cache_mode}
+### get_cache_mode {#get_cache_mode}
+
+`get_cache_mode() -> 'str'`
 
 Return the current cache mode.
 
-### `mch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mch_ratings}
+### mch_ratings {#mch_ratings}
+
+`mch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 MCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
 
@@ -589,7 +625,9 @@ ratings = mch_ratings(["20250118", "20250201"])
 ratings.sort("adj_net", descending=True).head()
 ```
 
-### `metric_curves(attempts: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'` {#metric_curves}
+### metric_curves {#metric_curves}
+
+`metric_curves(attempts: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'`
 
 League, team and player rate curves from an `ATTEMPT_SCHEMA` frame.
 
@@ -637,7 +675,9 @@ curves.filter((pl.col("metric") == "fg_pct_by_distance") & (pl.col("entity_type"
 curves.filter((pl.col("entity_type") == "player") & (pl.col("attempts") >= 10)).sort("rate", descending=True)
 ```
 
-### `nflfastr_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#nflfastr_attempts}
+### nflfastr_attempts {#nflfastr_attempts}
+
+`nflfastr_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 The same attempts from `nfl_model_pbp` (the nflfastR shape), which carries air yards.
 
@@ -694,7 +734,9 @@ curves = metric_curves(nflfastr_attempts(pbp), "nfl")
 curves.filter((pl.col("metric") == "cmp_pct_by_air_yards") & (pl.col("entity_type") == "league"))
 ```
 
-### `paper_index_game(pbp: 'pl.DataFrame', home_id: 'Union[int, str]', away_id: 'Union[int, str]', league: 'str') -> 'Optional[dict[str, Any]]'` {#paper_index_game}
+### paper_index_game {#paper_index_game}
+
+`paper_index_game(pbp: 'pl.DataFrame', home_id: 'Union[int, str]', away_id: 'Union[int, str]', league: 'str') -> 'Optional[dict[str, Any]]'`
 
 Paper Index of one game: each side's deserved-win share and the eight margins.
 
@@ -726,7 +768,9 @@ out = paper_index_game(pbp, 2, 25, "cfb")  # Auburn (home) vs California
 out["home_share"], out["margins"]["success"]
 ```
 
-### `paper_index_games(pbp: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'` {#paper_index_games}
+### paper_index_games {#paper_index_games}
+
+`paper_index_games(pbp: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'`
 
 Paper Index of every completed game in a pbp frame, one row per team per game.
 
@@ -786,7 +830,9 @@ games = paper_index_games(pl.read_parquet(url, columns=list(PBP_COLUMNS)), "nfl"
 games.filter(~pl.col("won") & (pl.col("paper_share") > 0.8))  # deserved to win, lost
 ```
 
-### `pff_aaf_facet_blocking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_blocking_summary}
+### pff_aaf_facet_blocking_summary {#pff_aaf_facet_blocking_summary}
+
+`pff_aaf_facet_blocking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -817,7 +863,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_blocking_summary()
 ```
 
-### `pff_aaf_facet_coverage_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_coverage_scheme}
+### pff_aaf_facet_coverage_scheme {#pff_aaf_facet_coverage_scheme}
+
+`pff_aaf_facet_coverage_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -848,7 +896,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_scheme()
 ```
 
-### `pff_aaf_facet_coverage_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_coverage_summary}
+### pff_aaf_facet_coverage_summary {#pff_aaf_facet_coverage_summary}
+
+`pff_aaf_facet_coverage_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -879,7 +929,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_summary()
 ```
 
-### `pff_aaf_facet_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_defense_summary}
+### pff_aaf_facet_defense_summary {#pff_aaf_facet_defense_summary}
+
+`pff_aaf_facet_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -910,7 +962,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_defense_summary()
 ```
 
-### `pff_aaf_facet_field_goal_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_field_goal_summary}
+### pff_aaf_facet_field_goal_summary {#pff_aaf_facet_field_goal_summary}
+
+`pff_aaf_facet_field_goal_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -941,7 +995,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_field_goal_summary()
 ```
 
-### `pff_aaf_facet_kicking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_kicking_summary}
+### pff_aaf_facet_kicking_summary {#pff_aaf_facet_kicking_summary}
+
+`pff_aaf_facet_kicking_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -972,7 +1028,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_kicking_summary()
 ```
 
-### `pff_aaf_facet_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_offense_summary}
+### pff_aaf_facet_offense_summary {#pff_aaf_facet_offense_summary}
+
+`pff_aaf_facet_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1003,7 +1061,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_offense_summary()
 ```
 
-### `pff_aaf_facet_pass_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pass_blocking}
+### pff_aaf_facet_pass_blocking {#pff_aaf_facet_pass_blocking}
+
+`pff_aaf_facet_pass_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1034,7 +1094,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_blocking()
 ```
 
-### `pff_aaf_facet_pass_rush_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pass_rush_summary}
+### pff_aaf_facet_pass_rush_summary {#pff_aaf_facet_pass_rush_summary}
+
+`pff_aaf_facet_pass_rush_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1065,7 +1127,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_rush_summary()
 ```
 
-### `pff_aaf_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_allowed_pressure}
+### pff_aaf_facet_passing_allowed_pressure {#pff_aaf_facet_passing_allowed_pressure}
+
+`pff_aaf_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1096,7 +1160,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_allowed_pressure()
 ```
 
-### `pff_aaf_facet_passing_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_concept}
+### pff_aaf_facet_passing_concept {#pff_aaf_facet_passing_concept}
+
+`pff_aaf_facet_passing_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1127,7 +1193,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_concept()
 ```
 
-### `pff_aaf_facet_passing_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_depth}
+### pff_aaf_facet_passing_depth {#pff_aaf_facet_passing_depth}
+
+`pff_aaf_facet_passing_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1158,7 +1226,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_depth()
 ```
 
-### `pff_aaf_facet_passing_detail_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_detail_stats}
+### pff_aaf_facet_passing_detail_stats {#pff_aaf_facet_passing_detail_stats}
+
+`pff_aaf_facet_passing_detail_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1189,7 +1259,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_detail_stats()
 ```
 
-### `pff_aaf_facet_passing_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_pressure}
+### pff_aaf_facet_passing_pressure {#pff_aaf_facet_passing_pressure}
+
+`pff_aaf_facet_passing_pressure(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1220,7 +1292,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_pressure()
 ```
 
-### `pff_aaf_facet_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_passing_summary}
+### pff_aaf_facet_passing_summary {#pff_aaf_facet_passing_summary}
+
+`pff_aaf_facet_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1251,7 +1325,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_summary()
 ```
 
-### `pff_aaf_facet_pbes(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_pbes}
+### pff_aaf_facet_pbes {#pff_aaf_facet_pbes}
+
+`pff_aaf_facet_pbes(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1282,7 +1358,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pbes()
 ```
 
-### `pff_aaf_facet_prps(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_prps}
+### pff_aaf_facet_prps {#pff_aaf_facet_prps}
+
+`pff_aaf_facet_prps(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1313,7 +1391,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_prps()
 ```
 
-### `pff_aaf_facet_punting_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_punting_summary}
+### pff_aaf_facet_punting_summary {#pff_aaf_facet_punting_summary}
+
+`pff_aaf_facet_punting_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1344,7 +1424,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_punting_summary()
 ```
 
-### `pff_aaf_facet_receiving_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_concept}
+### pff_aaf_facet_receiving_concept {#pff_aaf_facet_receiving_concept}
+
+`pff_aaf_facet_receiving_concept(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1375,7 +1457,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_concept()
 ```
 
-### `pff_aaf_facet_receiving_coverage(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_coverage}
+### pff_aaf_facet_receiving_coverage {#pff_aaf_facet_receiving_coverage}
+
+`pff_aaf_facet_receiving_coverage(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1406,7 +1490,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage()
 ```
 
-### `pff_aaf_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_coverage_stats}
+### pff_aaf_facet_receiving_coverage_stats {#pff_aaf_facet_receiving_coverage_stats}
+
+`pff_aaf_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1437,7 +1523,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage_stats()
 ```
 
-### `pff_aaf_facet_receiving_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_depth}
+### pff_aaf_facet_receiving_depth {#pff_aaf_facet_receiving_depth}
+
+`pff_aaf_facet_receiving_depth(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1468,7 +1556,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_depth()
 ```
 
-### `pff_aaf_facet_receiving_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_scheme}
+### pff_aaf_facet_receiving_scheme {#pff_aaf_facet_receiving_scheme}
+
+`pff_aaf_facet_receiving_scheme(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1499,7 +1589,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_scheme()
 ```
 
-### `pff_aaf_facet_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_receiving_summary}
+### pff_aaf_facet_receiving_summary {#pff_aaf_facet_receiving_summary}
+
+`pff_aaf_facet_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1530,7 +1622,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_summary()
 ```
 
-### `pff_aaf_facet_return_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_return_summary}
+### pff_aaf_facet_return_summary {#pff_aaf_facet_return_summary}
+
+`pff_aaf_facet_return_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1561,7 +1655,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_return_summary()
 ```
 
-### `pff_aaf_facet_run_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_run_blocking}
+### pff_aaf_facet_run_blocking {#pff_aaf_facet_run_blocking}
+
+`pff_aaf_facet_run_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1592,7 +1688,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_blocking()
 ```
 
-### `pff_aaf_facet_run_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_run_defense_summary}
+### pff_aaf_facet_run_defense_summary {#pff_aaf_facet_run_defense_summary}
+
+`pff_aaf_facet_run_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1623,7 +1721,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_defense_summary()
 ```
 
-### `pff_aaf_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_rushing_direction_stats}
+### pff_aaf_facet_rushing_direction_stats {#pff_aaf_facet_rushing_direction_stats}
+
+`pff_aaf_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1654,7 +1754,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_direction_stats()
 ```
 
-### `pff_aaf_facet_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_rushing_summary}
+### pff_aaf_facet_rushing_summary {#pff_aaf_facet_rushing_summary}
+
+`pff_aaf_facet_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1685,7 +1787,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_summary()
 ```
 
-### `pff_aaf_facet_slot_coverages(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_slot_coverages}
+### pff_aaf_facet_slot_coverages {#pff_aaf_facet_slot_coverages}
+
+`pff_aaf_facet_slot_coverages(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1716,7 +1820,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_slot_coverages()
 ```
 
-### `pff_aaf_facet_special_teams_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_special_teams_summary}
+### pff_aaf_facet_special_teams_summary {#pff_aaf_facet_special_teams_summary}
+
+`pff_aaf_facet_special_teams_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1747,7 +1853,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_special_teams_summary()
 ```
 
-### `pff_aaf_facet_time_in_pockets(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_facet_time_in_pockets}
+### pff_aaf_facet_time_in_pockets {#pff_aaf_facet_time_in_pockets}
+
+`pff_aaf_facet_time_in_pockets(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1778,7 +1886,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_time_in_pockets()
 ```
 
-### `pff_aaf_games(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_games}
+### pff_aaf_games {#pff_aaf_games}
+
+`pff_aaf_games(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
@@ -1806,7 +1916,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_games()
 ```
 
-### `pff_aaf_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_leagues}
+### pff_aaf_leagues {#pff_aaf_leagues}
+
+`pff_aaf_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
@@ -1831,7 +1943,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_leagues()
 ```
 
-### `pff_aaf_player_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_defense_summary}
+### pff_aaf_player_defense_summary {#pff_aaf_player_defense_summary}
+
+`pff_aaf_player_defense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
@@ -1861,7 +1975,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_defense_summary()
 ```
 
-### `pff_aaf_player_offense_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_offense_blocking}
+### pff_aaf_player_offense_blocking {#pff_aaf_player_offense_blocking}
+
+`pff_aaf_player_offense_blocking(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
@@ -1891,7 +2007,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_blocking()
 ```
 
-### `pff_aaf_player_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_offense_summary}
+### pff_aaf_player_offense_summary {#pff_aaf_player_offense_summary}
+
+`pff_aaf_player_offense_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
@@ -1921,7 +2039,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_summary()
 ```
 
-### `pff_aaf_player_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_passing_summary}
+### pff_aaf_player_passing_summary {#pff_aaf_player_passing_summary}
+
+`pff_aaf_player_passing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
@@ -1951,7 +2071,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_passing_summary()
 ```
 
-### `pff_aaf_player_position_pivot(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_position_pivot}
+### pff_aaf_player_position_pivot {#pff_aaf_player_position_pivot}
+
+`pff_aaf_player_position_pivot(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
@@ -1980,7 +2102,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_position_pivot()
 ```
 
-### `pff_aaf_player_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_receiving_summary}
+### pff_aaf_player_receiving_summary {#pff_aaf_player_receiving_summary}
+
+`pff_aaf_player_receiving_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
@@ -2010,7 +2134,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_receiving_summary()
 ```
 
-### `pff_aaf_player_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_rushing_summary}
+### pff_aaf_player_rushing_summary {#pff_aaf_player_rushing_summary}
+
+`pff_aaf_player_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
@@ -2040,7 +2166,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_rushing_summary()
 ```
 
-### `pff_aaf_player_seasons(*, league: 'Optional[str]' = 'aaf', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_seasons}
+### pff_aaf_player_seasons {#pff_aaf_player_seasons}
+
+`pff_aaf_player_seasons(*, league: 'Optional[str]' = 'aaf', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
@@ -2067,7 +2195,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_seasons()
 ```
 
-### `pff_aaf_player_snaps_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_player_snaps_summary}
+### pff_aaf_player_snaps_summary {#pff_aaf_player_snaps_summary}
+
+`pff_aaf_player_snaps_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
@@ -2097,7 +2227,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_snaps_summary()
 ```
 
-### `pff_aaf_players(*, league: 'Optional[str]' = 'aaf', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_players}
+### pff_aaf_players {#pff_aaf_players}
+
+`pff_aaf_players(*, league: 'Optional[str]' = 'aaf', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
@@ -2125,7 +2257,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_players()
 ```
 
-### `pff_aaf_teams(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_teams}
+### pff_aaf_teams {#pff_aaf_teams}
+
+`pff_aaf_teams(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
@@ -2152,7 +2286,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams()
 ```
 
-### `pff_aaf_teams_overview(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_aaf_teams_overview}
+### pff_aaf_teams_overview {#pff_aaf_teams_overview}
+
+`pff_aaf_teams_overview(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
@@ -2180,7 +2316,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams_overview()
 ```
 
-### `pff_ncaa_facet_blocking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_blocking_summary}
+### pff_ncaa_facet_blocking_summary {#pff_ncaa_facet_blocking_summary}
+
+`pff_ncaa_facet_blocking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2211,7 +2349,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_blocking_summary()
 ```
 
-### `pff_ncaa_facet_coverage_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_coverage_scheme}
+### pff_ncaa_facet_coverage_scheme {#pff_ncaa_facet_coverage_scheme}
+
+`pff_ncaa_facet_coverage_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2242,7 +2382,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_scheme()
 ```
 
-### `pff_ncaa_facet_coverage_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_coverage_summary}
+### pff_ncaa_facet_coverage_summary {#pff_ncaa_facet_coverage_summary}
+
+`pff_ncaa_facet_coverage_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2273,7 +2415,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_summary()
 ```
 
-### `pff_ncaa_facet_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_defense_summary}
+### pff_ncaa_facet_defense_summary {#pff_ncaa_facet_defense_summary}
+
+`pff_ncaa_facet_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2304,7 +2448,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_defense_summary()
 ```
 
-### `pff_ncaa_facet_field_goal_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_field_goal_summary}
+### pff_ncaa_facet_field_goal_summary {#pff_ncaa_facet_field_goal_summary}
+
+`pff_ncaa_facet_field_goal_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2335,7 +2481,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_field_goal_summary()
 ```
 
-### `pff_ncaa_facet_kicking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_kicking_summary}
+### pff_ncaa_facet_kicking_summary {#pff_ncaa_facet_kicking_summary}
+
+`pff_ncaa_facet_kicking_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2366,7 +2514,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_kicking_summary()
 ```
 
-### `pff_ncaa_facet_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_offense_summary}
+### pff_ncaa_facet_offense_summary {#pff_ncaa_facet_offense_summary}
+
+`pff_ncaa_facet_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2397,7 +2547,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_offense_summary()
 ```
 
-### `pff_ncaa_facet_pass_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pass_blocking}
+### pff_ncaa_facet_pass_blocking {#pff_ncaa_facet_pass_blocking}
+
+`pff_ncaa_facet_pass_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2428,7 +2580,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_blocking()
 ```
 
-### `pff_ncaa_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pass_rush_summary}
+### pff_ncaa_facet_pass_rush_summary {#pff_ncaa_facet_pass_rush_summary}
+
+`pff_ncaa_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2459,7 +2613,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_rush_summary()
 ```
 
-### `pff_ncaa_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_allowed_pressure}
+### pff_ncaa_facet_passing_allowed_pressure {#pff_ncaa_facet_passing_allowed_pressure}
+
+`pff_ncaa_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2490,7 +2646,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_allowed_pressure()
 ```
 
-### `pff_ncaa_facet_passing_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_concept}
+### pff_ncaa_facet_passing_concept {#pff_ncaa_facet_passing_concept}
+
+`pff_ncaa_facet_passing_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2521,7 +2679,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_concept()
 ```
 
-### `pff_ncaa_facet_passing_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_depth}
+### pff_ncaa_facet_passing_depth {#pff_ncaa_facet_passing_depth}
+
+`pff_ncaa_facet_passing_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2552,7 +2712,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_depth()
 ```
 
-### `pff_ncaa_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_detail_stats}
+### pff_ncaa_facet_passing_detail_stats {#pff_ncaa_facet_passing_detail_stats}
+
+`pff_ncaa_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2583,7 +2745,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_detail_stats()
 ```
 
-### `pff_ncaa_facet_passing_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_pressure}
+### pff_ncaa_facet_passing_pressure {#pff_ncaa_facet_passing_pressure}
+
+`pff_ncaa_facet_passing_pressure(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2614,7 +2778,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_pressure()
 ```
 
-### `pff_ncaa_facet_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_passing_summary}
+### pff_ncaa_facet_passing_summary {#pff_ncaa_facet_passing_summary}
+
+`pff_ncaa_facet_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2645,7 +2811,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_summary()
 ```
 
-### `pff_ncaa_facet_pbes(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_pbes}
+### pff_ncaa_facet_pbes {#pff_ncaa_facet_pbes}
+
+`pff_ncaa_facet_pbes(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2676,7 +2844,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pbes()
 ```
 
-### `pff_ncaa_facet_prps(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_prps}
+### pff_ncaa_facet_prps {#pff_ncaa_facet_prps}
+
+`pff_ncaa_facet_prps(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2707,7 +2877,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_prps()
 ```
 
-### `pff_ncaa_facet_punting_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_punting_summary}
+### pff_ncaa_facet_punting_summary {#pff_ncaa_facet_punting_summary}
+
+`pff_ncaa_facet_punting_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2738,7 +2910,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_punting_summary()
 ```
 
-### `pff_ncaa_facet_receiving_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_concept}
+### pff_ncaa_facet_receiving_concept {#pff_ncaa_facet_receiving_concept}
+
+`pff_ncaa_facet_receiving_concept(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2769,7 +2943,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_concept()
 ```
 
-### `pff_ncaa_facet_receiving_coverage(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_coverage}
+### pff_ncaa_facet_receiving_coverage {#pff_ncaa_facet_receiving_coverage}
+
+`pff_ncaa_facet_receiving_coverage(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2800,7 +2976,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage()
 ```
 
-### `pff_ncaa_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_coverage_stats}
+### pff_ncaa_facet_receiving_coverage_stats {#pff_ncaa_facet_receiving_coverage_stats}
+
+`pff_ncaa_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2831,7 +3009,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage_stats()
 ```
 
-### `pff_ncaa_facet_receiving_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_depth}
+### pff_ncaa_facet_receiving_depth {#pff_ncaa_facet_receiving_depth}
+
+`pff_ncaa_facet_receiving_depth(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2862,7 +3042,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_depth()
 ```
 
-### `pff_ncaa_facet_receiving_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_scheme}
+### pff_ncaa_facet_receiving_scheme {#pff_ncaa_facet_receiving_scheme}
+
+`pff_ncaa_facet_receiving_scheme(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2893,7 +3075,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_scheme()
 ```
 
-### `pff_ncaa_facet_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_receiving_summary}
+### pff_ncaa_facet_receiving_summary {#pff_ncaa_facet_receiving_summary}
+
+`pff_ncaa_facet_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2924,7 +3108,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_summary()
 ```
 
-### `pff_ncaa_facet_return_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_return_summary}
+### pff_ncaa_facet_return_summary {#pff_ncaa_facet_return_summary}
+
+`pff_ncaa_facet_return_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2955,7 +3141,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_return_summary()
 ```
 
-### `pff_ncaa_facet_run_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_run_blocking}
+### pff_ncaa_facet_run_blocking {#pff_ncaa_facet_run_blocking}
+
+`pff_ncaa_facet_run_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2986,7 +3174,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_blocking()
 ```
 
-### `pff_ncaa_facet_run_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_run_defense_summary}
+### pff_ncaa_facet_run_defense_summary {#pff_ncaa_facet_run_defense_summary}
+
+`pff_ncaa_facet_run_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3017,7 +3207,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_defense_summary()
 ```
 
-### `pff_ncaa_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_rushing_direction_stats}
+### pff_ncaa_facet_rushing_direction_stats {#pff_ncaa_facet_rushing_direction_stats}
+
+`pff_ncaa_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3048,7 +3240,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_direction_stats()
 ```
 
-### `pff_ncaa_facet_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_rushing_summary}
+### pff_ncaa_facet_rushing_summary {#pff_ncaa_facet_rushing_summary}
+
+`pff_ncaa_facet_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3079,7 +3273,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_summary()
 ```
 
-### `pff_ncaa_facet_slot_coverages(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_slot_coverages}
+### pff_ncaa_facet_slot_coverages {#pff_ncaa_facet_slot_coverages}
+
+`pff_ncaa_facet_slot_coverages(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3110,7 +3306,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_slot_coverages()
 ```
 
-### `pff_ncaa_facet_special_teams_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_special_teams_summary}
+### pff_ncaa_facet_special_teams_summary {#pff_ncaa_facet_special_teams_summary}
+
+`pff_ncaa_facet_special_teams_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3141,7 +3339,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_special_teams_summary()
 ```
 
-### `pff_ncaa_facet_time_in_pockets(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_facet_time_in_pockets}
+### pff_ncaa_facet_time_in_pockets {#pff_ncaa_facet_time_in_pockets}
+
+`pff_ncaa_facet_time_in_pockets(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3172,7 +3372,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_time_in_pockets()
 ```
 
-### `pff_ncaa_games(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_games}
+### pff_ncaa_games {#pff_ncaa_games}
+
+`pff_ncaa_games(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
@@ -3200,7 +3402,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_games()
 ```
 
-### `pff_ncaa_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_leagues}
+### pff_ncaa_leagues {#pff_ncaa_leagues}
+
+`pff_ncaa_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
@@ -3225,7 +3429,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_leagues()
 ```
 
-### `pff_ncaa_player_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_defense_summary}
+### pff_ncaa_player_defense_summary {#pff_ncaa_player_defense_summary}
+
+`pff_ncaa_player_defense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
@@ -3255,7 +3461,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_defense_summary()
 ```
 
-### `pff_ncaa_player_offense_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_offense_blocking}
+### pff_ncaa_player_offense_blocking {#pff_ncaa_player_offense_blocking}
+
+`pff_ncaa_player_offense_blocking(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
@@ -3285,7 +3493,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_blocking()
 ```
 
-### `pff_ncaa_player_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_offense_summary}
+### pff_ncaa_player_offense_summary {#pff_ncaa_player_offense_summary}
+
+`pff_ncaa_player_offense_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
@@ -3315,7 +3525,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_summary()
 ```
 
-### `pff_ncaa_player_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_passing_summary}
+### pff_ncaa_player_passing_summary {#pff_ncaa_player_passing_summary}
+
+`pff_ncaa_player_passing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
@@ -3345,7 +3557,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_passing_summary()
 ```
 
-### `pff_ncaa_player_position_pivot(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_position_pivot}
+### pff_ncaa_player_position_pivot {#pff_ncaa_player_position_pivot}
+
+`pff_ncaa_player_position_pivot(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
@@ -3374,7 +3588,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_position_pivot()
 ```
 
-### `pff_ncaa_player_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_receiving_summary}
+### pff_ncaa_player_receiving_summary {#pff_ncaa_player_receiving_summary}
+
+`pff_ncaa_player_receiving_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
@@ -3404,7 +3620,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_receiving_summary()
 ```
 
-### `pff_ncaa_player_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_rushing_summary}
+### pff_ncaa_player_rushing_summary {#pff_ncaa_player_rushing_summary}
+
+`pff_ncaa_player_rushing_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
@@ -3434,7 +3652,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_rushing_summary()
 ```
 
-### `pff_ncaa_player_seasons(*, league: 'Optional[str]' = 'ncaa', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_seasons}
+### pff_ncaa_player_seasons {#pff_ncaa_player_seasons}
+
+`pff_ncaa_player_seasons(*, league: 'Optional[str]' = 'ncaa', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
@@ -3461,7 +3681,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_seasons()
 ```
 
-### `pff_ncaa_player_snaps_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_player_snaps_summary}
+### pff_ncaa_player_snaps_summary {#pff_ncaa_player_snaps_summary}
+
+`pff_ncaa_player_snaps_summary(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
@@ -3491,7 +3713,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_snaps_summary()
 ```
 
-### `pff_ncaa_players(*, league: 'Optional[str]' = 'ncaa', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_players}
+### pff_ncaa_players {#pff_ncaa_players}
+
+`pff_ncaa_players(*, league: 'Optional[str]' = 'ncaa', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
@@ -3519,7 +3743,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_players()
 ```
 
-### `pff_ncaa_teams(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_teams}
+### pff_ncaa_teams {#pff_ncaa_teams}
+
+`pff_ncaa_teams(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
@@ -3546,7 +3772,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams()
 ```
 
-### `pff_ncaa_teams_overview(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ncaa_teams_overview}
+### pff_ncaa_teams_overview {#pff_ncaa_teams_overview}
+
+`pff_ncaa_teams_overview(*, league: 'Optional[str]' = 'ncaa', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
@@ -3574,7 +3802,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams_overview()
 ```
 
-### `pff_nfl_facet_blocking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_blocking_summary}
+### pff_nfl_facet_blocking_summary {#pff_nfl_facet_blocking_summary}
+
+`pff_nfl_facet_blocking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3605,7 +3835,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_blocking_summary()
 ```
 
-### `pff_nfl_facet_coverage_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_coverage_scheme}
+### pff_nfl_facet_coverage_scheme {#pff_nfl_facet_coverage_scheme}
+
+`pff_nfl_facet_coverage_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3636,7 +3868,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_scheme()
 ```
 
-### `pff_nfl_facet_coverage_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_coverage_summary}
+### pff_nfl_facet_coverage_summary {#pff_nfl_facet_coverage_summary}
+
+`pff_nfl_facet_coverage_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3667,7 +3901,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_summary()
 ```
 
-### `pff_nfl_facet_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_defense_summary}
+### pff_nfl_facet_defense_summary {#pff_nfl_facet_defense_summary}
+
+`pff_nfl_facet_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3698,7 +3934,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_defense_summary()
 ```
 
-### `pff_nfl_facet_field_goal_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_field_goal_summary}
+### pff_nfl_facet_field_goal_summary {#pff_nfl_facet_field_goal_summary}
+
+`pff_nfl_facet_field_goal_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3729,7 +3967,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_field_goal_summary()
 ```
 
-### `pff_nfl_facet_kicking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_kicking_summary}
+### pff_nfl_facet_kicking_summary {#pff_nfl_facet_kicking_summary}
+
+`pff_nfl_facet_kicking_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3760,7 +4000,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_kicking_summary()
 ```
 
-### `pff_nfl_facet_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_offense_summary}
+### pff_nfl_facet_offense_summary {#pff_nfl_facet_offense_summary}
+
+`pff_nfl_facet_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3791,7 +4033,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_offense_summary()
 ```
 
-### `pff_nfl_facet_pass_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pass_blocking}
+### pff_nfl_facet_pass_blocking {#pff_nfl_facet_pass_blocking}
+
+`pff_nfl_facet_pass_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3822,7 +4066,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_blocking()
 ```
 
-### `pff_nfl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pass_rush_summary}
+### pff_nfl_facet_pass_rush_summary {#pff_nfl_facet_pass_rush_summary}
+
+`pff_nfl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3853,7 +4099,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_rush_summary()
 ```
 
-### `pff_nfl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_allowed_pressure}
+### pff_nfl_facet_passing_allowed_pressure {#pff_nfl_facet_passing_allowed_pressure}
+
+`pff_nfl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3884,7 +4132,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_allowed_pressure()
 ```
 
-### `pff_nfl_facet_passing_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_concept}
+### pff_nfl_facet_passing_concept {#pff_nfl_facet_passing_concept}
+
+`pff_nfl_facet_passing_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3915,7 +4165,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_concept()
 ```
 
-### `pff_nfl_facet_passing_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_depth}
+### pff_nfl_facet_passing_depth {#pff_nfl_facet_passing_depth}
+
+`pff_nfl_facet_passing_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3946,7 +4198,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_depth()
 ```
 
-### `pff_nfl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_detail_stats}
+### pff_nfl_facet_passing_detail_stats {#pff_nfl_facet_passing_detail_stats}
+
+`pff_nfl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3977,7 +4231,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_detail_stats()
 ```
 
-### `pff_nfl_facet_passing_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_pressure}
+### pff_nfl_facet_passing_pressure {#pff_nfl_facet_passing_pressure}
+
+`pff_nfl_facet_passing_pressure(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4008,7 +4264,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_pressure()
 ```
 
-### `pff_nfl_facet_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_passing_summary}
+### pff_nfl_facet_passing_summary {#pff_nfl_facet_passing_summary}
+
+`pff_nfl_facet_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4039,7 +4297,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_summary()
 ```
 
-### `pff_nfl_facet_pbes(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_pbes}
+### pff_nfl_facet_pbes {#pff_nfl_facet_pbes}
+
+`pff_nfl_facet_pbes(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4070,7 +4330,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pbes()
 ```
 
-### `pff_nfl_facet_prps(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_prps}
+### pff_nfl_facet_prps {#pff_nfl_facet_prps}
+
+`pff_nfl_facet_prps(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4101,7 +4363,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_prps()
 ```
 
-### `pff_nfl_facet_punting_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_punting_summary}
+### pff_nfl_facet_punting_summary {#pff_nfl_facet_punting_summary}
+
+`pff_nfl_facet_punting_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4132,7 +4396,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_punting_summary()
 ```
 
-### `pff_nfl_facet_receiving_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_concept}
+### pff_nfl_facet_receiving_concept {#pff_nfl_facet_receiving_concept}
+
+`pff_nfl_facet_receiving_concept(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4163,7 +4429,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_concept()
 ```
 
-### `pff_nfl_facet_receiving_coverage(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_coverage}
+### pff_nfl_facet_receiving_coverage {#pff_nfl_facet_receiving_coverage}
+
+`pff_nfl_facet_receiving_coverage(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4194,7 +4462,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage()
 ```
 
-### `pff_nfl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_coverage_stats}
+### pff_nfl_facet_receiving_coverage_stats {#pff_nfl_facet_receiving_coverage_stats}
+
+`pff_nfl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4225,7 +4495,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage_stats()
 ```
 
-### `pff_nfl_facet_receiving_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_depth}
+### pff_nfl_facet_receiving_depth {#pff_nfl_facet_receiving_depth}
+
+`pff_nfl_facet_receiving_depth(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4256,7 +4528,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_depth()
 ```
 
-### `pff_nfl_facet_receiving_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_scheme}
+### pff_nfl_facet_receiving_scheme {#pff_nfl_facet_receiving_scheme}
+
+`pff_nfl_facet_receiving_scheme(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4287,7 +4561,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_scheme()
 ```
 
-### `pff_nfl_facet_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_receiving_summary}
+### pff_nfl_facet_receiving_summary {#pff_nfl_facet_receiving_summary}
+
+`pff_nfl_facet_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4318,7 +4594,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_summary()
 ```
 
-### `pff_nfl_facet_return_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_return_summary}
+### pff_nfl_facet_return_summary {#pff_nfl_facet_return_summary}
+
+`pff_nfl_facet_return_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4349,7 +4627,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_return_summary()
 ```
 
-### `pff_nfl_facet_run_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_run_blocking}
+### pff_nfl_facet_run_blocking {#pff_nfl_facet_run_blocking}
+
+`pff_nfl_facet_run_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4380,7 +4660,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_blocking()
 ```
 
-### `pff_nfl_facet_run_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_run_defense_summary}
+### pff_nfl_facet_run_defense_summary {#pff_nfl_facet_run_defense_summary}
+
+`pff_nfl_facet_run_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4411,7 +4693,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_defense_summary()
 ```
 
-### `pff_nfl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_rushing_direction_stats}
+### pff_nfl_facet_rushing_direction_stats {#pff_nfl_facet_rushing_direction_stats}
+
+`pff_nfl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4442,7 +4726,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_direction_stats()
 ```
 
-### `pff_nfl_facet_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_rushing_summary}
+### pff_nfl_facet_rushing_summary {#pff_nfl_facet_rushing_summary}
+
+`pff_nfl_facet_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4473,7 +4759,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_summary()
 ```
 
-### `pff_nfl_facet_slot_coverages(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_slot_coverages}
+### pff_nfl_facet_slot_coverages {#pff_nfl_facet_slot_coverages}
+
+`pff_nfl_facet_slot_coverages(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4504,7 +4792,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_slot_coverages()
 ```
 
-### `pff_nfl_facet_special_teams_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_special_teams_summary}
+### pff_nfl_facet_special_teams_summary {#pff_nfl_facet_special_teams_summary}
+
+`pff_nfl_facet_special_teams_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4535,7 +4825,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_special_teams_summary()
 ```
 
-### `pff_nfl_facet_time_in_pockets(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_facet_time_in_pockets}
+### pff_nfl_facet_time_in_pockets {#pff_nfl_facet_time_in_pockets}
+
+`pff_nfl_facet_time_in_pockets(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4566,7 +4858,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_time_in_pockets()
 ```
 
-### `pff_nfl_games(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_games}
+### pff_nfl_games {#pff_nfl_games}
+
+`pff_nfl_games(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
@@ -4594,7 +4888,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_games()
 ```
 
-### `pff_nfl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_leagues}
+### pff_nfl_leagues {#pff_nfl_leagues}
+
+`pff_nfl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
@@ -4619,7 +4915,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_leagues()
 ```
 
-### `pff_nfl_player_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_defense_summary}
+### pff_nfl_player_defense_summary {#pff_nfl_player_defense_summary}
+
+`pff_nfl_player_defense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
@@ -4649,7 +4947,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_defense_summary()
 ```
 
-### `pff_nfl_player_offense_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_offense_blocking}
+### pff_nfl_player_offense_blocking {#pff_nfl_player_offense_blocking}
+
+`pff_nfl_player_offense_blocking(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
@@ -4679,7 +4979,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_blocking()
 ```
 
-### `pff_nfl_player_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_offense_summary}
+### pff_nfl_player_offense_summary {#pff_nfl_player_offense_summary}
+
+`pff_nfl_player_offense_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
@@ -4709,7 +5011,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_summary()
 ```
 
-### `pff_nfl_player_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_passing_summary}
+### pff_nfl_player_passing_summary {#pff_nfl_player_passing_summary}
+
+`pff_nfl_player_passing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
@@ -4739,7 +5043,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_passing_summary()
 ```
 
-### `pff_nfl_player_position_pivot(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_position_pivot}
+### pff_nfl_player_position_pivot {#pff_nfl_player_position_pivot}
+
+`pff_nfl_player_position_pivot(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
@@ -4768,7 +5074,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_position_pivot()
 ```
 
-### `pff_nfl_player_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_receiving_summary}
+### pff_nfl_player_receiving_summary {#pff_nfl_player_receiving_summary}
+
+`pff_nfl_player_receiving_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
@@ -4798,7 +5106,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_receiving_summary()
 ```
 
-### `pff_nfl_player_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_rushing_summary}
+### pff_nfl_player_rushing_summary {#pff_nfl_player_rushing_summary}
+
+`pff_nfl_player_rushing_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
@@ -4828,7 +5138,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_rushing_summary()
 ```
 
-### `pff_nfl_player_seasons(*, league: 'Optional[str]' = 'nfl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_seasons}
+### pff_nfl_player_seasons {#pff_nfl_player_seasons}
+
+`pff_nfl_player_seasons(*, league: 'Optional[str]' = 'nfl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
@@ -4855,7 +5167,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_seasons()
 ```
 
-### `pff_nfl_player_snaps_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_player_snaps_summary}
+### pff_nfl_player_snaps_summary {#pff_nfl_player_snaps_summary}
+
+`pff_nfl_player_snaps_summary(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
@@ -4885,7 +5199,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_snaps_summary()
 ```
 
-### `pff_nfl_players(*, league: 'Optional[str]' = 'nfl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_players}
+### pff_nfl_players {#pff_nfl_players}
+
+`pff_nfl_players(*, league: 'Optional[str]' = 'nfl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
@@ -4913,7 +5229,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_players()
 ```
 
-### `pff_nfl_teams(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_teams}
+### pff_nfl_teams {#pff_nfl_teams}
+
+`pff_nfl_teams(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
@@ -4940,7 +5258,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams()
 ```
 
-### `pff_nfl_teams_overview(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_nfl_teams_overview}
+### pff_nfl_teams_overview {#pff_nfl_teams_overview}
+
+`pff_nfl_teams_overview(*, league: 'Optional[str]' = 'nfl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
@@ -4968,7 +5288,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams_overview()
 ```
 
-### `pff_ufl_facet_blocking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_blocking_summary}
+### pff_ufl_facet_blocking_summary {#pff_ufl_facet_blocking_summary}
+
+`pff_ufl_facet_blocking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4999,7 +5321,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_blocking_summary()
 ```
 
-### `pff_ufl_facet_coverage_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_coverage_scheme}
+### pff_ufl_facet_coverage_scheme {#pff_ufl_facet_coverage_scheme}
+
+`pff_ufl_facet_coverage_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5030,7 +5354,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_scheme()
 ```
 
-### `pff_ufl_facet_coverage_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_coverage_summary}
+### pff_ufl_facet_coverage_summary {#pff_ufl_facet_coverage_summary}
+
+`pff_ufl_facet_coverage_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5061,7 +5387,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_coverage_summary()
 ```
 
-### `pff_ufl_facet_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_defense_summary}
+### pff_ufl_facet_defense_summary {#pff_ufl_facet_defense_summary}
+
+`pff_ufl_facet_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5092,7 +5420,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_defense_summary()
 ```
 
-### `pff_ufl_facet_field_goal_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_field_goal_summary}
+### pff_ufl_facet_field_goal_summary {#pff_ufl_facet_field_goal_summary}
+
+`pff_ufl_facet_field_goal_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5123,7 +5453,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_field_goal_summary()
 ```
 
-### `pff_ufl_facet_kicking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_kicking_summary}
+### pff_ufl_facet_kicking_summary {#pff_ufl_facet_kicking_summary}
+
+`pff_ufl_facet_kicking_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5154,7 +5486,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_kicking_summary()
 ```
 
-### `pff_ufl_facet_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_offense_summary}
+### pff_ufl_facet_offense_summary {#pff_ufl_facet_offense_summary}
+
+`pff_ufl_facet_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5185,7 +5519,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_offense_summary()
 ```
 
-### `pff_ufl_facet_pass_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pass_blocking}
+### pff_ufl_facet_pass_blocking {#pff_ufl_facet_pass_blocking}
+
+`pff_ufl_facet_pass_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5216,7 +5552,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_blocking()
 ```
 
-### `pff_ufl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pass_rush_summary}
+### pff_ufl_facet_pass_rush_summary {#pff_ufl_facet_pass_rush_summary}
+
+`pff_ufl_facet_pass_rush_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5247,7 +5585,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pass_rush_summary()
 ```
 
-### `pff_ufl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_allowed_pressure}
+### pff_ufl_facet_passing_allowed_pressure {#pff_ufl_facet_passing_allowed_pressure}
+
+`pff_ufl_facet_passing_allowed_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5278,7 +5618,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_allowed_pressure()
 ```
 
-### `pff_ufl_facet_passing_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_concept}
+### pff_ufl_facet_passing_concept {#pff_ufl_facet_passing_concept}
+
+`pff_ufl_facet_passing_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5309,7 +5651,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_concept()
 ```
 
-### `pff_ufl_facet_passing_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_depth}
+### pff_ufl_facet_passing_depth {#pff_ufl_facet_passing_depth}
+
+`pff_ufl_facet_passing_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5340,7 +5684,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_depth()
 ```
 
-### `pff_ufl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_detail_stats}
+### pff_ufl_facet_passing_detail_stats {#pff_ufl_facet_passing_detail_stats}
+
+`pff_ufl_facet_passing_detail_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5371,7 +5717,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_detail_stats()
 ```
 
-### `pff_ufl_facet_passing_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_pressure}
+### pff_ufl_facet_passing_pressure {#pff_ufl_facet_passing_pressure}
+
+`pff_ufl_facet_passing_pressure(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5402,7 +5750,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_pressure()
 ```
 
-### `pff_ufl_facet_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_passing_summary}
+### pff_ufl_facet_passing_summary {#pff_ufl_facet_passing_summary}
+
+`pff_ufl_facet_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5433,7 +5783,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_passing_summary()
 ```
 
-### `pff_ufl_facet_pbes(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_pbes}
+### pff_ufl_facet_pbes {#pff_ufl_facet_pbes}
+
+`pff_ufl_facet_pbes(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5464,7 +5816,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_pbes()
 ```
 
-### `pff_ufl_facet_prps(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_prps}
+### pff_ufl_facet_prps {#pff_ufl_facet_prps}
+
+`pff_ufl_facet_prps(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5495,7 +5849,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_prps()
 ```
 
-### `pff_ufl_facet_punting_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_punting_summary}
+### pff_ufl_facet_punting_summary {#pff_ufl_facet_punting_summary}
+
+`pff_ufl_facet_punting_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5526,7 +5882,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_punting_summary()
 ```
 
-### `pff_ufl_facet_receiving_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_concept}
+### pff_ufl_facet_receiving_concept {#pff_ufl_facet_receiving_concept}
+
+`pff_ufl_facet_receiving_concept(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5557,7 +5915,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_concept()
 ```
 
-### `pff_ufl_facet_receiving_coverage(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_coverage}
+### pff_ufl_facet_receiving_coverage {#pff_ufl_facet_receiving_coverage}
+
+`pff_ufl_facet_receiving_coverage(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5588,7 +5948,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage()
 ```
 
-### `pff_ufl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_coverage_stats}
+### pff_ufl_facet_receiving_coverage_stats {#pff_ufl_facet_receiving_coverage_stats}
+
+`pff_ufl_facet_receiving_coverage_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5619,7 +5981,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_coverage_stats()
 ```
 
-### `pff_ufl_facet_receiving_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_depth}
+### pff_ufl_facet_receiving_depth {#pff_ufl_facet_receiving_depth}
+
+`pff_ufl_facet_receiving_depth(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5650,7 +6014,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_depth()
 ```
 
-### `pff_ufl_facet_receiving_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_scheme}
+### pff_ufl_facet_receiving_scheme {#pff_ufl_facet_receiving_scheme}
+
+`pff_ufl_facet_receiving_scheme(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5681,7 +6047,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_scheme()
 ```
 
-### `pff_ufl_facet_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_receiving_summary}
+### pff_ufl_facet_receiving_summary {#pff_ufl_facet_receiving_summary}
+
+`pff_ufl_facet_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5712,7 +6080,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_receiving_summary()
 ```
 
-### `pff_ufl_facet_return_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_return_summary}
+### pff_ufl_facet_return_summary {#pff_ufl_facet_return_summary}
+
+`pff_ufl_facet_return_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5743,7 +6113,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_return_summary()
 ```
 
-### `pff_ufl_facet_run_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_run_blocking}
+### pff_ufl_facet_run_blocking {#pff_ufl_facet_run_blocking}
+
+`pff_ufl_facet_run_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5774,7 +6146,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_blocking()
 ```
 
-### `pff_ufl_facet_run_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_run_defense_summary}
+### pff_ufl_facet_run_defense_summary {#pff_ufl_facet_run_defense_summary}
+
+`pff_ufl_facet_run_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5805,7 +6179,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_run_defense_summary()
 ```
 
-### `pff_ufl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_rushing_direction_stats}
+### pff_ufl_facet_rushing_direction_stats {#pff_ufl_facet_rushing_direction_stats}
+
+`pff_ufl_facet_rushing_direction_stats(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5836,7 +6212,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_direction_stats()
 ```
 
-### `pff_ufl_facet_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_rushing_summary}
+### pff_ufl_facet_rushing_summary {#pff_ufl_facet_rushing_summary}
+
+`pff_ufl_facet_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5867,7 +6245,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_rushing_summary()
 ```
 
-### `pff_ufl_facet_slot_coverages(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_slot_coverages}
+### pff_ufl_facet_slot_coverages {#pff_ufl_facet_slot_coverages}
+
+`pff_ufl_facet_slot_coverages(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5898,7 +6278,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_slot_coverages()
 ```
 
-### `pff_ufl_facet_special_teams_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_special_teams_summary}
+### pff_ufl_facet_special_teams_summary {#pff_ufl_facet_special_teams_summary}
+
+`pff_ufl_facet_special_teams_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5929,7 +6311,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_special_teams_summary()
 ```
 
-### `pff_ufl_facet_time_in_pockets(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_facet_time_in_pockets}
+### pff_ufl_facet_time_in_pockets {#pff_ufl_facet_time_in_pockets}
+
+`pff_ufl_facet_time_in_pockets(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -5960,7 +6344,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_facet_time_in_pockets()
 ```
 
-### `pff_ufl_games(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_games}
+### pff_ufl_games {#pff_ufl_games}
+
+`pff_ufl_games(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
@@ -5988,7 +6374,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_games()
 ```
 
-### `pff_ufl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_leagues}
+### pff_ufl_leagues {#pff_ufl_leagues}
+
+`pff_ufl_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
@@ -6013,7 +6401,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_leagues()
 ```
 
-### `pff_ufl_player_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_defense_summary}
+### pff_ufl_player_defense_summary {#pff_ufl_player_defense_summary}
+
+`pff_ufl_player_defense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
@@ -6043,7 +6433,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_defense_summary()
 ```
 
-### `pff_ufl_player_offense_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_offense_blocking}
+### pff_ufl_player_offense_blocking {#pff_ufl_player_offense_blocking}
+
+`pff_ufl_player_offense_blocking(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
@@ -6073,7 +6465,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_blocking()
 ```
 
-### `pff_ufl_player_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_offense_summary}
+### pff_ufl_player_offense_summary {#pff_ufl_player_offense_summary}
+
+`pff_ufl_player_offense_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
@@ -6103,7 +6497,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_offense_summary()
 ```
 
-### `pff_ufl_player_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_passing_summary}
+### pff_ufl_player_passing_summary {#pff_ufl_player_passing_summary}
+
+`pff_ufl_player_passing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
@@ -6133,7 +6529,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_passing_summary()
 ```
 
-### `pff_ufl_player_position_pivot(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_position_pivot}
+### pff_ufl_player_position_pivot {#pff_ufl_player_position_pivot}
+
+`pff_ufl_player_position_pivot(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
@@ -6162,7 +6560,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_position_pivot()
 ```
 
-### `pff_ufl_player_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_receiving_summary}
+### pff_ufl_player_receiving_summary {#pff_ufl_player_receiving_summary}
+
+`pff_ufl_player_receiving_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
@@ -6192,7 +6592,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_receiving_summary()
 ```
 
-### `pff_ufl_player_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_rushing_summary}
+### pff_ufl_player_rushing_summary {#pff_ufl_player_rushing_summary}
+
+`pff_ufl_player_rushing_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
@@ -6222,7 +6624,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_rushing_summary()
 ```
 
-### `pff_ufl_player_seasons(*, league: 'Optional[str]' = 'ufl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_seasons}
+### pff_ufl_player_seasons {#pff_ufl_player_seasons}
+
+`pff_ufl_player_seasons(*, league: 'Optional[str]' = 'ufl', player_id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
@@ -6249,7 +6653,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_seasons()
 ```
 
-### `pff_ufl_player_snaps_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_player_snaps_summary}
+### pff_ufl_player_snaps_summary {#pff_ufl_player_snaps_summary}
+
+`pff_ufl_player_snaps_summary(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, player_id: 'Optional[int]' = None, career: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
@@ -6279,7 +6685,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_player_snaps_summary()
 ```
 
-### `pff_ufl_players(*, league: 'Optional[str]' = 'ufl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_players}
+### pff_ufl_players {#pff_ufl_players}
+
+`pff_ufl_players(*, league: 'Optional[str]' = 'ufl', name: 'Optional[str]' = None, id: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
@@ -6307,7 +6715,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_players()
 ```
 
-### `pff_ufl_teams(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_teams}
+### pff_ufl_teams {#pff_ufl_teams}
+
+`pff_ufl_teams(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
@@ -6334,7 +6744,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams()
 ```
 
-### `pff_ufl_teams_overview(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#pff_ufl_teams_overview}
+### pff_ufl_teams_overview {#pff_ufl_teams_overview}
+
+`pff_ufl_teams_overview(*, league: 'Optional[str]' = 'ufl', season: 'Optional[int]' = None, week: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
@@ -6362,7 +6774,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 pff_teams_overview()
 ```
 
-### `rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'` {#rolling_windows}
+### rolling_windows {#rolling_windows}
+
+`rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'`
 
 Rolling-window form for every entity with an event in `season`.
 
@@ -6405,7 +6819,9 @@ rw.filter(pl.col("qualified") & (pl.col("delta_prev_rank") == 1)).select(
 )
 ```
 
-### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}
+### set_cache_mode {#set_cache_mode}
+
+`set_cache_mode(mode: 'str') -> 'None'`
 
 Switch the global cache mode.
 
@@ -6415,7 +6831,9 @@ Switch the global cache mode.
 |---|---|---|---|
 | `mode` | `str` |  | One of `"off"`, `"memory"`, `"filesystem"`. |
 
-### `set_default_ttl(ttl: 'Optional[Union[timedelta, int]]') -> 'None'` {#set_default_ttl}
+### set_default_ttl {#set_default_ttl}
+
+`set_default_ttl(ttl: 'Optional[Union[timedelta, int]]') -> 'None'`
 
 Override the default TTL for endpoints not matched by the tier rules.
 
@@ -6425,7 +6843,9 @@ Override the default TTL for endpoints not matched by the tier rules.
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
 
-### `shot_attempts(shots: 'pl.DataFrame', league: 'str' = 'nba') -> 'pl.DataFrame'` {#shot_attempts}
+### shot_attempts {#shot_attempts}
+
+`shot_attempts(shots: 'pl.DataFrame', league: 'str' = 'nba') -> 'pl.DataFrame'`
 
 `fg_pct_by_shot_distance` attempts from released `{nba,wnba}_stats_shots`.
 
@@ -6478,7 +6898,9 @@ curves = metric_curves(shot_attempts(shots), "nba")
 curves.filter((pl.col("entity_type") == "player") & (pl.col("entity_id") == "201939"))
 ```
 
-### `shot_events(shots: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'` {#shot_events}
+### shot_events {#shot_events}
+
+`shot_events(shots: 'pl.DataFrame', game_dates: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Field-goal-attempt events from released `{nba,wnba}_stats_shots`.
 
@@ -6518,7 +6940,9 @@ rw = rolling_windows(ev, 2025)
 rw.filter((pl.col("window_unit") == "fg3a") & pl.col("qualified")).sort("delta_prev_rank")
 ```
 
-### `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ufl_pbp}
+### ufl_pbp {#ufl_pbp}
+
+`ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
 
@@ -6553,7 +6977,9 @@ df = ufl_pbp("401638299")
 print(df.height)  # 0 today -- see the capture-finding note above
 ```
 
-### `validate_game(frame: 'pl.DataFrame', league: 'str', *, header: 'dict | None' = None, source: 'str' = 'espn', summary: 'dict | None' = None, box: 'dict | None' = None) -> 'GameReport'` {#validate_game}
+### validate_game {#validate_game}
+
+`validate_game(frame: 'pl.DataFrame', league: 'str', *, header: 'dict | None' = None, source: 'str' = 'espn', summary: 'dict | None' = None, box: 'dict | None' = None) -> 'GameReport'`
 
 Validate one processed game against the packaged invariant rules.
 
@@ -6595,7 +7021,9 @@ report = validate_game(proc.plays_frame, "nfl", summary=proc.json, box=game.get(
 report.ok, sorted(report.counts_by_rule)
 ```
 
-### `wch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#wch_ratings}
+### wch_ratings {#wch_ratings}
+
+`wch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
 
@@ -6621,7 +7049,9 @@ ratings = wch_ratings(["20250315", "20250321", "20250322", "20250323"])
 ratings.sort("adj_net", descending=True).head()
 ```
 
-### `xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#xfl_pbp}
+### xfl_pbp {#xfl_pbp}
+
+`xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
 

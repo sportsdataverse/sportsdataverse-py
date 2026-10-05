@@ -3,12 +3,13 @@ title: YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 sidebar_label: Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 
 `sportsdataverse.yahoo` — 107 endpoints.
 
-## `yahoo_oly_medal_count`
+## yahoo_oly_medal_count
 
 Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 
@@ -21,7 +22,7 @@ Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sortMethod` | `sort_method` |  |  | `Y` | sortMethod query parameter. |
 
-### Returns
+### Returns {#yahoo_oly_medal_count-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -36,7 +37,7 @@ Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_oly_medal_count-example}
 
 ```python
 yahoo_oly_medal_count()
@@ -44,7 +45,7 @@ yahoo_oly_medal_count()
 
 _Last validated n/a._
 
-## `yahoo_oly_seasons`
+## yahoo_oly_seasons
 
 Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 
@@ -56,7 +57,7 @@ Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 |---|---|:---:|:---:|:---:|---|
 | `seasons` | `seasons` |  |  | `Y` | seasons query parameter. |
 
-### Returns
+### Returns {#yahoo_oly_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -67,7 +68,7 @@ Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_oly_seasons-example}
 
 ```python
 yahoo_oly_seasons()
@@ -75,7 +76,7 @@ yahoo_oly_seasons()
 
 _Last validated n/a._
 
-## `yahoo_alias`
+## yahoo_alias
 
 Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 
@@ -87,7 +88,7 @@ Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 |---|---|:---:|:---:|:---:|---|
 | `alias` | `alias` |  |  | `Y` | alias query parameter. |
 
-### Returns
+### Returns {#yahoo_alias-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -116,7 +117,7 @@ Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_alias-example}
 
 ```python
 yahoo_alias()
@@ -124,7 +125,7 @@ yahoo_alias()
 
 _Last validated n/a._
 
-## `yahoo_article_list_card_players`
+## yahoo_article_list_card_players
 
 Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players` entry
 
@@ -136,7 +137,7 @@ Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players
 |---|---|:---:|:---:|:---:|---|
 | `playerIds` | `player_ids` |  |  | `Y` | playerIds query parameter. |
 
-### Returns
+### Returns {#yahoo_article_list_card_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -160,7 +161,7 @@ Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_article_list_card_players-example}
 
 ```python
 yahoo_article_list_card_players()
@@ -168,7 +169,7 @@ yahoo_article_list_card_players()
 
 _Last validated n/a._
 
-## `yahoo_article_list_card_teams`
+## yahoo_article_list_card_teams
 
 Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` entry
 
@@ -180,7 +181,7 @@ Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` en
 |---|---|:---:|:---:|:---:|---|
 | `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
 
-### Returns
+### Returns {#yahoo_article_list_card_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -210,7 +211,7 @@ Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` en
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_article_list_card_teams-example}
 
 ```python
 yahoo_article_list_card_teams()
@@ -218,7 +219,7 @@ yahoo_article_list_card_teams()
 
 _Last validated n/a._
 
-## `yahoo_basic_players`
+## yahoo_basic_players
 
 Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 
@@ -230,7 +231,7 @@ Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 |---|---|:---:|:---:|:---:|---|
 | `players` | `players` |  |  | `Y` | players query parameter. |
 
-### Returns
+### Returns {#yahoo_basic_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -242,7 +243,7 @@ Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_basic_players-example}
 
 ```python
 yahoo_basic_players()
@@ -250,7 +251,7 @@ yahoo_basic_players()
 
 _Last validated n/a._
 
-## `yahoo_betting_disclaimer`
+## yahoo_betting_disclaimer
 
 Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDisclaimers` entry
 
@@ -262,7 +263,7 @@ Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDiscl
 |---|---|:---:|:---:|:---:|---|
 | `bettingDisclaimerId` | `betting_disclaimer_id` |  |  | `Y` | bettingDisclaimerId query parameter. |
 
-### Returns
+### Returns {#yahoo_betting_disclaimer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -272,7 +273,7 @@ Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDiscl
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_betting_disclaimer-example}
 
 ```python
 yahoo_betting_disclaimer()
@@ -280,7 +281,7 @@ yahoo_betting_disclaimer()
 
 _Last validated n/a._
 
-## `yahoo_combat_event_fights`
+## yahoo_combat_event_fights
 
 Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` entry
 
@@ -294,7 +295,7 @@ Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` ent
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `league` | `league` |  |  | `Y` | league query parameter. |
 
-### Returns
+### Returns {#yahoo_combat_event_fights-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -304,7 +305,7 @@ Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_combat_event_fights-example}
 
 ```python
 yahoo_combat_event_fights()
@@ -312,7 +313,7 @@ yahoo_combat_event_fights()
 
 _Last validated n/a._
 
-## `yahoo_combat_schedule`
+## yahoo_combat_schedule
 
 Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 
@@ -325,7 +326,7 @@ Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `league` | `league` |  |  | `Y` | league query parameter. |
 
-### Returns
+### Returns {#yahoo_combat_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -335,7 +336,7 @@ Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_combat_schedule-example}
 
 ```python
 yahoo_combat_schedule()
@@ -343,7 +344,7 @@ yahoo_combat_schedule()
 
 _Last validated n/a._
 
-## `yahoo_common_pills`
+## yahoo_common_pills
 
 Yahoo shangrila persisted query `common/pills` (response body not captured; shape unknown)
 
@@ -357,12 +358,12 @@ Yahoo shangrila persisted query `common/pills` (response body not captured; shap
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
 
-### Returns
+### Returns {#yahoo_common_pills-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_common_pills-example}
 
 ```python
 yahoo_common_pills()
@@ -370,7 +371,7 @@ yahoo_common_pills()
 
 _Last validated n/a._
 
-## `yahoo_consensus_rankings_php`
+## yahoo_consensus_rankings_php
 
 Yahoo shangrila persisted query `consensus-rankings.php` (response body not captured; shape unknown)
 
@@ -387,12 +388,12 @@ Yahoo shangrila persisted query `consensus-rankings.php` (response body not capt
 | `scoring` | `scoring` |  |  | `Y` | scoring query parameter. |
 | `type` | `type` |  |  | `Y` | type query parameter. |
 
-### Returns
+### Returns {#yahoo_consensus_rankings_php-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_consensus_rankings_php-example}
 
 ```python
 yahoo_consensus_rankings_php()
@@ -400,7 +401,7 @@ yahoo_consensus_rankings_php()
 
 _Last validated n/a._
 
-## `yahoo_draft`
+## yahoo_draft
 
 Yahoo shangrila persisted query `draft` -> one row per `leagues` entry
 
@@ -413,12 +414,12 @@ Yahoo shangrila persisted query `draft` -> one row per `leagues` entry
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_draft-example}
 
 ```python
 yahoo_draft()
@@ -426,7 +427,7 @@ yahoo_draft()
 
 _Last validated n/a._
 
-## `yahoo_draft_prospects`
+## yahoo_draft_prospects
 
 Yahoo shangrila persisted query `draftProspects` -> one row per `leagues` entry
 
@@ -441,12 +442,12 @@ Yahoo shangrila persisted query `draftProspects` -> one row per `leagues` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_draft_prospects-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_draft_prospects-example}
 
 ```python
 yahoo_draft_prospects()
@@ -454,7 +455,7 @@ yahoo_draft_prospects()
 
 _Last validated n/a._
 
-## `yahoo_driver_results`
+## yahoo_driver_results
 
 Yahoo shangrila persisted query `driverResults` -> one row per `players` entry
 
@@ -467,12 +468,12 @@ Yahoo shangrila persisted query `driverResults` -> one row per `players` entry
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_driver_results-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_driver_results-example}
 
 ```python
 yahoo_driver_results()
@@ -480,7 +481,7 @@ yahoo_driver_results()
 
 _Last validated n/a._
 
-## `yahoo_driver_splits`
+## yahoo_driver_splits
 
 Yahoo shangrila persisted query `driverSplits` -> one row per `players` entry
 
@@ -492,12 +493,12 @@ Yahoo shangrila persisted query `driverSplits` -> one row per `players` entry
 |---|---|:---:|:---:|:---:|---|
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 
-### Returns
+### Returns {#yahoo_driver_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_driver_splits-example}
 
 ```python
 yahoo_driver_splits()
@@ -505,7 +506,7 @@ yahoo_driver_splits()
 
 _Last validated n/a._
 
-## `yahoo_featured_game_ids`
+## yahoo_featured_game_ids
 
 Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames` entry
 
@@ -516,7 +517,7 @@ Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#yahoo_featured_game_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -525,7 +526,7 @@ Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_featured_game_ids-example}
 
 ```python
 yahoo_featured_game_ids()
@@ -533,7 +534,7 @@ yahoo_featured_game_ids()
 
 _Last validated n/a._
 
-## `yahoo_game_prop_bets`
+## yahoo_game_prop_bets
 
 Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 
@@ -545,7 +546,7 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_game_prop_bets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -567,7 +568,7 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_game_prop_bets-example}
 
 ```python
 yahoo_game_prop_bets()
@@ -575,7 +576,7 @@ yahoo_game_prop_bets()
 
 _Last validated n/a._
 
-## `yahoo_game_stats_leaders`
+## yahoo_game_stats_leaders
 
 Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 
@@ -745,7 +746,7 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 | `soccerTeamStatIds4` | `soccer_team_stat_ids4` |  |  | `Y` | soccerTeamStatIds4 query parameter. |
 | `soccerTeamStatIds5` | `soccer_team_stat_ids5` |  |  | `Y` | soccerTeamStatIds5 query parameter. |
 
-### Returns
+### Returns {#yahoo_game_stats_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -821,7 +822,7 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_game_stats_leaders-example}
 
 ```python
 yahoo_game_stats_leaders()
@@ -829,7 +830,7 @@ yahoo_game_stats_leaders()
 
 _Last validated n/a._
 
-## `yahoo_gametime_game`
+## yahoo_gametime_game
 
 Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 
@@ -841,7 +842,7 @@ Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_gametime_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -852,7 +853,7 @@ Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_gametime_game-example}
 
 ```python
 yahoo_gametime_game()
@@ -860,7 +861,7 @@ yahoo_gametime_game()
 
 _Last validated n/a._
 
-## `yahoo_gametime_team`
+## yahoo_gametime_team
 
 Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 
@@ -872,7 +873,7 @@ Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 |---|---|:---:|:---:|:---:|---|
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 
-### Returns
+### Returns {#yahoo_gametime_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -882,7 +883,7 @@ Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_gametime_team-example}
 
 ```python
 yahoo_gametime_team()
@@ -890,7 +891,7 @@ yahoo_gametime_team()
 
 _Last validated n/a._
 
-## `yahoo_golf_tournament_seasons`
+## yahoo_golf_tournament_seasons
 
 Yahoo shangrila persisted query `golfTournamentSeasons` (response body not captured; shape unknown)
 
@@ -902,12 +903,12 @@ Yahoo shangrila persisted query `golfTournamentSeasons` (response body not captu
 |---|---|:---:|:---:|:---:|---|
 | `eventGroupId` | `event_group_id` |  |  | `Y` | eventGroupId query parameter. |
 
-### Returns
+### Returns {#yahoo_golf_tournament_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_golf_tournament_seasons-example}
 
 ```python
 yahoo_golf_tournament_seasons()
@@ -915,7 +916,7 @@ yahoo_golf_tournament_seasons()
 
 _Last validated n/a._
 
-## `yahoo_golf_tournaments`
+## yahoo_golf_tournaments
 
 Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournaments` entry
 
@@ -929,7 +930,7 @@ Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournament
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `showDefendingChamps` | `show_defending_champs` |  |  | `Y` | showDefendingChamps query parameter. |
 
-### Returns
+### Returns {#yahoo_golf_tournaments-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -956,7 +957,7 @@ Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournament
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_golf_tournaments-example}
 
 ```python
 yahoo_golf_tournaments()
@@ -964,7 +965,7 @@ yahoo_golf_tournaments()
 
 _Last validated n/a._
 
-## `yahoo_golf_tournaments_basic`
+## yahoo_golf_tournaments_basic
 
 Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTournaments` entry
 
@@ -978,7 +979,7 @@ Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTourn
 | `association` | `association` |  |  | `Y` | association query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_golf_tournaments_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1002,7 +1003,7 @@ Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTourn
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_golf_tournaments_basic-example}
 
 ```python
 yahoo_golf_tournaments_basic()
@@ -1010,7 +1011,7 @@ yahoo_golf_tournaments_basic()
 
 _Last validated n/a._
 
-## `yahoo_league_conferences`
+## yahoo_league_conferences
 
 Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` entry
 
@@ -1023,7 +1024,7 @@ Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` ent
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `divisionIds` | `division_ids` |  |  | `Y` | divisionIds query parameter. |
 
-### Returns
+### Returns {#yahoo_league_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1033,7 +1034,7 @@ Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_conferences-example}
 
 ```python
 yahoo_league_conferences()
@@ -1041,7 +1042,7 @@ yahoo_league_conferences()
 
 _Last validated n/a._
 
-## `yahoo_league_filters_data`
+## yahoo_league_filters_data
 
 Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` entry
 
@@ -1056,7 +1057,7 @@ Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` ent
 | `viewType` | `view_type` |  |  | `Y` | viewType query parameter. |
 | `includePosAndSplitsData` | `include_pos_and_splits_data` |  |  | `Y` | includePosAndSplitsData query parameter. |
 
-### Returns
+### Returns {#yahoo_league_filters_data-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1081,7 +1082,7 @@ Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_filters_data-example}
 
 ```python
 yahoo_league_filters_data()
@@ -1089,7 +1090,7 @@ yahoo_league_filters_data()
 
 _Last validated n/a._
 
-## `yahoo_league_future_odds`
+## yahoo_league_future_odds
 
 Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entry
 
@@ -1102,7 +1103,7 @@ Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entr
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `betCategories` | `bet_categories` |  |  | `Y` | betCategories query parameter. |
 
-### Returns
+### Returns {#yahoo_league_future_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1112,7 +1113,7 @@ Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entr
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_future_odds-example}
 
 ```python
 yahoo_league_future_odds()
@@ -1120,7 +1121,7 @@ yahoo_league_future_odds()
 
 _Last validated n/a._
 
-## `yahoo_league_game_ids`
+## yahoo_league_game_ids
 
 Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 
@@ -1143,7 +1144,7 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 | `top25` | `top25` |  |  | `Y` | top25 query parameter. |
 | `gameDayQueryType` | `game_day_query_type` |  |  | `Y` | gameDayQueryType query parameter. |
 
-### Returns
+### Returns {#yahoo_league_game_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1155,7 +1156,7 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_game_ids-example}
 
 ```python
 yahoo_league_game_ids()
@@ -1163,7 +1164,7 @@ yahoo_league_game_ids()
 
 _Last validated n/a._
 
-## `yahoo_league_game_ids_by_date`
+## yahoo_league_game_ids_by_date
 
 Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` entry
 
@@ -1186,7 +1187,7 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 | `tournamentIds` | `tournament_ids` |  |  | `Y` | tournamentIds query parameter. |
 | `isTennis` | `is_tennis` |  |  | `Y` | isTennis query parameter. |
 
-### Returns
+### Returns {#yahoo_league_game_ids_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1201,7 +1202,7 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_game_ids_by_date-example}
 
 ```python
 yahoo_league_game_ids_by_date()
@@ -1209,7 +1210,7 @@ yahoo_league_game_ids_by_date()
 
 _Last validated n/a._
 
-## `yahoo_league_games_by_round`
+## yahoo_league_games_by_round
 
 Yahoo shangrila persisted query `leagueGamesByRound` -> one row per `leagues` entry
 
@@ -1223,12 +1224,12 @@ Yahoo shangrila persisted query `leagueGamesByRound` -> one row per `leagues` en
 | `tournamentRoundIds` | `tournament_round_ids` |  |  | `Y` | tournamentRoundIds query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_league_games_by_round-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_games_by_round-example}
 
 ```python
 yahoo_league_games_by_round()
@@ -1236,7 +1237,7 @@ yahoo_league_games_by_round()
 
 _Last validated n/a._
 
-## `yahoo_league_info`
+## yahoo_league_info
 
 Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 
@@ -1248,7 +1249,7 @@ Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 |---|---|:---:|:---:|:---:|---|
 | `league` | `league` |  |  | `Y` | league query parameter. |
 
-### Returns
+### Returns {#yahoo_league_info-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1260,7 +1261,7 @@ Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_info-example}
 
 ```python
 yahoo_league_info()
@@ -1268,7 +1269,7 @@ yahoo_league_info()
 
 _Last validated n/a._
 
-## `yahoo_league_injuries`
+## yahoo_league_injuries
 
 Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` entry
 
@@ -1280,7 +1281,7 @@ Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` 
 |---|---|:---:|:---:|:---:|---|
 | `leagueId` | `league_id` |  |  | `Y` | leagueId query parameter. |
 
-### Returns
+### Returns {#yahoo_league_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1299,7 +1300,7 @@ Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_injuries-example}
 
 ```python
 yahoo_league_injuries()
@@ -1307,7 +1308,7 @@ yahoo_league_injuries()
 
 _Last validated n/a._
 
-## `yahoo_league_names`
+## yahoo_league_names
 
 Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 
@@ -1319,7 +1320,7 @@ Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
 
-### Returns
+### Returns {#yahoo_league_names-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1338,7 +1339,7 @@ Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_names-example}
 
 ```python
 yahoo_league_names()
@@ -1346,7 +1347,7 @@ yahoo_league_names()
 
 _Last validated n/a._
 
-## `yahoo_league_prop_odds`
+## yahoo_league_prop_odds
 
 Yahoo shangrila persisted query `leaguePropOdds` -> one row per `leagues` entry
 
@@ -1359,12 +1360,12 @@ Yahoo shangrila persisted query `leaguePropOdds` -> one row per `leagues` entry
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `league` | `league` |  |  | `Y` | league query parameter. |
 
-### Returns
+### Returns {#yahoo_league_prop_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_prop_odds-example}
 
 ```python
 yahoo_league_prop_odds()
@@ -1372,7 +1373,7 @@ yahoo_league_prop_odds()
 
 _Last validated n/a._
 
-## `yahoo_league_standings`
+## yahoo_league_standings
 
 Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 
@@ -1386,7 +1387,7 @@ Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonPhase` | `season_phase` |  |  | `Y` | seasonPhase query parameter. |
 
-### Returns
+### Returns {#yahoo_league_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1400,7 +1401,7 @@ Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_standings-example}
 
 ```python
 yahoo_league_standings()
@@ -1408,7 +1409,7 @@ yahoo_league_standings()
 
 _Last validated n/a._
 
-## `yahoo_league_stats_by_team`
+## yahoo_league_stats_by_team
 
 Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` entry
 
@@ -1427,7 +1428,7 @@ Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` ent
 | `footballCutType` | `football_cut_type` |  |  | `Y` | footballCutType query parameter. |
 | `hockeyCutType` | `hockey_cut_type` |  |  | `Y` | hockeyCutType query parameter. |
 
-### Returns
+### Returns {#yahoo_league_stats_by_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1441,7 +1442,7 @@ Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_stats_by_team-example}
 
 ```python
 yahoo_league_stats_by_team()
@@ -1449,7 +1450,7 @@ yahoo_league_stats_by_team()
 
 _Last validated n/a._
 
-## `yahoo_league_stats_individual`
+## yahoo_league_stats_individual
 
 Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues` entry
 
@@ -1476,7 +1477,7 @@ Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues`
 | `motorsportsSortStat` | `motorsports_sort_stat` |  |  | `Y` | motorsportsSortStat query parameter. |
 | `motorsportsStatIds` | `motorsports_stat_ids` |  |  | `Y` | motorsportsStatIds query parameter. |
 
-### Returns
+### Returns {#yahoo_league_stats_individual-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1490,7 +1491,7 @@ Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues`
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_stats_individual-example}
 
 ```python
 yahoo_league_stats_individual()
@@ -1498,7 +1499,7 @@ yahoo_league_stats_individual()
 
 _Last validated n/a._
 
-## `yahoo_league_stats_overview`
+## yahoo_league_stats_overview
 
 Yahoo shangrila persisted query `leagueStatsOverview` (response body not captured; shape unknown)
 
@@ -1519,12 +1520,12 @@ Yahoo shangrila persisted query `leagueStatsOverview` (response body not capture
 | `motorsportsSortStat` | `motorsports_sort_stat` |  |  | `Y` | motorsportsSortStat query parameter. |
 | `motorsportsStatIds` | `motorsports_stat_ids` |  |  | `Y` | motorsportsStatIds query parameter. |
 
-### Returns
+### Returns {#yahoo_league_stats_overview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_stats_overview-example}
 
 ```python
 yahoo_league_stats_overview()
@@ -1532,7 +1533,7 @@ yahoo_league_stats_overview()
 
 _Last validated n/a._
 
-## `yahoo_league_stats_weekly`
+## yahoo_league_stats_weekly
 
 Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` entry
 
@@ -1548,7 +1549,7 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonPhase` | `season_phase` |  |  | `Y` | seasonPhase query parameter. |
 
-### Returns
+### Returns {#yahoo_league_stats_weekly-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1562,7 +1563,7 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_stats_weekly-example}
 
 ```python
 yahoo_league_stats_weekly()
@@ -1570,7 +1571,7 @@ yahoo_league_stats_weekly()
 
 _Last validated n/a._
 
-## `yahoo_league_team_ids`
+## yahoo_league_team_ids
 
 Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 
@@ -1584,7 +1585,7 @@ Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 | `divisionIds` | `division_ids` |  |  | `Y` | divisionIds query parameter. |
 | `getTeamsByDivision` | `get_teams_by_division` |  |  | `Y` | getTeamsByDivision query parameter. |
 
-### Returns
+### Returns {#yahoo_league_team_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1594,7 +1595,7 @@ Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_team_ids-example}
 
 ```python
 yahoo_league_team_ids()
@@ -1602,7 +1603,7 @@ yahoo_league_team_ids()
 
 _Last validated n/a._
 
-## `yahoo_league_teams`
+## yahoo_league_teams
 
 Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 
@@ -1617,7 +1618,7 @@ Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 | `divisionIds` | `division_ids` |  |  | `Y` | divisionIds query parameter. |
 | `getTeamsByDivision` | `get_teams_by_division` |  |  | `Y` | getTeamsByDivision query parameter. |
 
-### Returns
+### Returns {#yahoo_league_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1627,7 +1628,7 @@ Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_league_teams-example}
 
 ```python
 yahoo_league_teams()
@@ -1635,7 +1636,7 @@ yahoo_league_teams()
 
 _Last validated n/a._
 
-## `yahoo_leagues_season_states`
+## yahoo_leagues_season_states
 
 Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` entry
 
@@ -1647,7 +1648,7 @@ Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` e
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
 
-### Returns
+### Returns {#yahoo_leagues_season_states-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1670,7 +1671,7 @@ Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` e
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_leagues_season_states-example}
 
 ```python
 yahoo_leagues_season_states()
@@ -1678,7 +1679,7 @@ yahoo_leagues_season_states()
 
 _Last validated n/a._
 
-## `yahoo_module_game`
+## yahoo_module_game
 
 Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 
@@ -1692,7 +1693,7 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_module_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1789,7 +1790,7 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_module_game-example}
 
 ```python
 yahoo_module_game()
@@ -1797,7 +1798,7 @@ yahoo_module_game()
 
 _Last validated n/a._
 
-## `yahoo_motorsport_standings`
+## yahoo_motorsport_standings
 
 Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` entry
 
@@ -1810,7 +1811,7 @@ Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` e
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_motorsport_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1821,7 +1822,7 @@ Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` e
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_motorsport_standings-example}
 
 ```python
 yahoo_motorsport_standings()
@@ -1829,7 +1830,7 @@ yahoo_motorsport_standings()
 
 _Last validated n/a._
 
-## `yahoo_nascar_drivers`
+## yahoo_nascar_drivers
 
 Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 
@@ -1841,7 +1842,7 @@ Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 |---|---|:---:|:---:|:---:|---|
 | `league` | `league` |  |  | `Y` | league query parameter. |
 
-### Returns
+### Returns {#yahoo_nascar_drivers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1851,7 +1852,7 @@ Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_nascar_drivers-example}
 
 ```python
 yahoo_nascar_drivers()
@@ -1859,7 +1860,7 @@ yahoo_nascar_drivers()
 
 _Last validated n/a._
 
-## `yahoo_nav_dropdown_tray`
+## yahoo_nav_dropdown_tray
 
 Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb, wnba, ncaab, ncaaf, ncaaw, sportsbook_legal_states
 
@@ -1873,7 +1874,7 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 | `soccerLeagueIds` | `soccer_league_ids` |  |  | `Y` | soccerLeagueIds query parameter. |
 | `soccerTeamIds` | `soccer_team_ids` |  |  | `Y` | soccerTeamIds query parameter. |
 
-### Returns
+### Returns {#yahoo_nav_dropdown_tray-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **nfl**
@@ -1940,7 +1941,7 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_nav_dropdown_tray-example}
 
 ```python
 yahoo_nav_dropdown_tray()
@@ -1948,7 +1949,7 @@ yahoo_nav_dropdown_tray()
 
 _Last validated n/a._
 
-## `yahoo_pick_distribution`
+## yahoo_pick_distribution
 
 Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entry
 
@@ -1962,7 +1963,7 @@ Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entr
 | `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
 | `count` | `count` |  |  | `Y` | count query parameter. |
 
-### Returns
+### Returns {#yahoo_pick_distribution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1972,7 +1973,7 @@ Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entr
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_pick_distribution-example}
 
 ```python
 yahoo_pick_distribution()
@@ -1980,7 +1981,7 @@ yahoo_pick_distribution()
 
 _Last validated n/a._
 
-## `yahoo_playbook_boxscore`
+## yahoo_playbook_boxscore
 
 Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions, football_stat_types, games
 
@@ -2002,7 +2003,7 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `isSoccer` | `is_soccer` |  |  | `Y` | isSoccer query parameter. |
 | `eventState` | `event_state` |  |  | `Y` | eventState query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_boxscore-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
@@ -2173,7 +2174,7 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_boxscore-example}
 
 ```python
 yahoo_playbook_boxscore()
@@ -2181,7 +2182,7 @@ yahoo_playbook_boxscore()
 
 _Last validated n/a._
 
-## `yahoo_playbook_boxscore_poll`
+## yahoo_playbook_boxscore_poll
 
 Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_positions, football_stat_types, games
 
@@ -2201,7 +2202,7 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `isSoccer` | `is_soccer` |  |  | `Y` | isSoccer query parameter. |
 | `eventState` | `event_state` |  |  | `Y` | eventState query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_boxscore_poll-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **football_positions**
@@ -2336,7 +2337,7 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_boxscore_poll-example}
 
 ```python
 yahoo_playbook_boxscore_poll()
@@ -2344,7 +2345,7 @@ yahoo_playbook_boxscore_poll()
 
 _Last validated n/a._
 
-## `yahoo_playbook_boxscore_social_share`
+## yahoo_playbook_boxscore_social_share
 
 Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `games` entry
 
@@ -2356,7 +2357,7 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_boxscore_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2378,7 +2379,7 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_boxscore_social_share-example}
 
 ```python
 yahoo_playbook_boxscore_social_share()
@@ -2386,7 +2387,7 @@ yahoo_playbook_boxscore_social_share()
 
 _Last validated n/a._
 
-## `yahoo_playbook_combat_match`
+## yahoo_playbook_combat_match
 
 Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games` entry
 
@@ -2402,12 +2403,12 @@ Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games` ent
 | `headshotHeight` | `headshot_height` |  |  | `Y` | headshotHeight query parameter. |
 | `headshotWidth` | `headshot_width` |  |  | `Y` | headshotWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_combat_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_combat_match-example}
 
 ```python
 yahoo_playbook_combat_match()
@@ -2415,7 +2416,7 @@ yahoo_playbook_combat_match()
 
 _Last validated n/a._
 
-## `yahoo_playbook_game`
+## yahoo_playbook_game
 
 Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 
@@ -2429,7 +2430,7 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2521,7 +2522,7 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_game-example}
 
 ```python
 yahoo_playbook_game()
@@ -2529,7 +2530,7 @@ yahoo_playbook_game()
 
 _Last validated n/a._
 
-## `yahoo_playbook_game_odds_poll`
+## yahoo_playbook_game_odds_poll
 
 Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` entry
 
@@ -2542,7 +2543,7 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 | `eventState` | `event_state` |  |  | `Y` | eventState query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_game_odds_poll-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2553,7 +2554,7 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_game_odds_poll-example}
 
 ```python
 yahoo_playbook_game_odds_poll()
@@ -2561,7 +2562,7 @@ yahoo_playbook_game_odds_poll()
 
 _Last validated n/a._
 
-## `yahoo_playbook_golf_tournament`
+## yahoo_playbook_golf_tournament
 
 Yahoo shangrila persisted query `playbookGolfTournament` (response body not captured; shape unknown)
 
@@ -2577,12 +2578,12 @@ Yahoo shangrila persisted query `playbookGolfTournament` (response body not capt
 | `statIds` | `stat_ids` |  |  | `Y` | statIds query parameter. |
 | `showHoleResults` | `show_hole_results` |  |  | `Y` | showHoleResults query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_golf_tournament-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_golf_tournament-example}
 
 ```python
 yahoo_playbook_golf_tournament()
@@ -2590,7 +2591,7 @@ yahoo_playbook_golf_tournament()
 
 _Last validated n/a._
 
-## `yahoo_playbook_league_odds`
+## yahoo_playbook_league_odds
 
 Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` entry
 
@@ -2607,7 +2608,7 @@ Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` en
 | `rangeStartDate` | `range_start_date` |  |  | `Y` | rangeStartDate query parameter. |
 | `rangeEndDate` | `range_end_date` |  |  | `Y` | rangeEndDate query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_league_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2617,7 +2618,7 @@ Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` en
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_league_odds-example}
 
 ```python
 yahoo_playbook_league_odds()
@@ -2625,7 +2626,7 @@ yahoo_playbook_league_odds()
 
 _Last validated n/a._
 
-## `yahoo_playbook_player`
+## yahoo_playbook_player
 
 Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 
@@ -2638,7 +2639,7 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 | `seasonPhases` | `season_phases` |  |  | `Y` | seasonPhases query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_player-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2693,7 +2694,7 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_player-example}
 
 ```python
 yahoo_playbook_player()
@@ -2701,7 +2702,7 @@ yahoo_playbook_player()
 
 _Last validated n/a._
 
-## `yahoo_playbook_player_social_share`
+## yahoo_playbook_player_social_share
 
 Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `players` entry
 
@@ -2713,7 +2714,7 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 |---|---|:---:|:---:|:---:|---|
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_player_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2727,7 +2728,7 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_player_social_share-example}
 
 ```python
 yahoo_playbook_player_social_share()
@@ -2735,7 +2736,7 @@ yahoo_playbook_player_social_share()
 
 _Last validated n/a._
 
-## `yahoo_playbook_race`
+## yahoo_playbook_race
 
 Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
 
@@ -2749,12 +2750,12 @@ Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
 | `playerImageHeight` | `player_image_height` |  |  | `Y` | playerImageHeight query parameter. |
 | `playerImageWidth` | `player_image_width` |  |  | `Y` | playerImageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_race-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_race-example}
 
 ```python
 yahoo_playbook_race()
@@ -2762,7 +2763,7 @@ yahoo_playbook_race()
 
 _Last validated n/a._
 
-## `yahoo_playbook_team`
+## yahoo_playbook_team
 
 Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
@@ -2779,7 +2780,7 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 | `disableConference` | `disable_conference` |  |  | `Y` | disableConference query parameter. |
 | `disableDivision` | `disable_division` |  |  | `Y` | disableDivision query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_team-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **teams**
@@ -2835,7 +2836,7 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_team-example}
 
 ```python
 yahoo_playbook_team()
@@ -2843,7 +2844,7 @@ yahoo_playbook_team()
 
 _Last validated n/a._
 
-## `yahoo_playbook_team_basic`
+## yahoo_playbook_team_basic
 
 Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 
@@ -2857,7 +2858,7 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_team_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2904,7 +2905,7 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_team_basic-example}
 
 ```python
 yahoo_playbook_team_basic()
@@ -2912,7 +2913,7 @@ yahoo_playbook_team_basic()
 
 _Last validated n/a._
 
-## `yahoo_playbook_team_social_share`
+## yahoo_playbook_team_social_share
 
 Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry
 
@@ -2924,7 +2925,7 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 |---|---|:---:|:---:|:---:|---|
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_team_social_share-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2938,7 +2939,7 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_team_social_share-example}
 
 ```python
 yahoo_playbook_team_social_share()
@@ -2946,7 +2947,7 @@ yahoo_playbook_team_social_share()
 
 _Last validated n/a._
 
-## `yahoo_playbook_tennis_match`
+## yahoo_playbook_tennis_match
 
 Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry
 
@@ -2958,12 +2959,12 @@ Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` en
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_playbook_tennis_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playbook_tennis_match-example}
 
 ```python
 yahoo_playbook_tennis_match()
@@ -2971,7 +2972,7 @@ yahoo_playbook_tennis_match()
 
 _Last validated n/a._
 
-## `yahoo_player_basic`
+## yahoo_player_basic
 
 Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 
@@ -2984,7 +2985,7 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 
-### Returns
+### Returns {#yahoo_player_basic-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **players**
@@ -3013,7 +3014,7 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_basic-example}
 
 ```python
 yahoo_player_basic()
@@ -3021,7 +3022,7 @@ yahoo_player_basic()
 
 _Last validated n/a._
 
-## `yahoo_player_career_stats`
+## yahoo_player_career_stats
 
 Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` entry
 
@@ -3039,7 +3040,7 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 | `hockeyStatIds` | `hockey_stat_ids` |  |  | `Y` | hockeyStatIds query parameter. |
 | `soccerStatIds` | `soccer_stat_ids` |  |  | `Y` | soccerStatIds query parameter. |
 
-### Returns
+### Returns {#yahoo_player_career_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3051,7 +3052,7 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_career_stats-example}
 
 ```python
 yahoo_player_career_stats()
@@ -3059,7 +3060,7 @@ yahoo_player_career_stats()
 
 _Last validated n/a._
 
-## `yahoo_player_game_log`
+## yahoo_player_game_log
 
 Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 
@@ -3079,7 +3080,7 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 | `hockeyStatIds` | `hockey_stat_ids` |  |  | `Y` | hockeyStatIds query parameter. |
 | `soccerStatIds` | `soccer_stat_ids` |  |  | `Y` | soccerStatIds query parameter. |
 
-### Returns
+### Returns {#yahoo_player_game_log-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3093,7 +3094,7 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_game_log-example}
 
 ```python
 yahoo_player_game_log()
@@ -3101,7 +3102,7 @@ yahoo_player_game_log()
 
 _Last validated n/a._
 
-## `yahoo_player_props`
+## yahoo_player_props
 
 Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 
@@ -3113,7 +3114,7 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 |---|---|:---:|:---:|:---:|---|
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
 
-### Returns
+### Returns {#yahoo_player_props-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3124,7 +3125,7 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_props-example}
 
 ```python
 yahoo_player_props()
@@ -3132,7 +3133,7 @@ yahoo_player_props()
 
 _Last validated n/a._
 
-## `yahoo_player_search`
+## yahoo_player_search
 
 Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` entry
 
@@ -3150,7 +3151,7 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 | `mlbPositionId` | `mlb_position_id` |  |  | `Y` | mlbPositionId query parameter. |
 | `nhlPositionId` | `nhl_position_id` |  |  | `Y` | nhlPositionId query parameter. |
 
-### Returns
+### Returns {#yahoo_player_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3166,7 +3167,7 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_search-example}
 
 ```python
 yahoo_player_search()
@@ -3174,7 +3175,7 @@ yahoo_player_search()
 
 _Last validated n/a._
 
-## `yahoo_player_season_stats`
+## yahoo_player_season_stats
 
 Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` entry
 
@@ -3198,7 +3199,7 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 | `groupBySeasonPhase` | `group_by_season_phase` |  |  | `Y` | groupBySeasonPhase query parameter. |
 | `usePlayerUniqueId` | `use_player_unique_id` |  |  | `Y` | usePlayerUniqueId query parameter. |
 
-### Returns
+### Returns {#yahoo_player_season_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3211,7 +3212,7 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_player_season_stats-example}
 
 ```python
 yahoo_player_season_stats()
@@ -3219,7 +3220,7 @@ yahoo_player_season_stats()
 
 _Last validated n/a._
 
-## `yahoo_playoff_bracket`
+## yahoo_playoff_bracket
 
 Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracketSlots` entry
 
@@ -3235,7 +3236,7 @@ Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracket
 | `type` | `type` |  |  | `Y` | type query parameter. |
 | `playoffRounds` | `playoff_rounds` |  |  | `Y` | playoffRounds query parameter. |
 
-### Returns
+### Returns {#yahoo_playoff_bracket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3252,7 +3253,7 @@ Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracket
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playoff_bracket-example}
 
 ```python
 yahoo_playoff_bracket()
@@ -3260,7 +3261,7 @@ yahoo_playoff_bracket()
 
 _Last validated n/a._
 
-## `yahoo_playoff_series_game`
+## yahoo_playoff_series_game
 
 Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 
@@ -3272,7 +3273,7 @@ Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_playoff_series_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3282,7 +3283,7 @@ Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_playoff_series_game-example}
 
 ```python
 yahoo_playoff_series_game()
@@ -3290,7 +3291,7 @@ yahoo_playoff_series_game()
 
 _Last validated n/a._
 
-## `yahoo_polymarket_game`
+## yahoo_polymarket_game
 
 Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 
@@ -3302,7 +3303,7 @@ Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 |---|---|:---:|:---:|:---:|---|
 | `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
 
-### Returns
+### Returns {#yahoo_polymarket_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3312,7 +3313,7 @@ Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_polymarket_game-example}
 
 ```python
 yahoo_polymarket_game()
@@ -3320,7 +3321,7 @@ yahoo_polymarket_game()
 
 _Last validated n/a._
 
-## `yahoo_racing_schedule`
+## yahoo_racing_schedule
 
 Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 
@@ -3335,7 +3336,7 @@ Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 | `today` | `today` |  |  | `Y` | today query parameter. |
 | `hasSeries` | `has_series` |  |  | `Y` | hasSeries query parameter. |
 
-### Returns
+### Returns {#yahoo_racing_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3345,7 +3346,7 @@ Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_racing_schedule-example}
 
 ```python
 yahoo_racing_schedule()
@@ -3353,7 +3354,7 @@ yahoo_racing_schedule()
 
 _Last validated n/a._
 
-## `yahoo_scoreboard_game`
+## yahoo_scoreboard_game
 
 Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 
@@ -3370,7 +3371,7 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 | `singleStatLeader` | `single_stat_leader` |  |  | `Y` | singleStatLeader query parameter. |
 | `betEventState` | `bet_event_state` |  |  | `Y` | betEventState query parameter. |
 
-### Returns
+### Returns {#yahoo_scoreboard_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3454,7 +3455,7 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_scoreboard_game-example}
 
 ```python
 yahoo_scoreboard_game()
@@ -3462,7 +3463,7 @@ yahoo_scoreboard_game()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_defense_ncaaf`
+## yahoo_season_stats_football_defense_ncaaf
 
 Legacy player season Defense leaders (NCAAF)
 
@@ -3478,7 +3479,7 @@ Legacy player season Defense leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_defense_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3504,7 +3505,7 @@ Legacy player season Defense leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_defense_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_defense_ncaaf()
@@ -3512,7 +3513,7 @@ yahoo_season_stats_football_defense_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_kicking_ncaaf`
+## yahoo_season_stats_football_kicking_ncaaf
 
 Legacy player season Kicking leaders (NCAAF)
 
@@ -3528,7 +3529,7 @@ Legacy player season Kicking leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_kicking_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3554,7 +3555,7 @@ Legacy player season Kicking leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_kicking_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_kicking_ncaaf()
@@ -3562,7 +3563,7 @@ yahoo_season_stats_football_kicking_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_passing_ncaaf`
+## yahoo_season_stats_football_passing_ncaaf
 
 Legacy player season Passing leaders (NCAAF)
 
@@ -3578,7 +3579,7 @@ Legacy player season Passing leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_passing_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3604,7 +3605,7 @@ Legacy player season Passing leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_passing_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_passing_ncaaf()
@@ -3612,7 +3613,7 @@ yahoo_season_stats_football_passing_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_punting_ncaaf`
+## yahoo_season_stats_football_punting_ncaaf
 
 Legacy player season Punting leaders (NCAAF)
 
@@ -3628,7 +3629,7 @@ Legacy player season Punting leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_punting_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3654,7 +3655,7 @@ Legacy player season Punting leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_punting_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_punting_ncaaf()
@@ -3662,7 +3663,7 @@ yahoo_season_stats_football_punting_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_receiving_ncaaf`
+## yahoo_season_stats_football_receiving_ncaaf
 
 Legacy player season Receiving leaders (NCAAF)
 
@@ -3678,7 +3679,7 @@ Legacy player season Receiving leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_receiving_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3704,7 +3705,7 @@ Legacy player season Receiving leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_receiving_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_receiving_ncaaf()
@@ -3712,7 +3713,7 @@ yahoo_season_stats_football_receiving_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_returns_ncaaf`
+## yahoo_season_stats_football_returns_ncaaf
 
 Legacy player season Returns leaders (NCAAF)
 
@@ -3728,7 +3729,7 @@ Legacy player season Returns leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_returns_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3754,7 +3755,7 @@ Legacy player season Returns leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_returns_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_returns_ncaaf()
@@ -3762,7 +3763,7 @@ yahoo_season_stats_football_returns_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_stats_football_rushing_ncaaf`
+## yahoo_season_stats_football_rushing_ncaaf
 
 Legacy player season Rushing leaders (NCAAF)
 
@@ -3778,7 +3779,7 @@ Legacy player season Rushing leaders (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_stats_football_rushing_ncaaf-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3804,7 +3805,7 @@ Legacy player season Rushing leaders (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_stats_football_rushing_ncaaf-example}
 
 ```python
 yahoo_season_stats_football_rushing_ncaaf()
@@ -3812,7 +3813,7 @@ yahoo_season_stats_football_rushing_ncaaf()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_defense`
+## yahoo_season_team_stats_football_defense
 
 Legacy team season Defense (NCAAF)
 
@@ -3828,7 +3829,7 @@ Legacy team season Defense (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_defense-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3854,7 +3855,7 @@ Legacy team season Defense (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_defense-example}
 
 ```python
 yahoo_season_team_stats_football_defense()
@@ -3862,7 +3863,7 @@ yahoo_season_team_stats_football_defense()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_kicking`
+## yahoo_season_team_stats_football_kicking
 
 Legacy team season Kicking (NCAAF)
 
@@ -3878,7 +3879,7 @@ Legacy team season Kicking (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_kicking-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3904,7 +3905,7 @@ Legacy team season Kicking (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_kicking-example}
 
 ```python
 yahoo_season_team_stats_football_kicking()
@@ -3912,7 +3913,7 @@ yahoo_season_team_stats_football_kicking()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_kickoffs`
+## yahoo_season_team_stats_football_kickoffs
 
 Legacy team season Kickoffs (NCAAF)
 
@@ -3928,7 +3929,7 @@ Legacy team season Kickoffs (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_kickoffs-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -3954,7 +3955,7 @@ Legacy team season Kickoffs (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_kickoffs-example}
 
 ```python
 yahoo_season_team_stats_football_kickoffs()
@@ -3962,7 +3963,7 @@ yahoo_season_team_stats_football_kickoffs()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_offense`
+## yahoo_season_team_stats_football_offense
 
 Legacy team season Offense (NCAAF)
 
@@ -3978,7 +3979,7 @@ Legacy team season Offense (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_offense-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4004,7 +4005,7 @@ Legacy team season Offense (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_offense-example}
 
 ```python
 yahoo_season_team_stats_football_offense()
@@ -4012,7 +4013,7 @@ yahoo_season_team_stats_football_offense()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_passing`
+## yahoo_season_team_stats_football_passing
 
 Legacy team season Passing (NCAAF)
 
@@ -4028,7 +4029,7 @@ Legacy team season Passing (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_passing-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4054,7 +4055,7 @@ Legacy team season Passing (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_passing-example}
 
 ```python
 yahoo_season_team_stats_football_passing()
@@ -4062,7 +4063,7 @@ yahoo_season_team_stats_football_passing()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_passing_defense`
+## yahoo_season_team_stats_football_passing_defense
 
 Legacy team Passing defense allowed (NCAAF)
 
@@ -4078,7 +4079,7 @@ Legacy team Passing defense allowed (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_passing_defense-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4104,7 +4105,7 @@ Legacy team Passing defense allowed (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_passing_defense-example}
 
 ```python
 yahoo_season_team_stats_football_passing_defense()
@@ -4112,7 +4113,7 @@ yahoo_season_team_stats_football_passing_defense()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_punting`
+## yahoo_season_team_stats_football_punting
 
 Legacy team season Punting (NCAAF)
 
@@ -4128,7 +4129,7 @@ Legacy team season Punting (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_punting-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4154,7 +4155,7 @@ Legacy team season Punting (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_punting-example}
 
 ```python
 yahoo_season_team_stats_football_punting()
@@ -4162,7 +4163,7 @@ yahoo_season_team_stats_football_punting()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_receiving`
+## yahoo_season_team_stats_football_receiving
 
 Legacy team season Receiving (NCAAF)
 
@@ -4178,7 +4179,7 @@ Legacy team season Receiving (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_receiving-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4204,7 +4205,7 @@ Legacy team season Receiving (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_receiving-example}
 
 ```python
 yahoo_season_team_stats_football_receiving()
@@ -4212,7 +4213,7 @@ yahoo_season_team_stats_football_receiving()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_receiving_defense`
+## yahoo_season_team_stats_football_receiving_defense
 
 Legacy team Receiving defense allowed (NCAAF)
 
@@ -4228,7 +4229,7 @@ Legacy team Receiving defense allowed (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_receiving_defense-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4254,7 +4255,7 @@ Legacy team Receiving defense allowed (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_receiving_defense-example}
 
 ```python
 yahoo_season_team_stats_football_receiving_defense()
@@ -4262,7 +4263,7 @@ yahoo_season_team_stats_football_receiving_defense()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_returns`
+## yahoo_season_team_stats_football_returns
 
 Legacy team season Returns (NCAAF)
 
@@ -4278,7 +4279,7 @@ Legacy team season Returns (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_returns-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4304,7 +4305,7 @@ Legacy team season Returns (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_returns-example}
 
 ```python
 yahoo_season_team_stats_football_returns()
@@ -4312,7 +4313,7 @@ yahoo_season_team_stats_football_returns()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_rushing`
+## yahoo_season_team_stats_football_rushing
 
 Legacy team season Rushing (NCAAF)
 
@@ -4328,7 +4329,7 @@ Legacy team season Rushing (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_rushing-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4354,7 +4355,7 @@ Legacy team season Rushing (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_rushing-example}
 
 ```python
 yahoo_season_team_stats_football_rushing()
@@ -4362,7 +4363,7 @@ yahoo_season_team_stats_football_rushing()
 
 _Last validated n/a._
 
-## `yahoo_season_team_stats_football_rushing_defense`
+## yahoo_season_team_stats_football_rushing_defense
 
 Legacy team Rushing defense allowed (NCAAF)
 
@@ -4378,7 +4379,7 @@ Legacy team Rushing defense allowed (NCAAF)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `sortStatId` | `sort_stat_id` |  |  | `Y` | sortStatId query parameter. |
 
-### Returns
+### Returns {#yahoo_season_team_stats_football_rushing_defense-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **stat_types**
@@ -4404,7 +4405,7 @@ Legacy team Rushing defense allowed (NCAAF)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_season_team_stats_football_rushing_defense-example}
 
 ```python
 yahoo_season_team_stats_football_rushing_defense()
@@ -4412,7 +4413,7 @@ yahoo_season_team_stats_football_rushing_defense()
 
 _Last validated n/a._
 
-## `yahoo_team_injuries`
+## yahoo_team_injuries
 
 Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 
@@ -4424,7 +4425,7 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 |---|---|:---:|:---:|:---:|---|
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 
-### Returns
+### Returns {#yahoo_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4444,7 +4445,7 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_injuries-example}
 
 ```python
 yahoo_team_injuries()
@@ -4452,7 +4453,7 @@ yahoo_team_injuries()
 
 _Last validated n/a._
 
-## `yahoo_team_playoff_series`
+## yahoo_team_playoff_series
 
 Yahoo shangrila persisted query `teamPlayoffSeries` -> one row per `teams.playoffSeries` entry
 
@@ -4465,12 +4466,12 @@ Yahoo shangrila persisted query `teamPlayoffSeries` -> one row per `teams.playof
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_team_playoff_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_playoff_series-example}
 
 ```python
 yahoo_team_playoff_series()
@@ -4478,7 +4479,7 @@ yahoo_team_playoff_series()
 
 _Last validated n/a._
 
-## `yahoo_team_roster`
+## yahoo_team_roster
 
 Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 
@@ -4492,7 +4493,7 @@ Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 | `playerImageHeight` | `player_image_height` |  |  | `Y` | playerImageHeight query parameter. |
 | `playerImageWidth` | `player_image_width` |  |  | `Y` | playerImageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4502,7 +4503,7 @@ Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_roster-example}
 
 ```python
 yahoo_team_roster()
@@ -4510,7 +4511,7 @@ yahoo_team_roster()
 
 _Last validated n/a._
 
-## `yahoo_team_schedule_by_season`
+## yahoo_team_schedule_by_season
 
 Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` entry
 
@@ -4523,7 +4524,7 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 
-### Returns
+### Returns {#yahoo_team_schedule_by_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4546,7 +4547,7 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_schedule_by_season-example}
 
 ```python
 yahoo_team_schedule_by_season()
@@ -4554,7 +4555,7 @@ yahoo_team_schedule_by_season()
 
 _Last validated n/a._
 
-## `yahoo_team_search`
+## yahoo_team_search
 
 Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 
@@ -4568,7 +4569,7 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_team_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4589,7 +4590,7 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_search-example}
 
 ```python
 yahoo_team_search()
@@ -4597,7 +4598,7 @@ yahoo_team_search()
 
 _Last validated n/a._
 
-## `yahoo_team_stats_leaders_v2`
+## yahoo_team_stats_leaders_v2
 
 Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
@@ -4617,7 +4618,7 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 | `includePlayerStats` | `include_player_stats` |  |  | `Y` | includePlayerStats query parameter. |
 | `isBaseball` | `is_baseball` |  |  | `Y` | isBaseball query parameter. |
 
-### Returns
+### Returns {#yahoo_team_stats_leaders_v2-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **teams**
@@ -4632,7 +4633,7 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_stats_leaders_v2-example}
 
 ```python
 yahoo_team_stats_leaders_v2()
@@ -4640,7 +4641,7 @@ yahoo_team_stats_leaders_v2()
 
 _Last validated n/a._
 
-## `yahoo_team_transactions`
+## yahoo_team_transactions
 
 Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 
@@ -4652,7 +4653,7 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 |---|---|:---:|:---:|:---:|---|
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 
-### Returns
+### Returns {#yahoo_team_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4673,7 +4674,7 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_team_transactions-example}
 
 ```python
 yahoo_team_transactions()
@@ -4681,7 +4682,7 @@ yahoo_team_transactions()
 
 _Last validated n/a._
 
-## `yahoo_teams_basic`
+## yahoo_teams_basic
 
 Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 
@@ -4695,7 +4696,7 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 | `imageHeight` | `image_height` |  |  | `Y` | imageHeight query parameter. |
 | `imageWidth` | `image_width` |  |  | `Y` | imageWidth query parameter. |
 
-### Returns
+### Returns {#yahoo_teams_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4717,7 +4718,7 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_teams_basic-example}
 
 ```python
 yahoo_teams_basic()
@@ -4725,7 +4726,7 @@ yahoo_teams_basic()
 
 _Last validated n/a._
 
-## `yahoo_tennis_matches_by_date`
+## yahoo_tennis_matches_by_date
 
 Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTournaments` entry
 
@@ -4739,7 +4740,7 @@ Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTour
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 
-### Returns
+### Returns {#yahoo_tennis_matches_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4757,7 +4758,7 @@ Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTour
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_tennis_matches_by_date-example}
 
 ```python
 yahoo_tennis_matches_by_date()
@@ -4765,7 +4766,7 @@ yahoo_tennis_matches_by_date()
 
 _Last validated n/a._
 
-## `yahoo_tennis_tournament`
+## yahoo_tennis_tournament
 
 Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournaments` entry
 
@@ -4778,7 +4779,7 @@ Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournam
 | `tournamentId` | `tournament_id` |  |  | `Y` | tournamentId query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_tennis_tournament-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4796,7 +4797,7 @@ Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournam
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_tennis_tournament-example}
 
 ```python
 yahoo_tennis_tournament()
@@ -4804,7 +4805,7 @@ yahoo_tennis_tournament()
 
 _Last validated n/a._
 
-## `yahoo_tennis_tournaments`
+## yahoo_tennis_tournaments
 
 Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTournaments` entry
 
@@ -4818,7 +4819,7 @@ Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTourna
 | `matchType` | `match_type` |  |  | `Y` | matchType query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#yahoo_tennis_tournaments-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4843,7 +4844,7 @@ Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTourna
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_tennis_tournaments-example}
 
 ```python
 yahoo_tennis_tournaments()
@@ -4851,7 +4852,7 @@ yahoo_tennis_tournaments()
 
 _Last validated n/a._
 
-## `yahoo_tennis_tournaments_by_date`
+## yahoo_tennis_tournaments_by_date
 
 Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennisTournaments` entry
 
@@ -4864,12 +4865,12 @@ Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennis
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 
-### Returns
+### Returns {#yahoo_tennis_tournaments_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_tennis_tournaments_by_date-example}
 
 ```python
 yahoo_tennis_tournaments_by_date()
@@ -4877,7 +4878,7 @@ yahoo_tennis_tournaments_by_date()
 
 _Last validated n/a._
 
-## `yahoo_trending_event_ids`
+## yahoo_trending_event_ids
 
 Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvents` entry
 
@@ -4891,12 +4892,12 @@ Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvent
 | `league` | `league` |  |  | `Y` | league query parameter. |
 | `dateFlipOffset` | `date_flip_offset` |  |  | `Y` | dateFlipOffset query parameter. |
 
-### Returns
+### Returns {#yahoo_trending_event_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_trending_event_ids-example}
 
 ```python
 yahoo_trending_event_ids()
@@ -4904,7 +4905,7 @@ yahoo_trending_event_ids()
 
 _Last validated n/a._
 
-## `yahoo_trending_game_ids`
+## yahoo_trending_game_ids
 
 Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames` entry
 
@@ -4919,12 +4920,12 @@ Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames`
 | `dateFlipOffset` | `date_flip_offset` |  |  | `Y` | dateFlipOffset query parameter. |
 | `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
 
-### Returns
+### Returns {#yahoo_trending_game_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_trending_game_ids-example}
 
 ```python
 yahoo_trending_game_ids()
@@ -4932,7 +4933,7 @@ yahoo_trending_game_ids()
 
 _Last validated n/a._
 
-## `yahoo_editorial_boxscore`
+## yahoo_editorial_boxscore
 
 Full game box score + play-by-play (normalized stat dictionaries)
 
@@ -4946,7 +4947,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `v` | `v` |  |  | `Y` | v query parameter. |
 | `polling` | `polling` |  |  | `Y` | polling query parameter. |
 
-### Returns
+### Returns {#yahoo_editorial_boxscore-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **player_stats**
@@ -5378,7 +5379,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_editorial_boxscore-example}
 
 ```python
 yahoo_editorial_boxscore(game_id='ncaaf.g.202509200023')
@@ -5386,7 +5387,7 @@ yahoo_editorial_boxscore(game_id='ncaaf.g.202509200023')
 
 _Last validated n/a._
 
-## `yahoo_editorial_scoreboard`
+## yahoo_editorial_scoreboard
 
 Scoreboard: games + teams + leagues + odds (fat payload)
 
@@ -5403,7 +5404,7 @@ Scoreboard: games + teams + leagues + odds (fat payload)
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `v` | `v` |  |  | `Y` | v query parameter. |
 
-### Returns
+### Returns {#yahoo_editorial_scoreboard-returns}
 
 **`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **games**
@@ -5981,7 +5982,7 @@ Scoreboard: games + teams + leagues + odds (fat payload)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#yahoo_editorial_scoreboard-example}
 
 ```python
 yahoo_editorial_scoreboard()

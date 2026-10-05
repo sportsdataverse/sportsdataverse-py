@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_bchl_season() -> 'int'` {#most_recent_bchl_season}
+### most_recent_bchl_season {#most_recent_bchl_season}
+
+`most_recent_bchl_season() -> 'int'`
 
 Most-recent BCHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `bchl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_game_corsi}
+### bchl_game_corsi {#bchl_game_corsi}
+
+`bchl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single BCHL game.
 
@@ -28,7 +32,9 @@ Player-level on-ice Corsi and Fenwick for a single BCHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_game_shifts}
+### bchl_game_shifts {#bchl_game_shifts}
+
+`bchl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single BCHL game.
 
@@ -39,7 +45,9 @@ Parsed shift stints for a single BCHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_game_summary(game_id: 'int') -> 'dict'` {#bchl_game_summary}
+### bchl_game_summary {#bchl_game_summary}
+
+`bchl_game_summary(game_id: 'int') -> 'dict'`
 
 BCHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -49,7 +57,9 @@ BCHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `bchl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_leaders}
+### bchl_leaders {#bchl_leaders}
+
+`bchl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL statistical leaders for a given season.
 
@@ -61,7 +71,9 @@ BCHL statistical leaders for a given season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_pbp}
+### bchl_pbp {#bchl_pbp}
+
+`bchl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL play-by-play — one row per event, fully enriched.
 
@@ -72,7 +84,9 @@ BCHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_player_stats}
+### bchl_player_stats {#bchl_player_stats}
+
+`bchl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL player season stats across all seasons.
 
@@ -83,7 +97,9 @@ BCHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_player_toi}
+### bchl_player_toi {#bchl_player_toi}
+
+`bchl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single BCHL game.
 
@@ -94,7 +110,9 @@ Per-player time-on-ice totals for a single BCHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_schedule}
+### bchl_schedule {#bchl_schedule}
+
+`bchl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL schedule — one row per game.
 
@@ -124,7 +142,9 @@ BCHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `bchl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_season_id}
+### bchl_season_id {#bchl_season_id}
+
+`bchl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All BCHL seasons with end-year + game-type labels.
 
@@ -149,7 +169,9 @@ All BCHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `bchl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_standings}
+### bchl_standings {#bchl_standings}
+
+`bchl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL standings — one row per team.
 
@@ -183,7 +205,9 @@ BCHL standings — one row per team.
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team-side label or team identifier. |
 
-### `bchl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_team_roster}
+### bchl_team_roster {#bchl_team_roster}
+
+`bchl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL team roster for a given team + season.
 
@@ -196,7 +220,9 @@ BCHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `bchl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#bchl_teams}
+### bchl_teams {#bchl_teams}
+
+`bchl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 BCHL teams for a given season.
 
@@ -221,7 +247,9 @@ BCHL teams for a given season.
 | `division` | character | Team division. |
 | `team_logo` | character | Team logo image URL. |
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 

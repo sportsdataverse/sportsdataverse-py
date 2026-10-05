@@ -3,12 +3,13 @@ title: MLS — MLS official web API (mlssoccer.com)
 sidebar_label: MLS official web API (mlssoccer.com)
 description: "MLS — MLS official web API (mlssoccer.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # MLS — MLS official web API (mlssoccer.com)
 
 `sportsdataverse.mls` — 12 endpoints.
 
-## `mls_club`
+## mls_club
 
 Single club detail (stats-api).
 
@@ -20,7 +21,7 @@ Single club detail (stats-api).
 |---|---|:---:|:---:|:---:|---|
 | `club_id` | `club_id` |  | `Y` |  | club_id path parameter. |
 
-### Returns
+### Returns {#mls_club-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -64,7 +65,7 @@ Single club detail (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_club-example}
 
 ```python
 mls_club(club_id='MLS-CLU-000001')
@@ -72,7 +73,7 @@ mls_club(club_id='MLS-CLU-000001')
 
 _Last validated n/a._
 
-## `mls_competition_seasons`
+## mls_competition_seasons
 
 List seasons for a competition (stats-api).
 
@@ -84,7 +85,7 @@ List seasons for a competition (stats-api).
 |---|---|:---:|:---:|:---:|---|
 | `competition_id` | `competition_id` |  | `Y` |  | competition_id path parameter. |
 
-### Returns
+### Returns {#mls_competition_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -94,7 +95,7 @@ List seasons for a competition (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_competition_seasons-example}
 
 ```python
 mls_competition_seasons(competition_id='MLS-COM-000001')
@@ -102,7 +103,7 @@ mls_competition_seasons(competition_id='MLS-COM-000001')
 
 _Last validated n/a._
 
-## `mls_competitions`
+## mls_competitions
 
 List competitions (stats-api).
 
@@ -113,7 +114,7 @@ List competitions (stats-api).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#mls_competitions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -126,7 +127,7 @@ List competitions (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_competitions-example}
 
 ```python
 mls_competitions()
@@ -134,7 +135,7 @@ mls_competitions()
 
 _Last validated n/a._
 
-## `mls_content_season`
+## mls_content_season
 
 Season content entity by slug (dapi / Contentful).
 
@@ -146,7 +147,7 @@ Season content entity by slug (dapi / Contentful).
 |---|---|:---:|:---:|:---:|---|
 | `slug` | `slug` |  | `Y` |  | slug path parameter. |
 
-### Returns
+### Returns {#mls_content_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -186,7 +187,7 @@ Season content entity by slug (dapi / Contentful).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_content_season-example}
 
 ```python
 mls_content_season(slug='mls-regular-season-2026')
@@ -194,7 +195,7 @@ mls_content_season(slug='mls-regular-season-2026')
 
 _Last validated n/a._
 
-## `mls_content_seasons`
+## mls_content_seasons
 
 Query season content entities (dapi / Contentful).
 
@@ -207,7 +208,7 @@ Query season content entities (dapi / Contentful).
 | `fields.competitionSportecId` | `competition_sportec_id` |  |  | `Y` | Filter by competition Sportec id (indexed field) |
 | `fields.sportecId` | `sportec_id` |  |  | `Y` | Filter by season Sportec id (indexed field) |
 
-### Returns
+### Returns {#mls_content_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -241,7 +242,7 @@ Query season content entities (dapi / Contentful).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_content_seasons-example}
 
 ```python
 mls_content_seasons()
@@ -249,7 +250,7 @@ mls_content_seasons()
 
 _Last validated n/a._
 
-## `mls_match`
+## mls_match
 
 Single match detail incl. lineups + referees (stats-api).
 
@@ -261,7 +262,7 @@ Single match detail incl. lineups + referees (stats-api).
 |---|---|:---:|:---:|:---:|---|
 | `match_id` | `match_id` |  | `Y` |  | match_id path parameter. |
 
-### Returns
+### Returns {#mls_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -303,7 +304,7 @@ Single match detail incl. lineups + referees (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_match-example}
 
 ```python
 mls_match(match_id='MLS-MAT-0009H8')
@@ -311,7 +312,7 @@ mls_match(match_id='MLS-MAT-0009H8')
 
 _Last validated n/a._
 
-## `mls_season_matches`
+## mls_season_matches
 
 List matches in a season, date-windowed (stats-api).
 
@@ -329,7 +330,7 @@ List matches in a season, date-windowed (stats-api).
 | `sort` | `sort` |  |  | `Y` | Sort spec, e.g. planned_kickoff_time:asc,home_team_name:asc |
 | `series_name` | `series_name` |  |  | `Y` | Filter by series/round name |
 
-### Returns
+### Returns {#mls_season_matches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -378,7 +379,7 @@ List matches in a season, date-windowed (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_season_matches-example}
 
 ```python
 mls_season_matches(season_id='MLS-SEA-0001KA')
@@ -386,7 +387,7 @@ mls_season_matches(season_id='MLS-SEA-0001KA')
 
 _Last validated n/a._
 
-## `mls_sportapi_club_players`
+## mls_sportapi_club_players
 
 Club roster with player Sportec ids (sportapi).
 
@@ -399,7 +400,7 @@ Club roster with player Sportec ids (sportapi).
 | `club_id` | `club_id` |  | `Y` |  | club_id path parameter. |
 | `culture` | `culture` |  |  | `Y` | Locale, e.g. en-us |
 
-### Returns
+### Returns {#mls_sportapi_club_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -431,7 +432,7 @@ Club roster with player Sportec ids (sportapi).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_sportapi_club_players-example}
 
 ```python
 mls_sportapi_club_players(club_id='MLS-CLU-000001')
@@ -439,7 +440,7 @@ mls_sportapi_club_players(club_id='MLS-CLU-000001')
 
 _Last validated n/a._
 
-## `mls_sportapi_clubs_by_sportec_ids`
+## mls_sportapi_clubs_by_sportec_ids
 
 Batch club detail by Sportec ids (sportapi).
 
@@ -451,7 +452,7 @@ Batch club detail by Sportec ids (sportapi).
 |---|---|:---:|:---:|:---:|---|
 | `ids` | `ids` |  | `Y` |  | ids path parameter. |
 
-### Returns
+### Returns {#mls_sportapi_clubs_by_sportec_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -471,7 +472,7 @@ Batch club detail by Sportec ids (sportapi).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_sportapi_clubs_by_sportec_ids-example}
 
 ```python
 mls_sportapi_clubs_by_sportec_ids(ids='MLS-MAT-0009H8')
@@ -479,7 +480,7 @@ mls_sportapi_clubs_by_sportec_ids(ids='MLS-MAT-0009H8')
 
 _Last validated n/a._
 
-## `mls_sportapi_match`
+## mls_sportapi_match
 
 Single match detail (sportapi / .NET).
 
@@ -491,7 +492,7 @@ Single match detail (sportapi / .NET).
 |---|---|:---:|:---:|:---:|---|
 | `match_id` | `match_id` |  | `Y` |  | match_id path parameter. |
 
-### Returns
+### Returns {#mls_sportapi_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -577,7 +578,7 @@ Single match detail (sportapi / .NET).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_sportapi_match-example}
 
 ```python
 mls_sportapi_match(match_id='MLS-MAT-0009H8')
@@ -585,7 +586,7 @@ mls_sportapi_match(match_id='MLS-MAT-0009H8')
 
 _Last validated n/a._
 
-## `mls_sportapi_matches_by_sportec_ids`
+## mls_sportapi_matches_by_sportec_ids
 
 Batch match detail by Sportec ids (sportapi).
 
@@ -597,7 +598,7 @@ Batch match detail by Sportec ids (sportapi).
 |---|---|:---:|:---:|:---:|---|
 | `ids` | `ids` |  | `Y` |  | ids path parameter. |
 
-### Returns
+### Returns {#mls_sportapi_matches_by_sportec_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -681,7 +682,7 @@ Batch match detail by Sportec ids (sportapi).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_sportapi_matches_by_sportec_ids-example}
 
 ```python
 mls_sportapi_matches_by_sportec_ids(ids='MLS-MAT-0009H8')
@@ -689,7 +690,7 @@ mls_sportapi_matches_by_sportec_ids(ids='MLS-MAT-0009H8')
 
 _Last validated n/a._
 
-## `mls_standings`
+## mls_standings
 
 Standings table for a competition season (stats-api).
 
@@ -705,7 +706,7 @@ Standings table for a competition season (stats-api).
 | `type` | `standings_type` |  |  | `Y` | home \| away split (optional) |
 | `is_live` | `is_live` |  |  | `Y` | Include live in-progress results |
 
-### Returns
+### Returns {#mls_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -739,7 +740,7 @@ Standings table for a competition season (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mls_standings-example}
 
 ```python
 mls_standings(competition_id='MLS-COM-000001', season_id='MLS-SEA-0001KA')

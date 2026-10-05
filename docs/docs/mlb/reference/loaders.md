@@ -3,6 +3,7 @@ title: MLB dataset loaders
 sidebar_label: Loaders
 description: "MLB dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # MLB dataset loaders
 
@@ -45,10 +46,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_ncaa_baseball_team_group_seasons` | [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) | — |
 | `load_mlb_park_dimensions` | [mlb_parks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks) | — |
 
-## `load_mlb_re24_matrix`
+## load_mlb_re24_matrix
 
 Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_re24_matrix_{season}.parquet`
-### Returns
+### Returns {#load_mlb_re24_matrix-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -62,10 +63,10 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 load_mlb_re24_matrix(seasons=2024)
 ```
 
-## `load_mlb_we_table`
+## load_mlb_we_table
 
 Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_we_table_{season}.parquet`
-### Returns
+### Returns {#load_mlb_we_table-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -83,10 +84,10 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 load_mlb_we_table(seasons=2024)
 ```
 
-## `load_mlb_wpa`
+## load_mlb_wpa
 
 Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_wpa_{season}.parquet`
-### Returns
+### Returns {#load_mlb_wpa-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -99,10 +100,10 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 load_mlb_wpa(seasons=2024)
 ```
 
-## `load_mlb_pbp`
+## load_mlb_pbp
 
 Release: [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pbp/mlb_pbp_{season}.parquet`
-### Returns
+### Returns {#load_mlb_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -130,10 +131,10 @@ Release: [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 load_mlb_pbp(seasons=2024)
 ```
 
-## `load_mlb_pitches`
+## load_mlb_pitches
 
 Release: [mlb_pitches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitches) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitches/mlb_pitches_{season}.parquet`
-### Returns
+### Returns {#load_mlb_pitches-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -167,10 +168,10 @@ Release: [mlb_pitches](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_mlb_pitches(seasons=2024)
 ```
 
-## `load_mlb_runners`
+## load_mlb_runners
 
 Release: [mlb_runners](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_runners) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_runners/mlb_runners_{season}.parquet`
-### Returns
+### Returns {#load_mlb_runners-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -195,10 +196,10 @@ Release: [mlb_runners](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_mlb_runners(seasons=2024)
 ```
 
-## `load_mlb_expected_stats`
+## load_mlb_expected_stats
 
 Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_hitting_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_hitting_models/mlb_expected_stats_{season}.parquet`
-### Returns
+### Returns {#load_mlb_expected_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -216,10 +217,10 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 load_mlb_expected_stats(seasons=2024)
 ```
 
-## `load_mlb_expected_hr`
+## load_mlb_expected_hr
 
 Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_hitting_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_hitting_models/mlb_expected_hr_{season}.parquet`
-### Returns
+### Returns {#load_mlb_expected_hr-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -234,10 +235,10 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 load_mlb_expected_hr(seasons=2024)
 ```
 
-## `load_mlb_batter_projection`
+## load_mlb_batter_projection
 
 Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_hitting_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_hitting_models/mlb_batter_projection_{season}.parquet`
-### Returns
+### Returns {#load_mlb_batter_projection-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -250,10 +251,10 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 load_mlb_batter_projection(seasons=2024)
 ```
 
-## `load_mlb_oaa`
+## load_mlb_oaa
 
 Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_fielding_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_fielding_models/mlb_oaa_{season}.parquet`
-### Returns
+### Returns {#load_mlb_oaa-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -267,10 +268,10 @@ Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdatavers
 load_mlb_oaa(seasons=2024)
 ```
 
-## `load_mlb_catcher_framing`
+## load_mlb_catcher_framing
 
 Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_fielding_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_fielding_models/mlb_catcher_framing_{season}.parquet`
-### Returns
+### Returns {#load_mlb_catcher_framing-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -284,10 +285,10 @@ Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdatavers
 load_mlb_catcher_framing(seasons=2024)
 ```
 
-## `load_mlb_xera`
+## load_mlb_xera
 
 Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitching_models/mlb_xera_{season}.parquet`
-### Returns
+### Returns {#load_mlb_xera-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -300,10 +301,10 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 load_mlb_xera(seasons=2024)
 ```
 
-## `load_mlb_stuff_plus`
+## load_mlb_stuff_plus
 
 Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitching_models/mlb_stuff_plus_{season}.parquet`
-### Returns
+### Returns {#load_mlb_stuff_plus-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -317,10 +318,10 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 load_mlb_stuff_plus(seasons=2024)
 ```
 
-## `load_mlb_command_plus`
+## load_mlb_command_plus
 
 Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitching_models/mlb_command_plus_{season}.parquet`
-### Returns
+### Returns {#load_mlb_command_plus-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -333,10 +334,10 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 load_mlb_command_plus(seasons=2024)
 ```
 
-## `load_ncaa_baseball_pbp`
+## load_ncaa_baseball_pbp
 
 Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_pbp/ncaa_baseball_pbp_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -382,10 +383,10 @@ Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-
 load_ncaa_baseball_pbp(seasons=2023)
 ```
 
-## `load_ncaa_baseball_schedule`
+## load_ncaa_baseball_schedule
 
 Release: [ncaa_baseball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_schedules/ncaa_baseball_schedule_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -408,10 +409,10 @@ Release: [ncaa_baseball_schedules](https://github.com/sportsdataverse/sportsdata
 load_ncaa_baseball_schedule(seasons=2023)
 ```
 
-## `load_ncaa_baseball_teams`
+## load_ncaa_baseball_teams
 
 Release: [ncaa_baseball_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_teams/ncaa_baseball_teams_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_teams-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -424,10 +425,10 @@ Release: [ncaa_baseball_teams](https://github.com/sportsdataverse/sportsdatavers
 load_ncaa_baseball_teams(seasons=2025)
 ```
 
-## `load_ncaa_baseball_rosters`
+## load_ncaa_baseball_rosters
 
 Release: [ncaa_baseball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_rosters/ncaa_baseball_rosters_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -451,10 +452,10 @@ Release: [ncaa_baseball_rosters](https://github.com/sportsdataverse/sportsdatave
 load_ncaa_baseball_rosters(seasons=2025)
 ```
 
-## `load_ncaa_baseball_linescore`
+## load_ncaa_baseball_linescore
 
 Release: [ncaa_baseball_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_linescore) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_linescore/ncaa_baseball_linescore_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_linescore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -479,10 +480,10 @@ Release: [ncaa_baseball_linescore](https://github.com/sportsdataverse/sportsdata
 load_ncaa_baseball_linescore(seasons=2025)
 ```
 
-## `load_ncaa_baseball_team_stats`
+## load_ncaa_baseball_team_stats
 
 Release: [ncaa_baseball_team_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_team_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_team_stats/ncaa_baseball_team_stats_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_team_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -506,10 +507,10 @@ Release: [ncaa_baseball_team_stats](https://github.com/sportsdataverse/sportsdat
 load_ncaa_baseball_team_stats(seasons=2025)
 ```
 
-## `load_ncaa_baseball_player_stats`
+## load_ncaa_baseball_player_stats
 
 Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_player_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_player_stats/ncaa_baseball_player_stats_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_player_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -577,10 +578,10 @@ Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsd
 load_ncaa_baseball_player_stats(seasons=2025)
 ```
 
-## `load_ncaa_baseball_situational_stats`
+## load_ncaa_baseball_situational_stats
 
 Release: [ncaa_baseball_situational_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_situational_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_situational_stats/ncaa_baseball_situational_stats_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_situational_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -622,10 +623,10 @@ Release: [ncaa_baseball_situational_stats](https://github.com/sportsdataverse/sp
 load_ncaa_baseball_situational_stats(seasons=2025)
 ```
 
-## `load_ncaa_baseball_games`
+## load_ncaa_baseball_games
 
 Release: [ncaa_baseball_games](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_games) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_games/ncaa_baseball_games_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_baseball_games-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -644,15 +645,15 @@ Release: [ncaa_baseball_games](https://github.com/sportsdataverse/sportsdatavers
 load_ncaa_baseball_games(seasons=2024)
 ```
 
-## `load_mlb_groups`
+## load_mlb_groups
 
 Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. mlb:al-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year.
 :::
 
-### Returns
+### Returns {#load_mlb_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -667,15 +668,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_mlb_groups()
 ```
 
-## `load_mlb_group_seasons`
+## load_mlb_group_seasons
 
 Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year.
 :::
 
-### Returns
+### Returns {#load_mlb_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -693,15 +694,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_mlb_group_seasons()
 ```
 
-## `load_mlb_group_aliases`
+## load_mlb_group_aliases
 
 Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (espn, mlb) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_mlb_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -718,15 +719,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_mlb_group_aliases()
 ```
 
-## `load_mlb_team_group_seasons`
+## load_mlb_team_group_seasons
 
 Release: [mlb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_groups/mlb_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the MLB Stats API id; team_id_source names the id space. season is the calendar year; seasons 1901-2026.
 :::
 
-### Returns
+### Returns {#load_mlb_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -746,15 +747,15 @@ One row per team per season: the SDV subdivision, conference and division group 
 load_mlb_team_group_seasons(seasons=2024)
 ```
 
-## `load_ncaa_baseball_groups`
+## load_ncaa_baseball_groups
 
 Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. ncaa_baseball:acc) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the calendar year.
 :::
 
-### Returns
+### Returns {#load_ncaa_baseball_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -769,15 +770,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_ncaa_baseball_groups()
 ```
 
-## `load_ncaa_baseball_group_seasons`
+## load_ncaa_baseball_group_seasons
 
 Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the calendar year.
 :::
 
-### Returns
+### Returns {#load_ncaa_baseball_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -795,15 +796,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_ncaa_baseball_group_seasons()
 ```
 
-## `load_ncaa_baseball_group_aliases`
+## load_ncaa_baseball_group_aliases
 
 Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (ncaa, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_ncaa_baseball_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -820,15 +821,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_ncaa_baseball_group_aliases()
 ```
 
-## `load_ncaa_baseball_team_group_seasons`
+## load_ncaa_baseball_team_group_seasons
 
 Release: [ncaa_baseball_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_groups/ncaa_baseball_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the stats.ncaa.org org id (not an ESPN id); team_id_source names the id space. season is the calendar year; seasons 2010-2026.
 :::
 
-### Returns
+### Returns {#load_ncaa_baseball_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -848,15 +849,15 @@ One row per team per season: the SDV subdivision, conference and division group 
 load_ncaa_baseball_team_group_seasons(seasons=2024)
 ```
 
-## `load_mlb_park_dimensions`
+## load_mlb_park_dimensions
 
 Release: [mlb_parks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_parks) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_parks/mlb_park_dimensions.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file, seasons 2001 on: one row per MLB venue per season (regular-season, spring-training, neutral and international sites) from the MLB Stats API venues endpoint, with fence distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and coordinates as of that season. venue_id is a string (the MLB Stats API venue id, venue.id in game feeds); venue_name is the name in use that season. The API lags or misses some fence moves: cited corrections (Camden Yards, Petco Park, T-Mobile Park, Comerica Park, 2022 Rate Field and Progressive Field) are applied and described in notes, which is null on uncorrected rows.
 :::
 
-### Returns
+### Returns {#load_mlb_park_dimensions-returns}
 
 | col_name | type | description |
 |---|---|---|

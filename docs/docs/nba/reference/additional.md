@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Highlights
 
-### `bref_players_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_players_stats}
+### bref_players_stats {#bref_players_stats}
+
+`bref_players_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 Player season statistics for an entire league season.
 
@@ -89,7 +91,9 @@ wnba = bref_players_stats(season=2024, league="wnba")
 adv.filter(pl.col("vorp") > 3.0).sort("vorp", descending=True).head()
 ```
 
-### `bref_standings(season: 'Optional[int]' = None, league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_standings}
+### bref_standings {#bref_standings}
+
+`bref_standings(season: 'Optional[int]' = None, league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 Conference standings for a season, both conferences stacked.
 
@@ -142,7 +146,9 @@ wnba = bref_standings(season=2024, league="wnba")
 df.filter(pl.col("playoffs") == True).sort("srs", descending=True).head()
 ```
 
-### `bref_teams_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_teams_stats}
+### bref_teams_stats {#bref_teams_stats}
+
+`bref_teams_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 Team season statistics from the league season page.
 
@@ -214,7 +220,9 @@ df_pd = bref_teams_stats(season=2024, return_as_pandas=True)
 df.sort("pts_per_g", descending=True).head()
 ```
 
-### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
+### compile_nba_season {#compile_nba_season}
+
+`compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
 
@@ -267,7 +275,9 @@ poss = compile_nba_season(
 )
 ```
 
-### `espn_nba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nba_player_stats}
+### espn_nba_player_stats {#espn_nba_player_stats}
+
+`espn_nba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull an NBA athlete's ESPN **season** stat line as one wide row.
 
@@ -456,7 +466,9 @@ df = espn_nba_player_stats(athlete_id=1966, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_schedule}
+### espn_nba_schedule {#espn_nba_schedule}
+
+`espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_nba_schedule - look up the NBA schedule for a given date from ESPN
 
@@ -564,7 +576,9 @@ finals = espn_nba_schedule(dates=20230102).filter(
 )
 ```
 
-### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
+### espn_nba_teams {#espn_nba_teams}
+
+`espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_nba_teams - look up NBA teams
 
@@ -613,7 +627,9 @@ teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
-### `most_recent_nba_season()` {#most_recent_nba_season}
+### most_recent_nba_season {#most_recent_nba_season}
+
+`most_recent_nba_season()`
 
 Return the most recent NBA season year based on today's date.
 
@@ -640,7 +656,9 @@ sched = load_nba_schedule(seasons=[most_recent_nba_season()])
 
 ## Dataset loaders
 
-### `load_darko_dpm(path: 'str') -> 'pl.DataFrame'` {#load_darko_dpm}
+### load_darko_dpm {#load_darko_dpm}
+
+`load_darko_dpm(path: 'str') -> 'pl.DataFrame'`
 
 Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`).
 
@@ -668,7 +686,9 @@ oracle = load_darko_dpm(f"{oracle_dir}/2026-darko-dpm-leaderboard.csv")
 print(oracle.sort("dpm", descending=True).head())
 ```
 
-### `load_dunks_threes_stats(path: 'str') -> 'pl.DataFrame'` {#load_dunks_threes_stats}
+### load_dunks_threes_stats {#load_dunks_threes_stats}
+
+`load_dunks_threes_stats(path: 'str') -> 'pl.DataFrame'`
 
 Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`).
 
@@ -694,7 +714,9 @@ from sportsdataverse.nba.nba_oracle_data import load_dunks_threes_stats
 oracle = load_dunks_threes_stats(f"{oracle_dir}/2025_Dunks_&_Threes_Stats.csv")
 ```
 
-### `load_epm(path: 'str') -> 'pl.DataFrame'` {#load_epm}
+### load_epm {#load_epm}
+
+`load_epm(path: 'str') -> 'pl.DataFrame'`
 
 Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`).
 
@@ -715,7 +737,9 @@ from sportsdataverse.nba.nba_oracle_data import load_epm
 oracle = load_epm(f"{oracle_dir}/2025_EPM_data.csv")
 ```
 
-### `load_lebron_daily(path: 'str') -> 'pl.DataFrame'` {#load_lebron_daily}
+### load_lebron_daily {#load_lebron_daily}
+
+`load_lebron_daily(path: 'str') -> 'pl.DataFrame'`
 
 Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`).
 
@@ -738,7 +762,9 @@ latest = sorted(glob.glob(f"{oracle_dir}/lebron_daily_*.csv"))[-1]
 oracle = load_lebron_daily(latest)
 ```
 
-### `load_lebron_season(path: 'str') -> 'pl.DataFrame'` {#load_lebron_season}
+### load_lebron_season {#load_lebron_season}
+
+`load_lebron_season(path: 'str') -> 'pl.DataFrame'`
 
 Parse a LEBRON season-file CSV (e.g. `lebron-data-2026.csv`).
 
@@ -763,7 +789,9 @@ from sportsdataverse.nba.nba_oracle_data import load_lebron_season
 oracle = load_lebron_season(f"{oracle_dir}/lebron-data-2026.csv")
 ```
 
-### `load_nba_stats_leaguedash(family: 'str', seasons: 'int | Iterable[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_nba_stats_leaguedash}
+### load_nba_stats_leaguedash {#load_nba_stats_leaguedash}
+
+`load_nba_stats_leaguedash(family: 'str', seasons: 'int | Iterable[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Load one asset family of the `nba_stats_leaguedash` release.
 
@@ -816,7 +844,9 @@ usage = load_nba_stats_leaguedash("player_stats_usage", seasons=2024)
 usage.sort("usg_pct", descending=True).head()
 ```
 
-### `load_rapm_ryan_davis(path: 'str') -> 'pl.DataFrame'` {#load_rapm_ryan_davis}
+### load_rapm_ryan_davis {#load_rapm_ryan_davis}
+
+`load_rapm_ryan_davis(path: 'str') -> 'pl.DataFrame'`
 
 Parse a Ryan Davis published RAPM CSV (single-season or multi-year window).
 
@@ -848,7 +878,9 @@ season = oracle.filter(pl.col("season") == "2022-23")
 
 ## Utilities & helpers
 
-### `year_to_season(year)` {#year_to_season}
+### year_to_season {#year_to_season}
+
+`year_to_season(year)`
 
 Convert a season START year (e.g. 2023) to the NBA's hyphenated label
 
@@ -884,7 +916,9 @@ print(year_to_season(1999))  # "1999-00"
 
 ## Other
 
-### `AdjRapmModel(prior: 'Dict[int, Tuple[float, float]]', alphas: 'np.ndarray' = <factory>, n_samples: 'int' = 200, seed: 'int' = 0) -> None` {#AdjRapmModel}
+### AdjRapmModel {#AdjRapmModel}
+
+`AdjRapmModel(prior: 'Dict[int, Tuple[float, float]]', alphas: 'np.ndarray' = <factory>, n_samples: 'int' = 200, seed: 'int' = 0) -> None`
 
 Prior-informed RAPM: ridge toward a per-player box prior with an RTO posterior.
 
@@ -914,7 +948,9 @@ print(report.calibration.coverage)      # non-None: the prior model has a poster
 
 **Methods**
 
-#### `AdjRapmModel.fit_with_prior(X: 'csr_matrix', y: 'np.ndarray', prior_mean: 'np.ndarray') -> 'FitResult'`
+#### AdjRapmModel.fit_with_prior
+
+`AdjRapmModel.fit_with_prior(X: 'csr_matrix', y: 'np.ndarray', prior_mean: 'np.ndarray') -> 'FitResult'`
 
 Delegate to fit_prior_ridge` using this model's hyperparameters.
 
@@ -930,7 +966,9 @@ Delegate to fit_prior_ridge` using this model's hyperparameters.
 
 `~sportsdataverse.nba.nba_model_validation.FitResult` with posterior of shape `(n_samples, 2P)`.
 
-### `AgingCurve(delta_by_age: 'Dict[int, float]' = <factory>) -> None` {#AgingCurve}
+### AgingCurve {#AgingCurve}
+
+`AgingCurve(delta_by_age: 'Dict[int, float]' = <factory>) -> None`
 
 Empirical aging deltas: `delta_by_age[a]` = expected rating change aging a -> a+1.
 
@@ -942,7 +980,9 @@ Empirical aging deltas: `delta_by_age[a]` = expected rating change aging a -> a+
 
 **Methods**
 
-#### `AgingCurve.delta(age: 'float') -> 'float'`
+#### AgingCurve.delta
+
+`AgingCurve.delta(age: 'float') -> 'float'`
 
 Aging drift for a player of (rounded) `age`; 0.0 outside the fitted range.
 
@@ -952,7 +992,9 @@ Aging drift for a player of (rounded) `age`; 0.0 outside the fitted range.
 |---|---|---|---|
 | `age` | `float` |  |  |
 
-### `ExternalValidityResult(corr: 'float', n_matched: 'int', coverage_pct: 'float', permutation_p95: 'float', join: 'str') -> None` {#ExternalValidityResult}
+### ExternalValidityResult {#ExternalValidityResult}
+
+`ExternalValidityResult(corr: 'float', n_matched: 'int', coverage_pct: 'float', permutation_p95: 'float', join: 'str') -> None`
 
 Concurrent-validity correlation of model ratings against a published oracle metric.
 
@@ -966,7 +1008,9 @@ Concurrent-validity correlation of model ratings against a published oracle metr
 | `permutation_p95` | `float` |  | 95th percentile of `\|corr\|` over `n_permutations` random shuffles of the oracle's matched value column -- a self-computed null-correlation ceiling. The spec deliberately avoids a hardcoded floor constant; compare `corr` against this instead. `nan` when fewer than 3 rows matched. |
 | `join` | `str` |  | The join strategy used (`"id"` or `"name"`). |
 
-### `ForecastResult(forecast_rmse: 'float', forecast_corr: 'float', baseline_rmse: 'float', n_forecasts: 'int') -> None` {#ForecastResult}
+### ForecastResult {#ForecastResult}
+
+`ForecastResult(forecast_rmse: 'float', forecast_corr: 'float', baseline_rmse: 'float', n_forecasts: 'int') -> None`
 
 Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out transitions.
 
@@ -979,7 +1023,9 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 | `baseline_rmse` | `float` |  |  |
 | `n_forecasts` | `int` |  |  |
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None` {#LeagueConstants}
+### LeagueConstants {#LeagueConstants}
+
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None`
 
 Per-`league_id` fitted constants for the NBA prediction & market stack.
 
@@ -994,7 +1040,9 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `game_minutes` | `int` |  | Regulation game length in minutes (NBA/G-League 48, WNBA 40) -- structurally different, not a fitted number. |
 | `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
 
-### `MeasureSpec(measure: 'str', actual: 'str', denom: 'str', out_prefix: 'str', extra_denoms: 'dict[str, tuple[str, str]]' = <factory>) -> None` {#MeasureSpec}
+### MeasureSpec {#MeasureSpec}
+
+`MeasureSpec(measure: 'str', actual: 'str', denom: 'str', out_prefix: 'str', extra_denoms: 'dict[str, tuple[str, str]]' = <factory>) -> None`
 
 Per-model column map for a `leaguedashptstats` measure.
 
@@ -1008,7 +1056,9 @@ Per-model column map for a `leaguedashptstats` measure.
 | `out_prefix` | `str` |  | Output-column prefix, e.g. `"reb"` -> `reb_oe`. |
 | `extra_denoms` | `dict[str, tuple[str, str]]` | `<factory>` | Difficulty buckets: `label -> (actual_col, denom_col)`. |
 
-### `NbaBpmModel(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True) -> 'None'` {#NbaBpmModel}
+### NbaBpmModel {#NbaBpmModel}
+
+`NbaBpmModel(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True) -> 'None'`
 
 A `RatingsModel` scoring a fold via faithful BPM 2.0.
 
@@ -1041,7 +1091,9 @@ report = validate_model(model, season_frames, model_name="bpm")
 
 **Methods**
 
-#### `NbaBpmModel.fit_ratings(possessions: 'pl.DataFrame') -> 'RatingsFit'`
+#### NbaBpmModel.fit_ratings
+
+`NbaBpmModel.fit_ratings(possessions: 'pl.DataFrame') -> 'RatingsFit'`
 
 Score the fold's players via BPM 2.0, restricted to the fold's game_ids.
 
@@ -1055,7 +1107,9 @@ Score the fold's players via BPM 2.0, restricted to the fold's game_ids.
 
 `RatingsFit` with `o_ratings` (OBPM) and `d_ratings` (DBPM) keyed by player_id. Returns empty dicts when no box data covers the fold's games.
 
-### `NbaSpmModel(coefficients: 'SpmCoefficients', player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame') -> 'None'` {#NbaSpmModel}
+### NbaSpmModel {#NbaSpmModel}
+
+`NbaSpmModel(coefficients: 'SpmCoefficients', player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame') -> 'None'`
 
 A `RatingsModel` that scores a fold via fitted SPM coefficients.
 
@@ -1081,7 +1135,9 @@ report = validate_model(model, season_frames, model_name="spm")
 
 **Methods**
 
-#### `NbaSpmModel.fit_ratings(possessions: 'pl.DataFrame') -> 'RatingsFit'`
+#### NbaSpmModel.fit_ratings
+
+`NbaSpmModel.fit_ratings(possessions: 'pl.DataFrame') -> 'RatingsFit'`
 
 Aggregate the fold's box (restricted to its game_ids) and apply SPM coeffs.
 
@@ -1095,8 +1151,10 @@ Aggregate the fold's box (restricted to its game_ids) and apply SPM coeffs.
 
 `RatingsFit` with `o_ratings` and `d_ratings` dicts mapping player_id to per-100 OSPM/DSPM. Returns empty dicts when no box features can be built from the fold's games.
 
-### `RidgeRapmModel(alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
-         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ])) -> 'None'` {#RidgeRapmModel}
+### RidgeRapmModel {#RidgeRapmModel}
+
+`RidgeRapmModel(alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
+         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ])) -> 'None'`
 
 Reference model: the merged plain-RAPM RidgeCV fit, adapted to `RapmModel`.
 
@@ -1132,7 +1190,9 @@ print(fit.posterior)     # None — point estimator
 
 **Methods**
 
-#### `RidgeRapmModel.fit(X: 'csr_matrix', y: 'np.ndarray') -> 'FitResult'`
+#### RidgeRapmModel.fit
+
+`RidgeRapmModel.fit(X: 'csr_matrix', y: 'np.ndarray') -> 'FitResult'`
 
 Fit RidgeCV and return coefficients + intercept (no posterior).
 
@@ -1147,7 +1207,9 @@ Fit RidgeCV and return coefficients + intercept (no posterior).
 
 FitResult with `coef` shape `(2P,)`, scalar `intercept`, and `posterior=None`.
 
-### `SpmCoefficients(o_coef: 'np.ndarray', d_coef: 'np.ndarray', o_intercept: 'float', d_intercept: 'float', feature_names: 'List[str]') -> None` {#SpmCoefficients}
+### SpmCoefficients {#SpmCoefficients}
+
+`SpmCoefficients(o_coef: 'np.ndarray', d_coef: 'np.ndarray', o_intercept: 'float', d_intercept: 'float', feature_names: 'List[str]') -> None`
 
 Fitted SPM coefficients (box features -> offense/defense RAPM, per-100).
 
@@ -1161,7 +1223,9 @@ Fitted SPM coefficients (box features -> offense/defense RAPM, per-100).
 | `d_intercept` | `float` |  | Intercept for the defense regression. |
 | `feature_names` | `List[str]` |  | Ordered list of feature column names corresponding to the coefficient vectors. |
 
-### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None, external: 'Optional[ExternalValidityResult]' = None, walk_forward: 'Optional[WalkForwardResult]' = None) -> None` {#ValidationReport}
+### ValidationReport {#ValidationReport}
+
+`ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None, external: 'Optional[ExternalValidityResult]' = None, walk_forward: 'Optional[WalkForwardResult]' = None) -> None`
 
 Holds all oracle results for a single model evaluation run.
 
@@ -1194,7 +1258,9 @@ print(rep.reliability.spearman_brown)        # float
 print(rep.calibration)                       # None — point estimator
 ```
 
-### `WalkForwardResult(game_margin_rmse: 'float', game_margin_corr: 'float', carry_forward_rmse: 'float', random_fold_rmse: 'float', n_checkpoints: 'int', n_test_games: 'int') -> None` {#WalkForwardResult}
+### WalkForwardResult {#WalkForwardResult}
+
+`WalkForwardResult(game_margin_rmse: 'float', game_margin_corr: 'float', carry_forward_rmse: 'float', random_fold_rmse: 'float', n_checkpoints: 'int', n_test_games: 'int') -> None`
 
 Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
 
@@ -1209,7 +1275,9 @@ Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
 | `n_checkpoints` | `int` |  | Number of checkpoint dates that produced a non-degenerate (train, test) split. |
 | `n_test_games` | `int` |  | Total distinct game_ids evaluated across all checkpoints. |
 
-### `add_ctg_shot_zones(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#add_ctg_shot_zones}
+### add_ctg_shot_zones {#add_ctg_shot_zones}
+
+`add_ctg_shot_zones(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Append CTG's shot-location zone (`ctg_shot_zone`) to an enhanced PBP frame.
 
@@ -1244,7 +1312,9 @@ pbp = add_ctg_shot_zones(enhanced_pbp_from_payload(payload))
 print(pbp.filter(pl.col("ctg_shot_zone").is_not_null())["ctg_shot_zone"].value_counts())
 ```
 
-### `add_play_context(enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'` {#add_play_context}
+### add_play_context {#add_play_context}
+
+`add_play_context(enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'`
 
 Build possessions and enrich them with the full CTG play-context surface.
 
@@ -1276,7 +1346,9 @@ poss = add_play_context(enhanced_pbp_from_payload(payload))
 print(poss["possession_start_type_ctg"].value_counts())
 ```
 
-### `add_start_type_detail(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#add_start_type_detail}
+### add_start_type_detail {#add_start_type_detail}
+
+`add_start_type_detail(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Append the full pbpstats start-type taxonomy to a possession frame.
 
@@ -1315,7 +1387,9 @@ poss = add_start_type_detail(build_possessions(pbp), pbp)
 print(poss["possession_start_type_ctg"].value_counts())
 ```
 
-### `add_transition(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, variant: 'str' = 'hoop_math') -> 'pl.DataFrame'` {#add_transition}
+### add_transition {#add_transition}
+
+`add_transition(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, variant: 'str' = 'hoop_math') -> 'pl.DataFrame'`
 
 Flag possessions that started in transition, and time their initial play.
 
@@ -1361,7 +1435,9 @@ print(poss["is_transition"].mean())          # transition frequency
 poss8 = add_transition(poss, pbp, transition_seconds=8.0)
 ```
 
-### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
+### adjust_efficiency {#adjust_efficiency}
+
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season.
 
@@ -1400,7 +1476,9 @@ from sportsdataverse.nba.nba_team_ratings import adjust_efficiency, raw_game_eff
 ratings = adjust_efficiency(raw_game_efficiency(sched, box))
 ```
 
-### `adjust_pace(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_pace}
+### adjust_pace {#adjust_pace}
+
+`adjust_pace(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
 
 Opponent-adjusted pace (possessions/game) per team-season.
 
@@ -1430,7 +1508,9 @@ from sportsdataverse.nba.nba_team_ratings import adjust_pace, raw_game_efficienc
 pace = adjust_pace(raw_game_efficiency(sched, box))
 ```
 
-### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+### as_of_ratings_split {#as_of_ratings_split}
+
+`as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'`
 
 Filter a results frame to games strictly before a cutoff date (leakage boundary).
 
@@ -1453,7 +1533,9 @@ from sportsdataverse._common.metrics import as_of_ratings_split
 as_of_ratings_split(results, dt.date(2023, 9, 8))
 ```
 
-### `box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'` {#box_features}
+### box_features {#box_features}
+
+`box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'`
 
 Aggregate per-player per-100-possession box features over a set of games.
 
@@ -1474,7 +1556,9 @@ game's own team pace), then summed — the result is fully deterministic.
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
-### `bref_awards(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_awards}
+### bref_awards {#bref_awards}
+
+`bref_awards(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 End-of-season award voting, all awards stacked into one frame.
 
@@ -1523,7 +1607,9 @@ df_pd = bref_awards(season=2024, return_as_pandas=True)
 df.filter(pl.col("award") == "mvp").sort("award_share", descending=True).head()
 ```
 
-### `bref_draft(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_draft}
+### bref_draft {#bref_draft}
+
+`bref_draft(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 NBA draft results with each pick's career totals and advanced metrics.
 
@@ -1584,7 +1670,9 @@ df_pd = bref_draft(season=2003, return_as_pandas=True)
 df.sort("vorp", descending=True).head()
 ```
 
-### `bref_injuries(*, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_injuries}
+### bref_injuries {#bref_injuries}
+
+`bref_injuries(*, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 The current NBA injury report.
 
@@ -1627,7 +1715,9 @@ df_pd = bref_injuries(return_as_pandas=True)
 df.filter(pl.col("note").str.contains("(?i)out")).head()
 ```
 
-### `bref_player_bios(letter: 'str' = 'a', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_player_bios}
+### bref_player_bios {#bref_player_bios}
+
+`bref_player_bios(letter: 'str' = 'a', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 The player index for one last-name initial -- bios plus the id slugs.
 
@@ -1678,7 +1768,9 @@ ids = [bref_player_bios(ch) for ch in string.ascii_lowercase]
 df.filter(pl.col("year_max") >= 2024).select(["player", "player_id"]).head()
 ```
 
-### `bref_player_game_log(player_id: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_player_game_log}
+### bref_player_game_log {#bref_player_game_log}
+
+`bref_player_game_log(player_id: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 A player's regular-season game-by-game log.
 
@@ -1715,7 +1807,9 @@ df_pd = bref_player_game_log("jamesle01", 2024, return_as_pandas=True)
 df.select(["date", "opp", "pts", "trb", "ast"]).head()
 ```
 
-### `bref_team_roster(team: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_team_roster}
+### bref_team_roster {#bref_team_roster}
+
+`bref_team_roster(team: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'`
 
 A team's roster for one season.
 
@@ -1751,7 +1845,9 @@ sonics = bref_team_roster(team="SEA", season=1996)
 df.select(["player", "pos", "height", "college"]).head()
 ```
 
-### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+### build_athlete_identity_lookup {#build_athlete_identity_lookup}
+
+`build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'`
 
 R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
@@ -1765,7 +1861,9 @@ R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
 athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
 
-### `build_nba_player_identity_lookup(player_box: 'pl.DataFrame') -> 'dict[str, dict[str, Any]]'` {#build_nba_player_identity_lookup}
+### build_nba_player_identity_lookup {#build_nba_player_identity_lookup}
+
+`build_nba_player_identity_lookup(player_box: 'pl.DataFrame') -> 'dict[str, dict[str, Any]]'`
 
 R `build_identity_lookup(season)`: athlete_id -> identity from the
 
@@ -1783,7 +1881,9 @@ cannot answer that for historical seasons).
 
 athlete_id (str) -> identity fields for `helper_nba_player_season_stats`. When an athlete appears in multiple rows (multiple games), the LAST row (by frame order) wins -- mirroring R's `!duplicated(athlete_id, fromLast = TRUE)`, which keeps an athlete's most recent team within the season.
 
-### `build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'` {#build_play_context_shots}
+### build_play_context_shots {#build_play_context_shots}
+
+`build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'`
 
 Build the per-shot frame carrying CTG's play context.
 
@@ -1821,7 +1921,9 @@ print(shots.group_by("shot_context").len())
 print(shots.filter(pl.col("is_putback") == True).height)
 ```
 
-### `build_possession_shooting(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#build_possession_shooting}
+### build_possession_shooting {#build_possession_shooting}
+
+`build_possession_shooting(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Build the per-shooter companion frame from an enhanced play-by-play DataFrame.
 
@@ -1864,7 +1966,9 @@ totals = sh.group_by("player_id").agg(
 print(totals.head())
 ```
 
-### `calibrate_pts_per_win(team_season: 'pl.DataFrame') -> 'float'` {#calibrate_pts_per_win}
+### calibrate_pts_per_win {#calibrate_pts_per_win}
+
+`calibrate_pts_per_win(team_season: 'pl.DataFrame') -> 'float'`
 
 Regress team wins on season point margin; return points-per-marginal-win.
 
@@ -1891,7 +1995,9 @@ pts_per_win = calibrate_pts_per_win(team_standings)  # team_id/wins/total_margin
 print(pts_per_win)
 ```
 
-### `calibrate_replacement_level(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, pts_per_win: 'float', target_total_war: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss') -> 'float'` {#calibrate_replacement_level}
+### calibrate_replacement_level {#calibrate_replacement_level}
+
+`calibrate_replacement_level(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, pts_per_win: 'float', target_total_war: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss') -> 'float'`
 
 Solve for the `replacement_level` that makes summed league WAR hit a target.
 
@@ -1929,7 +2035,9 @@ repl = calibrate_replacement_level(
 )
 ```
 
-### `clutch_delta(clutch: 'pl.DataFrame', ratings: 'pl.DataFrame') -> 'pl.DataFrame'` {#clutch_delta}
+### clutch_delta {#clutch_delta}
+
+`clutch_delta(clutch: 'pl.DataFrame', ratings: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Clutch net-rating delta vs a full-game baseline, per (season, team_id).
 
@@ -1955,7 +2063,9 @@ from sportsdataverse.nba.nba_clutch import clutch_delta
 d = clutch_delta(clutch_frame, baseline_frame)
 ```
 
-### `darko_forecast_accuracy(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, min_history: 'int' = 1) -> 'ForecastResult'` {#darko_forecast_accuracy}
+### darko_forecast_accuracy {#darko_forecast_accuracy}
+
+`darko_forecast_accuracy(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, min_history: 'int' = 1) -> 'ForecastResult'`
 
 Holdout forecast accuracy: for each transition, forecast N+1 from history <= N vs actual.
 
@@ -1995,7 +2105,9 @@ q, ob = _fit_noise_params(panel, ages, curve)
 res = darko_forecast_accuracy(panel, ages, aging_curve=curve, process_var=q, obs_base=ob)
 ```
 
-### `decay_weights(game_date: 'pl.Series', asof: 'Optional[datetime.date]', half_life_days: 'float') -> 'np.ndarray'` {#decay_weights}
+### decay_weights {#decay_weights}
+
+`decay_weights(game_date: 'pl.Series', asof: 'Optional[datetime.date]', half_life_days: 'float') -> 'np.ndarray'`
 
 Exponential time-decay sample weights `w = 0.5 ** (days_ago / half_life)`.
 
@@ -2023,7 +2135,9 @@ w = decay_weights(dates, datetime.date(2023, 1, 31), half_life_days=30.0)
 print(round(float(w[0]), 3))  # 0.5
 ```
 
-### `expected_possessions(home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#expected_possessions}
+### expected_possessions {#expected_possessions}
+
+`expected_possessions(home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
 
 Expected possessions for a matchup (Pythagorean-tempo blend).
 
@@ -2046,7 +2160,9 @@ from sportsdataverse.nba.nba_game_predict import expected_possessions
 expected_possessions(100.0, 98.0)
 ```
 
-### `external_validity(ratings: 'pl.DataFrame', oracle: 'pl.DataFrame', *, rating_col: 'str', oracle_col: 'str', join: 'str' = 'id', ratings_id_col: 'str' = 'player_id', oracle_id_col: 'str' = 'player_id', ratings_name_col: 'str' = 'player_name', oracle_name_col: 'str' = 'player_name', n_permutations: 'int' = 200, seed: 'int' = 0) -> 'ExternalValidityResult'` {#external_validity}
+### external_validity {#external_validity}
+
+`external_validity(ratings: 'pl.DataFrame', oracle: 'pl.DataFrame', *, rating_col: 'str', oracle_col: 'str', join: 'str' = 'id', ratings_id_col: 'str' = 'player_id', oracle_id_col: 'str' = 'player_id', ratings_name_col: 'str' = 'player_name', oracle_name_col: 'str' = 'player_name', n_permutations: 'int' = 200, seed: 'int' = 0) -> 'ExternalValidityResult'`
 
 Oracle 5: correlate a model's ratings against a published external metric.
 
@@ -2098,7 +2214,9 @@ res = external_validity(
 )
 ```
 
-### `fit_aging_curve(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, smooth: 'int' = 3) -> 'AgingCurve'` {#fit_aging_curve}
+### fit_aging_curve {#fit_aging_curve}
+
+`fit_aging_curve(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, smooth: 'int' = 3) -> 'AgingCurve'`
 
 Fit the aging curve by the delta method: avg YoY rating change grouped by starting age.
 
@@ -2126,7 +2244,9 @@ curve = fit_aging_curve(panel, ages, smooth=1)
 print(curve.delta(24))  # ~1.0
 ```
 
-### `flag_garbage_time(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'` {#flag_garbage_time}
+### flag_garbage_time {#flag_garbage_time}
+
+`flag_garbage_time(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'`
 
 Flag CTG garbage time (excluded from CTG stats by default).
 
@@ -2174,7 +2294,9 @@ print(poss.filter(pl.col("is_garbage_time") == True).height)
 poss = flag_garbage_time(poss, pbp, starters_on_court=starters_by_possession)
 ```
 
-### `flag_heave_possessions(possessions: 'pl.DataFrame') -> 'pl.DataFrame'` {#flag_heave_possessions}
+### flag_heave_possessions {#flag_heave_possessions}
+
+`flag_heave_possessions(possessions: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Flag CTG's "projected heave possessions" (excluded from CTG stats by default).
 
@@ -2199,7 +2321,9 @@ poss = flag_heave_possessions(poss)
 clean = poss.filter(pl.col("is_heave_possession") == False)
 ```
 
-### `fox_nba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_boxscore}
+### fox_nba_boxscore {#fox_nba_boxscore}
+
+`fox_nba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA boxscore (long: one row per player-stat).
 
@@ -2222,7 +2346,9 @@ from sportsdataverse.nba import fox_nba_boxscore
 df = fox_nba_boxscore("...")
 ```
 
-### `fox_nba_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_matchup}
+### fox_nba_event_matchup {#fox_nba_event_matchup}
+
+`fox_nba_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba pregame team-stat comparison (one row per stat).
 
@@ -2239,7 +2365,9 @@ from sportsdataverse.nba import fox_nba_event_matchup
 df = fox_nba_event_matchup("...")
 ```
 
-### `fox_nba_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_recap}
+### fox_nba_event_recap {#fox_nba_event_recap}
+
+`fox_nba_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba postgame top performers (one row per player).
 
@@ -2256,7 +2384,9 @@ from sportsdataverse.nba import fox_nba_event_recap
 df = fox_nba_event_recap("...")
 ```
 
-### `fox_nba_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_standings}
+### fox_nba_event_standings {#fox_nba_event_standings}
+
+`fox_nba_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba the two teams' standings context.
 
@@ -2273,7 +2403,9 @@ from sportsdataverse.nba import fox_nba_event_standings
 df = fox_nba_event_standings("...")
 ```
 
-### `fox_nba_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_conferences}
+### fox_nba_league_conferences {#fox_nba_league_conferences}
+
+`fox_nba_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba conference / group directory.
 
@@ -2290,7 +2422,9 @@ from sportsdataverse.nba import fox_nba_league_conferences
 df = fox_nba_league_conferences()
 ```
 
-### `fox_nba_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_header}
+### fox_nba_league_header {#fox_nba_league_header}
+
+`fox_nba_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league header (one row).
 
@@ -2320,7 +2454,9 @@ from sportsdataverse.nba import fox_nba_league_header
 df = fox_nba_league_header()
 ```
 
-### `fox_nba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_league_leaders}
+### fox_nba_league_leaders {#fox_nba_league_leaders}
+
+`fox_nba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA statistical leaders (`stats-con`); who=player|team.
 
@@ -2354,7 +2490,9 @@ from sportsdataverse.nba import fox_nba_league_leaders
 df = fox_nba_league_leaders("scoring")
 ```
 
-### `fox_nba_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_odds}
+### fox_nba_league_odds {#fox_nba_league_odds}
+
+`fox_nba_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league odds board (one row per team per game).
 
@@ -2371,7 +2509,9 @@ from sportsdataverse.nba import fox_nba_league_odds
 df = fox_nba_league_odds()
 ```
 
-### `fox_nba_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_player_news}
+### fox_nba_league_player_news {#fox_nba_league_player_news}
+
+`fox_nba_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league-wide player news feed.
 
@@ -2388,7 +2528,9 @@ from sportsdataverse.nba import fox_nba_league_player_news
 df = fox_nba_league_player_news()
 ```
 
-### `fox_nba_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_polls}
+### fox_nba_league_polls {#fox_nba_league_polls}
+
+`fox_nba_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba rankings / polls rendered as standings tables.
 
@@ -2405,7 +2547,9 @@ from sportsdataverse.nba import fox_nba_league_polls
 df = fox_nba_league_polls()
 ```
 
-### `fox_nba_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_schedule}
+### fox_nba_league_schedule {#fox_nba_league_schedule}
+
+`fox_nba_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league schedule nav selections.
 
@@ -2433,7 +2577,9 @@ from sportsdataverse.nba import fox_nba_league_schedule
 df = fox_nba_league_schedule()
 ```
 
-### `fox_nba_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_scores}
+### fox_nba_league_scores {#fox_nba_league_scores}
+
+`fox_nba_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league scores nav selections.
 
@@ -2461,7 +2607,9 @@ from sportsdataverse.nba import fox_nba_league_scores
 df = fox_nba_league_scores()
 ```
 
-### `fox_nba_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_standings}
+### fox_nba_league_standings {#fox_nba_league_standings}
+
+`fox_nba_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league-wide standings tables.
 
@@ -2503,7 +2651,9 @@ from sportsdataverse.nba import fox_nba_league_standings
 df = fox_nba_league_standings()
 ```
 
-### `fox_nba_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_stat_leaders}
+### fox_nba_league_stat_leaders {#fox_nba_league_stat_leaders}
+
+`fox_nba_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba league stats landing leaders.
 
@@ -2528,7 +2678,9 @@ from sportsdataverse.nba import fox_nba_league_stat_leaders
 df = fox_nba_league_stat_leaders()
 ```
 
-### `fox_nba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_odds}
+### fox_nba_odds {#fox_nba_odds}
+
+`fox_nba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA game odds six-pack (spread / to-win / total per team).
 
@@ -2551,7 +2703,9 @@ from sportsdataverse.nba import fox_nba_odds
 df = fox_nba_odds("...")
 ```
 
-### `fox_nba_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_pbp}
+### fox_nba_pbp {#fox_nba_pbp}
+
+`fox_nba_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA play-by-play (one row per play; period-based).
 
@@ -2574,7 +2728,9 @@ from sportsdataverse.nba import fox_nba_pbp
 df = fox_nba_pbp("...")
 ```
 
-### `fox_nba_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scoreboard}
+### fox_nba_scoreboard {#fox_nba_scoreboard}
+
+`fox_nba_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba scoreboard nav selections (weeks / dates / groups).
 
@@ -2602,7 +2758,9 @@ from sportsdataverse.nba import fox_nba_scoreboard
 df = fox_nba_scoreboard()
 ```
 
-### `fox_nba_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scorechip}
+### fox_nba_scorechip {#fox_nba_scorechip}
+
+`fox_nba_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -2619,7 +2777,9 @@ from sportsdataverse.nba import fox_nba_scorechip
 df = fox_nba_scorechip("nfl12345")
 ```
 
-### `fox_nba_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scores_segment}
+### fox_nba_scores_segment {#fox_nba_scores_segment}
+
+`fox_nba_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba one row per game in a scoreboard segment.
 
@@ -2636,7 +2796,9 @@ from sportsdataverse.nba import fox_nba_scores_segment
 df = fox_nba_scores_segment("...")
 ```
 
-### `fox_nba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_standings}
+### fox_nba_standings {#fox_nba_standings}
+
+`fox_nba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA standings for a team's conference/division.
 
@@ -2659,7 +2821,9 @@ from sportsdataverse.nba import fox_nba_standings
 df = fox_nba_standings("...")
 ```
 
-### `fox_nba_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_team_gamelog}
+### fox_nba_team_gamelog {#fox_nba_team_gamelog}
+
+`fox_nba_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA team game log (long: one row per game-stat).
 
@@ -2682,7 +2846,9 @@ from sportsdataverse.nba import fox_nba_team_gamelog
 df = fox_nba_team_gamelog("...")
 ```
 
-### `fox_nba_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_team_header}
+### fox_nba_team_header {#fox_nba_team_header}
+
+`fox_nba_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba team header (one row).
 
@@ -2699,7 +2865,9 @@ from sportsdataverse.nba import fox_nba_team_header
 df = fox_nba_team_header("...")
 ```
 
-### `fox_nba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_team_roster}
+### fox_nba_team_roster {#fox_nba_team_roster}
+
+`fox_nba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA team roster (one row per player).
 
@@ -2722,7 +2890,9 @@ from sportsdataverse.nba import fox_nba_team_roster
 df = fox_nba_team_roster("...")
 ```
 
-### `fox_nba_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_team_stats}
+### fox_nba_team_stats {#fox_nba_team_stats}
+
+`fox_nba_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA team stat leaders by category.
 
@@ -2745,7 +2915,9 @@ from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
 ```
 
-### `fox_nba_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_teamnav}
+### fox_nba_teamnav {#fox_nba_teamnav}
+
+`fox_nba_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nba team directory (one row per team).
 
@@ -2774,7 +2946,9 @@ from sportsdataverse.nba import fox_nba_teamnav
 df = fox_nba_teamnav()
 ```
 
-### `fox_nba_teams(team_id: 'Union[int, str]' = '1', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_teams}
+### fox_nba_teams {#fox_nba_teams}
+
+`fox_nba_teams(team_id: 'Union[int, str]' = '1', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NBA team directory (`fox_team_id` / `fox_team_name` / `fox_section`).
 
@@ -2810,7 +2984,9 @@ df = fox_nba_teams()
 df.select("fox_team_id", "fox_team_name").head()
 ```
 
-### `get_constants(league_id: 'str') -> 'LeagueConstants'` {#get_constants}
+### get_constants {#get_constants}
+
+`get_constants(league_id: 'str') -> 'LeagueConstants'`
 
 Return the `LeagueConstants` for a `league_id`.
 
@@ -2831,7 +3007,9 @@ from sportsdataverse.nba.nba_prediction_constants import get_constants
 get_constants("00").hfa
 ```
 
-### `get_shrinkage_k(league_id: 'str') -> 'float'` {#get_shrinkage_k}
+### get_shrinkage_k {#get_shrinkage_k}
+
+`get_shrinkage_k(league_id: 'str') -> 'float'`
 
 Shooter-talent shrinkage `k` for a league.
 
@@ -2852,7 +3030,9 @@ from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
 get_shrinkage_k("00")
 ```
 
-### `hoopshype_salaries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#hoopshype_salaries}
+### hoopshype_salaries {#hoopshype_salaries}
+
+`hoopshype_salaries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 League-wide NBA player salaries from HoopsHype.
 
@@ -2916,7 +3096,9 @@ salaries_pd = hoopshype_salaries(return_as_pandas=True)
 salaries.filter(pl.col("season") == 2026).sort("salary", descending=True).head()
 ```
 
-### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+### in_game_features {#in_game_features}
+
+`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
 
 Per-play in-game win-probability features from a `load_nba_pbp` frame.
 
@@ -2940,7 +3122,9 @@ pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 feats = in_game_features(pbp, 0.62)
 ```
 
-### `lineup_play_context(possessions: 'pl.DataFrame', *, min_poss: 'int' = 0, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#lineup_play_context}
+### lineup_play_context {#lineup_play_context}
+
+`lineup_play_context(possessions: 'pl.DataFrame', *, min_poss: 'int' = 0, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Roll possessions up into a per-5-man-lineup Play-Context table.
 
@@ -2976,7 +3160,9 @@ lu = lineup_play_context(poss, min_poss=25)
 print(lu.sort("pts_per_100", descending=True).head())
 ```
 
-### `luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'` {#luck_adjusted_response}
+### luck_adjusted_response {#luck_adjusted_response}
+
+`luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'`
 
 Attach a per-possession `la_points` expected-points response.
 
@@ -3025,7 +3211,9 @@ print(out["la_points"].mean())
 out = luck_adjusted_response(possessions_df, shooting_df, {7: (0.4, 0.8)})
 ```
 
-### `make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#make_prob_by_context}
+### make_prob_by_context {#make_prob_by_context}
+
+`make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
 
 Marginal FG% tables by defender distance and by shot clock.
 
@@ -3052,7 +3240,9 @@ tables = make_prob_by_context(ptshots)
 tables["defender"].sort("fg_pct")
 ```
 
-### `make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#make_prob_joint}
+### make_prob_joint {#make_prob_joint}
+
+`make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Independence-combined defender x shot-clock make probability.
 
@@ -3085,8 +3275,10 @@ t = make_prob_by_context(ptshots)
 joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
 ```
 
-### `nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
-         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_adj_rapm}
+### nba_adj_rapm {#nba_adj_rapm}
+
+`nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
+         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 One-shot prior-informed RAPM over a possession frame -> per-player ratings.
 
@@ -3125,7 +3317,9 @@ ratings = nba_adj_rapm(possessions, spm_prior_dict)
 print(ratings.sort("adj_rapm", descending=True).head())
 ```
 
-### `nba_aging_curve(*, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_aging_curve}
+### nba_aging_curve {#nba_aging_curve}
+
+`nba_aging_curve(*, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Load the bundled per-age value-multiplier curve.
 
@@ -3158,7 +3352,9 @@ print(curve.sort("rel_value", descending=True).head(1))
 curve.filter(pl.col("age").is_between(24, 30))
 ```
 
-### `nba_availability(seasons: "'int | list[int]'", *, league: 'str' = 'nba', gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_availability}
+### nba_availability {#nba_availability}
+
+`nba_availability(seasons: "'int | list[int]'", *, league: 'str' = 'nba', gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Project games-available % for a season (or seasons) from career GP history.
 
@@ -3188,7 +3384,9 @@ proj = nba_availability(2019)
 print(proj.sort("avail_pct").head())
 ```
 
-### `nba_box_logs(season: 'str', *, league_id: 'str' = '00', season_type: 'str' = 'Regular Season', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Dict[str, pl.DataFrame]'` {#nba_box_logs}
+### nba_box_logs {#nba_box_logs}
+
+`nba_box_logs(season: 'str', *, league_id: 'str' = '00', season_type: 'str' = 'Regular Season', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Dict[str, pl.DataFrame]'`
 
 Fetch per-player and per-team game logs for a season (bulk, one call each).
 
@@ -3213,7 +3411,9 @@ logs = nba_box_logs("2023-24")
 print(logs["player"].shape)
 ```
 
-### `nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#nba_bpm}
+### nba_bpm {#nba_bpm}
+
+`nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Faithful BPM 2.0 per player, at season or single-game granularity.
 
@@ -3254,7 +3454,9 @@ bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
 bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
 ```
 
-### `nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_career_trajectory}
+### nba_career_trajectory {#nba_career_trajectory}
+
+`nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Age-adjust player-season values with the bundled aging curve.
 
@@ -3279,7 +3481,9 @@ player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
 nba_career_trajectory(player_values)
 ```
 
-### `nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_darko}
+### nba_darko {#nba_darko}
+
+`nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Project each player's next-season rating via a per-player Kalman filter + aging curve.
 
@@ -3306,7 +3510,9 @@ proj = nba_darko(rating_panel, ages_panel)
 print(proj.sort("projected_rating", descending=True).head())
 ```
 
-### `nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_decay_rapm}
+### nba_decay_rapm {#nba_decay_rapm}
+
+`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
 
@@ -3349,7 +3555,9 @@ print(df.sort("decay_rapm", descending=True).head())
 df = nba_decay_rapm(season_poss)  # asof=None
 ```
 
-### `nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_draft_model}
+### nba_draft_model {#nba_draft_model}
+
+`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Project prospect career value + draft probability from combine measurements.
 
@@ -3389,7 +3597,9 @@ board = nba_draft_model(2019, college_prior=mbb_prior_df)
 board.filter(pl.col("pro_tier") == "lottery")
 ```
 
-### `nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_expected_turnovers}
+### nba_expected_turnovers {#nba_expected_turnovers}
+
+`nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Expected TOV + residual ball-security skill from Synergy play-type mix.
 
@@ -3439,7 +3649,9 @@ t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
 t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
 ```
 
-### `nba_foul_drawing(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, advanced: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_foul_drawing}
+### nba_foul_drawing {#nba_foul_drawing}
+
+`nba_foul_drawing(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, advanced: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Expected FTA + residual foul-drawing skill from Synergy play-type mix.
 
@@ -3485,7 +3697,9 @@ f = nba_foul_drawing("2023-24", base=base_df, player_mix=mix_df)
 f.filter(pl.col("poss") >= 200).sort("foul_draw_skill", descending=True)
 ```
 
-### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
+### nba_four_factor_rapm {#nba_four_factor_rapm}
+
+`nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
 
@@ -3514,7 +3728,9 @@ ff = nba_four_factor_rapm(season_poss)
 print(ff.sort("efg__off", descending=True).head())
 ```
 
-### `nba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_in_game_win_prob}
+### nba_in_game_win_prob {#nba_in_game_win_prob}
+
+`nba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-play home win probability from the bundled in-game model.
 
@@ -3551,7 +3767,9 @@ pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 wp = nba_in_game_win_prob(pbp, 0.62)
 ```
 
-### `nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'` {#nba_l2m}
+### nba_l2m {#nba_l2m}
+
+`nba_l2m(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
 
 Fetch and parse an NBA Last Two Minute report from official.nba.com.
 
@@ -3631,7 +3849,9 @@ payload = nba_l2m("0042500405", raw=True)
 print(payload["game"])
 ```
 
-### `nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_l2m_games}
+### nba_l2m_games {#nba_l2m_games}
+
+`nba_l2m_games(season: 'int | str', *, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Fetch the list of games with Last Two Minute reports for an NBA season.
 
@@ -3677,7 +3897,9 @@ playoffs = df.filter(df["season_type"] == "playoffs")
 df = nba_l2m_games(2026, return_as_pandas=True)
 ```
 
-### `nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_la_rapm}
+### nba_la_rapm {#nba_la_rapm}
+
+`nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
 
@@ -3713,7 +3935,9 @@ print(df.sort("la_rapm", descending=True).head())
 df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
 ```
 
-### `nba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#nba_live_boxscore}
+### nba_live_boxscore {#nba_live_boxscore}
+
+`nba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
 
 Fetch and parse NBA cdn.nba.com liveData boxscore for a game.
 
@@ -4009,7 +4233,9 @@ officials = result["officials"]
 print(officials.select("person_id", "name", "assignment"))
 ```
 
-### `nba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#nba_live_pbp}
+### nba_live_pbp {#nba_live_pbp}
+
+`nba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
 
 Fetch and parse NBA cdn.nba.com liveData play-by-play for a game.
 
@@ -4104,7 +4330,9 @@ print(pbp.filter(pbp["action_type"] == "foul").height)
 fouls = pbp.filter(pbp["action_type"] == "foul").select("official_id", "time_actual")
 ```
 
-### `nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_matchup_drapm}
+### nba_matchup_drapm {#nba_matchup_drapm}
+
+`nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Matchup-based defensive RAPM (offense-quality-controlled).
 
@@ -4152,7 +4380,9 @@ d = nba_matchup_drapm("2023-24", matchups=matchups_df)
 d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
 ```
 
-### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
+### nba_pbp_disk {#nba_pbp_disk}
+
+`nba_pbp_disk(game_id, path_to_json)`
 
 Load a previously cached ESPN NBA summary JSON for a game from disk.
 
@@ -4177,7 +4407,9 @@ pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
 print(list(pbp.keys()))
 ```
 
-### `nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_play_context}
+### nba_play_context {#nba_play_context}
+
+`nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Fetch one game and return its possessions with the full CTG play-context surface.
 
@@ -4216,7 +4448,9 @@ clean = poss.filter(
 print(clean["is_transition"].mean())
 ```
 
-### `nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'` {#nba_player_ages}
+### nba_player_ages {#nba_player_ages}
+
+`nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
 
 Per-player age for a season (bulk), for the DARKO aging curve.
 
@@ -4240,7 +4474,9 @@ ages = nba_player_ages("2023-24")
 print(ages.head())
 ```
 
-### `nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_player_crosswalk}
+### nba_player_crosswalk {#nba_player_crosswalk}
+
+`nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox).
 
@@ -4302,7 +4538,9 @@ strict = nba_player_crosswalk(season=2026, min_confidence=0.97)
 df.filter(pl.col("match_method") == "fuzzy_jw").head()
 ```
 
-### `nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#nba_player_identity}
+### nba_player_identity {#nba_player_identity}
+
+`nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Human-readable identity for every player in a season's box logs.
 
@@ -4347,7 +4585,9 @@ named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
 print(named.select("player_name", "team_name", "war"))
 ```
 
-### `nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'` {#nba_player_positions}
+### nba_player_positions {#nba_player_positions}
+
+`nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
 
 Fetch league-wide listed positions for a season as numeric 1-5.
 
@@ -4377,7 +4617,9 @@ stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
 pos = nba_player_positions("2023-24", fetch=stub)
 ```
 
-### `nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_player_props}
+### nba_player_props {#nba_player_props}
+
+`nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-player expected prop lines + team pace projection for a matchup.
 
@@ -4408,7 +4650,9 @@ from sportsdataverse.nba.nba_player_props import nba_player_props
 props = nba_player_props(2024, "401585828", "2", "6")
 ```
 
-### `nba_playtype_ratings(season: 'str', *, league_id: 'str' = '00', off_team: 'Optional[pl.DataFrame]' = None, def_team: 'Optional[pl.DataFrame]' = None, schedule: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_playtype_ratings}
+### nba_playtype_ratings {#nba_playtype_ratings}
+
+`nba_playtype_ratings(season: 'str', *, league_id: 'str' = '00', off_team: 'Optional[pl.DataFrame]' = None, def_team: 'Optional[pl.DataFrame]' = None, schedule: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Season play-type-adjusted offensive/defensive team ratings.
 
@@ -4448,7 +4692,9 @@ r = nba_playtype_ratings("2023-24", off_team=off_df, def_team=def_df, schedule=s
 r.filter(pl.col("adj_net") > 0).sort("adj_net", descending=True)
 ```
 
-### `nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_predict_games}
+### nba_predict_games {#nba_predict_games}
+
+`nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Vectorized pregame predictions for a schedule of games.
 
@@ -4477,7 +4723,9 @@ from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
 preds = nba_predict_games(games, nba_team_ratings(2024))
 ```
 
-### `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_ratings_panel}
+### nba_ratings_panel {#nba_ratings_panel}
+
+`nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Player-ratings-through-date long panel: one row per (player_id, date).
 
@@ -4519,7 +4767,9 @@ print(panel.filter(pl.col("player_id") == 201939).sort("date"))
 panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
 ```
 
-### `nba_raw_store_season_frame(endpoint: 'str', season: 'int', variant: 'Optional[str]' = None, *, result_set: 'Optional[str]' = None, raw_store_dir: 'RawStoreDir' = None) -> "Optional['pl.DataFrame']"` {#nba_raw_store_season_frame}
+### nba_raw_store_season_frame {#nba_raw_store_season_frame}
+
+`nba_raw_store_season_frame(endpoint: 'str', season: 'int', variant: 'Optional[str]' = None, *, result_set: 'Optional[str]' = None, raw_store_dir: 'RawStoreDir' = None) -> "Optional['pl.DataFrame']"`
 
 Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
 
@@ -4565,7 +4815,9 @@ frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
 positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
 ```
 
-### `nba_referee_assignments(date: 'str | _dt.date', *, league: 'str' = 'nba', raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'` {#nba_referee_assignments}
+### nba_referee_assignments {#nba_referee_assignments}
+
+`nba_referee_assignments(date: 'str | _dt.date', *, league: 'str' = 'nba', raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
 
 Fetch and parse NBA referee assignments for a given date from official.nba.com.
 
@@ -4625,7 +4877,9 @@ result = nba_referee_assignments("2026-06-13", league="wnba")
 wnba_officials = result["officials"]
 ```
 
-### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}
+### nba_rookie_projection {#nba_rookie_projection}
+
+`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Project rookie/sophomore value by composing draft x aging x availability.
 
@@ -4663,7 +4917,9 @@ board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())
 ```
 
-### `nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_schedule_crosswalk}
+### nba_schedule_crosswalk {#nba_schedule_crosswalk}
+
+`nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
 
@@ -4697,7 +4953,9 @@ print(df["match_method"].value_counts())
 df.filter(pl.col("match_method") == "both").select("espn_game_id", "nba_game_id").head()
 ```
 
-### `nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#nba_shot_value}
+### nba_shot_value {#nba_shot_value}
+
+`nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
 
 One-call shot-value spine: fetch, score, and run all five models.
 
@@ -4728,7 +4986,9 @@ out = nba_shot_value([201939], "2022-23")
 out["talent"].head()
 ```
 
-### `nba_shot_value_lineups(group_id: 'str', season: 'str', *, team_id: 'int', league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_shot_value_lineups}
+### nba_shot_value_lineups {#nba_shot_value_lineups}
+
+`nba_shot_value_lineups(group_id: 'str', season: 'str', *, team_id: 'int', league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`).
 
@@ -4753,7 +5013,9 @@ from sportsdataverse.nba import nba_shot_value_lineups
 df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
 ```
 
-### `nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_spm}
+### nba_spm {#nba_spm}
+
+`nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM.
 
@@ -4789,7 +5051,9 @@ print(ratings.sort("spm", descending=True).head())
 ratings.filter(pl.col("min") >= 500).sort("spm", descending=True)
 ```
 
-### `nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_team_clutch}
+### nba_team_clutch {#nba_team_clutch}
+
+`nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
 
@@ -4817,7 +5081,9 @@ skill = nba_team_clutch(2024)
 skill.sort("clutch_skill_shrunk", descending=True).head()
 ```
 
-### `nba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_crosswalk}
+### nba_team_crosswalk {#nba_team_crosswalk}
+
+`nba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox).
 
@@ -4878,7 +5144,9 @@ df = nba_team_crosswalk(season=2026, stats=my_stats, fox=my_fox)
 df.select("espn_team_id", "nba_team_id", "match_method").head()
 ```
 
-### `nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_ratings}
+### nba_team_ratings {#nba_team_ratings}
+
+`nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware.
 
@@ -4919,7 +5187,9 @@ ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
 wnba_ratings = nba_team_ratings(2024, league_id="10")
 ```
 
-### `nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_drive_value}
+### nba_tracking_drive_value {#nba_tracking_drive_value}
+
+`nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Drive value over expected + rim-pressure, per player-season.
 
@@ -4953,7 +5223,9 @@ df = nba_tracking_drive_value(2024)
 print(df.sort("drive_pts_oe", descending=True).head())
 ```
 
-### `nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_pass_value}
+### nba_tracking_pass_value {#nba_tracking_pass_value}
+
+`nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Expected-assists / passer value: `ast_oe` per player-season.
 
@@ -4998,7 +5270,9 @@ print(df.sort("ast_oe", descending=True).head())
 df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
 ```
 
-### `nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_reb_oe}
+### nba_tracking_reb_oe {#nba_tracking_reb_oe}
+
+`nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season.
 
@@ -5044,7 +5318,9 @@ df_all = nba_tracking_reb_oe(2024, by_position=False)
 df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
 ```
 
-### `nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_rim_protect_value}
+### nba_tracking_rim_protect_value {#nba_tracking_rim_protect_value}
+
+`nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Rim-protection / shot-defend points-saved over expected, per player-season.
 
@@ -5091,7 +5367,9 @@ df = nba_tracking_rim_protect_value(2024)
 print(df.sort("rim_protect_pts_saved", descending=True).head())
 ```
 
-### `nba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_shot_diet_value}
+### nba_tracking_shot_diet_value {#nba_tracking_shot_diet_value}
+
+`nba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Catch-&-shoot vs pull-up points-over-expected, per player-season.
 
@@ -5126,7 +5404,9 @@ df = nba_tracking_shot_diet_value(2024)
 print(df.sort("cs_pts_oe", descending=True).head())
 ```
 
-### `nba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_touch_value}
+### nba_tracking_touch_value {#nba_tracking_touch_value}
+
+`nba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Touch / possession-time value over expected, per player-season.
 
@@ -5160,7 +5440,9 @@ df = nba_tracking_touch_value(2024)
 print(df.sort("pts_per_touch_oe", descending=True).head())
 ```
 
-### `nba_v3_to_v2_pbp(pbp_v3: 'dict', box_v3: 'dict', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_v3_to_v2_pbp}
+### nba_v3_to_v2_pbp {#nba_v3_to_v2_pbp}
+
+`nba_v3_to_v2_pbp(pbp_v3: 'dict', box_v3: 'dict', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Convert a v3 `playbyplayv3` payload into the full v2-schema pbp frame.
 
@@ -5219,7 +5501,9 @@ print(type(df_pd))
 df.filter(pl.col("event_type") == "1").select("player1_name", "player2_name")
 ```
 
-### `nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_war}
+### nba_war {#nba_war}
+
+`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Points-above-replacement -> wins for each player.
 
@@ -5261,7 +5545,9 @@ repl = calibrate_replacement_level(
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```
 
-### `nbadraft_mock_draft(year: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nbadraft_mock_draft}
+### nbadraft_mock_draft {#nbadraft_mock_draft}
+
+`nbadraft_mock_draft(year: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 The current consensus mock draft from NBADraft.net.
 
@@ -5312,7 +5598,9 @@ mock_pd = nbadraft_mock_draft(year=2025, return_as_pandas=True)
 mock.filter((pl.col("round") == 1) & (pl.col("pick") <= 14))
 ```
 
-### `normalize_player_name(name: 'str') -> 'str'` {#normalize_player_name}
+### normalize_player_name {#normalize_player_name}
+
+`normalize_player_name(name: 'str') -> 'str'`
 
 Fold a player display name to a join-safe key.
 
@@ -5344,7 +5632,9 @@ assert normalize_player_name("Nikola Jokić") == normalize_player_name("Nikola J
 assert normalize_player_name("Gary Trent Jr.") == normalize_player_name("Gary Trent")
 ```
 
-### `player_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#player_play_context}
+### player_play_context {#player_play_context}
+
+`player_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half).
 
@@ -5391,7 +5681,9 @@ print(onoff.sort("diff_pts_per_100", descending=True).head())
 print(onoff.sort("diff_transition_freq", descending=True).head())
 ```
 
-### `player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#player_rates}
+### player_rates {#player_rates}
+
+`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Per-player per-minute rate stats from box logs.
 
@@ -5415,7 +5707,9 @@ from sportsdataverse.nba.nba_player_props import player_rates
 rates = player_rates(box_logs)
 ```
 
-### `players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_pbp}
+### players_on_court_from_pbp {#players_on_court_from_pbp}
+
+`players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
 
 Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
 
@@ -5453,7 +5747,9 @@ oc = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
 print(oc.shape)
 ```
 
-### `players_on_court_from_quarter_boxscores(enhanced_pbp: 'pl.DataFrame', period_boxscores: 'Dict[int, dict]', raw_box: 'Optional[dict]' = None, *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_quarter_boxscores}
+### players_on_court_from_quarter_boxscores {#players_on_court_from_quarter_boxscores}
+
+`players_on_court_from_quarter_boxscores(enhanced_pbp: 'pl.DataFrame', period_boxscores: 'Dict[int, dict]', raw_box: 'Optional[dict]' = None, *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
 
 Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible.
 
@@ -5527,7 +5823,9 @@ oc = players_on_court_from_quarter_boxscores(
 print(oc.shape)
 ```
 
-### `players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_rotation}
+### players_on_court_from_rotation {#players_on_court_from_rotation}
+
+`players_on_court_from_rotation(enhanced_pbp: 'pl.DataFrame', rotation: 'dict[str, list[dict]]', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'`
 
 Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm.
 
@@ -5572,7 +5870,9 @@ df = players_on_court_from_rotation(
 print(df.shape)
 ```
 
-### `predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'` {#predict_margin}
+### predict_margin {#predict_margin}
+
+`predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
 
 Expected home-minus-away margin from two adjusted net ratings.
 
@@ -5602,7 +5902,9 @@ from sportsdataverse.nba.nba_game_predict import predict_margin
 predict_margin(10.0, -2.0, home_pace=100.0, away_pace=98.0, neutral=False)
 ```
 
-### `predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#predict_total}
+### predict_total {#predict_total}
+
+`predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
 
 Expected total points from adjusted ratings and paces.
 
@@ -5633,7 +5935,9 @@ from sportsdataverse.nba.nba_game_predict import predict_total
 predict_total(118.0, 108.0, 110.0, 112.0, 100.0, 98.0)
 ```
 
-### `prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'` {#prob_over}
+### prob_over {#prob_over}
+
+`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'`
 
 Probability a stat finishes strictly above `line`.
 
@@ -5657,7 +5961,9 @@ from sportsdataverse.nba.nba_player_props import prob_over
 prob_over(24.0, 22.5, "pts")
 ```
 
-### `project_player_line(rate_row: 'dict[str, Any]', exp_minutes: 'float', pace_factor: 'float' = 1.0) -> 'dict[str, float]'` {#project_player_line}
+### project_player_line {#project_player_line}
+
+`project_player_line(rate_row: 'dict[str, Any]', exp_minutes: 'float', pace_factor: 'float' = 1.0) -> 'dict[str, float]'`
 
 Project a player's expected counting line from per-minute rates.
 
@@ -5684,7 +5990,9 @@ r = player_rates(box_logs).row(0, named=True)
 line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
 ```
 
-### `prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'` {#prop_distribution}
+### prop_distribution {#prop_distribution}
+
+`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'`
 
 Distribution family + parameters for a projected stat mean.
 
@@ -5711,7 +6019,9 @@ from sportsdataverse.nba.nba_player_props import prop_distribution
 fam, par = prop_distribution(24.0, "pts")
 ```
 
-### `ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'` {#ratings_as_of}
+### ratings_as_of {#ratings_as_of}
+
+`ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'`
 
 Fit `model` on every possession dated on or before `asof` and return ratings.
 
@@ -5746,7 +6056,9 @@ rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
 print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
 ```
 
-### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
+### raw_game_efficiency {#raw_game_efficiency}
+
+`raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Per-team, per-game possessions + raw offensive/defensive rating.
 
@@ -5769,7 +6081,9 @@ from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
 eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
 ```
 
-### `realgm_close_browser() -> 'None'` {#realgm_close_browser}
+### realgm_close_browser {#realgm_close_browser}
+
+`realgm_close_browser() -> 'None'`
 
 Close the cached headless browser, if one is open.
 
@@ -5786,7 +6100,9 @@ players = realgm_players()
 realgm_close_browser()
 ```
 
-### `realgm_coaches(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_coaches}
+### realgm_coaches {#realgm_coaches}
+
+`realgm_coaches(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Current NBA head coaches.
 
@@ -5813,7 +6129,9 @@ coaches = realgm_coaches()
 print(coaches.shape)
 ```
 
-### `realgm_draft(year: 'Optional[int]' = None, *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_draft}
+### realgm_draft {#realgm_draft}
+
+`realgm_draft(year: 'Optional[int]' = None, *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Results of one past NBA draft.
 
@@ -5865,7 +6183,9 @@ print(draft.shape)
 draft.filter(pl.col("round") == 1).head()
 ```
 
-### `realgm_draft_prospects(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_draft_prospects}
+### realgm_draft_prospects {#realgm_draft_prospects}
+
+`realgm_draft_prospects(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Current NBA draft-prospect statistics.
 
@@ -5892,7 +6212,9 @@ prospects = realgm_draft_prospects()
 print(prospects.shape)
 ```
 
-### `realgm_early_entry(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_early_entry}
+### realgm_early_entry {#realgm_early_entry}
+
+`realgm_early_entry(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The current NBA draft early-entrant and withdrawal list.
 
@@ -5920,7 +6242,9 @@ entrants = realgm_early_entry()
 print(entrants.shape)
 ```
 
-### `realgm_future_free_agents(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_future_free_agents}
+### realgm_future_free_agents {#realgm_future_free_agents}
+
+`realgm_future_free_agents(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 RealGM's projected future NBA free-agent classes, with each player's agent.
 
@@ -5952,7 +6276,9 @@ print(fas.shape)
 fas.group_by("agent").agg(pl.len().alias("clients")).sort("clients", descending=True)
 ```
 
-### `realgm_gms(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_gms}
+### realgm_gms {#realgm_gms}
+
+`realgm_gms(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Current NBA general managers.
 
@@ -5979,7 +6305,9 @@ gms = realgm_gms()
 print(gms.shape)
 ```
 
-### `realgm_individual_games(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_individual_games}
+### realgm_individual_games {#realgm_individual_games}
+
+`realgm_individual_games(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The all-time best individual NBA games leaderboard.
 
@@ -6006,7 +6334,9 @@ best = realgm_individual_games()
 print(best.shape)
 ```
 
-### `realgm_individual_seasons(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_individual_seasons}
+### realgm_individual_seasons {#realgm_individual_seasons}
+
+`realgm_individual_seasons(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The all-time best individual NBA seasons leaderboard.
 
@@ -6033,7 +6363,9 @@ best = realgm_individual_seasons()
 print(best.shape)
 ```
 
-### `realgm_player_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_player_stats}
+### realgm_player_stats {#realgm_player_stats}
+
+`realgm_player_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season player-statistics leaderboard for one stat family and season segment.
 
@@ -6067,7 +6399,9 @@ print(stats.shape)
 stats.sort("ppg", descending=True).head(10)
 ```
 
-### `realgm_players(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_players}
+### realgm_players {#realgm_players}
+
+`realgm_players(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The active NBA player index from RealGM.
 
@@ -6104,7 +6438,9 @@ players = realgm_players(fetcher=lambda path, proxy: "<html>...</html>")
 players.filter(pl.col("nationality") != "United States").head()
 ```
 
-### `realgm_players_abroad(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_players_abroad}
+### realgm_players_abroad {#realgm_players_abroad}
+
+`realgm_players_abroad(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 NBA-affiliated players currently playing overseas.
 
@@ -6132,7 +6468,9 @@ abroad = realgm_players_abroad()
 print(abroad.shape)
 ```
 
-### `realgm_rookie_scale(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_rookie_scale}
+### realgm_rookie_scale {#realgm_rookie_scale}
+
+`realgm_rookie_scale(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The current NBA rookie-scale salary table.
 
@@ -6160,7 +6498,9 @@ scale = realgm_rookie_scale()
 print(scale.shape)
 ```
 
-### `realgm_salary_cap(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_salary_cap}
+### realgm_salary_cap {#realgm_salary_cap}
+
+`realgm_salary_cap(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 NBA salary-cap history and projections.
 
@@ -6193,7 +6533,9 @@ print(caps.shape)
 caps.with_columns(pl.col("salary_cap").str.replace_all(r"[^0-9.]", "").cast(pl.Float64))
 ```
 
-### `realgm_standings(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_standings}
+### realgm_standings {#realgm_standings}
+
+`realgm_standings(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Current NBA standings, both conferences stacked.
 
@@ -6227,7 +6569,9 @@ print(standings.shape)
 standings.filter(pl.col("conference") == "Eastern").head()
 ```
 
-### `realgm_team_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_team_stats}
+### realgm_team_stats {#realgm_team_stats}
+
+`realgm_team_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Season team statistics for one stat family and season segment.
 
@@ -6257,7 +6601,9 @@ teams = realgm_team_stats(season=2025, stat_type="Advanced_Stats")
 print(teams.shape)
 ```
 
-### `realgm_teams(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_teams}
+### realgm_teams {#realgm_teams}
+
+`realgm_teams(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The NBA team index with division and conference.
 
@@ -6292,7 +6638,9 @@ teams = realgm_teams()
 print(teams.shape)
 ```
 
-### `realgm_transactions(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_transactions}
+### realgm_transactions {#realgm_transactions}
+
+`realgm_transactions(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 The NBA league transactions log.
 
@@ -6330,7 +6678,9 @@ print(log.shape)
 log.filter(pl.col("transaction").str.contains("(?i)two-way")).head()
 ```
 
-### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}
+### render_report {#render_report}
+
+`render_report(report: 'ValidationReport') -> 'str'`
 
 Render a `ValidationReport` as a human-readable markdown validation card.
 
@@ -6361,7 +6711,9 @@ with open("validation_card.md", "w") as f:
     f.write(render_report(rep))
 ```
 
-### `rotowire_injuries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#rotowire_injuries}
+### rotowire_injuries {#rotowire_injuries}
+
+`rotowire_injuries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 The current NBA injury report from RotoWire.
 
@@ -6416,7 +6768,9 @@ injuries_pd = rotowire_injuries(return_as_pandas=True)
 injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 ```
 
-### `score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#score_shot_xpoints}
+### score_shot_xpoints {#score_shot_xpoints}
+
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score each shot with expected points from the league-average baseline.
 
@@ -6448,7 +6802,9 @@ scored = score_shot_xpoints(shots, league_avgs)
 scored.group_by("player_id").agg(pl.col("xpoints").sum())
 ```
 
-### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
+### scoreboard_event_parsing {#scoreboard_event_parsing}
+
+`scoreboard_event_parsing(event)`
 
 Internal helper that flattens an ESPN NBA scoreboard event dict into a
 
@@ -6471,7 +6827,9 @@ from sportsdataverse.nba import espn_nba_schedule
 sched = espn_nba_schedule(dates=20230102)
 ```
 
-### `shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shooter_talent}
+### shooter_talent {#shooter_talent}
+
+`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
 
@@ -6506,7 +6864,9 @@ talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
 talent.sort("talent_pct", descending=True).head(15)
 ```
 
-### `shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shot_selection_quality}
+### shot_selection_quality {#shot_selection_quality}
+
+`shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Player shot-selection quality: mean expected value vs the league mean.
 
@@ -6538,7 +6898,9 @@ sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
 sel.sort("selection_quality", descending=True).head(15)
 ```
 
-### `shrink_clutch(delta: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'` {#shrink_clutch}
+### shrink_clutch {#shrink_clutch}
+
+`shrink_clutch(delta: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
 
 Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero.
 
@@ -6565,7 +6927,9 @@ from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
 skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
 ```
 
-### `spotrac_team_cap(season: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#spotrac_team_cap}
+### spotrac_team_cap {#spotrac_team_cap}
+
+`spotrac_team_cap(season: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team salary-cap allocations from Spotrac.
 
@@ -6617,7 +6981,9 @@ cap_pd = spotrac_team_cap(season=2024, return_as_pandas=True)
 cap.sort("cap_space_all", descending=True).head()
 ```
 
-### `starters_on_court_counts(possessions: 'pl.DataFrame', starters: 'dict[int, list[int]]') -> 'dict[int, int]'` {#starters_on_court_counts}
+### starters_on_court_counts {#starters_on_court_counts}
+
+`starters_on_court_counts(possessions: 'pl.DataFrame', starters: 'dict[int, list[int]]') -> 'dict[int, int]'`
 
 Count, per possession, how many **starters** are on the floor across BOTH teams.
 
@@ -6644,7 +7010,9 @@ counts = starters_on_court_counts(poss, _starters_from_boxscore_v3(box))
 print(max(counts.values()))  # 10 at the opening tip
 ```
 
-### `team_pace_projection(home_team_id: 'str', away_team_id: 'str', ratings: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'float'` {#team_pace_projection}
+### team_pace_projection {#team_pace_projection}
+
+`team_pace_projection(home_team_id: 'str', away_team_id: 'str', ratings: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'float'`
 
 Expected possessions for a matchup (Phase-3 `expected_possessions`).
 
@@ -6668,7 +7036,9 @@ from sportsdataverse.nba.nba_player_props import team_pace_projection
 poss = team_pace_projection("1", "2", ratings)
 ```
 
-### `team_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#team_play_context}
+### team_play_context {#team_play_context}
+
+`team_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Roll possessions up into CTG's team Play-Context table.
 
@@ -6708,7 +7078,9 @@ print(ctx.select("offense_team_id", "transition_freq", "transition_pts_added_per
 ctx = team_play_context(season_poss, league_non_transition_ppp=104.8)
 ```
 
-### `train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'` {#train_spm}
+### train_spm {#train_spm}
+
+`train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'`
 
 Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions).
 
@@ -6739,7 +7111,9 @@ coef = train_spm(box_feats, rapm_ratings)
 coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
 ```
 
-### `validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0, external_ratings: 'Optional[pl.DataFrame]' = None, external_oracle: 'Optional[pl.DataFrame]' = None, external_rating_col: 'str' = 'rating', external_oracle_col: 'str' = 'oracle_value', external_join: 'str' = 'id', walk_forward_horizon_days: 'int' = 14, walk_forward_min_games: 'int' = 15) -> 'ValidationReport'` {#validate_model}
+### validate_model {#validate_model}
+
+`validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0, external_ratings: 'Optional[pl.DataFrame]' = None, external_oracle: 'Optional[pl.DataFrame]' = None, external_rating_col: 'str' = 'rating', external_oracle_col: 'str' = 'oracle_value', external_join: 'str' = 'id', walk_forward_horizon_days: 'int' = 14, walk_forward_min_games: 'int' = 15) -> 'ValidationReport'`
 
 Run the selected oracles and assemble a `ValidationReport`.
 
@@ -6790,7 +7164,9 @@ rep = validate_model(
 print(rep.cross_season)   # None — not selected
 ```
 
-### `walk_forward(model: 'AnyModel', possessions: 'pl.DataFrame', *, checkpoint_dates: 'Optional[List[datetime.date]]' = None, horizon_days: 'int' = 14, min_games_before_first_checkpoint: 'int' = 15) -> 'WalkForwardResult'` {#walk_forward}
+### walk_forward {#walk_forward}
+
+`walk_forward(model: 'AnyModel', possessions: 'pl.DataFrame', *, checkpoint_dates: 'Optional[List[datetime.date]]' = None, horizon_days: 'int' = 14, min_games_before_first_checkpoint: 'int' = 15) -> 'WalkForwardResult'`
 
 Oracle 6: time-ordered "predict tomorrow" retrodiction.
 
@@ -6824,7 +7200,9 @@ res = walk_forward(RidgeRapmModel(), season_possessions)
 print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
 ```
 
-### `win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'` {#win_prob_from_margin}
+### win_prob_from_margin {#win_prob_from_margin}
+
+`win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
 
 Home win probability from an expected margin (normal-CDF closed form).
 
@@ -6846,7 +7224,9 @@ from sportsdataverse.nba.nba_game_predict import win_prob_from_margin
 win_prob_from_margin(5.0)
 ```
 
-### `xpoints_baseline(league_avgs: 'pl.DataFrame') -> 'pl.DataFrame'` {#xpoints_baseline}
+### xpoints_baseline {#xpoints_baseline}
+
+`xpoints_baseline(league_avgs: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 League-average FG% baseline table keyed by the three shot-zone columns.
 
@@ -6868,7 +7248,9 @@ from sportsdataverse.nba.nba_shot_value import xpoints_baseline
 base = xpoints_baseline(league_avgs)
 ```
 
-### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
+### zone_value_map {#zone_value_map}
+
+`zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-player per-zone value map: points and expected points per shot.
 

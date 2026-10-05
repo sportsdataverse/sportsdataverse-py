@@ -8,6 +8,8 @@ tree (``docs/docs/{league}/``); a drift guard asserts that tree matches a fresh 
 
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from tools.codegen import generate
@@ -20,7 +22,7 @@ from tools.codegen import generate
 
 def test_reference_block_has_all_sections():
     md = generate.render_reference_page("nba", "espn_site_v2")
-    assert "## `espn_nba_scoreboard`" in md
+    assert "## espn_nba_scoreboard\n" in md
     assert "Endpoint URL" in md
     assert "Valid URL" in md
     # nba_api-style parameter table (6-column: added Description column in F2a)
@@ -35,7 +37,7 @@ def test_reference_block_renders_frames_schema_as_multiple_tables():
     """The ESPN summary endpoint uses a ``kind: frames`` schema; each sub-frame
     should render as its own bolded ``@return`` table."""
     md = generate.render_reference_page("nba", "espn_site_v2")
-    assert "## `espn_nba_summary`" in md
+    assert "## espn_nba_summary\n" in md
     assert "**boxscore_player**" in md  # a named sub-frame from summary.yaml
 
 
@@ -44,8 +46,8 @@ def test_reference_page_documents_resolved_wrapper_names():
     api-web pbp wrapper is version-qualified to ``nhl_web_pbp`` (collision with the
     ``nhl_pbp`` composite), and a clean name like ``nhl_boxscore`` stays bare."""
     md = generate.render_reference_page("nhl", "nhl_api_web")
-    assert "## `nhl_web_pbp`" in md
-    assert "## `nhl_boxscore`" in md
+    assert "## nhl_web_pbp\n" in md
+    assert "## nhl_boxscore\n" in md
 
 
 # ===========================================================================
@@ -109,9 +111,33 @@ def test_loaders_page_states_the_pipeline_and_has_per_loader_blocks():
     assert "```mermaid" not in md
     assert "scrape / raw → enrich → release asset → `load_*()`" in md
     assert "## Automation status" in md
-    assert "## `load_nhl_pbp`" in md
+    assert "## load_nhl_pbp\n" in md
     # a 404-safe loader example call
     assert "load_nhl_pbp(seasons=" in md
+
+
+def test_reference_headings_are_plain_names_with_unique_sub_heading_ids():
+    md = generate.render_reference_page("nba", "espn_site_v2")
+    assert "## `" not in md
+    assert "toc_max_heading_level: 2\n" in md
+    assert "### Returns {#espn_nba_scoreboard-returns}" in md
+    assert "### Example {#espn_nba_scoreboard-example}" in md
+    ids = re.findall(r"\{#([\w-]+)\}", md)
+    assert len(ids) == len(set(ids)) > 0
+
+
+def test_loaders_page_uses_the_bracketed_admonition_title():
+    md = generate.render_loaders_page("cfb")
+    assert ":::caution[Coverage]" in md
+    assert ":::caution Coverage" not in md
+    assert "### Returns {#load_cfb_pbp-returns}" in md
+    assert "toc_max_heading_level: 2\n" in md
+
+
+def test_autodoc_heading_is_the_plain_name_and_the_signature_follows():
+    md = generate.render_autodoc_page("mbb", "")
+    assert "### `" not in md
+    assert "### espn_mbb_pbp {#espn_mbb_pbp}\n\n`espn_mbb_pbp(" in md
 
 
 def test_parameters_page_escapes_union_types():

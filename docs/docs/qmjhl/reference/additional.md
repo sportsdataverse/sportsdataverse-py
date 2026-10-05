@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_qmjhl_season() -> 'int'` {#most_recent_qmjhl_season}
+### most_recent_qmjhl_season {#most_recent_qmjhl_season}
+
+`most_recent_qmjhl_season() -> 'int'`
 
 Most-recent QMJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `qmjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_game_corsi}
+### qmjhl_game_corsi {#qmjhl_game_corsi}
+
+`qmjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single QMJHL game.
 
@@ -28,7 +32,9 @@ Player-level on-ice Corsi and Fenwick for a single QMJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `qmjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_game_shifts}
+### qmjhl_game_shifts {#qmjhl_game_shifts}
+
+`qmjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single QMJHL game.
 
@@ -39,7 +45,9 @@ Parsed shift stints for a single QMJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `qmjhl_game_summary(game_id: 'int') -> 'dict'` {#qmjhl_game_summary}
+### qmjhl_game_summary {#qmjhl_game_summary}
+
+`qmjhl_game_summary(game_id: 'int') -> 'dict'`
 
 QMJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -49,7 +57,9 @@ QMJHL game summary — dict of frames (game/goals/penalties/shots_by_period/thre
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `qmjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_leaders}
+### qmjhl_leaders {#qmjhl_leaders}
+
+`qmjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL statistical leaders for a given season.
 
@@ -82,7 +92,9 @@ QMJHL statistical leaders for a given season.
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
-### `qmjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_pbp}
+### qmjhl_pbp {#qmjhl_pbp}
+
+`qmjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL play-by-play — one row per event, fully enriched.
 
@@ -93,7 +105,9 @@ QMJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `qmjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_player_stats}
+### qmjhl_player_stats {#qmjhl_player_stats}
+
+`qmjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL player season stats across all seasons.
 
@@ -162,7 +176,9 @@ QMJHL player season stats across all seasons.
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `qmjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_player_toi}
+### qmjhl_player_toi {#qmjhl_player_toi}
+
+`qmjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single QMJHL game.
 
@@ -173,7 +189,9 @@ Per-player time-on-ice totals for a single QMJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `qmjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_schedule}
+### qmjhl_schedule {#qmjhl_schedule}
+
+`qmjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL schedule — one row per game.
 
@@ -203,7 +221,9 @@ QMJHL schedule — one row per game.
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### `qmjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_season_id}
+### qmjhl_season_id {#qmjhl_season_id}
+
+`qmjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All QMJHL seasons with end-year + game-type labels.
 
@@ -228,7 +248,9 @@ All QMJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `qmjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_standings}
+### qmjhl_standings {#qmjhl_standings}
+
+`qmjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL standings — one row per team.
 
@@ -266,7 +288,9 @@ QMJHL standings — one row per team.
 | `past_10` | character | Win-loss-overtime record string for the team over its most recent ten games (e.g., "7-2-1"). |
 | `team` | character | Team name. |
 
-### `qmjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_team_roster}
+### qmjhl_team_roster {#qmjhl_team_roster}
+
+`qmjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL team roster for a given team + season.
 
@@ -330,7 +354,9 @@ QMJHL team roster for a given team + season.
 | `player_image` | character | URL of the player's headshot or profile image as stored in the HockeyTech roster feed. |
 | `catches` | character | Catching hand (goalies). |
 
-### `qmjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_teams}
+### qmjhl_teams {#qmjhl_teams}
+
+`qmjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 QMJHL teams for a given season.
 
