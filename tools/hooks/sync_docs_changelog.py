@@ -60,7 +60,8 @@ def split(text: str) -> tuple[str, list[str], list[str]]:
 
 
 def _page(title: str, intro: str, sections: list[str]) -> str:
-    return f"---\ntitle: {title}\n---\n\n# {title}\n\n{intro}\n\n" + "\n".join(sections)
+    # One final newline, whatever the sections: codegen's docs normalisation must leave these bytes alone.
+    return (f"---\ntitle: {title}\n---\n\n# {title}\n\n{intro}\n\n" + "\n".join(sections)).rstrip() + "\n"
 
 
 def render(text: str) -> dict[str, str]:

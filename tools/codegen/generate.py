@@ -17,6 +17,7 @@ from urllib.parse import urlencode
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from tools.codegen import render, spec  # noqa: E402
+from tools.hooks import sync_docs_changelog  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
@@ -4026,6 +4027,9 @@ def _split_family_pages(
 
 # Relative to docs/docs, like _ANCHOR_MAP_REL: the file lands at docs/src/data/leagues.json.
 _LEAGUES_JSON_REL = "../src/data/leagues.json"
+# The three changelog pages rendered from the root CHANGELOG.md by tools/hooks/sync_docs_changelog.py (the
+# pre-commit hook stays the fast path when only CHANGELOG.md changes); relative to docs/docs.
+_CHANGELOG_PAGES_REL = "../src/pages/"
 _SPORTS = (
     ("football", "Football"),
     ("basketball", "Basketball"),
@@ -4154,6 +4158,11 @@ def _render_docs_all() -> dict[str, str]:
     _split_family_pages(out, None, anchor_map)
     out[_ANCHOR_MAP_REL] = json.dumps(anchor_map, indent=1, sort_keys=True)
     out[_LEAGUES_JSON_REL] = render_leagues_json()
+    try:
+        pages = sync_docs_changelog.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
+    except ValueError as e:  # an unrecognised CHANGELOG.md heading: name it, no traceback
+        raise SystemExit(f"codegen: cannot render the docs changelog pages: {e}") from None
+    out.update({_CHANGELOG_PAGES_REL + name: content for name, content in pages.items()})
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs
