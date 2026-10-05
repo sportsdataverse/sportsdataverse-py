@@ -1,11 +1,11 @@
 ---
-title: "NHL — NHL EDGE API — Skater (2)"
-sidebar_label: "Skater (2)"
+title: "NHL — NHL EDGE API — Skater: landing"
+sidebar_label: "Skater: landing"
 sidebar_position: 4
-description: "NHL — NHL EDGE API — Skater (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NHL — NHL EDGE API — Skater: landing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NHL — NHL EDGE API — Skater (2)
+# NHL — NHL EDGE API — Skater: landing
 
 ## nhl_edge_skater_landing
 

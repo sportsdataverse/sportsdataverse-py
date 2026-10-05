@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Player (3)"
-sidebar_label: "Player (3)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Player: passing–rushing"
+sidebar_label: "Player: passing–rushing"
 sidebar_position: 10
-description: "NFL — PFF Developer API (api.pff.com, API key) — Player (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Player: passing–rushing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Player (3)
+# NFL — PFF Developer API (api.pff.com, API key) — Player: passing–rushing
 
 ## pff_api_player_passing_pressure
 

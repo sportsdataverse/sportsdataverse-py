@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Nba"
-sidebar_label: "Nba"
+title: "NBA — additional Python functions — Nba: adj–la"
+sidebar_label: "Nba: adj–la"
 sidebar_position: 4
-description: "NBA — additional Python functions — Nba — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Nba: adj–la — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Nba
+# NBA — additional Python functions — Nba: adj–la
 
 ### nba_adj_rapm {#nba_adj_rapm}
 

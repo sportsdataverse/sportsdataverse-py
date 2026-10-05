@@ -1,11 +1,11 @@
 ---
-title: "NFL dataset loaders — Coach"
-sidebar_label: "Coach"
+title: "NFL dataset loaders — Coach: tendencies"
+sidebar_label: "Coach: tendencies"
 sidebar_position: 1
-description: "NFL dataset loaders — Coach — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL dataset loaders — Coach: tendencies — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL dataset loaders — Coach
+# NFL dataset loaders — Coach: tendencies
 
 ## load_nfl_coach_tendencies
 

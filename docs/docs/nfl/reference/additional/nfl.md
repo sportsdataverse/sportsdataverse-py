@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Nfl"
-sidebar_label: "Nfl"
+title: "NFL — additional Python functions — Nfl: availability–ngs"
+sidebar_label: "Nfl: availability–ngs"
 sidebar_position: 8
-description: "NFL — additional Python functions — Nfl — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Nfl: availability–ngs — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Nfl
+# NFL — additional Python functions — Nfl: availability–ngs
 
 ### nfl_availability_projection {#nfl_availability_projection}
 

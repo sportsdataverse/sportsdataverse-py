@@ -106,7 +106,7 @@ def test_family_pages_keep_autodoc_anchor_case():
 def test_split_writes_a_category_that_opens_the_overview():
     out = {
         "x/reference/some_api.md": _endpoint_page({"x_api_season_a": 40_000, "x_api_event_b": 40_000}),
-        "x/reference/small.md": _endpoint_page({"x_api_season_c": 100}),
+        "x/reference/small.md": _endpoint_page({"x_api_season_c": 100, "x_api_event_d": 100}),
     }
     anchor_map: dict = {}
     moved = generate._split_family_pages(out, "x", anchor_map)
@@ -145,4 +145,66 @@ def test_anchor_map_points_at_the_page_that_holds_each_anchor(first_render):
     for old, anchors in anchor_map.items():
         for anchor, slug in anchors.items():
             text = rendered[f"{old.removeprefix('/docs/')}/{slug}.md"]
-            assert f"\n## {anchor}\n" in text.lower() or "{#" + anchor + "}" in text, (old, anchor, slug)
+            # a family section folded into "Other" (``#dataset-loaders``) forwards to that page, which has no such heading
+            assert slug.startswith("other") or anchor in {i for _, i in generate._heading_ids(text)}, (
+                old,
+                anchor,
+                slug,
+            )
+
+
+def test_every_old_heading_id_stays_on_the_overview_or_forwards():
+    body = (
+        "## Dataset loaders\n\n"
+        "### load_a {#load_a}\n\nLoads a.\n\n" + "a" * 40_000 + "\n\n"
+        "## Utilities & helpers\n\n"
+        "### CFBPlayProcess {#CFBPlayProcess}\n\nRuns it.\n\n"
+        "#### CFBPlayProcess.run_pipeline\n\nRuns the pipeline.\n\n```\n# not a heading\n```\n\n"
+        + "b"
+        * 40_000
+        + "\n\n"
+        "### helper_b {#helper_b}\n\nHelps.\n\n"
+    )
+    page = (
+        "---\ntitle: X — additional Python functions\nsidebar_label: Additional functions\nsidebar_position: 50\n---\n"
+        "# X — additional Python functions\n\nHand-written.\n\n" + body
+    )
+    old_ids = {i for _, i in generate._heading_ids(page)}
+    assert {
+        "load_a",
+        "CFBPlayProcess",
+        "cfbplayprocessrun_pipeline",
+        "dataset-loaders",
+        "utilities--helpers",
+    } <= old_ids
+    assert "not-a-heading" not in old_ids
+    overview, pages, anchors = generate._family_pages("x/reference/additional.md", page, "x")
+    on_overview = {i for _, i in generate._heading_ids(overview)}
+    on_family = {slug: {i for _, i in generate._heading_ids(text)} for slug, text in pages.items()}
+    for old_id in old_ids:
+        if old_id in on_overview:
+            continue
+        assert old_id in anchors, old_id
+        if old_id not in ("dataset-loaders", "utilities--helpers"):  # a folded family heading lands on its page
+            assert old_id in on_family[anchors[old_id]], old_id
+
+
+def test_overflow_pages_are_labelled_by_the_shared_name_token():
+    labels = {
+        "pff_api_facet_defense_a": 30_000,
+        "pff_api_facet_defense_b": 30_000,
+        "pff_api_facet_offense_c": 30_000,
+        "pff_api_facet_passing_d": 30_000,
+        "pff_api_facet_passing_e": 30_000,
+        "pff_api_facet_rushing_f": 30_000,
+        "pff_api_games_g": 30_000,
+    }
+    page = _endpoint_page(labels)
+    _, pages, _ = generate._family_pages("x/reference/pff_api.md", page, "x")
+    shown = {slug: re.search(r'sidebar_label: "(.+)"', text).group(1) for slug, text in pages.items()}
+    assert shown == {
+        "facet": "Facet: defense",
+        "facet-2": "Facet: offense–passing",
+        "facet-3": "Facet: passing–rushing",
+        "other": "Other",
+    }

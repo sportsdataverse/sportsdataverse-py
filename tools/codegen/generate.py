@@ -3802,6 +3802,48 @@ def _pack_families(items: list[tuple[str, str, int]]) -> list[tuple[str, str, in
     return pages
 
 
+_HEADING_LINE = re.compile(r"^#{1,6} (.+?)(?: \{#([^}\s]+)\})?\s*$")
+
+
+def _github_slug(text: str) -> str:
+    """Docusaurus's heading id for ``text`` (github-slugger: lower-case, punctuation dropped, spaces to ``-``)."""
+    return re.sub(r"[^\w\- ]", "", text.lower()).replace(" ", "-")
+
+
+def _heading_ids(text: str) -> list[tuple[int, str]]:
+    """``[(offset, id)]`` for every heading of ``text`` outside code fences, as Docusaurus numbers them:
+    an explicit ``{#id}`` wins, a repeated slug gets ``-1``, ``-2`` ..."""
+    ids: list[tuple[int, str]] = []
+    seen: dict[str, int] = {}
+    fenced = False
+    offset = 0
+    for line in text.split("\n"):
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+        elif not fenced and (m := _HEADING_LINE.match(line)):
+            base = m.group(2) or _github_slug(m.group(1))
+            n = seen.get(base, -1) + 1
+            seen[base] = n
+            ids.append((offset, base if m.group(2) or n == 0 else f"{base}-{n}"))
+        offset += len(line) + 1
+    return ids
+
+
+def _token_label(label: str, slug: str, names: list[str]) -> str | None:
+    """``Facet: offense`` (or ``Facet: offense–passing``) from the name token that follows the family word in
+    every function of the page, or None when some function has none."""
+    base = re.sub(r"-\d+$", "", slug)
+    following = []
+    for n in names:
+        words = n.split("_")
+        at = next((i for i, w in enumerate(words) if w.lower() in (base, base + "s")), None)
+        if at is None or at + 1 >= len(words) or len(words[at + 1]) < 2:  # no word, or a stray letter (``_r``)
+            return None
+        following.append(words[at + 1].lower())
+    first, last = following[0], following[-1]
+    return f"{label}: {first}" if first == last else f"{label}: {first}–{last}"
+
+
 def _summary_line(block: str) -> str:
     """The first prose line of a function block, links reduced to their text, at most 160 characters."""
     for line in block.split("\n")[1:]:
@@ -3827,6 +3869,8 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
     body = content[front.end() :]
     page = rel.rsplit("/", 1)[1][:-3]
     blocks: dict[str, str] = {}
+    spans: dict[str, tuple[int, int]] = {}  # function -> its block's offsets in ``body``
+    section_of: dict[int, str] = {}  # autodoc family heading offset -> its first function
     keys: list[str] = []
     autodoc = page in (_AUTODOC_PAGE[:-3], _AUTODOC_GLOBAL_PAGE[:-3])
     if autodoc:
@@ -3837,14 +3881,19 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
             heads = list(_FN_H3_LINE.finditer(text))
             for j, h in enumerate(heads):
                 name = h.group(1)
-                blocks[name] = text[h.start() : heads[j + 1].start() if j + 1 < len(heads) else len(text)]
+                end = heads[j + 1].start() if j + 1 < len(heads) else len(text)
+                blocks[name] = text[h.start() : end]
+                spans[name] = (sec.start() + h.start(), sec.start() + end)
+                section_of.setdefault(sec.start(), name)
                 family = sec.group(1).strip()
                 keys.append(family if family != "Other" else name.split("_")[0])
     else:
         heads = list(_FN_H2_LINE.finditer(body))
         preamble = body[: heads[0].start()] if heads else body
         for j, h in enumerate(heads):
-            blocks[h.group(1)] = body[h.start() : heads[j + 1].start() if j + 1 < len(heads) else len(body)]
+            end = heads[j + 1].start() if j + 1 < len(heads) else len(body)
+            blocks[h.group(1)] = body[h.start() : end]
+            spans[h.group(1)] = (h.start(), end)
         names = list(blocks)
         keys = _loader_families(names, prefix) if page == "loaders" else _name_families(names)
     if len(blocks) < 2:  # nothing to split: one function over the budget stays as it is
@@ -3855,8 +3904,19 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
     family_pages: dict[str, str] = {}
     fn_slug: dict[str, str] = {}
     rows: dict[str, list[str]] = {}
+    pages_of: dict[str, int] = {}
+    for _, label, _, _ in pages:
+        pages_of[label] = pages_of.get(label, 0) + 1
+    used_labels: set[str] = set()
     for position, (slug, label, part, names) in enumerate(pages, start=1):
-        shown = label if part == 1 else f"{label} ({part})"
+        # A family on several pages labels each by the name token its functions share after the family word
+        # (``Facet: offense``); no usable token keeps the plain label, or ``Label (N)`` from page 2 on.
+        shown = (_token_label(label, slug, names) if pages_of[label] > 1 else None) or (
+            label if part == 1 else f"{label} ({part})"
+        )
+        if shown in used_labels:
+            shown = f"{label} ({part})"
+        used_labels.add(shown)
         heading = f"{title} — {shown}"
         family_pages[slug] = (
             f"---\ntitle: {json.dumps(heading, ensure_ascii=False)}\n"
@@ -3869,6 +3929,15 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
             anchor = n if autodoc else n.lower()
             fn_slug[anchor] = slug
             rows.setdefault(label, []).append(f"| [{n}]({page}/{slug}.md#{anchor}) | {_summary_line(blocks[n])} |")
+    # Every other heading id of the old page (a method, a family section folded into "Other") goes to the page
+    # that holds it, unless the overview still has it; ``-returns`` / ``-example`` ids the client strips.
+    on_overview = {i for _, i in _heading_ids(preamble)} | {_github_slug(label) for label in rows}
+    for at, hid in _heading_ids(body):
+        if hid in on_overview or hid in fn_slug or re.sub(r"-(returns|example)$", "", hid) in fn_slug:
+            continue
+        holder = next((n for n, (a, b) in spans.items() if a <= at < b), section_of.get(at))
+        if holder is not None:
+            fn_slug[hid] = next(sl for sl, _, _, ns in pages if holder in ns)
     overview = (
         front.group(0)
         + preamble.rstrip()

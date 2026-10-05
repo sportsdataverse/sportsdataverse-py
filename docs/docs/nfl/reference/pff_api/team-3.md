@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Team (3)"
-sidebar_label: "Team (3)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Team: report"
+sidebar_label: "Team: report"
 sidebar_position: 16
-description: "NFL — PFF Developer API (api.pff.com, API key) — Team (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Team: report — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Team (3)
+# NFL — PFF Developer API (api.pff.com, API key) — Team: report
 
 ## pff_api_team_report
 

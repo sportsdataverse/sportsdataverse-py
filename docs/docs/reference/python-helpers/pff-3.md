@@ -1,10 +1,10 @@
 ---
-title: "Package — additional Python functions — Pff (3)"
-sidebar_label: "Pff (3)"
+title: "Package — additional Python functions — Pff: ncaa–nfl"
+sidebar_label: "Pff: ncaa–nfl"
 sidebar_position: 3
-description: "Package — additional Python functions — Pff (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "Package — additional Python functions — Pff: ncaa–nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Package — additional Python functions — Pff (3)
+# Package — additional Python functions — Pff: ncaa–nfl
 
 ### pff_ncaa_facet_receiving_summary {#pff_ncaa_facet_receiving_summary}
 

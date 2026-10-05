@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial (2)"
-sidebar_label: "Editorial (2)"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial: scoreboard"
+sidebar_label: "Editorial: scoreboard"
 sidebar_position: 2
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial: scoreboard — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial (2)
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Editorial: scoreboard
 
 ## yahoo_editorial_scoreboard
 

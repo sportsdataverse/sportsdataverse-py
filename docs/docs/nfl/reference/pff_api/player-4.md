@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Player (4)"
-sidebar_label: "Player (4)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Player: receiving"
+sidebar_label: "Player: receiving"
 sidebar_position: 11
-description: "NFL — PFF Developer API (api.pff.com, API key) — Player (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Player: receiving — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Player (4)
+# NFL — PFF Developer API (api.pff.com, API key) — Player: receiving
 
 ## pff_api_player_receiving_depth
 

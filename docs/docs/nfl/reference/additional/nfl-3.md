@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Nfl (3)"
-sidebar_label: "Nfl (3)"
+title: "NFL — additional Python functions — Nfl: simulations–week"
+sidebar_label: "Nfl: simulations–week"
 sidebar_position: 10
-description: "NFL — additional Python functions — Nfl (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Nfl: simulations–week — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Nfl (3)
+# NFL — additional Python functions — Nfl: simulations–week
 
 ### nfl_simulations {#nfl_simulations}
 

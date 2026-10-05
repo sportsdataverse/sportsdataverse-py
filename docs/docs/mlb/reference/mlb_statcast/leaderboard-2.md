@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard (2)"
-sidebar_label: "Leaderboard (2)"
+title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park"
+sidebar_label: "Leaderboard: timer–park"
 sidebar_position: 2
-description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Statcast (Baseball Savant) — Leaderboard (2)
+# MLB — MLB Statcast (Baseball Savant) — Leaderboard: timer–park
 
 ## mlb_statcast_leaderboard_timer_infractions
 

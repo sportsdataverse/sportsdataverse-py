@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Team (4)"
-sidebar_label: "Team (4)"
+title: "CFB dataset loaders — Team: tendencies"
+sidebar_label: "Team: tendencies"
 sidebar_position: 12
-description: "CFB dataset loaders — Team (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Team: tendencies — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Team (4)
+# CFB dataset loaders — Team: tendencies
 
 ## load_cfb_team_tendencies
 

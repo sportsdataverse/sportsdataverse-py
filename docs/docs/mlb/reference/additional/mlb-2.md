@@ -1,10 +1,10 @@
 ---
-title: "MLB — additional Python functions — Mlb (2)"
-sidebar_label: "Mlb (2)"
+title: "MLB — additional Python functions — Mlb: statcast–win"
+sidebar_label: "Mlb: statcast–win"
 sidebar_position: 3
-description: "MLB — additional Python functions — Mlb (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — additional Python functions — Mlb: statcast–win — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MLB — additional Python functions — Mlb (2)
+# MLB — additional Python functions — Mlb: statcast–win
 
 ### mlb_statcast_search {#mlb_statcast_search}
 

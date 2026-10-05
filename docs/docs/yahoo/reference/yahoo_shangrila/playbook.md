@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook"
-sidebar_label: "Playbook"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team"
+sidebar_label: "Playbook: boxscore–team"
 sidebar_position: 5
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team
 
 ## yahoo_playbook_boxscore
 

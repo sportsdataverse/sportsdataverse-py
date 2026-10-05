@@ -1,10 +1,10 @@
 ---
-title: "Package — additional Python functions — Pff"
-sidebar_label: "Pff"
+title: "Package — additional Python functions — Pff: aaf"
+sidebar_label: "Pff: aaf"
 sidebar_position: 1
-description: "Package — additional Python functions — Pff — function reference in sdv-py, the SportsDataverse Python package."
+description: "Package — additional Python functions — Pff: aaf — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Package — additional Python functions — Pff
+# Package — additional Python functions — Pff: aaf
 
 ### pff_aaf_facet_blocking_summary {#pff_aaf_facet_blocking_summary}
 

@@ -1,10 +1,10 @@
 ---
-title: "MLB — additional Python functions — Mlb"
-sidebar_label: "Mlb"
+title: "MLB — additional Python functions — Mlb: attendance–statcast"
+sidebar_label: "Mlb: attendance–statcast"
 sidebar_position: 2
-description: "MLB — additional Python functions — Mlb — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — additional Python functions — Mlb: attendance–statcast — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MLB — additional Python functions — Mlb
+# MLB — additional Python functions — Mlb: attendance–statcast
 
 ### mlb_attendance {#mlb_attendance}
 

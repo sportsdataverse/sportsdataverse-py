@@ -1,10 +1,10 @@
 ---
-title: "Package — additional Python functions — Pff (4)"
-sidebar_label: "Pff (4)"
+title: "Package — additional Python functions — Pff: nfl–ufl"
+sidebar_label: "Pff: nfl–ufl"
 sidebar_position: 4
-description: "Package — additional Python functions — Pff (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "Package — additional Python functions — Pff: nfl–ufl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Package — additional Python functions — Pff (4)
+# Package — additional Python functions — Pff: nfl–ufl
 
 ### pff_nfl_facet_passing_pressure {#pff_nfl_facet_passing_pressure}
 

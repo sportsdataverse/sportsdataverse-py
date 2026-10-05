@@ -1,11 +1,11 @@
 ---
-title: "NBA dataset loaders — Stats (2)"
-sidebar_label: "Stats (2)"
+title: "NBA dataset loaders — Stats: possessions–team"
+sidebar_label: "Stats: possessions–team"
 sidebar_position: 3
-description: "NBA dataset loaders — Stats (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA dataset loaders — Stats: possessions–team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA dataset loaders — Stats (2)
+# NBA dataset loaders — Stats: possessions–team
 
 ## load_nba_stats_possessions_v3
 

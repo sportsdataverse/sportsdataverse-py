@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Wnba"
-sidebar_label: "Wnba"
+title: "WNBA — additional Python functions — Wnba: aging–predict"
+sidebar_label: "Wnba: aging–predict"
 sidebar_position: 3
-description: "WNBA — additional Python functions — Wnba — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Wnba: aging–predict — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Wnba
+# WNBA — additional Python functions — Wnba: aging–predict
 
 ### wnba_aging_curve {#wnba_aging_curve}
 

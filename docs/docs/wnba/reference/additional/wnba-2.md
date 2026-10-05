@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Wnba (2)"
-sidebar_label: "Wnba (2)"
+title: "WNBA — additional Python functions — Wnba: rapm–win"
+sidebar_label: "Wnba: rapm–win"
 sidebar_position: 4
-description: "WNBA — additional Python functions — Wnba (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Wnba: rapm–win — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Wnba (2)
+# WNBA — additional Python functions — Wnba: rapm–win
 
 ### wnba_rapm_from_games {#wnba_rapm_from_games}
 

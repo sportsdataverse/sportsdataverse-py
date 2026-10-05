@@ -8,16 +8,26 @@ let anchorMap: Promise<Record<string, Record<string, string>>> | undefined;
 
 export function onRouteDidUpdate({location}: {location: Location}): void {
   if (typeof window === 'undefined' || !location.hash) return;
-  const id = decodeURIComponent(location.hash.slice(1));
+  let id = location.hash.slice(1);
+  try {
+    id = decodeURIComponent(id);
+  } catch {
+    // a malformed escape such as `#%`: keep the raw hash
+  }
   if (document.getElementById(id)) return;
   const page = location.pathname.replace(/\/$/, '');
   anchorMap ??= fetch('/anchor-map.json')
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => ({}));
   void anchorMap.then((map) => {
-    const anchors = map[page];
+    // On a family page the map has no entry for the page itself: a function that was added or removed
+    // moved the family's pages (`pff-2` -> `pff-3`), so look the anchor up under the overview (the parent path).
+    const overview = map[page] ? page : page.slice(0, page.lastIndexOf('/'));
+    const anchors = map[overview];
     // `<fn>-returns` and `<fn>-example` (the per-function sub-headings) live on the function's page too
     const slug = anchors && (anchors[id] ?? anchors[id.replace(/-(returns|example)$/, '')]);
-    if (slug) window.location.replace(`${page}/${slug}${location.search}#${encodeURIComponent(id)}`);
+    if (slug && `${overview}/${slug}` !== page) {
+      window.location.replace(`${overview}/${slug}${location.search}#${encodeURIComponent(id)}`);
+    }
   });
 }

@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Coach (2)"
-sidebar_label: "Coach (2)"
+title: "CFB dataset loaders — Coach: careers"
+sidebar_label: "Coach: careers"
 sidebar_position: 3
-description: "CFB dataset loaders — Coach (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Coach: careers — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Coach (2)
+# CFB dataset loaders — Coach: careers
 
 ## load_cfb_coach_careers
 

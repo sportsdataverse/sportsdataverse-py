@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Nba (2)"
-sidebar_label: "Nba (2)"
+title: "NBA — additional Python functions — Nba: live–raw"
+sidebar_label: "Nba: live–raw"
 sidebar_position: 5
-description: "NBA — additional Python functions — Nba (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Nba: live–raw — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Nba (2)
+# NBA — additional Python functions — Nba: live–raw
 
 ### nba_live_boxscore {#nba_live_boxscore}
 

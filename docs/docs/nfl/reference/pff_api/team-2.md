@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Team (2)"
-sidebar_label: "Team (2)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Team: leaders–rushing"
+sidebar_label: "Team: leaders–rushing"
 sidebar_position: 15
-description: "NFL — PFF Developer API (api.pff.com, API key) — Team (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Team: leaders–rushing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Team (2)
+# NFL — PFF Developer API (api.pff.com, API key) — Team: leaders–rushing
 
 ## pff_api_team_leaders
 

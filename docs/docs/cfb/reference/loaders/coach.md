@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Coach"
-sidebar_label: "Coach"
+title: "CFB dataset loaders — Coach: tendencies"
+sidebar_label: "Coach: tendencies"
 sidebar_position: 2
-description: "CFB dataset loaders — Coach — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Coach: tendencies — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Coach
+# CFB dataset loaders — Coach: tendencies
 
 ## load_cfb_coach_tendencies
 

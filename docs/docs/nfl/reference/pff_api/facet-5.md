@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Facet (5)"
-sidebar_label: "Facet (5)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving"
+sidebar_label: "Facet: receiving"
 sidebar_position: 5
-description: "NFL — PFF Developer API (api.pff.com, API key) — Facet (5) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Facet (5)
+# NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving
 
 ## pff_api_facet_receiving_depth
 

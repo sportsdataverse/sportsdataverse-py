@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard"
-sidebar_label: "Leaderboard"
+title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year"
+sidebar_label: "Leaderboard: expected–year"
 sidebar_position: 1
-description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Statcast (Baseball Savant) — Leaderboard
+# MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year
 
 ## mlb_statcast_leaderboard_expected_stats
 

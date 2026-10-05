@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Team"
-sidebar_label: "Team"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Team: list–schedule"
+sidebar_label: "Team: list–schedule"
 sidebar_position: 14
-description: "NFL — PFF Developer API (api.pff.com, API key) — Team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Team: list–schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Team
+# NFL — PFF Developer API (api.pff.com, API key) — Team: list–schedule
 
 ## pff_api_team_list
 

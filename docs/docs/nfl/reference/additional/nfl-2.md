@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Nfl (2)"
-sidebar_label: "Nfl (2)"
+title: "NFL — additional Python functions — Nfl: ngs–season"
+sidebar_label: "Nfl: ngs–season"
 sidebar_position: 9
-description: "NFL — additional Python functions — Nfl (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Nfl: ngs–season — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Nfl (2)
+# NFL — additional Python functions — Nfl: ngs–season
 
 ### nfl_ngs_play_is_highlight {#nfl_ngs_play_is_highlight}
 

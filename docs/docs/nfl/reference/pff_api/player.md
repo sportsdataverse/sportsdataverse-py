@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Player"
-sidebar_label: "Player"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Player: seasons–passing"
+sidebar_label: "Player: seasons–passing"
 sidebar_position: 8
-description: "NFL — PFF Developer API (api.pff.com, API key) — Player — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Player: seasons–passing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Player
+# NFL — PFF Developer API (api.pff.com, API key) — Player: seasons–passing
 
 ## pff_api_player_seasons
 

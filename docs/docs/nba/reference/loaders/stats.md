@@ -1,11 +1,11 @@
 ---
-title: "NBA dataset loaders — Stats"
-sidebar_label: "Stats"
+title: "NBA dataset loaders — Stats: schedules–player"
+sidebar_label: "Stats: schedules–player"
 sidebar_position: 2
-description: "NBA dataset loaders — Stats — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA dataset loaders — Stats: schedules–player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA dataset loaders — Stats
+# NBA dataset loaders — Stats: schedules–player
 
 ## load_nba_stats_schedules
 

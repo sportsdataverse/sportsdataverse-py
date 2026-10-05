@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Nba (3)"
-sidebar_label: "Nba (3)"
+title: "NBA — additional Python functions — Nba: referee–war"
+sidebar_label: "Nba: referee–war"
 sidebar_position: 6
-description: "NBA — additional Python functions — Nba (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Nba: referee–war — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Nba (3)
+# NBA — additional Python functions — Nba: referee–war
 
 ### nba_referee_assignments {#nba_referee_assignments}
 
