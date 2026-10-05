@@ -49,6 +49,7 @@ _LEAGUES = (
     "nhl",
     "wbb",
     "wnba",
+    "nbagl",
     "pwhl",
     # minor / additional leagues, nested under sport-group packages (0.0.65+)
     "hockey.ahl",

@@ -70,6 +70,7 @@ from sportsdataverse.nhl import *
 from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
+from sportsdataverse.nbagl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ahl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402

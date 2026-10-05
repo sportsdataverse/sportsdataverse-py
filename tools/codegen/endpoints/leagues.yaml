@@ -12,6 +12,7 @@ hosts:
 leagues:
   - {prefix: nba, sport: basketball, league: nba, scopes: [universal]}
   - {prefix: wnba, sport: basketball, league: wnba, scopes: [universal]}
+  - {prefix: nbagl, sport: basketball, league: nba-development, scopes: [universal]}
   - {prefix: mbb, sport: basketball, league: mens-college-basketball, scopes: [universal, ncaa]}
   - {prefix: wbb, sport: basketball, league: womens-college-basketball, scopes: [universal, ncaa]}
   - {prefix: cfb, sport: football, league: college-football, scopes: [universal, ncaa, football]}

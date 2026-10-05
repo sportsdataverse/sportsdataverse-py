@@ -8,6 +8,18 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — ESPN NBA G League wrappers (`espn_nbagl_*`)
+
+ESPN's G League (`basketball/nba-development`) is registered in `leagues.yaml` like every other
+ESPN league, so codegen now emits the full universal family (112 wrappers) as
+`sportsdataverse.nbagl.nbagl_espn_ext`: `espn_nbagl_standings`, `espn_nbagl_scoreboard`,
+`espn_nbagl_teams_site`, `espn_nbagl_summary`, `espn_nbagl_team_roster`, and the rest. They are
+exported from `sportsdataverse.nbagl` and the top-level package, and `return_parsed=True` (the
+default) routes through the shared ESPN parsers. Before this, G League standings needed the
+private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
+standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
+a gated live smoke test checks the teams and standings endpoints.
+
 ### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
 
 The reference-docs return tables for these families named columns from the stats-API catalog

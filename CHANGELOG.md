@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
   - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
   - [Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows](#fixed--cfb-scores-espn-marks-but-no-text-rule-named-textless-copies-untyped-admin-rows)
   - [Fixed — CFB plays that end a half leave a possession worth nothing](#fixed--cfb-plays-that-end-a-half-leave-a-possession-worth-nothing)
@@ -317,6 +318,18 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — ESPN NBA G League wrappers (`espn_nbagl_*`)
+
+ESPN's G League (`basketball/nba-development`) is registered in `leagues.yaml` like every other
+ESPN league, so codegen now emits the full universal family (112 wrappers) as
+`sportsdataverse.nbagl.nbagl_espn_ext`: `espn_nbagl_standings`, `espn_nbagl_scoreboard`,
+`espn_nbagl_teams_site`, `espn_nbagl_summary`, `espn_nbagl_team_roster`, and the rest. They are
+exported from `sportsdataverse.nbagl` and the top-level package, and `return_parsed=True` (the
+default) routes through the shared ESPN parsers. Before this, G League standings needed the
+private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
+standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
+a gated live smoke test checks the teams and standings endpoints.
 
 ### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
 
