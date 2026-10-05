@@ -32,7 +32,7 @@ def _load(stem: str) -> Any:
 
 
 def test_endpoint_count_and_names() -> None:
-    assert len(ENDPOINTS) == 38
+    assert len(ENDPOINTS) == 33
     assert sorted(gen.__all__) == sorted(f"fox_api_{e['short']}" for e in ENDPOINTS)
 
 
@@ -86,6 +86,16 @@ def test_endpoint_resolves_to_expected_url_and_query(e: Dict[str, Any], monkeypa
     assert re.fullmatch(r"[A-Za-z0-9]{32}", seen["params"]["apikey"])
 
 
+def test_dropped_dead_endpoints_stay_dropped() -> None:
+    shorts = {e["short"] for e in ENDPOINTS}
+    assert not shorts & {"fs_feed", "fs_images", "fs_layouts", "fs_videos", "explore_favorite"}
+
+
+def test_scorechip_sends_no_api_version() -> None:
+    sc = next(e for e in ENDPOINTS if e["short"] == "scorechip")
+    assert all(p["query_key"] != "api-version" for p in sc["extra_params"])
+
+
 def test_feed_tier_uses_feed_key() -> None:
     keys = {e["short"]: next(p for p in e["extra_params"] if p["name"] == "apikey")["default"] for e in ENDPOINTS}
     assert keys["trending_articles"] == keys["foxpolls"] != keys["scoreboard"]
@@ -108,6 +118,8 @@ GROUPS: Dict[str, Tuple[Any, int, str]] = {
     "trending_articles": (P.parse_fox_api_trending, 2, "title"),
     "trending_videos": (P.parse_fox_api_trending, 5, "title"),
     "foxpolls": (P.parse_fox_api, 5, "poll_id"),
+    "nfl_scorechip": (P.parse_fox_api_scorechip, 1, "id"),
+    "topevents_segment": (P.parse_fox_api_events, 12, "game_id"),
 }
 
 

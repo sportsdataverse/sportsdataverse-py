@@ -15,6 +15,7 @@ from sportsdataverse.fox.fox_api_parsers import (  # noqa: F401
     parse_fox_api_nav,
     parse_fox_api_polls,
     parse_fox_api_roster,
+    parse_fox_api_scorechip,
     parse_fox_api_search,
     parse_fox_api_standings,
     parse_fox_api_trending,

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FOX — Fox Sports API (api.foxsports.com)
 
-`sportsdataverse.fox` — 38 endpoints.
+`sportsdataverse.fox` — 33 endpoints.
 
 ## fox_api_scoreboard
 
@@ -39,7 +39,7 @@ _Last validated n/a._
 
 ## fox_api_scorechip
 
-GET /bifrost/v1/{sport}/scorechip/{chip_id} -- Fox Sports API scorechip.
+GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/scorechip/{chip_id}`
 
@@ -50,11 +50,10 @@ GET /bifrost/v1/{sport}/scorechip/{chip_id} -- Fox Sports API scorechip.
 | `sport` | `sport` |  | `Y` |  | Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``. |
 | `chip_id` | `chip_id` |  | `Y` |  | Score-chip id: the league slug plus the numeric game id, e.g. ``nfl11195``. |
 | `apikey` | `apikey` |  |  | `Y` | Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
 
 ### Returns {#fox_api_scorechip-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_scorechip`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_scorechip-example}
@@ -71,11 +70,11 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/{segment}`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/2026-3-1](https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/2026-3-1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1](https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `segment` | `segment` |  | `Y` |  | Scoreboard segment id. |
+| `segment` | `segment` |  | `Y` |  | Top-events scoreboard segment id (``0`` / ``1`` ... as listed by ``topevents/scoreboard/main``); NOT a league ``<season>-<week>-<type>`` id. |
 | `apikey` | `apikey` |  |  | `Y` | Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
 | `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
 
@@ -87,7 +86,7 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 ### Example {#fox_api_topevents_scoreboard_segment-example}
 
 ```python
-fox_api_topevents_scoreboard_segment(segment='2026-3-1')
+fox_api_topevents_scoreboard_segment(segment='1')
 ```
 
 _Last validated n/a._
@@ -730,33 +729,6 @@ fox_api_explore_browse(section='sports')
 
 _Last validated n/a._
 
-## fox_api_explore_favorite
-
-GET /bifrost/v1/explore/favorite/{section}/main -- Fox Sports API explore favorite.
-
-**Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/explore/favorite/{section}/main`
-
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/explore/favorite/sports/main](https://api.foxsports.com/bifrost/v1/explore/favorite/sports/main)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `section` | `section` |  | `Y` |  | Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``. |
-| `apikey` | `apikey` |  |  | `Y` | Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
-
-### Returns {#fox_api_explore_favorite-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#fox_api_explore_favorite-example}
-
-```python
-fox_api_explore_favorite(section='sports')
-```
-
-_Last validated n/a._
-
 ## fox_api_explore_odds
 
 GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
@@ -942,110 +914,6 @@ GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 
 ```python
 fox_api_foxpolls()
-```
-
-_Last validated n/a._
-
-## fox_api_fs_feed
-
-GET /fs/feed -- Fox Sports API fs feed.
-
-**Endpoint URL:** `GET https://api.foxsports.com/fs/feed`
-
-**Valid URL:** [https://api.foxsports.com/fs/feed](https://api.foxsports.com/fs/feed)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `apikey` | `apikey` |  |  | `Y` | Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
-
-### Returns {#fox_api_fs_feed-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#fox_api_fs_feed-example}
-
-```python
-fox_api_fs_feed()
-```
-
-_Last validated n/a._
-
-## fox_api_fs_images
-
-GET /fs/images -- Fox Sports API fs images.
-
-**Endpoint URL:** `GET https://api.foxsports.com/fs/images`
-
-**Valid URL:** [https://api.foxsports.com/fs/images](https://api.foxsports.com/fs/images)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `apikey` | `apikey` |  |  | `Y` | Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
-
-### Returns {#fox_api_fs_images-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#fox_api_fs_images-example}
-
-```python
-fox_api_fs_images()
-```
-
-_Last validated n/a._
-
-## fox_api_fs_layouts
-
-GET /fs/layouts -- Fox Sports API fs layouts.
-
-**Endpoint URL:** `GET https://api.foxsports.com/fs/layouts`
-
-**Valid URL:** [https://api.foxsports.com/fs/layouts](https://api.foxsports.com/fs/layouts)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `apikey` | `apikey` |  |  | `Y` | Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
-
-### Returns {#fox_api_fs_layouts-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#fox_api_fs_layouts-example}
-
-```python
-fox_api_fs_layouts()
-```
-
-_Last validated n/a._
-
-## fox_api_fs_videos
-
-GET /fs/videos -- Fox Sports API fs videos.
-
-**Endpoint URL:** `GET https://api.foxsports.com/fs/videos`
-
-**Valid URL:** [https://api.foxsports.com/fs/videos](https://api.foxsports.com/fs/videos)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `apikey` | `apikey` |  |  | `Y` | Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it. |
-| `api-version` | `api_version` |  |  | `Y` | Fox API version (``api-version`` query key). |
-
-### Returns {#fox_api_fs_videos-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#fox_api_fs_videos-example}
-
-```python
-fox_api_fs_videos()
 ```
 
 _Last validated n/a._

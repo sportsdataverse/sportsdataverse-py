@@ -7,7 +7,7 @@ description: "sdv-py FOX: endpoint references, dataset loaders and parsers for F
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [Fox Sports API (api.foxsports.com)](reference/fox_api) | 38 | `https://api.foxsports.com` |
+| [Fox Sports API (api.foxsports.com)](reference/fox_api) | 33 | `https://api.foxsports.com` |
 
 ## Examples
 

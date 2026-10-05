@@ -33,6 +33,7 @@ __all__ = [
     "parse_fox_api_nav",
     "parse_fox_api_polls",
     "parse_fox_api_roster",
+    "parse_fox_api_scorechip",
     "parse_fox_api_search",
     "parse_fox_api_standings",
     "parse_fox_api_trending",
@@ -191,3 +192,10 @@ def parse_fox_api_trending(raw: Any, *, return_as_pandas: bool = False) -> _Fram
 def parse_fox_api_roster(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Team roster groups -> one row per athlete (``athlete_id`` as a string)."""
     return _roster(raw, return_as_pandas=return_as_pandas)
+
+
+def parse_fox_api_scorechip(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
+    """Single score chip (one game) -> a one-row frame; empty unless the body carries an ``id``."""
+    if not isinstance(raw, dict) or not raw.get("id"):
+        return _out([], return_as_pandas)
+    return _out([_flatten(raw)], return_as_pandas)

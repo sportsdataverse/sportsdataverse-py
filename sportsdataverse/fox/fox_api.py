@@ -14,6 +14,7 @@ from sportsdataverse.fox.fox_api_parsers import (
     parse_fox_api_nav,
     parse_fox_api_polls,
     parse_fox_api_roster,
+    parse_fox_api_scorechip,
     parse_fox_api_search,
     parse_fox_api_standings,
     parse_fox_api_trending,
@@ -50,7 +51,6 @@ __all__ = [
     "fox_api_team_standings",
     "fox_api_team_stats",
     "fox_api_explore_browse",
-    "fox_api_explore_favorite",
     "fox_api_explore_odds",
     "fox_api_search_content",
     "fox_api_search_entities",
@@ -58,10 +58,6 @@ __all__ = [
     "fox_api_trending_articles",
     "fox_api_trending_videos",
     "fox_api_foxpolls",
-    "fox_api_fs_feed",
-    "fox_api_fs_images",
-    "fox_api_fs_layouts",
-    "fox_api_fs_videos",
 ]
 
 
@@ -129,13 +125,12 @@ def fox_api_scorechip(
     sport: str,
     chip_id: str,
     apikey: Optional[str] = "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq",
-    api_version: Optional[str] = "1.1",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /bifrost/v1/{sport}/scorechip/{chip_id} -- Fox Sports API scorechip.
+    """GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/scorechip/{chip_id}``
     Example URL: https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195
@@ -144,8 +139,7 @@ def fox_api_scorechip(
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
         chip_id: Score-chip id: the league slug plus the numeric game id, e.g. ``nfl11195``.
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_fox_api_scorechip -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -171,7 +165,6 @@ def fox_api_scorechip(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "apikey": apikey,
-        "api-version": api_version,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -180,7 +173,7 @@ def fox_api_scorechip(
         **kwargs,
     )
     if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
+        return parse_fox_api_scorechip(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -196,10 +189,10 @@ def fox_api_topevents_scoreboard_segment(
     """GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topevents scoreboard segment.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/{segment}``
-    Example URL: https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/2026-3-1
+    Example URL: https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1
 
     Args:
-        segment: Scoreboard segment id.
+        segment: Top-events scoreboard segment id (``0`` / ``1`` ... as listed by ``topevents/scoreboard/main``); NOT a league ``<season>-<week>-<type>`` id.
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
         api_version: Fox API version (``api-version`` query key).
         return_parsed: parse the payload through parse_fox_api_events -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -216,7 +209,7 @@ def fox_api_topevents_scoreboard_segment(
         Quick start::
 
             from sportsdataverse.fox import fox_api_topevents_scoreboard_segment
-            fox_api_topevents_scoreboard_segment(segment='2026-3-1')
+            fox_api_topevents_scoreboard_segment(segment='1')
 
         See Also:
             * `Fox Sports`_ - the public site this API renders
@@ -1589,63 +1582,6 @@ def fox_api_explore_browse(
     return raw
 
 
-def fox_api_explore_favorite(
-    section: str,
-    apikey: Optional[str] = "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq",
-    api_version: Optional[str] = "1.1",
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /bifrost/v1/explore/favorite/{section}/main -- Fox Sports API explore favorite.
-
-    Endpoint: ``GET https://api.foxsports.com/bifrost/v1/explore/favorite/{section}/main``
-    Example URL: https://api.foxsports.com/bifrost/v1/explore/favorite/sports/main
-
-    Args:
-        section: Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``.
-        apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.fox import fox_api_explore_favorite
-            fox_api_explore_favorite(section='sports')
-
-        See Also:
-            * `Fox Sports`_ - the public site this API renders
-            * `sdv-swagger Fox Sports OpenAPI`_ - the endpoint spec these wrappers were cleaned from
-
-        .. _Fox Sports: https://www.foxsports.com/
-        .. _sdv-swagger Fox Sports OpenAPI: https://github.com/sportsdataverse/sdv-swagger
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "apikey": apikey,
-        "api-version": api_version,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        f"https://api.foxsports.com/bifrost/v1/explore/favorite/{section}/main",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
 def fox_api_explore_odds(
     apikey: Optional[str] = "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq",
     api_version: Optional[str] = "1.1",
@@ -2044,226 +1980,6 @@ def fox_api_foxpolls(
     _params.update(_caller_params)
     raw = _get(
         "https://api.foxsports.com/foxpolls/v1/polls",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def fox_api_fs_feed(
-    apikey: Optional[str] = "SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg",
-    api_version: Optional[str] = "1.1",
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /fs/feed -- Fox Sports API fs feed.
-
-    Endpoint: ``GET https://api.foxsports.com/fs/feed``
-    Example URL: https://api.foxsports.com/fs/feed
-
-    Args:
-        apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.fox import fox_api_fs_feed
-            fox_api_fs_feed()
-
-        See Also:
-            * `Fox Sports`_ - the public site this API renders
-            * `sdv-swagger Fox Sports OpenAPI`_ - the endpoint spec these wrappers were cleaned from
-
-        .. _Fox Sports: https://www.foxsports.com/
-        .. _sdv-swagger Fox Sports OpenAPI: https://github.com/sportsdataverse/sdv-swagger
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "apikey": apikey,
-        "api-version": api_version,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        "https://api.foxsports.com/fs/feed",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def fox_api_fs_images(
-    apikey: Optional[str] = "SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg",
-    api_version: Optional[str] = "1.1",
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /fs/images -- Fox Sports API fs images.
-
-    Endpoint: ``GET https://api.foxsports.com/fs/images``
-    Example URL: https://api.foxsports.com/fs/images
-
-    Args:
-        apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.fox import fox_api_fs_images
-            fox_api_fs_images()
-
-        See Also:
-            * `Fox Sports`_ - the public site this API renders
-            * `sdv-swagger Fox Sports OpenAPI`_ - the endpoint spec these wrappers were cleaned from
-
-        .. _Fox Sports: https://www.foxsports.com/
-        .. _sdv-swagger Fox Sports OpenAPI: https://github.com/sportsdataverse/sdv-swagger
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "apikey": apikey,
-        "api-version": api_version,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        "https://api.foxsports.com/fs/images",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def fox_api_fs_layouts(
-    apikey: Optional[str] = "SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg",
-    api_version: Optional[str] = "1.1",
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /fs/layouts -- Fox Sports API fs layouts.
-
-    Endpoint: ``GET https://api.foxsports.com/fs/layouts``
-    Example URL: https://api.foxsports.com/fs/layouts
-
-    Args:
-        apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.fox import fox_api_fs_layouts
-            fox_api_fs_layouts()
-
-        See Also:
-            * `Fox Sports`_ - the public site this API renders
-            * `sdv-swagger Fox Sports OpenAPI`_ - the endpoint spec these wrappers were cleaned from
-
-        .. _Fox Sports: https://www.foxsports.com/
-        .. _sdv-swagger Fox Sports OpenAPI: https://github.com/sportsdataverse/sdv-swagger
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "apikey": apikey,
-        "api-version": api_version,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        "https://api.foxsports.com/fs/layouts",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def fox_api_fs_videos(
-    apikey: Optional[str] = "SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg",
-    api_version: Optional[str] = "1.1",
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /fs/videos -- Fox Sports API fs videos.
-
-    Endpoint: ``GET https://api.foxsports.com/fs/videos``
-    Example URL: https://api.foxsports.com/fs/videos
-
-    Args:
-        apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-        api_version: Fox API version (``api-version`` query key).
-        return_parsed: parse the payload through parse_fox_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.fox import fox_api_fs_videos
-            fox_api_fs_videos()
-
-        See Also:
-            * `Fox Sports`_ - the public site this API renders
-            * `sdv-swagger Fox Sports OpenAPI`_ - the endpoint spec these wrappers were cleaned from
-
-        .. _Fox Sports: https://www.foxsports.com/
-        .. _sdv-swagger Fox Sports OpenAPI: https://github.com/sportsdataverse/sdv-swagger
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "apikey": apikey,
-        "api-version": api_version,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        "https://api.foxsports.com/fs/videos",
         params=_params,
         **kwargs,
     )

@@ -1,3 +1,13 @@
+# Probe record (2026-10-05, same-run 200 controls on the data key: explore/browse, nfl/league/*):
+#  - REMOVED fs_feed / fs_images / fs_layouts / fs_videos (/fs/{feed,images,layouts,videos}):
+#    404 {"fault":"Unable to identify proxy for host: secure"} with BOTH the data and the feed key,
+#    so we do not ship endpoints that always raise (same precedent as espn_site_v2.yaml's calendar paths).
+#  - REMOVED explore_favorite (/bifrost/v1/explore/favorite/{section}/main): 400 for sports/players,
+#    404 for nfl/cfb/teams, ids/sections taken from a live explore/browse payload; never returned data.
+#  - KEPT scorechip: chip id nfl11195 comes from a live league/scores-segment payload; the route
+#    400s when api-version is sent and returns 200 with apikey only, so it declares no api_version.
+#  - KEPT topevents_scoreboard_segment: segment ids (0, 1) come from topevents/scoreboard/main;
+#    league-style ids (2026-3-1) 404.
 api: fox_api
 host: https://api.foxsports.com
 name_pattern: fox_api_{short}
@@ -43,9 +53,9 @@ endpoints:
   example_args:
     sport: nfl
 - short: scorechip
-  summary: GET /bifrost/v1/{sport}/scorechip/{chip_id} -- Fox Sports API scorechip.
+  summary: GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
   path: /bifrost/v1/{sport}/scorechip/{chip_id}
-  parser: parse_fox_api
+  parser: parse_fox_api_scorechip
   path_params:
   - name: sport
     required: true
@@ -61,11 +71,6 @@ endpoints:
     type: str
     default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
     description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
   example_args:
     sport: nfl
     chip_id: nfl11195
@@ -77,7 +82,7 @@ endpoints:
   - name: segment
     required: true
     type: str
-    description: Scoreboard segment id.
+    description: Top-events scoreboard segment id (``0`` / ``1`` ... as listed by ``topevents/scoreboard/main``); NOT a league ``<season>-<week>-<type>`` id.
   extra_params:
   - name: apikey
     query_key: apikey
@@ -90,7 +95,7 @@ endpoints:
     default: '1.1'
     description: Fox API version (``api-version`` query key).
   example_args:
-    segment: 2026-3-1
+    segment: '1'
 - short: league_conferences
   summary: GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
   path: /bifrost/v1/{sport}/league/conferences
@@ -679,28 +684,6 @@ endpoints:
     description: Fox API version (``api-version`` query key).
   example_args:
     section: sports
-- short: explore_favorite
-  summary: GET /bifrost/v1/explore/favorite/{section}/main -- Fox Sports API explore favorite.
-  path: /bifrost/v1/explore/favorite/{section}/main
-  parser: parse_fox_api
-  path_params:
-  - name: section
-    required: true
-    type: str
-    description: 'Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``.'
-  extra_params:
-  - name: apikey
-    query_key: apikey
-    type: str
-    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
-    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
-  example_args:
-    section: sports
 - short: explore_odds
   summary: GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
   path: /bifrost/v1/explore/odds/main
@@ -842,66 +825,6 @@ endpoints:
     description: Include poll answer options.
     default: true
     transform: bool_str
-- short: fs_feed
-  summary: GET /fs/feed -- Fox Sports API fs feed.
-  path: /fs/feed
-  parser: parse_fox_api
-  extra_params:
-  - name: apikey
-    query_key: apikey
-    type: str
-    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
-    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
-- short: fs_images
-  summary: GET /fs/images -- Fox Sports API fs images.
-  path: /fs/images
-  parser: parse_fox_api
-  extra_params:
-  - name: apikey
-    query_key: apikey
-    type: str
-    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
-    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
-- short: fs_layouts
-  summary: GET /fs/layouts -- Fox Sports API fs layouts.
-  path: /fs/layouts
-  parser: parse_fox_api
-  extra_params:
-  - name: apikey
-    query_key: apikey
-    type: str
-    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
-    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
-- short: fs_videos
-  summary: GET /fs/videos -- Fox Sports API fs videos.
-  path: /fs/videos
-  parser: parse_fox_api
-  extra_params:
-  - name: apikey
-    query_key: apikey
-    type: str
-    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
-    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
-  - name: api_version
-    query_key: api-version
-    type: str
-    default: '1.1'
-    description: Fox API version (``api-version`` query key).
 runtime_imports:
 - _get
 - bool_str

@@ -31,9 +31,11 @@ with `curl`; `trending_*` and `foxpolls` are sliced to their first 2 / 5 / 5 rec
 | `trending_videos.json` | `/bifrost/v1/general/trending/videos?duration=4&maxItems=12` (feed key) |
 | `foxpolls.json` | `/foxpolls/v1/polls?includeAnswers=true` (feed key) |
 
-Live status on 2026-10-05 (known-positive control: the 15 routes above return 200 with
-the same key pair in the same run): `/fs/feed`, `/fs/images`, `/fs/layouts`, `/fs/videos`
-return 404 (`Unable to identify proxy for host: secure`) with BOTH keys; `scorechip`
-(`nfl11195`) returns 400; `topevents/scoreboard/segment/2026-3-1` returns 404;
-`nfl/league/polls` and `nfl/league/conferences` 404 (polls/conferences are CFB/CBK
-concepts). Those endpoints stay wired from the sdv-js spec but have no fixture.
+| `nfl_scorechip.json` | `/bifrost/v1/nfl/scorechip/nfl11195?apikey=...` (NO `api-version`: the route 400s with it) |
+| `topevents_segment.json` | `/bifrost/v1/topevents/scoreboard/segment/1` (segment id from `topevents/scoreboard/main`) |
+
+Probe record 2026-10-05 (same-run 200 controls): `/fs/{feed,images,layouts,videos}` return 404
+(`Unable to identify proxy for host: secure`) with both keys and `explore/favorite/{section}/main`
+returns 400/404 for every section tried, so those five endpoints are dropped from the family
+(see the comment at the top of `fox_api.yaml`). `scorechip` and `topevents` segment work once
+given ids taken from live payloads.
