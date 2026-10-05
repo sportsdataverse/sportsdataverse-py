@@ -26,6 +26,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
+from sportsdataverse._codegen_runtime import _json_body
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import NoDataError
 
@@ -56,12 +57,13 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
 
     Returns:
         The parsed JSON ``dict``; ``{}`` when the route 404s
-        (:class:`~sportsdataverse.errors.NoDataError`), when the body is not JSON,
-        or when it is not a JSON object. Yahoo answers a bad persisted query with
-        HTTP 400 and a ``{"errors": [...]}`` body, which is returned as-is so the
-        parser can turn it into a zero-row frame.
+        (:class:`~sportsdataverse.errors.NoDataError`), when the body is empty, or
+        when it is not a JSON object.
 
     Raises:
+        AssetFetchError: any non-2xx other than 404 after retries -- including the
+            HTTP 400 ``{"errors": [...]}`` Yahoo answers a bad persisted query with
+            -- or a 2xx whose body is not JSON. An error body is not data.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -78,8 +80,5 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
         resp = download(url=url, params=query, headers=headers, **kwargs)
     except NoDataError:
         return {}
-    try:
-        body = resp.json()
-    except ValueError:
-        return {}
+    body = _json_body(resp, url)
     return body if isinstance(body, dict) else {}

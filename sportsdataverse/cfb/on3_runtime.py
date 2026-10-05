@@ -42,6 +42,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
+from sportsdataverse._codegen_runtime import _check_response, _json_body
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import NoDataError
 
@@ -85,12 +86,16 @@ def _discover_build_id(page_url: str, **kwargs: Any) -> Optional[str]:
 
     Returns:
         The current buildId, or ``None`` when the page 404s / carries no blob.
+
+    Raises:
+        AssetFetchError: the page answered any other non-2xx after retries.
     """
     headers = {**_headers(), **kwargs.pop("headers", {})}
     try:
         resp = download(url=page_url, headers=headers, **kwargs)
     except NoDataError:
         return None
+    _check_response(resp, page_url)
     return _extract_build_id(getattr(resp, "text", "") or "")
 
 
@@ -109,8 +114,12 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> An
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The parsed JSON ``dict`` or ``list``; ``{}`` when the route is
-        unreachable (``NoDataError``) or the body is not JSON.
+        The parsed JSON ``dict`` or ``list``; ``{}`` when the route 404s
+        (``NoDataError``) or the body is empty.
+
+    Raises:
+        AssetFetchError: any other non-2xx after retries, or a 2xx whose body is
+            not JSON -- the answer is unknown, not empty.
     """
     headers = {**_headers(), **kwargs.pop("headers", {})}
     query = {k: v for k, v in (params or {}).items() if v is not None}
@@ -118,10 +127,7 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> An
         resp = download(url=url, params=query, headers=headers, **kwargs)
     except NoDataError:
         return {}
-    try:
-        body = resp.json()
-    except ValueError:
-        return {}
+    body = _json_body(resp, url)
     return body if isinstance(body, (dict, list)) else {}
 
 
@@ -143,8 +149,12 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
 
     Returns:
         The parsed JSON ``dict`` (``{"pageProps": {...}}``), or ``{}`` when the
-        route cannot be resolved (unknown path shape, unreachable page, or a
-        payload that is not JSON).
+        route cannot be resolved (unknown path shape, or a page / data route that
+        404s).
+
+    Raises:
+        AssetFetchError: the page or data route answered any other non-2xx after
+            retries, or a 2xx whose body is not JSON.
     """
     global _build_id
 
@@ -187,9 +197,6 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
             if _build_id is None or _build_id == stale:
                 return {}
             continue
-        try:
-            body = resp.json()
-        except ValueError:
-            return {}
+        body = _json_body(resp, data_url)
         return body if isinstance(body, dict) else {}
     return {}

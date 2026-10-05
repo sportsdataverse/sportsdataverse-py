@@ -41,8 +41,9 @@ non-feed criteria query), ``sports``, ``year`` (global class-year list),
 
 from __future__ import annotations
 
-import json
 from typing import Any, Callable, Dict, List, Optional, Union
+
+from sportsdataverse._codegen_runtime import _json_text
 
 __all__ = ["_get", "rdb_headers"]
 
@@ -160,7 +161,12 @@ def _get(
 
     Returns:
         Parsed JSON (``dict`` for enveloped payloads, ``list`` for the
-        array routes), or ``{}`` on non-200 status, blank body, or JSON error.
+        array routes), or ``{}`` for a blank 2xx body.
+
+    Raises:
+        NoDataError: the RDB answered 404.
+        AssetFetchError: any other non-2xx (a 401/403 that survived the re-mint, a
+            429, a 5xx), or a 2xx whose body is not JSON -- the answer is unknown.
 
     Example:
         Quick start (offline — inject a transport, no minting)::
@@ -188,17 +194,12 @@ def _get(
             if _jwt:
                 hdrs["Authorization"] = f"Bearer {_jwt}"
         status, text = _transport(full, clean, hdrs, proxy_url)
-        # 401/403 == the guest token expired (or was never minted). Re-mint once.
+        # 401/403 == the guest token expired (or was never minted). Re-mint once;
+        # a second refusal (or a failed mint) is a failed fetch, raised below.
         if auth and status in (401, 403) and attempt == 0:
             _jwt = _mint_guest_jwt()
-            if _jwt is None:
-                break
-            continue
-        if status != 200 or not (text or "").strip():
-            return {}
-        try:
-            body = json.loads(text)
-        except json.JSONDecodeError:
-            return {}
+            if _jwt is not None:
+                continue
+        body = _json_text(full, status, text)
         return body if isinstance(body, (dict, list)) else {}
-    return {}
+    return {}  # unreachable: the second attempt always returns or raises

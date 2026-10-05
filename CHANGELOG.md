@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
   - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
   - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
   - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
@@ -325,6 +326,41 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)
+
+`_codegen_runtime._get`, the getter behind every generated wrapper of the 30 `espn_*`
+league families, `fox_api_*`, `cbs_*` (NAPI), `mlb_api_*`, the four NHL families
+(`nhl_web_*`, `nhl_edge_*`, `nhl_stats_*`, `nhl_records_*`), `asa_*`, and the hand-written
+`fox_cfb_*`, `yahoo_cfb_*` and CFB crosswalk helpers, returned whatever came back. A
+401/403/429/5xx with a JSON body was handed over as if it were the payload (Fox's
+`{"fault": {"faultstring": "Invalid ApiKey"}}`, ESPN's `{"code": 400, ...}`); a non-JSON
+answer became `{}`. Parsed, both were a zero-row frame: a failed fetch read as "no data".
+It now follows the package error vocabulary:
+
+| Answer | Before | Now |
+|---|---|---|
+| 2xx with a JSON body | the body | the body (unchanged) |
+| 204 / empty 2xx body | `{}` | `{}` (a deliberate "nothing") |
+| 404, or ESPN 200 with `{"code": 404}` | `NoDataError` | `NoDataError` (unchanged) |
+| 401 / 403 / 429 / 5xx after retries, any other non-2xx | the error body as data | `AssetFetchError` |
+| 2xx with a non-JSON body | `{}` | `AssetFetchError` |
+
+The `AssetFetchError` message names host, path and status plus the start of the body, never
+the query string (API keys travel there) and with credentials redacted; the non-JSON case is
+raised outside the decode handler, so the `JSONDecodeError` (whose `.doc` is the whole body)
+is not chained. The same rule now applies to the other runtime getters that had the bug:
+`mlb_statcast_*`, `torvik_*` / `bart_wbb` and `kenpom_*` (an error page was returned as
+CSV/HTML text), the MLS and NWSL stats-API wrappers (`mls_*`, `nwsl_*`), the Yahoo shangrila
+wrappers (`yahoo_*`, including the HTTP 400 `{"errors": [...]}` a bad persisted query gets),
+`on3_*`, `sports247_*` (RDB and site pages), the LEGACY `pff_*` premium wrappers and the
+`mlb_api_extra` helpers; `nfl_api_*` raises `AssetFetchError` where it raised a bare
+`requests.HTTPError` / `JSONDecodeError`. The generated docstrings name both errors under
+`Raises:`. `nba_stats_*` / `wnba_stats_*` are unchanged here (a separate change).
+
+Migration: code that relied on an empty frame to keep a loop going should catch the error,
+e.g. `except AssetFetchError: log_and_retry_later()`; `except NoDataError` keeps skipping
+genuinely absent resources. Catch `SportsDataverseError` for both.
 
 ### Security — a credential in a query string no longer reaches a log or an error message
 

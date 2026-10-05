@@ -153,6 +153,8 @@ def yahoo_oly_medal_count(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -206,6 +208,8 @@ def yahoo_oly_seasons(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -258,6 +262,8 @@ def yahoo_alias(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -310,6 +316,8 @@ def yahoo_article_list_card_players(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -362,6 +370,8 @@ def yahoo_article_list_card_teams(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -414,6 +424,8 @@ def yahoo_basic_players(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -466,6 +478,8 @@ def yahoo_betting_disclaimer(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -522,6 +536,8 @@ def yahoo_combat_event_fights(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -578,6 +594,8 @@ def yahoo_combat_schedule(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -635,6 +653,8 @@ def yahoo_common_pills(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -699,6 +719,8 @@ def yahoo_consensus_rankings_php(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -758,6 +780,8 @@ def yahoo_draft(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -817,6 +841,8 @@ def yahoo_draft_prospects(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -874,6 +900,8 @@ def yahoo_driver_results(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -927,6 +955,8 @@ def yahoo_driver_splits(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -977,6 +1007,8 @@ def yahoo_featured_game_ids(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1027,6 +1059,8 @@ def yahoo_game_prop_bets(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1395,6 +1429,8 @@ def yahoo_game_stats_leaders(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1605,6 +1641,8 @@ def yahoo_gametime_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1657,6 +1695,8 @@ def yahoo_gametime_team(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1709,6 +1749,8 @@ def yahoo_golf_tournament_seasons(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1765,6 +1807,8 @@ def yahoo_golf_tournaments(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1823,6 +1867,8 @@ def yahoo_golf_tournaments_basic(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1879,6 +1925,8 @@ def yahoo_league_conferences(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1938,6 +1986,8 @@ def yahoo_league_filters_data(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1995,6 +2045,8 @@ def yahoo_league_future_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2070,6 +2122,8 @@ def yahoo_league_game_ids(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2155,6 +2209,8 @@ def yahoo_league_game_ids_by_date(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2222,6 +2278,8 @@ def yahoo_league_games_by_round(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2276,6 +2334,8 @@ def yahoo_league_info(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2328,6 +2388,8 @@ def yahoo_league_injuries(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2380,6 +2442,8 @@ def yahoo_league_names(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2434,6 +2498,8 @@ def yahoo_league_prop_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2491,6 +2557,8 @@ def yahoo_league_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2559,6 +2627,8 @@ def yahoo_league_stats_by_team(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2648,6 +2718,8 @@ def yahoo_league_stats_individual(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2733,6 +2805,8 @@ def yahoo_league_stats_overview(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2802,6 +2876,8 @@ def yahoo_league_stats_weekly(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2862,6 +2938,8 @@ def yahoo_league_team_ids(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2922,6 +3000,8 @@ def yahoo_league_teams(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2977,6 +3057,8 @@ def yahoo_leagues_season_states(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3033,6 +3115,8 @@ def yahoo_module_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3089,6 +3173,8 @@ def yahoo_motorsport_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3142,6 +3228,8 @@ def yahoo_nascar_drivers(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3196,6 +3284,10 @@ def yahoo_nav_dropdown_tray(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3245,6 +3337,8 @@ def yahoo_pick_distribution(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3317,6 +3411,10 @@ def yahoo_playbook_boxscore(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3384,6 +3482,10 @@ def yahoo_playbook_boxscore_poll(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -3435,6 +3537,8 @@ def yahoo_playbook_boxscore_social_share(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3495,6 +3599,8 @@ def yahoo_playbook_combat_match(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3555,6 +3661,8 @@ def yahoo_playbook_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3611,6 +3719,8 @@ def yahoo_playbook_game_odds_poll(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3672,6 +3782,8 @@ def yahoo_playbook_golf_tournament(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3738,6 +3850,8 @@ def yahoo_playbook_league_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3797,6 +3911,8 @@ def yahoo_playbook_player(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3850,6 +3966,8 @@ def yahoo_playbook_player_social_share(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3906,6 +4024,8 @@ def yahoo_playbook_race(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3968,6 +4088,10 @@ def yahoo_playbook_team(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4020,6 +4144,8 @@ def yahoo_playbook_team_basic(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4074,6 +4200,8 @@ def yahoo_playbook_team_social_share(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4126,6 +4254,8 @@ def yahoo_playbook_tennis_match(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4177,6 +4307,10 @@ def yahoo_player_basic(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4234,6 +4368,8 @@ def yahoo_player_career_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4308,6 +4444,8 @@ def yahoo_player_game_log(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4368,6 +4506,8 @@ def yahoo_player_props(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4432,6 +4572,8 @@ def yahoo_player_search(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4514,6 +4656,8 @@ def yahoo_player_season_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4586,6 +4730,8 @@ def yahoo_playoff_bracket(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4642,6 +4788,8 @@ def yahoo_playoff_series_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4694,6 +4842,8 @@ def yahoo_polymarket_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4752,6 +4902,8 @@ def yahoo_racing_schedule(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4817,6 +4969,8 @@ def yahoo_scoreboard_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4880,6 +5034,10 @@ def yahoo_season_stats_football_defense_ncaaf(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -4932,6 +5090,10 @@ def yahoo_season_stats_football_kicking_ncaaf(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4986,6 +5148,10 @@ def yahoo_season_stats_football_passing_ncaaf(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5038,6 +5204,10 @@ def yahoo_season_stats_football_punting_ncaaf(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5092,6 +5262,10 @@ def yahoo_season_stats_football_receiving_ncaaf(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5144,6 +5318,10 @@ def yahoo_season_stats_football_returns_ncaaf(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5198,6 +5376,10 @@ def yahoo_season_stats_football_rushing_ncaaf(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5250,6 +5432,10 @@ def yahoo_season_team_stats_football_defense(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5304,6 +5490,10 @@ def yahoo_season_team_stats_football_kicking(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5356,6 +5546,10 @@ def yahoo_season_team_stats_football_kickoffs(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5410,6 +5604,10 @@ def yahoo_season_team_stats_football_offense(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5462,6 +5660,10 @@ def yahoo_season_team_stats_football_passing(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5516,6 +5718,10 @@ def yahoo_season_team_stats_football_passing_defense(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5568,6 +5774,10 @@ def yahoo_season_team_stats_football_punting(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5622,6 +5832,10 @@ def yahoo_season_team_stats_football_receiving(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5674,6 +5888,10 @@ def yahoo_season_team_stats_football_receiving_defense(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5728,6 +5946,10 @@ def yahoo_season_team_stats_football_returns(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5780,6 +6002,10 @@ def yahoo_season_team_stats_football_rushing(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5834,6 +6060,10 @@ def yahoo_season_team_stats_football_rushing_defense(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -5881,6 +6111,8 @@ def yahoo_team_injuries(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5935,6 +6167,8 @@ def yahoo_team_playoff_series(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5992,6 +6226,8 @@ def yahoo_team_roster(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6048,6 +6284,8 @@ def yahoo_team_schedule_by_season(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6105,6 +6343,8 @@ def yahoo_team_search(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6173,6 +6413,10 @@ def yahoo_team_stats_leaders_v2(
     Returns:
         A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -6224,6 +6468,8 @@ def yahoo_team_transactions(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6280,6 +6526,8 @@ def yahoo_teams_basic(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6338,6 +6586,8 @@ def yahoo_tennis_matches_by_date(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6394,6 +6644,8 @@ def yahoo_tennis_tournament(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6451,6 +6703,8 @@ def yahoo_tennis_tournaments(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6507,6 +6761,8 @@ def yahoo_tennis_tournaments_by_date(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6564,6 +6820,8 @@ def yahoo_trending_event_ids(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6624,6 +6882,8 @@ def yahoo_trending_game_ids(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -6681,6 +6941,10 @@ def yahoo_editorial_boxscore(
     Returns:
         A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+
     Example:
         Quick start::
 
@@ -6732,6 +6996,10 @@ def yahoo_editorial_scoreboard(
 
     Returns:
         A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

@@ -55,6 +55,7 @@ def nwsl_competitions(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -112,6 +113,7 @@ def nwsl_match_lineups(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -167,6 +169,7 @@ def nwsl_matchdays(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -232,6 +235,7 @@ def nwsl_player_stats(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -296,6 +300,7 @@ def nwsl_season_matches(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -354,6 +359,7 @@ def nwsl_stages(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -413,6 +419,7 @@ def nwsl_standings(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -472,6 +479,7 @@ def nwsl_team_stats(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -528,6 +536,7 @@ def nwsl_teams(
     Raises:
         sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

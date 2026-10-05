@@ -42,6 +42,7 @@ def bart_wbb_ratings(
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

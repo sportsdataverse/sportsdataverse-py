@@ -155,12 +155,15 @@ def test_get_appends_trailing_slash_and_strips_none_params():
     assert "User-Agent" in seen["headers"]
 
 
-def test_get_returns_empty_dict_on_non_200_or_bad_json():
+def test_get_raises_on_non_200_or_bad_json():
+    # A refusal or a non-JSON 200 is a failed fetch, never an empty payload (was ``{}``).
     from sportsdataverse.cfb.sports247_runtime import _get
+    from sportsdataverse.errors import AssetFetchError
 
-    assert _get("https://ipa.247sports.com/rdb/v1/teams/", transport=lambda *a: (403, "")) == {}
-    assert _get("https://ipa.247sports.com/rdb/v1/teams/", transport=lambda *a: (401, "")) == {}
-    assert _get("https://ipa.247sports.com/rdb/v1/teams/", transport=lambda *a: (200, "<html>")) == {}
+    for answer in ((403, ""), (401, ""), (200, "<html>")):
+        with pytest.raises(AssetFetchError):
+            _get("https://ipa.247sports.com/rdb/v1/teams/", transport=lambda *a, answer=answer: answer)
+    assert _get("https://ipa.247sports.com/rdb/v1/teams/", transport=lambda *a: (200, "")) == {}
 
 
 # ===========================================================================

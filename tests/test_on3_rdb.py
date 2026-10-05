@@ -67,8 +67,17 @@ def test_get_returns_bare_list(rt, monkeypatch):
     assert rt._get("https://api.on3.com/public/rdb/v1/filters/status") == [{"a": 1}]
 
 
-def test_get_empty_on_non_json(rt, monkeypatch):
+def test_get_raises_on_non_json(rt, monkeypatch):
+    # A 200 that is not JSON (a CDN interstitial) is a failed fetch, not an empty one.
+    from sportsdataverse.errors import AssetFetchError
+
     monkeypatch.setattr(rt, "download", lambda **kw: _Resp(text="<html>"))
+    with pytest.raises(AssetFetchError, match="non-JSON body"):
+        rt._get("https://api.on3.com/public/rdb/v1/anything")
+
+
+def test_get_empty_on_blank_body(rt, monkeypatch):
+    monkeypatch.setattr(rt, "download", lambda **kw: _Resp(text=""))
     assert rt._get("https://api.on3.com/public/rdb/v1/anything") == {}
 
 

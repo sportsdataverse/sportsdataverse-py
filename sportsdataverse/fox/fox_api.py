@@ -90,6 +90,8 @@ def fox_api_scoreboard(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -148,6 +150,8 @@ def fox_api_scorechip(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -204,6 +208,8 @@ def fox_api_topevents_scoreboard_segment(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -261,6 +267,8 @@ def fox_api_league_conferences(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -318,6 +326,8 @@ def fox_api_league_header(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -377,6 +387,8 @@ def fox_api_league_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -435,6 +447,8 @@ def fox_api_league_playernews(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -492,6 +506,8 @@ def fox_api_league_polls(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -549,6 +565,8 @@ def fox_api_league_schedule(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -606,6 +624,8 @@ def fox_api_league_scores(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -667,6 +687,8 @@ def fox_api_league_scores_segment(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -725,6 +747,8 @@ def fox_api_league_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -782,6 +806,8 @@ def fox_api_league_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -847,6 +873,8 @@ def fox_api_league_stats_con(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -905,6 +933,8 @@ def fox_api_league_teamnav(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -964,6 +994,8 @@ def fox_api_event_data(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1023,6 +1055,8 @@ def fox_api_event_matchup(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1082,6 +1116,8 @@ def fox_api_event_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1141,6 +1177,8 @@ def fox_api_event_recap(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1200,6 +1238,8 @@ def fox_api_event_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1259,6 +1299,8 @@ def fox_api_team_gamelog(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1318,6 +1360,8 @@ def fox_api_team_header(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1377,6 +1421,8 @@ def fox_api_team_roster(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1436,6 +1482,8 @@ def fox_api_team_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1495,6 +1543,8 @@ def fox_api_team_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1552,6 +1602,8 @@ def fox_api_explore_browse(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1607,6 +1659,8 @@ def fox_api_explore_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1664,6 +1718,8 @@ def fox_api_search_content(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1722,6 +1778,8 @@ def fox_api_search_entities(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1778,6 +1836,8 @@ def fox_api_search_popular(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1837,6 +1897,8 @@ def fox_api_trending_articles(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1898,6 +1960,8 @@ def fox_api_trending_videos(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1957,6 +2021,8 @@ def fox_api_foxpolls(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

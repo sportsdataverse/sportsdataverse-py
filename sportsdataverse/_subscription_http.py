@@ -44,6 +44,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import requests
 
+from sportsdataverse._codegen_runtime import _check_response
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
 
@@ -404,10 +405,12 @@ def get_html(
             (``timeout``, ``num_retries``, ...).
 
     Returns:
-        The response body as ``str``; ``""`` when the request yields no response.
+        The response body as ``str``.
 
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
+        NoDataError: The page answered 404.
+        AssetFetchError: Any other non-2xx after retries -- its error page is not data.
 
     Example:
         One page, explicit proxy::
@@ -430,4 +433,5 @@ def get_html(
         session=sess,
         **kwargs,
     )
+    _check_response(resp, full)
     return getattr(resp, "text", "") or ""

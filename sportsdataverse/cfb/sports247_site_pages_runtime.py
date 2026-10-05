@@ -22,8 +22,9 @@ deliberate *deltas* from the sibling :mod:`sportsdataverse.cfb.sports247_runtime
 
 from __future__ import annotations
 
-import json
 from typing import Any, Callable, Dict, List, Optional, Union
+
+from sportsdataverse._codegen_runtime import _json_text
 
 __all__ = ["_get", "site_headers"]
 
@@ -109,7 +110,12 @@ def _get(
 
     Returns:
         Parsed JSON (``dict`` for the detail routes, ``list`` for the array
-        routes), or ``{}`` on non-200 status, blank body, or JSON error.
+        routes), or ``{}`` for a blank 2xx body.
+
+    Raises:
+        NoDataError: 247sports.com answered 404.
+        AssetFetchError: any other non-2xx, or a 2xx whose body is not JSON (a
+            Cloudflare interstitial) -- the answer is unknown, not empty.
 
     Example:
         Quick start (offline — inject a transport)::
@@ -123,10 +129,5 @@ def _get(
     hdrs = dict(headers or site_headers())
     _transport = transport or _curl_transport
     status, text = _transport(url, clean, hdrs, proxy_url)
-    if status != 200 or not (text or "").strip():
-        return {}
-    try:
-        body = json.loads(text)
-    except json.JSONDecodeError:
-        return {}
+    body = _json_text(url, status, text)
     return body if isinstance(body, (dict, list)) else {}

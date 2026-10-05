@@ -6,11 +6,14 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+import json
+from typing import Any, List, Optional
+from urllib.parse import urlsplit
 
 import polars as pl
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
 
 # Release / raw-data hosts for the generated dataset loaders.
@@ -62,16 +65,77 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs) -> Dict:
-    """GET ``url`` as JSON. Returns ``{}`` on failure. Strips ``None`` params."""
-    clean = {k: v for k, v in (params or {}).items() if v is not None}
-    resp = download(url=url, params=clean, **kwargs)
-    if resp is None:
+def _where(url: str) -> str:
+    """``host/path`` of ``url``: never the query string, which can carry an API key."""
+    parts = urlsplit(url)
+    return f"{parts.netloc}{parts.path}"
+
+
+def _check_status(url: str, status: Any, text: str = "") -> None:
+    """Raise unless ``status`` is 2xx, so a failed fetch never reaches a parser as data.
+
+    A 404 raises :class:`~sportsdataverse.errors.NoDataError` (the host answered
+    "nothing here"); every other status -- a 401/403/429/5xx that outlived the
+    retries, a 400 -- raises :class:`~sportsdataverse.errors.AssetFetchError` naming
+    host, path and status. The error classes redact credentials from the message.
+    """
+    if isinstance(status, int) and 200 <= status < 300:
+        return
+    if status == 404:
+        raise NoDataError(f"{_where(url)} answered HTTP 404")
+    raise AssetFetchError(f"{_where(url)} answered HTTP {status}: {(text or '').strip()[:200]}")
+
+
+def _json_text(url: str, status: Any, text: str) -> Any:
+    """Decode a ``(status, text)`` transport answer under the error vocabulary.
+
+    2xx with a JSON body -> the body; 2xx with an empty body (204) -> ``{}``, a
+    deliberate "nothing"; 2xx with any other body, or a non-2xx -> raises (see
+    :func:`_check_status`).
+    """
+    _check_status(url, status, text)
+    if not (text or "").strip():
         return {}
     try:
+        return json.loads(text)
+    except ValueError:  # its ``.doc`` is the whole body: never chain it as __context__
+        pass
+    raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a non-JSON body: {text.strip()[:200]}")
+
+
+def _check_response(resp: Any, url: str) -> None:
+    """:func:`_check_status` for a :func:`~sportsdataverse.dl_utils.download` response.
+
+    ``download`` has already raised :class:`~sportsdataverse.errors.NoDataError` for a
+    404 and for ESPN's 200-with-``code: 404`` body, and retried 403/408/429/5xx; what
+    reaches here is a final answer. The body is only decoded on the failure path.
+    """
+    if resp is None:
+        raise AssetFetchError(f"{_where(url)}: no response")
+    status = getattr(resp, "status_code", 200)
+    if not (isinstance(status, int) and 200 <= status < 300):
+        _check_status(url, status, getattr(resp, "text", "") or "")
+
+
+def _json_body(resp: Any, url: str) -> Any:
+    """Decode a :func:`~sportsdataverse.dl_utils.download` response like :func:`_json_text`."""
+    _check_response(resp, url)
+    try:
         return resp.json()
-    except Exception:
-        return {}
+    except ValueError:
+        pass
+    return _json_text(url, getattr(resp, "status_code", 200), getattr(resp, "text", "") or "")
+
+
+def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
+    """GET ``url`` as JSON. Strips ``None`` params.
+
+    Raises:
+        NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``).
+        AssetFetchError: any other non-2xx after retries, or a 2xx non-JSON body.
+    """
+    clean = {k: v for k, v in (params or {}).items() if v is not None}
+    return _json_body(download(url=url, params=clean, **kwargs), url)
 
 
 def _csv(values: Any) -> Optional[str]:

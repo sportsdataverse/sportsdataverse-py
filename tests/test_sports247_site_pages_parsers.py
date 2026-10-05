@@ -69,12 +69,16 @@ def test_get_strips_none_params_and_parses_array():
     assert seen["params"] == {"items": 50}
 
 
-def test_get_returns_empty_dict_on_non_200_or_bad_json():
+def test_get_raises_on_non_200_or_bad_json():
+    # A refusal or a non-JSON 200 is a failed fetch, never an empty payload (was ``{}``).
     from sportsdataverse.cfb.sports247_site_pages_runtime import _get
+    from sportsdataverse.errors import AssetFetchError
 
-    assert _get("https://247sports.com/Institution.json", transport=lambda *a: (403, "")) == {}
+    with pytest.raises(AssetFetchError):
+        _get("https://247sports.com/Institution.json", transport=lambda *a: (403, ""))
+    with pytest.raises(AssetFetchError):
+        _get("https://247sports.com/Institution.json", transport=lambda *a: (200, "<html>"))
     assert _get("https://247sports.com/Institution.json", transport=lambda *a: (200, "")) == {}
-    assert _get("https://247sports.com/Institution.json", transport=lambda *a: (200, "<html>")) == {}
 
 
 # ===========================================================================

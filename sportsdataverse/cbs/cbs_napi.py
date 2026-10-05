@@ -139,6 +139,8 @@ def cbs_bulk(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -205,6 +207,8 @@ def cbs_client_config(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -259,6 +263,8 @@ def cbs_coach_rankings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -310,6 +316,8 @@ def cbs_coach_team_associations(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -365,6 +373,8 @@ def cbs_division_subdivisions(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -416,6 +426,8 @@ def cbs_endpoint_registry(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -469,6 +481,8 @@ def cbs_event(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -521,6 +535,8 @@ def cbs_event_entrants(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -570,6 +586,8 @@ def cbs_event_leaderboard(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -619,6 +637,8 @@ def cbs_event_seasons(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -668,6 +688,8 @@ def cbs_event_venues(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -721,6 +743,8 @@ def cbs_game(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -773,6 +797,8 @@ def cbs_game_betting_splits(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -822,6 +848,8 @@ def cbs_game_boxscore(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -871,6 +899,8 @@ def cbs_game_content_preview(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -920,6 +950,8 @@ def cbs_game_content_recap(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -971,6 +1003,8 @@ def cbs_game_content_story(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1022,6 +1056,8 @@ def cbs_game_featured(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1073,6 +1109,8 @@ def cbs_game_lineup(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1134,6 +1172,8 @@ def cbs_game_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1189,6 +1229,8 @@ def cbs_game_odds_hq(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1238,6 +1280,8 @@ def cbs_game_outcomes(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1291,6 +1335,8 @@ def cbs_game_probable_players(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1353,6 +1399,8 @@ def cbs_game_props(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1408,6 +1456,8 @@ def cbs_game_rtwp(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1457,6 +1507,8 @@ def cbs_game_ruwt_highlights(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1506,6 +1558,8 @@ def cbs_game_scoring_boxscores(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1555,6 +1609,8 @@ def cbs_game_scoring_drives(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1604,6 +1660,8 @@ def cbs_game_scoring_leaders(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1653,6 +1711,8 @@ def cbs_game_scoring_player_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1702,6 +1762,8 @@ def cbs_game_scoring_plays(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1751,6 +1813,8 @@ def cbs_game_scoring_rosters(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1800,6 +1864,8 @@ def cbs_game_scoring_scoreboard(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1849,6 +1915,8 @@ def cbs_game_scoring_scores(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1898,6 +1966,8 @@ def cbs_game_scoring_team_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1947,6 +2017,8 @@ def cbs_game_scoring_winprob(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1996,6 +2068,8 @@ def cbs_game_scoring_ytd_player_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2045,6 +2119,8 @@ def cbs_game_scoring_ytd_team_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2094,6 +2170,8 @@ def cbs_game_ticket(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2143,6 +2221,8 @@ def cbs_game_weather(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2192,6 +2272,8 @@ def cbs_golf_event_markets(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2244,6 +2326,8 @@ def cbs_golf_player_markets(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2300,6 +2384,8 @@ def cbs_golfer_results(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2355,6 +2441,8 @@ def cbs_league(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2409,6 +2497,8 @@ def cbs_league_teams(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2460,6 +2550,8 @@ def cbs_odds(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2516,6 +2608,8 @@ def cbs_player(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2570,6 +2664,8 @@ def cbs_player_combine_data(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2624,6 +2720,8 @@ def cbs_player_depth_charts(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2683,6 +2781,8 @@ def cbs_player_draft_info(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2741,6 +2841,8 @@ def cbs_player_encyclopedia(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2794,6 +2896,8 @@ def cbs_player_futures(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2850,6 +2954,8 @@ def cbs_player_game_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2904,6 +3010,8 @@ def cbs_player_hockey_meta(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2956,6 +3064,8 @@ def cbs_player_injuries(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3008,6 +3118,8 @@ def cbs_player_meta_baseball(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3058,6 +3170,8 @@ def cbs_player_meta_golf(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3110,6 +3224,8 @@ def cbs_player_outlook(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3164,6 +3280,8 @@ def cbs_player_position_rankings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3226,6 +3344,8 @@ def cbs_player_rankings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3284,6 +3404,8 @@ def cbs_player_recruit_associations(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3346,6 +3468,8 @@ def cbs_player_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3416,6 +3540,8 @@ def cbs_player_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3480,6 +3606,8 @@ def cbs_player_team_associations(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3544,6 +3672,8 @@ def cbs_player_transactions(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3600,6 +3730,8 @@ def cbs_recruit_rankings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3654,6 +3786,8 @@ def cbs_season(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3709,6 +3843,8 @@ def cbs_season_teams(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3763,6 +3899,8 @@ def cbs_sport(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3815,6 +3953,8 @@ def cbs_sport_leagues(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3865,6 +4005,8 @@ def cbs_team_futures(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3917,6 +4059,8 @@ def cbs_team_metadata(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3971,6 +4115,8 @@ def cbs_team_players(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4027,6 +4173,8 @@ def cbs_team_polls(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4086,6 +4234,8 @@ def cbs_team_rankings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4140,6 +4290,8 @@ def cbs_team_rankings_sportsline(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4200,6 +4352,8 @@ def cbs_team_seasons(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4262,6 +4416,8 @@ def cbs_team_standings(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4318,6 +4474,8 @@ def cbs_team_standings_sportsline(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4378,6 +4536,8 @@ def cbs_team_stats(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4434,6 +4594,8 @@ def cbs_venue(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4485,6 +4647,8 @@ def cbs_venue_metadata(
 
     Raises:
         requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

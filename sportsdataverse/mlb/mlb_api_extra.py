@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from sportsdataverse._codegen_runtime import _json_body
 from sportsdataverse.dl_utils import download
 
 _BASE = "https://statsapi.mlb.com"
@@ -33,20 +34,18 @@ __all__ = [
 
 
 def _get(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
-    """GET ``{_BASE}{path}`` as JSON. Returns ``{}`` on failure.
+    """GET ``{_BASE}{path}`` as JSON.
 
     Strips ``None`` values from ``params`` before sending so caller wrappers can
     pass every optional param uniformly without producing ``?foo=&bar=`` urls.
+
+    Raises:
+        NoDataError: statsapi answered 404.
+        AssetFetchError: any other non-2xx after retries, or a 2xx non-JSON body.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     url = f"{_BASE}{path}"
-    resp = download(url=url, params=clean, **kwargs)
-    if resp is None:
-        return {}
-    try:
-        return resp.json()
-    except Exception:
-        return {}
+    return _json_body(download(url=url, params=clean, **kwargs), url)
 
 
 def _csv(values) -> Optional[str]:
