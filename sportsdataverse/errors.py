@@ -202,6 +202,25 @@ class InsufficientInputError(SportsDataverseError):
     """
 
 
+class EmptyResponseWarning(UserWarning):
+    """Warned when a stats.nba.com / stats.wnba.com request comes back with nothing to parse.
+
+    ``nba_stats_*`` / ``wnba_stats_*`` return ``{}`` (an empty frame when parsed) instead of
+    raising when the API answers a non-200 status, a blank body or an empty object, because
+    pipelines expect routine misses (``gamerotation`` 500s on pre-tracking games). This warning
+    names the URL and status so an interactive empty result is not silent. The usual cause is a
+    missing or invalid parameter, most often ``Season``. Silence it in a pipeline with
+    ``warnings.filterwarnings("ignore", category=EmptyResponseWarning)``.
+
+    Example:
+        Quick start::
+
+            import warnings
+            from sportsdataverse.errors import EmptyResponseWarning
+            warnings.filterwarnings("ignore", category=EmptyResponseWarning)
+    """
+
+
 class EraCoverageWarning(UserWarning):
     """Warned when NFL model features are built for a season past the validated era range.
 

@@ -4,6 +4,8 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — HockeyTech season names read as their end year in every league (BREAKING)](#fixed--hockeytech-season-names-read-as-their-end-year-in-every-league-breaking)
+  - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
+  - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
   - [Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)](#fixed--a-failed-hockeytech-fetch-raises-instead-of-returning-an-empty-frame-breaking)
   - [Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-paired-spread-signs-team-timeouts-mbb-double-overtime-seconds)
   - [Fixed — pff_api return tables for the per-player and coverage-matrix routes](#fixed--pff_api-return-tables-for-the-per-player-and-coverage-matrix-routes)
@@ -380,6 +382,58 @@ check that agreement.
 selects. In WHL and KIJHL `season=2026` now means 2025-26 (it returned 2026-27). One-year
 preseasons answer to the next year, so `resolve_season_id("ohl", season=2027,
 game_type="preseason")` is the "2026 Pre-season". A caller who passed the start year to get a season should pass the end year.
+
+### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
+
+The `nba_stats_*` / `wnba_stats_*` defaults are mined from hoopR / wehoop through the
+sdv-internal-refs catalog, and three things were lost on the way. Called with their defaults, 67
+of 128 NBA and 65 of 111 WNBA wrappers returned data before this change; all 128 and all 111 do
+now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working to broken).
+
+- **Season.** hoopR's default is a call (`year_to_season(...)`), and the catalog dropped it, so
+  `season` defaulted to `None` and the request went out without a `Season`. stats.nba.com answers
+  that with an empty HTTP 500, which these wrappers returned as an empty frame with no error.
+  51 NBA and 42 WNBA wrappers failed this way, among them `playergamelogs`, `playergamelog`,
+  `teamgamelogs`, `commonteamroster`, `commonallplayers`, `leaguedashplayerstats` and
+  `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family, `cumestats*`,
+  `videodetailsasset`, `commonplayoffseries` and WNBA `playercompare` need theirs too.
+  These arguments now default to the **previous season**, resolved at call time: `"2025-26"`
+  for NBA, G League and Summer League from October 2026, and `"2025"` for WNBA during 2026
+  (wehoop's own `most_recent_wnba_season() - 1`). The previous season always has data; a
+  current-season default returned empty frames in the preseason. An explicit value, including
+  `""`, is sent as given.
+- **Endpoints that work without a season keep the API's default.** For `drafthistory`,
+  `leaguegamefinder`, `playergamestreakfinder`, `playercareerbycollegerollup` and
+  `shotchartdetail` that default is every season, which a season default would silently narrow.
+  The 30 NBA and 25 WNBA endpoints the sweep measured this way are listed in
+  `tools/codegen/gen_nba_stats.py`.
+- **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
+  hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
+  asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA
+  game. NBA wrappers now take hoopR's examples and WNBA wrappers wehoop's, and an id that only the
+  other league's package sets is left out rather than borrowed: WNBA `boxscorehustlev2` /
+  `hustlestatsboxscore` used to fetch an NBA game, and `playerdashptshotdefend` defaulted to LeBron
+  James (without a player it now returns the league-wide table). `playercompare` gains its
+  player-id lists, and WNBA `playbyplayv2` sends wehoop's `StartPeriod` / `EndPeriod` (it was
+  HTTP 500 without).
+- **Empty results now warn.** When stats.nba.com / stats.wnba.com answer a non-200 status, a
+  blank body or an empty object, the wrappers still return `{}` / an empty frame (pipelines rely
+  on that for routine misses), but they now warn `sportsdataverse.errors.EmptyResponseWarning`
+  with the URL and status. Silence it with
+  `warnings.filterwarnings("ignore", category=EmptyResponseWarning)`.
+- **The vendored catalog is a plain copy again.** `tools/codegen/inputs/nba_canonical_catalog.json`
+  had drifted from sdv-internal-refs through edits made only here (#391's video endpoints, older
+  statuses). sdv-internal-refs now classifies the video envelope itself, so the file is copied
+  verbatim; the generated wrappers are unchanged by the copy.
+- stats.wnba.com answers `draftcombinestats` with the NBA draft combine; wehoop has deprecated its
+  draft-combine wrappers.
+
+### Fixed — returns tables no longer cite R-only arguments
+
+Column descriptions mined from hoopR / wehoop said "`team_detail = TRUE` only" (also
+`athlete_detail`, `position_detail`) for columns that the R wrappers add behind an argument. The
+Python parsers always return those columns and have no such argument, so the condition is dropped
+from 131 descriptions.
 
 ### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
 

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse.nba.nba_stats_runtime import _get
+from sportsdataverse.nba.nba_stats_runtime import _get, season_or_previous
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
@@ -209,13 +209,13 @@ def nba_stats_assistleaders(
     """GET /stats/assistleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/assistleaders``
-    Example URL: https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         per_mode_simple: PerMode query parameter.
         player_or_team: PlayerOrTeam query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -226,14 +226,14 @@ def nba_stats_assistleaders(
     Example:
         Quick start::
 
-            nba_stats_assistleaders(league_id='00')
+            nba_stats_assistleaders(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
         "PerMode": per_mode_simple,
         "PlayerOrTeam": player_or_team,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -371,7 +371,7 @@ def nba_stats_assisttracker(
 def nba_stats_boxscoreadvancedv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -383,7 +383,7 @@ def nba_stats_boxscoreadvancedv3(
     """GET /stats/boxscoreadvancedv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreadvancedv3``
-    Example URL: https://stats.nba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -425,7 +425,7 @@ def nba_stats_boxscoreadvancedv3(
 
 
 def nba_stats_boxscoredefensivev2(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -434,7 +434,7 @@ def nba_stats_boxscoredefensivev2(
     """GET /stats/boxscoredefensivev2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoredefensivev2``
-    Example URL: https://stats.nba.com/stats/boxscoredefensivev2?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/boxscoredefensivev2?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -468,7 +468,7 @@ def nba_stats_boxscoredefensivev2(
 def nba_stats_boxscorefourfactorsv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -480,7 +480,7 @@ def nba_stats_boxscorefourfactorsv3(
     """GET /stats/boxscorefourfactorsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorefourfactorsv3``
-    Example URL: https://stats.nba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -563,7 +563,7 @@ def nba_stats_boxscorehustlev2(
 
 
 def nba_stats_boxscorematchupsv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -572,7 +572,7 @@ def nba_stats_boxscorematchupsv3(
     """GET /stats/boxscorematchupsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorematchupsv3``
-    Example URL: https://stats.nba.com/stats/boxscorematchupsv3?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/boxscorematchupsv3?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -606,7 +606,7 @@ def nba_stats_boxscorematchupsv3(
 def nba_stats_boxscoremiscv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -618,7 +618,7 @@ def nba_stats_boxscoremiscv3(
     """GET /stats/boxscoremiscv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoremiscv3``
-    Example URL: https://stats.nba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -660,7 +660,7 @@ def nba_stats_boxscoremiscv3(
 
 
 def nba_stats_boxscoreplayertrackv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -669,7 +669,7 @@ def nba_stats_boxscoreplayertrackv3(
     """GET /stats/boxscoreplayertrackv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreplayertrackv3``
-    Example URL: https://stats.nba.com/stats/boxscoreplayertrackv3?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/boxscoreplayertrackv3?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -703,7 +703,7 @@ def nba_stats_boxscoreplayertrackv3(
 def nba_stats_boxscorescoringv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -715,7 +715,7 @@ def nba_stats_boxscorescoringv3(
     """GET /stats/boxscorescoringv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorescoringv3``
-    Example URL: https://stats.nba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -757,7 +757,7 @@ def nba_stats_boxscorescoringv3(
 
 
 def nba_stats_boxscoresummaryv2(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -766,7 +766,7 @@ def nba_stats_boxscoresummaryv2(
     """GET /stats/boxscoresummaryv2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoresummaryv2``
-    Example URL: https://stats.nba.com/stats/boxscoresummaryv2?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/boxscoresummaryv2?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -798,7 +798,7 @@ def nba_stats_boxscoresummaryv2(
 
 
 def nba_stats_boxscoresummaryv3(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -807,7 +807,7 @@ def nba_stats_boxscoresummaryv3(
     """GET /stats/boxscoresummaryv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoresummaryv3``
-    Example URL: https://stats.nba.com/stats/boxscoresummaryv3?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/boxscoresummaryv3?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -841,7 +841,7 @@ def nba_stats_boxscoresummaryv3(
 def nba_stats_boxscoretraditionalv2(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -853,7 +853,7 @@ def nba_stats_boxscoretraditionalv2(
     """GET /stats/boxscoretraditionalv2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoretraditionalv2``
-    Example URL: https://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -897,7 +897,7 @@ def nba_stats_boxscoretraditionalv2(
 def nba_stats_boxscoretraditionalv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -909,7 +909,7 @@ def nba_stats_boxscoretraditionalv3(
     """GET /stats/boxscoretraditionalv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoretraditionalv3``
-    Example URL: https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -953,7 +953,7 @@ def nba_stats_boxscoretraditionalv3(
 def nba_stats_boxscoreusagev3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     range_type: Optional[str] = "0",
     start_period: Optional[str] = "0",
     start_range: Optional[str] = "0",
@@ -965,7 +965,7 @@ def nba_stats_boxscoreusagev3(
     """GET /stats/boxscoreusagev3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreusagev3``
-    Example URL: https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
+    Example URL: https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -1018,12 +1018,12 @@ def nba_stats_commonallplayers(
     """GET /stats/commonallplayers
 
     Endpoint: ``GET https://stats.nba.com/stats/commonallplayers``
-    Example URL: https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00
+    Example URL: https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2024-25
 
     Args:
         is_only_current_season: IsOnlyCurrentSeason query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1033,13 +1033,13 @@ def nba_stats_commonallplayers(
     Example:
         Quick start::
 
-            nba_stats_commonallplayers(league_id='00')
+            nba_stats_commonallplayers(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "IsOnlyCurrentSeason": is_only_current_season,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1054,7 +1054,7 @@ def nba_stats_commonallplayers(
 
 def nba_stats_commonplayerinfo(
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1063,7 +1063,7 @@ def nba_stats_commonplayerinfo(
     """GET /stats/commonplayerinfo
 
     Endpoint: ``GET https://stats.nba.com/stats/commonplayerinfo``
-    Example URL: https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=1628932
+    Example URL: https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=2544
 
     Args:
         league_id: LeagueID query parameter.
@@ -1108,11 +1108,11 @@ def nba_stats_commonplayoffseries(
     """GET /stats/commonplayoffseries
 
     Endpoint: ``GET https://stats.nba.com/stats/commonplayoffseries``
-    Example URL: https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&SeriesID=
+    Example URL: https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&Season=2024-25&SeriesID=
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         series_id_nullable: SeriesID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1123,12 +1123,12 @@ def nba_stats_commonplayoffseries(
     Example:
         Quick start::
 
-            nba_stats_commonplayoffseries(league_id='00')
+            nba_stats_commonplayoffseries(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeriesID": series_id_nullable,
     }
     _params.update(_caller_params)
@@ -1145,7 +1145,7 @@ def nba_stats_commonplayoffseries(
 def nba_stats_commonteamroster(
     league_id: Optional[str] = "00",
     season: Optional[str] = None,
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1154,11 +1154,11 @@ def nba_stats_commonteamroster(
     """GET /stats/commonteamroster
 
     Endpoint: ``GET https://stats.nba.com/stats/commonteamroster``
-    Example URL: https://stats.nba.com/stats/commonteamroster?LeagueID=00&TeamID=1611661317
+    Example URL: https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=2024-25&TeamID=1610612739
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1170,12 +1170,12 @@ def nba_stats_commonteamroster(
     Example:
         Quick start::
 
-            nba_stats_commonteamroster(league_id='00')
+            nba_stats_commonteamroster(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "TeamID": team_id,
     }
     _params.update(_caller_params)
@@ -1230,10 +1230,10 @@ def nba_stats_commonteamyears(
 
 
 def nba_stats_cumestatsplayer(
-    game_ids: Optional[str] = "1022200018",
+    game_ids: Optional[str] = "0022000756",
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "204319",
-    season: Optional[str] = "2021-22",
+    player_id: Optional[str] = "1629611",
+    season: Optional[str] = "2020-21",
     season_type_all_star: Optional[str] = "Regular Season",
     *,
     return_parsed: bool = True,
@@ -1243,7 +1243,7 @@ def nba_stats_cumestatsplayer(
     """GET /stats/cumestatsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsplayer``
-    Example URL: https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/cumestatsplayer?GameIDs=0022000756&LeagueID=00&PlayerID=1629611&Season=2020-21&SeasonType=Regular+Season
 
     Args:
         game_ids: GameIDs query parameter.
@@ -1286,8 +1286,8 @@ def nba_stats_cumestatsplayergames(
     league_id: Optional[str] = "00",
     location_nullable: Optional[str] = "",
     outcome_nullable: Optional[str] = "",
-    player_id: Optional[str] = "204319",
-    season: Optional[str] = "2021-22",
+    player_id: Optional[str] = "2544",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
@@ -1300,14 +1300,14 @@ def nba_stats_cumestatsplayergames(
     """GET /stats/cumestatsplayergames
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsplayergames``
-    Example URL: https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0
+    Example URL: https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0
 
     Args:
         league_id: LeagueID query parameter.
         location_nullable: Location query parameter.
         outcome_nullable: Outcome query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
@@ -1321,7 +1321,7 @@ def nba_stats_cumestatsplayergames(
     Example:
         Quick start::
 
-            nba_stats_cumestatsplayergames(league_id='00')
+            nba_stats_cumestatsplayergames(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1329,7 +1329,7 @@ def nba_stats_cumestatsplayergames(
         "Location": location_nullable,
         "Outcome": outcome_nullable,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "VsConference": vs_conference_nullable,
         "VsDivision": vs_division_nullable,
@@ -1347,11 +1347,11 @@ def nba_stats_cumestatsplayergames(
 
 
 def nba_stats_cumestatsteam(
-    game_ids: Optional[str] = "1022200018",
+    game_ids: Optional[str] = "0022201094",
     league_id: Optional[str] = "00",
-    season: Optional[str] = "2021-22",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1360,12 +1360,12 @@ def nba_stats_cumestatsteam(
     """GET /stats/cumestatsteam
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsteam``
-    Example URL: https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317
+    Example URL: https://stats.nba.com/stats/cumestatsteam?GameIDs=0022201094&LeagueID=00&Season=2024-25&SeasonType=Regular+Season&TeamID=1610612739
 
     Args:
         game_ids: GameIDs query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -1378,13 +1378,13 @@ def nba_stats_cumestatsteam(
     Example:
         Quick start::
 
-            nba_stats_cumestatsteam(league_id='00')
+            nba_stats_cumestatsteam(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "GameIDs": game_ids,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -1403,10 +1403,10 @@ def nba_stats_cumestatsteamgames(
     league_id: Optional[str] = "00",
     location_nullable: Optional[str] = "",
     outcome_nullable: Optional[str] = "",
-    season: Optional[str] = "2021-22",
+    season: Optional[str] = None,
     season_id_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661317",
+    team_id: Optional[str] = "1610612739",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     vs_team_id_nullable: Optional[str] = "0",
@@ -1418,13 +1418,13 @@ def nba_stats_cumestatsteamgames(
     """GET /stats/cumestatsteamgames
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsteamgames``
-    Example URL: https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0
+    Example URL: https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2024-25&SeasonID=&SeasonType=Regular+Season&TeamID=1610612739&VsConference=&VsDivision=&VsTeamID=0
 
     Args:
         league_id: LeagueID query parameter.
         location_nullable: Location query parameter.
         outcome_nullable: Outcome query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_id_nullable: SeasonID query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -1440,14 +1440,14 @@ def nba_stats_cumestatsteamgames(
     Example:
         Quick start::
 
-            nba_stats_cumestatsteamgames(league_id='00')
+            nba_stats_cumestatsteamgames(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
         "Location": location_nullable,
         "Outcome": outcome_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonID": season_id_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -1477,11 +1477,11 @@ def nba_stats_draftcombinedrillresults(
     """GET /stats/draftcombinedrillresults
 
     Endpoint: ``GET https://stats.nba.com/stats/draftcombinedrillresults``
-    Example URL: https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00
+    Example URL: https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00&SeasonYear=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1491,12 +1491,12 @@ def nba_stats_draftcombinedrillresults(
     Example:
         Quick start::
 
-            nba_stats_draftcombinedrillresults(league_id='00')
+            nba_stats_draftcombinedrillresults(league_id='00', season_year='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1520,11 +1520,11 @@ def nba_stats_draftcombinenonstationaryshooting(
     """GET /stats/draftcombinenonstationaryshooting
 
     Endpoint: ``GET https://stats.nba.com/stats/draftcombinenonstationaryshooting``
-    Example URL: https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00
+    Example URL: https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00&SeasonYear=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1534,12 +1534,12 @@ def nba_stats_draftcombinenonstationaryshooting(
     Example:
         Quick start::
 
-            nba_stats_draftcombinenonstationaryshooting(league_id='00')
+            nba_stats_draftcombinenonstationaryshooting(league_id='00', season_year='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1563,11 +1563,11 @@ def nba_stats_draftcombineplayeranthro(
     """GET /stats/draftcombineplayeranthro
 
     Endpoint: ``GET https://stats.nba.com/stats/draftcombineplayeranthro``
-    Example URL: https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00
+    Example URL: https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00&SeasonYear=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1577,12 +1577,12 @@ def nba_stats_draftcombineplayeranthro(
     Example:
         Quick start::
 
-            nba_stats_draftcombineplayeranthro(league_id='00')
+            nba_stats_draftcombineplayeranthro(league_id='00', season_year='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1606,11 +1606,11 @@ def nba_stats_draftcombinespotshooting(
     """GET /stats/draftcombinespotshooting
 
     Endpoint: ``GET https://stats.nba.com/stats/draftcombinespotshooting``
-    Example URL: https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00
+    Example URL: https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00&SeasonYear=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season_year: SeasonYear query parameter.
+        season_year: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1620,12 +1620,12 @@ def nba_stats_draftcombinespotshooting(
     Example:
         Quick start::
 
-            nba_stats_draftcombinespotshooting(league_id='00')
+            nba_stats_draftcombinespotshooting(league_id='00', season_year='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_year,
+        "SeasonYear": season_or_previous(season_year),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1649,11 +1649,11 @@ def nba_stats_draftcombinestats(
     """GET /stats/draftcombinestats
 
     Endpoint: ``GET https://stats.nba.com/stats/draftcombinestats``
-    Example URL: https://stats.nba.com/stats/draftcombinestats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season_all_time: SeasonYear query parameter.
+        season_all_time: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1663,12 +1663,12 @@ def nba_stats_draftcombinestats(
     Example:
         Quick start::
 
-            nba_stats_draftcombinestats(league_id='00')
+            nba_stats_draftcombinestats(league_id='00', season_all_time='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "SeasonYear": season_all_time,
+        "SeasonYear": season_or_previous(season_all_time),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -1894,7 +1894,7 @@ def nba_stats_franchisehistory(
 
 def nba_stats_franchiseleaders(
     league_id: Optional[str] = "00",
-    team_id: Optional[str] = "1611661324",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1903,7 +1903,7 @@ def nba_stats_franchiseleaders(
     """GET /stats/franchiseleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseleaders``
-    Example URL: https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID=1611661324
+    Example URL: https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID=1610612739
 
     Args:
         league_id: LeagueID query parameter.
@@ -1939,7 +1939,7 @@ def nba_stats_franchiseleaderswrank(
     league_id: Optional[str] = "00",
     per_mode: Optional[str] = "Totals",
     season_type: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661324",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1948,7 +1948,7 @@ def nba_stats_franchiseleaderswrank(
     """GET /stats/franchiseleaderswrank
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseleaderswrank``
-    Example URL: https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324
+    Example URL: https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612739
 
     Args:
         league_id: LeagueID query parameter.
@@ -1988,7 +1988,7 @@ def nba_stats_franchiseplayers(
     league_id: Optional[str] = "00",
     per_mode_detailed: Optional[str] = "Totals",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661319",
+    team_id: Optional[str] = "1610612739",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1997,7 +1997,7 @@ def nba_stats_franchiseplayers(
     """GET /stats/franchiseplayers
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseplayers``
-    Example URL: https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319
+    Example URL: https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612739
 
     Args:
         league_id: LeagueID query parameter.
@@ -2034,7 +2034,7 @@ def nba_stats_franchiseplayers(
 
 
 def nba_stats_gamerotation(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022200021",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -2044,7 +2044,7 @@ def nba_stats_gamerotation(
     """GET /stats/gamerotation
 
     Endpoint: ``GET https://stats.nba.com/stats/gamerotation``
-    Example URL: https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00
+    Example URL: https://stats.nba.com/stats/gamerotation?GameID=0022200021&LeagueID=00
 
     Args:
         game_id: GameID query parameter.
@@ -2237,7 +2237,7 @@ def nba_stats_hustlestatsboxscore(
 
 
 def nba_stats_infographicfanduelplayer(
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022201086",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2246,7 +2246,7 @@ def nba_stats_infographicfanduelplayer(
     """GET /stats/infographicfanduelplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/infographicfanduelplayer``
-    Example URL: https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034
+    Example URL: https://stats.nba.com/stats/infographicfanduelplayer?GameID=0022201086
 
     Args:
         game_id: GameID query parameter.
@@ -2370,7 +2370,7 @@ def nba_stats_leaguedashlineups(
     """GET /stats/leaguedashlineups
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashlineups``
-    Example URL: https://stats.nba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -2392,7 +2392,7 @@ def nba_stats_leaguedashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2408,7 +2408,7 @@ def nba_stats_leaguedashlineups(
     Example:
         Quick start::
 
-            nba_stats_leaguedashlineups(league_id='00')
+            nba_stats_leaguedashlineups(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2431,7 +2431,7 @@ def nba_stats_leaguedashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2485,7 +2485,7 @@ def nba_stats_leaguedashoppptshot(
     """GET /stats/leaguedashoppptshot
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashoppptshot``
-    Example URL: https://stats.nba.com/stats/leaguedashoppptshot?CloseDefDistRange=&Conference=&DateFrom=&DateTo=&Division=&DribbleRange=&GameSegment=&GeneralRange=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&ShotDistRange=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/leaguedashoppptshot?CloseDefDistRange=&Conference=&DateFrom=&DateTo=&Division=&DribbleRange=&GameSegment=&GeneralRange=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&ShotDistRange=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=
 
     Args:
         close_def_dist_range_nullable: CloseDefDistRange query parameter.
@@ -2505,7 +2505,7 @@ def nba_stats_leaguedashoppptshot(
         po_round_nullable: PORound query parameter.
         per_mode_simple: PerMode query parameter.
         period_nullable: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2523,7 +2523,7 @@ def nba_stats_leaguedashoppptshot(
     Example:
         Quick start::
 
-            nba_stats_leaguedashoppptshot(league_id='00')
+            nba_stats_leaguedashoppptshot(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2544,7 +2544,7 @@ def nba_stats_leaguedashoppptshot(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2605,7 +2605,7 @@ def nba_stats_leaguedashplayerbiostats(
     """GET /stats/leaguedashplayerbiostats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerbiostats``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -2630,7 +2630,7 @@ def nba_stats_leaguedashplayerbiostats(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_abbreviation_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2648,7 +2648,7 @@ def nba_stats_leaguedashplayerbiostats(
     Example:
         Quick start::
 
-            nba_stats_leaguedashplayerbiostats(league_id='00')
+            nba_stats_leaguedashplayerbiostats(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2674,7 +2674,7 @@ def nba_stats_leaguedashplayerbiostats(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_abbreviation_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2742,7 +2742,7 @@ def nba_stats_leaguedashplayerclutch(
     """GET /stats/leaguedashplayerclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerclutch``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         ahead_behind: AheadBehind query parameter.
@@ -2774,7 +2774,7 @@ def nba_stats_leaguedashplayerclutch(
         plus_minus: PlusMinus query parameter.
         point_diff: PointDiff query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2792,7 +2792,7 @@ def nba_stats_leaguedashplayerclutch(
     Example:
         Quick start::
 
-            nba_stats_leaguedashplayerclutch(league_id='00')
+            nba_stats_leaguedashplayerclutch(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2825,7 +2825,7 @@ def nba_stats_leaguedashplayerclutch(
         "PlusMinus": plus_minus,
         "PointDiff": point_diff,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -2890,7 +2890,7 @@ def nba_stats_leaguedashplayerptshot(
     """GET /stats/leaguedashplayerptshot
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerptshot``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerptshot?CloseDefDistRange=&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&DribbleRange=&GameSegment=&GeneralRange=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguedashplayerptshot?CloseDefDistRange=&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&DribbleRange=&GameSegment=&GeneralRange=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=&Weight=
 
     Args:
         close_def_dist_range_nullable: CloseDefDistRange query parameter.
@@ -2917,7 +2917,7 @@ def nba_stats_leaguedashplayerptshot(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2937,7 +2937,7 @@ def nba_stats_leaguedashplayerptshot(
     Example:
         Quick start::
 
-            nba_stats_leaguedashplayerptshot(league_id='00')
+            nba_stats_leaguedashplayerptshot(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2965,7 +2965,7 @@ def nba_stats_leaguedashplayerptshot(
         "Period": period_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3033,7 +3033,7 @@ def nba_stats_leaguedashplayershotlocations(
     """GET /stats/leaguedashplayershotlocations
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayershotlocations``
-    Example URL: https://stats.nba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3063,7 +3063,7 @@ def nba_stats_leaguedashplayershotlocations(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3081,7 +3081,7 @@ def nba_stats_leaguedashplayershotlocations(
     Example:
         Quick start::
 
-            nba_stats_leaguedashplayershotlocations(league_id='00')
+            nba_stats_leaguedashplayershotlocations(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3112,7 +3112,7 @@ def nba_stats_leaguedashplayershotlocations(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3178,7 +3178,7 @@ def nba_stats_leaguedashplayerstats(
     """GET /stats/leaguedashplayerstats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerstats``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3207,7 +3207,7 @@ def nba_stats_leaguedashplayerstats(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3226,7 +3226,7 @@ def nba_stats_leaguedashplayerstats(
     Example:
         Quick start::
 
-            nba_stats_leaguedashplayerstats(league_id='00')
+            nba_stats_leaguedashplayerstats(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3256,7 +3256,7 @@ def nba_stats_leaguedashplayerstats(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3565,7 +3565,7 @@ def nba_stats_leaguedashptteamdefend(
     """GET /stats/leaguedashptteamdefend
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashptteamdefend``
-    Example URL: https://stats.nba.com/stats/leaguedashptteamdefend?Conference=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&Period=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/leaguedashptteamdefend?Conference=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&Period=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -3583,7 +3583,7 @@ def nba_stats_leaguedashptteamdefend(
         po_round_nullable: PORound query parameter.
         per_mode_simple: PerMode query parameter.
         period_nullable: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -3598,7 +3598,7 @@ def nba_stats_leaguedashptteamdefend(
     Example:
         Quick start::
 
-            nba_stats_leaguedashptteamdefend(league_id='00')
+            nba_stats_leaguedashptteamdefend(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3617,7 +3617,7 @@ def nba_stats_leaguedashptteamdefend(
         "PORound": po_round_nullable,
         "PerMode": per_mode_simple,
         "Period": period_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4456,7 +4456,7 @@ def nba_stats_leaguegamelog(
     """GET /stats/leaguegamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguegamelog``
-    Example URL: https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE
+    Example URL: https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2024-25&SeasonType=Regular+Season&Sorter=DATE
 
     Args:
         counter: Counter query parameter.
@@ -4465,7 +4465,7 @@ def nba_stats_leaguegamelog(
         direction: Direction query parameter.
         league_id: LeagueID query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         sorter: Sorter query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4477,7 +4477,7 @@ def nba_stats_leaguegamelog(
     Example:
         Quick start::
 
-            nba_stats_leaguegamelog(league_id='00')
+            nba_stats_leaguegamelog(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4487,7 +4487,7 @@ def nba_stats_leaguegamelog(
         "Direction": direction,
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team_abbreviation,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "Sorter": sorter,
     }
@@ -4536,7 +4536,7 @@ def nba_stats_leaguehustlestatsplayer(
     """GET /stats/leaguehustlestatsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsplayer``
-    Example URL: https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -4557,7 +4557,7 @@ def nba_stats_leaguehustlestatsplayer(
         per_mode_time: PerMode query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -4573,7 +4573,7 @@ def nba_stats_leaguehustlestatsplayer(
     Example:
         Quick start::
 
-            nba_stats_leaguehustlestatsplayer(league_id='00')
+            nba_stats_leaguehustlestatsplayer(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4595,7 +4595,7 @@ def nba_stats_leaguehustlestatsplayer(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4648,7 +4648,7 @@ def nba_stats_leaguehustlestatsteam(
     """GET /stats/leaguehustlestatsteam
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsteam``
-    Example URL: https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -4669,7 +4669,7 @@ def nba_stats_leaguehustlestatsteam(
         per_mode_time: PerMode query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -4685,7 +4685,7 @@ def nba_stats_leaguehustlestatsteam(
     Example:
         Quick start::
 
-            nba_stats_leaguehustlestatsteam(league_id='00')
+            nba_stats_leaguehustlestatsteam(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4707,7 +4707,7 @@ def nba_stats_leaguehustlestatsteam(
         "PerMode": per_mode_time,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -4820,7 +4820,7 @@ def nba_stats_leaguelineupviz(
     """GET /stats/leaguelineupviz
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguelineupviz``
-    Example URL: https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4843,7 +4843,7 @@ def nba_stats_leaguelineupviz(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4859,7 +4859,7 @@ def nba_stats_leaguelineupviz(
     Example:
         Quick start::
 
-            nba_stats_leaguelineupviz(league_id='00')
+            nba_stats_leaguelineupviz(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4883,7 +4883,7 @@ def nba_stats_leaguelineupviz(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -4921,7 +4921,7 @@ def nba_stats_leagueplayerondetails(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661313",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -4932,7 +4932,7 @@ def nba_stats_leagueplayerondetails(
     """GET /stats/leagueplayerondetails
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueplayerondetails``
-    Example URL: https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -4950,7 +4950,7 @@ def nba_stats_leagueplayerondetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -4965,7 +4965,7 @@ def nba_stats_leagueplayerondetails(
     Example:
         Quick start::
 
-            nba_stats_leagueplayerondetails(league_id='00')
+            nba_stats_leagueplayerondetails(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4984,7 +4984,7 @@ def nba_stats_leagueplayerondetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -5019,7 +5019,7 @@ def nba_stats_leagueseasonmatchups(
     """GET /stats/leagueseasonmatchups
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueseasonmatchups``
-    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
@@ -5028,7 +5028,7 @@ def nba_stats_leagueseasonmatchups(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5039,7 +5039,7 @@ def nba_stats_leagueseasonmatchups(
     Example:
         Quick start::
 
-            nba_stats_leagueseasonmatchups(league_id='00')
+            nba_stats_leagueseasonmatchups(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5049,7 +5049,7 @@ def nba_stats_leagueseasonmatchups(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5076,11 +5076,11 @@ def nba_stats_leaguestandings(
     """GET /stats/leaguestandings
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguestandings``
-    Example URL: https://stats.nba.com/stats/leaguestandings?LeagueID=00&SeasonType=Regular+Season&SeasonYear=
+    Example URL: https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -5092,12 +5092,12 @@ def nba_stats_leaguestandings(
     Example:
         Quick start::
 
-            nba_stats_leaguestandings(league_id='00')
+            nba_stats_leaguestandings(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5125,11 +5125,11 @@ def nba_stats_leaguestandingsv3(
     """GET /stats/leaguestandingsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguestandingsv3``
-    Example URL: https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&SeasonType=Regular+Season&SeasonYear=
+    Example URL: https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -5141,12 +5141,12 @@ def nba_stats_leaguestandingsv3(
     Example:
         Quick start::
 
-            nba_stats_leaguestandingsv3(league_id='00')
+            nba_stats_leaguestandingsv3(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type,
         "SeasonYear": season_nullable,
     }
@@ -5178,7 +5178,7 @@ def nba_stats_matchupsrollup(
     """GET /stats/matchupsrollup
 
     Endpoint: ``GET https://stats.nba.com/stats/matchupsrollup``
-    Example URL: https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
@@ -5187,7 +5187,7 @@ def nba_stats_matchupsrollup(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5198,7 +5198,7 @@ def nba_stats_matchupsrollup(
     Example:
         Quick start::
 
-            nba_stats_matchupsrollup(league_id='00')
+            nba_stats_matchupsrollup(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5208,7 +5208,7 @@ def nba_stats_matchupsrollup(
         "OffPlayerID": off_player_id_nullable,
         "OffTeamID": off_team_id_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_playoffs,
     }
     _params.update(_caller_params)
@@ -5224,7 +5224,7 @@ def nba_stats_matchupsrollup(
 
 def nba_stats_playbyplayv3(
     end_period: Optional[str] = "0",
-    game_id: Optional[str] = "1022200034",
+    game_id: Optional[str] = "0022201086",
     start_period: Optional[str] = "0",
     *,
     return_parsed: bool = True,
@@ -5234,7 +5234,7 @@ def nba_stats_playbyplayv3(
     """GET /stats/playbyplayv3
 
     Endpoint: ``GET https://stats.nba.com/stats/playbyplayv3``
-    Example URL: https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0
+    Example URL: https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=0022201086&StartPeriod=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -5269,7 +5269,7 @@ def nba_stats_playbyplayv3(
 
 
 def nba_stats_playerawards(
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5278,7 +5278,7 @@ def nba_stats_playerawards(
     """GET /stats/playerawards
 
     Endpoint: ``GET https://stats.nba.com/stats/playerawards``
-    Example URL: https://stats.nba.com/stats/playerawards?PlayerID=1628932
+    Example URL: https://stats.nba.com/stats/playerawards?PlayerID=2544
 
     Args:
         player_id: PlayerID query parameter.
@@ -5361,7 +5361,7 @@ def nba_stats_playercareerbycollegerollup(
 def nba_stats_playercareerstats(
     league_id: Optional[str] = "00",
     per_mode36: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5370,7 +5370,7 @@ def nba_stats_playercareerstats(
     """GET /stats/playercareerstats
 
     Endpoint: ``GET https://stats.nba.com/stats/playercareerstats``
-    Example URL: https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=1628932
+    Example URL: https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=2544
 
     Args:
         league_id: LeagueID query parameter.
@@ -5421,7 +5421,7 @@ def nba_stats_playercompare(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id_list: Optional[str] = None,
+    player_id_list: Optional[str] = "202681,203078,2544,201567,203954",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = "2020-21",
@@ -5430,7 +5430,7 @@ def nba_stats_playercompare(
     shot_clock_range_nullable: Optional[str] = "",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id_list: Optional[str] = None,
+    vs_player_id_list: Optional[str] = "201566,201939,201935,201142,203076",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -5439,7 +5439,7 @@ def nba_stats_playercompare(
     """GET /stats/playercompare
 
     Endpoint: ``GET https://stats.nba.com/stats/playercompare``
-    Example URL: https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerIDList=202681%2C203078%2C2544%2C201567%2C203954&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&VsPlayerIDList=201566%2C201939%2C201935%2C201142%2C203076
 
     Args:
         conference_nullable: Conference query parameter.
@@ -5533,7 +5533,7 @@ def nba_stats_playerdashboardbyclutch(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5550,7 +5550,7 @@ def nba_stats_playerdashboardbyclutch(
     """GET /stats/playerdashboardbyclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyclutch``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5570,7 +5570,7 @@ def nba_stats_playerdashboardbyclutch(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5586,7 +5586,7 @@ def nba_stats_playerdashboardbyclutch(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbyclutch(league_id='00')
+            nba_stats_playerdashboardbyclutch(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5607,7 +5607,7 @@ def nba_stats_playerdashboardbyclutch(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5640,7 +5640,7 @@ def nba_stats_playerdashboardbygamesplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5657,7 +5657,7 @@ def nba_stats_playerdashboardbygamesplits(
     """GET /stats/playerdashboardbygamesplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbygamesplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5677,7 +5677,7 @@ def nba_stats_playerdashboardbygamesplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5693,7 +5693,7 @@ def nba_stats_playerdashboardbygamesplits(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbygamesplits(league_id='00')
+            nba_stats_playerdashboardbygamesplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5714,7 +5714,7 @@ def nba_stats_playerdashboardbygamesplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5747,7 +5747,7 @@ def nba_stats_playerdashboardbygeneralsplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5764,7 +5764,7 @@ def nba_stats_playerdashboardbygeneralsplits(
     """GET /stats/playerdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbygeneralsplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5784,7 +5784,7 @@ def nba_stats_playerdashboardbygeneralsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5800,7 +5800,7 @@ def nba_stats_playerdashboardbygeneralsplits(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbygeneralsplits(league_id='00')
+            nba_stats_playerdashboardbygeneralsplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5821,7 +5821,7 @@ def nba_stats_playerdashboardbygeneralsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5854,7 +5854,7 @@ def nba_stats_playerdashboardbylastngames(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5871,7 +5871,7 @@ def nba_stats_playerdashboardbylastngames(
     """GET /stats/playerdashboardbylastngames
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbylastngames``
-    Example URL: https://stats.nba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5891,7 +5891,7 @@ def nba_stats_playerdashboardbylastngames(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5907,7 +5907,7 @@ def nba_stats_playerdashboardbylastngames(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbylastngames(league_id='00')
+            nba_stats_playerdashboardbylastngames(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5928,7 +5928,7 @@ def nba_stats_playerdashboardbylastngames(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5961,7 +5961,7 @@ def nba_stats_playerdashboardbyopponent(
     pace_adjust: Optional[str] = "N",
     per_mode: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -5978,7 +5978,7 @@ def nba_stats_playerdashboardbyopponent(
     """GET /stats/playerdashboardbyopponent
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyopponent``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -5998,7 +5998,7 @@ def nba_stats_playerdashboardbyopponent(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -6014,7 +6014,7 @@ def nba_stats_playerdashboardbyopponent(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbyopponent(league_id='00')
+            nba_stats_playerdashboardbyopponent(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6035,7 +6035,7 @@ def nba_stats_playerdashboardbyopponent(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -6068,7 +6068,7 @@ def nba_stats_playerdashboardbyshootingsplits(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6085,7 +6085,7 @@ def nba_stats_playerdashboardbyshootingsplits(
     """GET /stats/playerdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyshootingsplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6105,7 +6105,7 @@ def nba_stats_playerdashboardbyshootingsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -6121,7 +6121,7 @@ def nba_stats_playerdashboardbyshootingsplits(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbyshootingsplits(league_id='00')
+            nba_stats_playerdashboardbyshootingsplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6142,7 +6142,7 @@ def nba_stats_playerdashboardbyshootingsplits(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6175,7 +6175,7 @@ def nba_stats_playerdashboardbyteamperformance(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6192,7 +6192,7 @@ def nba_stats_playerdashboardbyteamperformance(
     """GET /stats/playerdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyteamperformance``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6212,7 +6212,7 @@ def nba_stats_playerdashboardbyteamperformance(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -6228,7 +6228,7 @@ def nba_stats_playerdashboardbyteamperformance(
     Example:
         Quick start::
 
-            nba_stats_playerdashboardbyteamperformance(league_id='00')
+            nba_stats_playerdashboardbyteamperformance(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6249,7 +6249,7 @@ def nba_stats_playerdashboardbyteamperformance(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -6282,7 +6282,7 @@ def nba_stats_playerdashboardbyyearoveryear(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6299,7 +6299,7 @@ def nba_stats_playerdashboardbyyearoveryear(
     """GET /stats/playerdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyyearoveryear``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6399,7 +6399,7 @@ def nba_stats_playerdashptpass(
     """GET /stats/playerdashptpass
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptpass``
-    Example URL: https://stats.nba.com/stats/playerdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&PlayerID=2544&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6412,7 +6412,7 @@ def nba_stats_playerdashptpass(
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -6428,7 +6428,7 @@ def nba_stats_playerdashptpass(
     Example:
         Quick start::
 
-            nba_stats_playerdashptpass(league_id='00')
+            nba_stats_playerdashptpass(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6442,7 +6442,7 @@ def nba_stats_playerdashptpass(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6579,7 +6579,7 @@ def nba_stats_playerdashptshotdefend(
     """GET /stats/playerdashptshotdefend
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptshotdefend``
-    Example URL: https://stats.nba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6594,7 +6594,7 @@ def nba_stats_playerdashptshotdefend(
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -6609,7 +6609,7 @@ def nba_stats_playerdashptshotdefend(
     Example:
         Quick start::
 
-            nba_stats_playerdashptshotdefend(league_id='00')
+            nba_stats_playerdashptshotdefend(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6625,7 +6625,7 @@ def nba_stats_playerdashptshotdefend(
         "PerMode": per_mode_simple,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -6786,7 +6786,7 @@ def nba_stats_playerfantasyprofile(
     measure_type: Optional[str] = "Base",
     pace_adjust: Optional[str] = "N",
     per_mode: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -6799,7 +6799,7 @@ def nba_stats_playerfantasyprofile(
     """GET /stats/playerfantasyprofile
 
     Endpoint: ``GET https://stats.nba.com/stats/playerfantasyprofile``
-    Example URL: https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=2544&PlusMinus=N&Rank=N&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -6848,7 +6848,7 @@ def nba_stats_playerfantasyprofile(
 
 def nba_stats_playerfantasyprofilebargraph(
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     season: Optional[str] = None,
     season_type_all_star_nullable: Optional[str] = "Regular Season",
     *,
@@ -6859,12 +6859,12 @@ def nba_stats_playerfantasyprofilebargraph(
     """GET /stats/playerfantasyprofilebargraph
 
     Endpoint: ``GET https://stats.nba.com/stats/playerfantasyprofilebargraph``
-    Example URL: https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star_nullable: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -6876,13 +6876,13 @@ def nba_stats_playerfantasyprofilebargraph(
     Example:
         Quick start::
 
-            nba_stats_playerfantasyprofilebargraph(league_id='00')
+            nba_stats_playerfantasyprofilebargraph(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star_nullable,
     }
     _params.update(_caller_params)
@@ -6900,7 +6900,7 @@ def nba_stats_playergamelog(
     date_from_nullable: Optional[str] = "",
     date_to_nullable: Optional[str] = "",
     league_id: Optional[str] = "00",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     *,
@@ -6911,14 +6911,14 @@ def nba_stats_playergamelog(
     """GET /stats/playergamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/playergamelog``
-    Example URL: https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -6929,7 +6929,7 @@ def nba_stats_playergamelog(
     Example:
         Quick start::
 
-            nba_stats_playergamelog(league_id='00')
+            nba_stats_playergamelog(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6937,7 +6937,7 @@ def nba_stats_playergamelog(
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
     }
     _params.update(_caller_params)
@@ -6981,7 +6981,7 @@ def nba_stats_playergamelogs(
     """GET /stats/playergamelogs
 
     Endpoint: ``GET https://stats.nba.com/stats/playergamelogs``
-    Example URL: https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6998,7 +6998,7 @@ def nba_stats_playergamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7014,7 +7014,7 @@ def nba_stats_playergamelogs(
     Example:
         Quick start::
 
-            nba_stats_playergamelogs(league_id='00')
+            nba_stats_playergamelogs(league_id='00', season_nullable='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7032,7 +7032,7 @@ def nba_stats_playergamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_nullable,
+        "Season": season_or_previous(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -7377,7 +7377,7 @@ def nba_stats_playerindex(
     """GET /stats/playerindex
 
     Endpoint: ``GET https://stats.nba.com/stats/playerindex``
-    Example URL: https://stats.nba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=00&TeamID=0&Weight=
+    Example URL: https://stats.nba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=00&Season=2024-25&TeamID=0&Weight=
 
     Args:
         active_nullable: Active query parameter.
@@ -7390,7 +7390,7 @@ def nba_stats_playerindex(
         height_nullable: Height query parameter.
         historical_nullable: Historical query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         team_id_nullable: TeamID query parameter.
         weight_nullable: Weight query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -7402,7 +7402,7 @@ def nba_stats_playerindex(
     Example:
         Quick start::
 
-            nba_stats_playerindex(league_id='00')
+            nba_stats_playerindex(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7416,7 +7416,7 @@ def nba_stats_playerindex(
         "Height": height_nullable,
         "Historical": historical_nullable,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "TeamID": team_id_nullable,
         "Weight": weight_nullable,
     }
@@ -7434,7 +7434,7 @@ def nba_stats_playerindex(
 def nba_stats_playerprofilev2(
     league_id: Optional[str] = "00",
     per_mode36: Optional[str] = "Totals",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -7443,7 +7443,7 @@ def nba_stats_playerprofilev2(
     """GET /stats/playerprofilev2
 
     Endpoint: ``GET https://stats.nba.com/stats/playerprofilev2``
-    Example URL: https://stats.nba.com/stats/playerprofilev2?LeagueID=00&PerMode=Totals&PlayerID=1628932
+    Example URL: https://stats.nba.com/stats/playerprofilev2?LeagueID=00&PerMode=Totals&PlayerID=2544
 
     Args:
         league_id: LeagueID query parameter.
@@ -7492,7 +7492,7 @@ def nba_stats_playervsplayer(
     pace_adjust: Optional[str] = "N",
     per_mode_detailed: Optional[str] = "Totals",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "2544",
     plus_minus: Optional[str] = "N",
     rank: Optional[str] = "N",
     season: Optional[str] = None,
@@ -7500,7 +7500,7 @@ def nba_stats_playervsplayer(
     season_type_playoffs: Optional[str] = "Regular Season",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id: Optional[str] = "1629488",
+    vs_player_id: Optional[str] = "203076",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -7509,7 +7509,7 @@ def nba_stats_playervsplayer(
     """GET /stats/playervsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/playervsplayer``
-    Example URL: https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488
+    Example URL: https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=2544&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=203076
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7528,7 +7528,7 @@ def nba_stats_playervsplayer(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
@@ -7544,7 +7544,7 @@ def nba_stats_playervsplayer(
     Example:
         Quick start::
 
-            nba_stats_playervsplayer(league_id='00')
+            nba_stats_playervsplayer(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7564,7 +7564,7 @@ def nba_stats_playervsplayer(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "VsConference": vs_conference_nullable,
@@ -7714,7 +7714,7 @@ def nba_stats_scheduleleaguev2int(
 
 def nba_stats_scoreboardv2(
     day_offset: Optional[str] = "0",
-    game_date: Optional[str] = "2022-07-20",
+    game_date: Optional[str] = "2021-07-20",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -7724,7 +7724,7 @@ def nba_stats_scoreboardv2(
     """GET /stats/scoreboardv2
 
     Endpoint: ``GET https://stats.nba.com/stats/scoreboardv2``
-    Example URL: https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00
+    Example URL: https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2021-07-20&LeagueID=00
 
     Args:
         day_offset: DayOffset query parameter.
@@ -7760,7 +7760,7 @@ def nba_stats_scoreboardv2(
 
 
 def nba_stats_scoreboardv3(
-    game_date: Optional[str] = "2022-06-26",
+    game_date: Optional[str] = "2023-03-26",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -7770,7 +7770,7 @@ def nba_stats_scoreboardv3(
     """GET /stats/scoreboardv3
 
     Endpoint: ``GET https://stats.nba.com/stats/scoreboardv3``
-    Example URL: https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00
+    Example URL: https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=00
 
     Args:
         game_date: GameDate query parameter.
@@ -7820,7 +7820,7 @@ def nba_stats_shotchartdetail(
     opponent_team_id: Optional[str] = "0",
     outcome_nullable: Optional[str] = "",
     period: Optional[str] = "0",
-    player_id: Optional[str] = "1628932",
+    player_id: Optional[str] = "202696",
     player_position_nullable: Optional[str] = "",
     point_diff_nullable: Optional[str] = None,
     position_nullable: Optional[str] = None,
@@ -7842,7 +7842,7 @@ def nba_stats_shotchartdetail(
     """GET /stats/shotchartdetail
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartdetail``
-    Example URL: https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=202696&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         ahead_behind_nullable: AheadBehind query parameter.
@@ -7944,11 +7944,11 @@ def nba_stats_shotchartleaguewide(
     """GET /stats/shotchartleaguewide
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartleaguewide``
-    Example URL: https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00
+    Example URL: https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00&Season=2024-25
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -7958,12 +7958,12 @@ def nba_stats_shotchartleaguewide(
     Example:
         Quick start::
 
-            nba_stats_shotchartleaguewide(league_id='00')
+            nba_stats_shotchartleaguewide(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -7981,7 +7981,7 @@ def nba_stats_shotchartlineupdetail(
     context_measure_detailed: Optional[str] = "FGA",
     date_from_nullable: Optional[str] = "",
     date_to_nullable: Optional[str] = "",
-    group_id: Optional[str] = "-1628899-1629481-1630096-1631019-1642784-",
+    group_id: Optional[str] = "-202689-203493-203501-1626174-1627827-",
     game_id_nullable: Optional[str] = "",
     game_segment_nullable: Optional[str] = "",
     last_n_games_nullable: Optional[str] = "0",
@@ -8005,7 +8005,7 @@ def nba_stats_shotchartlineupdetail(
     """GET /stats/shotchartlineupdetail
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartlineupdetail``
-    Example URL: https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-202689-203493-203501-1626174-1627827-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         context_filter_nullable: ContextFilter query parameter.
@@ -8090,7 +8090,7 @@ def nba_stats_synergyplaytypes(
     """GET /stats/synergyplaytypes
 
     Endpoint: ``GET https://stats.nba.com/stats/synergyplaytypes``
-    Example URL: https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive
+    Example URL: https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&SeasonYear=2024-25&TypeGrouping=Offensive
 
     Args:
         league_id: LeagueID query parameter.
@@ -8098,7 +8098,7 @@ def nba_stats_synergyplaytypes(
         play_type_nullable: PlayType query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
         season_type_all_star: SeasonType query parameter.
-        season: SeasonYear query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         type_grouping_nullable: TypeGrouping query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -8109,7 +8109,7 @@ def nba_stats_synergyplaytypes(
     Example:
         Quick start::
 
-            nba_stats_synergyplaytypes(league_id='00')
+            nba_stats_synergyplaytypes(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8118,7 +8118,7 @@ def nba_stats_synergyplaytypes(
         "PlayType": play_type_nullable,
         "PlayerOrTeam": player_or_team_abbreviation,
         "SeasonType": season_type_all_star,
-        "SeasonYear": season,
+        "SeasonYear": season_or_previous(season),
         "TypeGrouping": type_grouping_nullable,
     }
     _params.update(_caller_params)
@@ -8153,7 +8153,7 @@ def nba_stats_teamdashboardbyclutch(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8164,7 +8164,7 @@ def nba_stats_teamdashboardbyclutch(
     """GET /stats/teamdashboardbyclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyclutch``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8183,7 +8183,7 @@ def nba_stats_teamdashboardbyclutch(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8200,7 +8200,7 @@ def nba_stats_teamdashboardbyclutch(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbyclutch(league_id='00')
+            nba_stats_teamdashboardbyclutch(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8220,7 +8220,7 @@ def nba_stats_teamdashboardbyclutch(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8260,7 +8260,7 @@ def nba_stats_teamdashboardbygamesplits(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8271,7 +8271,7 @@ def nba_stats_teamdashboardbygamesplits(
     """GET /stats/teamdashboardbygamesplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbygamesplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8290,7 +8290,7 @@ def nba_stats_teamdashboardbygamesplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8307,7 +8307,7 @@ def nba_stats_teamdashboardbygamesplits(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbygamesplits(league_id='00')
+            nba_stats_teamdashboardbygamesplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8327,7 +8327,7 @@ def nba_stats_teamdashboardbygamesplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8367,7 +8367,7 @@ def nba_stats_teamdashboardbygeneralsplits(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -8378,7 +8378,7 @@ def nba_stats_teamdashboardbygeneralsplits(
     """GET /stats/teamdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbygeneralsplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8397,7 +8397,7 @@ def nba_stats_teamdashboardbygeneralsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8414,7 +8414,7 @@ def nba_stats_teamdashboardbygeneralsplits(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbygeneralsplits(league_id='00')
+            nba_stats_teamdashboardbygeneralsplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8434,7 +8434,7 @@ def nba_stats_teamdashboardbygeneralsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8474,7 +8474,7 @@ def nba_stats_teamdashboardbylastngames(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8485,7 +8485,7 @@ def nba_stats_teamdashboardbylastngames(
     """GET /stats/teamdashboardbylastngames
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbylastngames``
-    Example URL: https://stats.nba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8504,7 +8504,7 @@ def nba_stats_teamdashboardbylastngames(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8521,7 +8521,7 @@ def nba_stats_teamdashboardbylastngames(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbylastngames(league_id='00')
+            nba_stats_teamdashboardbylastngames(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8541,7 +8541,7 @@ def nba_stats_teamdashboardbylastngames(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8581,7 +8581,7 @@ def nba_stats_teamdashboardbyopponent(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8592,7 +8592,7 @@ def nba_stats_teamdashboardbyopponent(
     """GET /stats/teamdashboardbyopponent
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyopponent``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8611,7 +8611,7 @@ def nba_stats_teamdashboardbyopponent(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8628,7 +8628,7 @@ def nba_stats_teamdashboardbyopponent(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbyopponent(league_id='00')
+            nba_stats_teamdashboardbyopponent(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8648,7 +8648,7 @@ def nba_stats_teamdashboardbyopponent(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8688,7 +8688,7 @@ def nba_stats_teamdashboardbyshootingsplits(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -8699,7 +8699,7 @@ def nba_stats_teamdashboardbyshootingsplits(
     """GET /stats/teamdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyshootingsplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8718,7 +8718,7 @@ def nba_stats_teamdashboardbyshootingsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8735,7 +8735,7 @@ def nba_stats_teamdashboardbyshootingsplits(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbyshootingsplits(league_id='00')
+            nba_stats_teamdashboardbyshootingsplits(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8755,7 +8755,7 @@ def nba_stats_teamdashboardbyshootingsplits(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8795,7 +8795,7 @@ def nba_stats_teamdashboardbyteamperformance(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8806,7 +8806,7 @@ def nba_stats_teamdashboardbyteamperformance(
     """GET /stats/teamdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyteamperformance``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8825,7 +8825,7 @@ def nba_stats_teamdashboardbyteamperformance(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -8842,7 +8842,7 @@ def nba_stats_teamdashboardbyteamperformance(
     Example:
         Quick start::
 
-            nba_stats_teamdashboardbyteamperformance(league_id='00')
+            nba_stats_teamdashboardbyteamperformance(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8862,7 +8862,7 @@ def nba_stats_teamdashboardbyteamperformance(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -8902,7 +8902,7 @@ def nba_stats_teamdashboardbyyearoveryear(
     season_segment: Optional[str] = "",
     season_type: Optional[str] = "Regular Season",
     shot_clock_range: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference: Optional[str] = "",
     vs_division: Optional[str] = "",
     *,
@@ -8913,7 +8913,7 @@ def nba_stats_teamdashboardbyyearoveryear(
     """GET /stats/teamdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyyearoveryear``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -9011,7 +9011,7 @@ def nba_stats_teamdashlineups(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9022,7 +9022,7 @@ def nba_stats_teamdashlineups(
     """GET /stats/teamdashlineups
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashlineups``
-    Example URL: https://stats.nba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9043,7 +9043,7 @@ def nba_stats_teamdashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -9060,7 +9060,7 @@ def nba_stats_teamdashlineups(
     Example:
         Quick start::
 
-            nba_stats_teamdashlineups(league_id='00')
+            nba_stats_teamdashlineups(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9082,7 +9082,7 @@ def nba_stats_teamdashlineups(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9125,7 +9125,7 @@ def nba_stats_teamdashptpass(
     """GET /stats/teamdashptpass
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashptpass``
-    Example URL: https://stats.nba.com/stats/teamdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9137,7 +9137,7 @@ def nba_stats_teamdashptpass(
         opponent_team_id: OpponentTeamID query parameter.
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9153,7 +9153,7 @@ def nba_stats_teamdashptpass(
     Example:
         Quick start::
 
-            nba_stats_teamdashptpass(league_id='00')
+            nba_stats_teamdashptpass(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9166,7 +9166,7 @@ def nba_stats_teamdashptpass(
         "OpponentTeamID": opponent_team_id,
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9299,7 +9299,7 @@ def nba_stats_teamdashptshots(
     """GET /stats/teamdashptshots
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashptshots``
-    Example URL: https://stats.nba.com/stats/teamdashptshots?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamdashptshots?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9313,7 +9313,7 @@ def nba_stats_teamdashptshots(
         outcome_nullable: Outcome query parameter.
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9329,7 +9329,7 @@ def nba_stats_teamdashptshots(
     Example:
         Quick start::
 
-            nba_stats_teamdashptshots(league_id='00')
+            nba_stats_teamdashptshots(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9344,7 +9344,7 @@ def nba_stats_teamdashptshots(
         "Outcome": outcome_nullable,
         "PerMode": per_mode_simple,
         "Period": period,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9363,7 +9363,7 @@ def nba_stats_teamdashptshots(
 
 
 def nba_stats_teamdetails(
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9372,7 +9372,7 @@ def nba_stats_teamdetails(
     """GET /stats/teamdetails
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdetails``
-    Example URL: https://stats.nba.com/stats/teamdetails?TeamID=1611661328
+    Example URL: https://stats.nba.com/stats/teamdetails?TeamID=1610612749
 
     Args:
         team_id: TeamID query parameter.
@@ -9455,7 +9455,7 @@ def nba_stats_teamgamelog(
     league_id: Optional[str] = "00",
     season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9464,13 +9464,13 @@ def nba_stats_teamgamelog(
     """GET /stats/teamgamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/teamgamelog``
-    Example URL: https://stats.nba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328
+    Example URL: https://stats.nba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=00&Season=2024-25&SeasonType=Regular+Season&TeamID=1610612749
 
     Args:
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -9482,14 +9482,14 @@ def nba_stats_teamgamelog(
     Example:
         Quick start::
 
-            nba_stats_teamgamelog(league_id='00')
+            nba_stats_teamgamelog(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "DateFrom": date_from_nullable,
         "DateTo": date_to_nullable,
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
     }
@@ -9534,7 +9534,7 @@ def nba_stats_teamgamelogs(
     """GET /stats/teamgamelogs
 
     Endpoint: ``GET https://stats.nba.com/stats/teamgamelogs``
-    Example URL: https://stats.nba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9551,7 +9551,7 @@ def nba_stats_teamgamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -9567,7 +9567,7 @@ def nba_stats_teamgamelogs(
     Example:
         Quick start::
 
-            nba_stats_teamgamelogs(league_id='00')
+            nba_stats_teamgamelogs(league_id='00', season_nullable='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9585,7 +9585,7 @@ def nba_stats_teamgamelogs(
         "PerMode": per_mode_simple_nullable,
         "Period": period_nullable,
         "PlayerID": player_id_nullable,
-        "Season": season_nullable,
+        "Season": season_or_previous(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "ShotClockRange": shot_clock_range_nullable,
@@ -9608,7 +9608,7 @@ def nba_stats_teaminfocommon(
     league_id: Optional[str] = "00",
     season_nullable: Optional[str] = None,
     season_type_nullable: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9617,7 +9617,7 @@ def nba_stats_teaminfocommon(
     """GET /stats/teaminfocommon
 
     Endpoint: ``GET https://stats.nba.com/stats/teaminfocommon``
-    Example URL: https://stats.nba.com/stats/teaminfocommon?LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328
+    Example URL: https://stats.nba.com/stats/teaminfocommon?LeagueID=00&SeasonType=Regular+Season&TeamID=1610612749
 
     Args:
         league_id: LeagueID query parameter.
@@ -9675,7 +9675,7 @@ def nba_stats_teamplayerdashboard(
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
     shot_clock_range_nullable: Optional[str] = "",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9686,7 +9686,7 @@ def nba_stats_teamplayerdashboard(
     """GET /stats/teamplayerdashboard
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayerdashboard``
-    Example URL: https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9780,7 +9780,7 @@ def nba_stats_teamplayeronoffdetails(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9791,7 +9791,7 @@ def nba_stats_teamplayeronoffdetails(
     """GET /stats/teamplayeronoffdetails
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayeronoffdetails``
-    Example URL: https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9809,7 +9809,7 @@ def nba_stats_teamplayeronoffdetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9825,7 +9825,7 @@ def nba_stats_teamplayeronoffdetails(
     Example:
         Quick start::
 
-            nba_stats_teamplayeronoffdetails(league_id='00')
+            nba_stats_teamplayeronoffdetails(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9844,7 +9844,7 @@ def nba_stats_teamplayeronoffdetails(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9881,7 +9881,7 @@ def nba_stats_teamplayeronoffsummary(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
     *,
@@ -9892,7 +9892,7 @@ def nba_stats_teamplayeronoffsummary(
     """GET /stats/teamplayeronoffsummary
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayeronoffsummary``
-    Example URL: https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9910,7 +9910,7 @@ def nba_stats_teamplayeronoffsummary(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -9926,7 +9926,7 @@ def nba_stats_teamplayeronoffsummary(
     Example:
         Quick start::
 
-            nba_stats_teamplayeronoffsummary(league_id='00')
+            nba_stats_teamplayeronoffsummary(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -9945,7 +9945,7 @@ def nba_stats_teamplayeronoffsummary(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
@@ -9983,10 +9983,10 @@ def nba_stats_teamvsplayer(
     season: Optional[str] = None,
     season_segment_nullable: Optional[str] = "",
     season_type_playoffs: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     vs_conference_nullable: Optional[str] = "",
     vs_division_nullable: Optional[str] = "",
-    vs_player_id: Optional[str] = "1628932",
+    vs_player_id: Optional[str] = "2544",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -9995,7 +9995,7 @@ def nba_stats_teamvsplayer(
     """GET /stats/teamvsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/teamvsplayer``
-    Example URL: https://stats.nba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932
+    Example URL: https://stats.nba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=&VsPlayerID=2544
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -10014,7 +10014,7 @@ def nba_stats_teamvsplayer(
         player_id_nullable: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -10031,7 +10031,7 @@ def nba_stats_teamvsplayer(
     Example:
         Quick start::
 
-            nba_stats_teamvsplayer(league_id='00')
+            nba_stats_teamvsplayer(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -10051,7 +10051,7 @@ def nba_stats_teamvsplayer(
         "PlayerID": player_id_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "TeamID": team_id,
@@ -10074,7 +10074,7 @@ def nba_stats_teamyearbyyearstats(
     league_id: Optional[str] = "00",
     per_mode_simple: Optional[str] = "Totals",
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1611661328",
+    team_id: Optional[str] = "1610612749",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -10083,7 +10083,7 @@ def nba_stats_teamyearbyyearstats(
     """GET /stats/teamyearbyyearstats
 
     Endpoint: ``GET https://stats.nba.com/stats/teamyearbyyearstats``
-    Example URL: https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328
+    Example URL: https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612749
 
     Args:
         league_id: LeagueID query parameter.
@@ -10126,7 +10126,7 @@ def nba_stats_videodetailsasset(
     opponent_team_id: Optional[str] = "0",
     period: Optional[str] = "0",
     player_id: Optional[str] = "2544",
-    season: Optional[str] = "2022-23",
+    season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
     team_id: Optional[str] = "1610612747",
     vs_division_nullable: Optional[str] = "",
@@ -10158,7 +10158,7 @@ def nba_stats_videodetailsasset(
     """GET /stats/videodetailsasset
 
     Endpoint: ``GET https://stats.nba.com/stats/videodetailsasset``
-    Example URL: https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=
+    Example URL: https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=
 
     Args:
         context_measure_detailed: ContextMeasure query parameter.
@@ -10167,7 +10167,7 @@ def nba_stats_videodetailsasset(
         opponent_team_id: OpponentTeamID query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season query parameter.
+        season: Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         vs_division_nullable: VsDivision query parameter.
@@ -10201,7 +10201,7 @@ def nba_stats_videodetailsasset(
     Example:
         Quick start::
 
-            nba_stats_videodetailsasset(league_id='00')
+            nba_stats_videodetailsasset(league_id='00', season='2024-25')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -10211,7 +10211,7 @@ def nba_stats_videodetailsasset(
         "OpponentTeamID": opponent_team_id,
         "Period": period,
         "PlayerID": player_id,
-        "Season": season,
+        "Season": season_or_previous(season),
         "SeasonType": season_type_all_star,
         "TeamID": team_id,
         "VsDivision": vs_division_nullable,
@@ -10249,7 +10249,7 @@ def nba_stats_videodetailsasset(
 
 def nba_stats_videoevents(
     game_event_id: Optional[str] = "10",
-    game_id: Optional[str] = "1022200075",
+    game_id: Optional[str] = "0021700807",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -10258,7 +10258,7 @@ def nba_stats_videoevents(
     """GET /stats/videoevents
 
     Endpoint: ``GET https://stats.nba.com/stats/videoevents``
-    Example URL: https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075
+    Example URL: https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=0021700807
 
     Args:
         game_event_id: GameEventID query parameter.
@@ -10336,7 +10336,7 @@ def nba_stats_videoeventsasset(
 
 
 def nba_stats_videostatus(
-    game_date: Optional[str] = "2022-06-10",
+    game_date: Optional[str] = "2023-03-10",
     league_id: Optional[str] = "00",
     *,
     return_parsed: bool = True,
@@ -10346,7 +10346,7 @@ def nba_stats_videostatus(
     """GET /stats/videostatus
 
     Endpoint: ``GET https://stats.nba.com/stats/videostatus``
-    Example URL: https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00
+    Example URL: https://stats.nba.com/stats/videostatus?GameDate=2023-03-10&LeagueID=00
 
     Args:
         game_date: GameDate query parameter.

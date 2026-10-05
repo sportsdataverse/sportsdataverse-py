@@ -181,7 +181,7 @@ ESPN endpoint.
 | `category_slug` | character | Machine-readable slug identifying the statistical category the player entry belongs to in the box score. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 | `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
-| `athlete_position` | character | Player position name; `athlete_detail = TRUE` only. |
+| `athlete_position` | character | Player position name. |
 | `value` | character | Numeric or string value field. |
 | `main_stat_label` | character | Human-readable label for the primary statistic displayed for the player in the box score. |
 | `main_stat_value` | character | Value of the primary statistic displayed for the player in the box score. |

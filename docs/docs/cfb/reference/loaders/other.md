@@ -316,7 +316,7 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `first_name` | String | Athlete first name. |
 | `last_name` | String | Athlete last name. |
 | `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
-| `athlete_display_name` | String | Player display name; `athlete_detail = TRUE` only. |
+| `athlete_display_name` | String | Player display name. |
 | `short_name` | String | Ranking source short name (e.g. `AP Poll`). |
 | `weight` | Float64 | Listed weight (lbs). |
 | `display_weight` | String | Human-readable weight (e.g. `205 lbs`). |
@@ -362,14 +362,14 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `team_guid` | String | ESPN team GUID. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | Team slug for the stat row. |
-| `team_location` | String | Team location / school name; `team_detail = TRUE` only. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
-| `team_nickname` | String | Team nickname label; `team_detail = TRUE` only. |
-| `team_abbreviation` | String | Team abbreviation; `team_detail = TRUE` only. |
-| `team_display_name` | String | Full team display name; `team_detail = TRUE` only. |
-| `team_short_display_name` | String | Short team display name; `team_detail = TRUE` only. |
-| `team_color` | String | Primary team color; `team_detail = TRUE` only. |
-| `team_alternate_color` | String | Alternate team color; `team_detail = TRUE` only. |
+| `team_location` | String | Team location / school name. |
+| `team_name` | String | Team nickname. |
+| `team_nickname` | String | Team nickname label. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name. |
+| `team_color` | String | Primary team color. |
+| `team_alternate_color` | String | Alternate team color. |
 | `is_active` | Boolean | Whether the team is currently active. |
 | `is_all_star` | Boolean | Whether the team is an all-star team. |
 | `team_alternate_ids_sdr` | String | The team's Sportradar alternate identifier, which maps one-to-one with team_id. |

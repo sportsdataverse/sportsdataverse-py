@@ -280,7 +280,7 @@ GET /rdb/v1/player/{personKey}/profile
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
 | `hometown_name` | character | Player's hometown, as listed by On3. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `class_rank` | character | Player's rank within their recruiting class. |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
@@ -549,7 +549,7 @@ GET /rdb/v1/player/verified
 | `hometown_name` | character | Player's hometown, as listed by On3. |
 | `hometown_state` | character | Recruit hometown state. |
 | `current_state` | character | Current home venue state. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
 | `class_rank` | character | Player's rank within their recruiting class. |
 | `height` | character | Listed height (inches). |

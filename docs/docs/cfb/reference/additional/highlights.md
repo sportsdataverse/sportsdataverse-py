@@ -567,9 +567,9 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `slug` | character | URL slug for the team. |
 | `active` | logical | `TRUE` if the player was active for the game. |
 | `position_id` | integer | ESPN position id. |
-| `position_name` | character | Position name (e.g. `Quarterback`); `position_detail = TRUE` only. |
-| `position_display_name` | character | Human-readable position name; `position_detail = TRUE` only. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `position_name` | character | Position name (e.g. `Quarterback`). |
+| `position_display_name` | character | Human-readable position name. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `college_name` | character | Official college (usually the last one attended) |
 | `status_id` | integer | ESPN commitment status id. |
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
@@ -702,15 +702,15 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_guid` | character | ESPN team GUID. |
 | `team_slug` | character | Team slug for the stat row. |
-| `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `team_display_name` | character | Full team display name; `team_detail = TRUE` only. |
-| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
-| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
-| `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
+| `team_location` | character | Team location / school name. |
+| `team_name` | character | Team nickname. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_display_name` | character | Full team display name. |
+| `team_short_display_name` | character | Short team display name. |
+| `team_color` | character | Primary team color. |
+| `team_alternate_color` | character | Alternate team color. |
 | `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
+| `team_logo_href` | character | Default team logo URL. |
 
 **Example**
 

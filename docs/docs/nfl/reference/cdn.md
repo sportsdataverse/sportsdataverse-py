@@ -301,7 +301,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name. |
 | `team_logos` | character | Team logos. |
 | `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
 | `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
@@ -690,7 +690,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name. |
 | `team_logos` | character | Team logos. |
 | `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
 | `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |

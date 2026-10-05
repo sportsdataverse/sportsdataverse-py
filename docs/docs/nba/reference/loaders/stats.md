@@ -20,12 +20,12 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `matchup` | String | Matchup. |
 | `home_team_id` | Int64 | Unique identifier for the home team. |
-| `home_team_abbreviation` | String | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_abbreviation` | String | Home team abbreviation. |
 | `home_team_name` | String | Home team name. |
 | `home_pts` | Int64 | Final points scored by the home team. |
 | `home_wl` | String | Home team's result for the game (W or L). |
 | `away_team_id` | Int64 | Unique identifier for the away team. |
-| `away_team_abbreviation` | String | Away team abbreviation; `team_detail = TRUE` only. |
+| `away_team_abbreviation` | String | Away team abbreviation. |
 | `away_team_name` | String | Away team name. |
 | `away_pts` | Int64 | Final points scored by the away team. |
 | `away_wl` | String | Away team's result for the game (W or L). |

@@ -13,7 +13,7 @@ GET /stats/scoreboardv2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv2`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00](https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2021-07-20&LeagueID=00](https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2021-07-20&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -176,7 +176,7 @@ GET /stats/scoreboardv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `leag_tix` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -195,7 +195,7 @@ GET /stats/scoreboardv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00](https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=00](https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

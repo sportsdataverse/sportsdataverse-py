@@ -372,7 +372,7 @@ ESPN endpoint.
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name. |
 | `team_logos` | character | Team logos. |
 | `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
 | `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
@@ -800,7 +800,7 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character | ESPN id of the parent position; `position_detail = TRUE` only. |
+| `position_parent_id` | character | ESPN id of the parent position. |
 | `position_parent_name` | character | Parent position name. |
 | `position_parent_display_name` | character | Parent position display name. |
 | `position_parent_abbreviation` | character | Parent position abbreviation. |
