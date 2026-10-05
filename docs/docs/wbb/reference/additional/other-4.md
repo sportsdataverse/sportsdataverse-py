@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Other (4)"
-sidebar_label: "Other (4)"
+title: "WBB — additional Python functions — Other: right_kind–win_prob"
+sidebar_label: "Other: right_kind–win_prob"
 sidebar_position: 12
-description: "WBB — additional Python functions — Other (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Other: right_kind–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Other (4)
+# WBB — additional Python functions — Other: right_kind–win_prob
 
 ### right_kind_of_shot {#right_kind_of_shot}
 

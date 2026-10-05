@@ -15,7 +15,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 2 | `https://barttorvik.com` |
 | [KenPom (kenpom.com, subscription)](reference/kenpom) | 30 | `https://kenpom.com` |
 | [Dataset loaders](reference/loaders) | 34 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 317 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 320 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

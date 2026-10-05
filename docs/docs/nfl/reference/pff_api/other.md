@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Other"
-sidebar_label: "Other"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Other: ref_leagues–whoami"
+sidebar_label: "Other: ref_leagues–whoami"
 sidebar_position: 17
-description: "NFL — PFF Developer API (api.pff.com, API key) — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Other: ref_leagues–whoami — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Other
+# NFL — PFF Developer API (api.pff.com, API key) — Other: ref_leagues–whoami
 
 ## pff_api_ref_leagues
 

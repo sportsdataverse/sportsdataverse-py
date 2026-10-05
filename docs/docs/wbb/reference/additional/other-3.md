@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Other (3)"
-sidebar_label: "Other (3)"
+title: "WBB — additional Python functions — Other: find_pbp–ridge_fit"
+sidebar_label: "Other: find_pbp–ridge_fit"
 sidebar_position: 11
-description: "WBB — additional Python functions — Other (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Other: find_pbp–ridge_fit — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Other (3)
+# WBB — additional Python functions — Other: find_pbp–ridge_fit
 
 ### find_pbp_clump {#find_pbp_clump}
 

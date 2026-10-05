@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Other (2)"
-sidebar_label: "Other (2)"
+title: "CFB dataset loaders — Other: percentiles–group_aliases"
+sidebar_label: "Other: percentiles–group_aliases"
 sidebar_position: 16
-description: "CFB dataset loaders — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Other: percentiles–group_aliases — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Other (2)
+# CFB dataset loaders — Other: percentiles–group_aliases
 
 ## load_cfb_percentiles
 

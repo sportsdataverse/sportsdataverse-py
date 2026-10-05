@@ -125,12 +125,15 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_wbb_date_games](additional/ncaa.md#ncaa_wbb_date_games) | Discover every NCAA WBB game played on a date (wbigballR `get_date_games`). |
 | [ncaa_wbb_game_pbp](additional/ncaa.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed). |
 | [ncaa_wbb_join_pbp_shots](additional/ncaa.md#ncaa_wbb_join_pbp_shots) | Attach WBB chart shots onto the pbp frame (pure delegation). |
+| [ncaa_wbb_lineups](additional/ncaa.md#ncaa_wbb_lineups) | Aggregate WBB play-by-play into per-lineup stats (wbigballR `get_lineups`). |
 | [ncaa_wbb_on_off](additional/ncaa.md#ncaa_wbb_on_off) | Team stats for every on/off combination of the given WBB players. |
 | [ncaa_wbb_play_by_play](additional/ncaa.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed). |
 | [ncaa_wbb_player_combos](additional/ncaa.md#ncaa_wbb_player_combos) | Team stats for every n-player WBB combination on the court together. |
 | [ncaa_wbb_player_lineups](additional/ncaa.md#ncaa_wbb_player_lineups) | Filter a WBB lineups frame by on-court player membership. |
 | [ncaa_wbb_player_stats](additional/ncaa.md#ncaa_wbb_player_stats) | Aggregate WBB play-by-play into per-player box stats (wbigballR `get_player_stats`). |
+| [ncaa_wbb_possessions](additional/ncaa.md#ncaa_wbb_possessions) | Aggregate WBB play-by-play into one row per possession (wbigballR `get_possessions`). |
 | [ncaa_wbb_shot_locations](additional/ncaa.md#ncaa_wbb_shot_locations) | Scrape WBB shot locations for one or more games. |
+| [ncaa_wbb_team_ids](additional/ncaa.md#ncaa_wbb_team_ids) | Women's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
 | [ncaa_wbb_team_roster](additional/ncaa.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
 | [ncaa_wbb_team_schedule](additional/ncaa.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
 | [ncaa_wbb_team_stats](additional/ncaa.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |

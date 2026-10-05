@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Other"
-sidebar_label: "Other"
+title: "MBB — additional Python functions — Other: load_artifact–adjust_efficiency"
+sidebar_label: "Other: load_artifact–adjust_efficiency"
 sidebar_position: 9
-description: "MBB — additional Python functions — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Other: load_artifact–adjust_efficiency — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Other
+# MBB — additional Python functions — Other: load_artifact–adjust_efficiency
 
 ### load_artifact {#load_artifact}
 

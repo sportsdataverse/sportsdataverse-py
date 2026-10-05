@@ -166,11 +166,14 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_mbb_date_games](additional/ncaa.md#ncaa_mbb_date_games) | Discover every NCAA MBB game played on a date (bigballR `get_date_games`). |
 | [ncaa_mbb_game_pbp](additional/ncaa.md#ncaa_mbb_game_pbp) | Scrape one MBB game's play-by-play (bigballR `scrape_game`). |
 | [ncaa_mbb_join_pbp_shots](additional/ncaa.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
+| [ncaa_mbb_lineups](additional/ncaa.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
 | [ncaa_mbb_on_off](additional/ncaa.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/ncaa.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/ncaa.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
 | [ncaa_mbb_player_stats](additional/ncaa.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
+| [ncaa_mbb_possessions](additional/ncaa.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
 | [ncaa_mbb_shot_locations](additional/ncaa.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
+| [ncaa_mbb_team_ids](additional/ncaa.md#ncaa_mbb_team_ids) | Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
 | [ncaa_mbb_team_stats](additional/ncaa.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |
 
 ## Other

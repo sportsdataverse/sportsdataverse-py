@@ -227,6 +227,48 @@ joined = ncaa_mbb_join_pbp_shots(pbp, shots)
 joined.filter(pl.col("x").is_not_null()).head()
 ```
 
+### ncaa_mbb_lineups {#ncaa_mbb_lineups}
+
+`ncaa_mbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Aggregate bigballR-contract play-by-play into per-lineup stats.
+
+Port of bigballR `get_lineups` (`all_functions.R:1945-2521`). Rows
+with any missing on-court player and substitution rows are dropped, each
+row's home/away five are byte-sorted so a lineup always occupies the same
+columns, and the home + away passes are combined per `(p1..p5, team)`.
+Ratios are derived from the summed counters, rounded to 3 decimals, and
+NA/Inf are zeroed exactly where R does it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games. |
+| `include_transition` | `bool` | `False` | When True, append the trans`/half` split surface plus `o_trans_pct`/`d_trans_pct` (213 columns total). |
+| `fix_tip_in` | `bool` | `True` | When True (default), rim stats count the scrape engine's real `"Tip In"` vocabulary. When False, reproduce R's literal `"Tip-In"` test (`all_functions.R:2012`) — tip-ins silently excluded — for oracle parity. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with one row per lineup+team — 75 columns (`LINEUPS_COLUMNS`) or 213 with `include_transition=True` (`LINEUPS_TRANSITION_COLUMNS`), rows sorted by `p1..p5, team`. Empty input yields an empty frame with the documented schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_lineups
+lineups = ncaa_mbb_lineups(pbp)
+print(lineups.shape)
+
+# Transition/half-court splits, pandas out
+
+df_pd = ncaa_mbb_lineups(pbp, include_transition=True, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+lineups.filter(pl.col("mins") > 10).sort("netrtg", descending=True).head()
+```
+
 ### ncaa_mbb_on_off {#ncaa_mbb_on_off}
 
 `ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -416,6 +458,48 @@ df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pand
 season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
 ```
 
+### ncaa_mbb_possessions {#ncaa_mbb_possessions}
+
+`ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Aggregate bigballR-contract play-by-play into one row per possession.
+
+Port of bigballR `get_possessions` (`all_functions.R:3686-3745`).
+Groups by the possession keys stamped upstream by the scrape engine
+(`poss_num`, `poss_team`, the ten on-court lineup columns, plus game
+identity), drops possessions with any missing on-court player, and — in
+the full variant — sorts each row's home/away lineup alphabetically so a
+given lineup always occupies the same columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
+| `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
+poss = ncaa_mbb_possessions(pbp)
+print(poss.shape)
+
+# Simple points-per-possession variant
+
+poss_pd = ncaa_mbb_possessions(pbp, simple=True, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+poss.group_by("poss_team").agg(pl.col("pts").mean())
+```
+
 ### ncaa_mbb_shot_locations {#ncaa_mbb_shot_locations}
 
 `ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
@@ -455,6 +539,37 @@ df = ncaa_mbb_shot_locations(["6470186"], fetcher=my_fetcher)
 # Pipeline next step (one line)
 
 df.group_by("team").agg(pl.col("shot_dist").mean()).head()
+```
+
+### ncaa_mbb_team_ids {#ncaa_mbb_team_ids}
+
+`ncaa_mbb_team_ids(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk.
+
+Port of bigballR's bundled `teamids` data asset (one row per team per
+season, 2009-10 through 2025-26).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with columns `team` (str), `conference` (str), `id` (Int64 -- the season-specific stats.ncaa.org team id) and `season` (str, `"YYYY-YY"`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb import ncaa_mbb_team_ids
+df = ncaa_mbb_team_ids()
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("season") == "2025-26").head()
 ```
 
 ### ncaa_mbb_team_stats {#ncaa_mbb_team_stats}

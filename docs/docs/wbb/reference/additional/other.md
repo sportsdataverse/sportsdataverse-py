@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Other"
-sidebar_label: "Other"
+title: "WBB — additional Python functions — Other: load_artifact–add_stats"
+sidebar_label: "Other: load_artifact–add_stats"
 sidebar_position: 9
-description: "WBB — additional Python functions — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Other: load_artifact–add_stats — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Other
+# WBB — additional Python functions — Other: load_artifact–add_stats
 
 ### load_artifact {#load_artifact}
 

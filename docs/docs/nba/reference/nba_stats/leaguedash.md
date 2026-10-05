@@ -1,11 +1,11 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — League dashboards"
-sidebar_label: "League dashboards"
+title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashteamshotlocations"
+sidebar_label: "League dashboards: leaguedashlineups–leaguedashteamshotlocations"
 sidebar_position: 7
-description: "NBA — NBA Stats API (stats.nba.com) — League dashboards — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashteamshotlocations — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — League dashboards
+# NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashteamshotlocations
 
 ## nba_stats_leaguedashlineups
 

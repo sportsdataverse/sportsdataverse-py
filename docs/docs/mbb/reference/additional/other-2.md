@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Other (2)"
-sidebar_label: "Other (2)"
+title: "MBB — additional Python functions — Other: adjust_off–fit_espn"
+sidebar_label: "Other: adjust_off–fit_espn"
 sidebar_position: 10
-description: "MBB — additional Python functions — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Other: adjust_off–fit_espn — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Other (2)
+# MBB — additional Python functions — Other: adjust_off–fit_espn
 
 ### adjust_off_rating_stats {#adjust_off_rating_stats}
 

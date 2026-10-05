@@ -38,8 +38,10 @@ not covered by the generated API-endpoint reference above.
 | [cfb_odds_events_crosswalk](additional/cfb.md#cfb_odds_events_crosswalk) | Match The Odds API CFB events to ESPN game ids. |
 | [cfb_playoff_seeds](additional/cfb.md#cfb_playoff_seeds) | Assign College Football Playoff seeds (current straight-seeding rule). |
 | [cfb_predict_games](additional/cfb.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
+| [cfb_ratings](additional/cfb.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
 | [cfb_recruiting_projection](additional/cfb.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_resume](additional/cfb.md#cfb_resume) | Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble. |
+| [cfb_returning_production](additional/cfb.md#cfb_returning_production) | Returning production per team-season (offense / defense / overall). |
 | [cfb_roster_talent](additional/cfb.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_rosters_crosswalk](additional/cfb.md#cfb_rosters_crosswalk) | Build the ESPN x Fox x Yahoo player-id crosswalk for one team. |
 | [cfb_schedule_crosswalk](additional/cfb.md#cfb_schedule_crosswalk) | Build the ESPN x Fox x Yahoo CFB game-id crosswalk. |
@@ -112,6 +114,8 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [espn_cfb_game_rosters](additional/other.md#espn_cfb_game_rosters) | espn_cfb_game_rosters() - Pull the game by id. |
+| [espn_cfb_play_participants](additional/other.md#espn_cfb_play_participants) | Pull ESPN per-play participants for a college-football game. |
 | [load_cfb_betting_lines](additional/other.md#load_cfb_betting_lines) | Load college football betting lines information |
 | [load_cfb_rosters_crosswalk](additional/other.md#load_cfb_rosters_crosswalk) | Load the current ESPN x Fox CFB rosters crosswalk (single snapshot). |
 | [load_draft_outcomes](additional/other.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
@@ -125,6 +129,7 @@ not covered by the generated API-endpoint reference above.
 | [create_drive_summary](additional/other.md#create_drive_summary) | Build the StatBroadcast-style drive summary, chart, and long-play lists. |
 | [create_situational_stats](additional/other.md#create_situational_stats) | Build the situational team-stats block from a plays frame. |
 | [efficiency_ratings](additional/other.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
+| [espn_cfb_teams](additional/other.md#espn_cfb_teams) | espn_cfb_teams - look up the college football teams |
 | [fei_ratings](additional/other.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
 | [fit_field_position_ep](additional/other.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
 | [get_2pt_probs](additional/other.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |

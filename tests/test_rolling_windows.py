@@ -307,7 +307,10 @@ def test_package_level_export_and_reference_docs():
     assert sportsdataverse.rolling_windows is rolling_windows
     assert sportsdataverse.football_events is football_events
     assert sportsdataverse.shot_events is shot_events
-    doc = (Path(__file__).parents[1] / "docs" / "docs" / "reference" / "python-helpers.md").read_text(encoding="utf-8")
+    # the page is split into family pages under reference/python-helpers/ (the overview stays at the old path)
+    reference = Path(__file__).parents[1] / "docs" / "docs" / "reference"
+    pages = [reference / "python-helpers.md", *sorted((reference / "python-helpers").glob("*.md"))]
+    doc = "\n".join(page.read_text(encoding="utf-8") for page in pages)
     assert "{#rolling_windows}" in doc and "{#football_events}" in doc and "{#shot_events}" in doc
 
 

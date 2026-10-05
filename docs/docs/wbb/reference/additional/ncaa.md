@@ -186,6 +186,37 @@ joined = ncaa_wbb_join_pbp_shots(pbp, shots)
 print(joined.shape)
 ```
 
+### ncaa_wbb_lineups {#ncaa_wbb_lineups}
+
+`ncaa_wbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Aggregate WBB play-by-play into per-lineup stats (wbigballR `get_lineups`).
+
+Pure delegation to
+`sportsdataverse.mbb.mbb_ncaa_lineups.ncaa_mbb_lineups` — see it
+for the algorithm, column contract, and the `fix_tip_in` vocab fix.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
+| `include_transition` | `bool` | `False` | Append the trans`/half` split surface. |
+| `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per lineup+team; see the MBB sibling for the column contract.
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_lineups import ncaa_wbb_lineups
+lineups = ncaa_wbb_lineups(pbp)
+print(lineups.shape)
+```
+
 ### ncaa_wbb_on_off {#ncaa_wbb_on_off}
 
 `ncaa_wbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
@@ -345,6 +376,42 @@ stats = ncaa_wbb_player_stats(pbp)
 print(stats.shape)
 ```
 
+### ncaa_wbb_possessions {#ncaa_wbb_possessions}
+
+`ncaa_wbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Aggregate WBB play-by-play into one row per possession (wbigballR `get_possessions`).
+
+Pure delegation to
+`sportsdataverse.mbb.mbb_ncaa_possession_seg.ncaa_mbb_possessions`
+— see it for the algorithm, the 28/17-column contracts, and the fixed-vs-
+faithful flag convention.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
+| `simple` | `bool` | `False` | Return only the 17-column possession/points frame. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession does not inherit the previous game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`). Parity tests pass False. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per possession.
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_possession_seg import ncaa_wbb_possessions
+poss = ncaa_wbb_possessions(pbp)
+print(poss.shape)
+
+# Faithful (R-buggy) start-event lag
+
+poss = ncaa_wbb_possessions(pbp, fix_cross_game_leak=False)
+```
+
 ### ncaa_wbb_shot_locations {#ncaa_wbb_shot_locations}
 
 `ncaa_wbb_shot_locations(game_ids: 'Sequence[object]', *, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
@@ -375,6 +442,34 @@ All games' shots row-bound (zero-row schema frame when none found).
 from sportsdataverse.wbb.wbb_ncaa_shots import ncaa_wbb_shot_locations
 shots = ncaa_wbb_shot_locations(["5722355"])
 print(shots.shape)
+```
+
+### ncaa_wbb_team_ids {#ncaa_wbb_team_ids}
+
+`ncaa_wbb_team_ids(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Women's-basketball `(team, season) -> stats.ncaa.org id` crosswalk.
+
+Port of wbigballR's bundled `teamids` data asset (one row per team per
+season). Algorithm detail:
+`sportsdataverse.mbb.mbb_ncaa_team_ids.ncaa_mbb_team_ids`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with columns `team` (str), `conference` (str), `id` (Int64 — the season-specific stats.ncaa.org team id) and `season` (str, `"YYYY-YY"`).
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_team_ids import ncaa_wbb_team_ids
+df = ncaa_wbb_team_ids()
+print(df.shape)
 ```
 
 ### ncaa_wbb_team_roster {#ncaa_wbb_team_roster}

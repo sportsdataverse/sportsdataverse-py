@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Other (2)"
-sidebar_label: "Other (2)"
+title: "WBB — additional Python functions — Other: adjust_efficiency–find_missing"
+sidebar_label: "Other: adjust_efficiency–find_missing"
 sidebar_position: 10
-description: "WBB — additional Python functions — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Other: adjust_efficiency–find_missing — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Other (2)
+# WBB — additional Python functions — Other: adjust_efficiency–find_missing
 
 ### adjust_efficiency {#adjust_efficiency}
 

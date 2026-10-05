@@ -1,10 +1,45 @@
 ---
-title: "NBA — additional Python functions — Other (2)"
-sidebar_label: "Other (2)"
+title: "NBA — additional Python functions — Other: make_prob–zone_value"
+sidebar_label: "Other: make_prob–zone_value"
 sidebar_position: 10
-description: "NBA — additional Python functions — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Other: make_prob–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Other (2)
+# NBA — additional Python functions — Other: make_prob–zone_value
+
+### make_prob_joint {#make_prob_joint}
+
+`make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Independence-combined defender x shot-clock make probability.
+
+Combines the two marginal FG% tables under a conditional-independence
+assumption via odds multipliers: `odds(p) = p/(1-p)`;
+`odds_joint = odds_overall * (odds_def/odds_overall) *
+(odds_clock/odds_overall)`; `joint = odds_joint/(1+odds_joint)`. This
+assumes defender distance and shot-clock effects are independent given the
+league baseline — a simplification (a late clock correlates with tighter
+defense), documented here so callers weigh it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `defender` | `DataFrame` |  | The `"defender"` marginal table from `make_prob_by_context` (`bucket, fg_pct`). |
+| `shot_clock` | `DataFrame` |  | The `"shot_clock"` marginal table (`bucket, fg_pct`). |
+| `overall_fg_pct` | `float` |  | The league overall FG% baseline. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import make_prob_by_context, make_prob_joint
+t = make_prob_by_context(ptshots)
+joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
+```
 
 ### nbadraft_mock_draft {#nbadraft_mock_draft}
 

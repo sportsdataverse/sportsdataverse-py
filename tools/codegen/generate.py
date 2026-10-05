@@ -3331,6 +3331,15 @@ def _doc_view(obj) -> dict:
     return result
 
 
+_RELEASE_MENTION = re.compile(r"\[[^\]]*\]\(https?://[^)]*\)|https?://\S+|Release: \S+")
+
+
+def _without_release_mentions(corpus: str) -> str:
+    """``corpus`` without data-release tag mentions: a loader page names its release by the ESPN function's
+    name (``Release: espn_cfb_teams``), which says nothing about the function being documented."""
+    return _RELEASE_MENTION.sub("", corpus)
+
+
 def _autodoc_names(league: str | None, corpus: str) -> list[str]:
     """In-scope user-facing names that the autodoc page should document for ``league``.
 
@@ -3358,6 +3367,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
         mod_path = _LEAGUE_MODULE.get(league, league)
         mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         allowed = allow.get(league, set())
+    corpus = _without_release_mentions(corpus)
     out = []
     for n in names:
         if n in allowed:
@@ -3829,19 +3839,49 @@ def _heading_ids(text: str) -> list[tuple[int, str]]:
     return ids
 
 
-def _token_label(label: str, slug: str, names: list[str]) -> str | None:
-    """``Facet: offense`` (or ``Facet: offense–passing``) from the name token that follows the family word in
-    every function of the page, or None when some function has none."""
+def _shared_words(words: list[list[str]]) -> int:
+    """How many leading words every name of ``words`` shares, always leaving each one a last word."""
+    shared = 0
+    while all(len(w) > shared + 1 for w in words) and len({w[shared] for w in words}) == 1:
+        shared += 1
+    return shared
+
+
+def _name_tail(name: str, base: str, shared: int) -> str:
+    """The name's words after the family word (else after the ``shared`` leading words every function on the
+    page has), at most two, joined: ``pff_api_facet_passing_concept_x`` -> ``passing_concept``."""
+    words = name.split("_")
+    at = next((i for i, w in enumerate(words) if w.lower() in (base, base + "s")), None)
+    rest = words[at + 1 :] if at is not None else []
+    if not rest or len(rest[0]) < 2:  # nothing after the family word, or a stray letter (``_r``)
+        rest = words[shared:] or words
+    return "_".join(rest[:2])
+
+
+def _range_label(label: str, first: str, last: str) -> str:
+    return f"{label}: {first}" if first == last else f"{label}: {first}–{last}"
+
+
+def _page_label(label: str, slug: str, names: list[str], shared: int, taken: set[str]) -> str:
+    """Sidebar label of one page of a family that spans several pages: ``Facet: offense`` (or
+    ``Facet: offense–passing``) from the name token after the family word that its functions share; when that
+    is missing, a single letter, or already taken, the first and last name tail (``Facet: passing_concept–
+    passing_pressure``). Never a page number."""
     base = re.sub(r"-\d+$", "", slug)
     following = []
     for n in names:
         words = n.split("_")
         at = next((i for i, w in enumerate(words) if w.lower() in (base, base + "s")), None)
-        if at is None or at + 1 >= len(words) or len(words[at + 1]) < 2:  # no word, or a stray letter (``_r``)
-            return None
+        if at is None or at + 1 >= len(words) or len(words[at + 1]) < 2:
+            following = []
+            break
         following.append(words[at + 1].lower())
-    first, last = following[0], following[-1]
-    return f"{label}: {first}" if first == last else f"{label}: {first}–{last}"
+    if following:
+        shown = _range_label(label, following[0], following[-1])
+        if shown not in taken:
+            return shown
+    shown = _range_label(label, _name_tail(names[0], base, shared), _name_tail(names[-1], base, shared))
+    return shown if shown not in taken else f"{shown} ({names[0]})"
 
 
 def _summary_line(block: str) -> str:
@@ -3908,14 +3948,17 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
     for _, label, _, _ in pages:
         pages_of[label] = pages_of.get(label, 0) + 1
     used_labels: set[str] = set()
+    family_words: dict[str, list[list[str]]] = {}
+    for _, label, _, names in pages:
+        family_words.setdefault(label, []).extend(n.split("_") for n in names)
     for position, (slug, label, part, names) in enumerate(pages, start=1):
         # A family on several pages labels each by the name token its functions share after the family word
-        # (``Facet: offense``); no usable token keeps the plain label, or ``Label (N)`` from page 2 on.
-        shown = (_token_label(label, slug, names) if pages_of[label] > 1 else None) or (
-            label if part == 1 else f"{label} ({part})"
+        # (``Facet: offense``), else by its first and last name tail; no page numbers.
+        shown = (
+            _page_label(label, slug, names, _shared_words(family_words[label]), used_labels)
+            if pages_of[label] > 1
+            else label
         )
-        if shown in used_labels:
-            shown = f"{label} ({part})"
         used_labels.add(shown)
         heading = f"{title} — {shown}"
         family_pages[slug] = (

@@ -336,6 +336,22 @@ One row per on-ice player with columns: - `player_id` (Utf8) - `corsi_for`, `cor
 | `toi_seconds` | double | Total time on ice in seconds for this team at the tracked strength during the PWHL game. |
 | `corsi_for_per60` | double | This team's Corsi For rate projected to a full 60 minutes of ice time. |
 
+### pwhl_game_info {#pwhl_game_info}
+
+`pwhl_game_info(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
+
+PWHL single-game metadata.
+
+NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+(A1.8 follow-up); not yet functional.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ### pwhl_game_shifts {#pwhl_game_shifts}
 
 `pwhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -482,6 +498,42 @@ by season, not `season` (name string). The resolved integer is passed as the
 | `photo_small` | character | URL of the small-format headshot image for the PWHL leader-board player. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
+
+### pwhl_pbp {#pwhl_pbp}
+
+`pwhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
+
+PWHL play-by-play — one row per event, fully enriched.
+
+Matches fastRhockey `pwhl_pbp` column parity, adding:
+
+- Coordinate transforms (`*_original`, `*_neutral`, `*_fixed`,
+  `*_right`, `*_vertical`).
+- Clock columns (`minute_start`, `second_start`, `clock`,
+  `sec_from_start`).
+- Shot geometry (`shot_distance`, `shot_angle`, `scoring_chance`).
+- Game-meta join (`game_date`, `game_season`, `game_season_id`,
+  `home_team`, `home_team_id`, `away_team`, `away_team_id`).
+- On-ice player strings (`on_ice_home`, `on_ice_away`) derived from
+  shift data.
+
+Goal double-rowing: the HockeyTech feed emits both a `goal` row and a
+twin `shot` row for (nearly) every goal. The twin shot row is flagged
+`is_goal_twin = True` — shot rows (twins included) match the official
+boxscore shots-on-goal totals, while dropping flagged rows yields a
+deduplicated event stream. See `sportsdataverse.hockeytech._parsers.parse_pbp`.
+
+The three network fetches (PBP payload, game summary meta, and shift data)
+all go through the module-level `hockeytech_api` reference so tests can
+monkeypatch `sportsdataverse.pwhl.pwhl_api.hockeytech_api` to intercept
+all calls without touching the shared core.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
 
 ### pwhl_player_box {#pwhl_player_box}
 

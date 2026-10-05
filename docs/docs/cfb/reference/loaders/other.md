@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Other"
-sidebar_label: "Other"
+title: "CFB dataset loaders — Other: ratings–passing"
+sidebar_label: "Other: ratings–passing"
 sidebar_position: 15
-description: "CFB dataset loaders — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Other: ratings–passing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Other
+# CFB dataset loaders — Other: ratings–passing
 
 ## load_cfb_ratings
 

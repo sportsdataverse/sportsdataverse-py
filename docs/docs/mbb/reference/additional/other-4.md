@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Other (4)"
-sidebar_label: "Other (4)"
+title: "MBB — additional Python functions — Other: reorder_and–win_prob"
+sidebar_label: "Other: reorder_and–win_prob"
 sidebar_position: 12
-description: "MBB — additional Python functions — Other (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Other: reorder_and–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Other (4)
+# MBB — additional Python functions — Other: reorder_and–win_prob
 
 ### reorder_and_reverse {#reorder_and_reverse}
 

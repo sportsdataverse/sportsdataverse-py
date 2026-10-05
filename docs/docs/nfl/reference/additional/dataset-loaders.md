@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Dataset loaders"
-sidebar_label: "Dataset loaders"
+title: "NFL — additional Python functions — Dataset loaders: combine–nfl_espn"
+sidebar_label: "Dataset loaders: combine–nfl_espn"
 sidebar_position: 3
-description: "NFL — additional Python functions — Dataset loaders — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Dataset loaders: combine–nfl_espn — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Dataset loaders
+# NFL — additional Python functions — Dataset loaders: combine–nfl_espn
 
 ### load_combine {#load_combine}
 

@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Other (3)"
-sidebar_label: "Other (3)"
+title: "MBB — additional Python functions — Other: fit_shrinkage–remove_html"
+sidebar_label: "Other: fit_shrinkage–remove_html"
 sidebar_position: 11
-description: "MBB — additional Python functions — Other (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Other: fit_shrinkage–remove_html — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Other (3)
+# MBB — additional Python functions — Other: fit_shrinkage–remove_html
 
 ### fit_shrinkage_k {#fit_shrinkage_k}
 

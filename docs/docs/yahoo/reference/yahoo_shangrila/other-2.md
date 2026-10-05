@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other (2)"
-sidebar_label: "Other (2)"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game"
+sidebar_label: "Other: tennis_tournaments–trending_game"
 sidebar_position: 11
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other (2)
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game
 
 ## yahoo_tennis_tournaments_by_date
 

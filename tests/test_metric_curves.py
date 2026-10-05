@@ -361,6 +361,9 @@ def test_package_level_export_and_reference_docs():
     assert sportsdataverse.football_attempts is football_attempts
     assert sportsdataverse.nflfastr_attempts is nflfastr_attempts
     assert sportsdataverse.shot_attempts is shot_attempts
-    doc = (Path(__file__).parents[1] / "docs" / "docs" / "reference" / "python-helpers.md").read_text(encoding="utf-8")
+    # the page is split into family pages under reference/python-helpers/ (the overview stays at the old path)
+    reference = Path(__file__).parents[1] / "docs" / "docs" / "reference"
+    pages = [reference / "python-helpers.md", *sorted((reference / "python-helpers").glob("*.md"))]
+    doc = "\n".join(page.read_text(encoding="utf-8") for page in pages)
     for name in ("metric_curves", "football_attempts", "nflfastr_attempts", "shot_attempts"):
         assert f"{{#{name}}}" in doc, name

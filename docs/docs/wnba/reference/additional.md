@@ -45,6 +45,8 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [espn_wnba_game_officials](additional/play-by-play-schedule-rosters.md#espn_wnba_game_officials) | Pull the officials assigned to a WNBA game. |
+| [espn_wnba_game_rosters](additional/play-by-play-schedule-rosters.md#espn_wnba_game_rosters) | espn_wnba_game_rosters() - Pull the game by id. |
+| [espn_wnba_pbp](additional/play-by-play-schedule-rosters.md#espn_wnba_pbp) | espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary` |
 | [espn_wnba_player_stats](additional/play-by-play-schedule-rosters.md#espn_wnba_player_stats) | Pull a WNBA athlete's ESPN **season** stat line. |
 | [espn_wnba_schedule](additional/play-by-play-schedule-rosters.md#espn_wnba_schedule) | espn_wnba_schedule - look up the WNBA schedule for a given season |
 | [espn_wnba_team_stats](additional/play-by-play-schedule-rosters.md#espn_wnba_team_stats) | Pull ESPN team season stats for a WNBA team. |

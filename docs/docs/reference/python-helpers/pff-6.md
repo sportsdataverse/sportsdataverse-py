@@ -1,10 +1,10 @@
 ---
-title: "Package — additional Python functions — Pff (6)"
-sidebar_label: "Pff (6)"
+title: "Package — additional Python functions — Pff: ufl_player–ufl_teams"
+sidebar_label: "Pff: ufl_player–ufl_teams"
 sidebar_position: 6
-description: "Package — additional Python functions — Pff (6) — function reference in sdv-py, the SportsDataverse Python package."
+description: "Package — additional Python functions — Pff: ufl_player–ufl_teams — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Package — additional Python functions — Pff (6)
+# Package — additional Python functions — Pff: ufl_player–ufl_teams
 
 ### pff_ufl_player_position_pivot {#pff_ufl_player_position_pivot}
 

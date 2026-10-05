@@ -1,10 +1,83 @@
 ---
-title: "NBA — additional Python functions — Other"
-sidebar_label: "Other"
+title: "NBA — additional Python functions — Other: espn_nba–make_prob"
+sidebar_label: "Other: espn_nba–make_prob"
 sidebar_position: 9
-description: "NBA — additional Python functions — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Other: espn_nba–make_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Other
+# NBA — additional Python functions — Other: espn_nba–make_prob
+
+### espn_nba_game_rosters {#espn_nba_game_rosters}
+
+`espn_nba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_nba_game_rosters() - Pull the game by id.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from espn_nba_schedule(). |
+| `raw` |  | `False` |  |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'logo_href', 'logo_dark_href', 'game_id'
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_game_rosters
+rosters = espn_nba_game_rosters(game_id=401585183)
+print(rosters.shape)
+
+# Pandas round-trip
+
+rosters_pd = espn_nba_game_rosters(game_id=401585183, return_as_pandas=True)
+rosters_pd.head()
+
+# Pipeline next step (filter to game starters)
+
+import polars as pl
+starters = espn_nba_game_rosters(game_id=401585183).filter(
+    pl.col("starter") == True
+)
+```
+
+### espn_nba_pbp {#espn_nba_pbp}
+
+`espn_nba_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+
+espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from nba_schedule(). |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets. |
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_pbp
+pbp = espn_nba_pbp(game_id=401585183)
+print(list(pbp.keys()))
+
+# Pull only the raw ESPN summary payload (skip cleaning)
+
+raw_pbp = espn_nba_pbp(game_id=401585183, raw=True)
+
+# Pipeline next step (load plays into a polars DataFrame)
+
+import polars as pl
+pbp = espn_nba_pbp(game_id=401585183)
+plays_df = pl.from_dicts(pbp["plays"])
+```
 
 ### load_darko_dpm {#load_darko_dpm}
 
@@ -1632,39 +1705,4 @@ aggregates `Σfgm/Σfga` across players within each bucket.
 from sportsdataverse.nba.nba_shot_value import make_prob_by_context
 tables = make_prob_by_context(ptshots)
 tables["defender"].sort("fg_pct")
-```
-
-### make_prob_joint {#make_prob_joint}
-
-`make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Independence-combined defender x shot-clock make probability.
-
-Combines the two marginal FG% tables under a conditional-independence
-assumption via odds multipliers: `odds(p) = p/(1-p)`;
-`odds_joint = odds_overall * (odds_def/odds_overall) *
-(odds_clock/odds_overall)`; `joint = odds_joint/(1+odds_joint)`. This
-assumes defender distance and shot-clock effects are independent given the
-league baseline — a simplification (a late clock correlates with tighter
-defense), documented here so callers weigh it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `defender` | `DataFrame` |  | The `"defender"` marginal table from `make_prob_by_context` (`bucket, fg_pct`). |
-| `shot_clock` | `DataFrame` |  | The `"shot_clock"` marginal table (`bucket, fg_pct`). |
-| `overall_fg_pct` | `float` |  | The league overall FG% baseline. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value import make_prob_by_context, make_prob_joint
-t = make_prob_by_context(ptshots)
-joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
 ```

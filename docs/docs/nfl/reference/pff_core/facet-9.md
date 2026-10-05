@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet (9)"
-sidebar_label: "Facet (9)"
+title: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet: receiving_coverage"
+sidebar_label: "Facet: receiving_coverage"
 sidebar_position: 9
-description: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet (9) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet: receiving_coverage — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet (9)
+# NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — Facet: receiving_coverage
 
 ## pff_facet_receiving_coverage
 

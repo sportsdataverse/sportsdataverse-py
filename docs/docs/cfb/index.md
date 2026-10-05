@@ -16,7 +16,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
 | [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
 | [Dataset loaders](reference/loaders) | 71 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 100 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 105 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -89,6 +89,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_team_record`](reference/site#espn_cfb_team_record) | [`espn_cfb_team_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_record.html) |
 | [`espn_cfb_team_roster`](reference/site#espn_cfb_team_roster) | [`espn_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_roster.html) |
 | [`espn_cfb_team_schedule`](reference/site#espn_cfb_team_schedule) | [`espn_cfb_team_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_schedule.html) |
+| [`espn_cfb_teams`](reference/additional/other#espn_cfb_teams) | [`espn_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_teams.html) |
 | [`espn_cfb_venue`](reference/core/other#espn_cfb_venue) | [`espn_cfb_venue`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venue.html) |
 | [`espn_cfb_venues`](reference/core/other#espn_cfb_venues) | [`espn_cfb_venues`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venues.html) |
 | [`espn_cfb_week_rankings`](reference/core/other#espn_cfb_week_rankings) | [`espn_cfb_week_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_week_rankings.html) |

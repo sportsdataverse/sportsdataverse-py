@@ -153,6 +153,8 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [espn_nba_game_rosters](additional/other.md#espn_nba_game_rosters) | espn_nba_game_rosters() - Pull the game by id. |
+| [espn_nba_pbp](additional/other.md#espn_nba_pbp) | espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary` |
 | [load_darko_dpm](additional/other.md#load_darko_dpm) | Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`). |
 | [load_dunks_threes_stats](additional/other.md#load_dunks_threes_stats) | Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`). |
 | [load_epm](additional/other.md#load_epm) | Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`). |
@@ -202,7 +204,7 @@ not covered by the generated API-endpoint reference above.
 | [lineup_play_context](additional/other.md#lineup_play_context) | Roll possessions up into a per-5-man-lineup Play-Context table. |
 | [luck_adjusted_response](additional/other.md#luck_adjusted_response) | Attach a per-possession `la_points` expected-points response. |
 | [make_prob_by_context](additional/other.md#make_prob_by_context) | Marginal FG% tables by defender distance and by shot clock. |
-| [make_prob_joint](additional/other.md#make_prob_joint) | Independence-combined defender x shot-clock make probability. |
+| [make_prob_joint](additional/other-2.md#make_prob_joint) | Independence-combined defender x shot-clock make probability. |
 | [nbadraft_mock_draft](additional/other-2.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
 | [normalize_player_name](additional/other-2.md#normalize_player_name) | Fold a player display name to a join-safe key. |
 | [predict_margin](additional/other-2.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |

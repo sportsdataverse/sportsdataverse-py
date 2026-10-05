@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 111 | `https://stats.wnba.com` |
 | [Dataset loaders](reference/loaders) | 34 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 82 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 84 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -45,6 +45,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wnba_game_predictor`](reference/core/game#espn_wnba_game_predictor) | [`espn_wnba_game_predictor`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_predictor.html) |
 | [`espn_wnba_game_probabilities`](reference/core/game#espn_wnba_game_probabilities) | [`espn_wnba_game_probabilities`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_probabilities.html) |
 | [`espn_wnba_game_propbets`](reference/core/game#espn_wnba_game_propbets) | [`espn_wnba_game_propbets`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_propbets.html) |
+| [`espn_wnba_game_rosters`](reference/additional/play-by-play-schedule-rosters#espn_wnba_game_rosters) | [`espn_wnba_game_rosters`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_rosters.html) |
 | [`espn_wnba_game_situation`](reference/core/game#espn_wnba_game_situation) | [`espn_wnba_game_situation`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_situation.html) |
 | [`espn_wnba_game_team_leaders`](reference/core/game#espn_wnba_game_team_leaders) | [`espn_wnba_game_team_leaders`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_team_leaders.html) |
 | [`espn_wnba_game_team_linescores`](reference/core/game#espn_wnba_game_team_linescores) | [`espn_wnba_game_team_linescores`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_team_linescores.html) |
@@ -53,6 +54,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wnba_injuries`](reference/site#espn_wnba_injuries) | [`espn_wnba_injuries`](https://wehoop.sportsdataverse.org/reference/espn_wnba_injuries.html) |
 | [`espn_wnba_leaders`](reference/web#espn_wnba_leaders) | [`espn_wnba_leaders`](https://wehoop.sportsdataverse.org/reference/espn_wnba_leaders.html) |
 | [`espn_wnba_news`](reference/site#espn_wnba_news) | [`espn_wnba_news`](https://wehoop.sportsdataverse.org/reference/espn_wnba_news.html) |
+| [`espn_wnba_pbp`](reference/additional/play-by-play-schedule-rosters#espn_wnba_pbp) | [`espn_wnba_pbp`](https://wehoop.sportsdataverse.org/reference/espn_wnba_pbp.html) |
 | [`espn_wnba_player_awards`](reference/core/player#espn_wnba_player_awards) | [`espn_wnba_player_awards`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_awards.html) |
 | [`espn_wnba_player_career_stats`](reference/core/player#espn_wnba_player_career_stats) | [`espn_wnba_player_career_stats`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_career_stats.html) |
 | [`espn_wnba_player_eventlog`](reference/core/player#espn_wnba_player_eventlog) | [`espn_wnba_player_eventlog`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_eventlog.html) |

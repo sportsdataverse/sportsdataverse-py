@@ -14,7 +14,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 41 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 178 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 180 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -57,6 +57,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_game_predictor`](reference/core/game#espn_nba_game_predictor) | [`espn_nba_game_predictor`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_predictor.html) |
 | [`espn_nba_game_probabilities`](reference/core/game#espn_nba_game_probabilities) | [`espn_nba_game_probabilities`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_probabilities.html) |
 | [`espn_nba_game_propbets`](reference/core/game#espn_nba_game_propbets) | [`espn_nba_game_propbets`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_propbets.html) |
+| [`espn_nba_game_rosters`](reference/additional/other#espn_nba_game_rosters) | [`espn_nba_game_rosters`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_rosters.html) |
 | [`espn_nba_game_situation`](reference/core/game#espn_nba_game_situation) | [`espn_nba_game_situation`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_situation.html) |
 | [`espn_nba_game_team_leaders`](reference/core/game#espn_nba_game_team_leaders) | [`espn_nba_game_team_leaders`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_leaders.html) |
 | [`espn_nba_game_team_linescores`](reference/core/game#espn_nba_game_team_linescores) | [`espn_nba_game_team_linescores`](https://hoopR.sportsdataverse.org/reference/espn_nba_game_team_linescores.html) |
@@ -65,6 +66,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_injuries`](reference/site#espn_nba_injuries) | [`espn_nba_injuries`](https://hoopR.sportsdataverse.org/reference/espn_nba_injuries.html) |
 | [`espn_nba_leaders`](reference/web#espn_nba_leaders) | [`espn_nba_leaders`](https://hoopR.sportsdataverse.org/reference/espn_nba_leaders.html) |
 | [`espn_nba_news`](reference/site#espn_nba_news) | [`espn_nba_news`](https://hoopR.sportsdataverse.org/reference/espn_nba_news.html) |
+| [`espn_nba_pbp`](reference/additional/other#espn_nba_pbp) | [`espn_nba_pbp`](https://hoopR.sportsdataverse.org/reference/espn_nba_pbp.html) |
 | [`espn_nba_player_awards`](reference/core/player#espn_nba_player_awards) | [`espn_nba_player_awards`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_awards.html) |
 | [`espn_nba_player_career_stats`](reference/core/player#espn_nba_player_career_stats) | [`espn_nba_player_career_stats`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_career_stats.html) |
 | [`espn_nba_player_contracts`](reference/core/player#espn_nba_player_contracts) | [`espn_nba_player_contracts`](https://hoopR.sportsdataverse.org/reference/espn_nba_player_contracts.html) |

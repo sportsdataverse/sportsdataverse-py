@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Facet (3)"
-sidebar_label: "Facet (3)"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: passing_detail"
+sidebar_label: "Facet: passing_detail"
 sidebar_position: 3
-description: "NFL — PFF Developer API (api.pff.com, API key) — Facet (3) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: passing_detail — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Facet (3)
+# NFL — PFF Developer API (api.pff.com, API key) — Facet: passing_detail
 
 ## pff_api_facet_passing_detail
 

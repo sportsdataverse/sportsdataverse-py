@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Play-by-play"
-sidebar_label: "Play-by-play"
+title: "CFB dataset loaders — Play-by-play: pbp"
+sidebar_label: "Play-by-play: pbp"
 sidebar_position: 5
-description: "CFB dataset loaders — Play-by-play — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Play-by-play: pbp — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Play-by-play
+# CFB dataset loaders — Play-by-play: pbp
 
 ## load_cfb_pbp
 

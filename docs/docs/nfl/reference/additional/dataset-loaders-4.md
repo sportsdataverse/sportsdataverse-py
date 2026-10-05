@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Dataset loaders (4)"
-sidebar_label: "Dataset loaders (4)"
+title: "NFL — additional Python functions — Dataset loaders: players–trades"
+sidebar_label: "Dataset loaders: players–trades"
 sidebar_position: 6
-description: "NFL — additional Python functions — Dataset loaders (4) — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Dataset loaders: players–trades — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Dataset loaders (4)
+# NFL — additional Python functions — Dataset loaders: players–trades
 
 ### load_players {#load_players}
 

@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Stats API — Other (2)"
-sidebar_label: "Other (2)"
+title: "MLB — MLB Stats API — Other: umpires–stats_metrics"
+sidebar_label: "Other: umpires–stats_metrics"
 sidebar_position: 9
-description: "MLB — MLB Stats API — Other (2) — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Stats API — Other: umpires–stats_metrics — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Stats API — Other (2)
+# MLB — MLB Stats API — Other: umpires–stats_metrics
 
 ## mlb_umpires
 

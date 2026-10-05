@@ -1,11 +1,11 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — Player dashboards"
-sidebar_label: "Player dashboards"
+title: "NBA — NBA Stats API (stats.nba.com) — Player dashboards: playerdashboardbyclutch–playerdashptreb"
+sidebar_label: "Player dashboards: playerdashboardbyclutch–playerdashptreb"
 sidebar_position: 10
-description: "NBA — NBA Stats API (stats.nba.com) — Player dashboards — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — NBA Stats API (stats.nba.com) — Player dashboards: playerdashboardbyclutch–playerdashptreb — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — Player dashboards
+# NBA — NBA Stats API (stats.nba.com) — Player dashboards: playerdashboardbyclutch–playerdashptreb
 
 ## nba_stats_playerdashboardbyclutch
 

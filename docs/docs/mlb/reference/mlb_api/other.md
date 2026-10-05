@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Stats API — Other"
-sidebar_label: "Other"
+title: "MLB — MLB Stats API — Other: pbp–award_recipients"
+sidebar_label: "Other: pbp–award_recipients"
 sidebar_position: 8
-description: "MLB — MLB Stats API — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Stats API — Other: pbp–award_recipients — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Stats API — Other
+# MLB — MLB Stats API — Other: pbp–award_recipients
 
 ## mlb_pbp
 

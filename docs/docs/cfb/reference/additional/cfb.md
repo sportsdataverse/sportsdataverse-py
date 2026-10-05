@@ -462,6 +462,55 @@ ratings = cfb_ratings(2023)
 preds = cfb_predict_games(schedule_2023, ratings)
 ```
 
+### cfb_ratings {#cfb_ratings}
+
+`cfb_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, fbs_only: 'bool' = True, drop_kneels: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
+
+Public orchestrator over `efficiency_ratings`,
+`special_teams_ratings`, and `fei_ratings`. Loads play-by-play
++ schedule via `sportsdataverse.cfb.cfb_loaders.load_cfb_pbp` /
+`sportsdataverse.cfb.cfb_loaders.load_cfb_schedule`, joins the
+schedule's per-game date onto the plays, optionally applies the
+as-of-date leakage boundary
+(`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`),
+then fits all three component ratings on the (optionally filtered) plays
+and reshapes them into one wide per-team table with dense ranks and a
+net-rating z-score.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons to pool into one combined fit. |
+| `as_of_date` | `date \| None` | `None` | When given, the leakage boundary -- only plays from games with `date < as_of_date` are used to fit the ratings (mirrors what was knowable heading into that date). `None` (default) uses the full season(s), unfiltered. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs forwarded to all three component functions. Defaults to `RatingsConfig` when omitted. |
+| `fbs_only` | `bool` | `True` | Keep only FBS-vs-FBS games (gameonpaper `cfb-team-summaries` parity) -- both of the schedule's `home_division` / `away_division` must be `"fbs"`. Default True. Skipped (all games kept) when the schedule lacks the division columns; pass False to rate FCS opponents as regular teams. |
+| `drop_kneels` | `bool` | `True` | Strip kneel-downs before fitting (gameonpaper parity). Default True. Uses a pipeline `kneel_down` flag when present, otherwise the play-text regex (`kneel` / `takes a knee`) plus the end-of-half anonymized-TEAM-run clock heuristic; skipped when neither a flag nor a play-text column exists. Pass False to let kneels with non-null EPA flow into the fit. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model uses), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`), `fei_off_rank` (Int64, dense rank on `fei_off` descending), `fei_def_rank` (Int64, dense rank on `fei_def` **ascending** -- fewer drive EPA allowed ranks better), `fei_net_rank` (Int64, dense rank on `fei_net` descending). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import cfb_ratings
+ratings = cfb_ratings(2023)
+ratings.sort("net_rank").head()
+
+# As-of-date leakage boundary
+
+import datetime as dt
+week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
+
+# Pandas round-trip
+
+ratings_pd = cfb_ratings(2023, return_as_pandas=True)
+```
+
 ### cfb_recruiting_projection {#cfb_recruiting_projection}
 
 `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -553,6 +602,48 @@ One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense ran
 from sportsdataverse.cfb.cfb_resume import cfb_resume
 resume = cfb_resume(2023)
 resume.sort("sos_rank").head()
+```
+
+### cfb_returning_production {#cfb_returning_production}
+
+`cfb_returning_production(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Returning production per team-season (offense / defense / overall).
+
+For each requested season S, computes the fraction of season S-1 unit
+production attributable to players on the season-S roster (Bill Connelly's
+returning-production concept; unit weights from `get_constants`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Target season or list of seasons (production is drawn from S-1). |
+| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors), `def_basis`, `overall_basis` (Utf8, below), `is_estimated` (Boolean). `team_id` is the ESPN team id as Utf8 -- BREAKING vs the previous release, which emitted a normalized team NAME under `team` and joined at 57.7%. Zero-row (typed) when the box data is unavailable. `is_estimated` is True for **2004 only**, where season-2003 production is parsed from CFBD play text because ESPN's player box starts in 2004. Back-tested on 2005, where both sources exist, that route tracks the box route at r=0.73 (MAE 0.11) but reads about 0.085 LOW. It ranks teams well; it is not on the same level as its neighbours, so filter on this flag before comparing 2004 against another season. 2004 also carries a null `def_returning` -- 2003 play text has no defensive ids. `def_basis` names the defensive measure: `"participants"` when the production season is 2014+ (tackles, assists, tackles for loss, shared sacks, passes defended -- 92-100% of teams), `"pbp_splash"` for 2004-2013 (sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), `"box"` when that source's release is missing, null with `def_returning`. `overall_basis` is `"offense+defense"`, or `"offense"` for a team with no defensive value, whose overall then equals `off_returning`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the returning fractions describe (production drawn from the prior season). |
+| `team_id` | character | ESPN team id as a string (integer-origin). |
+| `off_returning` | double | Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster. |
+| `def_returning` | double | Fraction of prior-season weighted defensive production returning on the current roster; the measure is named in def_basis. |
+| `overall_returning` | double | Unit fractions combined with the fitted returning_prod_weights (FBS offense 0.49 / defense 0.51, the 2018-2025 fit in fit_returning_weights.py). |
+| `n_returning` | integer | Count of prior-season contributors present on the current roster. |
+| `def_basis` | character | Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), box (the source release was missing), or null with def_returning. |
+| `overall_basis` | character | Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall then equals off_returning. |
+| `is_estimated` | logical | True for 2004 only, where season-2003 production is parsed from play text; it reads about 0.085 low against the box route. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_returning_production
+rp = cfb_returning_production(2023)
+rp.sort("overall_returning", descending=True).head(10)
 ```
 
 ### cfb_roster_talent {#cfb_roster_talent}

@@ -208,3 +208,30 @@ def test_overflow_pages_are_labelled_by_the_shared_name_token():
         "facet-3": "Facet: passing–rushing",
         "other": "Other",
     }
+
+
+def test_overflow_pages_with_the_same_token_are_labelled_by_name_tails():
+    sizes = {
+        "pff_api_facet_passing_concept_a": 30_000,
+        "pff_api_facet_passing_depth_b": 30_000,
+        "pff_api_facet_passing_pressure_c": 30_000,
+        "pff_api_facet_passing_summary_d": 30_000,
+        "pff_api_games_g": 30_000,
+    }
+    _, pages, _ = generate._family_pages("x/reference/pff_api.md", _endpoint_page(sizes), "x")
+    shown = {slug: re.search(r'sidebar_label: "(.+)"', text).group(1) for slug, text in pages.items()}
+    assert shown["facet"] == "Facet: passing"
+    assert shown["facet-2"] == "Facet: passing_pressure–passing_summary"
+    assert not [label for label in shown.values() if re.search(r"\(\d+\)", label)]
+
+
+@pytest.mark.xdist_group("codegen_render")
+def test_no_family_page_label_carries_a_page_number(first_render):
+    rendered = first_render(generate._render_docs_all)
+    numbered = [
+        (rel, m.group(0))
+        for rel, text in rendered.items()
+        if "/reference/" in rel and rel.endswith((".md", ".json"))
+        for m in re.finditer(r'(?m)^(?:sidebar_label|title): .*\(\d+\).*$|"label": ".*\(\d+\).*"', text)
+    ]
+    assert numbered == []
