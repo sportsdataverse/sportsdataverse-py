@@ -186,3 +186,24 @@ def test_mbb_bare_seconds_clock_parses() -> None:
     raw["plays"][-1]["clock"]["displayValue"] = "23.4"
     last = mbb_pbp.helper_mbb_pbp(401830342, raw)["plays"][-1]
     assert (last["clock.minutes"], last["clock.seconds"], last["start.period_seconds_remaining"]) == (0, 23, 23)
+
+
+def test_zero_spread_takes_that_rows_favorite_flag():
+    """A pick'em line (spread 0) has no sign: the same row's favorite flag decides (home if unset).
+
+    Real case: WNBA 401391858 (spread 0, home favorite False).
+    """
+    from sportsdataverse._espn_basketball_pbp import pickcenter_odds
+
+    row = {"provider": {"id": "1002"}, "spread": 0.0, "overUnder": 160.5, "homeTeamOdds": {"favorite": False}}
+    out = pickcenter_odds([row], 165.5)
+    assert (out["gameSpread"], out["overUnder"], out["homeFavorite"], out["gameSpreadAvailable"]) == (
+        0.0,
+        160.5,
+        False,
+        True,
+    )
+    row["homeTeamOdds"]["favorite"] = True
+    assert pickcenter_odds([row], 165.5)["homeFavorite"] is True
+    del row["homeTeamOdds"]
+    assert pickcenter_odds([row], 165.5)["homeFavorite"] is True

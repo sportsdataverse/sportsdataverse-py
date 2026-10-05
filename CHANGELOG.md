@@ -342,7 +342,9 @@ Four fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp`
   line). The provider order is now explicit and unchanged: `str(provider.id)`, so teamrankings
   ("1002") reads ahead of consensus ("1004") and Caesars ("45"). Where teamrankings and consensus
   disagree, teamrankings matches the winner more often, and an integer sort would move MBB
-  2021-22 to Caesars' line.
+  2021-22 to Caesars' line. A spread of exactly 0 takes that row's favorite flag (home if unset).
+  `helper_<lg>_pickcenter` now returns plain floats/bools for `gameSpread`, `overUnder` and
+  `homeFavorite`; a found line used to come back as a 1-element numpy array.
 - **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
   NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
   dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
@@ -365,8 +367,8 @@ spread columns (`game_spread`, `home_team_spread`, `game_spread_available`, `hom
 and the timeout flags. Published data changes only after a release reprocess, and its scope is
 the owner's call:
 
-- **One-provider games only.** About 9,500 games in the raw stores have a one-provider pickcenter
-  with a spread: MBB about 5,500 (4,766 of them in 2025-26), NBA 1,070 (2025-26), WBB about 2,000
+- **One-provider games only.** About 9,150 games in the raw stores have a one-provider pickcenter
+  with a spread: MBB about 5,300 (4,766 of them in 2025-26), NBA 1,078 (2025-26), WBB 1,855
   (mostly 2022-23 and 2025-26) and WNBA 911 (2020-22 and 2026). Add the 128 mixed-row sign
   games (127 MBB, 107 of them in 2012-13, and NBA 401430219).
 - **Full history.** Older MBB and NBA `final.json` files were built by the pickcenter helper as
