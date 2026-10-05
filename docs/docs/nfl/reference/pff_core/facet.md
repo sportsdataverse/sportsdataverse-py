@@ -689,10 +689,10 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pa_touchdowns` | numeric | Number of passing touchdowns thrown on play-action dropbacks. |
 | `npa_ypa` | numeric | Yards gained per pass attempt on non-play-action dropbacks. |
 | `draft_season` | numeric | NFL season (year) in which the player was drafted, per PFF player metadata. |
-| `screen_avg_time_to_throw` | numeric | Average time from snap to release in seconds on screen passes. |
+| `screen_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on screen passes. |
 | `screen_thrown_aways` | numeric | Number of intentional throwaways on screen passes. |
 | `npa_sacks` | numeric | Number of sacks taken on non-play-action dropbacks. |
-| `npa_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on non-play-action dropbacks, as charted by PFF. |
+| `npa_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on non-play-action dropbacks, as charted by PFF. |
 | `no_screen_completions` | numeric | Number of completed passes excluding screen passes. |
 | `no_screen_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added excluding screen passes. |
 | `screen_spikes` | numeric | Number of clock-stopping spikes on screen passes. |
@@ -703,7 +703,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pa_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on play-action dropbacks. |
 | `screen_dropbacks_percent` | numeric | Share of the player's total dropbacks that came on screen passes, expressed as a percentage. |
 | `no_screen_epa` | numeric | Total expected points added (EPA) on the player's dropbacks excluding screen passes. |
-| `npa_avg_time_to_throw` | numeric | Average time from snap to release in seconds on non-play-action dropbacks. |
+| `npa_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on non-play-action dropbacks. |
 | `screen_bats` | numeric | Number of pass attempts batted down at the line of scrimmage on screen passes. |
 | `screen_grades_run_block` | numeric | PFF run-blocking grade for the player (0-100) on screen passes. |
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
@@ -722,7 +722,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `screen_grades_pass` | numeric | PFF passing grade (0-100) on screen passes. |
 | `npa_qb_rating` | numeric | Traditional NFL passer rating on non-play-action dropbacks. |
 | `no_screen_grades_pass` | numeric | PFF passing grade (0-100) excluding screen passes. |
-| `pa_avg_time_to_throw` | numeric | Average time from snap to release in seconds on play-action dropbacks. |
+| `pa_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on play-action dropbacks. |
 | `screen_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on screen passes, per PFF charting. |
 | `player_game_count` | numeric | Number of games the player appeared in during the period covered. |
 | `npa_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on non-play-action dropbacks. |
@@ -738,7 +738,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `screen_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) on screen passes. |
 | `npa_spikes` | numeric | Number of clock-stopping spikes on non-play-action dropbacks. |
 | `screen_hit_as_threw` | numeric | Number of attempts on which the passer was hit as he threw on screen passes, as charted by PFF. |
-| `no_screen_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) excluding screen passes, as charted by PFF. |
+| `no_screen_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) excluding screen passes, as charted by PFF. |
 | `screen_drops` | numeric | Number of catchable passes dropped by receivers on screen passes. |
 | `screen_ypa` | numeric | Yards gained per pass attempt on screen passes. |
 | `npa_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on non-play-action dropbacks, per PFF charting. |
@@ -772,13 +772,13 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pa_bats` | numeric | Number of pass attempts batted down at the line of scrimmage on play-action dropbacks. |
 | `pa_attempts` | numeric | Number of pass attempts on play-action dropbacks. |
 | `npa_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on non-play-action dropbacks, as charted by PFF. |
-| `no_screen_avg_time_to_throw` | numeric | Average time from snap to release in seconds excluding screen passes. |
+| `no_screen_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, excluding screen passes. |
 | `pa_yards` | numeric | Passing yards gained on play-action dropbacks. |
 | `npa_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on non-play-action dropbacks. |
 | `team` | character | Team abbreviation the player is credited to for the range. |
 | `no_screen_scrambles` | numeric | Number of scrambles excluding screen passes. |
 | `pa_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on play-action dropbacks, plays PFF charts as deserving of a turnover. |
-| `pa_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on play-action dropbacks, as charted by PFF. |
+| `pa_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on play-action dropbacks, as charted by PFF. |
 | `declined_penalties` | numeric | Number of declined penalties committed by the player. |
 | `pa_grades_offense` | numeric | PFF overall offense grade for the player (0-100) on play-action dropbacks. |
 | `screen_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on screen passes. |
@@ -812,7 +812,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pa_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on play-action dropbacks, per PFF charting. |
 | `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `screen_big_time_throws` | numeric | Number of big-time throws on screen passes, per PFF's highest-value, highest-difficulty throw designation. |
-| `screen_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on screen passes, as charted by PFF. |
+| `screen_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on screen passes, as charted by PFF. |
 | `npa_touchdowns` | numeric | Number of passing touchdowns thrown on non-play-action dropbacks. |
 | `screen_attempts` | numeric | Number of pass attempts on screen passes. |
 | `screen_dropbacks` | numeric | Number of dropbacks on screen passes. |

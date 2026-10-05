@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
+  - [Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions](#fixed--pff-time-to-throw-aimed-passes-and-receiving-positive-epa-descriptions)
   - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
   - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
   - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
@@ -361,6 +362,26 @@ wrappers (`yahoo_*`, including the HTTP 400 `{"errors": [...]}` a bad persisted 
 Migration: code that relied on an empty frame to keep a loop going should catch the error,
 e.g. `except AssetFetchError: log_and_retry_later()`; `except NoDataError` keeps skipping
 genuinely absent resources. Catch `SportsDataverseError` for both.
+
+### Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions
+
+The return tables of the legacy `pff_*` passing and receiving reports, and the `pff_api` position
+and team reports, described three PFF stats wrongly. These are the same texts that #689 corrected
+for the `pff_api` player summaries. Each of the 210 descriptions was checked against real nfl and
+ncaa rows:
+
+- `avg_time_to_throw` and every `*_avg_time_to_throw` is per dropback (`ttt_total_time / dropbacks`
+  on all 74 rows that carry both, 41 of them with dropbacks different from attempts), not "on the
+  passer's attempts".
+- `aimed_passes` and every `*_aimed_passes` also excludes batted passes and throws made while hit:
+  `attempts − throwaways − spikes − bats − hit_as_threw` on 478 of 478 rows. The old formula
+  matched 331.
+- Receiving `positive_epa_percent` and its depth, concept and scheme splits are a share of the
+  receiver's plays with an EPA value, in practice their routes run, not of their targets. The
+  published percentage is a whole number of plays out of routes run on 83 of 85 rows, but out of
+  targets on only 21 of 76.
+
+Text only; no column or value changes.
 
 ### Security — a credential in a query string no longer reaches a log or an error message
 
