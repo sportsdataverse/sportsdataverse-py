@@ -156,7 +156,7 @@ def mlb_pbp(
     Args:
         game_pk: game_pk path parameter.
         language: language query parameter.
-        timecode: language query parameter.
+        timecode: timecode query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
         return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -173,7 +173,7 @@ def mlb_pbp(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "language": language,
-        "language": timecode,
+        "timecode": timecode,
         "hydrate": hydrate,
         "fields": fields,
         **{_k: _v for _k, _v in kwargs.items() if _v is not None},
