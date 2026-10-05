@@ -1800,6 +1800,7 @@ FLAT_APIS = [
     ("nwsl_api", "nwsl"),
     ("cbs_napi", "cbs"),
     ("yahoo_shangrila", "yahoo"),
+    ("fox_api", "fox"),
 ]
 
 
@@ -2399,6 +2400,7 @@ _FLAT_API_DOC = {
     "nwsl_api": "NWSL official web API (StatsPerform SDP)",
     "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
     "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
+    "fox_api": "Fox Sports API (api.foxsports.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3673,7 +3675,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4052,6 +4054,7 @@ _LEAGUE_LABELS = {
     "college_baseball": "College baseball",
     "college_softball": "College softball",
     "cricket": "Cricket",
+    "fox": "Fox Sports",
     "laliga": "LaLiga",
     "ligamx": "Liga MX",
     "ligue1": "Ligue 1",

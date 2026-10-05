@@ -27,6 +27,7 @@ def test_registry_sports_and_labels():
         "odds": "Betting odds",
         "cbs": "CBS Sports",
         "yahoo": "Yahoo Sports",
+        "fox": "Fox Sports",
     }
 
 

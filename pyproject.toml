@@ -405,6 +405,7 @@ files = [
     "sportsdataverse/nba/nba_salary_draft.py",
     "sportsdataverse/nba/realgm.py",
     "sportsdataverse/cbs/cbs_napi_parsers.py",
+    "sportsdataverse/fox/fox_api_parsers.py",
     "sportsdataverse/yahoo/yahoo_shangrila_parsers.py",
     "sportsdataverse/yahoo/yahoo_shangrila_runtime.py",
     "sportsdataverse/nfl/nfl_fox_ext.py",
