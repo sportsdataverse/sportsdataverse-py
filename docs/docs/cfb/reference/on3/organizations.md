@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Organizations"
 sidebar_label: "Organizations"
-sidebar_position: 2
+sidebar_position: 3
 description: "CFB — On3 Recruit Database (api.on3.com) — Organizations — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -23,11 +23,9 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 
 ### Returns {#on3_organizations_draft_class_by_state-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `state` | character | U.S. state the draft-class grouping covers. |
-| `count` | integer | Total number of players in the season index. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -55,11 +53,9 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
 
 ### Returns {#on3_organizations_draft_class_by_year-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `count` | integer | Total number of players in the season index. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -85,14 +81,9 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 
 ### Returns {#on3_organizations_draft_count_by_stars-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `five_stars` | integer | Number of the organization's drafted players who were five-star recruits. |
-| `four_stars` | integer | Number of the organization's drafted players who were four-star recruits. |
-| `three_stars` | integer | Number of the organization's drafted players who were three-star recruits. |
-| `zero_stars` | integer | Number of the organization's drafted players who were unrated (zero-star) recruits. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -120,17 +111,9 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 
 ### Returns {#on3_organizations_draft_count_by_year-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `blue_chip_percent` | numeric | Percent of the year's drafted players who were blue-chip (four- or five-star) recruits. |
-| `talent_ratio` | numeric | Ratio of the group's draft share to its recruit-population share for the year (On3's talent ratio). |
-| `five_stars` | integer | Number of the organization's players drafted that year who were five-star recruits. |
-| `four_stars` | integer | Number of the organization's players drafted that year who were four-star recruits. |
-| `three_stars` | integer | Number of the organization's players drafted that year who were three-star recruits. |
-| `zero_stars` | integer | Number of the organization's players drafted that year who were unrated (zero-star) recruits. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -157,12 +140,9 @@ GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
 
 ### Returns {#on3_organizations_draft_ranking_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `conference` | character | Conference of the team. |
-| `year_summary` | character | Nested summary of the organization's draft ranking for the single year (stringified). |
-| `span_summary` | character | Nested summary of the organization's draft ranking over the multi-year span (stringified). |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -190,32 +170,9 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 
 ### Returns {#on3_organizations_drafted_players-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `recruitment_key` | integer | On3 RDB recruitment key linking the draft pick back to the player's recruitment record. |
-| `organization` | character | Organization. |
-| `drafted_from_organization` | character | Nested On3 organization object for the school the player was drafted out of (stringified). |
-| `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
-| `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
-| `hometown` | character | Prospect hometown. |
-| `state` | character | Home state of the drafted player, per On3. |
-| `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
-| `compensatory` | logical | Whether the selection was a compensatory draft pick. |
-| `supplementary` | logical | Whether the selection came in a supplemental draft. |
-| `traded` | logical | Whether the pick was traded. |
-| `forfeited` | logical | Whether the pick was forfeited. |
-| `trading_organization` | character | Pro organization that traded the pick away, when it changed hands (On3 RDB). |
-| `through_organization_one` | character | First intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
-| `through_organization_two` | character | Second intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
-| `through_organization_three` | character | Third intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
-| `key` | integer | On3 RDB key for the draft-pick record. |
-| `round` | integer | Round of NFL draft the draftee was picked in. |
-| `overall_pick` | integer | Overall pick number in the draft. |
-| `person` | character | Nested On3 person object for the drafted player (stringified). |
-| `position` | character | Athlete position. |
-| `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -242,17 +199,9 @@ GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
 
 ### Returns {#on3_organizations_drafts_by_stars_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `nat_total_drafted` | integer | National total of drafted players in the comparison set. |
-| `total_drafted` | integer | Total number of the organization's players drafted. |
-| `draft_rank` | integer | Organization's national rank by draft production. |
-| `organization` | character | Organization. |
-| `overall_star_summary` | character | Nested draft summary across all star tiers (stringified). |
-| `five_star_summary` | character | Nested draft summary for the organization's five-star recruits (stringified). |
-| `four_star_summary` | character | Nested draft summary for the organization's four-star recruits (stringified). |
-| `three_star_summary` | character | Nested draft summary for the organization's three-star recruits (stringified). |
+**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -286,14 +235,182 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 | col_name | type | description |
 |---|---|---|
 | `pso_key` | integer | On3 player-sport-organization (PSO) key for the roster entry. |
-| `player` | character | Player name. |
-| `organization` | character | Organization. |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `roster_rating` | character | Nested On3 roster rating object for the player (stringified). |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
 | `nil_value` | character | Player's On3 NIL valuation in dollars. |
 | `rpm` | character | Nested On3 Recruiting Prediction Machine (RPM) data for the player (stringified). |
 | `industry_comparison` | character | Nested comparison of the player's On3 rating against the industry-consensus rating (stringified). |
+| `player_key` | integer |  |
+| `player_recruitment_key` | numeric |  |
+| `player_first_name` | character | Player's first name |
+| `player_last_name` | character | Player's last name |
+| `player_full_name` | character | Player full name. |
+| `player_slug` | character | URL-safe player identifier. |
+| `player_date_of_birth` | character |  |
+| `player_age` | integer |  |
+| `player_high_school_name` | character |  |
+| `player_high_school_key` | integer |  |
+| `player_high_school_full_name` | character |  |
+| `player_high_school_name_2` | character |  |
+| `player_high_school_known_as` | character |  |
+| `player_high_school_mascot` | character |  |
+| `player_high_school_abbreviation` | character |  |
+| `player_high_school_asset_url` | character |  |
+| `player_high_school_default_asset_key` | integer |  |
+| `player_high_school_default_asset_domain_override` | character |  |
+| `player_high_school_default_asset_domain` | character |  |
+| `player_high_school_default_asset_source_override` | character |  |
+| `player_high_school_default_asset_source` | character |  |
+| `player_high_school_default_asset_title` | character |  |
+| `player_high_school_default_asset_description` | character |  |
+| `player_high_school_default_asset_caption` | character |  |
+| `player_high_school_default_asset_category` | character |  |
+| `player_high_school_default_asset_alt_text` | character |  |
+| `player_high_school_default_asset_height` | integer |  |
+| `player_high_school_default_asset_width` | integer |  |
+| `player_high_school_default_asset_asset_type` | character |  |
+| `player_high_school_default_asset_file_system` | character |  |
+| `player_high_school_default_asset_path` | character |  |
+| `player_high_school_default_asset_type` | character |  |
+| `player_high_school_default_asset_thumbnail` | character |  |
+| `player_high_school_default_asset_duration` | integer |  |
+| `player_high_school_default_asset_mime_type` | character |  |
+| `player_high_school_slug` | character |  |
+| `player_high_school_primary_color` | character |  |
+| `player_high_school_org_type` | character |  |
+| `player_high_school_org_type_enum` | character |  |
+| `player_high_school_division` | character |  |
+| `player_high_school_site_keys` | character |  |
+| `player_high_school_url_slug` | character |  |
+| `player_hometown_key` | integer |  |
+| `player_hometown_name` | character |  |
+| `player_hometown_abbr` | character |  |
+| `player_state_key` | integer |  |
+| `player_state_name` | character |  |
+| `player_state_abbr` | character |  |
+| `player_early_enrollee` | logical |  |
+| `player_early_signee` | logical |  |
+| `player_default_asset_key` | integer |  |
+| `player_default_asset_domain_override` | character |  |
+| `player_default_asset_domain` | character |  |
+| `player_default_asset_source_override` | character |  |
+| `player_default_asset_source` | character |  |
+| `player_default_asset_title` | character |  |
+| `player_default_asset_description` | character |  |
+| `player_default_asset_caption` | character |  |
+| `player_default_asset_category` | character |  |
+| `player_default_asset_alt_text` | character |  |
+| `player_default_asset_height` | integer |  |
+| `player_default_asset_width` | integer |  |
+| `player_default_asset_asset_type` | character |  |
+| `player_default_asset_file_system` | character |  |
+| `player_default_asset_path` | character |  |
+| `player_default_asset_type` | character |  |
+| `player_default_asset_thumbnail` | character |  |
+| `player_default_asset_duration` | integer |  |
+| `player_default_asset_mime_type` | character |  |
+| `player_class_year` | integer |  |
+| `player_class_rank` | character |  |
+| `player_position_key` | integer |  |
+| `player_position_name` | character |  |
+| `player_position_abbr` | character |  |
+| `player_default_sport` | character |  |
+| `player_jersey_number` | integer | Player's jersey number |
+| `player_height` | character | Participant height (e.g. "6' 5\""). |
+| `player_weight` | integer | Participant weight in pounds. |
+| `player_division` | character |  |
+| `player_athlete_verified` | logical |  |
+| `player_prospect_verified` | logical |  |
+| `player_tier` | character |  |
+| `organization_key` | integer |  |
+| `organization_full_name` | character |  |
+| `organization_name` | character |  |
+| `organization_known_as` | character |  |
+| `organization_mascot` | character |  |
+| `organization_abbreviation` | character |  |
+| `organization_asset_url` | character |  |
+| `organization_default_asset_key` | integer |  |
+| `organization_default_asset_domain_override` | character |  |
+| `organization_default_asset_domain` | character |  |
+| `organization_default_asset_source_override` | character |  |
+| `organization_default_asset_source` | character |  |
+| `organization_default_asset_title` | character |  |
+| `organization_default_asset_description` | character |  |
+| `organization_default_asset_caption` | character |  |
+| `organization_default_asset_category` | character |  |
+| `organization_default_asset_alt_text` | character |  |
+| `organization_default_asset_height` | integer |  |
+| `organization_default_asset_width` | integer |  |
+| `organization_default_asset_asset_type` | character |  |
+| `organization_default_asset_file_system` | character |  |
+| `organization_default_asset_path` | character |  |
+| `organization_default_asset_type` | character |  |
+| `organization_default_asset_thumbnail` | character |  |
+| `organization_default_asset_duration` | integer |  |
+| `organization_default_asset_mime_type` | character |  |
+| `organization_slug` | character |  |
+| `organization_primary_color` | character |  |
+| `organization_org_type` | character |  |
+| `organization_org_type_enum` | character |  |
+| `organization_division` | character |  |
+| `organization_site_keys` | character |  |
+| `organization_url_slug` | character |  |
+| `rating_key` | integer |  |
+| `rating_rating` | integer |  |
+| `rating_stars` | integer |  |
+| `rating_national_rank` | integer |  |
+| `rating_position_rank` | integer |  |
+| `rating_state_rank` | integer |  |
+| `rating_position_abbr` | character |  |
+| `rating_state_abbr` | character |  |
+| `rating_five_star_plus` | logical |  |
+| `rating_nearly_five_star_plus` | logical |  |
+| `rating_consensus_rating` | numeric |  |
+| `rating_consensus_stars` | integer |  |
+| `rating_consensus_national_rank` | integer |  |
+| `rating_consensus_position_rank` | integer |  |
+| `rating_consensus_state_rank` | integer |  |
+| `rating_year` | integer |  |
+| `rating_sport_key` | integer |  |
+| `rating_sport_name` | character |  |
+| `rating_sport_abbr` | character |  |
+| `roster_rating_key` | numeric |  |
+| `roster_rating_rating` | numeric |  |
+| `roster_rating_stars` | numeric |  |
+| `roster_rating_national_rank` | character |  |
+| `roster_rating_position_rank` | numeric |  |
+| `roster_rating_state_rank` | character |  |
+| `roster_rating_position_abbr` | character |  |
+| `roster_rating_state_abbr` | character |  |
+| `roster_rating_five_star_plus` | character |  |
+| `roster_rating_nearly_five_star_plus` | character |  |
+| `roster_rating_consensus_rating` | character |  |
+| `roster_rating_consensus_stars` | numeric |  |
+| `roster_rating_consensus_national_rank` | character |  |
+| `roster_rating_consensus_position_rank` | character |  |
+| `roster_rating_consensus_state_rank` | character |  |
+| `roster_rating_year` | numeric |  |
+| `roster_rating_sport_key` | numeric |  |
+| `roster_rating_sport_name` | character |  |
+| `roster_rating_sport_abbr` | character |  |
+| `roster_rating` | character | Nested On3 roster rating object for the player (stringified). |
+| `nil_value_key` | numeric |  |
+| `nil_value_nil_status` | character |  |
+| `nil_value_total_value` | numeric |  |
+| `nil_value_rank` | numeric |  |
+| `nil_value_group_rank` | numeric |  |
+| `nil_value_whisper` | character |  |
+| `status_type` | character | Status type. |
+| `status_date` | character |  |
+| `status_committed_asset` | character |  |
+| `status_transferred_asset` | character |  |
+| `status_decommitted_asset` | character |  |
+| `status_transfer_entered` | character |  |
+| `status_transfer_withdrawn` | character |  |
+| `status_recruitment_year` | numeric |  |
+| `status_short_term_signee` | character |  |
+| `status_transfer` | character |  |
+| `status_draft` | character |  |
+| `status_expected_to_transfer` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -324,7 +441,6 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `head_coach` | character | Nested On3 person object for the program's head coach (stringified). |
 | `talent_rank` | character | Program's current national roster-talent rank per On3. |
 | `prev_talent_rank` | character | Program's roster-talent rank in the previous cycle. |
 | `conference_rank` | character | Program's roster-talent rank within its conference. |
@@ -333,6 +449,70 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 | `prev_average_rating` | character | Average On3 roster rating in the previous cycle. |
 | `average_nil_value` | numeric | Average On3 NIL valuation across the roster, in dollars. |
 | `total_nil_value` | integer | Total On3 NIL valuation across the roster, in dollars. |
+| `head_coach_key` | integer |  |
+| `head_coach_first_name` | character |  |
+| `head_coach_last_name` | character |  |
+| `head_coach_known_as_name` | character |  |
+| `head_coach_full_name` | character |  |
+| `head_coach_slug` | character |  |
+| `head_coach_default_asset_key` | integer |  |
+| `head_coach_default_asset_domain_override` | character |  |
+| `head_coach_default_asset_domain` | character |  |
+| `head_coach_default_asset_source_override` | character |  |
+| `head_coach_default_asset_source` | character |  |
+| `head_coach_default_asset_title` | character |  |
+| `head_coach_default_asset_description` | character |  |
+| `head_coach_default_asset_caption` | character |  |
+| `head_coach_default_asset_category` | character |  |
+| `head_coach_default_asset_alt_text` | character |  |
+| `head_coach_default_asset_height` | integer |  |
+| `head_coach_default_asset_width` | integer |  |
+| `head_coach_default_asset_asset_type` | character |  |
+| `head_coach_default_asset_file_system` | character |  |
+| `head_coach_default_asset_path` | character |  |
+| `head_coach_default_asset_type` | character |  |
+| `head_coach_default_asset_thumbnail` | character |  |
+| `head_coach_default_asset_duration` | integer |  |
+| `head_coach_default_asset_mime_type` | character |  |
+| `head_coach_organization_key` | integer |  |
+| `head_coach_organization_full_name` | character |  |
+| `head_coach_organization_name` | character |  |
+| `head_coach_organization_known_as` | character |  |
+| `head_coach_organization_mascot` | character |  |
+| `head_coach_organization_abbreviation` | character |  |
+| `head_coach_organization_asset_url` | character |  |
+| `head_coach_organization_default_asset_key` | integer |  |
+| `head_coach_organization_default_asset_domain_override` | character |  |
+| `head_coach_organization_default_asset_domain` | character |  |
+| `head_coach_organization_default_asset_source_override` | character |  |
+| `head_coach_organization_default_asset_source` | character |  |
+| `head_coach_organization_default_asset_title` | character |  |
+| `head_coach_organization_default_asset_description` | character |  |
+| `head_coach_organization_default_asset_caption` | character |  |
+| `head_coach_organization_default_asset_category` | character |  |
+| `head_coach_organization_default_asset_alt_text` | character |  |
+| `head_coach_organization_default_asset_height` | integer |  |
+| `head_coach_organization_default_asset_width` | integer |  |
+| `head_coach_organization_default_asset_asset_type` | character |  |
+| `head_coach_organization_default_asset_file_system` | character |  |
+| `head_coach_organization_default_asset_path` | character |  |
+| `head_coach_organization_default_asset_type` | character |  |
+| `head_coach_organization_default_asset_thumbnail` | character |  |
+| `head_coach_organization_default_asset_duration` | integer |  |
+| `head_coach_organization_default_asset_mime_type` | character |  |
+| `head_coach_organization_slug` | character |  |
+| `head_coach_organization_primary_color` | character |  |
+| `head_coach_organization_org_type` | character |  |
+| `head_coach_organization_org_type_enum` | character |  |
+| `head_coach_organization_division` | character |  |
+| `head_coach_organization_site_keys` | character |  |
+| `head_coach_organization_url_slug` | character |  |
+| `head_coach_primary_position_key` | integer |  |
+| `head_coach_primary_position_name` | character |  |
+| `head_coach_primary_position_abbr` | character |  |
+| `head_coach_secondary_position` | character |  |
+| `head_coach_org_season_count` | integer |  |
+| `head_coach_years_active` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

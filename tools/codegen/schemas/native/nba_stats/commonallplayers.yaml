@@ -47,11 +47,5 @@ columns:
 - description: ''
   name: otherleague_experience_ch
   type: character
-- description: ''
-  name: is_nba_assigned
-  type: integer
-- description: ''
-  name: nba_assigned_team_id
-  type: integer
 kind: dataframe
 schema: commonallplayers

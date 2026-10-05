@@ -7,7 +7,7 @@ columns:
   type: integer
 - description: ''
   name: valuation_change
-  type: integer
+  type: numeric
 - description: ''
   name: date
   type: character

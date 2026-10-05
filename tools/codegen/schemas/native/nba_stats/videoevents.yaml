@@ -1,45 +1,94 @@
-columns:
-- description: ''
-  name: uuid
-  type: character
-- description: ''
-  name: dur
-  type: character
-- description: ''
-  name: stt
-  type: character
-- description: ''
-  name: stp
-  type: character
-- description: ''
-  name: sth
-  type: character
-- description: ''
-  name: stw
-  type: character
-- description: ''
-  name: mtt
-  type: character
-- description: ''
-  name: mtp
-  type: character
-- description: ''
-  name: mth
-  type: character
-- description: ''
-  name: mtw
-  type: character
-- description: ''
-  name: ltt
-  type: character
-- description: ''
-  name: ltp
-  type: character
-- description: ''
-  name: lth
-  type: character
-- description: ''
-  name: ltw
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: uuid
+    type: character
+  - description: ''
+    name: dur
+    type: character
+  - description: ''
+    name: stt
+    type: character
+  - description: ''
+    name: stp
+    type: character
+  - description: ''
+    name: sth
+    type: character
+  - description: ''
+    name: stw
+    type: character
+  - description: ''
+    name: mtt
+    type: character
+  - description: ''
+    name: mtp
+    type: character
+  - description: ''
+    name: mth
+    type: character
+  - description: ''
+    name: mtw
+    type: character
+  - description: ''
+    name: ltt
+    type: character
+  - description: ''
+    name: ltp
+    type: character
+  - description: ''
+    name: lth
+    type: character
+  - description: ''
+    name: ltw
+    type: character
+  section: videoUrls
+- columns:
+  - description: ''
+    name: gi
+    type: character
+  - description: ''
+    name: ei
+    type: integer
+  - description: ''
+    name: y
+    type: integer
+  - description: ''
+    name: m
+    type: character
+  - description: ''
+    name: d
+    type: character
+  - description: ''
+    name: gc
+    type: character
+  - description: ''
+    name: p
+    type: integer
+  - description: ''
+    name: dsc
+    type: character
+  - description: ''
+    name: ha
+    type: character
+  - description: ''
+    name: va
+    type: character
+  - description: ''
+    name: hpb
+    type: integer
+  - description: ''
+    name: hpa
+    type: integer
+  - description: ''
+    name: vpb
+    type: integer
+  - description: ''
+    name: vpa
+    type: integer
+  - description: ''
+    name: pta
+    type: integer
+  section: playlist
+kind: frames
 schema: videoevents

@@ -1,0 +1,100 @@
+{
+ "resource": "shotchartdetail",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "TeamID": 0,
+  "PlayerID": 2544,
+  "GameID": "0022300061",
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "Position": null,
+  "RookieYear": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "ISTRound": null,
+  "ClutchTime": "Last 5 Minutes",
+  "AheadBehind": "Ahead or Behind",
+  "PointDiff": "5",
+  "RangeType": 0,
+  "StartPeriod": 0,
+  "EndPeriod": 0,
+  "StartRange": 0,
+  "EndRange": 28800,
+  "ContextFilter": null,
+  "ContextMeasure": "FGM"
+ },
+ "resultSets": [
+  {
+   "name": "Shot_Chart_Detail",
+   "headers": [
+    "GRID_TYPE",
+    "GAME_ID",
+    "GAME_EVENT_ID",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "PERIOD",
+    "MINUTES_REMAINING",
+    "SECONDS_REMAINING",
+    "EVENT_TYPE",
+    "ACTION_TYPE",
+    "SHOT_TYPE",
+    "SHOT_ZONE_BASIC",
+    "SHOT_ZONE_AREA",
+    "SHOT_ZONE_RANGE",
+    "SHOT_DISTANCE",
+    "LOC_X",
+    "LOC_Y",
+    "SHOT_ATTEMPTED_FLAG",
+    "SHOT_MADE_FLAG",
+    "GAME_DATE",
+    "HTM",
+    "VTM"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "LeagueAverages",
+   "headers": [
+    "GRID_TYPE",
+    "SHOT_ZONE_BASIC",
+    "SHOT_ZONE_AREA",
+    "SHOT_ZONE_RANGE",
+    "FGA",
+    "FGM",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     "League Averages",
+     "Above the Break 3",
+     "Back Court(BC)",
+     "Back Court Shot",
+     32,
+     3,
+     0.094
+    ],
+    [
+     "League Averages",
+     "Above the Break 3",
+     "Center(C)",
+     "24+ ft.",
+     15734,
+     5617,
+     0.357
+    ]
+   ]
+  }
+ ]
+}

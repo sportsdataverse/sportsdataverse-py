@@ -1,0 +1,151 @@
+{
+ "resource": "boxscore",
+ "parameters": {
+  "GameID": "1022600128",
+  "RangeType": 0,
+  "StartPeriod": 0,
+  "EndPeriod": 0,
+  "StartRange": 0,
+  "EndRange": 28800
+ },
+ "resultSets": [
+  {
+   "name": "sqlPlayersFourFactors",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "NICKNAME",
+    "START_POSITION",
+    "COMMENT",
+    "MIN",
+    "EFG_PCT",
+    "FTA_RATE",
+    "TM_TOV_PCT",
+    "OREB_PCT",
+    "OPP_EFG_PCT",
+    "OPP_FTA_RATE",
+    "OPP_TOV_PCT",
+    "OPP_OREB_PCT"
+   ],
+   "rowSet": [
+    [
+     "1022600128",
+     1611661317,
+     "PHX",
+     "Phoenix",
+     1643493,
+     "Noemie Brochant",
+     "Noemie",
+     "F",
+     "",
+     "33:06",
+     0.634,
+     0.464,
+     0.152,
+     0.261,
+     0.736,
+     0.226,
+     0.202,
+     0.158
+    ],
+    [
+     "1022600128",
+     1611661317,
+     "PHX",
+     "Phoenix",
+     201886,
+     "DeWanna Bonner",
+     "DeWanna",
+     "F",
+     "",
+     "32:43",
+     0.679,
+     0.453,
+     0.144,
+     0.2,
+     0.651,
+     0.226,
+     0.205,
+     0.182
+    ],
+    [
+     "1022600128",
+     1611661317,
+     "PHX",
+     "Phoenix",
+     1642777,
+     "Monique Akoa Makani",
+     "Monique",
+     "",
+     "DND - Injury/Illness",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "sqlTeamsFourFactors",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY",
+    "MIN",
+    "EFG_PCT",
+    "FTA_RATE",
+    "TM_TOV_PCT",
+    "OREB_PCT",
+    "OPP_EFG_PCT",
+    "OPP_FTA_RATE",
+    "OPP_TOV_PCT",
+    "OPP_OREB_PCT"
+   ],
+   "rowSet": [
+    [
+     "1022600128",
+     1611661317,
+     "Mercury",
+     "PHX",
+     "Phoenix",
+     "200:00",
+     0.644,
+     0.5,
+     0.153,
+     0.29,
+     0.689,
+     0.288,
+     0.193,
+     0.222
+    ],
+    [
+     "1022600128",
+     1611661325,
+     "Fever",
+     "IND",
+     "Indiana",
+     "200:00",
+     0.689,
+     0.288,
+     0.193,
+     0.222,
+     0.644,
+     0.5,
+     0.153,
+     0.29
+    ]
+   ]
+  }
+ ]
+}

@@ -1,42 +1,273 @@
-columns:
-- description: ''
-  name: dummykey
-  type: character
-- description: ''
-  name: gameid
-  type: character
-- description: ''
-  name: inbonus
-  type: character
-- description: ''
-  name: score
-  type: integer
-- description: ''
-  name: seed
-  type: integer
-- description: ''
-  name: teamcity
-  type: character
-- description: ''
-  name: teamid
-  type: integer
-- description: ''
-  name: teamlosses
-  type: integer
-- description: ''
-  name: teamname
-  type: character
-- description: ''
-  name: teamslug
-  type: character
-- description: ''
-  name: teamtricode
-  type: character
-- description: ''
-  name: teamwins
-  type: integer
-- description: ''
-  name: timeoutsremaining
-  type: integer
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_code
+    type: character
+  - description: ''
+    name: game_status
+    type: integer
+  - description: ''
+    name: game_status_text
+    type: character
+  - description: ''
+    name: period
+    type: integer
+  - description: ''
+    name: game_clock
+    type: character
+  - description: ''
+    name: game_time_utc
+    type: character
+  - description: ''
+    name: game_et
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: duration
+    type: character
+  - description: ''
+    name: attendance
+    type: integer
+  - description: ''
+    name: sellout
+    type: integer
+  - description: ''
+    name: series_game_number
+    type: character
+  - description: ''
+    name: game_label
+    type: character
+  - description: ''
+    name: game_sub_label
+    type: character
+  - description: ''
+    name: series_text
+    type: character
+  - description: ''
+    name: if_necessary
+    type: logical
+  - description: ''
+    name: is_neutral
+    type: logical
+  - description: ''
+    name: video_available_flag
+    type: integer
+  - description: ''
+    name: pt_available
+    type: integer
+  - description: ''
+    name: pt_xyz_available
+    type: integer
+  - description: ''
+    name: wh_status
+    type: integer
+  - description: ''
+    name: hustle_status
+    type: integer
+  - description: ''
+    name: historical_status
+    type: integer
+  - description: ''
+    name: game_subtype
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: team_wins
+    type: integer
+  - description: ''
+    name: team_losses
+    type: integer
+  - description: ''
+    name: score
+    type: integer
+  - description: ''
+    name: in_bonus
+    type: character
+  - description: ''
+    name: timeouts_remaining
+    type: integer
+  - description: ''
+    name: seed
+    type: integer
+  - description: ''
+    name: person_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: name_i
+    type: character
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: family_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  section: PlayerStats
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_code
+    type: character
+  - description: ''
+    name: game_status
+    type: integer
+  - description: ''
+    name: game_status_text
+    type: character
+  - description: ''
+    name: period
+    type: integer
+  - description: ''
+    name: game_clock
+    type: character
+  - description: ''
+    name: game_time_utc
+    type: character
+  - description: ''
+    name: game_et
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: duration
+    type: character
+  - description: ''
+    name: attendance
+    type: integer
+  - description: ''
+    name: sellout
+    type: integer
+  - description: ''
+    name: series_game_number
+    type: character
+  - description: ''
+    name: game_label
+    type: character
+  - description: ''
+    name: game_sub_label
+    type: character
+  - description: ''
+    name: series_text
+    type: character
+  - description: ''
+    name: if_necessary
+    type: logical
+  - description: ''
+    name: is_neutral
+    type: logical
+  - description: ''
+    name: video_available_flag
+    type: integer
+  - description: ''
+    name: pt_available
+    type: integer
+  - description: ''
+    name: pt_xyz_available
+    type: integer
+  - description: ''
+    name: wh_status
+    type: integer
+  - description: ''
+    name: hustle_status
+    type: integer
+  - description: ''
+    name: historical_status
+    type: integer
+  - description: ''
+    name: game_subtype
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: team_wins
+    type: integer
+  - description: ''
+    name: team_losses
+    type: integer
+  - description: ''
+    name: score
+    type: integer
+  - description: ''
+    name: in_bonus
+    type: character
+  - description: ''
+    name: timeouts_remaining
+    type: integer
+  - description: ''
+    name: seed
+    type: integer
+  - description: ''
+    name: dummy_key
+    type: character
+  section: TeamStats
+- columns:
+  - description: ''
+    name: person_id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: name_i
+    type: character
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: family_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: assignment
+    type: character
+  section: Officials
+kind: frames
 schema: boxscoresummaryv3

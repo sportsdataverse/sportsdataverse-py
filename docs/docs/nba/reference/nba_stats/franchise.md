@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Franchise"
 sidebar_label: "Franchise"
-sidebar_position: 5
+sidebar_position: 6
 description: "NBA — NBA Stats API (stats.nba.com) — Franchise — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -21,7 +21,29 @@ GET /stats/franchisehistory
 
 ### Returns {#nba_stats_franchisehistory-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`FranchiseHistory`, `DefunctTeams`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**FranchiseHistory**
+
+| col_name | type | description |
+|---|---|---|
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `start_year` | character | Span starting year. |
+| `end_year` | character | Span ending year. |
+| `years` | integer | Years. |
+| `games` | integer | Games played. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `win_pct` | numeric | Win percentage (0-1 decimal). |
+| `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
+| `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
+| `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
+| `league_titles` | integer | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
+
+**DefunctTeams**
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |
@@ -127,8 +149,8 @@ GET /stats/franchiseleaderswrank
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -147,8 +169,8 @@ GET /stats/franchiseleaderswrank
 | `f_rank_fgm` | integer | Franchise all-time rank of the player's career field goals made. |
 | `f_rank_fga` | integer | Franchise all-time rank of the player's career field goals attempted. |
 | `f_rank_fg_pct` | integer | Franchise all-time rank of the player's career field goal percentage. |
-| `f_rank_fg3m` | integer | Franchise all-time rank of the player's career three-point field goals made. |
-| `f_rank_fg3a` | integer | Franchise all-time rank of the player's career three-point field goals attempted. |
+| `f_rank_fg3_m` | integer | Franchise all-time rank of the player's career three-point field goals made. |
+| `f_rank_fg3_a` | integer | Franchise all-time rank of the player's career three-point field goals attempted. |
 | `f_rank_fg3_pct` | integer | Franchise all-time rank of the player's career three-point field goal percentage. |
 | `f_rank_ftm` | integer | Franchise all-time rank of the player's career free throws made. |
 | `f_rank_fta` | integer | Franchise all-time rank of the player's career free throws attempted. |
@@ -204,8 +226,8 @@ GET /stats/franchiseplayers
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |

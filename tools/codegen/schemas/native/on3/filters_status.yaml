@@ -1,3 +1,6 @@
-columns: []
+columns:
+- description: ''
+  name: value
+  type: character
 kind: dataframe
 schema: filters_status

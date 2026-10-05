@@ -1,0 +1,316 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/league/10/2025/07/15/scoreboard?Format=json",
+  "time": "2025-07-17T11:10:50.105Z"
+ },
+ "scoreboard": {
+  "gameDate": "2025-07-15",
+  "leagueId": "10",
+  "leagueName": "Women's National Basketball Association",
+  "games": [
+   {
+    "gameId": "1022500139",
+    "gameCode": "20250715/INDCON",
+    "gameStatus": 3,
+    "gameStatusText": "Final",
+    "period": 4,
+    "gameClock": "",
+    "gameTimeUTC": "2025-07-16T00:00:00Z",
+    "gameEt": "2025-07-15T20:00:00Z",
+    "regulationPeriods": 4,
+    "seriesGameNumber": "",
+    "gameLabel": "",
+    "gameSubLabel": "",
+    "seriesText": "",
+    "ifNecessary": false,
+    "seriesConference": "",
+    "poRoundDesc": "",
+    "gameSubtype": "",
+    "isNeutral": false,
+    "gameLeaders": {
+     "homeLeaders": {
+      "personId": 202250,
+      "name": "Tina Charles",
+      "playerSlug": "tina-charles",
+      "jerseyNum": "31",
+      "position": "C",
+      "teamTricode": "CON",
+      "points": 21,
+      "rebounds": 11,
+      "assists": 3
+     },
+     "awayLeaders": {
+      "personId": 203827,
+      "name": "Natasha Howard",
+      "playerSlug": "natasha-howard",
+      "jerseyNum": "6",
+      "position": "F",
+      "teamTricode": "IND",
+      "points": 18,
+      "rebounds": 13,
+      "assists": 0
+     }
+    },
+    "teamLeaders": {
+     "homeLeaders": {
+      "personId": 202250,
+      "name": "Tina Charles",
+      "playerSlug": "tina-charles",
+      "jerseyNum": "31",
+      "position": "C",
+      "teamTricode": "CON",
+      "points": 15.6,
+      "rebounds": 5.6,
+      "assists": 1.6
+     },
+     "awayLeaders": {
+      "personId": 1641648,
+      "name": "Aliyah Boston",
+      "playerSlug": "aliyah-boston",
+      "jerseyNum": "7",
+      "position": "C-F",
+      "teamTricode": "IND",
+      "points": 15.6,
+      "rebounds": 7.6,
+      "assists": 3.7
+     },
+     "seasonLeadersFlag": 0
+    },
+    "broadcasters": {
+     "nationalBroadcasters": [
+      {
+       "broadcasterId": 2,
+       "broadcastDisplay": "ESPN",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "nationalRadioBroadcasters": [],
+     "nationalOttBroadcasters": [
+      {
+       "broadcasterId": 1001141,
+       "broadcastDisplay": "WNBA League Pass",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "homeTvBroadcasters": [],
+     "homeRadioBroadcasters": [],
+     "homeOttBroadcasters": [],
+     "awayTvBroadcasters": [],
+     "awayRadioBroadcasters": [
+      {
+       "broadcasterId": 1641,
+       "broadcastDisplay": "WFNI-FM/AM",
+       "broadcasterTeamId": 1610612754,
+       "broadcasterDescription": ""
+      }
+     ],
+     "awayOttBroadcasters": []
+    },
+    "homeTeam": {
+     "teamId": 1611661323,
+     "teamName": "Sun",
+     "teamCity": "Connecticut",
+     "teamTricode": "CON",
+     "teamSlug": "sun",
+     "wins": 3,
+     "losses": 19,
+     "score": 77,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 0,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 28
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 14
+      }
+     ]
+    },
+    "awayTeam": {
+     "teamId": 1611661325,
+     "teamName": "Fever",
+     "teamCity": "Indiana",
+     "teamTricode": "IND",
+     "teamSlug": "fever",
+     "wins": 12,
+     "losses": 10,
+     "score": 85,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 0,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 29
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 15
+      }
+     ]
+    }
+   },
+   {
+    "gameId": "1022500140",
+    "gameCode": "20250715/WASLAS",
+    "gameStatus": 3,
+    "gameStatusText": "Final",
+    "period": 4,
+    "gameClock": "",
+    "gameTimeUTC": "2025-07-16T02:00:00Z",
+    "gameEt": "2025-07-15T22:00:00Z",
+    "regulationPeriods": 4,
+    "seriesGameNumber": "",
+    "gameLabel": "",
+    "gameSubLabel": "",
+    "seriesText": "",
+    "ifNecessary": false,
+    "seriesConference": "",
+    "poRoundDesc": "",
+    "gameSubtype": "",
+    "isNeutral": false,
+    "gameLeaders": {
+     "homeLeaders": {
+      "personId": 204324,
+      "name": "Dearica Hamby",
+      "playerSlug": "dearica-hamby",
+      "jerseyNum": "5",
+      "position": "F",
+      "teamTricode": "LAS",
+      "points": 26,
+      "rebounds": 6,
+      "assists": 4
+     },
+     "awayLeaders": {
+      "personId": 1631022,
+      "name": "Shakira Austin",
+      "playerSlug": "shakira-austin",
+      "jerseyNum": "0",
+      "position": "F-C",
+      "teamTricode": "WAS",
+      "points": 16,
+      "rebounds": 8,
+      "assists": 2
+     }
+    },
+    "teamLeaders": {
+     "homeLeaders": {
+      "personId": 1628276,
+      "name": "Kelsey Plum",
+      "playerSlug": "kelsey-plum",
+      "jerseyNum": "10",
+      "position": "G",
+      "teamTricode": "LAS",
+      "points": 20.1,
+      "rebounds": 3.1,
+      "assists": 5.8
+     },
+     "awayLeaders": {
+      "personId": 1628279,
+      "name": "Brittney Sykes",
+      "playerSlug": "brittney-sykes",
+      "jerseyNum": "20",
+      "position": "G",
+      "teamTricode": "WAS",
+      "points": 17.1,
+      "rebounds": 3.6,
+      "assists": 4.4
+     },
+     "seasonLeadersFlag": 0
+    },
+    "broadcasters": {
+     "nationalBroadcasters": [],
+     "nationalRadioBroadcasters": [],
+     "nationalOttBroadcasters": [
+      {
+       "broadcasterId": 1001141,
+       "broadcastDisplay": "WNBA League Pass",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "homeTvBroadcasters": [
+      {
+       "broadcasterId": 1651,
+       "broadcastDisplay": "SPECSN",
+       "broadcasterTeamId": 1610612747,
+       "broadcasterDescription": ""
+      }
+     ],
+     "homeRadioBroadcasters": [],
+     "homeOttBroadcasters": [],
+     "awayTvBroadcasters": [
+      {
+       "broadcasterId": 1001046,
+       "broadcastDisplay": "MNMT",
+       "broadcasterTeamId": 1610612764,
+       "broadcasterDescription": ""
+      }
+     ],
+     "awayRadioBroadcasters": [],
+     "awayOttBroadcasters": []
+    },
+    "homeTeam": {
+     "teamId": 1611661320,
+     "teamName": "Sparks",
+     "teamCity": "Los Angeles",
+     "teamTricode": "LAS",
+     "teamSlug": "sparks",
+     "wins": 8,
+     "losses": 14,
+     "score": 99,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 1,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 26
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 33
+      }
+     ]
+    },
+    "awayTeam": {
+     "teamId": 1611661322,
+     "teamName": "Mystics",
+     "teamCity": "Washington",
+     "teamTricode": "WAS",
+     "teamSlug": "mystics",
+     "wins": 11,
+     "losses": 11,
+     "score": 80,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 1,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 22
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 12
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

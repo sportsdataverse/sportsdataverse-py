@@ -1,0 +1,54 @@
+{
+ "pagination": {
+  "count": 53,
+  "offset": 0,
+  "limit": 25,
+  "itemsPerPage": 25,
+  "currentPage": 1,
+  "pageCount": 3
+ },
+ "list": [
+  {
+   "key": 26,
+   "body": "I think I’ve always been kind of geared up to always sort of look at what’s in front of you, not necessarily look what’s behind you, and I think that the next game is always the most important, the next season is always the most important, the next team, the next group of players, and there’s always a great challenge in that. I think that we sometimes use the analogy of every season is like climbing a mountain, and obviously when you get in a situation like we’re in now, both teams, it gets a little more treacherous at the top in terms of the consequences of mistakes and things that can happen.",
+   "category": "Motivational",
+   "personKey": 133646,
+   "person": {
+    "key": 133646,
+    "knownAsName": null,
+    "firstName": "Nick",
+    "lastName": "Saban",
+    "twitterHandle": null,
+    "instagramProfile": null,
+    "tikTokHandle": null,
+    "espnProfile": null,
+    "classYear": 1969,
+    "twoFourSevenProfile": null,
+    "rivalsProfile": null
+   },
+   "dateAdded": "2022-05-12T15:14:04Z",
+   "dateUpdated": "2022-05-12T15:14:04Z"
+  },
+  {
+   "key": 25,
+   "body": "So my question to you is, where do you want them to be? Want to condemn them to a life sentence? Or do you want a guy to have his children going to Princeton?",
+   "category": "Motivational",
+   "personKey": 133646,
+   "person": {
+    "key": 133646,
+    "knownAsName": null,
+    "firstName": "Nick",
+    "lastName": "Saban",
+    "twitterHandle": null,
+    "instagramProfile": null,
+    "tikTokHandle": null,
+    "espnProfile": null,
+    "classYear": 1969,
+    "twoFourSevenProfile": null,
+    "rivalsProfile": null
+   },
+   "dateAdded": "2022-05-12T15:13:48Z",
+   "dateUpdated": "2022-05-12T15:13:48Z"
+  }
+ ]
+}

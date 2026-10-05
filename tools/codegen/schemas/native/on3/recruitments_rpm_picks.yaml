@@ -1,48 +1,6 @@
-columns:
-- description: ''
-  name: key
-  type: integer
-- description: ''
-  name: organization
-  type: character
-- description: ''
-  name: date_added
-  type: character
-- description: ''
-  name: expert
-  type: character
-- description: ''
-  name: confidence
-  type: numeric
-- description: ''
-  name: description
-  type: character
-- description: ''
-  name: article_link
-  type: character
-- description: ''
-  name: premium
-  type: logical
-- description: ''
-  name: correct
-  type: logical
-- description: ''
-  name: days_correct
-  type: numeric
-- description: ''
-  name: flipped_from_organization
-  type: character
-- description: ''
-  name: previous_confidence
-  type: numeric
-- description: ''
-  name: previous_date_added
-  type: character
-- description: ''
-  name: type
-  type: character
-- description: ''
-  name: top_teams
-  type: character
+columns: []
 kind: dataframe
 schema: recruitments_rpm_picks
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

@@ -5,6 +5,7 @@
 - [WNBA Stats fixtures](#wnba-stats-fixtures)
   - [Trimming](#trimming)
   - [Re-capturing](#re-capturing)
+  - [Per-endpoint captures](#per-endpoint-captures)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -47,3 +48,16 @@ json.dump(raw, open('tests/fixtures/wnba_stats/scheduleleaguev2_2026.json', 'w')
 `tests/test_crosswalk_basketball_sources.py` derives its expected row count from
 the fixture itself, so a re-capture does not need a matching test edit unless the
 column contract moved.
+
+## Per-endpoint captures
+
+`endpoints/<slug>.json` holds one real body per `wnba_stats_*` wrapper (110 of
+111). They are the 2026-08 capture sweep's samples,
+`sdv-internal-refs/nba/captures/_sample/10/<slug>.json` (commit `3d754b8`), trimmed
+by `tools/codegen/vendor_captures.py`; the trimming rule is described in
+`../nba_stats/README.md`. The returns-table schemas are generated from the
+parser's output on these bodies (`tools/codegen/gen_nba_stats.py`).
+
+`homepagev2` is the one wrapper not in the directory. Its sweep sample used
+`PlayerOrTeam=Player`, but the wrapper defaults to `Team`, so its schema comes
+from the pilot capture `tests/nba/fixtures/cap_homepagev2_wnba.json` instead.

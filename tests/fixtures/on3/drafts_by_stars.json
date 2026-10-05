@@ -1,0 +1,44 @@
+{
+ "pagination": {
+  "count": 51,
+  "offset": 0,
+  "limit": 51,
+  "itemsPerPage": 51,
+  "currentPage": 1,
+  "pageCount": 1
+ },
+ "list": [
+  {
+   "state": {
+    "key": 1,
+    "name": "Alabama",
+    "abbreviation": "AL",
+    "countryKey": 1
+   },
+   "blueChipPercent": 4.2105263157894735,
+   "populationPercent": 1.5185212363673801,
+   "talentRatio": 277.2780659862177,
+   "fiveStars": 2,
+   "fourStars": 2,
+   "threeStars": 6,
+   "zeroStars": 0,
+   "total": 10
+  },
+  {
+   "state": {
+    "key": 2,
+    "name": "Alaska",
+    "abbreviation": "AK",
+    "countryKey": 1
+   },
+   "blueChipPercent": 0,
+   "populationPercent": 0.22075529022097118,
+   "talentRatio": 0,
+   "fiveStars": 0,
+   "fourStars": 0,
+   "threeStars": 0,
+   "zeroStars": 0,
+   "total": 0
+  }
+ ]
+}

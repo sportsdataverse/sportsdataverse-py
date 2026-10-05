@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 14
+sidebar_position: 25
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -24,13 +24,195 @@ GET /stats/alltimeleadersgrids
 
 ### Returns {#wnba_stats_alltimeleadersgrids-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GPLeaders`, `PTSLeaders`, `ASTLeaders`, `STLLeaders`, `OREBLeaders`, `DREBLeaders`, `REBLeaders`, `BLKLeaders`, `FGMLeaders`, `FGALeaders`, `FG_PCTLeaders`, `TOVLeaders`, `FG3MLeaders`, `FG3ALeaders`, `FG3_PCTLeaders`, `PFLeaders`, `FTMLeaders`, `FTALeaders`, `FT_PCTLeaders`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**GPLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `gp` | integer | Games played. |
+| `gp_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**PTSLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `pts` | numeric | Points scored. |
+| `pts_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**ASTLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `ast` | numeric | Assists. |
+| `ast_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**STLLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `stl` | numeric | Steals. |
+| `stl_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**OREBLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `oreb` | numeric | Offensive rebounds. |
+| `oreb_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**DREBLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `dreb` | numeric | Defensive rebounds. |
+| `dreb_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**REBLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `reb` | numeric | Total rebounds. |
+| `reb_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**BLKLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `blk` | numeric | Blocks. |
+| `blk_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FGMLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fgm` | numeric | Field goals made. |
+| `fgm_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FGALeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fga` | numeric | Field goal attempts. |
+| `fga_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FG_PCTLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg_pct_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**TOVLeaders**
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `tov` | numeric | Turnovers. |
 | `tov_rank` | integer | All-time league rank of the player's career turnover total on the leaders grid. |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FG3MLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_m_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FG3ALeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
+| `fg3_a_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FG3_PCTLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**PFLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `pf` | numeric | Personal fouls. |
+| `pf_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FTMLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `ftm` | numeric | Free throws made. |
+| `ftm_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FTALeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `fta` | numeric | Free throw attempts. |
+| `fta_rank` | integer |  |
+| `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
+
+**FT_PCTLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `ft_pct_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -315,7 +497,7 @@ GET /stats/fantasywidget
 | `blk` | numeric | Blocks. |
 | `stl` | numeric | Steals. |
 | `tov` | numeric | Turnovers. |
-| `fg3m` | numeric | Three-point field goals made. |
+| `fg3_m` | numeric | Three-point field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `fta` | numeric | Free throw attempts. |
@@ -346,7 +528,26 @@ GET /stats/gamerotation
 
 ### Returns {#wnba_stats_gamerotation-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`AwayTeam`, `HomeTeam`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**AwayTeam**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player_first` | character | NBA or WNBA Stats value for player first in the gamerotation result set. |
+| `player_last` | character | NBA or WNBA Stats value for player last in the gamerotation result set. |
+| `in_time_real` | numeric | Real-time clock value when the player entered the game rotation stint. |
+| `out_time_real` | numeric | Real-time clock value when the player exited the game rotation stint. |
+| `player_pts` | integer | Scoring or score-margin metric for player points in the requested NBA or WNBA Stats split. |
+| `pt_diff` | numeric | NBA or WNBA Stats value for pt diff in the gamerotation result set. |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
+
+**HomeTeam**
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -392,20 +593,46 @@ GET /stats/homepageleaders
 
 ### Returns {#wnba_stats_homepageleaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageLeaders`, `LeagueAverage`, `LeagueMax`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**HomePageLeaders**
+
 | col_name | type | description |
 |---|---|---|
-| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `pts` | character | Points scored. |
+| `pts` | numeric | Points scored. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
 | `efg_pct` | numeric | Effective field goal percentage, as a decimal. |
 | `ts_pct` | numeric | True shooting percentage (0-1). |
-| `pts_per48` | character | Points scored per 48 minutes played. |
+| `pts_per48` | numeric | Points scored per 48 minutes played. |
+
+**LeagueAverage**
+
+| col_name | type | description |
+|---|---|---|
+| `pts` | numeric | Points scored. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `efg_pct` | numeric | Effective field goal percentage, as a decimal. |
+| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `pts_per48` | numeric | Points scored per 48 minutes played. |
+
+**LeagueMax**
+
+| col_name | type | description |
+|---|---|---|
+| `pts` | numeric | Points scored. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `efg_pct` | numeric | Effective field goal percentage, as a decimal. |
+| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `pts_per48` | numeric | Points scored per 48 minutes played. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -437,17 +664,85 @@ GET /stats/homepagev2
 
 ### Returns {#wnba_stats_homepagev2-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageStat1`, `HomePageStat2`, `HomePageStat3`, `HomePageStat4`, `HomePageStat5`, `HomePageStat6`, `HomePageStat7`, `HomePageStat8`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**HomePageStat1**
+
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Whether to include statistical ranks in the returned table. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `pts` | numeric | Points scored. |
+
+**HomePageStat2**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `reb` | numeric | Total rebounds. |
+
+**HomePageStat3**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `ast` | numeric | Assists. |
+
+**HomePageStat4**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `stl` | numeric | Steals. |
+
+**HomePageStat5**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+
+**HomePageStat6**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+
+**HomePageStat7**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+
+**HomePageStat8**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `blk` | numeric | Blocks. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -474,22 +769,58 @@ GET /stats/hustlestatsboxscore
 
 ### Returns {#wnba_stats_hustlestatsboxscore-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HustleStatsAvailable`, `PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**HustleStatsAvailable**
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `team_id` | character | Unique team identifier. |
+| `hustle_status` | integer | Hustle status. |
+
+**PlayerStats**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `start_position` | character | Position the player started the game at (F, C, or G); empty for reserves. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
 | `pts` | integer | Points scored. |
 | `contested_shots` | numeric | Defensively contested shots. |
-| `contested_shots_2pt` | numeric | Opponent two-point attempts contested. |
-| `contested_shots_3pt` | numeric | Opponent three-point attempts contested. |
+| `contested_shots_2_pt` | numeric | Opponent two-point attempts contested. |
+| `contested_shots_3_pt` | numeric | Opponent three-point attempts contested. |
+| `deflections` | numeric | Defensive deflections. |
+| `charges_drawn` | numeric | Charges drawn. |
+| `screen_assists` | numeric | Screen assists (resulting in a basket). |
+| `screen_ast_pts` | numeric | Points teammates scored directly off the row's screen assists. |
+| `off_loose_balls_recovered` | numeric | Loose balls recovered while on offense. |
+| `def_loose_balls_recovered` | numeric | Loose balls recovered while on defense. |
+| `loose_balls_recovered` | numeric | Total loose balls recovered. |
+| `off_boxouts` | numeric | Box-outs recorded on the offensive glass. |
+| `def_boxouts` | numeric | Box-outs recorded on the defensive glass. |
+| `box_out_player_team_rebs` | numeric | Team rebounds secured following the row's box-outs. |
+| `box_out_player_rebs` | numeric | Rebounds the player secured directly off their own box-outs. |
+| `box_outs` | numeric | Box-outs executed. |
+
+**TeamStats**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `pts` | integer | Points scored. |
+| `contested_shots` | numeric | Defensively contested shots. |
+| `contested_shots_2_pt` | numeric | Opponent two-point attempts contested. |
+| `contested_shots_3_pt` | numeric | Opponent three-point attempts contested. |
 | `deflections` | numeric | Defensive deflections. |
 | `charges_drawn` | numeric | Charges drawn. |
 | `screen_assists` | numeric | Screen assists (resulting in a basket). |
@@ -545,8 +876,8 @@ GET /stats/infographicfanduelplayer
 | `fgm` | integer | Field goals made. |
 | `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | integer | Three-point field goals made. |
-| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_m` | integer | Three-point field goals made. |
+| `fg3_a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | integer | Free throws made. |
 | `fta` | integer | Free throw attempts. |
@@ -594,7 +925,9 @@ GET /stats/leaderstiles
 
 ### Returns {#wnba_stats_leaderstiles-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`LeadersTiles`, `AllTimeSeasonHigh`, `LastSeasonHigh`, `LowSeasonHigh`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**LeadersTiles**
+
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Whether to include statistical ranks in the returned table. |
@@ -604,6 +937,42 @@ GET /stats/leaderstiles
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `pts` | numeric | Points scored. |
+
+**AllTimeSeasonHigh**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `pts` | numeric | Points scored. |
+| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+
+**LastSeasonHigh**
+
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `player_id` | integer | Unique player identifier. |
+| `player` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `pts` | numeric | Points scored. |
+
+**LowSeasonHigh**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `pts` | numeric | Points scored. |
+| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -631,7 +1000,9 @@ GET /stats/playbyplayv2
 
 ### Returns {#wnba_stats_playbyplayv2-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayByPlay`, `AvailableVideo`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**PlayByPlay**
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -646,27 +1017,33 @@ GET /stats/playbyplayv2
 | `visitordescription` | character | Text description of the event from the visiting team's perspective; empty when not a visitor action. |
 | `score` | character | Final score. |
 | `scoremargin` | character | Score margin after the event ('TIE' when tied); empty on non-scoring events. |
-| `person1type` | integer | Person1type. |
+| `person1_type` | integer |  |
 | `player1_id` | integer | V2 PBP primary player ID (e.g. shooter / fouler). |
 | `player1_name` | character | V2 PBP primary player name. |
 | `player1_team_id` | integer | Team ID of player1. |
 | `player1_team_city` | character | Player1 team city. |
 | `player1_team_nickname` | character | Player1 team nickname. |
 | `player1_team_abbreviation` | character | Player1 team abbreviation. |
-| `person2type` | integer | Person2type. |
+| `person2_type` | integer |  |
 | `player2_id` | integer | V2 PBP secondary player ID (e.g. assister / fouled-by). |
 | `player2_name` | character | V2 PBP secondary player name. |
 | `player2_team_id` | integer | Team ID of player2. |
 | `player2_team_city` | character | Player2 team city. |
 | `player2_team_nickname` | character | Player2 team nickname. |
 | `player2_team_abbreviation` | character | Player2 team abbreviation. |
-| `person3type` | integer | Person3type. |
+| `person3_type` | integer |  |
 | `player3_id` | integer | V2 PBP tertiary player ID (e.g. blocker). |
 | `player3_name` | character | V2 PBP tertiary player name. |
 | `player3_team_id` | integer | Team ID of player3. |
 | `player3_team_city` | character | Player3 team city. |
 | `player3_team_nickname` | character | Player3 team nickname. |
 | `player3_team_abbreviation` | character | Player3 team abbreviation. |
+| `video_available_flag` | integer | Video available flag. |
+
+**AvailableVideo**
+
+| col_name | type | description |
+|---|---|---|
 | `video_available_flag` | integer | Video available flag. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -695,33 +1072,9 @@ GET /stats/playbyplayv3
 
 ### Returns {#wnba_stats_playbyplayv3-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `actionid` | integer | NBA or WNBA Stats action identifier for the play event. |
-| `actionnumber` | integer | Sequential action number for the play within the game feed. |
-| `actiontype` | character | Normalized play action type reported by NBA or WNBA Stats. |
-| `clock` | character | Game clock value. |
-| `description` | character | Long-form description text. |
-| `gameid` | character | Unique NBA or WNBA Stats game identifier for the play event. |
-| `isfieldgoal` | integer | Flag indicating whether the play event is a field-goal attempt. |
-| `location` | character | Filter results by game location. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `personid` | integer | NBA or WNBA Stats player identifier associated with the play, when present. |
-| `playername` | character | Full display name for the player associated with the play event. |
-| `playernamei` | character | Abbreviated player display name used by the play feed. |
-| `pointstotal` | integer | Running points total credited to the player after the play, when reported. |
-| `scoreaway` | character | Away team's score after the play, when reported by the feed. |
-| `scorehome` | character | Home team's score after the play, when reported by the feed. |
-| `shotdistance` | integer | Shot distance in feet for shot attempts, when available. |
-| `shotresult` | character | Result of the shot attempt, such as made or missed. |
-| `shotvalue` | integer | Point value of the shot attempt, usually two or three points. |
-| `subtype` | character | Secondary play subtype reported by NBA or WNBA Stats. |
-| `teamid` | integer | Teamid. |
-| `teamtricode` | character | Three-letter code for the team associated with the play event. |
-| `videoavailable` | integer | Flag indicating whether video is available for the play or game row. |
-| `xlegacy` | integer | Legacy NBA Stats x-coordinate for shot-location play events. |
-| `ylegacy` | integer | Legacy NBA Stats y-coordinate for shot-location play events. |
+**`return_parsed=True`** (default) — the output of `parse_wnba_stats_result_sets`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parse_nba_stats_result_sets emits no columns for the committed capture tests/fixtures/wnba_stats/endpoints/playbyplayv3.json.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -729,197 +1082,6 @@ GET /stats/playbyplayv3
 
 ```python
 wnba_stats_playbyplayv3()
-```
-
-_Last validated n/a._
-
-## wnba_stats_shotchartdetail
-
-GET /stats/shotchartdetail
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartdetail`
-
-**Valid URL:** [https://stats.wnba.com/stats/shotchartdetail?LeagueID=10](https://stats.wnba.com/stats/shotchartdetail?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `AheadBehind` | `ahead_behind_nullable` |  |  | `Y` |  |
-| `ClutchTime` | `clutch_time_nullable` |  |  | `Y` |  |
-| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
-| `ContextMeasure` | `context_measure_simple` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `EndPeriod` | `end_period_nullable` |  |  | `Y` |  |
-| `EndRange` | `end_range_nullable` |  |  | `Y` |  |
-| `GameID` | `game_id_nullable` |  |  | `Y` |  |
-| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `Period` | `period` |  |  | `Y` |  |
-| `PlayerID` | `player_id` |  |  | `Y` |  |
-| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
-| `PointDiff` | `point_diff_nullable` |  |  | `Y` |  |
-| `Position` | `position_nullable` |  |  | `Y` |  |
-| `RangeType` | `range_type_nullable` |  |  | `Y` |  |
-| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `StartPeriod` | `start_period_nullable` |  |  | `Y` |  |
-| `StartRange` | `start_range_nullable` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_shotchartdetail-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character | Unique game identifier. |
-| `game_event_id` | character | Unique identifier for game event. |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `minutes_remaining` | character | Minutes remaining. |
-| `seconds_remaining` | character | Seconds remaining in the period. |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `shot_distance` | character | Shot distance from the basket, in feet. |
-| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
-| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
-| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
-| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_shotchartdetail-example}
-
-```python
-wnba_stats_shotchartdetail(league_id='10')
-```
-
-_Last validated n/a._
-
-## wnba_stats_shotchartleaguewide
-
-GET /stats/shotchartleaguewide
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartleaguewide`
-
-**Valid URL:** [https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10](https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-
-### Returns {#wnba_stats_shotchartleaguewide-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | integer | Field goal attempts. |
-| `fgm` | integer | Field goals made. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_shotchartleaguewide-example}
-
-```python
-wnba_stats_shotchartleaguewide(league_id='10')
-```
-
-_Last validated n/a._
-
-## wnba_stats_shotchartlineupdetail
-
-GET /stats/shotchartlineupdetail
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartlineupdetail`
-
-**Valid URL:** [https://stats.wnba.com/stats/shotchartlineupdetail?LeagueID=10](https://stats.wnba.com/stats/shotchartlineupdetail?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
-| `ContextMeasure` | `context_measure_detailed` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `GROUP_ID` | `group_id` |  |  | `Y` |  |
-| `GameID` | `game_id_nullable` |  |  | `Y` |  |
-| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month_nullable` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `Period` | `period` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_shotchartlineupdetail-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character | Unique game identifier. |
-| `game_event_id` | character | Unique identifier for game event. |
-| `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `minutes_remaining` | character | Minutes remaining. |
-| `seconds_remaining` | character | Seconds remaining in the period. |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `shot_distance` | character | Shot distance from the basket, in feet. |
-| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
-| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
-| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
-| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_shotchartlineupdetail-example}
-
-```python
-wnba_stats_shotchartlineupdetail(league_id='10')
 ```
 
 _Last validated n/a._
@@ -942,7 +1104,7 @@ GET /stats/videostatus
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `visitor_team_id` | integer | Unique identifier for visitor team. |
 | `visitor_team_city` | character | City name of the visiting team. |
@@ -952,10 +1114,10 @@ GET /stats/videostatus
 | `home_team_city` | character | Home team city / location. |
 | `home_team_name` | character | Home team name. |
 | `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
-| `game_status` | character | Game status label. |
+| `game_status` | integer | Game status label. |
 | `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
-| `is_available` | character | Flag indicating whether game video is available in the league's stats video system. |
-| `pt_xyz_available` | character | Pt xyz available. |
+| `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |
+| `pt_xyz_available` | integer | Pt xyz available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

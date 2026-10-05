@@ -36,25 +36,25 @@ columns:
   name: efg_pct
   type: numeric
 - description: ''
-  name: fg2a_frequency
+  name: fg2_a_frequency
   type: numeric
 - description: ''
-  name: fg2m
+  name: fg2_m
   type: numeric
 - description: ''
-  name: fg2a
+  name: fg2_a
   type: numeric
 - description: ''
   name: fg2_pct
   type: numeric
 - description: ''
-  name: fg3a_frequency
+  name: fg3_a_frequency
   type: numeric
 - description: ''
-  name: fg3m
+  name: fg3_m
   type: numeric
 - description: ''
-  name: fg3a
+  name: fg3_a
   type: numeric
 - description: ''
   name: fg3_pct

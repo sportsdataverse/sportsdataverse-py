@@ -10,7 +10,7 @@ columns:
   type: numeric
 - description: ''
   name: current_measurement_verified
-  type: logical
+  type: character
 - description: ''
   name: top300_difference
   type: numeric

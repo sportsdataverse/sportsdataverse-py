@@ -1,33 +1,6 @@
-columns:
-- description: ''
-  name: key
-  type: integer
-- description: ''
-  name: person_key
-  type: integer
-- description: ''
-  name: source_url
-  type: character
-- description: ''
-  name: title
-  type: character
-- description: ''
-  name: thumbnail
-  type: character
-- description: ''
-  name: category
-  type: character
-- description: ''
-  name: description
-  type: character
-- description: ''
-  name: person_sport
-  type: character
-- description: ''
-  name: is_featured
-  type: logical
-- description: ''
-  name: date
-  type: integer
+columns: []
 kind: dataframe
 schema: videos_video_key
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

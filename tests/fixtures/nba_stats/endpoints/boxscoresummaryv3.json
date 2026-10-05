@@ -1,0 +1,507 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/0022300061/boxscoresummary?Format=json",
+  "time": "2025-08-11T11:30:02.302Z"
+ },
+ "boxScoreSummary": {
+  "gameId": "0022300061",
+  "gameCode": "20231024/LALDEN",
+  "gameStatus": 3,
+  "gameStatusText": "Final",
+  "period": 4,
+  "gameClock": "PT00M00.00S",
+  "gameTimeUTC": "2023-10-24T23:30:00Z",
+  "gameEt": "2023-10-24T19:30:00Z",
+  "awayTeamId": 1610612747,
+  "homeTeamId": 1610612743,
+  "duration": "2:17",
+  "attendance": 19842,
+  "sellout": 1,
+  "seriesGameNumber": "",
+  "gameLabel": "",
+  "gameSubLabel": "",
+  "seriesText": "",
+  "ifNecessary": false,
+  "isNeutral": false,
+  "arena": {
+   "arenaId": 1000046,
+   "arenaName": "Ball Arena",
+   "arenaCity": "Denver",
+   "arenaState": "CO",
+   "arenaCountry": "US",
+   "arenaTimezone": "Mountain",
+   "arenaStreetAddress": "",
+   "arenaPostalCode": ""
+  },
+  "officials": [
+   {
+    "personId": 201246,
+    "name": "Kevin Cutler",
+    "nameI": "K. Cutler",
+    "firstName": "Kevin",
+    "familyName": "Cutler",
+    "jerseyNum": "34  ",
+    "assignment": ""
+   },
+   {
+    "personId": 202053,
+    "name": "Scott Twardoski",
+    "nameI": "S. Twardoski",
+    "firstName": "Scott",
+    "familyName": "Twardoski",
+    "jerseyNum": "52  ",
+    "assignment": ""
+   }
+  ],
+  "broadcasters": {
+   "internationalBroadcasters": [
+    {
+     "broadcasterId": 11,
+     "broadcastDisplay": "TSN",
+     "broadcasterDisplay": "TSN",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612761,
+     "regionId": 2
+    },
+    {
+     "broadcasterId": 1209,
+     "broadcastDisplay": "Elta",
+     "broadcasterDisplay": "ELTA TV",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 32
+    }
+   ],
+   "internationalRadioBroadcasters": [],
+   "internationalOttBroadcasters": [
+    {
+     "broadcasterId": 1605,
+     "broadcastDisplay": "DAZN_GER",
+     "broadcasterDisplay": "DAZN",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 14
+    },
+    {
+     "broadcasterId": 1675,
+     "broadcastDisplay": "Rakuten",
+     "broadcasterDisplay": "NBA Rakuten",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 20
+    }
+   ],
+   "nationalBroadcasters": [
+    {
+     "broadcasterId": 10,
+     "broadcastDisplay": "TNT",
+     "broadcasterDisplay": "TNT",
+     "broadcasterVideoLink": "https://www.tntdrama.com/nba-on-tnt",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "nationalRadioBroadcasters": [
+    {
+     "broadcasterId": 3,
+     "broadcastDisplay": "ESPNR",
+     "broadcasterDisplay": "ESPN Radio",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "nationalOttBroadcasters": [],
+   "homeTvBroadcasters": [],
+   "homeRadioBroadcasters": [
+    {
+     "broadcasterId": 1730,
+     "broadcastDisplay": "KKSE-FM",
+     "broadcasterDisplay": "Altitude Sports Radio 92.5 FM",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612743,
+     "regionId": 1
+    }
+   ],
+   "homeOttBroadcasters": [],
+   "awayTvBroadcasters": [],
+   "awayRadioBroadcasters": [
+    {
+     "broadcasterId": 1000286,
+     "broadcastDisplay": "KSPN/KWKW-LAL",
+     "broadcasterDisplay": "ESPN LA 710/1330 KWKW",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612747,
+     "regionId": 1
+    }
+   ],
+   "awayOttBroadcasters": []
+  },
+  "homeTeam": {
+   "teamId": 1610612743,
+   "teamName": "Nuggets",
+   "teamCity": "Denver",
+   "teamTricode": "DEN",
+   "teamSlug": "nuggets",
+   "teamWins": 1,
+   "teamLosses": 0,
+   "score": 119,
+   "inBonus": "",
+   "timeoutsRemaining": 0,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 34
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 29
+    }
+   ],
+   "players": [
+    {
+     "personId": 201599,
+     "name": "DeAndre Jordan",
+     "nameI": "D. Jordan",
+     "firstName": "DeAndre",
+     "familyName": "Jordan",
+     "jerseyNum": "6"
+    },
+    {
+     "personId": 202704,
+     "name": "Reggie Jackson",
+     "nameI": "R. Jackson",
+     "firstName": "Reggie",
+     "familyName": "Jackson",
+     "jerseyNum": "7"
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1630643,
+     "firstName": "Jay",
+     "familyName": "Huff",
+     "jerseyNum": "30  "
+    },
+    {
+     "personId": 1628427,
+     "firstName": "Vlatko",
+     "familyName": "Cancar",
+     "jerseyNum": "31  "
+    }
+   ]
+  },
+  "awayTeam": {
+   "teamId": 1610612747,
+   "teamName": "Lakers",
+   "teamCity": "Los Angeles",
+   "teamTricode": "LAL",
+   "teamSlug": "lakers",
+   "teamWins": 0,
+   "teamLosses": 1,
+   "score": 107,
+   "inBonus": "",
+   "timeoutsRemaining": 0,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 20
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 34
+    }
+   ],
+   "players": [
+    {
+     "personId": 2544,
+     "name": "LeBron James",
+     "nameI": "L. James",
+     "firstName": "LeBron",
+     "familyName": "James",
+     "jerseyNum": "23"
+    },
+    {
+     "personId": 203076,
+     "name": "Anthony Davis",
+     "nameI": "A. Davis",
+     "firstName": "Anthony",
+     "familyName": "Davis",
+     "jerseyNum": "3"
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1630658,
+     "firstName": "Colin",
+     "familyName": "Castleton",
+     "jerseyNum": "14  "
+    },
+    {
+     "personId": 1641720,
+     "firstName": "Jalen",
+     "familyName": "Hood-Schifino",
+     "jerseyNum": "0   "
+    }
+   ]
+  },
+  "lastFiveMeetings": {
+   "meetings": [
+    {
+     "recencyOrder": 1,
+     "gameId": "0042200314",
+     "gameTimeUTC": "2023-05-23T00:30:00Z",
+     "gameEt": "2023-05-22T20:30:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "",
+     "awayTeam": {
+      "teamId": 1610612743,
+      "teamCity": "Denver",
+      "teamName": "Nuggets",
+      "teamTricode": "DEN",
+      "teamSlug": "nuggets",
+      "score": 113,
+      "wins": 4,
+      "losses": 0
+     },
+     "homeTeam": {
+      "teamId": 1610612747,
+      "teamCity": "Los Angeles",
+      "teamName": "Lakers",
+      "teamTricode": "LAL",
+      "teamSlug": "lakers",
+      "score": 111,
+      "wins": 0,
+      "losses": 4
+     }
+    },
+    {
+     "recencyOrder": 2,
+     "gameId": "0042200313",
+     "gameTimeUTC": "2023-05-21T00:30:00Z",
+     "gameEt": "2023-05-20T20:30:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "",
+     "awayTeam": {
+      "teamId": 1610612743,
+      "teamCity": "Denver",
+      "teamName": "Nuggets",
+      "teamTricode": "DEN",
+      "teamSlug": "nuggets",
+      "score": 119,
+      "wins": 3,
+      "losses": 0
+     },
+     "homeTeam": {
+      "teamId": 1610612747,
+      "teamCity": "Los Angeles",
+      "teamName": "Lakers",
+      "teamTricode": "LAL",
+      "teamSlug": "lakers",
+      "score": 108,
+      "wins": 0,
+      "losses": 3
+     }
+    }
+   ]
+  },
+  "pregameCharts": {
+   "homeTeam": {
+    "teamId": 1610612743,
+    "teamCity": "Denver",
+    "teamName": "Nuggets",
+    "teamTricode": "DEN",
+    "statistics": {
+     "points": 114.9,
+     "reboundsTotal": 44.4,
+     "assists": 29.5,
+     "steals": 7.1,
+     "blocks": 5.6,
+     "turnovers": 12.6,
+     "fieldGoalsPercentage": 0.496,
+     "threePointersPercentage": 0.374,
+     "freeThrowsPercentage": 0.762,
+     "pointsInThePaint": 53.5,
+     "pointsSecondChance": 13.7,
+     "pointsFastBreak": 14.3,
+     "playerPtsLeaderFirstName": "Nikola",
+     "playerPtsLeaderFamilyName": "Jokić",
+     "playerPtsLeaderId": 203999,
+     "playerPtsLeaderPts": 26.4,
+     "playerRebLeaderFirstName": "Nikola",
+     "playerRebLeaderFamilyName": "Jokić",
+     "playerRebLeaderId": 203999,
+     "playerRebLeaderReb": 12.4,
+     "playerAstLeaderFirstName": "Nikola",
+     "playerAstLeaderFamilyName": "Jokić",
+     "playerAstLeaderId": 203999,
+     "playerAstLeaderAst": 9.0,
+     "playerBlkLeaderFirstName": "Peyton",
+     "playerBlkLeaderFamilyName": "Watson",
+     "playerBlkLeaderId": 1631212,
+     "playerBlkLeaderBlk": 1.1
+    }
+   },
+   "awayTeam": {
+    "teamId": 1610612747,
+    "teamCity": "Los Angeles",
+    "teamName": "Lakers",
+    "teamTricode": "LAL",
+    "statistics": {
+     "points": 118.0,
+     "reboundsTotal": 43.1,
+     "assists": 28.5,
+     "steals": 7.4,
+     "blocks": 5.5,
+     "turnovers": 14.0,
+     "fieldGoalsPercentage": 0.499,
+     "threePointersPercentage": 0.377,
+     "freeThrowsPercentage": 0.782,
+     "pointsInThePaint": 55.6,
+     "pointsSecondChance": 10.5,
+     "pointsFastBreak": 17.0,
+     "playerPtsLeaderFirstName": "LeBron",
+     "playerPtsLeaderFamilyName": "James",
+     "playerPtsLeaderId": 2544,
+     "playerPtsLeaderPts": 25.7,
+     "playerRebLeaderFirstName": "Anthony",
+     "playerRebLeaderFamilyName": "Davis",
+     "playerRebLeaderId": 203076,
+     "playerRebLeaderReb": 12.6,
+     "playerAstLeaderFirstName": "LeBron",
+     "playerAstLeaderFamilyName": "James",
+     "playerAstLeaderId": 2544,
+     "playerAstLeaderAst": 8.3,
+     "playerBlkLeaderFirstName": "Anthony",
+     "playerBlkLeaderFamilyName": "Davis",
+     "playerBlkLeaderId": 203076,
+     "playerBlkLeaderBlk": 2.34
+    }
+   }
+  },
+  "postgameCharts": {
+   "homeTeam": {
+    "teamId": 1610612743,
+    "teamCity": "Denver",
+    "teamName": "Nuggets",
+    "teamTricode": "DEN",
+    "statistics": {
+     "points": 119.0,
+     "reboundsTotal": 42.0,
+     "assists": 29.0,
+     "steals": 9.0,
+     "blocks": 6.0,
+     "turnovers": 11.0,
+     "fieldGoalsPercentage": 0.527,
+     "threePointersPercentage": 0.412,
+     "freeThrowsPercentage": 0.75,
+     "pointsInThePaint": 52.0,
+     "pointsSecondChance": 17.0,
+     "pointsFastBreak": 20.0,
+     "biggestLead": 18.0,
+     "leadChanges": 1.0,
+     "timesTied": 1.0,
+     "biggestScoringRun": 9.0,
+     "turnoversTeam": 1.0,
+     "turnoversTotal": 12.0,
+     "reboundsTeam": 6.0,
+     "pointsFromTurnovers": 20.0,
+     "benchPoints": 22.0,
+     "playerPtsLeaderFirstName": "Nikola",
+     "playerPtsLeaderFamilyName": "Jokić",
+     "playerPtsLeaderId": 203999,
+     "playerPtsLeaderPts": 29.0,
+     "playerRebLeaderFirstName": "Nikola",
+     "playerRebLeaderFamilyName": "Jokić",
+     "playerRebLeaderId": 203999,
+     "playerRebLeaderReb": 13.0,
+     "playerAstLeaderFirstName": "Nikola",
+     "playerAstLeaderFamilyName": "Jokić",
+     "playerAstLeaderId": 203999,
+     "playerAstLeaderAst": 11.0,
+     "playerBlkLeaderFirstName": "Kentavious",
+     "playerBlkLeaderFamilyName": "Caldwell-Pope",
+     "playerBlkLeaderId": 203484,
+     "playerBlkLeaderBlk": 1.0
+    }
+   },
+   "awayTeam": {
+    "teamId": 1610612747,
+    "teamCity": "Los Angeles",
+    "teamName": "Lakers",
+    "teamTricode": "LAL",
+    "statistics": {
+     "points": 107.0,
+     "reboundsTotal": 44.0,
+     "assists": 23.0,
+     "steals": 5.0,
+     "blocks": 4.0,
+     "turnovers": 11.0,
+     "fieldGoalsPercentage": 0.456,
+     "threePointersPercentage": 0.345,
+     "freeThrowsPercentage": 0.75,
+     "pointsInThePaint": 58.0,
+     "pointsSecondChance": 4.0,
+     "pointsFastBreak": 20.0,
+     "biggestLead": 4.0,
+     "leadChanges": 1.0,
+     "timesTied": 1.0,
+     "biggestScoringRun": 13.0,
+     "turnoversTeam": 1.0,
+     "turnoversTotal": 12.0,
+     "reboundsTeam": 8.0,
+     "pointsFromTurnovers": 18.0,
+     "benchPoints": 26.0,
+     "playerPtsLeaderFirstName": "LeBron",
+     "playerPtsLeaderFamilyName": "James",
+     "playerPtsLeaderId": 2544,
+     "playerPtsLeaderPts": 21.0,
+     "playerRebLeaderFirstName": "Austin",
+     "playerRebLeaderFamilyName": "Reaves",
+     "playerRebLeaderId": 1630559,
+     "playerRebLeaderReb": 8.0,
+     "playerAstLeaderFirstName": "D'Angelo",
+     "playerAstLeaderFamilyName": "Russell",
+     "playerAstLeaderId": 1626156,
+     "playerAstLeaderAst": 7.0,
+     "playerBlkLeaderFirstName": "Anthony",
+     "playerBlkLeaderFamilyName": "Davis",
+     "playerBlkLeaderId": 203076,
+     "playerBlkLeaderBlk": 2.0
+    }
+   }
+  },
+  "videoAvailableFlag": 1,
+  "ptAvailable": 1,
+  "ptXYZAvailable": 0,
+  "whStatus": 1,
+  "hustleStatus": 1,
+  "historicalStatus": 0,
+  "gameSubtype": ""
+ }
+}

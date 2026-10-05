@@ -1,0 +1,63 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/playbyplay?Format=json",
+  "time": "2026-06-24T22:20:16.2016Z"
+ },
+ "game": {
+  "gameId": "1022600128",
+  "videoAvailable": 1,
+  "actions": [
+   {
+    "actionNumber": 2,
+    "clock": "PT10M00.00S",
+    "period": 1,
+    "teamId": 0,
+    "teamTricode": "",
+    "personId": 0,
+    "playerName": "",
+    "playerNameI": "",
+    "xLegacy": 0,
+    "yLegacy": 0,
+    "shotDistance": 0,
+    "shotResult": "",
+    "isFieldGoal": 0,
+    "scoreHome": "0",
+    "scoreAway": "0",
+    "pointsTotal": 0,
+    "location": "",
+    "description": "Start of 1st Period (7:38 PM EST)",
+    "actionType": "period",
+    "subType": "start",
+    "videoAvailable": 0,
+    "shotValue": 0,
+    "actionId": 1
+   },
+   {
+    "actionNumber": 4,
+    "clock": "PT10M00.00S",
+    "period": 1,
+    "teamId": 1611661325,
+    "teamTricode": "IND",
+    "personId": 1641648,
+    "playerName": "Boston",
+    "playerNameI": "A. Boston",
+    "xLegacy": 0,
+    "yLegacy": 0,
+    "shotDistance": 0,
+    "shotResult": "",
+    "isFieldGoal": 0,
+    "scoreHome": "",
+    "scoreAway": "",
+    "pointsTotal": 0,
+    "location": "h",
+    "description": "Jump Ball Boston vs. Bonner: Tip to Clark",
+    "actionType": "Jump Ball",
+    "subType": "",
+    "videoAvailable": 1,
+    "shotValue": 0,
+    "actionId": 2
+   }
+  ]
+ }
+}

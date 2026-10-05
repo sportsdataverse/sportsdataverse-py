@@ -1,0 +1,318 @@
+{
+ "resource": "homepagev2",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "GameScope": null,
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Player",
+  "StatType": "Traditional"
+ },
+ "resultSets": [
+  {
+   "name": "HomePageStat1",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     203954,
+     "Joel Embiid",
+     1610612755,
+     "PHI",
+     "Philadelphia 76ers",
+     "21",
+     "C-F",
+     34.7
+    ],
+    [
+     2,
+     1629029,
+     "Luka Dončić",
+     1610612742,
+     "DAL",
+     "Dallas Mavericks",
+     "77",
+     "F-G",
+     33.9
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat2",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "REB"
+   ],
+   "rowSet": [
+    [
+     1,
+     1627734,
+     "Domantas Sabonis",
+     1610612758,
+     "SAC",
+     "Sacramento Kings",
+     "10",
+     "F-C",
+     13.7
+    ],
+    [
+     2,
+     203497,
+     "Rudy Gobert",
+     1610612750,
+     "MIN",
+     "Minnesota Timberwolves",
+     "27",
+     "C",
+     12.9
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat3",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630169,
+     "Tyrese Haliburton",
+     1610612754,
+     "IND",
+     "Indiana Pacers",
+     "0",
+     "G",
+     10.9
+    ],
+    [
+     2,
+     1629027,
+     "Trae Young",
+     1610612737,
+     "ATL",
+     "Atlanta Hawks",
+     "11",
+     "G",
+     10.8
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat4",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "STL"
+   ],
+   "rowSet": [
+    [
+     1,
+     203935,
+     "Marcus Smart",
+     1610612763,
+     "MEM",
+     "Memphis Grizzlies",
+     "36",
+     "G",
+     2.05
+    ],
+    [
+     2,
+     1628368,
+     "De'Aaron Fox",
+     1610612758,
+     "SAC",
+     "Sacramento Kings",
+     "5",
+     "G",
+     2.03
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat5",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     1641726,
+     "Dereck Lively II",
+     1610612742,
+     "DAL",
+     "Dallas Mavericks",
+     "2",
+     "C",
+     0.747
+    ],
+    [
+     2,
+     1629646,
+     "Charles Bassey",
+     1610612759,
+     "SAS",
+     "San Antonio Spurs",
+     "28",
+     "C-F",
+     0.725
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat6",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FT_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     203493,
+     "Reggie Bullock Jr.",
+     1610612745,
+     "HOU",
+     "Houston Rockets",
+     "25",
+     "G-F",
+     1.0
+    ],
+    [
+     1,
+     1630658,
+     "Colin Castleton",
+     1610612747,
+     "LAL",
+     "Los Angeles Lakers",
+     "14",
+     "C",
+     1.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat7",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FG3_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     1629234,
+     "Drew Eubanks",
+     1610612756,
+     "PHX",
+     "Phoenix Suns",
+     "14",
+     "F-C",
+     1.0
+    ],
+    [
+     1,
+     1628436,
+     "Luke Kornet",
+     1610612738,
+     "BOS",
+     "Boston Celtics",
+     "40",
+     "C-F",
+     1.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat8",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "BLK"
+   ],
+   "rowSet": [
+    [
+     1,
+     1641705,
+     "Victor Wembanyama",
+     1610612759,
+     "SAS",
+     "San Antonio Spurs",
+     "1",
+     "F-C",
+     3.58
+    ],
+    [
+     2,
+     1631117,
+     "Walker Kessler",
+     1610612762,
+     "UTA",
+     "Utah Jazz",
+     "24",
+     "C",
+     2.41
+    ]
+   ]
+  }
+ ]
+}

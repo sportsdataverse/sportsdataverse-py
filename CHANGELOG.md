@@ -3,6 +3,11 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
+  - [Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows](#fixed--cfb-scores-espn-marks-but-no-text-rule-named-textless-copies-untyped-admin-rows)
+  - [Fixed — CFB plays that end a half leave a possession worth nothing](#fixed--cfb-plays-that-end-a-half-leave-a-possession-worth-nothing)
+  - [Fixed — CFB returned kickoffs end at the receiving team's first down](#fixed--cfb-returned-kickoffs-end-at-the-receiving-teams-first-down)
+  - [Fixed — CFB plays end at the next play's clock](#fixed--cfb-plays-end-at-the-next-plays-clock)
   - [Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down](#fixed--cfb-2007-13-touchdowns-filed-as-their-own-kick-get-the-snaps-down)
   - [Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy](#fixed--cfb-blocked-field-goals-keep-espns-type-641-null-keys-never-twin-a-play-copy)
   - [Added — the metric registry (`sportsdataverse.registry`)](#added--the-metric-registry-sportsdataverseregistry)
@@ -313,6 +318,30 @@
 
 ## Unreleased
 
+### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
+
+The reference-docs return tables for these families named columns from the stats-API catalog
+and the On3 OpenAPI spec, not from the parser output. Many of those names never appear in a
+parsed frame. The tables are now generated from the parser's output on a committed real
+capture of each endpoint.
+
+- **Renamed columns.** Examples: `fg3m` → `fg3_m`, `leagueid` → `league_id`,
+  `5-9_ft_fgm` → `5_9_ft_fgm`.
+- **Result sets.** 67 NBA and 63 WNBA endpoints return a dict of result sets. Their docs now
+  show every set, and their docstrings say they return a dict.
+- **On3 tables.** These show the flattened nested-object columns that `parse_on3_rdb` returns.
+- **On3 without a capture.** 48 On3 endpoints have no capture with rows. Each is marked
+  `unverified`, and its docs carry a one-line caveat in place of a table. The OpenAPI response
+  types were not used as a fallback: on the 9 endpoints where they could be checked against a
+  capture, their field names matched the parser on only 7.
+- **`nba_stats_playbyplayv3` / `wnba_stats_playbyplayv3`** are marked `unverified`. The generic
+  parser returns no columns for their `{meta, game}` payload.
+- **`on3_people_measurements`** shows a single `player_measurements` column. `parse_on3_rdb` does
+  not unwrap the `{playerMeasurements: [...]}` envelope, and the table documents what the parser
+  returns.
+
+Wrapper behaviour is unchanged.
+
 ### Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows
 
 Three ESPN feed defects, sized on the 20,080 processed games of 2004-26:
@@ -416,6 +445,7 @@ ESPN's types stand. Found porting the relabel block to cfbfastR (sportsdataverse
 state. Polars (1.40–1.44) matches rows whose join key has four or more null columns despite
 `nulls_equal=False`, so plays with no drive, team, down or distance could be dropped as a stale
 batch. Null keys are now dropped before the join; no game in the raw corpus was affected.
+
 ### Added — the metric registry (`sportsdataverse.registry`)
 
 `sportsdataverse/registry/metrics.yaml` is the one source for how a published football metric is

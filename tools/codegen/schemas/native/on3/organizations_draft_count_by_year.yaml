@@ -1,27 +1,6 @@
-columns:
-- description: ''
-  name: year
-  type: integer
-- description: ''
-  name: blue_chip_percent
-  type: numeric
-- description: ''
-  name: talent_ratio
-  type: numeric
-- description: ''
-  name: five_stars
-  type: integer
-- description: ''
-  name: four_stars
-  type: integer
-- description: ''
-  name: three_stars
-  type: integer
-- description: ''
-  name: zero_stars
-  type: integer
-- description: ''
-  name: total
-  type: integer
+columns: []
 kind: dataframe
 schema: organizations_draft_count_by_year
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

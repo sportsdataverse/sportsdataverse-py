@@ -1,27 +1,6 @@
-columns:
-- description: ''
-  name: key
-  type: integer
-- description: ''
-  name: organization_type
-  type: character
-- description: ''
-  name: state_key
-  type: integer
-- description: ''
-  name: state
-  type: character
-- description: ''
-  name: monetization_allowed
-  type: logical
-- description: ''
-  name: governing_rule_label
-  type: character
-- description: ''
-  name: governing_rule_url
-  type: character
-- description: ''
-  name: current_rules
-  type: character
+columns: []
 kind: dataframe
 schema: nil_compliances_state
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

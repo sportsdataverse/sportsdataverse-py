@@ -1,0 +1,67 @@
+{
+ "relatedModel": {
+  "numberOfYears": 3,
+  "position": {
+   "key": 18,
+   "name": "Power Forward",
+   "abbreviation": "PF",
+   "sportKey": 2,
+   "sport": {
+    "key": 2,
+    "name": "Basketball",
+    "slug": "basketball",
+    "abbreviation": "BK",
+    "isRankable": true,
+    "isIndustryRankable": true,
+    "isScoutable": true
+   },
+   "positionType": "Player"
+  }
+ },
+ "pagination": {
+  "count": 13,
+  "offset": 0,
+  "limit": 13,
+  "itemsPerPage": 13,
+  "currentPage": 1,
+  "pageCount": 1
+ },
+ "list": [
+  {
+   "measurementKey": 1,
+   "measurementName": "Height",
+   "currentPersonMeasurement": 80,
+   "currentMeasurementVerified": false,
+   "top300Difference": -0.34536082474227214,
+   "top300Average": 80.34536082474227,
+   "combineDraftedAverage": null,
+   "combineDraftedDifference": null,
+   "sort": "Latest",
+   "measurementRecord": "None"
+  },
+  {
+   "measurementKey": 2,
+   "measurementName": "Weight",
+   "currentPersonMeasurement": 210,
+   "currentMeasurementVerified": false,
+   "top300Difference": 0.6382978723404165,
+   "top300Average": 209.36170212765958,
+   "combineDraftedAverage": null,
+   "combineDraftedDifference": null,
+   "sort": "Latest",
+   "measurementRecord": "None"
+  },
+  {
+   "measurementKey": 3,
+   "measurementName": "Hand",
+   "currentPersonMeasurement": null,
+   "currentMeasurementVerified": null,
+   "top300Difference": null,
+   "top300Average": null,
+   "combineDraftedAverage": null,
+   "combineDraftedDifference": null,
+   "sort": "Highest",
+   "measurementRecord": null
+  }
+ ]
+}

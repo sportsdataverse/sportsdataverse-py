@@ -46,7 +46,7 @@ def test_usable_drops_non200():
 
 
 _SPEC = (
-    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs"))
+    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"))
     / "on3"
     / "on3-recruit-database.openapi.yaml"
 )

@@ -1,0 +1,48 @@
+{
+ "intervalAmount": 10,
+ "intervalType": "Week",
+ "valuationStart": 1990825,
+ "valuationChange": 4009175,
+ "list": [
+  {
+   "nilStatus": "Normal",
+   "valuation": 1990825,
+   "valuationChange": null,
+   "date": "Jun 29, 2026",
+   "dateUnix": 1782691200
+  },
+  {
+   "nilStatus": "Normal",
+   "valuation": 1990825,
+   "valuationChange": 0,
+   "date": "Jun 30, 2026",
+   "dateUnix": 1782777600
+  }
+ ],
+ "pagedList": {
+  "pagination": {
+   "count": 366,
+   "offset": 0,
+   "limit": 10,
+   "itemsPerPage": 10,
+   "currentPage": 1,
+   "pageCount": 37
+  },
+  "list": [
+   {
+    "nilStatus": "Normal",
+    "valuation": 1990825,
+    "valuationChange": null,
+    "date": "Jun 29, 2026",
+    "dateUnix": 1782691200
+   },
+   {
+    "nilStatus": "Normal",
+    "valuation": 1990825,
+    "valuationChange": 0,
+    "date": "Jun 30, 2026",
+    "dateUnix": 1782777600
+   }
+  ]
+ }
+}

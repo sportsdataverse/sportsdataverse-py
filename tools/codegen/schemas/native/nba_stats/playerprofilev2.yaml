@@ -1,84 +1,1062 @@
-columns:
-- description: ''
-  name: player_id
-  type: integer
-- description: ''
-  name: season_id
-  type: character
-- description: ''
-  name: league_id
-  type: character
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: player_age
-  type: numeric
-- description: ''
-  name: gp
-  type: integer
-- description: ''
-  name: gs
-  type: integer
-- description: ''
-  name: min
-  type: numeric
-- description: ''
-  name: fgm
-  type: numeric
-- description: ''
-  name: fga
-  type: numeric
-- description: ''
-  name: fg_pct
-  type: numeric
-- description: ''
-  name: fg3m
-  type: numeric
-- description: ''
-  name: fg3a
-  type: numeric
-- description: ''
-  name: fg3_pct
-  type: numeric
-- description: ''
-  name: ftm
-  type: numeric
-- description: ''
-  name: fta
-  type: numeric
-- description: ''
-  name: ft_pct
-  type: numeric
-- description: ''
-  name: oreb
-  type: numeric
-- description: ''
-  name: dreb
-  type: numeric
-- description: ''
-  name: reb
-  type: numeric
-- description: ''
-  name: ast
-  type: numeric
-- description: ''
-  name: stl
-  type: numeric
-- description: ''
-  name: blk
-  type: numeric
-- description: ''
-  name: tov
-  type: numeric
-- description: ''
-  name: pf
-  type: numeric
-- description: ''
-  name: pts
-  type: numeric
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: numeric
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: SeasonTotalsRegularSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: CareerTotalsRegularSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: numeric
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: SeasonTotalsPostSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: CareerTotalsPostSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: numeric
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: SeasonTotalsAllStarSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: CareerTotalsAllStarSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: character
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: organization_id
+    type: character
+  - description: ''
+    name: school_name
+    type: character
+  - description: ''
+    name: player_age
+    type: character
+  - description: ''
+    name: gp
+    type: character
+  - description: ''
+    name: gs
+    type: character
+  - description: ''
+    name: min
+    type: character
+  - description: ''
+    name: fgm
+    type: character
+  - description: ''
+    name: fga
+    type: character
+  - description: ''
+    name: fg_pct
+    type: character
+  - description: ''
+    name: fg3_m
+    type: character
+  - description: ''
+    name: fg3_a
+    type: character
+  - description: ''
+    name: fg3_pct
+    type: character
+  - description: ''
+    name: ftm
+    type: character
+  - description: ''
+    name: fta
+    type: character
+  - description: ''
+    name: ft_pct
+    type: character
+  - description: ''
+    name: oreb
+    type: character
+  - description: ''
+    name: dreb
+    type: character
+  - description: ''
+    name: reb
+    type: character
+  - description: ''
+    name: ast
+    type: character
+  - description: ''
+    name: stl
+    type: character
+  - description: ''
+    name: blk
+    type: character
+  - description: ''
+    name: tov
+    type: character
+  - description: ''
+    name: pf
+    type: character
+  - description: ''
+    name: pts
+    type: character
+  section: SeasonTotalsCollegeSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: organization_id
+    type: character
+  - description: ''
+    name: gp
+    type: character
+  - description: ''
+    name: gs
+    type: character
+  - description: ''
+    name: min
+    type: character
+  - description: ''
+    name: fgm
+    type: character
+  - description: ''
+    name: fga
+    type: character
+  - description: ''
+    name: fg_pct
+    type: character
+  - description: ''
+    name: fg3_m
+    type: character
+  - description: ''
+    name: fg3_a
+    type: character
+  - description: ''
+    name: fg3_pct
+    type: character
+  - description: ''
+    name: ftm
+    type: character
+  - description: ''
+    name: fta
+    type: character
+  - description: ''
+    name: ft_pct
+    type: character
+  - description: ''
+    name: oreb
+    type: character
+  - description: ''
+    name: dreb
+    type: character
+  - description: ''
+    name: reb
+    type: character
+  - description: ''
+    name: ast
+    type: character
+  - description: ''
+    name: stl
+    type: character
+  - description: ''
+    name: blk
+    type: character
+  - description: ''
+    name: tov
+    type: character
+  - description: ''
+    name: pf
+    type: character
+  - description: ''
+    name: pts
+    type: character
+  section: CareerTotalsCollegeSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: numeric
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: SeasonTotalsPreseason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gs
+    type: integer
+  - description: ''
+    name: min
+    type: numeric
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pts
+    type: numeric
+  section: CareerTotalsPreseason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: character
+  - description: ''
+    name: gp
+    type: character
+  - description: ''
+    name: gs
+    type: character
+  - description: ''
+    name: rank_pg_min
+    type: integer
+  - description: ''
+    name: rank_pg_fgm
+    type: integer
+  - description: ''
+    name: rank_pg_fga
+    type: integer
+  - description: ''
+    name: rank_fg_pct
+    type: integer
+  - description: ''
+    name: rank_pg_fg3_m
+    type: integer
+  - description: ''
+    name: rank_pg_fg3_a
+    type: integer
+  - description: ''
+    name: rank_fg3_pct
+    type: integer
+  - description: ''
+    name: rank_pg_ftm
+    type: integer
+  - description: ''
+    name: rank_pg_fta
+    type: integer
+  - description: ''
+    name: rank_ft_pct
+    type: integer
+  - description: ''
+    name: rank_pg_oreb
+    type: integer
+  - description: ''
+    name: rank_pg_dreb
+    type: integer
+  - description: ''
+    name: rank_pg_reb
+    type: integer
+  - description: ''
+    name: rank_pg_ast
+    type: integer
+  - description: ''
+    name: rank_pg_stl
+    type: integer
+  - description: ''
+    name: rank_pg_blk
+    type: integer
+  - description: ''
+    name: rank_pg_tov
+    type: integer
+  - description: ''
+    name: rank_pg_pts
+    type: integer
+  - description: ''
+    name: rank_pg_eff
+    type: integer
+  section: SeasonRankingsRegularSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: season_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: player_age
+    type: character
+  - description: ''
+    name: gp
+    type: character
+  - description: ''
+    name: gs
+    type: character
+  - description: ''
+    name: rank_pg_min
+    type: integer
+  - description: ''
+    name: rank_pg_fgm
+    type: integer
+  - description: ''
+    name: rank_pg_fga
+    type: integer
+  - description: ''
+    name: rank_fg_pct
+    type: integer
+  - description: ''
+    name: rank_pg_fg3_m
+    type: integer
+  - description: ''
+    name: rank_pg_fg3_a
+    type: integer
+  - description: ''
+    name: rank_fg3_pct
+    type: integer
+  - description: ''
+    name: rank_pg_ftm
+    type: integer
+  - description: ''
+    name: rank_pg_fta
+    type: integer
+  - description: ''
+    name: rank_ft_pct
+    type: integer
+  - description: ''
+    name: rank_pg_oreb
+    type: integer
+  - description: ''
+    name: rank_pg_dreb
+    type: integer
+  - description: ''
+    name: rank_pg_reb
+    type: integer
+  - description: ''
+    name: rank_pg_ast
+    type: integer
+  - description: ''
+    name: rank_pg_stl
+    type: integer
+  - description: ''
+    name: rank_pg_blk
+    type: integer
+  - description: ''
+    name: rank_pg_tov
+    type: integer
+  - description: ''
+    name: rank_pg_pts
+    type: integer
+  - description: ''
+    name: rank_pg_eff
+    type: integer
+  section: SeasonRankingsPostSeason
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_date
+    type: character
+  - description: ''
+    name: vs_team_id
+    type: integer
+  - description: ''
+    name: vs_team_city
+    type: character
+  - description: ''
+    name: vs_team_name
+    type: character
+  - description: ''
+    name: vs_team_abbreviation
+    type: character
+  - description: ''
+    name: stat
+    type: character
+  - description: ''
+    name: stat_value
+    type: integer
+  - description: ''
+    name: stat_order
+    type: integer
+  - description: ''
+    name: date_est
+    type: character
+  section: SeasonHighs
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_date
+    type: character
+  - description: ''
+    name: vs_team_id
+    type: integer
+  - description: ''
+    name: vs_team_city
+    type: character
+  - description: ''
+    name: vs_team_name
+    type: character
+  - description: ''
+    name: vs_team_abbreviation
+    type: character
+  - description: ''
+    name: stat
+    type: character
+  - description: ''
+    name: stat_value
+    type: integer
+  - description: ''
+    name: stat_order
+    type: integer
+  - description: ''
+    name: date_est
+    type: character
+  section: CareerHighs
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_date
+    type: character
+  - description: ''
+    name: game_time
+    type: character
+  - description: ''
+    name: location
+    type: character
+  - description: ''
+    name: player_team_id
+    type: integer
+  - description: ''
+    name: player_team_city
+    type: character
+  - description: ''
+    name: player_team_nickname
+    type: character
+  - description: ''
+    name: player_team_abbreviation
+    type: character
+  - description: ''
+    name: vs_team_id
+    type: integer
+  - description: ''
+    name: vs_team_city
+    type: character
+  - description: ''
+    name: vs_team_nickname
+    type: character
+  - description: ''
+    name: vs_team_abbreviation
+    type: character
+  section: NextGame
+kind: frames
 schema: playerprofilev2

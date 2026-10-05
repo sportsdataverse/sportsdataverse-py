@@ -1,21 +1,6 @@
-columns:
-- description: ''
-  name: key
-  type: integer
-- description: ''
-  name: person_key
-  type: integer
-- description: ''
-  name: connected_person_key
-  type: integer
-- description: ''
-  name: sport_key
-  type: integer
-- description: ''
-  name: description
-  type: character
-- description: ''
-  name: connected_person_sport
-  type: character
+columns: []
 kind: dataframe
 schema: person_connections_connection_key
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

@@ -1,0 +1,114 @@
+{
+ "resource": "commonteamroster",
+ "parameters": {
+  "TeamID": 1611661319,
+  "LeagueID": "10",
+  "Season": "2023"
+ },
+ "resultSets": [
+  {
+   "name": "CommonTeamRoster",
+   "headers": [
+    "TeamID",
+    "SEASON",
+    "LeagueID",
+    "PLAYER",
+    "NICKNAME",
+    "PLAYER_SLUG",
+    "NUM",
+    "POSITION",
+    "HEIGHT",
+    "WEIGHT",
+    "BIRTH_DATE",
+    "AGE",
+    "EXP",
+    "SCHOOL",
+    "PLAYER_ID",
+    "HOW_ACQUIRED"
+   ],
+   "rowSet": [
+    [
+     1611661319,
+     "2023",
+     "10",
+     "Jackie Young",
+     "Jackie",
+     "jackie-young",
+     "0",
+     "G",
+     "6-0",
+     "165",
+     "SEP 16, 1997",
+     26.0,
+     "4",
+     "Notre Dame",
+     1629498,
+     "#1 Pick in 2019 Draft"
+    ],
+    [
+     1611661319,
+     "2023",
+     "10",
+     "Kierstan Bell",
+     "Kierstan",
+     "kierstan-bell",
+     "1",
+     "F",
+     "6-1",
+     "176",
+     "MAR 16, 2000",
+     24.0,
+     "1",
+     "Florida Gulf Coast",
+     1631006,
+     "#11 Pick in 2022 Draft"
+    ],
+    [
+     1611661319,
+     "2023",
+     "10",
+     "Riquna Williams",
+     "Riquna",
+     "riquna-williams",
+     "2",
+     "G",
+     "5-7",
+     "165",
+     "MAY 28, 1990",
+     34.0,
+     "10",
+     "Miami",
+     203029,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "Coaches",
+   "headers": [
+    "COACH_ID",
+    "TEAM_ID",
+    "SEASON",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "COACH_NAME",
+    "IS_ASSISTANT",
+    "COACH_TYPE",
+    "SORT_SEQUENCE"
+   ],
+   "rowSet": [
+    [
+     100342,
+     1611661319,
+     "2023",
+     "Becky",
+     "Hammon",
+     "Becky Hammon",
+     1,
+     "Head Coach",
+     1
+    ]
+   ]
+  }
+ ]
+}

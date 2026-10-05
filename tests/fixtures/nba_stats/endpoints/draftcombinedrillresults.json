@@ -1,0 +1,84 @@
+{
+ "resource": "draftcombinedrillresults",
+ "parameters": {
+  "LeagueID": "00",
+  "SeasonYear": "2023-24"
+ },
+ "resultSets": [
+  {
+   "name": "Results",
+   "headers": [
+    "TEMP_PLAYER_ID",
+    "PLAYER_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "PLAYER_NAME",
+    "POSITION",
+    "STANDING_VERTICAL_LEAP",
+    "MAX_VERTICAL_LEAP",
+    "LANE_AGILITY_TIME",
+    "MODIFIED_LANE_AGILITY_TIME",
+    "THREE_QUARTER_SPRINT",
+    "BENCH_PRESS"
+   ],
+   "rowSet": [
+    [
+     1641725,
+     1641725,
+     "Trey",
+     "Alexander",
+     "Trey Alexander",
+     "SG",
+     29.5,
+     34.0,
+     11.6,
+     null,
+     3.35,
+     null
+    ],
+    [
+     1641735,
+     1641735,
+     "Amari",
+     "Bailey",
+     "Amari Bailey",
+     "SG",
+     28.5,
+     35.0,
+     11.34,
+     null,
+     3.19,
+     null
+    ],
+    [
+     1641736,
+     1641736,
+     "Reece",
+     "Beekman",
+     "Reece Beekman",
+     "PG",
+     30.5,
+     38.0,
+     10.99,
+     3.33,
+     3.14,
+     null
+    ],
+    [
+     1641737,
+     1641737,
+     "Adem",
+     "Bona",
+     "Adem Bona",
+     "C",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ]
+  }
+ ]
+}

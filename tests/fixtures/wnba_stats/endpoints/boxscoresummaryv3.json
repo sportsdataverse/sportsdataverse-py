@@ -1,0 +1,510 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscoresummary?Format=json",
+  "time": "2026-06-25T19:50:12.5012Z"
+ },
+ "boxScoreSummary": {
+  "gameId": "1022600128",
+  "gameCode": "20260624/PHXIND",
+  "gameStatus": 3,
+  "gameStatusText": "Final",
+  "period": 4,
+  "gameClock": "PT00M00.00S",
+  "gameTimeUTC": "2026-06-24T23:30:00Z",
+  "gameEt": "2026-06-24T19:30:00Z",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "duration": "2:20",
+  "attendance": 16128,
+  "sellout": 0,
+  "seriesGameNumber": "",
+  "gameLabel": "",
+  "gameSubLabel": "",
+  "seriesText": "",
+  "ifNecessary": false,
+  "isNeutral": false,
+  "arena": {
+   "arenaId": 1000063,
+   "arenaName": "Gainbridge Fieldhouse",
+   "arenaCity": "Indianapolis",
+   "arenaState": "IN",
+   "arenaCountry": "US",
+   "arenaTimezone": "Eastern",
+   "arenaStreetAddress": "",
+   "arenaPostalCode": ""
+  },
+  "officials": [
+   {
+    "personId": 200431,
+    "name": "Gina Cross",
+    "nameI": "G. Cross",
+    "firstName": "Gina",
+    "familyName": "Cross",
+    "jerseyNum": "38  ",
+    "assignment": ""
+   },
+   {
+    "personId": 200667,
+    "name": "Angelica Suffren",
+    "nameI": "A. Suffren",
+    "firstName": "Angelica",
+    "familyName": "Suffren",
+    "jerseyNum": "7   ",
+    "assignment": ""
+   }
+  ],
+  "broadcasters": {
+   "internationalBroadcasters": [
+    {
+     "broadcasterId": 1210,
+     "broadcastDisplay": "Videoland",
+     "broadcasterDisplay": "Videoland",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 32
+    },
+    {
+     "broadcasterId": 1306,
+     "broadcastDisplay": "QQ",
+     "broadcasterDisplay": "Tencent",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 8
+    }
+   ],
+   "internationalRadioBroadcasters": [],
+   "internationalOttBroadcasters": [
+    {
+     "broadcasterId": 1001500,
+     "broadcastDisplay": "Docomo_NBA Docomo",
+     "broadcasterDisplay": "NBA docomo",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 20
+    },
+    {
+     "broadcasterId": 1001704,
+     "broadcastDisplay": "WOW Germany",
+     "broadcasterDisplay": "WOW",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 14
+    }
+   ],
+   "nationalBroadcasters": [
+    {
+     "broadcasterId": 1001665,
+     "broadcastDisplay": "USA",
+     "broadcasterDisplay": "USA Network",
+     "broadcasterVideoLink": "https://www.usanetwork.com/sports",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "nationalRadioBroadcasters": [],
+   "nationalOttBroadcasters": [],
+   "homeTvBroadcasters": [
+    {
+     "broadcasterId": 1001168,
+     "broadcastDisplay": "WTHR",
+     "broadcasterDisplay": "WTHR Channel 13",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612754,
+     "regionId": 1
+    }
+   ],
+   "homeRadioBroadcasters": [
+    {
+     "broadcasterId": 1641,
+     "broadcastDisplay": "WFNI-FM/AM",
+     "broadcasterDisplay": "93.5/107.5 The Fan",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612754,
+     "regionId": 1
+    }
+   ],
+   "homeOttBroadcasters": [],
+   "awayTvBroadcasters": [
+    {
+     "broadcasterId": 1000998,
+     "broadcastDisplay": "KTVK/KPHE",
+     "broadcasterDisplay": "Arizona's Family 3TV / Arizona's Family Sports",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": 1610612756,
+     "regionId": 1
+    },
+    {
+     "broadcasterId": 1001467,
+     "broadcastDisplay": "Merc+",
+     "broadcasterDisplay": "Merc+",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "awayRadioBroadcasters": [],
+   "awayOttBroadcasters": []
+  },
+  "homeTeam": {
+   "teamId": 1611661325,
+   "teamName": "Fever",
+   "teamCity": "Indiana",
+   "teamTricode": "IND",
+   "teamSlug": "fever",
+   "teamWins": 10,
+   "teamLosses": 8,
+   "score": 109,
+   "inBonus": "",
+   "timeoutsRemaining": 0,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 35
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 20
+    }
+   ],
+   "players": [
+    {
+     "personId": 203024,
+     "name": "Damiris Dantas",
+     "nameI": "D. Dantas",
+     "firstName": "Damiris",
+     "familyName": "Dantas",
+     "jerseyNum": ""
+    },
+    {
+     "personId": 1628881,
+     "name": "Monique Billings",
+     "nameI": "M. Billings",
+     "firstName": "Monique",
+     "familyName": "Billings",
+     "jerseyNum": ""
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1642788,
+     "firstName": "Bree",
+     "familyName": "Hall",
+     "jerseyNum": "23  "
+    },
+    {
+     "personId": 1643495,
+     "firstName": "Justine",
+     "familyName": "Pissott",
+     "jerseyNum": "13  "
+    }
+   ]
+  },
+  "awayTeam": {
+   "teamId": 1611661317,
+   "teamName": "Mercury",
+   "teamCity": "Phoenix",
+   "teamTricode": "PHX",
+   "teamSlug": "mercury",
+   "teamWins": 6,
+   "teamLosses": 13,
+   "score": 111,
+   "inBonus": "",
+   "timeoutsRemaining": 0,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 29
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 24
+    }
+   ],
+   "players": [
+    {
+     "personId": 201886,
+     "name": "DeWanna Bonner",
+     "nameI": "D. Bonner",
+     "firstName": "DeWanna",
+     "familyName": "Bonner",
+     "jerseyNum": ""
+    },
+    {
+     "personId": 203826,
+     "name": "Alyssa Thomas",
+     "nameI": "A. Thomas",
+     "firstName": "Alyssa",
+     "familyName": "Thomas",
+     "jerseyNum": ""
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1643470,
+     "firstName": "Shay",
+     "familyName": "Ciezki",
+     "jerseyNum": "5   "
+    }
+   ]
+  },
+  "lastFiveMeetings": {
+   "meetings": [
+    {
+     "recencyOrder": 1,
+     "gameId": "1022600125",
+     "gameTimeUTC": "2026-06-23T00:00:00Z",
+     "gameEt": "2026-06-22T20:00:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "",
+     "awayTeam": {
+      "teamId": 1611661317,
+      "teamCity": "Phoenix",
+      "teamName": "Mercury",
+      "teamTricode": "PHX",
+      "teamSlug": "mercury",
+      "score": 77,
+      "wins": 5,
+      "losses": 13
+     },
+     "homeTeam": {
+      "teamId": 1611661325,
+      "teamCity": "Indiana",
+      "teamName": "Fever",
+      "teamTricode": "IND",
+      "teamSlug": "fever",
+      "score": 86,
+      "wins": 10,
+      "losses": 7
+     }
+    },
+    {
+     "recencyOrder": 2,
+     "gameId": "1022500262",
+     "gameTimeUTC": "2025-09-03T02:00:00Z",
+     "gameEt": "2025-09-02T22:00:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "https://leaguepass.wnba.com/live/276139",
+     "awayTeam": {
+      "teamId": 1611661325,
+      "teamCity": "Indiana",
+      "teamName": "Fever",
+      "teamTricode": "IND",
+      "teamSlug": "fever",
+      "score": 79,
+      "wins": 21,
+      "losses": 20
+     },
+     "homeTeam": {
+      "teamId": 1611661317,
+      "teamCity": "Phoenix",
+      "teamName": "Mercury",
+      "teamTricode": "PHX",
+      "teamSlug": "mercury",
+      "score": 85,
+      "wins": 26,
+      "losses": 14
+     }
+    }
+   ]
+  },
+  "pregameCharts": {
+   "homeTeam": {
+    "teamId": 1611661325,
+    "teamCity": "Indiana",
+    "teamName": "Fever",
+    "teamTricode": "IND",
+    "statistics": {
+     "points": 93.0,
+     "reboundsTotal": 33.9,
+     "assists": 21.1,
+     "steals": 6.1,
+     "blocks": 3.9,
+     "turnovers": 16.6,
+     "fieldGoalsPercentage": 0.467,
+     "threePointersPercentage": 0.356,
+     "freeThrowsPercentage": 0.824,
+     "pointsInThePaint": 39.2,
+     "pointsSecondChance": 11.8,
+     "pointsFastBreak": 8.3,
+     "playerPtsLeaderFirstName": "Kelsey",
+     "playerPtsLeaderFamilyName": "Mitchell",
+     "playerPtsLeaderId": 1628909,
+     "playerPtsLeaderPts": 21.4,
+     "playerRebLeaderFirstName": "Aliyah",
+     "playerRebLeaderFamilyName": "Boston",
+     "playerRebLeaderId": 1641648,
+     "playerRebLeaderReb": 8.6,
+     "playerAstLeaderFirstName": "Caitlin",
+     "playerAstLeaderFamilyName": "Clark",
+     "playerAstLeaderId": 1642286,
+     "playerAstLeaderAst": 8.2,
+     "playerBlkLeaderFirstName": "Aliyah",
+     "playerBlkLeaderFamilyName": "Boston",
+     "playerBlkLeaderId": 1641648,
+     "playerBlkLeaderBlk": 1.18
+    }
+   },
+   "awayTeam": {
+    "teamId": 1611661317,
+    "teamCity": "Phoenix",
+    "teamName": "Mercury",
+    "teamTricode": "PHX",
+    "statistics": {
+     "points": 83.7,
+     "reboundsTotal": 31.8,
+     "assists": 19.4,
+     "steals": 7.5,
+     "blocks": 3.6,
+     "turnovers": 13.9,
+     "fieldGoalsPercentage": 0.436,
+     "threePointersPercentage": 0.321,
+     "freeThrowsPercentage": 0.797,
+     "pointsInThePaint": 34.2,
+     "pointsSecondChance": 9.5,
+     "pointsFastBreak": 11.4,
+     "playerPtsLeaderFirstName": "Kahleah",
+     "playerPtsLeaderFamilyName": "Copper",
+     "playerPtsLeaderId": 1627674,
+     "playerPtsLeaderPts": 19.7,
+     "playerRebLeaderFirstName": "Natasha",
+     "playerRebLeaderFamilyName": "Mack",
+     "playerRebLeaderId": 1630442,
+     "playerRebLeaderReb": 8.3,
+     "playerAstLeaderFirstName": "Alyssa",
+     "playerAstLeaderFamilyName": "Thomas",
+     "playerAstLeaderId": 203826,
+     "playerAstLeaderAst": 8.4,
+     "playerBlkLeaderFirstName": "Natasha",
+     "playerBlkLeaderFamilyName": "Mack",
+     "playerBlkLeaderId": 1630442,
+     "playerBlkLeaderBlk": 1.33
+    }
+   }
+  },
+  "postgameCharts": {
+   "homeTeam": {
+    "teamId": 1611661325,
+    "teamCity": "Indiana",
+    "teamName": "Fever",
+    "teamTricode": "IND",
+    "statistics": {
+     "points": 109.0,
+     "reboundsTotal": 26.0,
+     "assists": 30.0,
+     "steals": 6.0,
+     "blocks": 1.0,
+     "turnovers": 16.0,
+     "fieldGoalsPercentage": 0.591,
+     "threePointersPercentage": 0.481,
+     "freeThrowsPercentage": 0.947,
+     "pointsInThePaint": 48.0,
+     "pointsSecondChance": 9.0,
+     "pointsFastBreak": 4.0,
+     "biggestLead": 8.0,
+     "leadChanges": 13.0,
+     "timesTied": 6.0,
+     "biggestScoringRun": 8.0,
+     "turnoversTeam": 0.0,
+     "turnoversTotal": 16.0,
+     "reboundsTeam": 3.0,
+     "pointsFromTurnovers": 10.0,
+     "benchPoints": 20.0,
+     "playerPtsLeaderFirstName": "Kelsey",
+     "playerPtsLeaderFamilyName": "Mitchell",
+     "playerPtsLeaderId": 1628909,
+     "playerPtsLeaderPts": 30.0,
+     "playerRebLeaderFirstName": "Aliyah",
+     "playerRebLeaderFamilyName": "Boston",
+     "playerRebLeaderId": 1641648,
+     "playerRebLeaderReb": 9.0,
+     "playerAstLeaderFirstName": "Caitlin",
+     "playerAstLeaderFamilyName": "Clark",
+     "playerAstLeaderId": 1642286,
+     "playerAstLeaderAst": 8.0,
+     "playerBlkLeaderFirstName": "Myisha",
+     "playerBlkLeaderFamilyName": "Hines-Allen",
+     "playerBlkLeaderId": 1628899,
+     "playerBlkLeaderBlk": 1.0
+    }
+   },
+   "awayTeam": {
+    "teamId": 1611661317,
+    "teamCity": "Phoenix",
+    "teamName": "Mercury",
+    "teamTricode": "PHX",
+    "statistics": {
+     "points": 111.0,
+     "reboundsTotal": 26.0,
+     "assists": 21.0,
+     "steals": 8.0,
+     "blocks": 3.0,
+     "turnovers": 10.0,
+     "fieldGoalsPercentage": 0.591,
+     "threePointersPercentage": 0.35,
+     "freeThrowsPercentage": 0.788,
+     "pointsInThePaint": 52.0,
+     "pointsSecondChance": 11.0,
+     "pointsFastBreak": 17.0,
+     "biggestLead": 6.0,
+     "leadChanges": 13.0,
+     "timesTied": 6.0,
+     "biggestScoringRun": 8.0,
+     "turnoversTeam": 3.0,
+     "turnoversTotal": 13.0,
+     "reboundsTeam": 7.0,
+     "pointsFromTurnovers": 25.0,
+     "benchPoints": 25.0,
+     "playerPtsLeaderFirstName": "Kahleah",
+     "playerPtsLeaderFamilyName": "Copper",
+     "playerPtsLeaderId": 1627674,
+     "playerPtsLeaderPts": 28.0,
+     "playerRebLeaderFirstName": "DeWanna",
+     "playerRebLeaderFamilyName": "Bonner",
+     "playerRebLeaderId": 201886,
+     "playerRebLeaderReb": 8.0,
+     "playerAstLeaderFirstName": "Noemie",
+     "playerAstLeaderFamilyName": "Brochant",
+     "playerAstLeaderId": 1643493,
+     "playerAstLeaderAst": 9.0,
+     "playerBlkLeaderFirstName": "DeWanna",
+     "playerBlkLeaderFamilyName": "Bonner",
+     "playerBlkLeaderId": 201886,
+     "playerBlkLeaderBlk": 1.0
+    }
+   }
+  },
+  "videoAvailableFlag": 1,
+  "ptAvailable": 0,
+  "ptXYZAvailable": 0,
+  "whStatus": 1,
+  "hustleStatus": 1,
+  "historicalStatus": 0,
+  "gameSubtype": ""
+ }
+}

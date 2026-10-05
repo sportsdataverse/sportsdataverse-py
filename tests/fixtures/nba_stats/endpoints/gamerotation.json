@@ -1,0 +1,103 @@
+{
+ "resource": "gamerotation",
+ "parameters": {
+  "GameID": "0022300061",
+  "LeagueID": "00"
+ },
+ "resultSets": [
+  {
+   "name": "AwayTeam",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "PERSON_ID",
+    "PLAYER_FIRST",
+    "PLAYER_LAST",
+    "IN_TIME_REAL",
+    "OUT_TIME_REAL",
+    "PLAYER_PTS",
+    "PT_DIFF",
+    "USG_PCT"
+   ],
+   "rowSet": [
+    [
+     "0022300061",
+     1610612747,
+     "L.A. Lakers",
+     "Lakers",
+     2544,
+     "LeBron",
+     "James",
+     0.0,
+     3530.0,
+     4,
+     -4.0,
+     0.2
+    ],
+    [
+     "0022300061",
+     1610612747,
+     "L.A. Lakers",
+     "Lakers",
+     2544,
+     "LeBron",
+     "James",
+     6794.0,
+     10450.0,
+     4,
+     -2.0,
+     0.308
+    ]
+   ]
+  },
+  {
+   "name": "HomeTeam",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "PERSON_ID",
+    "PLAYER_FIRST",
+    "PLAYER_LAST",
+    "IN_TIME_REAL",
+    "OUT_TIME_REAL",
+    "PLAYER_PTS",
+    "PT_DIFF",
+    "USG_PCT"
+   ],
+   "rowSet": [
+    [
+     "0022300061",
+     1610612743,
+     "Denver",
+     "Nuggets",
+     202704,
+     "Reggie",
+     "Jackson",
+     3530.0,
+     8890.0,
+     8,
+     14.0,
+     0.278
+    ],
+    [
+     "0022300061",
+     1610612743,
+     "Denver",
+     "Nuggets",
+     202704,
+     "Reggie",
+     "Jackson",
+     9220.0,
+     11940.0,
+     0,
+     -4.0,
+     0.273
+    ]
+   ]
+  }
+ ]
+}

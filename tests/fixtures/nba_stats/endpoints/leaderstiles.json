@@ -1,0 +1,124 @@
+{
+ "resource": "leaderstiles",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "GameScope": null,
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Player",
+  "Stat": "PTS"
+ },
+ "resultSet": [
+  {
+   "name": "LeadersTiles",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     203954,
+     "Joel Embiid",
+     1610612755,
+     "PHI",
+     "Philadelphia 76ers",
+     34.7
+    ],
+    [
+     2,
+     1629029,
+     "Luka Dončić",
+     1610612742,
+     "DAL",
+     "Dallas Mavericks",
+     33.9
+    ]
+   ]
+  },
+  {
+   "name": "AllTimeSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     76375,
+     "Wilt Chamberlain",
+     50.4,
+     "1961-62",
+     1610612744,
+     "PHW",
+     "Warriors"
+    ]
+   ]
+  },
+  {
+   "name": "LastSeasonHigh",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     203954,
+     "Joel Embiid",
+     1610612755,
+     "PHI",
+     "Philadelphia 76ers",
+     33.1
+    ],
+    [
+     2,
+     1629029,
+     "Luka Dončić",
+     1610612742,
+     "DAL",
+     "Dallas Mavericks",
+     32.4
+    ]
+   ]
+  },
+  {
+   "name": "LowSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     76764,
+     "Joe Fulks",
+     22.1,
+     "1947-48",
+     1610612744,
+     "PHW",
+     "Warriors"
+    ]
+   ]
+  }
+ ]
+}

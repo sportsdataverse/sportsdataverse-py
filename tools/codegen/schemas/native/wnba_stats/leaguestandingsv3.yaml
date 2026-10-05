@@ -1,42 +1,42 @@
 columns:
 - description: ''
-  name: leagueid
+  name: league_id
   type: character
 - description: ''
-  name: seasonid
+  name: season_id
   type: character
 - description: ''
-  name: teamid
+  name: team_id
   type: integer
 - description: ''
-  name: teamcity
+  name: team_city
   type: character
 - description: ''
-  name: teamname
+  name: team_name
   type: character
 - description: ''
-  name: teamslug
+  name: team_slug
   type: character
 - description: ''
   name: conference
   type: character
 - description: ''
-  name: conferencerecord
+  name: conference_record
   type: character
 - description: ''
-  name: playoffrank
+  name: playoff_rank
   type: integer
 - description: ''
-  name: clinchindicator
+  name: clinch_indicator
   type: character
 - description: ''
   name: division
   type: character
 - description: ''
-  name: divisionrecord
+  name: division_record
   type: character
 - description: ''
-  name: divisionrank
+  name: division_rank
   type: integer
 - description: ''
   name: wins
@@ -45,10 +45,10 @@ columns:
   name: losses
   type: integer
 - description: ''
-  name: winpct
+  name: win_pct
   type: numeric
 - description: ''
-  name: leaguerank
+  name: league_rank
   type: integer
 - description: ''
   name: record
@@ -63,148 +63,148 @@ columns:
   name: l10
   type: character
 - description: ''
-  name: last10home
+  name: last10_home
   type: character
 - description: ''
-  name: last10road
+  name: last10_road
   type: character
 - description: ''
   name: ot
   type: character
 - description: ''
-  name: threeptsorless
+  name: three_pts_or_less
   type: character
 - description: ''
-  name: tenptsormore
+  name: ten_pts_or_more
   type: character
 - description: ''
-  name: longhomestreak
+  name: long_home_streak
   type: integer
 - description: ''
-  name: strlonghomestreak
+  name: str_long_home_streak
   type: character
 - description: ''
-  name: longroadstreak
+  name: long_road_streak
   type: integer
 - description: ''
-  name: strlongroadstreak
+  name: str_long_road_streak
   type: character
 - description: ''
-  name: longwinstreak
+  name: long_win_streak
   type: integer
 - description: ''
-  name: longlossstreak
+  name: long_loss_streak
   type: integer
 - description: ''
-  name: currenthomestreak
+  name: current_home_streak
   type: integer
 - description: ''
-  name: strcurrenthomestreak
+  name: str_current_home_streak
   type: character
 - description: ''
-  name: currentroadstreak
+  name: current_road_streak
   type: integer
 - description: ''
-  name: strcurrentroadstreak
+  name: str_current_road_streak
   type: character
 - description: ''
-  name: currentstreak
+  name: current_streak
   type: integer
 - description: ''
-  name: strcurrentstreak
+  name: str_current_streak
   type: character
 - description: ''
-  name: conferencegamesback
+  name: conference_games_back
   type: numeric
 - description: ''
-  name: divisiongamesback
+  name: division_games_back
   type: numeric
 - description: ''
-  name: clinchedconferencetitle
+  name: clinched_conference_title
   type: integer
 - description: ''
-  name: clincheddivisiontitle
+  name: clinched_division_title
   type: integer
 - description: ''
-  name: clinchedplayoffbirth
+  name: clinched_playoff_birth
   type: integer
 - description: ''
-  name: clinchedplayin
+  name: clinched_play_in
   type: integer
 - description: ''
-  name: eliminatedconference
+  name: eliminated_conference
   type: integer
 - description: ''
-  name: eliminateddivision
+  name: eliminated_division
   type: integer
 - description: ''
-  name: aheadathalf
+  name: ahead_at_half
   type: character
 - description: ''
-  name: behindathalf
+  name: behind_at_half
   type: character
 - description: ''
-  name: tiedathalf
+  name: tied_at_half
   type: character
 - description: ''
-  name: aheadatthird
+  name: ahead_at_third
   type: character
 - description: ''
-  name: behindatthird
+  name: behind_at_third
   type: character
 - description: ''
-  name: tiedatthird
+  name: tied_at_third
   type: character
 - description: ''
-  name: score100pts
+  name: score100_pts
   type: character
 - description: ''
-  name: oppscore100pts
+  name: opp_score100_pts
   type: character
 - description: ''
-  name: oppover500
+  name: opp_over500
   type: character
 - description: ''
-  name: leadinfgpct
+  name: lead_in_fgpct
   type: character
 - description: ''
-  name: leadinreb
+  name: lead_in_reb
   type: character
 - description: ''
-  name: fewerturnovers
+  name: fewer_turnovers
   type: character
 - description: ''
-  name: pointspg
+  name: points_pg
   type: numeric
 - description: ''
-  name: opppointspg
+  name: opp_points_pg
   type: numeric
 - description: ''
-  name: diffpointspg
+  name: diff_points_pg
   type: numeric
 - description: ''
-  name: vseast
+  name: vs_east
   type: character
 - description: ''
-  name: vsatlantic
+  name: vs_atlantic
   type: character
 - description: ''
-  name: vscentral
+  name: vs_central
   type: character
 - description: ''
-  name: vssoutheast
+  name: vs_southeast
   type: character
 - description: ''
-  name: vswest
+  name: vs_west
   type: character
 - description: ''
-  name: vsnorthwest
+  name: vs_northwest
   type: character
 - description: ''
-  name: vspacific
+  name: vs_pacific
   type: character
 - description: ''
-  name: vssouthwest
+  name: vs_southwest
   type: character
 - description: ''
   name: jan
@@ -255,22 +255,22 @@ columns:
   name: opp_score_below_80
   type: character
 - description: ''
-  name: totalpoints
+  name: total_points
   type: integer
 - description: ''
-  name: opptotalpoints
+  name: opp_total_points
   type: integer
 - description: ''
-  name: difftotalpoints
+  name: diff_total_points
   type: integer
 - description: ''
-  name: leaguegamesback
+  name: league_games_back
   type: numeric
 - description: ''
-  name: playoffseeding
+  name: playoff_seeding
   type: integer
 - description: ''
-  name: clinchedpostseason
+  name: clinched_post_season
   type: integer
 - description: ''
   name: neutral

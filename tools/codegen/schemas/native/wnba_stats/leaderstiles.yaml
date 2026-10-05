@@ -1,24 +1,95 @@
-columns:
-- description: ''
-  name: rank
-  type: integer
-- description: ''
-  name: player_id
-  type: integer
-- description: ''
-  name: player
-  type: character
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: team_name
-  type: character
-- description: ''
-  name: pts
-  type: numeric
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  section: LeadersTiles
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  - description: ''
+    name: season_year
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  section: AllTimeSeasonHigh
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  section: LastSeasonHigh
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  - description: ''
+    name: season_year
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  section: LowSeasonHigh
+kind: frames
 schema: leaderstiles

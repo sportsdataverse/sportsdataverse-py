@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Common"
 sidebar_label: "Common"
-sidebar_position: 2
+sidebar_position: 3
 description: "NBA — NBA Stats API (stats.nba.com) — Common — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -42,8 +42,6 @@ GET /stats/commonallplayers
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `games_played_flag` | character | Y/N flag for whether the player has appeared in a league game. |
 | `otherleague_experience_ch` | character | Code for the player's experience in another league (e.g. G League), as reported by the stats API. |
-| `is_nba_assigned` | integer | Flag indicating whether the player is currently on an NBA roster assignment (two-way and G League assignment tracking). |
-| `nba_assigned_team_id` | integer | Team identifier of the NBA team the player is assigned to, when on assignment. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -70,7 +68,9 @@ GET /stats/commonplayerinfo
 
 ### Returns {#nba_stats_commonplayerinfo-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**CommonPlayerInfo**
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -106,6 +106,24 @@ GET /stats/commonplayerinfo
 | `draft_round` | character | Round of the draft selection. |
 | `draft_number` | character | The number pick that was used to select a given player. |
 | `greatest_75_flag` | character | Flag indicating greatest 75 flag for the requested NBA or WNBA Stats context. |
+
+**PlayerHeadlineStats**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `time_frame` | character |  |
+| `pts` | numeric | Points scored. |
+| `ast` | numeric | Assists. |
+| `reb` | numeric | Rebounds per game. |
+| `pie` | integer | Player Impact Estimate (0-1). |
+
+**AvailableSeasons**
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -168,12 +186,14 @@ GET /stats/commonteamroster
 
 ### Returns {#nba_stats_commonteamroster-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**CommonTeamRoster**
+
 | col_name | type | description |
 |---|---|---|
-| `teamid` | integer | Teamid. |
+| `team_id` | integer | Unique team identifier. |
 | `season` | character | Season year. |
-| `leagueid` | character | League identifier from the stats API ("00" = NBA, "10" = WNBA, "20" = G League). |
+| `league_id` | character | League identifier from the stats API ("00" = NBA, "10" = WNBA, "20" = G League). |
 | `player` | character | Player name. |
 | `nickname` | character | Team or athlete nickname. |
 | `player_slug` | character | URL-safe player identifier. |
@@ -187,6 +207,21 @@ GET /stats/commonteamroster
 | `school` | character | Player school / pre-draft team. |
 | `player_id` | integer | Unique player identifier. |
 | `how_acquired` | character | How the team acquired the player (e.g. draft, trade, free agency). |
+
+**Coaches**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `season` | character | Season year. |
+| `coach_id` | integer | ESPN coach id. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `coach_name` | character |  |
+| `is_assistant` | integer |  |
+| `coach_type` | character |  |
+| `sort_sequence` | integer |  |
+| `sub_sort_sequence` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

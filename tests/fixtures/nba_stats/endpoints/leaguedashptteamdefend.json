@@ -1,0 +1,73 @@
+{
+ "resource": "leaguedashptteamdefend",
+ "parameters": {
+  "PerMode": "PerGame",
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "TeamID": 0,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "Conference": null,
+  "Division": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "PORound": null,
+  "DefenseCategory": "Overall",
+  "ISTRound": null
+ },
+ "resultSets": [
+  {
+   "name": "LeagueDashPtTeamDefend",
+   "headers": [
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "GP",
+    "G",
+    "FREQ",
+    "D_FGM",
+    "D_FGA",
+    "D_FG_PCT",
+    "NORMAL_FG_PCT",
+    "PCT_PLUSMINUS"
+   ],
+   "rowSet": [
+    [
+     1610612750,
+     "Minnesota Timberwolves",
+     "MIN",
+     82,
+     82,
+     1.0,
+     39.0,
+     86.73,
+     0.45,
+     0.473,
+     -0.023
+    ],
+    [
+     1610612738,
+     "Boston Celtics",
+     "BOS",
+     82,
+     82,
+     1.0,
+     41.49,
+     91.57,
+     0.453,
+     0.473,
+     -0.019
+    ]
+   ]
+  }
+ ]
+}

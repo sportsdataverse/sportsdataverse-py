@@ -4,22 +4,24 @@ Recruit Database OpenAPI spec (``api.on3.com/public/rdb``, auth-free).
 Idempotent: same spec -> byte-identical output. Modeled on ``gen_nba_stats.py``.
 
 The generator reads the frozen OpenAPI spec (path via the ``SDV_INTERNAL_REFS_REPO``
-env, default ``C:/Users/saiem/Documents/sdv-internal-refs``) and emits:
+env, default ``C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs``) and emits:
 
 * ``tools/codegen/endpoints/on3.yaml`` -- one endpoint per usable GET op, host
   ``https://api.on3.com/public/rdb/v1`` (the single ``/rdb/v2`` op carries an
   endpoint-level ``host`` override so ``host + path`` == the real URL for both).
-* ``tools/codegen/schemas/native/on3/<short>.yaml`` -- returns-schema per endpoint,
-  columns resolved from the 200 response component (array / PagedData ``list`` /
-  plain object). The two legacy scrape schemas (``on3_player_rankings`` /
-  ``on3_team_rankings``) that back the demoted ``_next/data`` rankings shim are
-  PRESERVED, never clobbered.
+* ``tools/codegen/schemas/native/on3/<short>.yaml`` -- returns-schema per endpoint
+  (see ``_schema``): the columns ``parse_on3_rdb`` emits on the committed capture
+  ``tests/fixtures/on3/<short>.json``; without one (or with zero rows), no columns
+  and an ``unverified`` reason. The two legacy scrape schemas
+  (``on3_player_rankings`` / ``on3_team_rankings``) that back the demoted
+  ``_next/data`` rankings shim are PRESERVED, never clobbered.
 
 Run: ``python tools/codegen/gen_on3.py``
 """
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from pathlib import Path
@@ -27,9 +29,12 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
+from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
 from sportsdataverse.dl_utils import underscore
 
 ROOT = Path(__file__).resolve().parents[2]
+FIXTURE_DIR = ROOT / "tests/fixtures/on3"
+_POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
 
 HOST = "https://api.on3.com/public/rdb/v1"
 HOST_V2 = "https://api.on3.com/public/rdb/v2"
@@ -79,7 +84,7 @@ _TOKEN = re.compile(r"\{([^}]+)\}")
 
 
 def _spec_path() -> Path:
-    base = os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs")
+    base = os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
     return Path(base) / "on3" / "on3-recruit-database.openapi.yaml"
 
 
@@ -142,32 +147,77 @@ def _resolve_ref(spec: dict, schema: Any) -> dict:
     return schema if isinstance(schema, dict) else {}
 
 
-def _props_to_cols(obj: dict) -> List[Dict[str, str]]:
-    cols: List[Dict[str, str]] = []
-    for name, pv in (obj or {}).get("properties", {}).items():
-        jtype = (pv or {}).get("type") or "unknown"
-        cols.append({"name": underscore(name), "type": _DTYPE.get(jtype, "character"), "description": ""})
-    return cols
-
-
-def _response_columns(op: dict, spec: dict) -> List[Dict[str, str]]:
-    """Resolve the 200-response schema to a flat returns-column list.
+def _row_schema(op: dict, spec: dict) -> dict:
+    """Resolve the 200-response schema to the schema of ONE parsed row.
 
     Handles the three RDB shapes: a top-level array (unwrap ``items``), a
     ``*PagedData`` object (unwrap the ``list`` array's ``items``), or a plain
-    object / ``On3*Live`` component (use its ``properties`` directly).
+    object / ``On3*Live`` component (the object itself is the row).
     """
     resp = op.get("responses", {}).get("200") or op.get("responses", {}).get(200) or {}
-    schema = resp.get("content", {}).get("application/json", {}).get("schema")
-    if not schema:
-        return []
-    schema = _resolve_ref(spec, schema)
+    schema = _resolve_ref(spec, resp.get("content", {}).get("application/json", {}).get("schema") or {})
     if schema.get("type") == "array":
-        return _props_to_cols(_resolve_ref(spec, schema.get("items", {})))
+        return _resolve_ref(spec, schema.get("items", {}))
     lst = schema.get("properties", {}).get("list")
     if isinstance(lst, dict) and lst.get("type") == "array":
-        return _props_to_cols(_resolve_ref(spec, lst.get("items", {})))
-    return _props_to_cols(schema)
+        return _resolve_ref(spec, lst.get("items", {}))
+    return schema
+
+
+def _spec_types(spec: dict, schema: dict, prefix: str = "", seen: frozenset = frozenset()) -> Dict[str, str]:
+    """``{column: json type}`` for a row schema's leaves, named the way ``parse_on3_rdb``
+    flattens them (``json_normalize(sep="_")`` then ``underscore``). Used only to type a
+    captured column that is all-null in its capture."""
+    out: Dict[str, str] = {}
+    for name, pv in schema.get("properties", {}).items():
+        pv = pv or {}
+        if len(pv.get("allOf") or []) == 1:
+            pv = pv["allOf"][0]
+        ref = pv.get("$ref", "")
+        node = _resolve_ref(spec, pv)
+        if node.get("properties") and ref not in seen:
+            out.update(_spec_types(spec, node, f"{prefix}{name}_", seen | {ref}))
+        else:
+            out[underscore(f"{prefix}{name}")] = node.get("type") or "unknown"
+    return out
+
+
+def _captured_columns(short: str, spec_types: Dict[str, str]) -> List[Dict[str, str]]:
+    """Columns ``parse_on3_rdb`` emits on the committed capture (``[]`` when there is
+    none, or it parses to no columns). An all-null column carries no type signal, so
+    it takes the response type's declared type."""
+    path = FIXTURE_DIR / f"{short}.json"
+    if not path.exists():
+        return []
+    df = parse_on3_rdb(json.loads(path.read_text(encoding="utf-8")))
+    cols = []
+    for col, dtype in df.schema.items():
+        if df[col].null_count() < df.height:
+            rtype = _POLARS_TO_R.get(str(dtype), "character")
+        else:
+            rtype = _DTYPE.get(spec_types.get(col, "unknown"), "character")
+        cols.append({"name": col, "type": rtype, "description": ""})
+    return cols
+
+
+# Why a capture-less endpoint publishes no table. Measured 2026-10-05: of the 9
+# endpoints with a capture whose response type is authoritative (on3_ts_api) and flat
+# -- the best case -- the spec's field names matched parse_on3_rdb's columns on only 7
+# (filters_draft_rounds emits ``round``, not ``value``; people_latest_valuation emits 5
+# fields the spec lacks), and nullable integers come back Float64.
+_UNVERIFIED = (
+    "no committed capture with rows; names derived from the OpenAPI response type matched "
+    "parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published"
+)
+
+
+def _schema(short: str, op: dict, spec: dict) -> Dict[str, Any]:
+    """Returns-schema from the committed capture; else no columns, marked ``unverified``."""
+    doc: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
+    doc["columns"] = _captured_columns(short, _spec_types(spec, _row_schema(op, spec)))
+    if not doc["columns"]:
+        doc["unverified"] = _UNVERIFIED
+    return doc
 
 
 def _path_params(path: str) -> List[Dict[str, Any]]:
@@ -269,8 +319,7 @@ def main() -> None:
         short = _short_from_path(path)
         if short in _PRESERVE:
             continue
-        schema = {"schema": short, "kind": "dataframe", "columns": _response_columns(op, spec)}
-        _write_yaml(schema_dir / f"{short}.yaml", schema)
+        _write_yaml(schema_dir / f"{short}.yaml", _schema(short, op, spec))
     print(f"on3: {len(ops)} endpoints")
 
 

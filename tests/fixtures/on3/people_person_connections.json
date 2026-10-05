@@ -1,0 +1,11 @@
+{
+ "pagination": {
+  "count": 0,
+  "offset": 0,
+  "limit": 1,
+  "itemsPerPage": 1,
+  "currentPage": 1,
+  "pageCount": 0
+ },
+ "list": []
+}

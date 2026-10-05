@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — League"
 sidebar_label: "League"
-sidebar_position: 5
+sidebar_position: 6
 description: "WNBA — WNBA Stats API (stats.wnba.com) — League — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -124,8 +124,8 @@ GET /stats/leaguegamefinder
 | `fgm` | integer | Field goals made. |
 | `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | integer | Three-point field goals made. |
-| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_m` | integer | Three-point field goals made. |
+| `fg3_a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | integer | Free throws made. |
 | `fta` | integer | Free throw attempts. |
@@ -187,8 +187,8 @@ GET /stats/leaguegamelog
 | `fgm` | integer | Field goals made. |
 | `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | integer | Three-point field goals made. |
-| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_m` | integer | Three-point field goals made. |
+| `fg3_a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | integer | Free throws made. |
 | `fta` | integer | Free throw attempts. |
@@ -248,8 +248,8 @@ GET /stats/leagueleaders
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -263,7 +263,6 @@ GET /stats/leagueleaders
 | `tov` | numeric | Turnovers. |
 | `pts` | numeric | Points scored. |
 | `eff` | numeric | Eff. |
-| `nickname` | character | Team or athlete nickname. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -330,9 +329,9 @@ GET /stats/leaguelineupviz
 | `ts_pct` | numeric | True shooting percentage (0-1). |
 | `fta_rate` | numeric | Free throw attempts per field goal attempt for the lineup. |
 | `tm_ast_pct` | numeric | Percentage of the lineup's made field goals that were assisted, as a decimal. |
-| `pct_fga_2pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
-| `pct_fga_3pt` | numeric | Share of field goal attempts taken as three-pointers, as a decimal. |
-| `pct_pts_2pt_mr` | numeric | Share of points scored on mid-range two-pointers, as a decimal. |
+| `pct_fga_2_pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
+| `pct_fga_3_pt` | numeric | Share of field goal attempts taken as three-pointers, as a decimal. |
+| `pct_pts_2_pt_mr` | numeric | Share of points scored on mid-range two-pointers, as a decimal. |
 | `pct_pts_fb` | numeric | Share of points scored on fast breaks, as a decimal. |
 | `pct_pts_ft` | numeric | Share of points scored at the free throw line, as a decimal. |
 | `pct_pts_paint` | numeric | Share of points scored in the paint, as a decimal. |
@@ -406,8 +405,8 @@ GET /stats/leagueplayerondetails
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -432,8 +431,8 @@ GET /stats/leagueplayerondetails
 | `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
@@ -501,8 +500,8 @@ GET /stats/leagueseasonmatchups
 | `matchup_fgm` | numeric | Shooting metric for matchup fgm in the requested NBA or WNBA Stats split. |
 | `matchup_fga` | numeric | Shooting metric for matchup fga in the requested NBA or WNBA Stats split. |
 | `matchup_fg_pct` | numeric | Percentage or rate for matchup field goals percentage in the requested NBA or WNBA Stats split. |
-| `matchup_fg3m` | numeric | Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split. |
-| `matchup_fg3a` | numeric | Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split. |
+| `matchup_fg3_m` | numeric | Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split. |
+| `matchup_fg3_a` | numeric | Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split. |
 | `matchup_fg3_pct` | numeric | Percentage or rate for matchup three-point field goals percentage in the requested NBA or WNBA Stats split. |
 | `help_blk` | integer | NBA or WNBA Stats value for help blocks in the leagueseasonmatchups result set. |
 | `help_fgm` | integer | Shooting metric for help fgm in the requested NBA or WNBA Stats split. |
@@ -542,75 +541,75 @@ GET /stats/leaguestandingsv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `leagueid` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
-| `seasonid` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
-| `teamid` | integer | Teamid. |
-| `teamcity` | character | Teamcity. |
-| `teamname` | character | Teamname. |
-| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `league_id` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
+| `season_id` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `conference` | character | Filter players or teams by conference. |
-| `conferencerecord` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set. |
-| `playoffrank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set. |
-| `clinchindicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set. |
+| `conference_record` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set. |
+| `playoff_rank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set. |
+| `clinch_indicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set. |
 | `division` | character | Team division. |
-| `divisionrecord` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set. |
-| `divisionrank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set. |
+| `division_record` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set. |
+| `division_rank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set. |
 | `wins` | integer | Total wins. |
 | `losses` | integer | Total losses. |
-| `winpct` | numeric | Winning percentage for the team or split represented by this row. |
-| `leaguerank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set. |
+| `win_pct` | numeric | Winning percentage for the team or split represented by this row. |
+| `league_rank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set. |
 | `record` | character | Record string (e.g. '12-4'). |
 | `home` | character | Home. |
 | `road` | character | Road. |
 | `l10` | character | L10. |
-| `last10home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
-| `last10road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
+| `last10_home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
+| `last10_road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
 | `ot` | character | Ot. |
-| `threeptsorless` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
-| `tenptsormore` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
-| `longhomestreak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
-| `strlonghomestreak` | character | NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set. |
-| `longroadstreak` | integer | NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set. |
-| `strlongroadstreak` | character | NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set. |
-| `longwinstreak` | integer | NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set. |
-| `longlossstreak` | integer | NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set. |
-| `currenthomestreak` | integer | NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set. |
-| `strcurrenthomestreak` | character | NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set. |
-| `currentroadstreak` | integer | NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set. |
-| `strcurrentroadstreak` | character | NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set. |
-| `currentstreak` | integer | NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set. |
-| `strcurrentstreak` | character | Strcurrentstreak. |
-| `conferencegamesback` | numeric | NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set. |
-| `divisiongamesback` | numeric | NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set. |
-| `clinchedconferencetitle` | integer | Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context. |
-| `clincheddivisiontitle` | integer | Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context. |
-| `clinchedplayoffbirth` | integer | Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context. |
-| `clinchedplayin` | integer | Flag indicating clinchedplayin for the requested NBA or WNBA Stats context. |
-| `eliminatedconference` | integer | Flag indicating eliminatedconference for the requested NBA or WNBA Stats context. |
-| `eliminateddivision` | integer | Flag indicating eliminateddivision for the requested NBA or WNBA Stats context. |
-| `aheadathalf` | character | NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set. |
-| `behindathalf` | character | NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set. |
-| `tiedathalf` | character | NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set. |
-| `aheadatthird` | character | NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set. |
-| `behindatthird` | character | NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set. |
-| `tiedatthird` | character | NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set. |
-| `score100pts` | character | Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split. |
-| `oppscore100pts` | character | Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split. |
-| `oppover500` | character | NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set. |
-| `leadinfgpct` | character | Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split. |
-| `leadinreb` | character | Rebounding metric for leadinreb in the requested NBA or WNBA Stats split. |
-| `fewerturnovers` | character | Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split. |
-| `pointspg` | numeric | Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split. |
-| `opppointspg` | numeric | Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split. |
-| `diffpointspg` | numeric | Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split. |
-| `vseast` | character | NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set. |
-| `vsatlantic` | character | NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set. |
-| `vscentral` | character | NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set. |
-| `vssoutheast` | character | NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set. |
-| `vswest` | character | NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set. |
-| `vsnorthwest` | character | NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set. |
-| `vspacific` | character | NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set. |
-| `vssouthwest` | character | NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set. |
+| `three_pts_or_less` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
+| `ten_pts_or_more` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
+| `long_home_streak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
+| `str_long_home_streak` | character | NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set. |
+| `long_road_streak` | integer | NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set. |
+| `str_long_road_streak` | character | NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set. |
+| `long_win_streak` | integer | NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set. |
+| `long_loss_streak` | integer | NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set. |
+| `current_home_streak` | integer | NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set. |
+| `str_current_home_streak` | character | NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set. |
+| `current_road_streak` | integer | NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set. |
+| `str_current_road_streak` | character | NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set. |
+| `current_streak` | integer | NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set. |
+| `str_current_streak` | character |  |
+| `conference_games_back` | numeric | NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set. |
+| `division_games_back` | numeric | NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set. |
+| `clinched_conference_title` | integer | Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context. |
+| `clinched_division_title` | integer | Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context. |
+| `clinched_playoff_birth` | integer | Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context. |
+| `clinched_play_in` | integer | Flag indicating clinchedplayin for the requested NBA or WNBA Stats context. |
+| `eliminated_conference` | integer | Flag indicating eliminatedconference for the requested NBA or WNBA Stats context. |
+| `eliminated_division` | integer | Flag indicating eliminateddivision for the requested NBA or WNBA Stats context. |
+| `ahead_at_half` | character | NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set. |
+| `behind_at_half` | character | NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set. |
+| `tied_at_half` | character | NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set. |
+| `ahead_at_third` | character | NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set. |
+| `behind_at_third` | character | NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set. |
+| `tied_at_third` | character | NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set. |
+| `score100_pts` | character | Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split. |
+| `opp_score100_pts` | character | Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split. |
+| `opp_over500` | character | NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set. |
+| `lead_in_fgpct` | character | Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split. |
+| `lead_in_reb` | character | Rebounding metric for leadinreb in the requested NBA or WNBA Stats split. |
+| `fewer_turnovers` | character | Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split. |
+| `points_pg` | numeric | Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split. |
+| `opp_points_pg` | numeric | Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split. |
+| `diff_points_pg` | numeric | Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split. |
+| `vs_east` | character | NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set. |
+| `vs_atlantic` | character | NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set. |
+| `vs_central` | character | NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set. |
+| `vs_southeast` | character | NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set. |
+| `vs_west` | character | NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set. |
+| `vs_northwest` | character | NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set. |
+| `vs_pacific` | character | NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set. |
+| `vs_southwest` | character | NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set. |
 | `jan` | character | Value for January in the endpoint's monthly NBA or WNBA Stats split. |
 | `feb` | character | Value for February in the endpoint's monthly NBA or WNBA Stats split. |
 | `mar` | character | Value for March in the endpoint's monthly NBA or WNBA Stats split. |
@@ -627,12 +626,12 @@ GET /stats/leaguestandingsv3
 | `opp_score_80_plus` | character | Opponent score 80 plus for the requested NBA or WNBA team, player, lineup, or game split. |
 | `score_below_80` | character | Scoring or score-margin metric for score below 80 in the requested NBA or WNBA Stats split. |
 | `opp_score_below_80` | character | Opponent score below 80 for the requested NBA or WNBA team, player, lineup, or game split. |
-| `totalpoints` | integer | Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split. |
-| `opptotalpoints` | integer | Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split. |
-| `difftotalpoints` | integer | Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split. |
-| `leaguegamesback` | numeric | NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set. |
-| `playoffseeding` | integer | NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set. |
-| `clinchedpostseason` | integer | Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context. |
+| `total_points` | integer | Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split. |
+| `opp_total_points` | integer | Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split. |
+| `diff_total_points` | integer | Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split. |
+| `league_games_back` | numeric | NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set. |
+| `playoff_seeding` | integer | NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set. |
+| `clinched_post_season` | integer | Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context. |
 | `neutral` | character | Neutral. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

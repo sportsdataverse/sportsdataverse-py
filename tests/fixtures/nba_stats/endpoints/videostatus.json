@@ -1,0 +1,62 @@
+{
+ "resource": "videostatus",
+ "parameters": {
+  "LeagueID": "00",
+  "GameDate": "01/15/2025"
+ },
+ "resultSets": [
+  {
+   "name": "VideoStatus",
+   "headers": [
+    "GAME_ID",
+    "GAME_DATE",
+    "VISITOR_TEAM_ID",
+    "VISITOR_TEAM_CITY",
+    "VISITOR_TEAM_NAME",
+    "VISITOR_TEAM_ABBREVIATION",
+    "HOME_TEAM_ID",
+    "HOME_TEAM_CITY",
+    "HOME_TEAM_NAME",
+    "HOME_TEAM_ABBREVIATION",
+    "GAME_STATUS",
+    "GAME_STATUS_TEXT",
+    "IS_AVAILABLE",
+    "PT_XYZ_AVAILABLE"
+   ],
+   "rowSet": [
+    [
+     "0022400561",
+     "01/15/2025",
+     1610612752,
+     "New York",
+     "Knicks",
+     "NYK",
+     1610612755,
+     "Philadelphia",
+     "76ers",
+     "PHI",
+     3,
+     "Final",
+     1,
+     1
+    ],
+    [
+     "0022400562",
+     "01/15/2025",
+     1610612738,
+     "Boston",
+     "Celtics",
+     "BOS",
+     1610612761,
+     "Toronto",
+     "Raptors",
+     "TOR",
+     3,
+     "Final",
+     1,
+     1
+    ]
+   ]
+  }
+ ]
+}

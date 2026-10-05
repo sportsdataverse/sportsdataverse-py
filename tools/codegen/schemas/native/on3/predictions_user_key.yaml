@@ -1,3 +1,6 @@
 columns: []
 kind: dataframe
 schema: predictions_user_key
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

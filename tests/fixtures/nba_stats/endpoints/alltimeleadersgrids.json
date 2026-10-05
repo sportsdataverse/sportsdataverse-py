@@ -1,0 +1,505 @@
+{
+ "resource": "alltimeleadersgrids",
+ "parameters": {
+  "LeagueID": "00",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "TopX": "10"
+ },
+ "resultSets": [
+  {
+   "name": "GPLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "GP",
+    "GP_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     1622,
+     1,
+     "Y"
+    ],
+    [
+     305,
+     "Robert Parish",
+     1611,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PTSLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "PTS_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     893,
+     "Michael Jordan",
+     30.1,
+     1,
+     "N"
+    ],
+    [
+     76375,
+     "Wilt Chamberlain",
+     30.1,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "ASTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "AST",
+    "AST_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     77142,
+     "Magic Johnson",
+     11.2,
+     1,
+     "N"
+    ],
+    [
+     304,
+     "John Stockton",
+     10.5,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "STLLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "STL",
+    "STL_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     926,
+     "Alvin Robertson",
+     2.71117,
+     1,
+     "N"
+    ],
+    [
+     77952,
+     "Micheal Ray Richardson",
+     2.63129,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "OREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "OREB",
+    "OREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     77449,
+     "Moses Malone",
+     5.06471,
+     1,
+     "N"
+    ],
+    [
+     23,
+     "Dennis Rodman",
+     4.75192,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "DREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "DREB",
+    "DREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76462,
+     "Dave Cowens",
+     9.77481,
+     1,
+     "N"
+    ],
+    [
+     76916,
+     "Happy Hairston",
+     8.92053,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "REBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "REB",
+    "REB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76375,
+     "Wilt Chamberlain",
+     22.89378,
+     1,
+     "N"
+    ],
+    [
+     78049,
+     "Bill Russell",
+     22.45067,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "BLKLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "BLK",
+    "BLK_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76631,
+     "Mark Eaton",
+     3.50171,
+     1,
+     "N"
+    ],
+    [
+     1641705,
+     "Victor Wembanyama",
+     3.46409,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FGMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGM",
+    "FGM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76375,
+     "Wilt Chamberlain",
+     12.13493,
+     1,
+     "N"
+    ],
+    [
+     893,
+     "Michael Jordan",
+     11.37313,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FGALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGA",
+    "FGA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76127,
+     "Elgin Baylor",
+     23.84279,
+     1,
+     "N"
+    ],
+    [
+     893,
+     "Michael Jordan",
+     22.88899,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FG_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG_PCT",
+    "FG_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1629655,
+     "Daniel Gafford",
+     0.702,
+     1,
+     "Y"
+    ],
+    [
+     201599,
+     "DeAndre Jordan",
+     0.673,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "TOVLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TOV",
+    "TOV_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1629027,
+     "Trae Young",
+     4.19679,
+     1,
+     "Y"
+    ],
+    [
+     1629029,
+     "Luka Dončić",
+     3.95331,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3MLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3M",
+    "FG3M_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201939,
+     "Stephen Curry",
+     3.97381,
+     1,
+     "Y"
+    ],
+    [
+     1642851,
+     "Kon Knueppel",
+     3.37037,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3ALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3A",
+    "FG3A_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201939,
+     "Stephen Curry",
+     9.42283,
+     1,
+     "Y"
+    ],
+    [
+     1629029,
+     "Luka Dončić",
+     9.01167,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3_PCT",
+    "FG3_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     70,
+     "Steve Kerr",
+     0.454,
+     1,
+     "N"
+    ],
+    [
+     1628379,
+     "Luke Kennard",
+     0.442,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "PFLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PF",
+    "PF_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     600012,
+     "George Mikan",
+     4.24146,
+     1,
+     "N"
+    ],
+    [
+     76611,
+     "Walter Dukes",
+     4.0868,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FTMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTM",
+    "FTM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     203954,
+     "Joel Embiid",
+     8.25102,
+     1,
+     "Y"
+    ],
+    [
+     77847,
+     "Bob Pettit",
+     7.80556,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FTALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTA",
+    "FTA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     76375,
+     "Wilt Chamberlain",
+     11.3512,
+     1,
+     "N"
+    ],
+    [
+     77847,
+     "Bob Pettit",
+     10.25126,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FT_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FT_PCT",
+    "FT_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201939,
+     "Stephen Curry",
+     0.912,
+     1,
+     "Y"
+    ],
+    [
+     959,
+     "Steve Nash",
+     0.904,
+     2,
+     "N"
+    ]
+   ]
+  }
+ ]
+}

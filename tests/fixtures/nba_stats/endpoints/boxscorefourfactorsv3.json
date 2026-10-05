@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/0022300061/boxscorefourfactors?Format=json",
+  "time": "2026-06-29T01:45:30.453Z"
+ },
+ "boxScoreFourFactors": {
+  "gameId": "0022300061",
+  "awayTeamId": 1610612747,
+  "homeTeamId": 1610612743,
+  "homeTeam": {
+   "teamId": 1610612743,
+   "teamCity": "Denver",
+   "teamName": "Nuggets",
+   "teamTricode": "DEN",
+   "teamSlug": "nuggets",
+   "players": [
+    {
+     "personId": 1629008,
+     "firstName": "Michael",
+     "familyName": "Porter Jr.",
+     "nameI": "M. Porter Jr.",
+     "playerSlug": "michael-porter-jr",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "1",
+     "statistics": {
+      "minutes": "30:07",
+      "effectiveFieldGoalPercentage": 0.569,
+      "freeThrowAttemptRate": 0.108,
+      "teamTurnoverPercentage": 0.089,
+      "offensiveReboundPercentage": 0.059,
+      "oppEffectiveFieldGoalPercentage": 0.467,
+      "oppFreeThrowAttemptRate": 0.267,
+      "oppTeamTurnoverPercentage": 0.123,
+      "oppOffensiveReboundPercentage": 0.294
+     }
+    },
+    {
+     "personId": 203932,
+     "firstName": "Aaron",
+     "familyName": "Gordon",
+     "nameI": "A. Gordon",
+     "playerSlug": "aaron-gordon",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "50",
+     "statistics": {
+      "minutes": "34:58",
+      "effectiveFieldGoalPercentage": 0.575,
+      "freeThrowAttemptRate": 0.137,
+      "teamTurnoverPercentage": 0.105,
+      "offensiveReboundPercentage": 0.053,
+      "oppEffectiveFieldGoalPercentage": 0.514,
+      "oppFreeThrowAttemptRate": 0.225,
+      "oppTeamTurnoverPercentage": 0.11,
+      "oppOffensiveReboundPercentage": 0.333
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "effectiveFieldGoalPercentage": 0.604,
+    "freeThrowAttemptRate": 0.132,
+    "teamTurnoverPercentage": 0.126,
+    "offensiveReboundPercentage": 0.289,
+    "oppEffectiveFieldGoalPercentage": 0.511,
+    "oppFreeThrowAttemptRate": 0.222,
+    "oppTeamTurnoverPercentage": 0.125,
+    "oppOffensiveReboundPercentage": 0.346
+   }
+  },
+  "awayTeam": {
+   "teamId": 1610612747,
+   "teamCity": "Los Angeles",
+   "teamName": "Lakers",
+   "teamTricode": "LAL",
+   "teamSlug": "lakers",
+   "players": [
+    {
+     "personId": 1627752,
+     "firstName": "Taurean",
+     "familyName": "Prince",
+     "nameI": "T. Prince",
+     "playerSlug": "taurean-prince",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "12",
+     "statistics": {
+      "minutes": "29:53",
+      "effectiveFieldGoalPercentage": 0.458,
+      "freeThrowAttemptRate": 0.271,
+      "teamTurnoverPercentage": 0.125,
+      "offensiveReboundPercentage": 0.027,
+      "oppEffectiveFieldGoalPercentage": 0.578,
+      "oppFreeThrowAttemptRate": 0.109,
+      "oppTeamTurnoverPercentage": 0.089,
+      "oppOffensiveReboundPercentage": 0.214
+     }
+    },
+    {
+     "personId": 2544,
+     "firstName": "LeBron",
+     "familyName": "James",
+     "nameI": "L. James",
+     "playerSlug": "lebron-james",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "23",
+     "statistics": {
+      "minutes": "29:01",
+      "effectiveFieldGoalPercentage": 0.607,
+      "freeThrowAttemptRate": 0.214,
+      "teamTurnoverPercentage": 0.07,
+      "offensiveReboundPercentage": 0.033,
+      "oppEffectiveFieldGoalPercentage": 0.598,
+      "oppFreeThrowAttemptRate": 0.089,
+      "oppTeamTurnoverPercentage": 0.116,
+      "oppOffensiveReboundPercentage": 0.208
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "effectiveFieldGoalPercentage": 0.511,
+    "freeThrowAttemptRate": 0.222,
+    "teamTurnoverPercentage": 0.125,
+    "offensiveReboundPercentage": 0.346,
+    "oppEffectiveFieldGoalPercentage": 0.604,
+    "oppFreeThrowAttemptRate": 0.132,
+    "oppTeamTurnoverPercentage": 0.126,
+    "oppOffensiveReboundPercentage": 0.289
+   }
+  }
+ }
+}

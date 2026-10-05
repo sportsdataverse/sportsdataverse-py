@@ -42,16 +42,13 @@ columns:
   name: team_slug
   type: character
 - description: ''
-  name: games_played_flag
-  type: character
-- description: ''
-  name: otherleague_experience_ch
-  type: character
-- description: ''
   name: is_nba_assigned
   type: integer
 - description: ''
   name: nba_assigned_team_id
   type: integer
+- description: ''
+  name: games_played_flag
+  type: character
 kind: dataframe
 schema: commonallplayers

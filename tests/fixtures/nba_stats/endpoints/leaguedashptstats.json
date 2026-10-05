@@ -1,0 +1,92 @@
+{
+ "resource": "leaguedashptstats",
+ "parameters": {
+  "PtMeasureType": "SpeedDistance",
+  "PerMode": "PerGame",
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PORound": null,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "VsConference": null,
+  "VsDivision": null,
+  "TeamID": 0,
+  "Conference": null,
+  "Division": null,
+  "GameScope": null,
+  "PlayerExperience": null,
+  "PlayerPosition": null,
+  "StarterBench": null,
+  "DraftYear": null,
+  "DraftPick": null,
+  "College": null,
+  "Country": null,
+  "Height": null,
+  "Weight": null,
+  "PlayerOrTeam": "Player",
+  "ISTRound": null
+ },
+ "resultSets": [
+  {
+   "name": "LeagueDashPtStats",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "GP",
+    "W",
+    "L",
+    "MIN",
+    "DIST_FEET",
+    "DIST_MILES",
+    "DIST_MILES_OFF",
+    "DIST_MILES_DEF",
+    "AVG_SPEED",
+    "AVG_SPEED_OFF",
+    "AVG_SPEED_DEF"
+   ],
+   "rowSet": [
+    [
+     1630639,
+     "A.J. Lawson",
+     1610612742,
+     "DAL",
+     41,
+     26,
+     15,
+     7.5,
+     3282.4,
+     0.6,
+     0.3,
+     0.3,
+     4.62,
+     4.77,
+     4.44
+    ],
+    [
+     1631260,
+     "AJ Green",
+     1610612749,
+     "MIL",
+     56,
+     35,
+     21,
+     11.0,
+     4523.1,
+     0.9,
+     0.5,
+     0.4,
+     4.34,
+     4.72,
+     3.99
+    ]
+   ]
+  }
+ ]
+}

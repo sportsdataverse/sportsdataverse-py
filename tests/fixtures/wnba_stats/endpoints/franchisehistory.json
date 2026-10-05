@@ -1,0 +1,120 @@
+{
+ "resource": "franchisehistory",
+ "parameters": {
+  "LeagueID": "10"
+ },
+ "resultSets": [
+  {
+   "name": "FranchiseHistory",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "10",
+     1611661330,
+     "Atlanta",
+     "Dream",
+     "2008",
+     "2026",
+     19,
+     641,
+     296,
+     345,
+     0.462,
+     11,
+     0,
+     3,
+     0
+    ],
+    [
+     "10",
+     1611661329,
+     "Chicago",
+     "Sky",
+     "2006",
+     "2026",
+     21,
+     708,
+     313,
+     395,
+     0.442,
+     9,
+     0,
+     2,
+     1
+    ]
+   ]
+  },
+  {
+   "name": "DefunctTeams",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "10",
+     1611661314,
+     "Charlotte",
+     "Sting",
+     "1997",
+     "2006",
+     10,
+     322,
+     143,
+     179,
+     0.444,
+     6,
+     0,
+     0,
+     0
+    ],
+    [
+     "10",
+     1611661315,
+     "Cleveland",
+     "Rockers",
+     "1997",
+     "2003",
+     7,
+     220,
+     108,
+     112,
+     0.491,
+     4,
+     0,
+     0,
+     0
+    ]
+   ]
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashteamshotlocations"
 sidebar_label: "League dashboards: leaguedashlineups–leaguedashteamshotlocations"
-sidebar_position: 7
+sidebar_position: 8
 description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashteamshotlocations — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -62,8 +62,8 @@ GET /stats/leaguedashlineups
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -88,8 +88,8 @@ GET /stats/leaguedashlineups
 | `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
@@ -170,13 +170,13 @@ GET /stats/leaguedashoppptshot
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `fg2a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
-| `fg2m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
-| `fg2a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
+| `fg2_a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
+| `fg2_m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
+| `fg2_a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
 | `fg2_pct` | numeric | Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split. |
-| `fg3a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -339,8 +339,8 @@ GET /stats/leaguedashplayerclutch
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -369,8 +369,8 @@ GET /stats/leaguedashplayerclutch
 | `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
 | `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
 | `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
 | `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
 | `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
 | `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
@@ -466,13 +466,13 @@ GET /stats/leaguedashplayerptshot
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `fg2a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
-| `fg2m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
-| `fg2a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
+| `fg2_a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
+| `fg2_m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
+| `fg2_a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
 | `fg2_pct` | numeric | Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split. |
-| `fg3a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -546,27 +546,27 @@ GET /stats/leaguedashplayershotlocations
 | `less_than_5_ft_fgm` | numeric | Field goals made from less than 5 feet. |
 | `less_than_5_ft_fga` | numeric | Field goals attempted from less than 5 feet. |
 | `less_than_5_ft_fg_pct` | numeric | Field goal percentage on shots from less than 5 feet, as a decimal. |
-| `5-9_ft_fgm` | numeric | Field goals made from 5-9 feet. |
-| `5-9_ft_fga` | numeric | Field goals attempted from 5-9 feet. |
-| `5-9_ft_fg_pct` | numeric | Field goal percentage on shots from 5-9-f feet, as a decimal. |
-| `10-14_ft_fgm` | numeric | Field goals made from 10-14 feet. |
-| `10-14_ft_fga` | numeric | Field goals attempted from 10-14 feet. |
-| `10-14_ft_fg_pct` | numeric | Field goal percentage on shots from 10-14-f feet, as a decimal. |
-| `15-19_ft_fgm` | numeric | Field goals made from 15-19 feet. |
-| `15-19_ft_fga` | numeric | Field goals attempted from 15-19 feet. |
-| `15-19_ft_fg_pct` | numeric | Field goal percentage on shots from 15-19-f feet, as a decimal. |
-| `20-24_ft_fgm` | numeric | Field goals made from 20-24 feet. |
-| `20-24_ft_fga` | numeric | Field goals attempted from 20-24 feet. |
-| `20-24_ft_fg_pct` | numeric | Field goal percentage on shots from 20-24-f feet, as a decimal. |
-| `25-29_ft_fgm` | numeric | Field goals made from 25-29 feet. |
-| `25-29_ft_fga` | numeric | Field goals attempted from 25-29 feet. |
-| `25-29_ft_fg_pct` | numeric | Field goal percentage on shots from 25-29-f feet, as a decimal. |
-| `30-34_ft_fgm` | numeric | Field goals made from 30-34 feet. |
-| `30-34_ft_fga` | numeric | Field goals attempted from 30-34 feet. |
-| `30-34_ft_fg_pct` | numeric | Field goal percentage on shots from 30-34-f feet, as a decimal. |
-| `35-39_ft_fgm` | numeric | Field goals made from 35-39 feet. |
-| `35-39_ft_fga` | numeric | Field goals attempted from 35-39 feet. |
-| `35-39_ft_fg_pct` | numeric | Field goal percentage on shots from 35-39-f feet, as a decimal. |
+| `5_9_ft_fgm` | numeric | Field goals made from 5-9 feet. |
+| `5_9_ft_fga` | numeric | Field goals attempted from 5-9 feet. |
+| `5_9_ft_fg_pct` | numeric | Field goal percentage on shots from 5-9-f feet, as a decimal. |
+| `10_14_ft_fgm` | numeric | Field goals made from 10-14 feet. |
+| `10_14_ft_fga` | numeric | Field goals attempted from 10-14 feet. |
+| `10_14_ft_fg_pct` | numeric | Field goal percentage on shots from 10-14-f feet, as a decimal. |
+| `15_19_ft_fgm` | numeric | Field goals made from 15-19 feet. |
+| `15_19_ft_fga` | numeric | Field goals attempted from 15-19 feet. |
+| `15_19_ft_fg_pct` | numeric | Field goal percentage on shots from 15-19-f feet, as a decimal. |
+| `20_24_ft_fgm` | numeric | Field goals made from 20-24 feet. |
+| `20_24_ft_fga` | numeric | Field goals attempted from 20-24 feet. |
+| `20_24_ft_fg_pct` | numeric | Field goal percentage on shots from 20-24-f feet, as a decimal. |
+| `25_29_ft_fgm` | numeric | Field goals made from 25-29 feet. |
+| `25_29_ft_fga` | numeric | Field goals attempted from 25-29 feet. |
+| `25_29_ft_fg_pct` | numeric | Field goal percentage on shots from 25-29-f feet, as a decimal. |
+| `30_34_ft_fgm` | numeric | Field goals made from 30-34 feet. |
+| `30_34_ft_fga` | numeric | Field goals attempted from 30-34 feet. |
+| `30_34_ft_fg_pct` | numeric | Field goal percentage on shots from 30-34-f feet, as a decimal. |
+| `35_39_ft_fgm` | numeric | Field goals made from 35-39 feet. |
+| `35_39_ft_fga` | numeric | Field goals attempted from 35-39 feet. |
+| `35_39_ft_fg_pct` | numeric | Field goal percentage on shots from 35-39-f feet, as a decimal. |
 | `40+_ft_fgm` | numeric | Field goals made from 40 feet and beyond, per the stats API's shot-location distance bands. |
 | `40+_ft_fga` | numeric | Field goals attempted from 40 feet and beyond, per the stats API's shot-location distance bands. |
 | `40+_ft_fg_pct` | numeric | Field-goal percentage on attempts from 40 feet and beyond, as a decimal. |
@@ -647,8 +647,8 @@ GET /stats/leaguedashplayerstats
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -677,8 +677,8 @@ GET /stats/leaguedashplayerstats
 | `fgm_rank` | integer | Player's league rank for field goals made (1 = most made). |
 | `fga_rank` | integer | Player's league rank for field goal attempts (1 = most attempts). |
 | `fg_pct_rank` | integer | Player's league rank for field goal percentage (1 = highest pct). |
-| `fg3m_rank` | integer | Player's league rank for three-point field goals made (1 = most made). |
-| `fg3a_rank` | integer | Player's league rank for three-point field goal attempts (1 = most attempts). |
+| `fg3_m_rank` | integer | Player's league rank for three-point field goals made (1 = most made). |
+| `fg3_a_rank` | integer | Player's league rank for three-point field goal attempts (1 = most attempts). |
 | `fg3_pct_rank` | integer | Player's league rank for three-point percentage (1 = highest pct). |
 | `ftm_rank` | integer | Player's league rank for free throws made (1 = most made). |
 | `fta_rank` | integer | Player's league rank for free throw attempts (1 = most attempts). |
@@ -972,8 +972,8 @@ GET /stats/leaguedashteamclutch
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -998,8 +998,8 @@ GET /stats/leaguedashteamclutch
 | `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
 | `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
 | `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
 | `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
 | `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
 | `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
@@ -1079,13 +1079,13 @@ GET /stats/leaguedashteamptshot
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
-| `fg2a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
-| `fg2m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
-| `fg2a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
+| `fg2_a_frequency` | numeric | Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split. |
+| `fg2_m` | numeric | Shooting metric for fg2m in the requested NBA or WNBA Stats split. |
+| `fg2_a` | numeric | Shooting metric for fg2a in the requested NBA or WNBA Stats split. |
 | `fg2_pct` | numeric | Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split. |
-| `fg3a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_a_frequency` | numeric | Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1149,27 +1149,27 @@ GET /stats/leaguedashteamshotlocations
 | `less_than_5_ft_fgm` | numeric | Field goals made from less than 5 feet. |
 | `less_than_5_ft_fga` | numeric | Field goals attempted from less than 5 feet. |
 | `less_than_5_ft_fg_pct` | numeric | Field goal percentage on shots from less than 5 feet, as a decimal. |
-| `5-9_ft_fgm` | numeric | Field goals made from 5-9 feet. |
-| `5-9_ft_fga` | numeric | Field goals attempted from 5-9 feet. |
-| `5-9_ft_fg_pct` | numeric | Field goal percentage on shots from 5-9-f feet, as a decimal. |
-| `10-14_ft_fgm` | numeric | Field goals made from 10-14 feet. |
-| `10-14_ft_fga` | numeric | Field goals attempted from 10-14 feet. |
-| `10-14_ft_fg_pct` | numeric | Field goal percentage on shots from 10-14-f feet, as a decimal. |
-| `15-19_ft_fgm` | numeric | Field goals made from 15-19 feet. |
-| `15-19_ft_fga` | numeric | Field goals attempted from 15-19 feet. |
-| `15-19_ft_fg_pct` | numeric | Field goal percentage on shots from 15-19-f feet, as a decimal. |
-| `20-24_ft_fgm` | numeric | Field goals made from 20-24 feet. |
-| `20-24_ft_fga` | numeric | Field goals attempted from 20-24 feet. |
-| `20-24_ft_fg_pct` | numeric | Field goal percentage on shots from 20-24-f feet, as a decimal. |
-| `25-29_ft_fgm` | numeric | Field goals made from 25-29 feet. |
-| `25-29_ft_fga` | numeric | Field goals attempted from 25-29 feet. |
-| `25-29_ft_fg_pct` | numeric | Field goal percentage on shots from 25-29-f feet, as a decimal. |
-| `30-34_ft_fgm` | numeric | Field goals made from 30-34 feet. |
-| `30-34_ft_fga` | numeric | Field goals attempted from 30-34 feet. |
-| `30-34_ft_fg_pct` | numeric | Field goal percentage on shots from 30-34-f feet, as a decimal. |
-| `35-39_ft_fgm` | numeric | Field goals made from 35-39 feet. |
-| `35-39_ft_fga` | numeric | Field goals attempted from 35-39 feet. |
-| `35-39_ft_fg_pct` | numeric | Field goal percentage on shots from 35-39-f feet, as a decimal. |
+| `5_9_ft_fgm` | numeric | Field goals made from 5-9 feet. |
+| `5_9_ft_fga` | numeric | Field goals attempted from 5-9 feet. |
+| `5_9_ft_fg_pct` | numeric | Field goal percentage on shots from 5-9-f feet, as a decimal. |
+| `10_14_ft_fgm` | numeric | Field goals made from 10-14 feet. |
+| `10_14_ft_fga` | numeric | Field goals attempted from 10-14 feet. |
+| `10_14_ft_fg_pct` | numeric | Field goal percentage on shots from 10-14-f feet, as a decimal. |
+| `15_19_ft_fgm` | numeric | Field goals made from 15-19 feet. |
+| `15_19_ft_fga` | numeric | Field goals attempted from 15-19 feet. |
+| `15_19_ft_fg_pct` | numeric | Field goal percentage on shots from 15-19-f feet, as a decimal. |
+| `20_24_ft_fgm` | numeric | Field goals made from 20-24 feet. |
+| `20_24_ft_fga` | numeric | Field goals attempted from 20-24 feet. |
+| `20_24_ft_fg_pct` | numeric | Field goal percentage on shots from 20-24-f feet, as a decimal. |
+| `25_29_ft_fgm` | numeric | Field goals made from 25-29 feet. |
+| `25_29_ft_fga` | numeric | Field goals attempted from 25-29 feet. |
+| `25_29_ft_fg_pct` | numeric | Field goal percentage on shots from 25-29-f feet, as a decimal. |
+| `30_34_ft_fgm` | numeric | Field goals made from 30-34 feet. |
+| `30_34_ft_fga` | numeric | Field goals attempted from 30-34 feet. |
+| `30_34_ft_fg_pct` | numeric | Field goal percentage on shots from 30-34-f feet, as a decimal. |
+| `35_39_ft_fgm` | numeric | Field goals made from 35-39 feet. |
+| `35_39_ft_fga` | numeric | Field goals attempted from 35-39 feet. |
+| `35_39_ft_fg_pct` | numeric | Field goal percentage on shots from 35-39-f feet, as a decimal. |
 | `40+_ft_fgm` | numeric | Team field goals made from 40 feet and beyond, per the stats API's shot-location distance bands. |
 | `40+_ft_fga` | numeric | Team field goals attempted from 40 feet and beyond, per the stats API's shot-location distance bands. |
 | `40+_ft_fg_pct` | numeric | Team field-goal percentage on attempts from 40 feet and beyond, as a decimal. |

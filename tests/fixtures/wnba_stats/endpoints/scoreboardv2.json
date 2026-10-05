@@ -1,0 +1,452 @@
+{
+ "resource": "scoreboardV2",
+ "parameters": {
+  "GameDate": "08/15/2024",
+  "LeagueID": "10",
+  "DayOffset": "0"
+ },
+ "resultSets": [
+  {
+   "name": "GameHeader",
+   "headers": [
+    "GAME_DATE_EST",
+    "GAME_SEQUENCE",
+    "GAME_ID",
+    "GAME_STATUS_ID",
+    "GAME_STATUS_TEXT",
+    "GAMECODE",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "SEASON",
+    "LIVE_PERIOD",
+    "LIVE_PC_TIME",
+    "NATL_TV_BROADCASTER_ABBREVIATION",
+    "HOME_TV_BROADCASTER_ABBREVIATION",
+    "AWAY_TV_BROADCASTER_ABBREVIATION",
+    "LIVE_PERIOD_TIME_BCAST",
+    "ARENA_NAME",
+    "WH_STATUS",
+    "WNBA_COMMISSIONER_FLAG"
+   ],
+   "rowSet": [
+    [
+     "2024-08-15T00:00:00",
+     1,
+     "1022400149",
+     3,
+     "Final",
+     "20240815/PHOCHI",
+     1611661329,
+     1611661317,
+     "2024",
+     4,
+     "     ",
+     "Amazon",
+     "Marquee",
+     "Mercury Live",
+     "Q4       - Amazon",
+     "Wintrust Arena",
+     1,
+     0
+    ],
+    [
+     "2024-08-15T00:00:00",
+     2,
+     "1022400150",
+     3,
+     "Final",
+     "20240815/WASMIN",
+     1611661324,
+     1611661322,
+     "2024",
+     4,
+     "     ",
+     "ESPN3",
+     "BSNX",
+     "MNMT",
+     "Q4       - ESPN3",
+     "Target Center",
+     1,
+     0
+    ],
+    [
+     "2024-08-15T00:00:00",
+     3,
+     "1022400151",
+     3,
+     "Final",
+     "20240815/NYLLAS",
+     1611661320,
+     1611661313,
+     "2024",
+     4,
+     "     ",
+     "ESPN",
+     null,
+     null,
+     "Q4       - ESPN",
+     "Crypto.com Arena",
+     1,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "LineScore",
+   "headers": [
+    "GAME_DATE_EST",
+    "GAME_SEQUENCE",
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY_NAME",
+    "TEAM_NAME",
+    "TEAM_WINS_LOSSES",
+    "PTS_QTR1",
+    "PTS_QTR2",
+    "PTS_QTR3",
+    "PTS_QTR4",
+    "PTS_OT1",
+    "PTS_OT2",
+    "PTS_OT3",
+    "PTS_OT4",
+    "PTS_OT5",
+    "PTS_OT6",
+    "PTS_OT7",
+    "PTS_OT8",
+    "PTS_OT9",
+    "PTS_OT10",
+    "PTS",
+    "FG_PCT",
+    "FT_PCT",
+    "FG3_PCT",
+    "AST",
+    "REB",
+    "TOV"
+   ],
+   "rowSet": [
+    [
+     "2024-08-15T00:00:00",
+     1,
+     "1022400149",
+     1611661317,
+     "PHO",
+     "Phoenix",
+     "Mercury",
+     "14-12",
+     30,
+     20,
+     19,
+     16,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     85,
+     0.559,
+     0.636,
+     0.522,
+     26,
+     34,
+     12
+    ],
+    [
+     "2024-08-15T00:00:00",
+     1,
+     "1022400149",
+     1611661329,
+     "CHI",
+     "Chicago",
+     "Sky",
+     "10-15",
+     12,
+     16,
+     24,
+     13,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     65,
+     0.37,
+     0.5,
+     0.211,
+     14,
+     33,
+     11
+    ]
+   ]
+  },
+  {
+   "name": "SeriesStandings",
+   "headers": [
+    "GAME_ID",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "GAME_DATE_EST",
+    "HOME_TEAM_WINS",
+    "HOME_TEAM_LOSSES",
+    "SERIES_LEADER"
+   ],
+   "rowSet": [
+    [
+     "1022400149",
+     1611661329,
+     1611661317,
+     "2024-08-15T00:00:00",
+     0,
+     3,
+     "Phoenix"
+    ],
+    [
+     "1022400150",
+     1611661324,
+     1611661322,
+     "2024-08-15T00:00:00",
+     4,
+     0,
+     "Minnesota"
+    ]
+   ]
+  },
+  {
+   "name": "LastMeeting",
+   "headers": [
+    "GAME_ID",
+    "LAST_GAME_ID",
+    "LAST_GAME_DATE_EST",
+    "LAST_GAME_HOME_TEAM_ID",
+    "LAST_GAME_HOME_TEAM_CITY",
+    "LAST_GAME_HOME_TEAM_NAME",
+    "LAST_GAME_HOME_TEAM_ABBREVIATION",
+    "LAST_GAME_HOME_TEAM_POINTS",
+    "LAST_GAME_VISITOR_TEAM_ID",
+    "LAST_GAME_VISITOR_TEAM_CITY",
+    "LAST_GAME_VISITOR_TEAM_NAME",
+    "LAST_GAME_VISITOR_TEAM_CITY1",
+    "LAST_GAME_VISITOR_TEAM_POINTS"
+   ],
+   "rowSet": [
+    [
+     "1022400149",
+     "1022300148",
+     "2023-07-30T00:00:00",
+     1611661329,
+     "Chicago",
+     "Sky",
+     "CHI",
+     104,
+     1611661317,
+     "Phoenix",
+     "Mercury",
+     "PHO",
+     85
+    ],
+    [
+     "1022400150",
+     "1022400122",
+     "2024-07-06T00:00:00",
+     1611661324,
+     "Minnesota",
+     "Lynx",
+     "MIN",
+     74,
+     1611661322,
+     "Washington",
+     "Mystics",
+     "WAS",
+     67
+    ]
+   ]
+  },
+  {
+   "name": "EastConfStandingsByDay",
+   "headers": [
+    "TEAM_ID",
+    "LEAGUE_ID",
+    "SEASON_ID",
+    "STANDINGSDATE",
+    "CONFERENCE",
+    "TEAM",
+    "G",
+    "W",
+    "L",
+    "W_PCT",
+    "HOME_RECORD",
+    "ROAD_RECORD"
+   ],
+   "rowSet": [
+    [
+     1611661313,
+     "10",
+     "22024",
+     "08/15/2024",
+     "East",
+     "New York",
+     26,
+     22,
+     4,
+     0.846,
+     "12-1",
+     "10-3"
+    ],
+    [
+     1611661323,
+     "10",
+     "22024",
+     "08/15/2024",
+     "East",
+     "Connecticut",
+     24,
+     18,
+     6,
+     0.75,
+     "10-3",
+     "8-3"
+    ]
+   ]
+  },
+  {
+   "name": "WestConfStandingsByDay",
+   "headers": [
+    "TEAM_ID",
+    "LEAGUE_ID",
+    "SEASON_ID",
+    "STANDINGSDATE",
+    "CONFERENCE",
+    "TEAM",
+    "G",
+    "W",
+    "L",
+    "W_PCT",
+    "HOME_RECORD",
+    "ROAD_RECORD"
+   ],
+   "rowSet": [
+    [
+     1611661324,
+     "10",
+     "22024",
+     "08/15/2024",
+     "West",
+     "Minnesota",
+     26,
+     18,
+     8,
+     0.692,
+     "12-3",
+     "6-5"
+    ],
+    [
+     1611661328,
+     "10",
+     "22024",
+     "08/15/2024",
+     "West",
+     "Seattle",
+     25,
+     17,
+     8,
+     0.68,
+     "11-3",
+     "6-5"
+    ]
+   ]
+  },
+  {
+   "name": "Available",
+   "headers": [
+    "GAME_ID",
+    "PT_AVAILABLE"
+   ],
+   "rowSet": [
+    [
+     "1022400149",
+     0
+    ],
+    [
+     "1022400150",
+     0
+    ]
+   ]
+  },
+  {
+   "name": "TeamLeaders",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NICKNAME",
+    "TEAM_ABBREVIATION",
+    "PTS_PLAYER_ID",
+    "PTS_PLAYER_NAME",
+    "PTS",
+    "REB_PLAYER_ID",
+    "REB_PLAYER_NAME",
+    "REB",
+    "AST_PLAYER_ID",
+    "AST_PLAYER_NAME",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     "1022400149",
+     1611661317,
+     "Phoenix",
+     "Mercury",
+     "PHO",
+     1627674,
+     "Kahleah Copper",
+     29,
+     203398,
+     "Brittney Griner",
+     9,
+     203398,
+     "Brittney Griner",
+     6
+    ],
+    [
+     "1022400149",
+     1611661329,
+     "Chicago",
+     "Sky",
+     "CHI",
+     1630389,
+     "Dana Evans",
+     14,
+     1642291,
+     "Angel Reese",
+     15,
+     1628263,
+     "Lindsay Allen",
+     6
+    ]
+   ]
+  },
+  {
+   "name": "TicketLinks",
+   "headers": [
+    "GAME_ID",
+    "LEAG_TIX"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "WinProbability",
+   "headers": [],
+   "rowSet": []
+  }
+ ]
+}

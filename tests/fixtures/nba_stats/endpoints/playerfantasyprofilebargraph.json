@@ -1,0 +1,89 @@
+{
+ "resource": "playerfantasyprofilebargraph",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PlayerID": 2544
+ },
+ "resultSets": [
+  {
+   "name": "SeasonAvg",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "FAN_DUEL_PTS",
+    "NBA_FANTASY_PTS",
+    "PTS",
+    "REB",
+    "AST",
+    "FG3M",
+    "FT_PCT",
+    "STL",
+    "BLK",
+    "TOV",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     1610612747,
+     "LAL",
+     47.0,
+     48.8,
+     25.7,
+     7.3,
+     8.3,
+     2.1,
+     0.75,
+     1.25,
+     0.54,
+     3.5,
+     0.54
+    ]
+   ]
+  },
+  {
+   "name": "LastFiveGamesAvg",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "FAN_DUEL_PTS",
+    "NBA_FANTASY_PTS",
+    "PTS",
+    "REB",
+    "AST",
+    "FG3M",
+    "FT_PCT",
+    "STL",
+    "BLK",
+    "TOV",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     1610612747,
+     "LAL",
+     56.0,
+     59.0,
+     29.4,
+     7.8,
+     10.8,
+     1.0,
+     0.778,
+     2.6,
+     0.4,
+     5.0,
+     0.582
+    ]
+   ]
+  }
+ ]
+}

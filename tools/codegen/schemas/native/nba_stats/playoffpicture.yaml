@@ -1,78 +1,267 @@
-columns:
-- description: ''
-  name: conference
-  type: character
-- description: ''
-  name: rank
-  type: integer
-- description: ''
-  name: team
-  type: character
-- description: ''
-  name: team_slug
-  type: character
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: wins
-  type: integer
-- description: ''
-  name: losses
-  type: integer
-- description: ''
-  name: pct
-  type: numeric
-- description: ''
-  name: div
-  type: character
-- description: ''
-  name: conf
-  type: character
-- description: ''
-  name: home
-  type: character
-- description: ''
-  name: away
-  type: character
-- description: ''
-  name: gb
-  type: numeric
-- description: ''
-  name: gr_over_500
-  type: integer
-- description: ''
-  name: gr_over_500_home
-  type: integer
-- description: ''
-  name: gr_over_500_away
-  type: integer
-- description: ''
-  name: gr_under_500
-  type: integer
-- description: ''
-  name: gr_under_500_home
-  type: integer
-- description: ''
-  name: gr_under_500_away
-  type: integer
-- description: ''
-  name: ranking_criteria
-  type: integer
-- description: ''
-  name: clinched_playoffs
-  type: integer
-- description: ''
-  name: clinched_conference
-  type: integer
-- description: ''
-  name: clinched_division
-  type: integer
-- description: ''
-  name: eliminated_playoffs
-  type: integer
-- description: ''
-  name: sosa_remaining
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: conference
+    type: character
+  - description: ''
+    name: high_seed_rank
+    type: integer
+  - description: ''
+    name: high_seed_team
+    type: character
+  - description: ''
+    name: high_seed_team_id
+    type: integer
+  - description: ''
+    name: low_seed_rank
+    type: integer
+  - description: ''
+    name: low_seed_team
+    type: character
+  - description: ''
+    name: low_seed_team_id
+    type: integer
+  - description: ''
+    name: high_seed_series_w
+    type: integer
+  - description: ''
+    name: high_seed_series_l
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_g
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_home_g
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_away_g
+    type: integer
+  section: EastConfPlayoffPicture
+- columns:
+  - description: ''
+    name: conference
+    type: character
+  - description: ''
+    name: high_seed_rank
+    type: integer
+  - description: ''
+    name: high_seed_team
+    type: character
+  - description: ''
+    name: high_seed_team_id
+    type: integer
+  - description: ''
+    name: low_seed_rank
+    type: integer
+  - description: ''
+    name: low_seed_team
+    type: character
+  - description: ''
+    name: low_seed_team_id
+    type: integer
+  - description: ''
+    name: high_seed_series_w
+    type: integer
+  - description: ''
+    name: high_seed_series_l
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_g
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_home_g
+    type: integer
+  - description: ''
+    name: high_seed_series_remaining_away_g
+    type: integer
+  section: WestConfPlayoffPicture
+- columns:
+  - description: ''
+    name: conference
+    type: character
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: wins
+    type: integer
+  - description: ''
+    name: losses
+    type: integer
+  - description: ''
+    name: pct
+    type: numeric
+  - description: ''
+    name: div
+    type: character
+  - description: ''
+    name: conf
+    type: character
+  - description: ''
+    name: home
+    type: character
+  - description: ''
+    name: away
+    type: character
+  - description: ''
+    name: gb
+    type: numeric
+  - description: ''
+    name: gr_over_500
+    type: integer
+  - description: ''
+    name: gr_over_500_home
+    type: integer
+  - description: ''
+    name: gr_over_500_away
+    type: integer
+  - description: ''
+    name: gr_under_500
+    type: integer
+  - description: ''
+    name: gr_under_500_home
+    type: integer
+  - description: ''
+    name: gr_under_500_away
+    type: integer
+  - description: ''
+    name: ranking_criteria
+    type: integer
+  - description: ''
+    name: clinched_playoffs
+    type: integer
+  - description: ''
+    name: clinched_conference
+    type: integer
+  - description: ''
+    name: clinched_division
+    type: integer
+  - description: ''
+    name: eliminated_playoffs
+    type: integer
+  - description: ''
+    name: sosa_remaining
+    type: character
+  section: EastConfStandings
+- columns:
+  - description: ''
+    name: conference
+    type: character
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: wins
+    type: integer
+  - description: ''
+    name: losses
+    type: integer
+  - description: ''
+    name: pct
+    type: numeric
+  - description: ''
+    name: div
+    type: character
+  - description: ''
+    name: conf
+    type: character
+  - description: ''
+    name: home
+    type: character
+  - description: ''
+    name: away
+    type: character
+  - description: ''
+    name: gb
+    type: numeric
+  - description: ''
+    name: gr_over_500
+    type: integer
+  - description: ''
+    name: gr_over_500_home
+    type: integer
+  - description: ''
+    name: gr_over_500_away
+    type: integer
+  - description: ''
+    name: gr_under_500
+    type: integer
+  - description: ''
+    name: gr_under_500_home
+    type: integer
+  - description: ''
+    name: gr_under_500_away
+    type: integer
+  - description: ''
+    name: ranking_criteria
+    type: integer
+  - description: ''
+    name: clinched_playoffs
+    type: integer
+  - description: ''
+    name: clinched_conference
+    type: integer
+  - description: ''
+    name: clinched_division
+    type: integer
+  - description: ''
+    name: eliminated_playoffs
+    type: integer
+  - description: ''
+    name: sosa_remaining
+    type: character
+  section: WestConfStandings
+- columns:
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: remaining_g
+    type: integer
+  - description: ''
+    name: remaining_home_g
+    type: integer
+  - description: ''
+    name: remaining_away_g
+    type: integer
+  section: EastConfRemainingGames
+- columns:
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: remaining_g
+    type: integer
+  - description: ''
+    name: remaining_home_g
+    type: integer
+  - description: ''
+    name: remaining_away_g
+    type: integer
+  section: WestConfRemainingGames
+kind: frames
 schema: playoffpicture

@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscorefourfactors?Format=json",
+  "time": "2026-06-29T01:55:25.5525Z"
+ },
+ "boxScoreFourFactors": {
+  "gameId": "1022600128",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "homeTeam": {
+   "teamId": 1611661325,
+   "teamCity": "Indiana",
+   "teamName": "Fever",
+   "teamTricode": "IND",
+   "teamSlug": "fever",
+   "players": [
+    {
+     "personId": 1631086,
+     "firstName": "Lexie",
+     "familyName": "Hull",
+     "nameI": "L. Hull",
+     "playerSlug": "lexie-hull",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "24:29",
+      "effectiveFieldGoalPercentage": 0.744,
+      "freeThrowAttemptRate": 0.171,
+      "teamTurnoverPercentage": 0.211,
+      "offensiveReboundPercentage": 0.0,
+      "oppEffectiveFieldGoalPercentage": 0.689,
+      "oppFreeThrowAttemptRate": 0.432,
+      "oppTeamTurnoverPercentage": 0.154,
+      "oppOffensiveReboundPercentage": 0.0
+     }
+    },
+    {
+     "personId": 1628881,
+     "firstName": "Monique",
+     "familyName": "Billings",
+     "nameI": "M. Billings",
+     "playerSlug": "monique-billings",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "19:55",
+      "effectiveFieldGoalPercentage": 0.75,
+      "freeThrowAttemptRate": 0.433,
+      "teamTurnoverPercentage": 0.216,
+      "offensiveReboundPercentage": 0.182,
+      "oppEffectiveFieldGoalPercentage": 0.662,
+      "oppFreeThrowAttemptRate": 0.378,
+      "oppTeamTurnoverPercentage": 0.111,
+      "oppOffensiveReboundPercentage": 0.231
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "effectiveFieldGoalPercentage": 0.689,
+    "freeThrowAttemptRate": 0.288,
+    "teamTurnoverPercentage": 0.193,
+    "offensiveReboundPercentage": 0.222,
+    "oppEffectiveFieldGoalPercentage": 0.644,
+    "oppFreeThrowAttemptRate": 0.5,
+    "oppTeamTurnoverPercentage": 0.153,
+    "oppOffensiveReboundPercentage": 0.29
+   }
+  },
+  "awayTeam": {
+   "teamId": 1611661317,
+   "teamCity": "Phoenix",
+   "teamName": "Mercury",
+   "teamTricode": "PHX",
+   "teamSlug": "mercury",
+   "players": [
+    {
+     "personId": 1643493,
+     "firstName": "Noemie",
+     "familyName": "Brochant",
+     "nameI": "N. Brochant",
+     "playerSlug": "noemie-brochant",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "33:06",
+      "effectiveFieldGoalPercentage": 0.634,
+      "freeThrowAttemptRate": 0.464,
+      "teamTurnoverPercentage": 0.152,
+      "offensiveReboundPercentage": 0.038,
+      "oppEffectiveFieldGoalPercentage": 0.736,
+      "oppFreeThrowAttemptRate": 0.226,
+      "oppTeamTurnoverPercentage": 0.202,
+      "oppOffensiveReboundPercentage": 0.158
+     }
+    },
+    {
+     "personId": 201886,
+     "firstName": "DeWanna",
+     "familyName": "Bonner",
+     "nameI": "D. Bonner",
+     "playerSlug": "dewanna-bonner",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:43",
+      "effectiveFieldGoalPercentage": 0.679,
+      "freeThrowAttemptRate": 0.453,
+      "teamTurnoverPercentage": 0.144,
+      "offensiveReboundPercentage": 0.0,
+      "oppEffectiveFieldGoalPercentage": 0.651,
+      "oppFreeThrowAttemptRate": 0.226,
+      "oppTeamTurnoverPercentage": 0.205,
+      "oppOffensiveReboundPercentage": 0.182
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "effectiveFieldGoalPercentage": 0.644,
+    "freeThrowAttemptRate": 0.5,
+    "teamTurnoverPercentage": 0.153,
+    "offensiveReboundPercentage": 0.29,
+    "oppEffectiveFieldGoalPercentage": 0.689,
+    "oppFreeThrowAttemptRate": 0.288,
+    "oppTeamTurnoverPercentage": 0.193,
+    "oppOffensiveReboundPercentage": 0.222
+   }
+  }
+ }
+}

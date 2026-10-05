@@ -1,0 +1,33 @@
+{
+ "resource": "cumestatsteamgames",
+ "parameters": {
+  "LeagueID": "00",
+  "SeasonID": "2023-24",
+  "SeasonType": "Regular Season",
+  "TeamID": 1610612747,
+  "Location": null,
+  "Outcome": null,
+  "VsTeamID": 1610612744,
+  "VsDivision": null,
+  "VsConference": null
+ },
+ "resultSets": [
+  {
+   "name": "CumeStatsTeamGames",
+   "headers": [
+    "MATCHUP",
+    "GAME_ID"
+   ],
+   "rowSet": [
+    [
+     "04/09/2024 Warriors at Lakers",
+     "0022301155"
+    ],
+    [
+     "03/16/2024 Warriors at Lakers",
+     "0022300973"
+    ]
+   ]
+  }
+ ]
+}

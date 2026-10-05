@@ -9,16 +9,22 @@ toc_max_heading_level: 2
 
 `sportsdataverse.cfb` — 78 endpoints.
 
-## Draft
+## Commits
 
 | Function | Summary |
 |---|---|
-| [on3_draft_organization_rank](on3/draft.md#on3_draft_organization_rank) | GET /rdb/v1/draft-organization-rank |
-| [on3_draft_pick_organization_rank](on3/draft.md#on3_draft_pick_organization_rank) | GET /rdb/v1/draft-pick-organization-rank |
-| [on3_drafts](on3/draft.md#on3_drafts) | GET /rdb/v1/drafts |
-| [on3_drafts_by_stars](on3/draft.md#on3_drafts_by_stars) | GET /rdb/v1/drafts-by-stars |
-| [on3_drafts_by_stars_summary](on3/draft.md#on3_drafts_by_stars_summary) | GET /rdb/v1/drafts-by-stars-summary |
-| [on3_drafts_players](on3/draft.md#on3_drafts_players) | GET /rdb/v1/drafts/{orgKey}/players |
+| [on3_commits_latest](on3/commits.md#on3_commits_latest) | GET /rdb/v1/commits/latest |
+| [on3_commits_organizations_latest_commits](on3/commits.md#on3_commits_organizations_latest_commits) | GET /rdb/v1/commits/organizations/{orgKey}/latest-commits |
+| [on3_commits_organizations_org_key](on3/commits.md#on3_commits_organizations_org_key) | GET /rdb/v1/commits/organizations/{orgKey} |
+
+## Nil
+
+| Function | Summary |
+|---|---|
+| [on3_nil_100](on3/nil.md#on3_nil_100) | GET /rdb/v1/nil-100 |
+| [on3_nil_100_v2](on3/nil.md#on3_nil_100_v2) | GET /rdb/v2/nil-100 |
+| [on3_nil_compliances_state](on3/nil.md#on3_nil_compliances_state) | GET /rdb/v1/nil-compliances/state |
+| [on3_nil_rankings](on3/nil.md#on3_nil_rankings) | GET /rdb/v1/nil-rankings |
 
 ## Organizations
 
@@ -77,15 +83,12 @@ toc_max_heading_level: 2
 | [on3_recruitments_rpm_picks](on3/recruitment.md#on3_recruitments_rpm_picks) | GET /rdb/v1/recruitments/{recKey}/rpm-picks |
 | [on3_recruitments_rpm_summary](on3/recruitment.md#on3_recruitments_rpm_summary) | GET /rdb/v1/recruitments/{recKey}/rpm-summary |
 
-## Team
+## Transfers
 
 | Function | Summary |
 |---|---|
-| [on3_team_ranking](on3/team.md#on3_team_ranking) | GET /rdb/v1/team-ranking |
-| [on3_team_ranking_bluechips_team_rankings](on3/team.md#on3_team_ranking_bluechips_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings |
-| [on3_team_ranking_consensus_team_rankings](on3/team.md#on3_team_ranking_consensus_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings |
-| [on3_team_ranking_organizations_summary](on3/team.md#on3_team_ranking_organizations_summary) | GET /rdb/v1/team-ranking/organizations/{orgKey}/summary |
-| [on3_team_ranking_team_rankings](on3/team.md#on3_team_ranking_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings |
+| [on3_transfers_best_available](on3/transfers.md#on3_transfers_best_available) | GET /rdb/v1/transfers/best-available |
+| [on3_transfers_latest](on3/transfers.md#on3_transfers_latest) | GET /rdb/v1/transfers/latest |
 
 ## Other
 
@@ -96,9 +99,12 @@ toc_max_heading_level: 2
 | [on3_collective_groups](on3/other.md#on3_collective_groups) | GET /rdb/v1/collective-groups |
 | [on3_collective_groups_deals](on3/other.md#on3_collective_groups_deals) | GET /rdb/v1/collective-groups/{key}/deals |
 | [on3_collective_groups_key](on3/other.md#on3_collective_groups_key) | GET /rdb/v1/collective-groups/{key} |
-| [on3_commits_latest](on3/other.md#on3_commits_latest) | GET /rdb/v1/commits/latest |
-| [on3_commits_organizations_latest_commits](on3/other.md#on3_commits_organizations_latest_commits) | GET /rdb/v1/commits/organizations/{orgKey}/latest-commits |
-| [on3_commits_organizations_org_key](on3/other.md#on3_commits_organizations_org_key) | GET /rdb/v1/commits/organizations/{orgKey} |
+| [on3_draft_organization_rank](on3/other.md#on3_draft_organization_rank) | GET /rdb/v1/draft-organization-rank |
+| [on3_draft_pick_organization_rank](on3/other.md#on3_draft_pick_organization_rank) | GET /rdb/v1/draft-pick-organization-rank |
+| [on3_drafts](on3/other.md#on3_drafts) | GET /rdb/v1/drafts |
+| [on3_drafts_by_stars](on3/other.md#on3_drafts_by_stars) | GET /rdb/v1/drafts-by-stars |
+| [on3_drafts_by_stars_summary](on3/other.md#on3_drafts_by_stars_summary) | GET /rdb/v1/drafts-by-stars-summary |
+| [on3_drafts_players](on3/other.md#on3_drafts_players) | GET /rdb/v1/drafts/{orgKey}/players |
 | [on3_filters_conferences](on3/other.md#on3_filters_conferences) | GET /rdb/v1/filters/conferences |
 | [on3_filters_draft_rounds](on3/other.md#on3_filters_draft_rounds) | GET /rdb/v1/filters/draft-rounds |
 | [on3_filters_positions](on3/other.md#on3_filters_positions) | GET /rdb/v1/filters/positions |
@@ -106,10 +112,6 @@ toc_max_heading_level: 2
 | [on3_filters_status](on3/other.md#on3_filters_status) | GET /rdb/v1/filters/status |
 | [on3_filters_teams](on3/other.md#on3_filters_teams) | GET /rdb/v1/filters/teams |
 | [on3_filters_years](on3/other.md#on3_filters_years) | GET /rdb/v1/filters/years |
-| [on3_nil_100](on3/other.md#on3_nil_100) | GET /rdb/v1/nil-100 |
-| [on3_nil_100_v2](on3/other.md#on3_nil_100_v2) | GET /rdb/v2/nil-100 |
-| [on3_nil_compliances_state](on3/other.md#on3_nil_compliances_state) | GET /rdb/v1/nil-compliances/state |
-| [on3_nil_rankings](on3/other.md#on3_nil_rankings) | GET /rdb/v1/nil-rankings |
 | [on3_person_connections_connection_key](on3/other.md#on3_person_connections_connection_key) | GET /rdb/v1/person-connections/{connectionKey} |
 | [on3_person_primary_recruitment_evaluation](on3/other.md#on3_person_primary_recruitment_evaluation) | GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation |
 | [on3_person_recruitment_evaluations](on3/other.md#on3_person_recruitment_evaluations) | GET /rdb/v1/person/{personKey}/recruitment-evaluations |
@@ -118,6 +120,9 @@ toc_max_heading_level: 2
 | [on3_predictions_user_key](on3/other.md#on3_predictions_user_key) | Expert prediction accuracy + feed (see PredictionAccuracies) |
 | [on3_quotes](on3/other.md#on3_quotes) | GET /rdb/v1/quotes |
 | [on3_quotes_key](on3/other.md#on3_quotes_key) | GET /rdb/v1/quotes/{key} |
-| [on3_transfers_best_available](on3/other.md#on3_transfers_best_available) | GET /rdb/v1/transfers/best-available |
-| [on3_transfers_latest](on3/other.md#on3_transfers_latest) | GET /rdb/v1/transfers/latest |
+| [on3_team_ranking](on3/other.md#on3_team_ranking) | GET /rdb/v1/team-ranking |
+| [on3_team_ranking_bluechips_team_rankings](on3/other.md#on3_team_ranking_bluechips_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings |
+| [on3_team_ranking_consensus_team_rankings](on3/other.md#on3_team_ranking_consensus_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings |
+| [on3_team_ranking_organizations_summary](on3/other.md#on3_team_ranking_organizations_summary) | GET /rdb/v1/team-ranking/organizations/{orgKey}/summary |
+| [on3_team_ranking_team_rankings](on3/other.md#on3_team_ranking_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings |
 | [on3_videos_video_key](on3/other.md#on3_videos_video_key) | GET /rdb/v1/videos/{videoKey} |

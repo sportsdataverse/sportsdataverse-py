@@ -1,9 +1,6 @@
-columns:
-- description: ''
-  name: person
-  type: character
-- description: ''
-  name: valuation
-  type: character
+columns: []
 kind: dataframe
 schema: nil_100
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

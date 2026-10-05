@@ -1,0 +1,34 @@
+{
+ "key": 61424,
+ "rankingKey": 28,
+ "ranking": {
+  "key": 28,
+  "sportKey": 2,
+  "sport": {
+   "key": 2,
+   "name": "Basketball"
+  },
+  "year": 2023
+ },
+ "rating": 96,
+ "stateRank": 1,
+ "stateAbbr": "WI",
+ "positionRank": 6,
+ "positionAbbr": "PF",
+ "overallRank": 43,
+ "stars": 4,
+ "change": {
+  "38": "Increase"
+ },
+ "consensusRating": 95.81918754605748,
+ "consensusStateRank": 1,
+ "consensusPositionRank": 7,
+ "consensusOverallRank": 44,
+ "consensusStars": 4,
+ "consensusChange": {
+  "41": "Increase"
+ },
+ "strength": 10,
+ "fiveStarPlus": false,
+ "rankingType": "Player"
+}
