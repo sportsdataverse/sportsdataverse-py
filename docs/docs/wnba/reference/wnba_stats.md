@@ -84,7 +84,7 @@ toc_max_heading_level: 2
 | [wnba_stats_leaguedashptdefend](wnba_stats/leaguedash.md#wnba_stats_leaguedashptdefend) | GET /stats/leaguedashptdefend |
 | [wnba_stats_leaguedashteamclutch](wnba_stats/leaguedash.md#wnba_stats_leaguedashteamclutch) | GET /stats/leaguedashteamclutch |
 | [wnba_stats_leaguedashteamshotlocations](wnba_stats/leaguedash.md#wnba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |
-| [wnba_stats_leaguedashteamstats](wnba_stats/leaguedash.md#wnba_stats_leaguedashteamstats) | GET /stats/leaguedashteamstats |
+| [wnba_stats_leaguedashteamstats](wnba_stats/leaguedash-2.md#wnba_stats_leaguedashteamstats) | GET /stats/leaguedashteamstats |
 
 ## Player
 

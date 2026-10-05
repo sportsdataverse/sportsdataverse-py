@@ -78,7 +78,7 @@ toc_max_heading_level: 2
 | [nba_stats_leagueplayerondetails](nba_stats/league.md#nba_stats_leagueplayerondetails) | GET /stats/leagueplayerondetails |
 | [nba_stats_leagueseasonmatchups](nba_stats/league.md#nba_stats_leagueseasonmatchups) | GET /stats/leagueseasonmatchups |
 | [nba_stats_leaguestandings](nba_stats/league.md#nba_stats_leaguestandings) | GET /stats/leaguestandings |
-| [nba_stats_leaguestandingsv3](nba_stats/league.md#nba_stats_leaguestandingsv3) | GET /stats/leaguestandingsv3 |
+| [nba_stats_leaguestandingsv3](nba_stats/league-2.md#nba_stats_leaguestandingsv3) | GET /stats/leaguestandingsv3 |
 
 ## League dashboards
 
@@ -93,7 +93,7 @@ toc_max_heading_level: 2
 | [nba_stats_leaguedashplayerstats](nba_stats/leaguedash.md#nba_stats_leaguedashplayerstats) | GET /stats/leaguedashplayerstats |
 | [nba_stats_leaguedashptdefend](nba_stats/leaguedash.md#nba_stats_leaguedashptdefend) | GET /stats/leaguedashptdefend |
 | [nba_stats_leaguedashptstats](nba_stats/leaguedash.md#nba_stats_leaguedashptstats) | GET /stats/leaguedashptstats |
-| [nba_stats_leaguedashptteamdefend](nba_stats/leaguedash.md#nba_stats_leaguedashptteamdefend) | GET /stats/leaguedashptteamdefend |
+| [nba_stats_leaguedashptteamdefend](nba_stats/leaguedash-2.md#nba_stats_leaguedashptteamdefend) | GET /stats/leaguedashptteamdefend |
 | [nba_stats_leaguedashteamclutch](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamclutch) | GET /stats/leaguedashteamclutch |
 | [nba_stats_leaguedashteamptshot](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamptshot) | GET /stats/leaguedashteamptshot |
 | [nba_stats_leaguedashteamshotlocations](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |

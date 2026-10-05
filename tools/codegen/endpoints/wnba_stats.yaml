@@ -18,6 +18,10 @@ endpoints:
     query_key: PerMode
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -47,18 +51,24 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -152,13 +162,15 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -168,6 +180,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star_nullable
     query_key: SeasonType
     type: str
@@ -691,13 +707,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -735,13 +753,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -767,13 +787,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -822,6 +844,10 @@ endpoints:
     query_key: Season
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -854,6 +880,10 @@ endpoints:
     query_key: Season
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -893,6 +923,10 @@ endpoints:
     query_key: Season
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -929,6 +963,10 @@ endpoints:
     query_key: SeasonID
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -962,13 +1000,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_all_time
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -1024,13 +1064,15 @@ endpoints:
     query_key: RoundPick
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -1097,13 +1139,15 @@ endpoints:
     query_key: Position
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1113,6 +1157,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -1184,6 +1232,10 @@ endpoints:
     query_key: PerMode
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -1208,6 +1260,10 @@ endpoints:
     query_key: PerMode
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -1262,18 +1318,24 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -1311,18 +1373,24 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -1384,18 +1452,24 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -1489,13 +1563,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1505,6 +1581,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -1622,13 +1702,15 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1638,6 +1720,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -1791,13 +1877,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1807,6 +1895,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -1952,13 +2044,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1968,6 +2062,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -2109,13 +2207,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2125,6 +2225,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -2258,13 +2362,15 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2274,6 +2380,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -2403,13 +2513,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2419,6 +2531,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -2540,13 +2656,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2556,6 +2674,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -2673,13 +2795,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2689,6 +2813,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3042,13 +3170,15 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -3058,6 +3188,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_nullable
     query_key: SeasonType
     type: str
@@ -3119,18 +3253,24 @@ endpoints:
     query_key: PlayerOrTeam
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3164,18 +3304,24 @@ endpoints:
     query_key: Scope
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3273,13 +3419,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3289,6 +3437,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3378,13 +3530,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3394,6 +3548,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3443,18 +3601,24 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -3472,18 +3636,24 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -3563,18 +3733,24 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -3690,13 +3866,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3706,6 +3884,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -3809,13 +3991,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3825,6 +4009,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -3922,13 +4110,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3938,6 +4128,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4035,13 +4229,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4051,6 +4247,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4148,13 +4348,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4164,6 +4366,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4260,13 +4466,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4276,6 +4484,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -4374,13 +4586,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4390,6 +4604,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4486,13 +4704,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4502,6 +4722,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4598,13 +4822,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4614,6 +4840,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -4687,13 +4917,15 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4703,6 +4935,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -4732,18 +4968,24 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -4788,18 +5030,24 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -4823,18 +5071,24 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star_nullable
     query_key: SeasonType
     type: str
@@ -4864,18 +5118,24 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -4945,13 +5205,15 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -4961,6 +5223,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_nullable
     query_key: SeasonType
     type: str
@@ -5310,13 +5576,15 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -5326,6 +5594,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_nullable
     query_key: SeasonType
     type: str
@@ -5403,13 +5675,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5444,18 +5718,24 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_all
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -5565,13 +5845,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5581,6 +5863,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -5610,13 +5896,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5635,13 +5923,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5791,13 +6081,15 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -5807,6 +6099,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -5844,13 +6140,15 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5924,13 +6222,15 @@ endpoints:
     query_key: Period
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5940,6 +6240,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -6035,13 +6339,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6051,6 +6357,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6148,13 +6458,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6164,6 +6476,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6261,13 +6577,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6277,6 +6595,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -6374,13 +6696,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6390,6 +6714,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6486,13 +6814,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6502,6 +6832,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6599,13 +6933,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6615,6 +6951,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -6711,13 +7051,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6727,6 +7069,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6823,13 +7169,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6839,6 +7187,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -6942,13 +7294,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6958,6 +7312,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -7006,18 +7364,24 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type
     query_key: SeasonType
     type: str
@@ -7043,18 +7407,24 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -7128,13 +7498,15 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -7144,6 +7516,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_nullable
     query_key: SeasonType
     type: str
@@ -7180,18 +7556,24 @@ endpoints:
     query_key: LeagueID
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_nullable
     query_key: SeasonType
     type: str
@@ -7275,13 +7657,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7291,6 +7675,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -7383,13 +7771,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7399,6 +7789,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -7487,13 +7881,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7503,6 +7899,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str
@@ -7596,13 +7996,15 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
-    description: 'Season year, e.g. ``2024``. Defaults at call time to the latest
-      WNBA season that has rows: the current year from June (``2026`` from June 2026,
-      ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs``
-      (or ``commonplayoffseries``) from October, with ``All Star`` from the August
-      after its July game. A month table cannot follow a lockout or pandemic calendar:
-      pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or
-      every season summed.'
+    description: 'Season year, e.g. ``2024``. Defaults at call time by a calendar
+      cutoff, the month after a season''s first games, so it can lag the newest rows
+      by a few weeks. A WNBA season tips off in mid-May and becomes the default in
+      June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``,
+      mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``)
+      the WNBA rolls over in October, after its mid-September playoffs start; with
+      ``All Star`` in August, after the July game. A month table cannot follow a lockout
+      or pandemic calendar: pass a season then. Without one stats.wnba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7612,6 +8014,10 @@ endpoints:
     query_key: SeasonSegment
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_playoffs
     query_key: SeasonType
     type: str
@@ -7648,6 +8054,10 @@ endpoints:
     query_key: PerMode
     type: str
   - default: Regular Season
+    description: 'Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``
+      or ``All Star`` (each endpoint takes a subset). Not ESPN''s numeric code: ``3``
+      is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October,
+      ``All Star`` in August.'
     name: season_type_all_star
     query_key: SeasonType
     type: str

@@ -1,11 +1,11 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptteamdefend"
-sidebar_label: "League dashboards: leaguedashlineups–leaguedashptteamdefend"
-sidebar_position: 8
-description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptteamdefend — function reference in sdv-py, the SportsDataverse Python package."
+title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptstats"
+sidebar_label: "League dashboards: leaguedashlineups–leaguedashptstats"
+sidebar_position: 9
+description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptstats — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptteamdefend
+# NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashlineups–leaguedashptstats
 
 ## nba_stats_leaguedashlineups
 
@@ -36,9 +36,9 @@ GET /stats/leaguedashlineups
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
@@ -146,9 +146,9 @@ GET /stats/leaguedashoppptshot
 | `PORound` | `po_round_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `ShotDistRange` | `shot_dist_range_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -223,9 +223,9 @@ GET /stats/leaguedashplayerbiostats
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -312,9 +312,9 @@ GET /stats/leaguedashplayerclutch
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `PointDiff` | `point_diff` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -441,9 +441,9 @@ GET /stats/leaguedashplayerptshot
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `ShotDistRange` | `shot_dist_range_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
@@ -527,9 +527,9 @@ GET /stats/leaguedashplayershotlocations
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -623,9 +623,9 @@ GET /stats/leaguedashplayerstats
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -751,9 +751,9 @@ GET /stats/leaguedashptdefend
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
@@ -823,9 +823,9 @@ GET /stats/leaguedashptstats
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` | PlayerOrTeam query parameter. |
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` | PlayerPosition query parameter. |
 | `PtMeasureType` | `pt_measure_type` |  |  | `Y` | PtMeasureType query parameter. |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` | SeasonSegment query parameter. |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` | SeasonType query parameter. |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` | StarterBench query parameter. |
 | `TeamID` | `team_id_nullable` |  |  | `Y` | TeamID query parameter. |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` | VsConference query parameter. |
@@ -860,66 +860,6 @@ GET /stats/leaguedashptstats
 
 ```python
 nba_stats_leaguedashptstats(league_id='00', season='2024-25')
-```
-
-_Last validated n/a._
-
-## nba_stats_leaguedashptteamdefend
-
-GET /stats/leaguedashptteamdefend
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashptteamdefend`
-
-**Valid URL:** [https://stats.nba.com/stats/leaguedashptteamdefend?Conference=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&Period=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/leaguedashptteamdefend?Conference=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&Period=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `Conference` | `conference_nullable` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `DefenseCategory` | `defense_category` |  |  | `Y` |  |
-| `Division` | `division_nullable` |  |  | `Y` |  |
-| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month_nullable` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Period` | `period_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start, with ``All Star`` from the March after its February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-
-### Returns {#nba_stats_leaguedashptteamdefend-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `gp` | integer | Games played. |
-| `g` | integer | Games played. |
-| `freq` | numeric | NBA or WNBA Stats value for freq in the leaguedashptteamdefend result set. |
-| `d_fgm` | numeric | Shooting metric for d fgm in the requested NBA or WNBA Stats split. |
-| `d_fga` | numeric | Shooting metric for d fga in the requested NBA or WNBA Stats split. |
-| `d_fg_pct` | numeric | Percentage or rate for d field goals percentage in the requested NBA or WNBA Stats split. |
-| `normal_fg_pct` | numeric | Percentage or rate for normal field goals percentage in the requested NBA or WNBA Stats split. |
-| `pct_plusminus` | numeric | Percentage share of plusminus for the requested NBA or WNBA Stats split. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_leaguedashptteamdefend-example}
-
-```python
-nba_stats_leaguedashptteamdefend(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

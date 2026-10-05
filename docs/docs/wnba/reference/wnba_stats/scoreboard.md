@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Scoreboard"
 sidebar_label: "Scoreboard"
-sidebar_position: 17
+sidebar_position: 18
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Scoreboard — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

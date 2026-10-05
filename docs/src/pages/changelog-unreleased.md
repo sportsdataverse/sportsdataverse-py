@@ -222,6 +222,15 @@ now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working
   season for `scheduleleaguev2` (`nbagl_schedule()`). Only
   `cumestats*` and NBA `playercompare` keep hoopR's / wehoop's literal season, paired with their
   literal ids.
+- **`nba_shot_value(include_context=True)` asks for each shooter's own team.** `playerdashptshots`
+  answers HTTP 500 for `TeamID "0"` with a season, so the wrapper's default pins a player with his
+  team, and a context call that passed only `player_id` sent that default team: every other
+  player's context was filtered out. It now passes each (player, team) pair its fetched shots came
+  from; a player traded mid-season gets one context per team.
+- **`SeasonType` is documented as a label.** The stats wrappers inherited ESPN's
+  "1=preseason, 2=regular season, 3=postseason" description by argument name; stats.nba.com
+  answers `SeasonType=3` with HTTP 400. Every `season_type*` argument now lists the labels and
+  the rollover each one sets.
 - **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
   hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
   asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA

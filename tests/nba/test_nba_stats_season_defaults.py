@@ -21,6 +21,7 @@ from sportsdataverse.nba.nba_stats_runtime import season_latest_with_data as nba
 from sportsdataverse.wnba import wnba_stats
 from sportsdataverse.wnba.wnba_stats_runtime import season_latest_with_data as wnba_season
 from tests.conftest import skip_if_no_nba_stats_live
+from tools.codegen import spec
 
 _ENDPOINTS = Path(__file__).resolve().parents[2] / "tools/codegen/endpoints"
 
@@ -268,3 +269,18 @@ def test_live_defaults_return_rows(fn, kwargs):
         h, rows = s.get("headers") or [], s.get("rowSet") or []
         for col in {"SEASON", "SEASON_ID", "SEASON_YEAR"} & set(h if h and isinstance(h[0], str) else []):
             assert len({r[h.index(col)] for r in rows}) <= 1, f"{fn.__name__}: {s.get('name')}.{col}"
+
+
+def test_season_type_is_documented_as_a_label_not_an_espn_code():
+    # stats.nba.com answers SeasonType=3 with HTTP 400 {"SeasonType":["Invalid parameters"]}; the ESPN
+    # registry's "1=preseason, 2=regular season, 3=postseason" used to be inherited by every
+    # ``season_type`` argument's docs by name (PR #693 review).
+    registry = spec.load_parameters(_ENDPOINTS / "parameters.yaml")
+    leaked = [
+        f"{stem}.{ep.short}"
+        for stem in ("nba_stats", "wnba_stats")
+        for ep in spec.load_flat_api(_ENDPOINTS / f"{stem}.yaml", registry).endpoints
+        for p in ep.query_params
+        if p.api == "SeasonType" and ("3=postseason" in p.description or "Playoffs" not in p.description)
+    ]
+    assert not leaked, leaked
