@@ -252,14 +252,16 @@ def fetch_pbp_or_skip(proc):
 # ponytail: the fingerprint is (mtime_ns, size), not a content hash -- a same-bytes
 # rewrite is still the race, and stat is ~5x cheaper than hashing the ~300 MB tree.
 # It runs in the xdist controller only (workers carry ``workerinput``); the
-# controller's sessionfinish fires after every worker has exited.
+# controller's sessionfinish fires after every worker has exited. git is asked
+# for the file list once, at start; the end re-stats that same list, so a git
+# hiccup at the end cannot read as "every file changed".
 _GUARDED_DIRS = ("tools/codegen", "docs/docs", "sportsdataverse", "tests/fixtures")
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _tree_at_start: dict[str, tuple[int, int]] | None = None
 
 
-def _tree_fingerprint() -> dict[str, tuple[int, int]] | None:
-    """(mtime_ns, size) of every tracked file under ``_GUARDED_DIRS``; None outside git."""
+def _tracked_files() -> list[str] | None:
+    """Tracked files under ``_GUARDED_DIRS``; None outside a git checkout (an sdist)."""
     try:
         out = subprocess.run(
             ["git", "ls-files", "-z", "--", *_GUARDED_DIRS],
@@ -268,9 +270,14 @@ def _tree_fingerprint() -> dict[str, tuple[int, int]] | None:
             check=True,
         ).stdout
     except (OSError, subprocess.CalledProcessError):
-        return None  # not a git checkout (an sdist): nothing to guard
+        return None
+    return [rel for rel in out.decode("utf-8").split("\0") if rel]
+
+
+def _fingerprint(files: list[str]) -> dict[str, tuple[int, int]]:
+    """(mtime_ns, size) per file; (-1, -1) for a missing one."""
     fingerprint = {}
-    for rel in filter(None, out.decode("utf-8").split("\0")):
+    for rel in files:
         try:
             st = (_REPO_ROOT / rel).stat()
             fingerprint[rel] = (st.st_mtime_ns, st.st_size)
@@ -282,14 +289,15 @@ def _tree_fingerprint() -> dict[str, tuple[int, int]] | None:
 def pytest_sessionstart(session: pytest.Session) -> None:
     global _tree_at_start
     if not hasattr(session.config, "workerinput"):
-        _tree_at_start = _tree_fingerprint()
+        files = _tracked_files()
+        _tree_at_start = None if files is None else _fingerprint(files)
 
 
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
     if _tree_at_start is None:
         return
-    after = _tree_fingerprint() or {}
-    changed = sorted(k for k in _tree_at_start.keys() | after.keys() if _tree_at_start.get(k) != after.get(k))
+    after = _fingerprint(list(_tree_at_start))
+    changed = sorted(rel for rel, fp in _tree_at_start.items() if after[rel] != fp)
     if not changed:
         return
     reporter = session.config.pluginmanager.get_plugin("terminalreporter")
