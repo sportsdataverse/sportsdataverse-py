@@ -2,9 +2,12 @@
 title: PWHL tutorial
 sidebar_label: PWHL
 sidebar_position: 10
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/10_pwhl_intro.ipynb
 ---
 
 # 🏒 The PWHL with `sportsdataverse-py`
+
+> This page is the executed notebook [`10_pwhl_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/10_pwhl_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/10_pwhl_intro.ipynb) to run it yourself.
 
 Welcome to **professional women's hockey**! The Professional Women's Hockey League (**PWHL**) dropped its first puck in January 2024 with six clubs — Boston, Minnesota, Montréal, New York, Ottawa and Toronto — and it's been must-watch hockey ever since. 🎉
 

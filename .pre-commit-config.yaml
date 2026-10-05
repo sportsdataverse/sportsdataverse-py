@@ -96,22 +96,20 @@ repos:
         # page render. Exclude that tree (docs/architecture/ etc. still get TOCs).
         # docs/versioned_docs/ holds frozen `yarn version:docs` snapshots of
         # docs/docs/ — same frontmatter pages, so it must be excluded too.
-        exclude: ^(docs/(docs|versioned_docs)|\.claude)/
+        exclude: ^(docs/(docs|versioned_docs|src/pages)|\.claude)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:
       - id: markdownlint-cli2
         args: ["--config", ".markdownlint-cli2.yaml"]
-  # Sync the docusaurus CHANGELOG copy from the repo-root master copy
-  # whenever CHANGELOG.md is touched. Until 0.0.51 this sync was done
-  # manually (`cp CHANGELOG.md docs/src/pages/CHANGELOG.md`); the hook
-  # makes drift impossible. The hook stages the synced file
-  # automatically so `git commit` sees both copies in the same commit.
+  # Mirror the repo-root CHANGELOG.md onto the docs site whenever it is touched, as three pages: the newest
+  # releases (/CHANGELOG), what is merged but unreleased, and an archive of older releases. The script stages
+  # the pages so `git commit` sees them with CHANGELOG.md in the same commit.
   - repo: local
     hooks:
       - id: sync-docs-changelog
         name: sync-docs-changelog
-        entry: uv run --frozen python -c "import shutil, subprocess, sys; shutil.copy('CHANGELOG.md', 'docs/src/pages/CHANGELOG.md'); subprocess.run(['git', 'add', 'docs/src/pages/CHANGELOG.md'])"
+        entry: uv run --frozen python tools/hooks/sync_docs_changelog.py
         language: system
         files: ^CHANGELOG\.md$
         pass_filenames: false

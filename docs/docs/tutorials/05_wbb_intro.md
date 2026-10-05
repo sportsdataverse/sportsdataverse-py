@@ -2,9 +2,12 @@
 title: WBB tutorial
 sidebar_label: WBB
 sidebar_position: 5
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/05_wbb_intro.ipynb
 ---
 
 # 🏀 Women's college basketball with `sportsdataverse-py`
+
+> This page is the executed notebook [`05_wbb_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/05_wbb_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/05_wbb_intro.ipynb) to run it yourself.
 
 Welcome to the **women's college hoops** corner of the SportsDataverse! 🎉 In a handful of lines you're about to pull rosters, schedules, play-by-play, live scoreboards, AP rankings, **ESPN's Basketball Power Index (BPI)**, in-game **win-probability** curves, and season-long parquet releases — all returned as tidy [polars](https://pola.rs) DataFrames that are ready to model. 🚀
 
@@ -16,29 +19,29 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`espn_wbb_teams`](../wbb/reference/additional.md#espn_wbb_teams) | Every D-I program, one wide row each | ESPN |
+| [`espn_wbb_teams`](../wbb/reference/additional/other-2.md#espn_wbb_teams) | Every D-I program, one wide row each | ESPN |
 | [`espn_wbb_team_roster`](../wbb/reference/site.md#espn_wbb_team_roster) | A team's roster, one row per player | ESPN |
-| [`espn_wbb_schedule`](../wbb/reference/additional.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
+| [`espn_wbb_schedule`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
 | [`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) | One program's full season slate | ESPN |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ Live + final scoreboard, one row per game | ESPN |
-| [`espn_wbb_pbp`](../wbb/reference/additional.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
+| [`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
 | [`espn_wbb_player_gamelog`](../wbb/reference/web.md#espn_wbb_player_gamelog) | A player's game-by-game log | ESPN |
 | [`espn_wbb_player_splits`](../wbb/reference/web.md#espn_wbb_player_splits) | A player's situational stat splits | ESPN |
-| [`espn_wbb_team_stats`](../wbb/reference/additional.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
+| [`espn_wbb_team_stats`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
 | [`espn_wbb_standings`](../wbb/reference/site.md#espn_wbb_standings) | Conference standings + records | ESPN |
 | [`espn_wbb_conferences`](../wbb/reference/site.md#espn_wbb_conferences) | Conference groups + group ids | ESPN |
 | [`espn_wbb_rankings`](../wbb/reference/site.md#espn_wbb_rankings) | ⭐ AP / Coaches poll rankings | ESPN |
 | [`espn_wbb_leaders`](../wbb/reference/web.md#espn_wbb_leaders) | ⭐ League statistical leaders | ESPN |
 | [`espn_wbb_injuries`](../wbb/reference/site.md#espn_wbb_injuries) | ⭐ Active injury report | ESPN |
-| [`espn_wbb_season_powerindex`](../wbb/reference/core.md#espn_wbb_season_powerindex) | ⭐ **BPI** ratings, one row per team | ESPN |
-| [`espn_wbb_season_powerindex_leaders`](../wbb/reference/core.md#espn_wbb_season_powerindex_leaders) | ⭐ BPI / SOS / SOR category leaders | ESPN |
-| [`espn_wbb_game_predictor`](../wbb/reference/core.md#espn_wbb_game_predictor) | ⭐ BPI matchup projection for a game | ESPN |
-| [`espn_wbb_game_probabilities`](../wbb/reference/core.md#espn_wbb_game_probabilities) | ⭐ Play-by-play win-probability curve | ESPN |
+| [`espn_wbb_season_powerindex`](../wbb/reference/core/season.md#espn_wbb_season_powerindex) | ⭐ **BPI** ratings, one row per team | ESPN |
+| [`espn_wbb_season_powerindex_leaders`](../wbb/reference/core/season.md#espn_wbb_season_powerindex_leaders) | ⭐ BPI / SOS / SOR category leaders | ESPN |
+| [`espn_wbb_game_predictor`](../wbb/reference/core/game.md#espn_wbb_game_predictor) | ⭐ BPI matchup projection for a game | ESPN |
+| [`espn_wbb_game_probabilities`](../wbb/reference/core/game.md#espn_wbb_game_probabilities) | ⭐ Play-by-play win-probability curve | ESPN |
 | [`espn_wbb_calendar`](../wbb/reference/site.md#espn_wbb_calendar) | Valid game dates for a season | ESPN |
-| [`load_wbb_schedule`](../wbb/reference/loaders.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
-| [`load_wbb_pbp`](../wbb/reference/loaders.md#load_wbb_pbp) | Season-long play-by-play (parquet, back to 2002) | release |
-| [`load_wbb_team_boxscore`](../wbb/reference/loaders.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
-| [`load_wbb_player_boxscore`](../wbb/reference/loaders.md#load_wbb_player_boxscore) | Season-long player boxscores (parquet) | release |
+| [`load_wbb_schedule`](../wbb/reference/loaders/other.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
+| [`load_wbb_pbp`](../wbb/reference/loaders/other.md#load_wbb_pbp) | Season-long play-by-play (parquet, back to 2002) | release |
+| [`load_wbb_team_boxscore`](../wbb/reference/loaders/team.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
+| [`load_wbb_player_boxscore`](../wbb/reference/loaders/player.md#load_wbb_player_boxscore) | Season-long player boxscores (parquet) | release |
 
 ## 🔌 Setup
 
@@ -83,7 +86,7 @@ def has_rows(df):
 
 ## 🏟️ Teams
 
-[`espn_wbb_teams`](../wbb/reference/additional.md#espn_wbb_teams) returns one wide row per Division-I program. The `team_id` here is the key you'll feed to roster, stats, and leader endpoints. (NCAA team frames carry no conference column — that comes from `espn_wbb_standings()` / `espn_wbb_conferences()` below.)
+[`espn_wbb_teams`](../wbb/reference/additional/other-2.md#espn_wbb_teams) returns one wide row per Division-I program. The `team_id` here is the key you'll feed to roster, stats, and leader endpoints. (NCAA team frames carry no conference column — that comes from `espn_wbb_standings()` / `espn_wbb_conferences()` below.)
 
 
 ```python
@@ -163,7 +166,7 @@ Two complementary views of a slate:
 
 | Function | Best for |
 |---|---|
-| [`espn_wbb_schedule`](../wbb/reference/additional.md#espn_wbb_schedule) | a clean game list for a date or `'YYYYMMDD-YYYYMMDD'` range |
+| [`espn_wbb_schedule`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_schedule) | a clean game list for a date or `'YYYYMMDD-YYYYMMDD'` range |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ a richer live/final scoreboard (status, venue, scores) |
 
 April 4, 2025 was the women's **Final Four**. Note: `home_score` / `away_score` from `espn_wbb_schedule` arrive as **strings**, so cast before arithmetic.
@@ -227,7 +230,7 @@ keep = ['game_id', 'short_name', 'status_type_completed', 'home_team_short_displ
 
 ## 🎬 Play-by-play
 
-[`espn_wbb_pbp`](../wbb/reference/additional.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
+[`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
 
 Game `401746075` is the **2025 national championship**: South Carolina vs. UConn.
 
@@ -344,7 +347,7 @@ injuries = safe('injury report', wbb.espn_wbb_injuries)
 
 ## 📊 Basketball Power Index (BPI)
 
-ESPN's **BPI** is a forward-looking team-strength rating — expected point margin per 70 possessions against an average opponent on a neutral floor. [`espn_wbb_season_powerindex`](../wbb/reference/core.md#espn_wbb_season_powerindex) returns one row per ranked team, with a nested `stats` list (BPI, BPI rank, SOS, SOR, …). Let's unnest it into a clean BPI leaderboard for 2024-25.
+ESPN's **BPI** is a forward-looking team-strength rating — expected point margin per 70 possessions against an average opponent on a neutral floor. [`espn_wbb_season_powerindex`](../wbb/reference/core/season.md#espn_wbb_season_powerindex) returns one row per ranked team, with a nested `stats` list (BPI, BPI rank, SOS, SOR, …). Let's unnest it into a clean BPI leaderboard for 2024-25.
 
 
 ```python
@@ -409,7 +412,7 @@ out
 
 
 
-And [`espn_wbb_season_powerindex_leaders`](../wbb/reference/core.md#espn_wbb_season_powerindex_leaders) lists the category leaders — who tops BPI, strength-of-schedule, strength-of-record, and more.
+And [`espn_wbb_season_powerindex_leaders`](../wbb/reference/core/season.md#espn_wbb_season_powerindex_leaders) lists the category leaders — who tops BPI, strength-of-schedule, strength-of-record, and more.
 
 
 ```python
@@ -544,7 +547,7 @@ print('player_box:', player_box.shape, '| team_box:', team_box.shape, '| pbp:', 
 
 ### Recipe 1 — Win-probability ride of a championship 📈
 
-[`espn_wbb_game_probabilities`](../wbb/reference/core.md#espn_wbb_game_probabilities) returns ESPN's play-by-play win-probability snapshots for a game. Let's watch how UConn's win odds evolved through the 2025 title game (event `401746075`).
+[`espn_wbb_game_probabilities`](../wbb/reference/core/game.md#espn_wbb_game_probabilities) returns ESPN's play-by-play win-probability snapshots for a game. Let's watch how UConn's win odds evolved through the 2025 title game (event `401746075`).
 
 
 ```python
@@ -585,7 +588,7 @@ out
 
 ### Recipe 2 — BPI matchup preview for a game 🔮
 
-[`espn_wbb_game_predictor`](../wbb/reference/core.md#espn_wbb_game_predictor) gives ESPN's BPI-based projection for a single game — matchup quality, projected game score, and each side's predicted point total. Here's the championship preview.
+[`espn_wbb_game_predictor`](../wbb/reference/core/game.md#espn_wbb_game_predictor) gives ESPN's BPI-based projection for a single game — matchup quality, projected game score, and each side's predicted point total. Here's the championship preview.
 
 
 ```python
@@ -1125,7 +1128,7 @@ lineups = ncaa_wbb_lineups(game_id)       # five-player stints
 ## 🎉 Where to go next
 
 - Pass `return_as_pandas=True` to any wrapper for a pandas frame.
-- **Premium analytics**: [`espn_wbb_season_powerindex`](../wbb/reference/core.md#espn_wbb_season_powerindex), [`espn_wbb_game_probabilities`](../wbb/reference/core.md#espn_wbb_game_probabilities), and [`espn_wbb_rankings`](../wbb/reference/site.md#espn_wbb_rankings) are the deep cuts.
+- **Premium analytics**: [`espn_wbb_season_powerindex`](../wbb/reference/core/season.md#espn_wbb_season_powerindex), [`espn_wbb_game_probabilities`](../wbb/reference/core/game.md#espn_wbb_game_probabilities), and [`espn_wbb_rankings`](../wbb/reference/site.md#espn_wbb_rankings) are the deep cuts.
 - **Full reference**: the WBB pages — [core](../wbb/reference/core.md), [site](../wbb/reference/site.md), [web](../wbb/reference/web.md), [additional](../wbb/reference/additional.md), and [loaders](../wbb/reference/loaders.md).
 - `dir(sdv.wbb)` shows the full 100+ endpoint surface (player gamelogs, splits, depth charts, transactions, recruits, and more).
 - Men's side? See the parallel [`06_mbb_intro.ipynb`](06_mbb_intro.md).

@@ -2,9 +2,12 @@
 title: Soccer tutorial
 sidebar_label: Soccer
 sidebar_position: 12
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/13_soccer_intro.ipynb
 ---
 
 # ⚽ Soccer with `sportsdataverse-py`
+
+> This page is the executed notebook [`13_soccer_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/13_soccer_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/13_soccer_intro.ipynb) to run it yourself.
 
 From the Premier League to the World Cup, `sportsdataverse.soccer` gives you the global
 game in tidy **polars** DataFrames — no API key, no config, just pip and import.

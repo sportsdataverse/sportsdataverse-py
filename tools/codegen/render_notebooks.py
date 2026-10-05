@@ -13,6 +13,7 @@ just consumes the committed ``.md``. Run locally with:
 
     python tools/codegen/render_notebooks.py            # execute + render
     python tools/codegen/render_notebooks.py --no-execute  # render as-is (no live calls)
+    python tools/codegen/render_notebooks.py --relink      # re-apply the page head to the committed pages
 
 Determinism / safety:
 
@@ -27,6 +28,8 @@ Determinism / safety:
 from __future__ import annotations
 
 import argparse
+import functools
+import json
 import os
 import re
 import sys
@@ -132,7 +135,24 @@ def _fix_links(body: str) -> str:
     """
     body = re.sub(r"\]\([^)]*?(\d\d_[a-z0-9_]+)\.ipynb\)", r"](\1.md)", body)
     body = re.sub(rf"\]\([^)]*?({_LEAGUES})/index\.md\)", r"](../\1/index.md)", body)
-    return body
+    return _REF_ANCHOR_LINK.sub(_to_family_page, body)
+
+
+# A link to a function on a reference page that generate.py split into family pages
+# (``../cfb/reference/loaders.md#load_cfb_pbp``) goes straight to the family page
+# (``../cfb/reference/loaders/pbp.md#load_cfb_pbp``), from the anchor map the docs build writes.
+_REF_ANCHOR_LINK = re.compile(r"\]\((\.\./([a-z0-9_]+)/reference/([a-z0-9_]+))\.md#([A-Za-z0-9_-]+)\)")
+
+
+@functools.lru_cache(maxsize=1)
+def _anchor_map() -> dict:
+    path = ROOT / "docs" / "static" / "anchor-map.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def _to_family_page(m: re.Match) -> str:
+    slug = _anchor_map().get(f"/docs/{m.group(2)}/reference/{m.group(3)}", {}).get(m.group(4))
+    return f"]({m.group(1)}/{slug}.md#{m.group(4)})" if slug else m.group(0)
 
 
 def _normalize_md(text: str) -> str:
@@ -145,8 +165,35 @@ def _normalize_md(text: str) -> str:
     return "\n".join(ln.rstrip() for ln in text.splitlines()).rstrip() + "\n"
 
 
-def _frontmatter(label: str, position: int) -> str:
-    return f"---\ntitle: {label} tutorial\nsidebar_label: {label}\nsidebar_position: {position}\n---\n\n"
+_REPO = "sportsdataverse/sportsdataverse-py"
+_LINKS_PREFIX = "> This page is the executed notebook"
+
+
+def _frontmatter(stem: str, label: str, position: int) -> str:
+    # "Edit this page" opens the notebook, the source of this page, not the generated markdown.
+    edit = f"https://github.com/{_REPO}/edit/main/examples/notebooks/{stem}.ipynb"
+    return (
+        f"---\ntitle: {label} tutorial\nsidebar_label: {label}\nsidebar_position: {position}\n"
+        f"custom_edit_url: {edit}\n---\n\n"
+    )
+
+
+def _with_links(stem: str, body: str) -> str:
+    """The body with a line linking its notebook (GitHub view and raw download) under the first heading.
+
+    Under, not above: Docusaurus takes a leading ``#`` heading as the page title."""
+    github = f"https://github.com/{_REPO}/blob/main/examples/notebooks/{stem}.ipynb"
+    raw = f"https://raw.githubusercontent.com/{_REPO}/main/examples/notebooks/{stem}.ipynb"
+    line = f"{_LINKS_PREFIX} [`{stem}.ipynb`]({github}): [download it]({raw}) to run it yourself."
+    head, _, rest = body.partition("\n")
+    return f"{head}\n\n{line}\n{rest}" if head.startswith("# ") else f"{line}\n\n{body}"
+
+
+def _relink(text: str, stem: str, label: str, position: int) -> str:
+    """A committed page with its head (frontmatter, notebook links) rebuilt, without executing anything."""
+    body = text.split("\n---\n", 1)[1].lstrip("\n")
+    body = re.sub(rf"^{re.escape(_LINKS_PREFIX)}.*\n\n", "", body, count=1, flags=re.M)
+    return _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, _fix_links(body)))
 
 
 def main() -> int:
@@ -155,7 +202,18 @@ def main() -> int:
     ap.add_argument(
         "--only", action="append", default=[], help="only render this stem (repeatable); for retries/debugging"
     )
+    ap.add_argument(
+        "--relink", action="store_true", help="rebuild the head of the committed pages (no execution, no outputs lost)"
+    )
     args = ap.parse_args()
+    if args.relink:
+        for stem, label, position in TUTORIALS:
+            page = OUT_DIR / f"{stem}.md"
+            page.write_text(
+                _relink(page.read_text(encoding="utf-8"), stem, label, position), encoding="utf-8", newline="\n"
+            )
+            print(f"  relinked {page}")
+        return 0
 
     import nbformat
 
@@ -181,7 +239,7 @@ def main() -> int:
         _clean_outputs(nb)
         body = _fix_links(_to_markdown(nb, stem))
         (OUT_DIR / f"{stem}.md").write_text(
-            _normalize_md(_frontmatter(label, position) + body), encoding="utf-8", newline="\n"
+            _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, body)), encoding="utf-8", newline="\n"
         )
         print(f"  wrote {OUT_DIR / f'{stem}.md'}")
 

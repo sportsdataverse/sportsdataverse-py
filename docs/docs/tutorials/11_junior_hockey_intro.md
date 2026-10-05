@@ -2,9 +2,12 @@
 title: Junior & minor hockey tutorial
 sidebar_label: Junior & minor hockey
 sidebar_position: 11
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/11_junior_hockey_intro.ipynb
 ---
 
 # 🏒 Junior & minor hockey with `sportsdataverse-py`
+
+> This page is the executed notebook [`11_junior_hockey_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/11_junior_hockey_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/11_junior_hockey_intro.ipynb) to run it yourself.
 
 Four leagues, **one toolkit**. `sportsdataverse` wraps the HockeyTech /
 LeagueStat feed behind the American Hockey League (**AHL**) and the three

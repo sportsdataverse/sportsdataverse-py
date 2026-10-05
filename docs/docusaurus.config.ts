@@ -56,6 +56,30 @@ const sdvPrismDark: PrismTheme = {
   ],
 };
 
+// A tutorial's file keeps its number (docs/tutorials/02_cfb_intro.md) but Docusaurus serves it without it
+// (/docs/tutorials/cfb_intro), so links to the numbered URL answered 404. Write a static page at each numbered
+// URL that sends the reader on; it lists the tutorials at build time, so a new notebook needs no edit here.
+function tutorialRedirects() {
+  return {
+    name: 'tutorial-redirects',
+    async postBuild({outDir}: {outDir: string}) {
+      for (const file of fs.readdirSync(path.join(__dirname, 'docs/tutorials'))) {
+        const m = file.match(/^(\d+_(.+))\.mdx?$/);
+        if (!m) continue;
+        const to = `/docs/tutorials/${m[2]}`;
+        const dir = path.join(outDir, 'docs/tutorials', m[1]);
+        fs.mkdirSync(dir, {recursive: true});
+        fs.writeFileSync(
+          path.join(dir, 'index.html'),
+          `<!doctype html><meta charset="utf-8"><title>Moved to ${to}</title><link rel="canonical" href="${to}">` +
+            `<meta http-equiv="refresh" content="0; url=${to}"><script>location.replace(${JSON.stringify(to)} + location.hash)</script>` +
+            `<p><a href="${to}">${to}</a></p>\n`,
+        );
+      }
+    },
+  };
+}
+
 const config: Config = {
   // Rspack/SWC build pipeline (@docusaurus/faster). Adopted when the 0.0.72
   // snapshot doubled the built page count (current + one full release tree)
@@ -94,7 +118,11 @@ const config: Config = {
     format: 'detect',
   },
   // Forwards an old #anchor on a split reference page to the family page that now holds it.
-  clientModules: [require.resolve('./src/clientModules/anchorForward.ts')],
+  clientModules: [
+    require.resolve('./src/clientModules/anchorForward.ts'),
+    require.resolve('./src/clientModules/hydrated.ts'),
+  ],
+  plugins: [tutorialRedirects],
   scripts: [
     {src: 'https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js', async: true},
   ],
@@ -147,9 +175,12 @@ const config: Config = {
           },
           versions: {
             current: {
-              label: 'main',
+              // "main" alone read like a branch name; the label stays unlike any release number.
+              label: 'main (latest)',
               path: '',
               banner: 'none',
+              // the "Version" chip only on the frozen versions
+              badge: false,
             },
           },
         },

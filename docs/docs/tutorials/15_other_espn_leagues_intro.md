@@ -2,9 +2,12 @@
 title: Other ESPN leagues tutorial
 sidebar_label: Other ESPN leagues
 sidebar_position: 14
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/15_other_espn_leagues_intro.ipynb
 ---
 
 # 🏈⚾🏒 Newer ESPN leagues with `sportsdataverse-py`
+
+> This page is the executed notebook [`15_other_espn_leagues_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/15_other_espn_leagues_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/15_other_espn_leagues_intro.ipynb) to run it yourself.
 
 Spring pro football is back, college diamonds are packed, and NCAA rinks are full. 🎉
 In a few lines of Python you're about to pull **live scoreboards**, **schedules**,

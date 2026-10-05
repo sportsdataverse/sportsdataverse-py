@@ -2,9 +2,12 @@
 title: NBA tutorial
 sidebar_label: NBA
 sidebar_position: 2
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/04_nba_intro.ipynb
 ---
 
 # 🏀 NBA hoops with `sportsdataverse-py`
+
+> This page is the executed notebook [`04_nba_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/04_nba_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/04_nba_intro.ipynb) to run it yourself.
 
 Welcome to the hardwood! 🎉 In just a few lines of Python you're about to
 pull a whole season of NBA data — **teams, standings, rosters, play-by-play,
@@ -28,9 +31,9 @@ releases — fast and reliable. Click any name for the full reference.
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`espn_nba_teams`](../nba/reference/additional.md#espn_nba_teams) | All 30 NBA teams (grab `team_id`s here) | ⭐ ESPN |
+| [`espn_nba_teams`](../nba/reference/additional/highlights.md#espn_nba_teams) | All 30 NBA teams (grab `team_id`s here) | ⭐ ESPN |
 | [`espn_nba_scoreboard`](../nba/reference/site.md#espn_nba_scoreboard) | A day's slate — scores, status, matchups | ⭐ ESPN |
-| [`espn_nba_schedule`](../nba/reference/additional.md#espn_nba_schedule) | Schedule for a date / date-range | ⭐ ESPN |
+| [`espn_nba_schedule`](../nba/reference/additional/highlights.md#espn_nba_schedule) | Schedule for a date / date-range | ⭐ ESPN |
 | [`espn_nba_standings`](../nba/reference/site.md#espn_nba_standings) | Conference standings (W-L, win%, streak) | ⭐ ESPN |
 | [`espn_nba_team_roster`](../nba/reference/site.md#espn_nba_team_roster) | A team's active roster | ⭐ ESPN |
 | [`espn_nba_team_schedule`](../nba/reference/site.md#espn_nba_team_schedule) | One team's full-season schedule | ⭐ ESPN |
@@ -38,13 +41,13 @@ releases — fast and reliable. Click any name for the full reference.
 | [`espn_nba_leaders`](../nba/reference/web.md#espn_nba_leaders) | League statistical leaders | ⭐ ESPN |
 | [`espn_nba_pbp`](../nba/reference/additional.md) | Full game payload (play-by-play, win prob, box) | ⭐ ESPN |
 | [`espn_nba_game_rosters`](../nba/reference/additional.md) | Both teams' rosters for one game | ⭐ ESPN |
-| [`load_nba_schedule`](../nba/reference/loaders.md#load_nba_pbp) | Multi-season schedule parquet | 📦 release |
-| [`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore) | Player box scores, every game | 📦 release |
-| [`load_nba_standings`](../nba/reference/loaders.md#load_nba_standings) | Historical standings | 📦 release |
+| [`load_nba_schedule`](../nba/reference/loaders/other.md#load_nba_pbp) | Multi-season schedule parquet | 📦 release |
+| [`load_nba_player_boxscore`](../nba/reference/loaders/player.md#load_nba_player_boxscore) | Player box scores, every game | 📦 release |
+| [`load_nba_standings`](../nba/reference/loaders/other.md#load_nba_standings) | Historical standings | 📦 release |
 | [`espn_nba_injuries`](../nba/reference/site.md#espn_nba_injuries) | League-wide injury report, one row per team | ⭐ ESPN |
-| [`load_nba_team_boxscore`](../nba/reference/loaders.md#load_nba_team_boxscore) | Team box scores, every game (off/def, shooting) | 📦 release |
-| [`load_nba_shots`](../nba/reference/loaders.md#load_nba_shots) | Every made shot with court coordinates | 📦 release |
-| [`most_recent_nba_season`](../nba/reference/additional.md#most_recent_nba_season) | The current season year helper | 🧮 util |
+| [`load_nba_team_boxscore`](../nba/reference/loaders/team.md#load_nba_team_boxscore) | Team box scores, every game (off/def, shooting) | 📦 release |
+| [`load_nba_shots`](../nba/reference/loaders/other.md#load_nba_shots) | Every made shot with court coordinates | 📦 release |
+| [`most_recent_nba_season`](../nba/reference/additional/highlights.md#most_recent_nba_season) | The current season year helper | 🧮 util |
 
 
 ## 🔌 Setup
@@ -89,7 +92,7 @@ def safe(label, thunk):
 
 ## 🏟️ Teams
 
-Start with [`espn_nba_teams`](../nba/reference/additional.md#espn_nba_teams) —
+Start with [`espn_nba_teams`](../nba/reference/additional/highlights.md#espn_nba_teams) —
 one wide row per franchise. The `team_id` column is the key you'll pass into
 roster, schedule and standings calls everywhere else.
 
@@ -208,7 +211,7 @@ Each one leans on the premium `espn_nba_*` wrappers.
 
 ### Recipe 1 — A team and its roster 👥
 
-Grab a `team_id` from [`espn_nba_teams`](../nba/reference/additional.md#espn_nba_teams),
+Grab a `team_id` from [`espn_nba_teams`](../nba/reference/additional/highlights.md#espn_nba_teams),
 then pull the active roster with
 [`espn_nba_team_roster`](../nba/reference/site.md#espn_nba_team_roster).
 
@@ -328,7 +331,7 @@ cols = ['event_date', 'opponent_abbreviation', 'home_away', 'game_result', 'scor
 ### Recipe 4 — Top scorers from the box-score release 🥇
 
 For a whole-season leaderboard the
-[`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore)
+[`load_nba_player_boxscore`](../nba/reference/loaders/player.md#load_nba_player_boxscore)
 release is your friend — it's a fast parquet download, no live API needed.
 Here we average points per game and rank the top 10 scorers.
 
@@ -380,7 +383,7 @@ out
 
 ### Recipe 5 — Offense vs defense, every team 🛡️
 
-The [`load_nba_team_boxscore`](../nba/reference/loaders.md#load_nba_team_boxscore)
+The [`load_nba_team_boxscore`](../nba/reference/loaders/team.md#load_nba_team_boxscore)
 release has one row per team-game with both `team_score` and
 `opponent_team_score` — so points-for, points-against and net rating are a
 single `group_by` away.
@@ -480,7 +483,7 @@ out
 A *double-double* is double digits in two of points / rebounds / assists.
 Count the categories per player-game, keep the ones that cleared two, then
 tally them up — straight from
-[`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore).
+[`load_nba_player_boxscore`](../nba/reference/loaders/player.md#load_nba_player_boxscore).
 
 
 ```python
@@ -531,7 +534,7 @@ out
 
 ### Recipe 8 — A tidy standings table 🏆
 
-The [`load_nba_standings`](../nba/reference/loaders.md#load_nba_standings)
+The [`load_nba_standings`](../nba/reference/loaders/other.md#load_nba_standings)
 release ships in **long** format (one row per team × stat). Pivot the stats
 you care about into columns to get a classic standings grid, sorted by
 win percentage.
@@ -589,7 +592,7 @@ out
 
 ### Recipe 9 — Built on threes (shot release + a join) 🧱
 
-[`load_nba_shots`](../nba/reference/loaders.md#load_nba_shots) is one row per
+[`load_nba_shots`](../nba/reference/loaders/other.md#load_nba_shots) is one row per
 made shot with a `score_value`. Tally points from twos vs threes per team,
 then **join** team abbreviations from the box-score release to find who
 leaned hardest on the long ball.
@@ -893,9 +896,9 @@ reliable, and don't depend on a live API being up.
 
 | Loader | Grain |
 |---|---|
-| [`load_nba_schedule`](../nba/reference/loaders.md#load_nba_schedule) | one row per game |
-| [`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore) | one row per player-game |
-| [`load_nba_standings`](../nba/reference/loaders.md#load_nba_standings) | one row per team-season |
+| [`load_nba_schedule`](../nba/reference/loaders/other.md#load_nba_schedule) | one row per game |
+| [`load_nba_player_boxscore`](../nba/reference/loaders/player.md#load_nba_player_boxscore) | one row per player-game |
+| [`load_nba_standings`](../nba/reference/loaders/other.md#load_nba_standings) | one row per team-season |
 
 
 ```python

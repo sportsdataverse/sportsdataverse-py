@@ -2,9 +2,12 @@
 title: CFB tutorial
 sidebar_label: CFB
 sidebar_position: 7
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/02_cfb_intro.ipynb
 ---
 
 # 🏈 College football with `sportsdataverse-py`
+
+> This page is the executed notebook [`02_cfb_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/02_cfb_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/02_cfb_intro.ipynb) to run it yourself.
 
 Saturdays in autumn, condensed into tidy DataFrames. 🍂 In a few lines of
 Python you're about to pull **a decade of play-by-play**, full **rosters**,
@@ -31,24 +34,24 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`load_cfb_pbp`](../cfb/reference/loaders.md#load_cfb_pbp) | Full **play-by-play** with EPA/WPA, since 2003 | ⭐ release |
-| [`load_cfb_rosters`](../cfb/reference/loaders.md#load_cfb_rosters) | Season **rosters** (bio, position, hometown) | ⭐ release |
-| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | Season **schedule** + results | ⭐ release |
-| [`load_cfb_team_info`](../cfb/reference/loaders.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
-| [`load_cfb_ratings`](../cfb/reference/loaders.md#load_cfb_ratings) | Opponent-adjusted **EPA ratings** per team-season | ⭐ release |
-| [`load_cfb_betting_lines`](../cfb/reference/additional.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
+| [`load_cfb_pbp`](../cfb/reference/loaders/pbp.md#load_cfb_pbp) | Full **play-by-play** with EPA/WPA, since 2003 | ⭐ release |
+| [`load_cfb_rosters`](../cfb/reference/loaders/rosters.md#load_cfb_rosters) | Season **rosters** (bio, position, hometown) | ⭐ release |
+| [`load_cfb_schedule`](../cfb/reference/loaders/schedule.md#load_cfb_schedule) | Season **schedule** + results | ⭐ release |
+| [`load_cfb_team_info`](../cfb/reference/loaders/team.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
+| [`load_cfb_ratings`](../cfb/reference/loaders/other.md#load_cfb_ratings) | Opponent-adjusted **EPA ratings** per team-season | ⭐ release |
+| [`load_cfb_betting_lines`](../cfb/reference/additional/other.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
 | [`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
-| [`espn_cfb_schedule`](../cfb/reference/additional.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
+| [`espn_cfb_schedule`](../cfb/reference/additional/highlights.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
 | [`espn_cfb_teams`](../cfb/reference/additional/other.md#espn_cfb_teams) | Every FBS/FCS **team** (grab `team_id`s) | ⭐ ESPN |
 | [`espn_cfb_team_roster`](../cfb/reference/site.md#espn_cfb_team_roster) | One team's **roster** | ⭐ ESPN |
 | [`espn_cfb_team_schedule`](../cfb/reference/site.md#espn_cfb_team_schedule) | One team's **schedule** | ⭐ ESPN |
 | [`espn_cfb_standings`](../cfb/reference/site.md#espn_cfb_standings) | Conference / division **standings** | ⭐ ESPN |
 | [`espn_cfb_rankings`](../cfb/reference/site.md#espn_cfb_rankings) | AP / Coaches / CFP **polls** | ⭐ ESPN |
 | [`espn_cfb_leaders`](../cfb/reference/web.md#espn_cfb_leaders) | League **stat leaders** by category | ⭐ ESPN |
-| [`espn_cfb_recruits`](../cfb/reference/core.md#espn_cfb_recruits) | Season **recruiting** class | ⭐ ESPN |
+| [`espn_cfb_recruits`](../cfb/reference/core/other.md#espn_cfb_recruits) | Season **recruiting** class | ⭐ ESPN |
 | [`espn_cfb_play_participants`](../cfb/reference/additional/other.md#espn_cfb_play_participants) | Per-play **athletes** (passer/rusher/tackler…) | ⭐ ESPN |
-| [`CFBPlayProcess`](../cfb/reference/additional.md#CFBPlayProcess) | Full ESPN **PBP pipeline** (EPA/WPA + box) | ⭐ ESPN |
-| [`most_recent_cfb_season`](../cfb/reference/additional.md#most_recent_cfb_season) | The current season year helper | helper |
+| [`CFBPlayProcess`](../cfb/reference/additional/highlights.md#CFBPlayProcess) | Full ESPN **PBP pipeline** (EPA/WPA + box) | ⭐ ESPN |
+| [`most_recent_cfb_season`](../cfb/reference/additional/highlights.md#most_recent_cfb_season) | The current season year helper | helper |
 
 
 ## 🔌 Setup
@@ -100,7 +103,7 @@ scores, conference flags, and playoff fields baked in.
 
 | Function | Grain | Highlights |
 |---|---|---|
-| [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | one row / game | scores, neutral-site & conference flags, playoff rounds |
+| [`load_cfb_schedule`](../cfb/reference/loaders/schedule.md#load_cfb_schedule) | one row / game | scores, neutral-site & conference flags, playoff rounds |
 
 
 
@@ -140,7 +143,7 @@ schedule.select([
 
 ## 👥 Premium loaders: rosters
 
-[`load_cfb_rosters`](../cfb/reference/loaders.md#load_cfb_rosters) gives you
+[`load_cfb_rosters`](../cfb/reference/loaders/rosters.md#load_cfb_rosters) gives you
 every listed player for a season — name, position, jersey, physicals and
 hometown. Perfect for joining onto play-by-play or building depth tables.
 
@@ -177,7 +180,7 @@ rosters.select([
 
 ## 🏟️ Premium loaders: team info
 
-[`load_cfb_team_info`](../cfb/reference/loaders.md#load_cfb_team_info)
+[`load_cfb_team_info`](../cfb/reference/loaders/team.md#load_cfb_team_info)
 carries the reference metadata you'll want to label every chart: school
 name, conference, classification (FBS/FCS), team colors, and venue.
 
@@ -220,7 +223,7 @@ team_info.select([
 
 ## 🎬 Premium loaders: play-by-play with EPA
 
-The crown jewel. [`load_cfb_pbp`](../cfb/reference/loaders.md#load_cfb_pbp)
+The crown jewel. [`load_cfb_pbp`](../cfb/reference/loaders/pbp.md#load_cfb_pbp)
 returns **every play** of a season with hundreds of engineered columns —
 down & distance, win probability, and **Expected Points Added (EPA)**
 already computed. (It's a big pull, so we grab a single season and peek.) 📊
@@ -614,7 +617,7 @@ standings_tbl.head(10)
 
 ### Recipe 6 — End-of-season power ratings ⚡
 
-[`load_cfb_ratings`](../cfb/reference/loaders.md#load_cfb_ratings) ships opponent-adjusted EPA ratings for every team-season: `adj_net` is adjusted offensive EPA per play minus adjusted defensive EPA per play, with ranks alongside. Join the schedule's team names onto its `team_id` for a ready-to-rank power table — no model to fit.
+[`load_cfb_ratings`](../cfb/reference/loaders/other.md#load_cfb_ratings) ships opponent-adjusted EPA ratings for every team-season: `adj_net` is adjusted offensive EPA per play minus adjusted defensive EPA per play, with ranks alongside. Join the schedule's team names onto its `team_id` for a ready-to-rank power table — no model to fit.
 
 
 ```python
@@ -893,7 +896,7 @@ splits
 
 ### Recipe 12 — Biggest betting favorites in history 💸
 
-[`load_cfb_betting_lines`](../cfb/reference/additional.md#load_cfb_betting_lines) is a premium release frame of historical sportsbook lines. Average the spread across books per game and sort to surface the most lopsided favorites — the mismatches Vegas saw coming a mile away.
+[`load_cfb_betting_lines`](../cfb/reference/additional/other.md#load_cfb_betting_lines) is a premium release frame of historical sportsbook lines. Average the spread across books per game and sort to surface the most lopsided favorites — the mismatches Vegas saw coming a mile away.
 
 
 ```python
@@ -990,7 +993,7 @@ A quick lap through the rest of the live ESPN surface. Each is wrapped in
 | [`espn_cfb_standings`](../cfb/reference/site.md#espn_cfb_standings) | conference / division standings |
 | [`espn_cfb_rankings`](../cfb/reference/site.md#espn_cfb_rankings) | AP / Coaches / CFP polls |
 | [`espn_cfb_leaders`](../cfb/reference/web.md#espn_cfb_leaders) | league stat leaders by category |
-| [`espn_cfb_recruits`](../cfb/reference/core.md#espn_cfb_recruits) | a season's recruiting class |
+| [`espn_cfb_recruits`](../cfb/reference/core/other.md#espn_cfb_recruits) | a season's recruiting class |
 
 
 
@@ -1071,7 +1074,7 @@ recruits = safe(
 ## 🧪 Bonus: process one game from scratch with `CFBPlayProcess`
 
 Want EPA/WPA on a single *live* game without loading a whole season?
-[`CFBPlayProcess`](../cfb/reference/additional.md#CFBPlayProcess) drives the
+[`CFBPlayProcess`](../cfb/reference/additional/highlights.md#CFBPlayProcess) drives the
 full ESPN pipeline: `.espn_cfb_pbp()` fetches the raw summary, then
 `.run_processing_pipeline()` returns a dict whose `plays` key is the
 fully-featured play list (alongside an advanced box score and metadata).

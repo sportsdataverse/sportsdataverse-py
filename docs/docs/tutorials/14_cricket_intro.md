@@ -2,9 +2,12 @@
 title: Cricket tutorial
 sidebar_label: Cricket
 sidebar_position: 13
+custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/14_cricket_intro.ipynb
 ---
 
 # 🏏 Cricket with `sportsdataverse-py`
+
+> This page is the executed notebook [`14_cricket_intro.ipynb`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/14_cricket_intro.ipynb): [download it](https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/examples/notebooks/14_cricket_intro.ipynb) to run it yourself.
 
 **ESPN** carries live scorecards, standings, and full match summaries for the world's
 most widely-played bat-and-ball game. `sportsdataverse-py` wraps that surface through
