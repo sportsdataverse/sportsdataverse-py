@@ -761,4 +761,5 @@ files = [
     "sdv_docs/__init__.py",
     "sdv_docs/schema.py",
     "sdv_docs/index.py",
+    "sdv_docs/server.py",
 ]

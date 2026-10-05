@@ -1,0 +1,238 @@
+"""sdv-docs MCP server: six read-only lookups over the SportsDataverse docs index.
+
+Run as ``sdv-docs`` (stdio). Never import ``sportsdataverse`` here (see sdv_docs/__init__.py).
+"""
+
+from __future__ import annotations
+
+import difflib
+import json
+from typing import Any, Callable, Optional
+
+from sdv_docs.index import Index, IndexUnavailable, locate
+
+INSTALL = "sdv-docs needs Python >= 3.10 and the mcp extra: pip install 'sportsdataverse[mcp]'"
+COLUMN_CAP = 50
+WRAPPER_CAP = 6
+
+
+def _with_index(run: Callable[[Index], str]) -> str:
+    try:
+        path = locate()
+    except IndexUnavailable as e:
+        return f"index unavailable: {e}; set SDV_DOCS_DB or check network"
+    with Index(path) as ix:
+        return run(ix)
+
+
+def _not_found(ix: Index, what: str, name: str, table: str) -> str:
+    close = difflib.get_close_matches(name, ix.names(table), n=5, cutoff=0.6)
+    hint = f" Close names: {', '.join(f'`{c}`' for c in close)}." if close else ""
+    return f"`{name}`: {what} not in index.{hint}"
+
+
+def search(
+    query: str,
+    kind: Optional[str] = None,
+    league: Optional[str] = None,
+    lang: Optional[str] = None,
+    limit: int = 10,
+) -> str:
+    """Search the SportsDataverse index: Python and R functions, returned columns, provider API endpoints and released datasets.
+
+    Use this to discover names; then call get_function / find_columns / find_endpoints / list_datasets for exact details.
+
+    Args:
+        query: Free text, e.g. "wnba shotchartdetail", "nhl shifts", "athlete injuries".
+        kind: Optional filter: function, column, endpoint or dataset.
+        league: Optional league prefix, e.g. nba, wnba, mbb, wbb, cfb, nfl, mlb, nhl.
+        lang: Optional filter: python or r.
+        limit: Maximum hits (default 10).
+    """
+
+    def run(ix: Index) -> str:
+        hits = ix.search(query, kind=kind, league=league, lang=lang, limit=limit)
+        if not hits:
+            return f"No results for {query!r}."
+        lines = [f"{len(hits)} result(s) for {query!r}:"]
+        for h in hits:
+            tags = " · ".join(t for t in (h["kind"], h["lang"], h["league"]) if t)
+            title = f" — {h['title']}" if h["title"] else ""
+            url = f" {h['url']}" if h["url"] else ""
+            lines.append(f"- **{h['name']}** ({tags}){title}{url}")
+        return "\n".join(lines)
+
+    return _with_index(run)
+
+
+def get_function(name: str, lang: Optional[str] = None, columns: bool = True) -> str:
+    """Full reference for one function: signature, parameters, returned columns (type + meaning), release dataset and Python/R equivalents.
+
+    Args:
+        name: Function name, e.g. load_nhl_pbp or espn_nba_team_roster; R functions as pkg::fn, e.g. hoopR::load_nba_pbp.
+        lang: Optional: python or r, when a name exists in both.
+        columns: Include the returned-columns table (default True). Set False for very wide datasets.
+    """
+
+    def run(ix: Index) -> str:
+        rows = ix.functions(name, lang)
+        if not rows:
+            bare = name.strip().rpartition("::")[2].strip().removesuffix("()")
+            return _not_found(ix, "function", bare, "functions")
+        return "\n\n---\n\n".join(_function_block(ix, f, columns) for f in rows)
+
+    return _with_index(run)
+
+
+def _function_block(ix: Index, f: Any, columns: bool) -> str:
+    py = f["lang"] == "python"
+    lines = [f"## {f['name']}" if py else f"## {f['package']}::{f['name']}"]
+    lines.append(" · ".join(t for t in (f["lang"], f["kind"], f["league"], f["category"]) if t))
+    if f["summary"]:
+        lines.append(f["summary"])
+    if f["signature"]:
+        lines.append(f"```python\n{f['signature']}\n```")
+    if py:
+        params = ix.params(f["name"])
+        if params:
+            lines.append("**Parameters**")
+            for p in params:
+                typ = f" ({p['type']})" if p["type"] else ""
+                dflt = f" = {p['default_value']}" if p["default_value"] else ""
+                desc = f": {p['description']}" if p["description"] else ""
+                lines.append(f"- `{p['name']}`{typ}{dflt}{desc}")
+        ds = ix.dataset_for(f["name"])
+        if ds is not None:
+            lines.append(
+                f"**Dataset**: release `{ds['tag']}`, seasons from {ds['min_season']}, "
+                f"`{ds['url_template']}` ({ds['release_url']})"
+            )
+        eq = [e for e in ix.equivalents(f["name"]) if e["py_function"] == f["name"]]
+        if eq:
+            lines.append("**R equivalent**: " + ", ".join(f"`{e['r_package']}::{e['r_function']}`" for e in eq))
+        cols = ix.columns(f["name"]) if columns else []
+        if cols:
+            lines += [f"**Returns** ({len(cols)} columns)", "| column | type | description |", "|---|---|---|"]
+            for c in cols:
+                col = f"{c['section']}.{c['name']}" if c["section"] else c["name"]
+                desc = (c["description"] or "").replace("|", "\\|")
+                lines.append(f"| `{col}` | {c['type'] or ''} | {desc} |")
+    else:
+        eq = [e for e in ix.equivalents(f["name"]) if e["r_function"] == f["name"] and e["r_package"] == f["package"]]
+        if eq:
+            lines.append("**Python equivalent**: " + ", ".join(f"`{e['py_function']}`" for e in eq))
+    if f["doc_url"]:
+        lines.append(f"Docs: {f['doc_url']}")
+    return "\n".join(lines)
+
+
+def find_columns(column: str, league: Optional[str] = None, function: Optional[str] = None) -> str:
+    """Which functions return a column, with its type and meaning in each.
+
+    Args:
+        column: Column name, e.g. epa, drive_id, event_type (case-insensitive).
+        league: Optional league prefix to narrow the list.
+        function: Optional function name to get just that function's definition of the column.
+    """
+
+    def run(ix: Index) -> str:
+        rows = ix.columns_named(column, league=league, function=function, limit=COLUMN_CAP + 1)
+        if not rows:
+            return _not_found(ix, "column", column.strip(), "columns")
+        shown = rows[:COLUMN_CAP]
+        more = f" (first {COLUMN_CAP}; narrow with league= or function=)" if len(rows) > COLUMN_CAP else ""
+        lines = [f"`{column.strip()}` is returned by {len(shown)} function(s){more}:"]
+        for r in shown:
+            sec = f" [{r['section']}]" if r["section"] else ""
+            url = f" {r['doc_url']}" if r["doc_url"] else ""
+            lines.append(
+                f"- **{r['function']}**{sec} ({r['type'] or '?'}): {r['description'] or '(no description)'}{url}"
+            )
+        return "\n".join(lines)
+
+    return _with_index(run)
+
+
+def find_endpoints(query: str, api: Optional[str] = None, limit: int = 10) -> str:
+    """Provider API endpoints (ESPN, stats.nba.com, NHL, MLB, Fox, CBS, Yahoo, 247, ...) matching a description: method, URL, params (* = required), quirks and the sdv-py wrapper that calls it.
+
+    Args:
+        query: Free text, e.g. "athlete injuries", "event odds", "shotchartdetail".
+        api: Optional exact API name, e.g. espn_core_v2, espn_site_v2, espn_cdn, nba_stats, nhl_api_web.
+        limit: Maximum endpoints (default 10).
+    """
+
+    def run(ix: Index) -> str:
+        rows = ix.endpoints(query, api=api, limit=limit)
+        if not rows:
+            return f"No endpoints match {query!r}" + (f" in api {api!r}" if api else "") + "."
+        blocks = []
+        for e in rows:
+            lines = [f"### {e['method']} {e['path']}", f"api: {e['api']} · source: {e['source']}"]
+            if e["summary"]:
+                lines.append(e["summary"])
+            params = json.loads(e["params_json"] or "[]")
+            if params:
+                lines.append(
+                    "params: " + ", ".join(f"`{p['name']}`" + ("*" if p.get("required") else "") for p in params)
+                )
+            names = (e["wrapper"] or "").split()
+            if names:
+                extra = f" (+{len(names) - WRAPPER_CAP} more)" if len(names) > WRAPPER_CAP else ""
+                lines.append("sdv-py: " + ", ".join(f"`{n}`" for n in names[:WRAPPER_CAP]) + extra)
+            if e["notes"]:
+                lines.append(f"notes: {e['notes'][:600]}")
+            if e["spec_url"]:
+                lines.append(f"spec: {e['spec_url']}")
+            blocks.append("\n".join(lines))
+        return "\n\n".join(blocks)
+
+    return _with_index(run)
+
+
+def list_datasets(league: Optional[str] = None, query: Optional[str] = None, limit: int = 50) -> str:
+    """Released datasets behind the load_* loaders: release tag, first season and download URL template.
+
+    Args:
+        league: Optional league prefix, e.g. nhl, nfl, cfb, nba.
+        query: Optional free text, e.g. "shifts", "ratings", "pbp".
+        limit: Maximum rows (default 50).
+    """
+
+    def run(ix: Index) -> str:
+        rows = ix.datasets(league=league, query=query, limit=limit)
+        if not rows:
+            return (
+                "No datasets match"
+                + (f" league {league!r}" if league else "")
+                + (f" query {query!r}" if query else "")
+                + "."
+            )
+        lines = ["| loader | league | release tag | from season | release |", "|---|---|---|---|---|"]
+        lines += [
+            f"| {d['loader']} | {d['league']} | {d['tag']} | {d['min_season']} | {d['release_url']} |" for d in rows
+        ]
+        return "\n".join(lines)
+
+    return _with_index(run)
+
+
+def index_info() -> str:
+    """When the index was built, from which sdv-py commit and sources, and how many rows each table holds."""
+
+    def run(ix: Index) -> str:
+        meta = ix.meta()
+        lines = [
+            f"sdv-docs index (schema {meta.get('schema_version', '?')}), built {meta.get('built_at', '?')} "
+            f"from sdv-py {meta.get('sdv_py_commit', '?')}"
+        ]
+        lines += [
+            f"- {k}: {v}" for k, v in sorted(meta.items()) if k not in ("schema_version", "built_at", "sdv_py_commit")
+        ]
+        lines.append("rows: " + ", ".join(f"{k} {v:,}" for k, v in ix.counts().items()))
+        return "\n".join(lines)
+
+    return _with_index(run)
+
+
+TOOLS: tuple[Callable[..., str], ...] = (search, get_function, find_columns, find_endpoints, list_datasets, index_info)
