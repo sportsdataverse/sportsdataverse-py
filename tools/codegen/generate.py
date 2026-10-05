@@ -425,6 +425,12 @@ def _fix_desc_typos(text: str) -> str:
     return text
 
 
+#: R wrappers gate some columns behind an argument sdv-py does not have (hoopR/wehoop
+#: ``team_detail = TRUE``, ``athlete_detail``, ``position_detail``); the Python parsers always
+#: return those columns, so the condition is dropped from the mined text.
+_R_ONLY_ARG = re.compile(r";\s*`[a-z_]+ = (?:TRUE|FALSE)` only(?=\.?$)")
+
+
 def _r_col_desc(league: str | None, col: str) -> str:
     """Mined description for ``col`` for ``league``'s R package.
 
@@ -434,7 +440,7 @@ def _r_col_desc(league: str | None, col: str) -> str:
         return ""
     val = _r_pkg_dict(league).get(col)
     if val:
-        return _fix_desc_typos(val)
+        return _R_ONLY_ARG.sub("", _fix_desc_typos(val))
     # Prefer SAME-SPORT sibling packages before the cross-sport ``_merged``
     # union (wehoop text for an nba column beats nflreadr's). ``_merged`` stays
     # as the last resort — dropping it blanked ~800 described cells and trips
@@ -445,8 +451,8 @@ def _r_col_desc(league: str | None, col: str) -> str:
     if sport:
         val = _sport_merged(sport).get(col)
         if val:
-            return _fix_desc_typos(val)
-    return _fix_desc_typos(_r_col_descs().get("_merged", {}).get(col, "") or "")
+            return _R_ONLY_ARG.sub("", _fix_desc_typos(val))
+    return _R_ONLY_ARG.sub("", _fix_desc_typos(_r_col_descs().get("_merged", {}).get(col, "") or ""))
 
 
 _MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
