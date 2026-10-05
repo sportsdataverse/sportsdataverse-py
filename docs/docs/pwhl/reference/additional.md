@@ -488,7 +488,7 @@ by season, not `season` (name string). The resolved integer is passed as the
 | `rank` | integer | Rank of the streak. |
 | `player_id` | character | Unique player identifier. |
 | `jersey_number` | character | Jersey number. |
-| `name` | character | Team mascot name. |
+| `name` | character | Player full name (e.g. 'Hilary Knight'). |
 | `team_id` | character | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
@@ -644,9 +644,9 @@ Search for PWHL players by name.
 | `birthcntry` | character | Player birth country. |
 | `team_id` | character | Unique team identifier. |
 | `jersey_number` | character | Jersey number. |
-| `role_id` | character | Numeric identifier for the player's primary positional role in the PWHL HockeyTech system (e.g., skater, goalie). |
+| `role_id` | character | Id of the person's role in the HockeyTech person record ('1' = 'Player' in the captures): player or staff, not a playing position (see position). |
 | `season_id` | character | Season identifier. |
-| `role_name` | character | Human-readable label for the player's primary positional role in the PWHL HockeyTech system (e.g., 'Forward', 'Defense', 'Goalie'). |
+| `role_name` | character | Label of the person's role in the HockeyTech person record (e.g. 'Player'), not a playing position (see position). |
 | `all_roles` | character | Pipe- or comma-delimited string listing every positional or roster role associated with the player in the PWHL HockeyTech system. |
 | `last_team_name` | character | Full name of the PWHL team on which the player most recently appeared. |
 | `last_team_code` | character | Short abbreviation code for the PWHL team on which the player most recently appeared. |
@@ -654,7 +654,7 @@ Search for PWHL players by name.
 | `position` | character | Player position. |
 | `profile_image` | character | File name of the player's profile photo, not a URL (e.g. '7dea378a91cedc9d5d14b1222802322c.jpg'). |
 | `score` | character | Search relevance score of the match as a decimal string (e.g. '5.911529541015625'), not a game score. |
-| `last_active_date` | character | ISO-formatted date string of the player's most recent recorded activity or roster transaction in the PWHL HockeyTech system. |
+| `last_active_date` | character | Date (YYYY-MM-DD) the feed reports the person as last active; for the active players captured it equals the capture date, so it is not the date of the player's last game. |
 
 ### pwhl_player_stats {#pwhl_player_stats}
 
@@ -851,27 +851,27 @@ PWHL live scorebar (today ± 3 days).
 |---|---|---|
 | `id` | character | HockeyTech game id, the game_id the single-game functions (pwhl_pbp, pwhl_game_summary) take. |
 | `season_id` | character | Season identifier. |
-| `league_id` | character | League identifier of the team. |
+| `league_id` | character | HockeyTech league id of the game within the feed (e.g. '1'; AHL '4', SJHL '3'); not always the league_id the standings call sends. |
 | `game_number` | character | Game number within the schedule. |
-| `game_letter` | character | Single-letter suffix appended to the game number to distinguish doubleheader or rescheduled games. |
+| `game_letter` | character | Playoff-series letter (A, B, C, ... one per series), set on every playoff game and empty on regular-season games. |
 | `game_type` | character | Game type the row belongs to. |
 | `quick_score` | character | Unused by the feed: '0' in every captured row (final and scheduled games, 17 leagues), never a score. |
-| `date` | character | Game date (ISO 8601 datetime string). |
+| `date` | character | Game date as YYYY-MM-DD (date only, no time). |
 | `flo_core_event_id` | character | FloSports core event identifier linking this PWHL game to its FloSports broadcast event record. |
 | `flo_live_event_id` | character | FloSports live-stream event identifier for this PWHL game. |
 | `game_date` | character | Game date. |
-| `game_date_iso8601` | character | Game date formatted as an ISO 8601 string (e.g., "2024-02-10T00:00:00") for timezone-aware parsing. |
+| `game_date_iso8601` | character | Scheduled start as an ISO 8601 date-time with UTC offset (e.g. '2023-12-04T13:00:00-05:00'). |
 | `scheduled_time` | character | Raw scheduled start time for the game as returned by the HockeyTech feed, typically in HH:MM:SS format. |
 | `scheduled_formatted_time` | character | Human-readable local game start time string formatted for display (e.g., "7:00 PM ET"). |
-| `timezone` | character | Time zone of the transaction. |
+| `timezone` | character | Time zone of the scheduled start as a tz database name (e.g. 'Canada/Eastern'). |
 | `ticket_url` | character | URL to the official ticketing page where fans can purchase tickets for this game. |
 | `home_id` | character | HockeyTech team id of the home team (the team_id of pwhl_teams, e.g. '1' = Boston), not an ESPN id. |
 | `home_code` | character | Short team code (abbreviation) for the home team (e.g., "BOS", "MIN"). |
-| `home_city` | character | Hometown of the athlete. |
+| `home_city` | character | City name of the home team (e.g. 'Boston', 'Minnesota'). |
 | `home_nickname` | character | Franchise nickname for the home team (e.g., "Fleet", "Frost"). |
 | `home_long_name` | character | Full name including city and franchise for the home team (e.g., "Boston Fleet"). |
 | `home_division` | character | Home team division. |
-| `home_goals` | character | Home goals in the period. |
+| `home_goals` | character | Goals scored by the home team in the game so far; the final score once game_status is '4'. |
 | `home_audio_url` | character | URL of the home-team radio or audio broadcast stream for this game. |
 | `home_video_url` | character | URL of the home-team video broadcast stream for this game. |
 | `home_webcast_url` | character | URL of the home-team webcast for online viewing of this game. |
@@ -890,14 +890,14 @@ PWHL live scorebar (today ± 3 days).
 | `period_name_long` | character | Verbose name of the current or final game period (e.g., "Third Period", "Overtime"). |
 | `game_clock` | character | Game clock. |
 | `game_summary_url` | character | Game-summary link target, not a full URL: the bare game id in some leagues (e.g. PWHL '74') and a site-relative path in others (e.g. '/game-center/?game_id=4896'). |
-| `home_wins` | character | Wins at home. |
-| `home_regulation_losses` | character | Number of regulation losses accumulated by the home team at the time of this game in the current standings. |
-| `home_ot_losses` | character | Home overtime losses. |
-| `home_shootout_losses` | character | Number of shootout losses accumulated by the home team at the time of this game in the current standings. |
-| `visitor_wins` | character | Number of wins accumulated by the visiting team at the time of this game in the current standings. |
-| `visitor_regulation_losses` | character | Number of regulation losses accumulated by the visiting team at the time of this game in the current standings. |
-| `visitor_ot_losses` | character | Number of overtime losses accumulated by the visiting team at the time of this game in the current standings. |
-| `visitor_shootout_losses` | character | Number of shootout losses accumulated by the visiting team at the time of this game in the current standings. |
+| `home_wins` | character | Home team's wins in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `home_regulation_losses` | character | Home team's regulation losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `home_ot_losses` | character | Home team's overtime losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `home_shootout_losses` | character | Home team's shootout losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `visitor_wins` | character | Visiting team's wins in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `visitor_regulation_losses` | character | Visiting team's regulation losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `visitor_ot_losses` | character | Visiting team's overtime losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
+| `visitor_shootout_losses` | character | Visiting team's shootout losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
 | `game_status` | character | Numeric game-status code as text: '1' for a scheduled game, '4' for a final. The label is in game_status_string ('Final', or the start time of a scheduled game). |
 | `intermission` | character | Flag or string indicating whether the game is currently in an intermission period. |
 | `game_status_string` | character | Short status label for the game's current state (e.g., "Final", "In Progress", "Scheduled"). |
@@ -1085,7 +1085,7 @@ PWHL aggregate stats by season and position.
 | `shortname` | character | Player short name. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
-| `name` | character | Team mascot name. |
+| `name` | character | Player full name (e.g. 'Jessie Eldridge'). |
 | `phonetic_name` | character | Phonetic spelling of the player name. |
 | `active` | character | Whether athlete is currently active. |
 | `height` | character | Player height as feet-and-inches text (e.g. 5'11), not a number of inches. |
@@ -1097,7 +1097,7 @@ PWHL aggregate stats by season and position.
 | `suspension_games_remaining` | character | Suspension games remaining. |
 | `suspension_indefinite` | character | Whether the suspension is indefinite. |
 | `rookie` | character | Whether the player is a rookie. |
-| `veteran` | character | Whether the player is a veteran. |
+| `veteran` | character | HockeyTech veteran-status code as text ('1' or '2' in the captured rows; the feed does not document the codes), not a boolean. |
 | `draft_eligible` | character | Whether the player is draft eligible. |
 | `jersey_number` | character | Jersey number. |
 | `team_name` | character | Team name. |
@@ -1106,7 +1106,7 @@ PWHL aggregate stats by season and position.
 | `division` | character | Division name as text (e.g. 'PWHL'), not an identifier. |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
-| `hometown` | character | Prospect hometown. |
+| `hometown` | character | Player hometown as city and province, state or country abbreviation (e.g. 'Barrie, ON'). |
 | `homeprov` | character | Player home province/state. |
 | `homecntry` | character | Player home country. |
 | `birthtown` | character | Player birth town. |
@@ -1276,7 +1276,7 @@ PWHL team roster for a given team + season.
 | `h` | character | Hits. |
 | `w` | character | Wins. |
 | `draft_status` | character | Text description of the player's draft history or eligibility status (e.g., undrafted, drafted year and round). |
-| `name` | character | Team mascot name. |
+| `name` | character | Player full name, first then last (e.g. 'Megan Keller'). |
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
 | `catches` | character | Catching hand (goalies). |
 

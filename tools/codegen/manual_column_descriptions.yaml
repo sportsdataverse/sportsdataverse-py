@@ -33160,6 +33160,7 @@ pwhl_game_shifts:
   penalty_on_shift: Number of penalties called while this shift was active.
   start_s: Shift start time in seconds elapsed from the start of the period.
 pwhl_leaders:
+  name: Player full name (e.g. 'Hilary Knight').
   photo_small: URL of the small-format headshot image for the PWHL leader-board player.
   stat_formatted: The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards
     requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet.
@@ -33169,15 +33170,15 @@ pwhl_leaders:
 pwhl_player_search:
   all_roles: Pipe- or comma-delimited string listing every positional or roster role associated with the player in the PWHL
     HockeyTech system.
-  last_active_date: ISO-formatted date string of the player's most recent recorded activity or roster transaction in the PWHL
-    HockeyTech system.
+  last_active_date: Date (YYYY-MM-DD) the feed reports the person as last active; for the active players captured it equals
+    the capture date, so it is not the date of the player's last game.
   last_team_code: Short abbreviation code for the PWHL team on which the player most recently appeared.
   last_team_name: Full name of the PWHL team on which the player most recently appeared.
   profile_image: File name of the player's profile photo, not a URL (e.g. '7dea378a91cedc9d5d14b1222802322c.jpg').
   rawbirthdate: Player's birth date as a raw string in the format returned by the PWHL HockeyTech API, typically YYYY-MM-DD.
-  role_id: Numeric identifier for the player's primary positional role in the PWHL HockeyTech system (e.g., skater, goalie).
-  role_name: Human-readable label for the player's primary positional role in the PWHL HockeyTech system (e.g., 'Forward',
-    'Defense', 'Goalie').
+  role_id: 'Id of the person''s role in the HockeyTech person record (''1'' = ''Player'' in the captures): player or staff,
+    not a playing position (see position).'
+  role_name: Label of the person's role in the HockeyTech person record (e.g. 'Player'), not a playing position (see position).
   score: Search relevance score of the match as a decimal string (e.g. '5.911529541015625'), not a game score.
 pwhl_player_stats:
   sopt_track_faceoffs: Flag indicating whether faceoff tracking is enabled for this player's statistical record in the HockeyTech
@@ -33189,13 +33190,15 @@ pwhl_player_toi:
 pwhl_scorebar:
   combined_client_code: Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant
     deployments.
+  date: Game date as YYYY-MM-DD (date only, no time).
   date_tbd: Scorebar flag string named for a to-be-determined game date; '0' in every sampled row, so the non-zero case was
     not observed.
   flo_core_event_id: FloSports core event identifier linking this PWHL game to its FloSports broadcast event record.
   flo_hockey_url: URL to the FloHockey streaming page for this PWHL game.
   flo_live_event_id: FloSports live-stream event identifier for this PWHL game.
-  game_date_iso8601: Game date formatted as an ISO 8601 string (e.g., "2024-02-10T00:00:00") for timezone-aware parsing.
-  game_letter: Single-letter suffix appended to the game number to distinguish doubleheader or rescheduled games.
+  game_date_iso8601: Scheduled start as an ISO 8601 date-time with UTC offset (e.g. '2023-12-04T13:00:00-05:00').
+  game_letter: Playoff-series letter (A, B, C, ... one per series), set on every playoff game and empty on regular-season
+    games.
   game_status: 'Numeric game-status code as text: ''1'' for a scheduled game, ''4'' for a final. The label is in game_status_string
     (''Final'', or the start time of a scheduled game).'
   game_status_string: Short status label for the game's current state (e.g., "Final", "In Progress", "Scheduled").
@@ -33203,18 +33206,27 @@ pwhl_scorebar:
   game_summary_url: 'Game-summary link target, not a full URL: the bare game id in some leagues (e.g. PWHL ''74'') and a site-relative
     path in others (e.g. ''/game-center/?game_id=4896'').'
   home_audio_url: URL of the home-team radio or audio broadcast stream for this game.
+  home_city: City name of the home team (e.g. 'Boston', 'Minnesota').
   home_code: Short team code (abbreviation) for the home team (e.g., "BOS", "MIN").
+  home_goals: Goals scored by the home team in the game so far; the final score once game_status is '4'.
   home_id: HockeyTech team id of the home team (the team_id of pwhl_teams, e.g. '1' = Boston), not an ESPN id.
   home_long_name: Full name including city and franchise for the home team (e.g., "Boston Fleet").
   home_nickname: Franchise nickname for the home team (e.g., "Fleet", "Frost").
-  home_regulation_losses: Number of regulation losses accumulated by the home team at the time of this game in the current
-    standings.
-  home_shootout_losses: Number of shootout losses accumulated by the home team at the time of this game in the current standings.
+  home_ot_losses: 'Home team''s overtime losses in its record for this game''s season (season_id) as the feed reports it when
+    fetched: the same value on every row of that team-season, not the record as of the game date.'
+  home_regulation_losses: 'Home team''s regulation losses in its record for this game''s season (season_id) as the feed reports
+    it when fetched: the same value on every row of that team-season, not the record as of the game date.'
+  home_shootout_losses: 'Home team''s shootout losses in its record for this game''s season (season_id) as the feed reports
+    it when fetched: the same value on every row of that team-season, not the record as of the game date.'
   home_video_url: URL of the home-team video broadcast stream for this game.
   home_webcast_url: URL of the home-team webcast for online viewing of this game.
+  home_wins: 'Home team''s wins in its record for this game''s season (season_id) as the feed reports it when fetched: the
+    same value on every row of that team-season, not the record as of the game date.'
   id: HockeyTech game id, the game_id the single-game functions (pwhl_pbp, pwhl_game_summary) take.
   intermission: Flag or string indicating whether the game is currently in an intermission period.
   league_code: Short code identifying the league for this scorebar record (e.g., "PWHL").
+  league_id: HockeyTech league id of the game within the feed (e.g. '1'; AHL '4', SJHL '3'); not always the league_id the
+    standings call sends.
   ord: Ordinal sort key used by the HockeyTech scorebar feed to order games within a day.
   period_name_long: Verbose name of the current or final game period (e.g., "Third Period", "Overtime").
   period_name_short: Abbreviated name of the current or final game period (e.g., "3rd", "OT").
@@ -33224,6 +33236,7 @@ pwhl_scorebar:
   ticket_url: URL to the official ticketing page where fans can purchase tickets for this game.
   time_tbd: Scorebar flag string named for a to-be-determined start time; '0' in every sampled row, so the non-zero case was
     not observed.
+  timezone: Time zone of the scheduled start as a tz database name (e.g. 'Canada/Eastern').
   timezone_short: Abbreviated timezone label for the game's scheduled start time (e.g., "ET", "CT").
   venue_location: City and/or arena name indicating the physical location where the game is played.
   visitor_audio_url: URL of the visiting-team radio or audio broadcast stream for this game.
@@ -33234,14 +33247,16 @@ pwhl_scorebar:
   visitor_logo: URL of the logo image for the visiting team.
   visitor_long_name: Full name including city and franchise for the visiting team (e.g., "Ottawa Charge").
   visitor_nickname: Franchise nickname for the visiting team (e.g., "Charge", "Sceptres").
-  visitor_ot_losses: Number of overtime losses accumulated by the visiting team at the time of this game in the current standings.
-  visitor_regulation_losses: Number of regulation losses accumulated by the visiting team at the time of this game in the
-    current standings.
-  visitor_shootout_losses: Number of shootout losses accumulated by the visiting team at the time of this game in the current
-    standings.
+  visitor_ot_losses: 'Visiting team''s overtime losses in its record for this game''s season (season_id) as the feed reports
+    it when fetched: the same value on every row of that team-season, not the record as of the game date.'
+  visitor_regulation_losses: 'Visiting team''s regulation losses in its record for this game''s season (season_id) as the
+    feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date.'
+  visitor_shootout_losses: 'Visiting team''s shootout losses in its record for this game''s season (season_id) as the feed
+    reports it when fetched: the same value on every row of that team-season, not the record as of the game date.'
   visitor_video_url: URL of the visiting-team video broadcast stream for this game.
   visitor_webcast_url: URL of the visiting-team webcast for online viewing of this game.
-  visitor_wins: Number of wins accumulated by the visiting team at the time of this game in the current standings.
+  visitor_wins: 'Visiting team''s wins in its record for this game''s season (season_id) as the feed reports it when fetched:
+    the same value on every row of that team-season, not the record as of the game date.'
 pwhl_standings:
   percentage: Points percentage earned by the PWHL team (points divided by maximum possible points), expressed as a decimal
     between 0 and 1.
@@ -33250,9 +33265,13 @@ pwhl_standings:
 pwhl_stats:
   division: Division name as text (e.g. 'PWHL'), not an identifier.
   height: 'Player height as feet-and-inches text (e.g. 5''11), not a number of inches.'
+  hometown: Player hometown as city and province, state or country abbreviation (e.g. 'Barrie, ON').
+  name: Player full name (e.g. 'Jessie Eldridge').
   namelink: Player name as plain text (the text of the feed's player link; equals name in the captures), not HTML.
   player_image: URL to the player's headshot image as served by the HockeyTech/PWHL data feed.
   rank: 1-based position of the player in the feed's sorted stat table.
+  veteran: HockeyTech veteran-status code as text ('1' or '2' in the captured rows; the feed does not document the codes),
+    not a boolean.
 pwhl_team_roster:
   birthplace: City, province/state, or country where the player was born, as recorded in the PWHL HockeyTech roster.
   current_team: Name or identifier of the PWHL team to which the player is currently rostered.
@@ -33261,6 +33280,7 @@ pwhl_team_roster:
     HockeyTech API.
   hidden: Flag indicating whether the player's roster entry is suppressed from public-facing displays in the PWHL HockeyTech
     system.
+  name: Player full name, first then last (e.g. 'Megan Keller').
   nhlteam: Name or identifier of the NHL organization that holds the player's NHL rights, if applicable.
   player_id_1: Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields.
   player_image: URL of the player's official roster photograph from the PWHL HockeyTech feed.
