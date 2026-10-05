@@ -366,6 +366,155 @@
     },
     "links": []
    }
+  ],
+  "330582427": [
+   {
+    "provider": {
+     "id": "1004",
+     "name": "consensus",
+     "priority": 0
+    },
+    "details": "UNCA -17.5",
+    "spread": -17.5,
+    "awayTeamOdds": {
+     "winPercentage": 31.295,
+     "favorite": false,
+     "underdog": true,
+     "teamId": "2506"
+    },
+    "homeTeamOdds": {
+     "winPercentage": 68.706,
+     "favorite": true,
+     "underdog": false,
+     "teamId": "2427"
+    },
+    "links": []
+   },
+   {
+    "provider": {
+     "id": "1002",
+     "name": "teamrankings",
+     "priority": 0
+    },
+    "awayTeamOdds": {
+     "averageScore": 62.0,
+     "favorite": false,
+     "underdog": true,
+     "spreadRecord": {
+      "wins": 11,
+      "losses": 17,
+      "pushes": 1,
+      "summary": "11-17-1"
+     },
+     "teamId": "2506"
+    },
+    "homeTeamOdds": {
+     "averageScore": 74.0,
+     "favorite": false,
+     "underdog": true,
+     "spreadRecord": {
+      "wins": 18,
+      "losses": 13,
+      "pushes": 1,
+      "summary": "18-13-1"
+     },
+     "teamId": "2427"
+    },
+    "links": []
+   }
+  ],
+  "401364342": [
+   {
+    "provider": {
+     "id": "45",
+     "name": "Caesars Sportsbook (New Jersey)",
+     "priority": 1
+    },
+    "details": "PUR -15.5",
+    "overUnder": 158.5,
+    "spread": -15.5,
+    "awayTeamOdds": {
+     "favorite": false,
+     "underdog": true,
+     "moneyLine": 700,
+     "spreadOdds": -110.0,
+     "teamId": "2294"
+    },
+    "homeTeamOdds": {
+     "favorite": true,
+     "underdog": false,
+     "moneyLine": -1100,
+     "spreadOdds": -110.0,
+     "teamId": "2509"
+    },
+    "links": []
+   },
+   {
+    "provider": {
+     "id": "1004",
+     "name": "consensus",
+     "priority": 0
+    },
+    "details": "PUR -15.5",
+    "overUnder": 158.0,
+    "spread": -15.5,
+    "awayTeamOdds": {
+     "winPercentage": 55.0,
+     "favorite": false,
+     "underdog": true,
+     "moneyLine": 662,
+     "spreadOdds": -115.0,
+     "teamId": "2294"
+    },
+    "homeTeamOdds": {
+     "winPercentage": 45.0,
+     "favorite": true,
+     "underdog": false,
+     "moneyLine": -1088,
+     "spreadOdds": -106.0,
+     "teamId": "2509"
+    },
+    "links": []
+   },
+   {
+    "provider": {
+     "id": "1002",
+     "name": "teamrankings",
+     "priority": 0
+    },
+    "details": "PUR -13.0",
+    "overUnder": 160.5,
+    "spread": -13.0,
+    "awayTeamOdds": {
+     "averageScore": 72.4,
+     "favorite": false,
+     "underdog": true,
+     "moneyLine": 580,
+     "spreadRecord": {
+      "wins": 17,
+      "losses": 15,
+      "pushes": 0,
+      "summary": "17-15-0"
+     },
+     "spreadOdds": -108.0,
+     "teamId": "2294"
+    },
+    "homeTeamOdds": {
+     "averageScore": 85.3,
+     "favorite": true,
+     "underdog": false,
+     "moneyLine": -800,
+     "spreadRecord": {
+      "wins": 13,
+      "losses": 19,
+      "pushes": 2,
+      "summary": "13-19-2"
+     },
+     "spreadOdds": -112.0,
+     "teamId": "2509"
+    },
+    "links": []
+   }
   ]
  },
  "nba": {
@@ -700,6 +849,109 @@
      "teamId": "3"
     },
     "links": []
+   }
+  ],
+  "401430219": [
+   {
+    "provider": {
+     "id": "1004",
+     "name": "consensus",
+     "priority": 0
+    },
+    "details": "MIA -4.5",
+    "overUnder": 216.0,
+    "spread": -4.5,
+    "overOdds": -110.0,
+    "underOdds": -110.0,
+    "awayTeamOdds": {
+     "winPercentage": 28.0,
+     "favorite": false,
+     "underdog": true,
+     "moneyLine": 171,
+     "spreadOdds": -110.0,
+     "current": {
+      "pointSpread": {
+       "alternateDisplayValue": "+4.5",
+       "american": "+4.5"
+      },
+      "spread": {
+       "alternateDisplayValue": "-110",
+       "american": "-110"
+      },
+      "moneyLine": {
+       "alternateDisplayValue": "+171",
+       "american": "+171"
+      }
+     },
+     "teamId": "1"
+    },
+    "homeTeamOdds": {
+     "winPercentage": 72.0,
+     "favorite": true,
+     "underdog": false,
+     "moneyLine": -202,
+     "spreadOdds": -110.0,
+     "current": {
+      "pointSpread": {
+       "alternateDisplayValue": "-4.5",
+       "american": "-4.5"
+      },
+      "spread": {
+       "alternateDisplayValue": "-110",
+       "american": "-110"
+      },
+      "moneyLine": {
+       "alternateDisplayValue": "-202",
+       "american": "-202"
+      }
+     },
+     "teamId": "14"
+    },
+    "current": {
+     "over": {
+      "alternateDisplayValue": "-110",
+      "american": "-110"
+     },
+     "under": {
+      "alternateDisplayValue": "-110",
+      "american": "-110"
+     },
+     "total": {
+      "alternateDisplayValue": "216",
+      "american": "216"
+     }
+    }
+   },
+   {
+    "provider": {
+     "id": "1002",
+     "name": "teamrankings",
+     "priority": 0
+    },
+    "awayTeamOdds": {
+     "averageScore": 108.7,
+     "favorite": false,
+     "underdog": false,
+     "spreadRecord": {
+      "wins": 39,
+      "losses": 48,
+      "pushes": 1,
+      "summary": "39-48-1"
+     },
+     "teamId": "1"
+    },
+    "homeTeamOdds": {
+     "averageScore": 111.3,
+     "favorite": false,
+     "underdog": false,
+     "spreadRecord": {
+      "wins": 45,
+      "losses": 58,
+      "pushes": 3,
+      "summary": "45-58-3"
+     },
+     "teamId": "14"
+    }
    }
   ]
  },

@@ -51,10 +51,28 @@ def _pick(lg: str, pickcenter) -> tuple:
         # several providers: the values the pre-fix `> 1` path already produced
         ("mbb", "400766104", (-6.5, 132.5, True, True)),
         ("nba", "400578293", (-9.0, 191.0, True, True)),
+        # providers in str(provider.id) order: teamrankings "1002" ahead of Caesars "45"
+        # (an int sort would read Caesars' -15.5 / 158.5)
+        ("mbb", "401364342", (-13.0, 160.5, True, True)),
     ],
 )
 def test_pickcenter_reads_the_provider(lg: str, game_id: str, expected: tuple) -> None:
     assert _pick(lg, PICKCENTER[lg][game_id]) == expected
+
+
+@pytest.mark.parametrize(
+    ("lg", "game_id", "home_line"),
+    [
+        ("mbb", "330582427", 17.5),  # consensus UNCA (home) -17.5; the home line was -17.5
+        ("nba", "401430219", 4.5),  # consensus MIA (home) -4.5; the home line was -4.5
+    ],
+)
+def test_spread_and_favorite_come_from_the_same_provider(lg: str, game_id: str, home_line: float) -> None:
+    # a record-only teamrankings row sorts first: no spread, favorite False for both
+    # teams. Its flag used to be paired with consensus' spread.
+    spread, _, home_favorite, available = _pick(lg, PICKCENTER[lg][game_id])
+    # homeTeamSpread as helper_<lg>_pbp_features builds it
+    assert (abs(spread) if home_favorite else -abs(spread), available) == (home_line, True)
 
 
 @pytest.mark.parametrize("lg", list(MODULES))
@@ -125,6 +143,25 @@ def test_nba_timeout_goes_to_the_calling_team_not_a_substring_match() -> None:
     assert out["timeouts"] == _expected_timeouts(raw["plays"], list(out["timeouts"]), 2)
     mem, phi = (set(sum(out["timeouts"][t].values(), [])) for t in (29, 20))
     assert mem and phi and not (mem & phi)
+
+
+def test_nba_name_fallback_matches_whole_words_only() -> None:
+    # the same game with every play's team removed, so only the name fallback runs:
+    # "Memphis 20 Sec. timeout" must not match PHI inside "Memphis"
+    raw = _raw("nba_260312029.json.gz")
+    expected = _expected_timeouts(raw["plays"], [29, 20], 2)
+    for p in raw["plays"]:
+        p.pop("team", None)
+    assert nba_pbp.helper_nba_pbp(260312029, raw)["timeouts"] == expected
+
+
+def test_wnba_timeout_without_a_team_name_goes_to_the_play_team() -> None:
+    # 2017 CHI @ MIN: two RegularTimeOut plays read only " Full timeout". The name
+    # match credits them to nobody; the play's team.id says CHI (19) and MIN (8).
+    raw = _raw("wnba_400927398.json.gz")
+    out = wnba_pbp.helper_wnba_pbp(400927398, copy.deepcopy(raw))
+    assert out["timeouts"] == _expected_timeouts(raw["plays"], list(out["timeouts"]), 2)
+    assert 400927398184 in out["timeouts"][19]["1"] and 400927398402 in out["timeouts"][8]["2"]
 
 
 def test_mbb_overtime_end_seconds_agree_in_every_overtime() -> None:
