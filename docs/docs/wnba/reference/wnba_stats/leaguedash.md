@@ -13,7 +13,7 @@ GET /stats/leaguedashlineups
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashlineups`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -36,7 +36,7 @@ GET /stats/leaguedashlineups
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -114,7 +114,7 @@ GET /stats/leaguedashlineups
 ### Example {#wnba_stats_leaguedashlineups-example}
 
 ```python
-wnba_stats_leaguedashlineups(league_id='10')
+wnba_stats_leaguedashlineups(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -125,7 +125,7 @@ GET /stats/leaguedashplayerbiostats
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashplayerbiostats`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -151,7 +151,7 @@ GET /stats/leaguedashplayerbiostats
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -196,7 +196,7 @@ GET /stats/leaguedashplayerbiostats
 ### Example {#wnba_stats_leaguedashplayerbiostats-example}
 
 ```python
-wnba_stats_leaguedashplayerbiostats(league_id='10')
+wnba_stats_leaguedashplayerbiostats(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -207,7 +207,7 @@ GET /stats/leaguedashplayerclutch
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashplayerclutch`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -240,7 +240,7 @@ GET /stats/leaguedashplayerclutch
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `PointDiff` | `point_diff` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -330,7 +330,7 @@ GET /stats/leaguedashplayerclutch
 ### Example {#wnba_stats_leaguedashplayerclutch-example}
 
 ```python
-wnba_stats_leaguedashplayerclutch(league_id='10')
+wnba_stats_leaguedashplayerclutch(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -341,7 +341,7 @@ GET /stats/leaguedashplayershotlocations
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashplayershotlocations`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -372,7 +372,7 @@ GET /stats/leaguedashplayershotlocations
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -427,7 +427,7 @@ GET /stats/leaguedashplayershotlocations
 ### Example {#wnba_stats_leaguedashplayershotlocations-example}
 
 ```python
-wnba_stats_leaguedashplayershotlocations(league_id='10')
+wnba_stats_leaguedashplayershotlocations(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -438,7 +438,7 @@ GET /stats/leaguedashplayerstats
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashplayerstats`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=](https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -468,7 +468,7 @@ GET /stats/leaguedashplayerstats
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -558,7 +558,7 @@ GET /stats/leaguedashplayerstats
 ### Example {#wnba_stats_leaguedashplayerstats-example}
 
 ```python
-wnba_stats_leaguedashplayerstats(league_id='10')
+wnba_stats_leaguedashplayerstats(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

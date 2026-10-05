@@ -157,7 +157,7 @@ GET /stats/leaguegamelog
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguegamelog`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE](https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE)
+**Valid URL:** [https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2024-25&SeasonType=Regular+Season&Sorter=DATE](https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2024-25&SeasonType=Regular+Season&Sorter=DATE)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -167,7 +167,7 @@ GET /stats/leaguegamelog
 | `Direction` | `direction` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `Sorter` | `sorter` |  |  | `Y` |  |
 
@@ -212,7 +212,7 @@ GET /stats/leaguegamelog
 ### Example {#nba_stats_leaguegamelog-example}
 
 ```python
-nba_stats_leaguegamelog(league_id='00')
+nba_stats_leaguegamelog(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -223,7 +223,7 @@ GET /stats/leaguehustlestatsplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -245,7 +245,7 @@ GET /stats/leaguehustlestatsplayer
 | `PerMode` | `per_mode_time` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -293,7 +293,7 @@ GET /stats/leaguehustlestatsplayer
 ### Example {#nba_stats_leaguehustlestatsplayer-example}
 
 ```python
-nba_stats_leaguehustlestatsplayer(league_id='00')
+nba_stats_leaguehustlestatsplayer(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -304,7 +304,7 @@ GET /stats/leaguehustlestatsteam
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsteam`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=)
+**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -326,7 +326,7 @@ GET /stats/leaguehustlestatsteam
 | `PerMode` | `per_mode_time` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -366,7 +366,7 @@ GET /stats/leaguehustlestatsteam
 ### Example {#nba_stats_leaguehustlestatsteam-example}
 
 ```python
-nba_stats_leaguehustlestatsteam(league_id='00')
+nba_stats_leaguehustlestatsteam(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -437,7 +437,7 @@ GET /stats/leaguelineupviz
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguelineupviz`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -461,7 +461,7 @@ GET /stats/leaguelineupviz
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -506,7 +506,7 @@ GET /stats/leaguelineupviz
 ### Example {#nba_stats_leaguelineupviz-example}
 
 ```python
-nba_stats_leaguelineupviz(league_id='00')
+nba_stats_leaguelineupviz(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -517,7 +517,7 @@ GET /stats/leagueplayerondetails
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leagueplayerondetails`
 
-**Valid URL:** [https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=](https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=](https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -536,7 +536,7 @@ GET /stats/leagueplayerondetails
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -614,7 +614,7 @@ GET /stats/leagueplayerondetails
 ### Example {#nba_stats_leagueplayerondetails-example}
 
 ```python
-nba_stats_leagueplayerondetails(league_id='00')
+nba_stats_leagueplayerondetails(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -625,7 +625,7 @@ GET /stats/leagueseasonmatchups
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leagueseasonmatchups`
 
-**Valid URL:** [https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season](https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season](https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -635,7 +635,7 @@ GET /stats/leagueseasonmatchups
 | `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
 | `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_leagueseasonmatchups-returns}
@@ -676,7 +676,7 @@ GET /stats/leagueseasonmatchups
 ### Example {#nba_stats_leagueseasonmatchups-example}
 
 ```python
-nba_stats_leagueseasonmatchups(league_id='00')
+nba_stats_leagueseasonmatchups(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -687,12 +687,12 @@ GET /stats/leaguestandings
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguestandings`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguestandings?LeagueID=00&SeasonType=Regular+Season&SeasonYear=](https://stats.nba.com/stats/leaguestandings?LeagueID=00&SeasonType=Regular+Season&SeasonYear=)
+**Valid URL:** [https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=](https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `SeasonYear` | `season_nullable` |  |  | `Y` |  |
 
@@ -789,7 +789,7 @@ GET /stats/leaguestandings
 ### Example {#nba_stats_leaguestandings-example}
 
 ```python
-nba_stats_leaguestandings(league_id='00')
+nba_stats_leaguestandings(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -800,12 +800,12 @@ GET /stats/leaguestandingsv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaguestandingsv3`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&SeasonType=Regular+Season&SeasonYear=](https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&SeasonType=Regular+Season&SeasonYear=)
+**Valid URL:** [https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=](https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2024-25&SeasonType=Regular+Season&SeasonYear=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `SeasonYear` | `season_nullable` |  |  | `Y` |  |
 
@@ -913,7 +913,7 @@ GET /stats/leaguestandingsv3
 ### Example {#nba_stats_leaguestandingsv3-example}
 
 ```python
-nba_stats_leaguestandingsv3(league_id='00')
+nba_stats_leaguestandingsv3(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

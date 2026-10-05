@@ -238,7 +238,7 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 | `athlete_guid` | String | ESPN athlete GUID. |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_short_name` | String | Athlete short display name. |
-| `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
+| `athlete_first_name` | String | Player first name. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |

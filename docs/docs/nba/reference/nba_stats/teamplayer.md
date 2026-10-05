@@ -13,7 +13,7 @@ GET /stats/teamplayerdashboard
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamplayerdashboard`
 
-**Valid URL:** [https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1610612749&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -192,7 +192,7 @@ GET /stats/teamplayeronoffdetails
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamplayeronoffdetails`
 
-**Valid URL:** [https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -211,7 +211,7 @@ GET /stats/teamplayeronoffdetails
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -417,7 +417,7 @@ GET /stats/teamplayeronoffdetails
 ### Example {#nba_stats_teamplayeronoffdetails-example}
 
 ```python
-nba_stats_teamplayeronoffdetails(league_id='00')
+nba_stats_teamplayeronoffdetails(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -428,7 +428,7 @@ GET /stats/teamplayeronoffsummary
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamplayeronoffsummary`
 
-**Valid URL:** [https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=](https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -447,7 +447,7 @@ GET /stats/teamplayeronoffsummary
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -561,7 +561,7 @@ GET /stats/teamplayeronoffsummary
 ### Example {#nba_stats_teamplayeronoffsummary-example}
 
 ```python
-nba_stats_teamplayeronoffsummary(league_id='00')
+nba_stats_teamplayeronoffsummary(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

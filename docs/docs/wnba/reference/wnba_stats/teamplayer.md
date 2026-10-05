@@ -192,7 +192,7 @@ GET /stats/teamplayeronoffdetails
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamplayeronoffdetails`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -211,7 +211,7 @@ GET /stats/teamplayeronoffdetails
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -417,7 +417,7 @@ GET /stats/teamplayeronoffdetails
 ### Example {#wnba_stats_teamplayeronoffdetails-example}
 
 ```python
-wnba_stats_teamplayeronoffdetails(league_id='10')
+wnba_stats_teamplayeronoffdetails(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -428,7 +428,7 @@ GET /stats/teamplayeronoffsummary
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamplayeronoffsummary`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=](https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -447,7 +447,7 @@ GET /stats/teamplayeronoffsummary
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -561,7 +561,7 @@ GET /stats/teamplayeronoffsummary
 ### Example {#wnba_stats_teamplayeronoffsummary-example}
 
 ```python
-wnba_stats_teamplayeronoffsummary(league_id='10')
+wnba_stats_teamplayeronoffsummary(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

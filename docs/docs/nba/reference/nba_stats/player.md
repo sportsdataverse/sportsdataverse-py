@@ -13,7 +13,7 @@ GET /stats/playerawards
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playerawards`
 
-**Valid URL:** [https://stats.nba.com/stats/playerawards?PlayerID=1628932](https://stats.nba.com/stats/playerawards?PlayerID=1628932)
+**Valid URL:** [https://stats.nba.com/stats/playerawards?PlayerID=2544](https://stats.nba.com/stats/playerawards?PlayerID=2544)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -201,7 +201,7 @@ GET /stats/playercareerstats
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playercareerstats`
 
-**Valid URL:** [https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=1628932](https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=1628932)
+**Valid URL:** [https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=2544](https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=2544)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -628,7 +628,7 @@ GET /stats/playercompare
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playercompare`
 
-**Valid URL:** [https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=](https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerIDList=202681%2C203078%2C2544%2C201567%2C203954&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&VsPlayerIDList=201566%2C201939%2C201935%2C201142%2C203076](https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerIDList=202681%2C203078%2C2544%2C201567%2C203954&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&VsPlayerIDList=201566%2C201939%2C201935%2C201142%2C203076)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -799,7 +799,7 @@ GET /stats/playerfantasyprofile
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playerfantasyprofile`
 
-**Valid URL:** [https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season](https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=2544&PlusMinus=N&Rank=N&SeasonType=Regular+Season](https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=2544&PlusMinus=N&Rank=N&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1019,13 +1019,13 @@ GET /stats/playerfantasyprofilebargraph
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playerfantasyprofilebargraph`
 
-**Valid URL:** [https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season](https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season](https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_playerfantasyprofilebargraph-returns}
@@ -1077,7 +1077,7 @@ GET /stats/playerfantasyprofilebargraph
 ### Example {#nba_stats_playerfantasyprofilebargraph-example}
 
 ```python
-nba_stats_playerfantasyprofilebargraph(league_id='00')
+nba_stats_playerfantasyprofilebargraph(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -1088,7 +1088,7 @@ GET /stats/playergamelog
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playergamelog`
 
-**Valid URL:** [https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season](https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season](https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1096,7 +1096,7 @@ GET /stats/playergamelog
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_playergamelog-returns}
@@ -1138,7 +1138,7 @@ GET /stats/playergamelog
 ### Example {#nba_stats_playergamelog-example}
 
 ```python
-nba_stats_playergamelog(league_id='00')
+nba_stats_playergamelog(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -1149,7 +1149,7 @@ GET /stats/playergamelogs
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playergamelogs`
 
-**Valid URL:** [https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1167,7 +1167,7 @@ GET /stats/playergamelogs
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -1257,7 +1257,7 @@ GET /stats/playergamelogs
 ### Example {#nba_stats_playergamelogs-example}
 
 ```python
-nba_stats_playergamelogs(league_id='00')
+nba_stats_playergamelogs(league_id='00', season_nullable='2024-25')
 ```
 
 _Last validated n/a._

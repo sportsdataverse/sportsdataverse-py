@@ -1,37 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game"
-sidebar_label: "Other: tennis_tournaments–trending_game"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: trending_event–trending_game"
+sidebar_label: "Other: trending_event–trending_game"
 sidebar_position: 11
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: trending_event–trending_game — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: tennis_tournaments–trending_game
-
-## yahoo_tennis_tournaments_by_date
-
-Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennisTournaments` entry
-
-**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate`
-
-**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `date` | `date` |  |  | `Y` | date query parameter. |
-
-### Returns {#yahoo_tennis_tournaments_by_date-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#yahoo_tennis_tournaments_by_date-example}
-
-```python
-yahoo_tennis_tournaments_by_date()
-```
-
-_Last validated n/a._
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: trending_event–trending_game
 
 ## yahoo_trending_event_ids
 

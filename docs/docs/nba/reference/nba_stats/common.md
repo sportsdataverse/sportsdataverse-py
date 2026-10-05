@@ -13,13 +13,13 @@ GET /stats/commonallplayers
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/commonallplayers`
 
-**Valid URL:** [https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00](https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2024-25](https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `IsOnlyCurrentSeason` | `is_only_current_season` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_commonallplayers-returns}
 
@@ -49,7 +49,7 @@ GET /stats/commonallplayers
 ### Example {#nba_stats_commonallplayers-example}
 
 ```python
-nba_stats_commonallplayers(league_id='00')
+nba_stats_commonallplayers(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -60,7 +60,7 @@ GET /stats/commonplayerinfo
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/commonplayerinfo`
 
-**Valid URL:** [https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=1628932](https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=1628932)
+**Valid URL:** [https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=2544](https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=2544)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -143,12 +143,12 @@ GET /stats/commonplayoffseries
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/commonplayoffseries`
 
-**Valid URL:** [https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&SeriesID=](https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&SeriesID=)
+**Valid URL:** [https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&Season=2024-25&SeriesID=](https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&Season=2024-25&SeriesID=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeriesID` | `series_id_nullable` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_commonplayoffseries-returns}
@@ -168,7 +168,7 @@ GET /stats/commonplayoffseries
 ### Example {#nba_stats_commonplayoffseries-example}
 
 ```python
-nba_stats_commonplayoffseries(league_id='00')
+nba_stats_commonplayoffseries(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -179,12 +179,12 @@ GET /stats/commonteamroster
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/commonteamroster`
 
-**Valid URL:** [https://stats.nba.com/stats/commonteamroster?LeagueID=00&TeamID=1611661317](https://stats.nba.com/stats/commonteamroster?LeagueID=00&TeamID=1611661317)
+**Valid URL:** [https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=2024-25&TeamID=1610612739](https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=2024-25&TeamID=1610612739)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_commonteamroster-returns}
@@ -232,7 +232,7 @@ GET /stats/commonteamroster
 ### Example {#nba_stats_commonteamroster-example}
 
 ```python
-nba_stats_commonteamroster(league_id='00')
+nba_stats_commonteamroster(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
