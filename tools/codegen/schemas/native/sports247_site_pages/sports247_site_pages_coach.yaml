@@ -22,7 +22,7 @@ columns:
   type: integer
 - description: ''
   name: cbs_key
-  type: character
+  type: integer
 - description: ''
   name: twitter_contact
   type: character

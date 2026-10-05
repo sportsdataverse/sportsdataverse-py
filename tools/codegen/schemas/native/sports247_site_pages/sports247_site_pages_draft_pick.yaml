@@ -10,16 +10,16 @@ columns:
   type: character
 - description: ''
   name: year
-  type: character
+  type: integer
 - description: ''
   name: round
-  type: character
+  type: integer
 - description: ''
   name: pick
-  type: character
+  type: integer
 - description: ''
   name: overall_pick
-  type: character
+  type: integer
 - description: ''
   name: player
   type: integer
@@ -52,6 +52,6 @@ columns:
   type: character
 - description: ''
   name: default_name
-  type: character
+  type: integer
 kind: dataframe
 schema: sports247_site_pages_draft_pick

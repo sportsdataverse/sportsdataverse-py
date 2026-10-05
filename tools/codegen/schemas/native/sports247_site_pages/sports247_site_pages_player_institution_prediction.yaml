@@ -19,16 +19,16 @@ columns:
   type: character
 - description: ''
   name: days_correct
-  type: character
+  type: numeric
 - description: ''
   name: premium
   type: character
 - description: ''
   name: score
-  type: character
+  type: numeric
 - description: ''
   name: confidence
-  type: character
+  type: integer
 - description: ''
   name: parent
   type: character
@@ -37,6 +37,6 @@ columns:
   type: character
 - description: ''
   name: default_name
-  type: character
+  type: integer
 kind: dataframe
 schema: sports247_site_pages_player_institution_prediction

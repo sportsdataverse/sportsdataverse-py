@@ -36265,6 +36265,7 @@ sports247_site_pages_institution:
   state: FK -> State entity.
   telephone: Institution's telephone number.
   type: Institution type code (college / pro / high school).
+  website: Institution's website URL.
 sports247_site_pages_location:
   city_tax_rate: City income-tax rate for the location, carried on the 247Sports location record.
   county_tax_rate: County income-tax rate for the location, carried on the 247Sports location record.

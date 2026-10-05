@@ -28,7 +28,7 @@ columns:
   type: integer
 - description: ''
   name: composite_strength
-  type: character
+  type: integer
 - description: ''
   name: final_choice
   type: integer
@@ -112,7 +112,7 @@ columns:
   type: integer
 - description: ''
   name: player_twitter_contact
-  type: integer
+  type: numeric
 - description: ''
   name: player_mobile_phone_contact
   type: character
@@ -166,7 +166,7 @@ columns:
   type: integer
 - description: ''
   name: player_hometown_state
-  type: integer
+  type: character
 - description: ''
   name: player_hometown_city
   type: character
