@@ -18,16 +18,26 @@ It now follows the package error vocabulary:
 - **HTTP 404** raises `NoDataError`.
 - **A failed fetch** raises `AssetFetchError`: a transport error, a non-2xx status that outlived
   the retries, an empty or unparseable body, or one of the HTTP-200 error sentinels
-  (`Undefined Tab <view>`, `InvalidView error: <view>`). The sentinels used to warn and then
-  parse to an empty frame.
+  (`Undefined Tab <view>`, or any top-level `{"error": "..."}` such as
+  `InvalidView error: <view>`). The sentinels used to warn and then parse to an empty frame.
+  The error text never carries the feed key: it is masked, and the URL-bearing transport
+  exception is not chained.
 - **`Feed type access denied.`**, the plain-text reply MJHL's public key gets on `gc`, is still
   a graceful empty: `mjhl_game_summary` returns empty frames and `mjhl_pbp` returns plays without
   game metadata.
 
 Every `<lg>_*` family function, the `pwhl_*` functions and the analytics fetches pass these errors
 to the caller. `resolve_season_id` keeps PWHL's fallback table for a failed seasons fetch and for
-a season the list lacks; other leagues re-raise. `pwhl_streaks` (deprecated, no such upstream
-view) no longer sends a request; it still warns and returns an empty frame.
+a season the list lacks; other leagues re-raise. The table now runs through 2026-27 (ids 1-11,
+preseasons and the 2026 playoffs included). `pwhl_streaks` (deprecated, no such upstream view) no
+longer sends a request; it still warns and returns an empty frame.
+
+Season resolution also skips the one-off events HockeyTech lists as seasons (all-star games,
+showcases, prospect games, combines, special events, exhibitions, play-ins):
+`resolve_season_id("ahl", season=2026)` returned 91, the "2026 All-Star Challenge", instead of 90,
+the "2025-26 Regular Season". An explicit `season_id=` never asks for the seasons list, so a dead
+seasons feed cannot break `pwhl_stats(season_id=11)`. `pwhl_playoff_bracket()` with no arguments
+now uses the newest season that has playoffs, not the newest season (which usually has none yet).
 
 `most_recent_<lg>_season` / `most_recent_pwhl_season` no longer return a hard-coded 2026, which was
 already stale (the live PWHL seasons feed lists 2026-27, end-year 2027). A seasons list the feed
@@ -37,14 +47,34 @@ matches sportsdataverse-js.
 **Breaking:** code that checked for `None` or an empty frame to detect a HockeyTech failure now
 gets `AssetFetchError` / `NoDataError`. Wrappers that default the season (`<lg>_standings`,
 `_teams`, `_team_roster`, `_leaders`, `pwhl_stats`, `pwhl_playoff_bracket`) raise the same way when
-the seasons lookup fails.
+they need the seasons lookup and it fails; pass `season_id=` to skip the lookup. Catch them as:
 
-Eleven PWHL return-column descriptions were also wrong and are corrected from real values. In
+```python
+import sportsdataverse as sdv
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
+try:
+    df = sdv.ahl_schedule()
+except NoDataError:
+    df = None  # the fetch worked and there is nothing there: skip it
+except AssetFetchError:
+    raise  # the fetch failed and the answer is unknown: retry later, never record it as empty
+```
+
+Both subclass `SportsDataverseError`. A season that the list does not carry is still `ValueError`
+("No ahl season for season=..."), as before.
+
+34 PWHL return-column descriptions were also wrong and are corrected from real values. In
 `pwhl_scorebar`: `id` is the game id, `home_id` is the HockeyTech team id, `game_status` is the
-numeric code, `quick_score` is always `'0'` and `game_summary_url` is a game id or a site path. In
-`pwhl_player_search`: `score` is a search relevance score and `profile_image` is a file name. In
-`pwhl_stats`: `height` is feet-and-inches text, `rank` is the table rank, `namelink` is plain
-text and `division` is a name.
+numeric code, `quick_score` is always `'0'`, `game_summary_url` is a game id or a site path,
+`game_letter` is the playoff-series letter, `game_date_iso8601` carries the start time and UTC
+offset, `date` is a date only, `home_city` / `timezone` / `home_goals` / `league_id` say what they
+hold, and the eight W/L columns are the team's season record as fetched, not as of the game. In
+`pwhl_player_search`: `score` is a search relevance score, `profile_image` is a file name, and
+`role_id` / `role_name` are the person's role, not a position. In `pwhl_stats`: `height` is
+feet-and-inches text, `rank` is the table rank, `namelink` is plain text, `division` is a name,
+`veteran` is a code, and `name` (also in `pwhl_leaders` and `pwhl_team_roster`) is the player's
+name, not a team mascot.
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
