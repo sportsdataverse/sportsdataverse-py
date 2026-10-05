@@ -19,7 +19,7 @@ columns:
   type: integer
 - description: ''
   name: primary_color
-  type: character
+  type: integer
 - description: ''
   name: year
   type: integer

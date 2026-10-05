@@ -16,7 +16,7 @@ columns:
   type: character
 - description: ''
   name: end_year
-  type: character
+  type: integer
 - description: ''
   name: end_date
   type: character
@@ -28,10 +28,10 @@ columns:
   type: character
 - description: ''
   name: height
-  type: character
+  type: numeric
 - description: ''
   name: weight
-  type: character
+  type: numeric
 - description: ''
   name: transfer_institution
   type: character
@@ -70,13 +70,13 @@ columns:
   type: character
 - description: ''
   name: end_year_or_current
-  type: character
+  type: integer
 - description: ''
   name: start_year_or_expected
-  type: character
+  type: integer
 - description: ''
   name: end_year_or_expected
-  type: character
+  type: integer
 - description: ''
   name: next_institution_type
   type: character
@@ -85,7 +85,7 @@ columns:
   type: character
 - description: ''
   name: start_year
-  type: character
+  type: integer
 - description: ''
   name: start_date
   type: character

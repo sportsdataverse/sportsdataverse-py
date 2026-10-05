@@ -202,7 +202,7 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 | `overtimes` | integer | Torvik 'overtimes' field as shipped; observed integers 0-13, which is too large for an overtime count, so treat it as opaque. |
 | `game_date` | Date | date parsed to a Date (null when it does not parse). |
 
-**`return_parsed=False`** — the raw CSV response body (`str`).
+**`return_parsed=False`** — the decoded JSON response body (the positional-field array).
 
 ### Example {#torvik_game_stats-example}
 
@@ -383,7 +383,7 @@ GET /{year}_super_sked.json — men's season schedule/results with T-Rank projec
 | `game_date` | Date | date parsed to a Date (null when it does not parse). |
 | `year` | integer | Season ending year inferred from game_date (July onward is the next season). |
 
-**`return_parsed=False`** — the raw CSV response body (`str`).
+**`return_parsed=False`** — the decoded JSON response body (the positional-field array).
 
 ### Example {#torvik_game_schedule-example}
 

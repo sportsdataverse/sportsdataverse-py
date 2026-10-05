@@ -66,6 +66,21 @@ endpoints:
     type: int
     default: 1
     description: Response format switch; leave at 1 (the parser expects the headerless JSON array).
+  docstring:
+    raw_doc: 'the decoded JSON response body (the positional-field array)'
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file
+      for that season).'
+    - 'requests.exceptions.RequestException: Connection-level failure after
+      ``dl_utils.download`` exhausts its retries.'
+    see_also:
+    - name: hoopR
+      url: https://hoopR.sportsdataverse.org
+      note: R sister package for men's college basketball
+    - name: Bart Torvik
+      url: https://barttorvik.com
+      note: data origin (T-Rank)
   example_args:
     year: 2025
   parser: parse_torvik_game_stats
@@ -96,6 +111,21 @@ endpoints:
   - name: year
     type: int
     required: true
+  docstring:
+    raw_doc: 'the decoded JSON response body (the positional-field array)'
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file
+      for that season).'
+    - 'requests.exceptions.RequestException: Connection-level failure after
+      ``dl_utils.download`` exhausts its retries.'
+    see_also:
+    - name: hoopR
+      url: https://hoopR.sportsdataverse.org
+      note: R sister package for men's college basketball
+    - name: Bart Torvik
+      url: https://barttorvik.com
+      note: data origin (T-Rank)
   example_args:
     year: 2025
   parser: parse_torvik_game_schedule

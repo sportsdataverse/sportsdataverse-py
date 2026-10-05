@@ -29,38 +29,38 @@ Final-choice PlayerSport/commit for a recruitment.
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
 | `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
-| `rating` | character | 247Sports rating string (0-1). |
-| `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
-| `local_index` | character | 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes. |
-| `rivals_grade` | character | Rivals source grade (industry composite input). |
-| `rivals_rank` | character | Player's rank in the Rivals industry ranking, as tracked by 247Sports. |
-| `rivals_index` | character | Rivals index value for the player, as tracked by 247Sports. |
-| `espn_grade` | character | ESPN source grade (industry composite input). |
-| `espn_rank` | character | Player's rank in the ESPN industry ranking, as tracked by 247Sports. |
-| `espn_index` | character | ESPN index value for the player, as tracked by 247Sports. |
-| `composite_strength` | character | Composite strength points (team-ranking weight). |
-| `composite_rating` | character | 247Sports Composite rating (industry blend). |
-| `composite_rating_or_default` | character | 247Sports Composite rating, falling back to a default value when unrated. |
-| `average_rank` | character | Player's average rank across the tracked industry services. |
+| `rating` | integer | 247Sports rating string (0-1). |
+| `rating_or_default` | integer | 247Sports in-house rating, falling back to a default value when unrated. |
+| `local_index` | integer | 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes. |
+| `rivals_grade` | numeric | Rivals source grade (industry composite input). |
+| `rivals_rank` | integer | Player's rank in the Rivals industry ranking, as tracked by 247Sports. |
+| `rivals_index` | numeric | Rivals index value for the player, as tracked by 247Sports. |
+| `espn_grade` | integer | ESPN source grade (industry composite input). |
+| `espn_rank` | integer | Player's rank in the ESPN industry ranking, as tracked by 247Sports. |
+| `espn_index` | numeric | ESPN index value for the player, as tracked by 247Sports. |
+| `composite_strength` | integer | Composite strength points (team-ranking weight). |
+| `composite_rating` | numeric | 247Sports Composite rating (industry blend). |
+| `composite_rating_or_default` | numeric | 247Sports Composite rating, falling back to a default value when unrated. |
+| `average_rank` | numeric | Player's average rank across the tracked industry services. |
 | `previous_recruitment` | integer | Nested record for the player's previous recruitment (stringified). |
 | `primary` | character | Whether this is the player's primary sport. |
 | `class_year_override` | character | Override of the player's recruiting class year, when 247Sports reassigns it. |
 | `class_year` | character | Recruiting class year. |
 | `recruitment` | integer | FK -> Recruitment aggregate for this player-sport. |
-| `primary_institution_prediction` | integer | Nested leading Crystal Ball institution prediction for the player (stringified). |
+| `primary_institution_prediction` | numeric | Nested leading Crystal Ball institution prediction for the player (stringified). |
 | `secondary_institution_prediction` | integer | Nested second-place Crystal Ball institution prediction (stringified). |
-| `primary_institution_prediction_percentage` | character | Share of Crystal Ball predictions favoring the leading institution. |
+| `primary_institution_prediction_percentage` | numeric | Share of Crystal Ball predictions favoring the leading institution. |
 | `show_unranked_rating` | character | 247Sports display flag to show the rating even while the player is unranked. |
-| `current_player_sport_year` | integer | Current ranking-cycle year for the player-sport profile. |
-| `unpublished_player_sport_ranking` | integer | Nested not-yet-published ranking row for the player (stringified). |
-| `current_player_sport_ranking` | integer | Nested current published ranking row for the player (stringified). |
+| `current_player_sport_year` | numeric | Current ranking-cycle year for the player-sport profile. |
+| `unpublished_player_sport_ranking` | numeric | Nested not-yet-published ranking row for the player (stringified). |
+| `current_player_sport_ranking` | numeric | Nested current published ranking row for the player (stringified). |
 | `primary_player_position` | integer | Nested 247Sports record for the player's primary position (stringified). |
 | `primary_position` | integer | Player's primary position on the 247Sports profile. |
 | `primary_position_group` | integer | Position group the player's primary position belongs to. |
 | `default_name` | character | Server-rendered display label for the entity. |
-| `star_rating` | character | Star tier (2-5). |
-| `secondary_institution_prediction_percentage` | character | Share of Crystal Ball predictions favoring the second-place institution. |
-| `jersey` | character | Jersey number. |
+| `star_rating` | integer | Star tier (2-5). |
+| `secondary_institution_prediction_percentage` | numeric | Share of Crystal Ball predictions favoring the second-place institution. |
+| `jersey` | integer | Jersey number. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -95,8 +95,8 @@ Committed institution for a recruitment.
 | `group` | character | Institution group (division/level) bitmask code. |
 | `location` | integer | FK -> Location (`/Institution/{Location}/Location.json`). |
 | `state` | integer | FK -> State entity. |
-| `latitude` | character | Venue latitude in decimal degrees. |
-| `longitude` | character | Venue longitude in decimal degrees. |
+| `latitude` | numeric | Venue latitude in decimal degrees. |
+| `longitude` | numeric | Venue longitude in decimal degrees. |
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
@@ -104,12 +104,13 @@ Committed institution for a recruitment.
 | `secondary_color` | character | Secondary team color (hex). |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
-| `default_asset` | integer | Nested 247Sports image asset for the institution's primary logo (stringified). |
-| `alternate_asset` | integer | Nested 247Sports image asset for the institution's alternate logo (stringified). |
-| `light_asset` | integer | Nested 247Sports image asset for the light-background logo variant (stringified). |
+| `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
+| `alternate_asset` | numeric | Nested 247Sports image asset for the institution's alternate logo (stringified). |
+| `light_asset` | numeric | Nested 247Sports image asset for the light-background logo variant (stringified). |
 | `default_name` | character | Server-rendered display label for the entity. |
 | `address` | character | Institution's street address. |
 | `telephone` | character | Institution's telephone number. |
+| `website` | character | Institution's website URL. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -144,8 +145,8 @@ All institutions the recruit has interest links with.
 | `group` | character | Institution group (division/level) bitmask code. |
 | `location` | integer | FK -> Location (`/Institution/{Location}/Location.json`). |
 | `state` | integer | FK -> State entity. |
-| `latitude` | character | Venue latitude in decimal degrees. |
-| `longitude` | character | Venue longitude in decimal degrees. |
+| `latitude` | numeric | Venue latitude in decimal degrees. |
+| `longitude` | numeric | Venue longitude in decimal degrees. |
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
@@ -153,12 +154,13 @@ All institutions the recruit has interest links with.
 | `secondary_color` | character | Secondary team color (hex). |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
-| `default_asset` | integer | Nested 247Sports image asset for the institution's primary logo (stringified). |
-| `alternate_asset` | integer | Nested 247Sports image asset for the institution's alternate logo (stringified). |
-| `light_asset` | integer | Nested 247Sports image asset for the light-background logo variant (stringified). |
+| `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
+| `alternate_asset` | numeric | Nested 247Sports image asset for the institution's alternate logo (stringified). |
+| `light_asset` | numeric | Nested 247Sports image asset for the light-background logo variant (stringified). |
 | `default_name` | character | Server-rendered display label for the entity. |
 | `address` | character | Institution's street address. |
 | `telephone` | character | Institution's telephone number. |
+| `website` | character | Institution's website URL. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -193,8 +195,8 @@ Institutions that have offered the recruit.
 | `group` | character | Institution group (division/level) bitmask code. |
 | `location` | integer | FK -> Location (`/Institution/{Location}/Location.json`). |
 | `state` | integer | FK -> State entity. |
-| `latitude` | character | Venue latitude in decimal degrees. |
-| `longitude` | character | Venue longitude in decimal degrees. |
+| `latitude` | numeric | Venue latitude in decimal degrees. |
+| `longitude` | numeric | Venue longitude in decimal degrees. |
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
@@ -202,12 +204,13 @@ Institutions that have offered the recruit.
 | `secondary_color` | character | Secondary team color (hex). |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
-| `default_asset` | integer | Nested 247Sports image asset for the institution's primary logo (stringified). |
-| `alternate_asset` | integer | Nested 247Sports image asset for the institution's alternate logo (stringified). |
-| `light_asset` | integer | Nested 247Sports image asset for the light-background logo variant (stringified). |
+| `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
+| `alternate_asset` | numeric | Nested 247Sports image asset for the institution's alternate logo (stringified). |
+| `light_asset` | numeric | Nested 247Sports image asset for the light-background logo variant (stringified). |
 | `default_name` | character | Server-rendered display label for the entity. |
 | `address` | character | Institution's street address. |
 | `telephone` | character | Institution's telephone number. |
+| `website` | character | Institution's website URL. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -241,38 +244,38 @@ PlayerSport underlying a recruitment.
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
 | `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
-| `rating` | character | 247Sports rating string (0-1). |
-| `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
-| `local_index` | character | 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes. |
-| `rivals_grade` | character | Rivals source grade (industry composite input). |
-| `rivals_rank` | character | Player's rank in the Rivals industry ranking, as tracked by 247Sports. |
-| `rivals_index` | character | Rivals index value for the player, as tracked by 247Sports. |
-| `espn_grade` | character | ESPN source grade (industry composite input). |
-| `espn_rank` | character | Player's rank in the ESPN industry ranking, as tracked by 247Sports. |
-| `espn_index` | character | ESPN index value for the player, as tracked by 247Sports. |
-| `composite_strength` | character | Composite strength points (team-ranking weight). |
-| `composite_rating` | character | 247Sports Composite rating (industry blend). |
-| `composite_rating_or_default` | character | 247Sports Composite rating, falling back to a default value when unrated. |
-| `average_rank` | character | Player's average rank across the tracked industry services. |
+| `rating` | integer | 247Sports rating string (0-1). |
+| `rating_or_default` | integer | 247Sports in-house rating, falling back to a default value when unrated. |
+| `local_index` | integer | 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes. |
+| `rivals_grade` | numeric | Rivals source grade (industry composite input). |
+| `rivals_rank` | integer | Player's rank in the Rivals industry ranking, as tracked by 247Sports. |
+| `rivals_index` | numeric | Rivals index value for the player, as tracked by 247Sports. |
+| `espn_grade` | integer | ESPN source grade (industry composite input). |
+| `espn_rank` | integer | Player's rank in the ESPN industry ranking, as tracked by 247Sports. |
+| `espn_index` | numeric | ESPN index value for the player, as tracked by 247Sports. |
+| `composite_strength` | integer | Composite strength points (team-ranking weight). |
+| `composite_rating` | numeric | 247Sports Composite rating (industry blend). |
+| `composite_rating_or_default` | numeric | 247Sports Composite rating, falling back to a default value when unrated. |
+| `average_rank` | numeric | Player's average rank across the tracked industry services. |
 | `previous_recruitment` | integer | Nested record for the player's previous recruitment (stringified). |
 | `primary` | character | Whether this is the player's primary sport. |
 | `class_year_override` | character | Override of the player's recruiting class year, when 247Sports reassigns it. |
 | `class_year` | character | Recruiting class year. |
 | `recruitment` | integer | FK -> Recruitment aggregate for this player-sport. |
-| `primary_institution_prediction` | integer | Nested leading Crystal Ball institution prediction for the player (stringified). |
+| `primary_institution_prediction` | numeric | Nested leading Crystal Ball institution prediction for the player (stringified). |
 | `secondary_institution_prediction` | integer | Nested second-place Crystal Ball institution prediction (stringified). |
-| `primary_institution_prediction_percentage` | character | Share of Crystal Ball predictions favoring the leading institution. |
+| `primary_institution_prediction_percentage` | numeric | Share of Crystal Ball predictions favoring the leading institution. |
 | `show_unranked_rating` | character | 247Sports display flag to show the rating even while the player is unranked. |
-| `current_player_sport_year` | integer | Current ranking-cycle year for the player-sport profile. |
-| `unpublished_player_sport_ranking` | integer | Nested not-yet-published ranking row for the player (stringified). |
-| `current_player_sport_ranking` | integer | Nested current published ranking row for the player (stringified). |
+| `current_player_sport_year` | numeric | Current ranking-cycle year for the player-sport profile. |
+| `unpublished_player_sport_ranking` | numeric | Nested not-yet-published ranking row for the player (stringified). |
+| `current_player_sport_ranking` | numeric | Nested current published ranking row for the player (stringified). |
 | `primary_player_position` | integer | Nested 247Sports record for the player's primary position (stringified). |
 | `primary_position` | integer | Player's primary position on the 247Sports profile. |
 | `primary_position_group` | integer | Position group the player's primary position belongs to. |
 | `default_name` | character | Server-rendered display label for the entity. |
-| `star_rating` | character | Star tier (2-5). |
-| `secondary_institution_prediction_percentage` | character | Share of Crystal Ball predictions favoring the second-place institution. |
-| `jersey` | character | Jersey number. |
+| `star_rating` | integer | Star tier (2-5). |
+| `secondary_institution_prediction_percentage` | numeric | Share of Crystal Ball predictions favoring the second-place institution. |
+| `jersey` | integer | Jersey number. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

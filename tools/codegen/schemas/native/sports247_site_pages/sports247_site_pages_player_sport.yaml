@@ -16,43 +16,43 @@ columns:
   type: integer
 - description: ''
   name: rating
-  type: character
+  type: integer
 - description: ''
   name: rating_or_default
-  type: character
+  type: integer
 - description: ''
   name: local_index
-  type: character
+  type: integer
 - description: ''
   name: rivals_grade
-  type: character
+  type: numeric
 - description: ''
   name: rivals_rank
-  type: character
+  type: integer
 - description: ''
   name: rivals_index
-  type: character
+  type: numeric
 - description: ''
   name: espn_grade
-  type: character
+  type: integer
 - description: ''
   name: espn_rank
-  type: character
+  type: integer
 - description: ''
   name: espn_index
-  type: character
+  type: numeric
 - description: ''
   name: composite_strength
-  type: character
+  type: integer
 - description: ''
   name: composite_rating
-  type: character
+  type: numeric
 - description: ''
   name: composite_rating_or_default
-  type: character
+  type: numeric
 - description: ''
   name: average_rank
-  type: character
+  type: numeric
 - description: ''
   name: previous_recruitment
   type: integer
@@ -70,25 +70,25 @@ columns:
   type: integer
 - description: ''
   name: primary_institution_prediction
-  type: integer
+  type: numeric
 - description: ''
   name: secondary_institution_prediction
   type: integer
 - description: ''
   name: primary_institution_prediction_percentage
-  type: character
+  type: numeric
 - description: ''
   name: show_unranked_rating
   type: character
 - description: ''
   name: current_player_sport_year
-  type: integer
+  type: numeric
 - description: ''
   name: unpublished_player_sport_ranking
-  type: integer
+  type: numeric
 - description: ''
   name: current_player_sport_ranking
-  type: integer
+  type: numeric
 - description: ''
   name: primary_player_position
   type: integer
@@ -103,12 +103,12 @@ columns:
   type: character
 - description: ''
   name: star_rating
-  type: character
+  type: integer
 - description: ''
   name: secondary_institution_prediction_percentage
-  type: character
+  type: numeric
 - description: ''
   name: jersey
-  type: character
+  type: integer
 kind: dataframe
 schema: sports247_site_pages_player_sport

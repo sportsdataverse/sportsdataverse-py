@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import functools
 import json
 import re
@@ -629,6 +630,9 @@ class _EndpointView:
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
     ):
+        # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
+        if league.prefix in ep.league_example_args:
+            ep = dataclasses.replace(ep, example_args=ep.league_example_args[league.prefix])
         # Raw (``return_parsed=False``) payload types: JSON-only unless the family's
         # getter is content-type aware (Torvik CSV data files -> ``Dict | str``).
         rt = list(raw_types or ["Dict"])
@@ -945,7 +949,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
             else:
                 fn_name = new
         used.add(fn_name)
-        view = _EndpointView(ep, fn_name, ep_host, league)
+        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring)
         view.api_name = api_name
         views.append(view)
     overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
@@ -1157,7 +1161,10 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines.append(f"Will be removed in {LOADER_DEPRECATION_REMOVED_IN}; migrate callers to")
         lines.append(f"``{ld.deprecated_for}``. The ``seasons`` argument is unchanged.")
         lines.append("")
-    lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
+    if ld.base == "raw_data":  # committed to a repo tree, not a release (no such tag exists)
+        lines.append(f"Source: https://github.com/sportsdataverse/{ld.url.split('/', 1)[0]}")
+    else:
+        lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
     lines.append("")
     lines.append("Args:")
     rng = f" (>= {ld.min_season})" if ld.min_season else ""
@@ -2438,6 +2445,25 @@ def _loader_schema_table(fn: str, league: str | None = None) -> str:
     )
 
 
+def _release_page_url(bases: dict, base: str, url: str, tag: str) -> str:
+    """Browsable page for a loader's source.
+
+    GitHub-releases bases link the tag page of the repo the asset downloads from.
+    ``raw.githubusercontent.com/<org>/`` bases (assets committed to a repo's tree,
+    not a release) link that repo -- the first segment of ``url`` -- because no
+    release tag of that name exists anywhere (``sportsdataverse-data`` has no
+    ``cfbfastR-data`` tag; the old fallback 404'd). Anything else falls back to the
+    historical sportsdataverse-data tag page.
+    """
+    base_dl = bases.get(base, "")
+    if "/releases/download/" in base_dl:
+        return base_dl.replace("/releases/download/", "/releases/tag/") + tag
+    if base_dl.startswith("https://raw.githubusercontent.com/"):
+        org = base_dl.rstrip("/").rsplit("/", 1)[-1]
+        return f"https://github.com/{org}/{url.split('/', 1)[0]}"
+    return f"https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{tag}"
+
+
 def _loader_doc_views(prefix: str) -> list[dict]:
     """Template-facing loader dicts for ``loaders_page.md.jinja`` (one per league loader).
 
@@ -2452,19 +2478,13 @@ def _loader_doc_views(prefix: str) -> list[dict]:
         # Release-tag page URL: for GitHub-releases-hosted assets, derive it from
         # the SAME repo the asset download comes from (download -> tag) so an
         # nflverse-hosted loader links nflverse tags. Non-releases bases (e.g.
-        # raw.githubusercontent) still tag their provenance in the
-        # sportsdataverse-data releases repo, so fall back to that historical URL.
-        base_dl = rel.bases.get(ld.base, "")
-        if "/releases/download/" in base_dl:
-            tag_base = base_dl.replace("/releases/download/", "/releases/tag/")
-        else:
-            tag_base = "https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/"
+        # raw.githubusercontent) link the source repo (see _release_page_url).
         out.append(
             {
                 "fn": ld.fn,
                 "notes": ld.notes or "",
                 "tag": ld.tag,
-                "tag_url": f"{tag_base}{ld.tag}",
+                "tag_url": _release_page_url(rel.bases, ld.base, ld.url, ld.tag),
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
                 "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
                 "return_table": (

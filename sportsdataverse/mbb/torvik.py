@@ -145,12 +145,12 @@ def torvik_game_stats(
     Args:
         year: 4-digit season ending year (2025 = the 2024-25 season).
         json: Response format switch; leave at 1 (the parser expects the headerless JSON array).
-        return_parsed: parse the payload through parse_torvik_game_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
+        return_parsed: parse the payload through parse_torvik_game_stats -> polars DataFrame (default True). Pass return_parsed=False for the decoded JSON response body (the positional-field array).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the decoded JSON response body (the positional-field array) when ``return_parsed=False``.
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
@@ -255,12 +255,12 @@ def torvik_game_schedule(
 
     Args:
         year: year path parameter.
-        return_parsed: parse the payload through parse_torvik_game_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
+        return_parsed: parse the payload through parse_torvik_game_schedule -> polars DataFrame (default True). Pass return_parsed=False for the decoded JSON response body (the positional-field array).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the decoded JSON response body (the positional-field array) when ``return_parsed=False``.
 
     Raises:
         sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).

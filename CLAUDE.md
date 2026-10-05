@@ -731,8 +731,12 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
   a `gameCenterPlayByPlay` coordinate-range probe shows the big canvas. Classify
   by observed range, **not** pro/junior tier (ECHL is pro but small-canvas).
 - **Per-league PBP caveats:** `ushl` gamecenter ships goals/penalties/goalie
-  changes only (no coordinates); `mjhl`'s public key has no gamecenter access
-  (`<lg>_pbp`/`<lg>_game_summary` return empty — graceful, not an error).
+  changes only (no coordinates); `mjhl` (probed 2026-10-05) is the same: its
+  `gameCenterPlayByPlay` returns goals/penalties/goalie changes only (no
+  shots/coordinates), shifts return a valid empty envelope, and only the game
+  summary is denied (plain-text body `Feed type access denied.`, which
+  `hockeytech_api` turns into None, so `mjhl_game_summary` is empty — graceful,
+  not an error).
 - **Keys are per-league and public** (shipped in each site's JS); no shared master
   key. They rotate by *addition* — old generations keep working. Override any
   league's key with env `SDV_<LEAGUE>_API_KEY` (wins for every view). PWHL's

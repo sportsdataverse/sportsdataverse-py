@@ -5210,20 +5210,21 @@ def espn_mbb_cdn_playbyplay(
     Bound to sport='basketball', league='mens-college-basketball'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/playbyplay``
-    Example URL: https://cdn.espn.com/core/mens-college-basketball/playbyplay?xhr=1&gameId=401705127
+    Example URL: https://cdn.espn.com/core/mens-college-basketball/playbyplay?xhr=1&gameId=401708348
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
 
-            espn_mbb_cdn_playbyplay(game_id='401705127')
+            espn_mbb_cdn_playbyplay(game_id='401708348')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5253,20 +5254,21 @@ def espn_mbb_cdn_boxscore(
     Bound to sport='basketball', league='mens-college-basketball'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/boxscore``
-    Example URL: https://cdn.espn.com/core/mens-college-basketball/boxscore?xhr=1&gameId=401705127
+    Example URL: https://cdn.espn.com/core/mens-college-basketball/boxscore?xhr=1&gameId=401708348
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
 
-            espn_mbb_cdn_boxscore(game_id='401705127')
+            espn_mbb_cdn_boxscore(game_id='401708348')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

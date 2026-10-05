@@ -48,7 +48,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `status_display_clock` | character | Display clock string. |
 | `status_period` | integer | Current period. |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | character | Whether it is a conference competition. |
+| `conference_competition` | logical | Whether it is a conference competition. |
 | `attendance` | integer | Game attendance. |
 | `venue_id` | character | Venue identifier. |
 | `venue_full_name` | character | Venue full name. |
@@ -67,7 +67,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Whether the home team won. |
-| `home_rank` | integer | Home team rank (if ranked). |
+| `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Away team ESPN identifier. |
 | `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team abbreviation. |
@@ -78,7 +78,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Whether the away team won. |
-| `away_rank` | integer | Away team rank (if ranked). |
+| `away_rank` | character | Away team rank (if ranked). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -997,7 +997,7 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
 def load_cfb_rosters_cfbd(seasons, return_as_pandas: bool = False):
     """Load cfbfastR-data (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data
+    Source: https://github.com/sportsdataverse/cfbfastR-data
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).

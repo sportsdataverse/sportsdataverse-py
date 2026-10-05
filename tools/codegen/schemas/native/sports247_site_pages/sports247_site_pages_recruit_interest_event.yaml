@@ -19,6 +19,6 @@ columns:
   type: character
 - description: ''
   name: default_name
-  type: character
+  type: integer
 kind: dataframe
 schema: sports247_site_pages_recruit_interest_event

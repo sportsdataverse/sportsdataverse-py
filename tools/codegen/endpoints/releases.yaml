@@ -2,6 +2,9 @@ bases:
   sdv_releases: https://github.com/sportsdataverse/sportsdataverse-data/releases/download/
   raw_data: https://raw.githubusercontent.com/sportsdataverse/
   nflverse: https://github.com/nflverse/nflverse-data/releases/download/
+# Per-loader ``on_missing`` (optional): ``raise`` marks hand-written loaders that raise
+# NoDataError for a season with no asset; the default ``skip`` is the generated-loader
+# behaviour (season dropped). Tests: tests/codegen/test_on_missing.py.
 loaders:
 - fn: load_cfb_pbp
   league: cfb
@@ -1871,6 +1874,7 @@ loaders:
   base: nflverse
   url: pbp/play_by_play_{season}.parquet
   tag: pbp
+  on_missing: raise
   min_season: 1999
   example_args:
     seasons: 2024
@@ -1888,6 +1892,7 @@ loaders:
   base: sdv_releases
   url: nfl_model_pbp/model_pbp_{season}.parquet
   tag: nfl_model_pbp
+  on_missing: raise
   min_season: 1999
   example_args:
     seasons: 2024
@@ -1899,6 +1904,7 @@ loaders:
   base: sdv_releases
   url: nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet
   tag: nfl_ratings_weekly
+  on_missing: raise
   min_season: 1999
   example_args:
     seasons: 2024
@@ -1912,6 +1918,7 @@ loaders:
   base: sdv_releases
   url: nfl_ngs_passing/ngs_passing_{season}.parquet
   tag: nfl_ngs_passing
+  on_missing: raise
   min_season: 2009
   example_args:
     seasons: 2024
@@ -1923,6 +1930,7 @@ loaders:
   base: nflverse
   url: rosters/roster_{season}.parquet
   tag: rosters
+  on_missing: raise
   min_season: 1920
   example_args:
     seasons: 2024
@@ -1931,6 +1939,7 @@ loaders:
   base: nflverse
   url: weekly_rosters/roster_weekly_{season}.parquet
   tag: weekly_rosters
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -1939,6 +1948,7 @@ loaders:
   base: nflverse
   url: depth_charts/depth_charts_{season}.parquet
   tag: depth_charts
+  on_missing: raise
   min_season: 2001
   example_args:
     seasons: 2024
@@ -1947,6 +1957,7 @@ loaders:
   base: nflverse
   url: injuries/injuries_{season}.parquet
   tag: injuries
+  on_missing: raise
   min_season: 2009
   example_args:
     seasons: 2024
@@ -1955,6 +1966,7 @@ loaders:
   base: nflverse
   url: snap_counts/snap_counts_{season}.parquet
   tag: snap_counts
+  on_missing: raise
   min_season: 2012
   example_args:
     seasons: 2024
@@ -1963,6 +1975,7 @@ loaders:
   base: nflverse
   url: pbp_participation/pbp_participation_{season}.parquet
   tag: pbp_participation
+  on_missing: raise
   min_season: 2016
   example_args:
     seasons: 2024
@@ -1971,6 +1984,7 @@ loaders:
   base: nflverse
   url: ftn_charting/ftn_charting_{season}.parquet
   tag: ftn_charting
+  on_missing: raise
   min_season: 2022
   example_args:
     seasons: 2024
@@ -1984,6 +1998,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_players/usage_players_{season}.parquet
   tag: espn_nfl_usage_players
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -1993,6 +2008,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_position_groups/usage_position_groups_{season}.parquet
   tag: espn_nfl_usage_position_groups
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2002,6 +2018,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_tackles/usage_tackles_{season}.parquet
   tag: espn_nfl_usage_tackles
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2011,6 +2028,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet
   tag: espn_nfl_usage_position_group_tackles
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2020,6 +2038,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_teams/usage_teams_{season}.parquet
   tag: espn_nfl_usage_teams
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2029,6 +2048,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_drive_scripting/usage_drive_scripting_{season}.parquet
   tag: espn_nfl_usage_drive_scripting
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2038,6 +2058,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_st_kickers/usage_st_kickers_{season}.parquet
   tag: espn_nfl_usage_st_kickers
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2047,6 +2068,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_st_punters/usage_st_punters_{season}.parquet
   tag: espn_nfl_usage_st_punters
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2056,6 +2078,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_st_returners/usage_st_returners_{season}.parquet
   tag: espn_nfl_usage_st_returners
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2065,6 +2088,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_st_blocks/usage_st_blocks_{season}.parquet
   tag: espn_nfl_usage_st_blocks
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2074,6 +2098,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_usage_st_team/usage_st_team_{season}.parquet
   tag: espn_nfl_usage_st_team
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2083,6 +2108,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_team_tendencies/team_tendencies_{season}.parquet
   tag: espn_nfl_team_tendencies
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2092,6 +2118,7 @@ loaders:
   base: sdv_releases
   url: espn_nfl_coach_tendencies/coach_tendencies_{season}.parquet
   tag: espn_nfl_coach_tendencies
+  on_missing: raise
   min_season: 2002
   example_args:
     seasons: 2024
@@ -2501,6 +2528,7 @@ loaders:
   base: sdv_releases
   url: nfl_groups/nfl_team_group_seasons_{season}.parquet
   tag: nfl_groups
+  on_missing: raise
   min_season: 1970
   example_args:
     seasons: 2024

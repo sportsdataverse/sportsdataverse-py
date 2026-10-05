@@ -63,6 +63,76 @@ _SHORT: Dict[str, str] = {
     "/League/{league}/DraftPicks/ConfigureEmbed/.json": "league_draft_picks",
 }
 
+# Real-capture fixture stem (tests/fixtures/sports247_site_pages/<stem>.json) per
+# endpoint short. The OpenAPI spec types every numeric-string field as ``string``,
+# but the parser (``_cast_numeric_strings``) widens them to Int64/Float64, so the
+# returns-schemas take their column TYPES from parser output on these captures.
+FIXTURE_FOR_SHORT: Dict[str, List[str]] = {
+    "coach": ["coach"],
+    "coach_alma_mater": ["coach_almamater"],
+    "coach_hometown": ["coach_hometown"],
+    "coach_ranking": ["coachranking"],
+    "coach_rankings": ["coach_rankings"],
+    "event": ["event"],
+    "institution": ["institution"],
+    "institution_list": ["institution_list"],
+    "institution_location": ["institution_location"],
+    "institution_timeline_events": ["institution_timeline"],
+    "league_draft_picks": ["draft_picks"],
+    "league_institutions": ["league_institutions"],
+    "page_feeds": ["page_feeds"],
+    "player": ["player"],
+    "player_current_institution": ["player_currentinst"],
+    "player_high_school": ["player_highschool"],
+    "player_institution": ["player_institution"],
+    "player_institution_evaluation": ["pi_evaluation"],
+    "player_primary_sport": ["player_primarysport"],
+    "player_search": ["player_search"],
+    "playersport": ["playersport"],
+    "playersport_institution": ["playersport_inst"],
+    "playersport_rank_history": ["playersport_rankhist"],
+    "position_rankings": ["position_ranks"],
+    "recruit_interest": ["recruit_interest"],
+    "recruitment_final_choice": ["recruitment_finalchoice"],
+    "recruitment_institution": ["recruitment_inst"],
+    "recruitment_interests": ["recruitment_interests"],
+    "recruitment_offers": ["recruitment_offers"],
+    "recruitment_player_sport": ["recruitment_playersport"],
+    "season_current_expert_predictions": ["current_expert_pred", "expert_predictions"],
+    "season_recruit_interest_events": ["season_recruit_int_ev"],
+    "season_recruit_interests": ["season_recruit_ints"],
+    "season_recruits": ["recruits_season"],
+    "season_roster_embed": ["roster_embed"],
+}
+FIXTURE_DIR = ROOT / "tests/fixtures/sports247_site_pages"
+
+_TYPE_RANK = {"logical": 0, "integer": 1, "numeric": 2, "character": 3}
+_POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
+
+
+def observed_types(short: str) -> Dict[str, str]:
+    """``{snake_col: r_type}`` from the parser run over this endpoint's fixtures.
+
+    All-null columns carry no type signal and are skipped; if a column's type
+    differs between fixtures (e.g. Int64 vs Float64) the widest wins
+    (character > numeric > integer/logical).
+    """
+    import json
+
+    from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
+
+    out: Dict[str, str] = {}
+    for stem in FIXTURE_FOR_SHORT.get(short, []):
+        df = parse_sports247_site_page(json.loads((FIXTURE_DIR / f"{stem}.json").read_text(encoding="utf-8")))
+        for col, dt in df.schema.items():
+            if df[col].null_count() == df.height:
+                continue
+            t = _POLARS_TO_R.get(str(dt), "character")
+            if col not in out or _TYPE_RANK[t] > _TYPE_RANK[out[col]]:
+                out[col] = t
+    return out
+
+
 # OpenAPI scalar type -> python-hint (params) and R-style (returns-schema)
 _PY_TYPE = {"integer": "int", "number": "float", "string": "str", "boolean": "bool"}
 _R_TYPE = {"integer": "integer", "number": "numeric", "string": "character", "boolean": "logical"}
@@ -215,6 +285,7 @@ def main() -> None:
 
     endpoints: List[Dict[str, Any]] = []
     used_schemas: Dict[str, str] = {}  # schema-file-name -> component name
+    observed: Dict[str, Dict[str, str]] = {}  # schema-file-name -> {col: r_type}
     for path, item in paths.items():
         op = item.get("get")
         if not op:
@@ -222,7 +293,11 @@ def main() -> None:
         endpoints.append(_endpoint(path, op, comps))
         ref = _response_ref(op)
         if ref:
-            used_schemas[_schema_name(ref, _SHORT[path])] = ref
+            sname = _schema_name(ref, _SHORT[path])
+            used_schemas[sname] = ref
+            for col, t in observed_types(_SHORT[path]).items():
+                prev = observed.setdefault(sname, {}).get(col)
+                observed[sname][col] = t if prev is None else max(prev, t, key=_TYPE_RANK.__getitem__)
     endpoints.sort(key=lambda e: e["short"])
 
     doc = {
@@ -243,11 +318,15 @@ def main() -> None:
     _clean_generated_schema_dir(schema_dir)
     for schema_name, comp_name in sorted(used_schemas.items()):
         cols = _flatten_columns(comps[comp_name].get("properties", {}), comps)
-        schema = {
-            "schema": schema_name,
-            "kind": "dataframe",
-            "columns": [{"name": underscore(raw), "type": rtype, "description": ""} for raw, rtype in cols],
-        }
+        # Parser output wins over the spec's types; columns the parser emits but the
+        # spec omits (e.g. institution_list.website) are appended.
+        obs = observed.get(schema_name, {})
+        columns = [
+            {"name": underscore(raw), "type": obs.get(underscore(raw), rtype), "description": ""} for raw, rtype in cols
+        ]
+        known = {c["name"] for c in columns}
+        columns += [{"name": n, "type": t, "description": ""} for n, t in obs.items() if n not in known]
+        schema = {"schema": schema_name, "kind": "dataframe", "columns": columns}
         _write_yaml(schema_dir / f"{schema_name}.yaml", schema)
 
     print(f"sports247_site_pages: {len(endpoints)} endpoints, {len(used_schemas)} schemas")

@@ -15,7 +15,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/college-softball/playbyplay`
 
-**Valid URL:** [https://cdn.espn.com/core/college-softball/playbyplay?xhr=1&gameId=401705127](https://cdn.espn.com/core/college-softball/playbyplay?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/college-softball/playbyplay?xhr=1&gameId=401772530](https://cdn.espn.com/core/college-softball/playbyplay?xhr=1&gameId=401772530)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,7 +23,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 ### Returns {#espn_college_softball_cdn_playbyplay-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -283,7 +283,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 ### Example {#espn_college_softball_cdn_playbyplay-example}
 
 ```python
-espn_college_softball_cdn_playbyplay(game_id='401705127')
+espn_college_softball_cdn_playbyplay(game_id='401772530')
 ```
 
 _Last validated n/a._
@@ -294,7 +294,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/college-softball/boxscore`
 
-**Valid URL:** [https://cdn.espn.com/core/college-softball/boxscore?xhr=1&gameId=401705127](https://cdn.espn.com/core/college-softball/boxscore?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/college-softball/boxscore?xhr=1&gameId=401772530](https://cdn.espn.com/core/college-softball/boxscore?xhr=1&gameId=401772530)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -302,7 +302,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 ### Returns {#espn_college_softball_cdn_boxscore-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -562,7 +562,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 ### Example {#espn_college_softball_cdn_boxscore-example}
 
 ```python
-espn_college_softball_cdn_boxscore(game_id='401705127')
+espn_college_softball_cdn_boxscore(game_id='401772530')
 ```
 
 _Last validated n/a._
@@ -587,9 +587,56 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `season` | integer | Four-digit season year. |
-| `game_date` | character | ISO 8601 kickoff timestamp (UTC). |
+| `game_id` | character | ESPN event id. |
+| `uid` | character | ESPN UID string. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_slug` | character | Season slug. |
+| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
+| `status_clock` | double | Game clock in seconds. |
+| `status_display_clock` | character | Status display clock. |
+| `status_period` | integer | Current period. |
+| `neutral_site` | logical | Whether the match is played at a neutral venue. |
+| `conference_competition` | logical | Conference competition. |
+| `attendance` | integer | Reported attendance. |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_city` | character | Venue city. |
+| `venue_state` | character | Venue state / region. |
+| `venue_indoor` | logical | Whether the home venue is indoors. |
+| `broadcast` | character | Broadcast information string. |
+| `note` | character | Injury status and description. |
+| `home_id` | character | Unique identifier for home. |
+| `home_name` | character | Home team display name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home team display name. |
+| `home_location` | character | Home team's location. |
+| `home_color` | character | Home team primary color hex. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_logo` | character | Home team logo URL. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `home_winner` | logical | Whether the home team won. |
+| `home_rank` | character | Home team rank (if ranked). |
+| `away_id` | character | Unique identifier for away. |
+| `away_name` | character | Away team display name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away team display name. |
+| `away_location` | character | Away team's location. |
+| `away_color` | character | Away team primary color hex. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_logo` | character | Away team logo URL. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
+| `away_winner` | logical | Whether the away team won. |
+| `away_rank` | character | Away team rank (if ranked). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

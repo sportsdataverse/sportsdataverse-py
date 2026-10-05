@@ -22,7 +22,7 @@ columns:
   type: character
 - description: ''
   name: primary_coach
-  type: integer
+  type: numeric
 - description: ''
   name: secondary_coach
   type: character
@@ -52,7 +52,7 @@ columns:
   type: character
 - description: ''
   name: official_visit
-  type: integer
+  type: numeric
 - description: ''
   name: second_official_visit
   type: character
@@ -61,13 +61,13 @@ columns:
   type: character
 - description: ''
   name: hard_commit
-  type: integer
+  type: numeric
 - description: ''
   name: signing_date
-  type: integer
+  type: numeric
 - description: ''
   name: enrollment_date
-  type: integer
+  type: numeric
 - description: ''
   name: decommit
   type: character
@@ -76,7 +76,7 @@ columns:
   type: character
 - description: ''
   name: highest_recruit_interest_event
-  type: integer
+  type: numeric
 - description: ''
   name: commit_status
   type: character

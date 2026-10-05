@@ -4,7 +4,7 @@ columns:
   type: integer
 - description: ''
   name: postal_code
-  type: character
+  type: integer
 - description: ''
   name: city
   type: character
@@ -13,19 +13,19 @@ columns:
   type: integer
 - description: ''
   name: latitude
-  type: character
+  type: numeric
 - description: ''
   name: longitude
-  type: character
+  type: numeric
 - description: ''
   name: county_tax_rate
-  type: character
+  type: numeric
 - description: ''
   name: city_tax_rate
-  type: character
+  type: numeric
 - description: ''
   name: special_tax_rate
-  type: character
+  type: numeric
 - description: ''
   name: region_name
   type: character

@@ -1,11 +1,12 @@
 import copy
+import os
 import sys
 
 from sportsdataverse.cfb import cfb_box_invariants as inv
 from sportsdataverse.cfb import cfb_drive_summary as drive_summary
 from sportsdataverse.cfb import cfb_situational_stats as situational_stats
 
-sys.path.insert(0, __file__.rsplit("/", 1)[0])
+sys.path.insert(0, os.path.dirname(__file__))
 from test_cfb_drive_summary import _clock_drives, _clock_frame, _drives  # noqa: E402
 from test_cfb_drive_summary import _frame as _drive_frame  # noqa: E402
 from test_cfb_situational_stats import _frame as _sit_frame  # noqa: E402

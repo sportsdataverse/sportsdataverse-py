@@ -30,8 +30,8 @@ Coach alma-mater Institution.
 | `group` | character | Institution group (division/level) bitmask code. |
 | `location` | integer | FK -> Location (`/Institution/{Location}/Location.json`). |
 | `state` | integer | FK -> State entity. |
-| `latitude` | character | Venue latitude in decimal degrees. |
-| `longitude` | character | Venue longitude in decimal degrees. |
+| `latitude` | numeric | Venue latitude in decimal degrees. |
+| `longitude` | numeric | Venue longitude in decimal degrees. |
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
@@ -39,12 +39,13 @@ Coach alma-mater Institution.
 | `secondary_color` | character | Secondary team color (hex). |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
-| `default_asset` | integer | Nested 247Sports image asset for the institution's primary logo (stringified). |
-| `alternate_asset` | integer | Nested 247Sports image asset for the institution's alternate logo (stringified). |
-| `light_asset` | integer | Nested 247Sports image asset for the light-background logo variant (stringified). |
+| `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
+| `alternate_asset` | numeric | Nested 247Sports image asset for the institution's alternate logo (stringified). |
+| `light_asset` | numeric | Nested 247Sports image asset for the light-background logo variant (stringified). |
 | `default_name` | character | Server-rendered display label for the entity. |
 | `address` | character | Institution's street address. |
 | `telephone` | character | Institution's telephone number. |
+| `website` | character | Institution's website URL. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -74,14 +75,14 @@ Coach hometown Location.
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `postal_code` | character | Postal code of the venue. |
+| `postal_code` | integer | Postal code of the venue. |
 | `city` | character | Venue city. |
 | `state` | integer | U.S. state of the location record, per 247Sports. |
-| `latitude` | character | Venue latitude in decimal degrees. |
-| `longitude` | character | Venue longitude in decimal degrees. |
-| `county_tax_rate` | character | County income-tax rate for the location, carried on the 247Sports location record. |
-| `city_tax_rate` | character | City income-tax rate for the location, carried on the 247Sports location record. |
-| `special_tax_rate` | character | Special-district tax rate for the location, carried on the 247Sports location record. |
+| `latitude` | numeric | Venue latitude in decimal degrees. |
+| `longitude` | numeric | Venue longitude in decimal degrees. |
+| `county_tax_rate` | numeric | County income-tax rate for the location, carried on the 247Sports location record. |
+| `city_tax_rate` | numeric | City income-tax rate for the location, carried on the 247Sports location record. |
+| `special_tax_rate` | numeric | Special-district tax rate for the location, carried on the 247Sports location record. |
 | `region_name` | character | Name of the region (state/province) for the location. |
 | `default_name` | character | Server-rendered display label for the entity. |
 
@@ -119,38 +120,38 @@ Single CoachRanking row.
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |
 | `sport` | integer | Nested 247Sports sport the ranking covers (stringified). |
 | `recruitment` | character | Nested 247Sports recruitment record credited to the coach on this row (stringified). |
-| `rating` | character | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
-| `scout_rating` | character | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
-| `composite_rating` | character | Composite class rating for the coach's haul. |
-| `commits` | character | Number of commits credited to the coach in the ranking. |
-| `total` | character | Total ranking score for the coach's class, as reported by 247Sports. |
-| `composite_total` | character | Total 247Sports Composite rating points credited to the coach's commits. |
-| `five_stars` | character | Number of five-star commits credited to the coach. |
-| `scout_five_stars` | character | Number of five-star commits by 247Sports' own (scout) rating. |
-| `composite_five_stars` | character | Number of five-star commits by the 247Sports Composite rating. |
-| `four_stars` | character | Number of four-star commits credited to the coach. |
-| `scout_four_stars` | character | Number of four-star commits by 247Sports' own (scout) rating. |
-| `composite_four_stars` | character | Number of four-star commits by the 247Sports Composite rating. |
-| `three_stars` | character | Number of three-star commits credited to the coach. |
-| `scout_three_stars` | character | Number of three-star commits by 247Sports' own (scout) rating. |
-| `composite_three_stars` | character | Number of three-star commits by the 247Sports Composite rating. |
-| `two_stars` | character | Number of two-star commits credited to the coach. |
-| `scout_two_stars` | character | Number of two-star commits by 247Sports' own (scout) rating. |
-| `composite_two_stars` | character | Number of two-star commits by the 247Sports Composite rating. |
-| `average_rating` | character | Average rating across the coach's credited commits. |
-| `average_scout_rating` | character | Average 247Sports in-house (scout) rating across the credited commits. |
-| `composite_average_rating` | character | Average 247Sports Composite rating across the credited commits. |
-| `overall_rank` | character | Overall national coach-recruiting rank. |
-| `composite_overall_rank` | character | Coach's national recruiter rank by Composite points. |
-| `scout_overall_rank` | character | Coach's national recruiter rank by 247Sports' own (scout) points. |
-| `division_rank` | character | Coach's recruiter rank within the division. |
-| `scout_division_rank` | character | Coach's division recruiter rank by 247Sports' own (scout) points. |
-| `composite_division_rank` | character | Coach's division recruiter rank by Composite points. |
-| `conference_rank` | character | Rank within conference. |
-| `scout_conference_rank` | character | Coach's conference recruiter rank by 247Sports' own (scout) points. |
-| `composite_conference_rank` | character | Coach's conference recruiter rank by Composite points. |
-| `previous_coach_ranking` | integer | Nested prior-cycle recruiter-ranking row for the coach (stringified). |
-| `default_name` | character | Server-rendered display label for the entity. |
+| `rating` | numeric | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
+| `scout_rating` | numeric | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
+| `composite_rating` | numeric | Composite class rating for the coach's haul. |
+| `commits` | integer | Number of commits credited to the coach in the ranking. |
+| `total` | integer | Total ranking score for the coach's class, as reported by 247Sports. |
+| `composite_total` | integer | Total 247Sports Composite rating points credited to the coach's commits. |
+| `five_stars` | integer | Number of five-star commits credited to the coach. |
+| `scout_five_stars` | integer | Number of five-star commits by 247Sports' own (scout) rating. |
+| `composite_five_stars` | integer | Number of five-star commits by the 247Sports Composite rating. |
+| `four_stars` | integer | Number of four-star commits credited to the coach. |
+| `scout_four_stars` | integer | Number of four-star commits by 247Sports' own (scout) rating. |
+| `composite_four_stars` | integer | Number of four-star commits by the 247Sports Composite rating. |
+| `three_stars` | integer | Number of three-star commits credited to the coach. |
+| `scout_three_stars` | integer | Number of three-star commits by 247Sports' own (scout) rating. |
+| `composite_three_stars` | integer | Number of three-star commits by the 247Sports Composite rating. |
+| `two_stars` | integer | Number of two-star commits credited to the coach. |
+| `scout_two_stars` | integer | Number of two-star commits by 247Sports' own (scout) rating. |
+| `composite_two_stars` | integer | Number of two-star commits by the 247Sports Composite rating. |
+| `average_rating` | numeric | Average rating across the coach's credited commits. |
+| `average_scout_rating` | integer | Average 247Sports in-house (scout) rating across the credited commits. |
+| `composite_average_rating` | numeric | Average 247Sports Composite rating across the credited commits. |
+| `overall_rank` | integer | Overall national coach-recruiting rank. |
+| `composite_overall_rank` | integer | Coach's national recruiter rank by Composite points. |
+| `scout_overall_rank` | integer | Coach's national recruiter rank by 247Sports' own (scout) points. |
+| `division_rank` | integer | Coach's recruiter rank within the division. |
+| `scout_division_rank` | integer | Coach's division recruiter rank by 247Sports' own (scout) points. |
+| `composite_division_rank` | integer | Coach's division recruiter rank by Composite points. |
+| `conference_rank` | integer | Rank within conference. |
+| `scout_conference_rank` | integer | Coach's conference recruiter rank by 247Sports' own (scout) points. |
+| `composite_conference_rank` | integer | Coach's conference recruiter rank by Composite points. |
+| `previous_coach_ranking` | numeric | Nested prior-cycle recruiter-ranking row for the coach (stringified). |
+| `default_name` | integer | Server-rendered display label for the entity. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -186,38 +187,38 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |
 | `sport` | integer | Nested 247Sports sport the ranking covers (stringified). |
 | `recruitment` | character | Nested 247Sports recruitment record credited to the coach on this row (stringified). |
-| `rating` | character | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
-| `scout_rating` | character | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
-| `composite_rating` | character | Composite class rating for the coach's haul. |
-| `commits` | character | Number of commits credited to the coach in the ranking. |
-| `total` | character | Total ranking score for the coach's class, as reported by 247Sports. |
-| `composite_total` | character | Total 247Sports Composite rating points credited to the coach's commits. |
-| `five_stars` | character | Number of five-star commits credited to the coach. |
-| `scout_five_stars` | character | Number of five-star commits by 247Sports' own (scout) rating. |
-| `composite_five_stars` | character | Number of five-star commits by the 247Sports Composite rating. |
-| `four_stars` | character | Number of four-star commits credited to the coach. |
-| `scout_four_stars` | character | Number of four-star commits by 247Sports' own (scout) rating. |
-| `composite_four_stars` | character | Number of four-star commits by the 247Sports Composite rating. |
-| `three_stars` | character | Number of three-star commits credited to the coach. |
-| `scout_three_stars` | character | Number of three-star commits by 247Sports' own (scout) rating. |
-| `composite_three_stars` | character | Number of three-star commits by the 247Sports Composite rating. |
-| `two_stars` | character | Number of two-star commits credited to the coach. |
-| `scout_two_stars` | character | Number of two-star commits by 247Sports' own (scout) rating. |
-| `composite_two_stars` | character | Number of two-star commits by the 247Sports Composite rating. |
-| `average_rating` | character | Average rating across the coach's credited commits. |
-| `average_scout_rating` | character | Average 247Sports in-house (scout) rating across the credited commits. |
-| `composite_average_rating` | character | Average 247Sports Composite rating across the credited commits. |
-| `overall_rank` | character | Overall national coach-recruiting rank. |
-| `composite_overall_rank` | character | Coach's national recruiter rank by Composite points. |
-| `scout_overall_rank` | character | Coach's national recruiter rank by 247Sports' own (scout) points. |
-| `division_rank` | character | Coach's recruiter rank within the division. |
-| `scout_division_rank` | character | Coach's division recruiter rank by 247Sports' own (scout) points. |
-| `composite_division_rank` | character | Coach's division recruiter rank by Composite points. |
-| `conference_rank` | character | Rank within conference. |
-| `scout_conference_rank` | character | Coach's conference recruiter rank by 247Sports' own (scout) points. |
-| `composite_conference_rank` | character | Coach's conference recruiter rank by Composite points. |
-| `previous_coach_ranking` | integer | Nested prior-cycle recruiter-ranking row for the coach (stringified). |
-| `default_name` | character | Server-rendered display label for the entity. |
+| `rating` | numeric | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
+| `scout_rating` | numeric | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
+| `composite_rating` | numeric | Composite class rating for the coach's haul. |
+| `commits` | integer | Number of commits credited to the coach in the ranking. |
+| `total` | integer | Total ranking score for the coach's class, as reported by 247Sports. |
+| `composite_total` | integer | Total 247Sports Composite rating points credited to the coach's commits. |
+| `five_stars` | integer | Number of five-star commits credited to the coach. |
+| `scout_five_stars` | integer | Number of five-star commits by 247Sports' own (scout) rating. |
+| `composite_five_stars` | integer | Number of five-star commits by the 247Sports Composite rating. |
+| `four_stars` | integer | Number of four-star commits credited to the coach. |
+| `scout_four_stars` | integer | Number of four-star commits by 247Sports' own (scout) rating. |
+| `composite_four_stars` | integer | Number of four-star commits by the 247Sports Composite rating. |
+| `three_stars` | integer | Number of three-star commits credited to the coach. |
+| `scout_three_stars` | integer | Number of three-star commits by 247Sports' own (scout) rating. |
+| `composite_three_stars` | integer | Number of three-star commits by the 247Sports Composite rating. |
+| `two_stars` | integer | Number of two-star commits credited to the coach. |
+| `scout_two_stars` | integer | Number of two-star commits by 247Sports' own (scout) rating. |
+| `composite_two_stars` | integer | Number of two-star commits by the 247Sports Composite rating. |
+| `average_rating` | numeric | Average rating across the coach's credited commits. |
+| `average_scout_rating` | integer | Average 247Sports in-house (scout) rating across the credited commits. |
+| `composite_average_rating` | numeric | Average 247Sports Composite rating across the credited commits. |
+| `overall_rank` | integer | Overall national coach-recruiting rank. |
+| `composite_overall_rank` | integer | Coach's national recruiter rank by Composite points. |
+| `scout_overall_rank` | integer | Coach's national recruiter rank by 247Sports' own (scout) points. |
+| `division_rank` | integer | Coach's recruiter rank within the division. |
+| `scout_division_rank` | integer | Coach's division recruiter rank by 247Sports' own (scout) points. |
+| `composite_division_rank` | integer | Coach's division recruiter rank by Composite points. |
+| `conference_rank` | integer | Rank within conference. |
+| `scout_conference_rank` | integer | Coach's conference recruiter rank by 247Sports' own (scout) points. |
+| `composite_conference_rank` | integer | Coach's conference recruiter rank by Composite points. |
+| `previous_coach_ranking` | numeric | Nested prior-cycle recruiter-ranking row for the coach (stringified). |
+| `default_name` | integer | Server-rendered display label for the entity. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

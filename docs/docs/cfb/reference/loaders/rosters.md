@@ -106,7 +106,7 @@ load_cfb_rosters(seasons=2024)
 
 ## load_cfb_rosters_cfbd
 
-Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) · asset `https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet`
+Release: [cfbfastR-data](https://github.com/sportsdataverse/cfbfastR-data) · asset `https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet`
 ### Returns {#load_cfb_rosters_cfbd-returns}
 
 | col_name | type | description |

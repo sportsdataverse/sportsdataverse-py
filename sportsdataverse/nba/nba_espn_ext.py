@@ -4956,11 +4956,12 @@ def espn_nba_cdn_playbyplay(
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4999,11 +5000,12 @@ def espn_nba_cdn_boxscore(
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
