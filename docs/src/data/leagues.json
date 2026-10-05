@@ -241,6 +241,10 @@
         {
           "prefix": "yahoo",
           "label": "Yahoo Sports"
+        },
+        {
+          "prefix": "fox",
+          "label": "Fox Sports"
         }
       ]
     }

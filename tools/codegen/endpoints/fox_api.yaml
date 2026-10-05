@@ -1,0 +1,907 @@
+api: fox_api
+host: https://api.foxsports.com
+name_pattern: fox_api_{short}
+module: fox_api
+parser_module: fox.fox_api_parsers
+qualifier: ''
+docstring:
+  example_import: true
+  raises:
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.'
+  see_also:
+  - name: Fox Sports
+    url: https://www.foxsports.com/
+    note: the public site this API renders
+  - name: sdv-swagger Fox Sports OpenAPI
+    url: https://github.com/sportsdataverse/sdv-swagger
+    note: the endpoint spec these wrappers were cleaned from
+endpoints:
+- short: scoreboard
+  summary: GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
+  path: /bifrost/v1/{sport}/scoreboard/main
+  parser: parse_fox_api_events
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: group_id
+    query_key: groupId
+    type: int
+    description: Conference / group id filter.
+  example_args:
+    sport: nfl
+- short: scorechip
+  summary: GET /bifrost/v1/{sport}/scorechip/{chip_id} -- Fox Sports API scorechip.
+  path: /bifrost/v1/{sport}/scorechip/{chip_id}
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: chip_id
+    required: true
+    type: str
+    description: 'Score-chip id: the league slug plus the numeric game id, e.g. ``nfl11195``.'
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    chip_id: nfl11195
+- short: topevents_scoreboard_segment
+  summary: GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topevents scoreboard segment.
+  path: /bifrost/v1/topevents/scoreboard/segment/{segment}
+  parser: parse_fox_api_events
+  path_params:
+  - name: segment
+    required: true
+    type: str
+    description: Scoreboard segment id.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    segment: 2026-3-1
+- short: league_conferences
+  summary: GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
+  path: /bifrost/v1/{sport}/league/conferences
+  parser: parse_fox_api_nav
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_header
+  summary: GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
+  path: /bifrost/v1/{sport}/league/header
+  parser: parse_fox_api_header
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_odds
+  summary: GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
+  path: /bifrost/v1/{sport}/league/odds
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: group_id
+    query_key: groupId
+    type: int
+    description: Conference / group id filter.
+  example_args:
+    sport: nfl
+- short: league_playernews
+  summary: GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
+  path: /bifrost/v1/{sport}/league/playernews
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_polls
+  summary: GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
+  path: /bifrost/v1/{sport}/league/polls
+  parser: parse_fox_api_polls
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_schedule
+  summary: GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
+  path: /bifrost/v1/{sport}/league/schedule
+  parser: parse_fox_api_events
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_scores
+  summary: GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
+  path: /bifrost/v1/{sport}/league/scores
+  parser: parse_fox_api_events
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_scores_segment
+  summary: GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API league scores segment.
+  path: /bifrost/v1/{sport}/league/scores-segment/{segment_id}
+  parser: parse_fox_api_events
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: segment_id
+    required: true
+    type: str
+    description: Scores segment id, ``<season>-<week>-<seasonTypeCode>``, e.g. ``2026-3-1``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: group_id
+    query_key: groupId
+    type: int
+    description: Conference / group id filter.
+  example_args:
+    sport: nfl
+    segment_id: 2026-3-1
+- short: league_standings
+  summary: GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
+  path: /bifrost/v1/{sport}/league/standings
+  parser: parse_fox_api_standings
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_stats
+  summary: GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
+  path: /bifrost/v1/{sport}/league/stats
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: league_stats_con
+  summary: GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports API league stats con.
+  path: /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page}
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: who
+    required: true
+    type: str
+    description: Stat subject, e.g. ``player`` or ``team``.
+  - name: category
+    required: true
+    type: str
+    description: Stat category slug, e.g. ``passing``.
+  - name: page
+    required: true
+    type: str
+    description: Results page number.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: group_id
+    query_key: groupId
+    type: int
+    description: Conference / group id filter.
+  example_args:
+    sport: nfl
+    who: player
+    category: passing
+    page: '1'
+- short: league_teamnav
+  summary: GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
+  path: /bifrost/v1/{sport}/league/teamnav
+  parser: parse_fox_api_nav
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+- short: event_data
+  summary: GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
+  path: /bifrost/v1/{sport}/event/{event_id}/data
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: event_id
+    required: true
+    type: str
+    description: Numeric Fox game (event) id, e.g. ``11195``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    event_id: '11195'
+- short: event_matchup
+  summary: GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup.
+  path: /bifrost/v1/{sport}/event/{event_id}/matchup
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: event_id
+    required: true
+    type: str
+    description: Numeric Fox game (event) id, e.g. ``11195``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    event_id: '11195'
+- short: event_odds
+  summary: GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
+  path: /bifrost/v1/{sport}/event/{event_id}/odds
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: event_id
+    required: true
+    type: str
+    description: Numeric Fox game (event) id, e.g. ``11195``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    event_id: '11195'
+- short: event_recap
+  summary: GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
+  path: /bifrost/v1/{sport}/event/{event_id}/recap
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: event_id
+    required: true
+    type: str
+    description: Numeric Fox game (event) id, e.g. ``11195``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    event_id: '11195'
+- short: event_standings
+  summary: GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event standings.
+  path: /bifrost/v1/{sport}/event/{event_id}/standings
+  parser: parse_fox_api_standings
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: event_id
+    required: true
+    type: str
+    description: Numeric Fox game (event) id, e.g. ``11195``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    event_id: '11195'
+- short: team_gamelog
+  summary: GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
+  path: /bifrost/v1/{sport}/team/{team_id}/gamelog
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: team_id
+    required: true
+    type: str
+    description: Numeric Fox team id, e.g. ``25``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    team_id: '25'
+- short: team_header
+  summary: GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
+  path: /bifrost/v1/{sport}/team/{team_id}/header
+  parser: parse_fox_api_header
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: team_id
+    required: true
+    type: str
+    description: Numeric Fox team id, e.g. ``25``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    team_id: '25'
+- short: team_roster
+  summary: GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
+  path: /bifrost/v1/{sport}/team/{team_id}/roster
+  parser: parse_fox_api_roster
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: team_id
+    required: true
+    type: str
+    description: Numeric Fox team id, e.g. ``25``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    team_id: '25'
+- short: team_standings
+  summary: GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standings.
+  path: /bifrost/v1/{sport}/team/{team_id}/standings
+  parser: parse_fox_api_standings
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: team_id
+    required: true
+    type: str
+    description: Numeric Fox team id, e.g. ``25``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    team_id: '25'
+- short: team_stats
+  summary: GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
+  path: /bifrost/v1/{sport}/team/{team_id}/stats
+  parser: parse_fox_api
+  path_params:
+  - name: sport
+    required: true
+    type: str
+    description: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
+  - name: team_id
+    required: true
+    type: str
+    description: Numeric Fox team id, e.g. ``25``.
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    sport: nfl
+    team_id: '25'
+- short: explore_browse
+  summary: GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
+  path: /bifrost/v1/explore/browse/{section}/main
+  parser: parse_fox_api_nav
+  path_params:
+  - name: section
+    required: true
+    type: str
+    description: 'Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``.'
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    section: sports
+- short: explore_favorite
+  summary: GET /bifrost/v1/explore/favorite/{section}/main -- Fox Sports API explore favorite.
+  path: /bifrost/v1/explore/favorite/{section}/main
+  parser: parse_fox_api
+  path_params:
+  - name: section
+    required: true
+    type: str
+    description: 'Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``.'
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  example_args:
+    section: sports
+- short: explore_odds
+  summary: GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
+  path: /bifrost/v1/explore/odds/main
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+- short: search_content
+  summary: GET /bifrost/v1/search/content -- Fox Sports API search content.
+  path: /bifrost/v1/search/content
+  parser: parse_fox_api_search
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: text
+    query_key: text
+    type: str
+    description: Search text.
+  example_args:
+    text: mahomes
+- short: search_entities
+  summary: GET /bifrost/v1/search/entities -- Fox Sports API search entities.
+  path: /bifrost/v1/search/entities
+  parser: parse_fox_api_search
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: text
+    query_key: text
+    type: str
+    description: Search text.
+  example_args:
+    text: mahomes
+- short: search_popular
+  summary: GET /bifrost/v1/search/popular -- Fox Sports API search popular.
+  path: /bifrost/v1/search/popular
+  parser: parse_fox_api_search
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
+    description: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+- short: trending_articles
+  summary: GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
+  path: /bifrost/v1/general/trending/articles
+  parser: parse_fox_api_trending
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: duration
+    query_key: duration
+    type: int
+    description: Trending look-back window.
+    default: 4
+  - name: tags
+    query_key: tags
+    type: str
+    description: Comma-separated tag filter.
+- short: trending_videos
+  summary: GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
+  path: /bifrost/v1/general/trending/videos
+  parser: parse_fox_api_trending
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+  - name: duration
+    query_key: duration
+    type: int
+    description: Trending look-back window.
+    default: 4
+  - name: max_items
+    query_key: maxItems
+    type: int
+    description: Maximum items to return.
+    default: 12
+- short: foxpolls
+  summary: GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
+  path: /foxpolls/v1/polls
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: associated_entity_ids
+    query_key: associatedEntityIds
+    type: str
+    description: Comma-separated Fox entity ids the polls are associated with.
+  - name: include_answers
+    query_key: includeAnswers
+    type: bool
+    description: Include poll answer options.
+    default: true
+    transform: bool_str
+- short: fs_feed
+  summary: GET /fs/feed -- Fox Sports API fs feed.
+  path: /fs/feed
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+- short: fs_images
+  summary: GET /fs/images -- Fox Sports API fs images.
+  path: /fs/images
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+- short: fs_layouts
+  summary: GET /fs/layouts -- Fox Sports API fs layouts.
+  path: /fs/layouts
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+- short: fs_videos
+  summary: GET /fs/videos -- Fox Sports API fs videos.
+  path: /fs/videos
+  parser: parse_fox_api
+  extra_params:
+  - name: apikey
+    query_key: apikey
+    type: str
+    default: SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg
+    description: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
+  - name: api_version
+    query_key: api-version
+    type: str
+    default: '1.1'
+    description: Fox API version (``api-version`` query key).
+runtime_imports:
+- _get
+- bool_str
