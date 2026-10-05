@@ -230,7 +230,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_color` | character | Team primary color (hex, no leading '#'). |
 | `team_alternate_color` | character | Team alternate color (hex). |
 | `team_is_active` | logical | Team is active. |
-| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
+| `team_logo_href` | character | Default team logo URL. |
 
 **Example**
 

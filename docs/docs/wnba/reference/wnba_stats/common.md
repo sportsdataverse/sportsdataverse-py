@@ -13,13 +13,13 @@ GET /stats/commonallplayers
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonallplayers`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10](https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10&Season=2024](https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `IsOnlyCurrentSeason` | `is_only_current_season` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#wnba_stats_commonallplayers-returns}
 
@@ -50,7 +50,7 @@ GET /stats/commonallplayers
 ### Example {#wnba_stats_commonallplayers-example}
 
 ```python
-wnba_stats_commonallplayers(league_id='10')
+wnba_stats_commonallplayers(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -144,12 +144,12 @@ GET /stats/commonplayoffseries
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonplayoffseries`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=)
+**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&Season=2024&SeriesID=](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&Season=2024&SeriesID=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time, as wehoop does (``2025`` during 2026). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeriesID` | `series_id_nullable` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_commonplayoffseries-returns}
@@ -169,7 +169,7 @@ GET /stats/commonplayoffseries
 ### Example {#wnba_stats_commonplayoffseries-example}
 
 ```python
-wnba_stats_commonplayoffseries(league_id='10')
+wnba_stats_commonplayoffseries(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -180,12 +180,12 @@ GET /stats/commonteamroster
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonteamroster`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317](https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317)
+**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10&Season=2024&TeamID=1611661317](https://stats.wnba.com/stats/commonteamroster?LeagueID=10&Season=2024&TeamID=1611661317)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_commonteamroster-returns}
@@ -232,7 +232,7 @@ GET /stats/commonteamroster
 ### Example {#wnba_stats_commonteamroster-example}
 
 ```python
-wnba_stats_commonteamroster(league_id='10')
+wnba_stats_commonteamroster(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

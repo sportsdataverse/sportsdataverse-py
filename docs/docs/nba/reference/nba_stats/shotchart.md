@@ -13,7 +13,7 @@ GET /stats/shotchartdetail
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartdetail`
 
-**Valid URL:** [https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=202696&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=202696&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -110,12 +110,12 @@ GET /stats/shotchartleaguewide
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartleaguewide`
 
-**Valid URL:** [https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00](https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00&Season=2024-25](https://stats.nba.com/stats/shotchartleaguewide?LeagueID=00&Season=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_shotchartleaguewide-returns}
 
@@ -136,7 +136,7 @@ GET /stats/shotchartleaguewide
 ### Example {#nba_stats_shotchartleaguewide-example}
 
 ```python
-nba_stats_shotchartleaguewide(league_id='00')
+nba_stats_shotchartleaguewide(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -147,7 +147,7 @@ GET /stats/shotchartlineupdetail
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartlineupdetail`
 
-**Valid URL:** [https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-202689-203493-203501-1626174-1627827-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-202689-203493-203501-1626174-1627827-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

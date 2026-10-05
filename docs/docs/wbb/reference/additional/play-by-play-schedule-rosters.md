@@ -364,7 +364,7 @@ A single-row wide DataFrame (polars by default). Columns: identity / echo (`seas
 | `team_color` | character | Team primary color (hex without leading '#'). |
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
+| `team_logo_href` | character | Default team logo URL. |
 
 **Example**
 

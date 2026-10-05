@@ -263,7 +263,7 @@ Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-da
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_uid` | String | ESPN athlete UID (universal identifier). |
 | `athlete_guid` | String | ESPN athlete GUID. |
-| `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
+| `athlete_first_name` | String | Player first name. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_full_name` | String | Drafted player full name. |
 | `athlete_display_name` | String | Athlete display name (full). |
@@ -312,7 +312,7 @@ Release: [espn_wnba_game_rosters](https://github.com/sportsdataverse/sportsdatav
 | `athlete_guid` | String | ESPN athlete GUID. |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_short_name` | String | Athlete short display name. |
-| `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
+| `athlete_first_name` | String | Player first name. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |

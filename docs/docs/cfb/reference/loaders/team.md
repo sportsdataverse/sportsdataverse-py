@@ -219,8 +219,8 @@ Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 | `interceptions` | String | Passing interceptions. |
 | `possessionTime` | String | Time of possession as mm:ss; the two teams' values add up to 60 minutes in a regulation game. |
 | `team_id` | Int64 | ESPN team id. |
-| `team_abbreviation` | String | Team abbreviation; `team_detail = TRUE` only. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_name` | String | Team nickname. |
 | `home_away` | String | `home` or `away`. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |

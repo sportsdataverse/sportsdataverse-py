@@ -2111,7 +2111,7 @@
           "pattern": null,
           "query_key": "GameID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {},
@@ -3285,7 +3285,7 @@
           "pattern": null,
           "query_key": "GameID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {},
@@ -4146,7 +4146,7 @@
           "pattern": null,
           "query_key": "GameID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {},
@@ -5283,7 +5283,7 @@
           "pattern": null,
           "query_key": "Person1LeagueId",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": null,
@@ -5339,7 +5339,7 @@
           "pattern": null,
           "query_key": "Person2LeagueId",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": null,
@@ -13051,7 +13051,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": null,
@@ -13874,7 +13874,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "Totals",
@@ -14731,7 +14731,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": null,
@@ -28179,7 +28179,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -29035,7 +29035,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -46996,7 +46996,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -55506,7 +55506,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "Base",
@@ -63677,7 +63677,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {},
@@ -64371,7 +64371,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {
@@ -67487,7 +67487,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -70851,7 +70851,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -74619,7 +74619,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -76623,7 +76623,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -79526,7 +79526,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -81016,7 +81016,7 @@
           "pattern": null,
           "query_key": "LeagueID",
           "required": false,
-          "type": "int"
+          "type": "str"
         },
         {
           "default": "",
@@ -95517,7 +95517,7 @@
           "pattern": null,
           "query_key": "GameID",
           "required": false,
-          "type": "int"
+          "type": "str"
         }
       ],
       "result_sets": {

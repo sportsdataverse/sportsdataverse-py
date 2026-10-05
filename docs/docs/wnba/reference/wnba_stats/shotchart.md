@@ -110,12 +110,12 @@ GET /stats/shotchartleaguewide
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartleaguewide`
 
-**Valid URL:** [https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10](https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10&Season=2024](https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#wnba_stats_shotchartleaguewide-returns}
 
@@ -136,7 +136,7 @@ GET /stats/shotchartleaguewide
 ### Example {#wnba_stats_shotchartleaguewide-example}
 
 ```python
-wnba_stats_shotchartleaguewide(league_id='10')
+wnba_stats_shotchartleaguewide(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

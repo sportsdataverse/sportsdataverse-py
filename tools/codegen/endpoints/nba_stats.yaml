@@ -32,6 +32,7 @@ endpoints:
   summary: GET /stats/alltimeleadersgrids
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -497,6 +498,7 @@ endpoints:
   summary: GET /stats/boxscoreusagev3
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '0'
     name: is_only_current_season
@@ -540,6 +542,7 @@ endpoints:
   summary: GET /stats/commonplayerinfo
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -567,6 +570,7 @@ endpoints:
       ``Coaches``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -634,6 +638,7 @@ endpoints:
   summary: GET /stats/cumestatsplayer
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -685,6 +690,7 @@ endpoints:
       ``TotalTeamStats``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: 0022201094
     name: game_ids
@@ -717,6 +723,7 @@ endpoints:
   summary: GET /stats/cumestatsteam
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -769,6 +776,7 @@ endpoints:
   summary: GET /stats/cumestatsteamgames
 - example_args:
     league_id: '00'
+    season_year: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -789,6 +797,7 @@ endpoints:
   summary: GET /stats/draftcombinedrillresults
 - example_args:
     league_id: '00'
+    season_year: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -809,6 +818,7 @@ endpoints:
   summary: GET /stats/draftcombinenonstationaryshooting
 - example_args:
     league_id: '00'
+    season_year: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -829,6 +839,7 @@ endpoints:
   summary: GET /stats/draftcombineplayeranthro
 - example_args:
     league_id: '00'
+    season_year: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -849,6 +860,7 @@ endpoints:
   summary: GET /stats/draftcombinespotshooting
 - example_args:
     league_id: '00'
+    season_all_time: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -1255,6 +1267,7 @@ endpoints:
   summary: GET /stats/leaderstiles
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -1371,6 +1384,7 @@ endpoints:
   summary: GET /stats/leaguedashlineups
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: close_def_dist_range_nullable
@@ -1487,6 +1501,7 @@ endpoints:
   summary: GET /stats/leaguedashoppptshot
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -1623,6 +1638,7 @@ endpoints:
   summary: GET /stats/leaguedashplayerbiostats
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: Ahead or Behind
     name: ahead_behind
@@ -1787,6 +1803,7 @@ endpoints:
   summary: GET /stats/leaguedashplayerclutch
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: close_def_dist_range_nullable
@@ -1939,6 +1956,7 @@ endpoints:
   summary: GET /stats/leaguedashplayerptshot
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -2095,6 +2113,7 @@ endpoints:
   summary: GET /stats/leaguedashplayershotlocations
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -2511,6 +2530,7 @@ endpoints:
   summary: GET /stats/leaguedashptstats
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -3471,6 +3491,7 @@ endpoints:
   summary: GET /stats/leaguegamefinder
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '0'
     name: counter
@@ -3519,6 +3540,7 @@ endpoints:
   summary: GET /stats/leaguegamelog
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -3631,6 +3653,7 @@ endpoints:
   summary: GET /stats/leaguehustlestatsplayer
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -3779,6 +3802,7 @@ endpoints:
   summary: GET /stats/leagueleaders
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -3899,6 +3923,7 @@ endpoints:
   summary: GET /stats/leaguelineupviz
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -3995,6 +4020,7 @@ endpoints:
   summary: GET /stats/leagueplayerondetails
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: def_player_id_nullable
@@ -4039,6 +4065,7 @@ endpoints:
   summary: GET /stats/leagueseasonmatchups
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -4067,6 +4094,7 @@ endpoints:
   summary: GET /stats/leaguestandings
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -4095,6 +4123,7 @@ endpoints:
   summary: GET /stats/leaguestandingsv3
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: def_player_id_nullable
@@ -4340,6 +4369,7 @@ endpoints:
       ``Last30Sec3Point2PlayerDashboard``, ``Last10Sec3Point2PlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -4448,6 +4478,7 @@ endpoints:
       ``ByActualMarginPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -4556,6 +4587,7 @@ endpoints:
       ``PrePostAllStarPlayerDashboard``, ``StartingPosition``, ``DaysRestPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -4664,6 +4696,7 @@ endpoints:
       ``Last20PlayerDashboard``, ``GameNumberPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -4771,6 +4804,7 @@ endpoints:
       ``ConferencePlayerDashboard``, ``DivisionPlayerDashboard``, ``OpponentPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -4880,6 +4914,7 @@ endpoints:
       ``AssistedBy``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -4987,6 +5022,7 @@ endpoints:
       ``ScoreDifferentialPlayerDashboard``, ``PointsScoredPlayerDashboard``, ``PontsAgainstPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5196,6 +5232,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PassesMade``, ``PassesReceived``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5356,6 +5393,7 @@ endpoints:
   summary: GET /stats/playerdashptreb
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5593,6 +5631,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``SeasonAvg``, ``LastFiveGamesAvg``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -5621,6 +5660,7 @@ endpoints:
   summary: GET /stats/playerfantasyprofilebargraph
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5657,6 +5697,7 @@ endpoints:
   summary: GET /stats/playergamelog
 - example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -6117,6 +6158,7 @@ endpoints:
   summary: GET /stats/playergamestreakfinder
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: null
     name: active_nullable
@@ -6213,6 +6255,7 @@ endpoints:
       ``VsPlayerInfo``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -6540,6 +6583,7 @@ endpoints:
   summary: GET /stats/shotchartdetail
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -6651,6 +6695,7 @@ endpoints:
   summary: GET /stats/shotchartlineupdetail
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -6697,6 +6742,7 @@ endpoints:
       ``Last30Sec3Point2TeamDashboard``, ``Last10Sec3Point2TeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -6805,6 +6851,7 @@ endpoints:
       ``ByActualMarginTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -6913,6 +6960,7 @@ endpoints:
       ``PrePostAllStarTeamDashboard``, ``DaysRestTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7021,6 +7069,7 @@ endpoints:
       ``GameNumberTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -7128,6 +7177,7 @@ endpoints:
       ``ConferenceTeamDashboard``, ``DivisionTeamDashboard``, ``OpponentTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -7236,6 +7286,7 @@ endpoints:
       ``AssitedShotTeamDashboard``, ``ShotTypeTeamDashboard``, ``AssistedBy``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7343,6 +7394,7 @@ endpoints:
       ``ScoreDifferentialTeamDashboard``, ``PointsScoredTeamDashboard``, ``PontsAgainstTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -7552,6 +7604,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``Overall``, ``Lineups``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7666,6 +7719,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``PassesMade``, ``PassesReceived``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7822,6 +7876,7 @@ endpoints:
       ``TouchTimeShooting``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7937,6 +7992,7 @@ endpoints:
   summary: GET /stats/teamestimatedmetrics
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -7973,6 +8029,7 @@ endpoints:
   summary: GET /stats/teamgamelog
 - example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8201,6 +8258,7 @@ endpoints:
       ``PlayersOnCourtTeamPlayerOnOffDetails``, ``PlayersOffCourtTeamPlayerOnOffDetails``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8300,6 +8358,7 @@ endpoints:
       ``PlayersOnCourtTeamPlayerOnOffSummary``, ``PlayersOffCourtTeamPlayerOnOffSummary``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8400,6 +8459,7 @@ endpoints:
       ``ShotAreaOverall``, ``ShotAreaOnCourt``, ``ShotAreaOffCourt``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8531,6 +8591,7 @@ endpoints:
       thumbnails) and ``playlist`` (per-event game metadata)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: FGA
     name: context_measure_detailed

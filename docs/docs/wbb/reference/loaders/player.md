@@ -105,7 +105,7 @@ Release: [espn_womens_college_basketball_player_season_stats](https://github.com
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_display_name` | String | Athlete display name (full). |
-| `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
+| `athlete_first_name` | String | Player first name. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_position_abbreviation` | String | Athlete position abbreviation (G / F / C). |
 | `athlete_jersey` | String | Athlete jersey number. |

@@ -13,7 +13,7 @@ GET /stats/boxscoretraditionalv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoretraditionalv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
+**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -118,7 +118,7 @@ GET /stats/boxscoreusagev3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoreusagev3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
+**Valid URL:** [https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=0022200021&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

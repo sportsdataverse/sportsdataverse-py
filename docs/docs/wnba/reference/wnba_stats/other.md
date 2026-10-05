@@ -232,14 +232,14 @@ GET /stats/assistleaders
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/assistleaders`
 
-**Valid URL:** [https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season](https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_assistleaders-returns}
@@ -263,7 +263,7 @@ GET /stats/assistleaders
 ### Example {#wnba_stats_assistleaders-example}
 
 ```python
-wnba_stats_assistleaders(league_id='10')
+wnba_stats_assistleaders(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -331,12 +331,12 @@ GET /stats/draftcombinestats
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/draftcombinestats`
 
-**Valid URL:** [https://stats.wnba.com/stats/draftcombinestats?LeagueID=10](https://stats.wnba.com/stats/draftcombinestats?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/draftcombinestats?LeagueID=10&SeasonYear=2024](https://stats.wnba.com/stats/draftcombinestats?LeagueID=10&SeasonYear=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_all_time` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `SeasonYear` | `season_all_time` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#wnba_stats_draftcombinestats-returns}
 
@@ -397,7 +397,7 @@ GET /stats/draftcombinestats
 ### Example {#wnba_stats_draftcombinestats-example}
 
 ```python
-wnba_stats_draftcombinestats(league_id='10')
+wnba_stats_draftcombinestats(league_id='10', season_all_time='2024')
 ```
 
 _Last validated n/a._
@@ -770,7 +770,7 @@ GET /stats/hustlestatsboxscore
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/hustlestatsboxscore`
 
-**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore?GameID=0022200021](https://stats.wnba.com/stats/hustlestatsboxscore?GameID=0022200021)
+**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore](https://stats.wnba.com/stats/hustlestatsboxscore)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1002,7 +1002,7 @@ GET /stats/playbyplayv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playbyplayv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/playbyplayv2?GameID=1022200034](https://stats.wnba.com/stats/playbyplayv2?GameID=1022200034)
+**Valid URL:** [https://stats.wnba.com/stats/playbyplayv2?EndPeriod=0&GameID=1022200034&StartPeriod=0](https://stats.wnba.com/stats/playbyplayv2?EndPeriod=0&GameID=1022200034&StartPeriod=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1127,7 +1127,7 @@ GET /stats/videostatus
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `home_team_city` | character | Home team city / location. |
 | `home_team_name` | character | Home team name. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_abbreviation` | character | Home team abbreviation. |
 | `game_status` | integer | Game status label. |
 | `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
 | `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |

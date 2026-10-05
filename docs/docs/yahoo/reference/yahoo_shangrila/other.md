@@ -763,12 +763,12 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name; `team_detail = TRUE` only. |
-| `away_team_abbreviation` | character | Away team abbreviation; `team_detail = TRUE` only. |
+| `away_team_display_name` | character | Away team full display name. |
+| `away_team_abbreviation` | character | Away team abbreviation. |
 | `away_team_location` | character | Away team's team location. |
 | `away_team_gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the away team's games. |
 | `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character | Away team nickname label; `team_detail = TRUE` only. |
+| `away_team_nickname` | character | Away team nickname label. |
 | `away_team_last_games` | character | JSON-encoded list of the away team's most recently completed games. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
@@ -781,12 +781,12 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name; `team_detail = TRUE` only. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_display_name` | character | Home team full display name. |
+| `home_team_abbreviation` | character | Home team abbreviation. |
 | `home_team_location` | character | Home team's team location. |
 | `home_team_gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the home team's games. |
 | `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character | Home team nickname label; `team_detail = TRUE` only. |
+| `home_team_nickname` | character | Home team nickname label. |
 | `home_team_last_games` | character | JSON-encoded list of the home team's most recently completed games. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
@@ -1209,10 +1209,10 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 | `away_team_id` | character | Unique identifier for the away team. |
 | `away_team_full_name` | character | Full away team name (e.g. 'Las Vegas Aces'). |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
-| `away_team_display_name` | character | Away team full display name; `team_detail = TRUE` only. |
-| `away_team_abbreviation` | character | Away team abbreviation; `team_detail = TRUE` only. |
+| `away_team_display_name` | character | Away team full display name. |
+| `away_team_abbreviation` | character | Away team abbreviation. |
 | `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character | Away team nickname label; `team_detail = TRUE` only. |
+| `away_team_nickname` | character | Away team nickname label. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
 | `away_team_team_standings` | character | JSON-encoded standings node for the away team, carrying its record, position and streak. |
@@ -1222,10 +1222,10 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 | `home_team_id` | character | Unique identifier for the home team. |
 | `home_team_full_name` | character | Full home team name (e.g. 'Las Vegas Aces'). |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
-| `home_team_display_name` | character | Home team full display name; `team_detail = TRUE` only. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_display_name` | character | Home team full display name. |
+| `home_team_abbreviation` | character | Home team abbreviation. |
 | `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character | Home team nickname label; `team_detail = TRUE` only. |
+| `home_team_nickname` | character | Home team nickname label. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
 | `home_team_team_standings` | character | JSON-encoded standings node for the home team, carrying its record, position and streak. |
@@ -1407,6 +1407,32 @@ Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTourna
 
 ```python
 yahoo_tennis_tournaments()
+```
+
+_Last validated n/a._
+
+## yahoo_tennis_tournaments_by_date
+
+Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennisTournaments` entry
+
+**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate`
+
+**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/tennisTournamentsByDate)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+
+### Returns {#yahoo_tennis_tournaments_by_date-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#yahoo_tennis_tournaments_by_date-example}
+
+```python
+yahoo_tennis_tournaments_by_date()
 ```
 
 _Last validated n/a._

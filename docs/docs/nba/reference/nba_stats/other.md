@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 28
+sidebar_position: 29
 description: "NBA — NBA Stats API (stats.nba.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -232,14 +232,14 @@ GET /stats/assistleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assistleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season](https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&Season=2024-25&SeasonType=Regular+Season](https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&Season=2024-25&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_assistleaders-returns}
@@ -263,7 +263,7 @@ GET /stats/assistleaders
 ### Example {#nba_stats_assistleaders-example}
 
 ```python
-nba_stats_assistleaders(league_id='00')
+nba_stats_assistleaders(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -448,7 +448,7 @@ GET /stats/gamerotation
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/gamerotation`
 
-**Valid URL:** [https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00](https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/gamerotation?GameID=0022200021&LeagueID=00](https://stats.nba.com/stats/gamerotation?GameID=0022200021&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -815,7 +815,7 @@ GET /stats/infographicfanduelplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/infographicfanduelplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034](https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034)
+**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer?GameID=0022201086](https://stats.nba.com/stats/infographicfanduelplayer?GameID=0022201086)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -957,7 +957,7 @@ GET /stats/matchupsrollup
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/matchupsrollup`
 
-**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season](https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season](https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -967,7 +967,7 @@ GET /stats/matchupsrollup
 | `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
 | `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_matchupsrollup-returns}
@@ -1004,7 +1004,7 @@ GET /stats/matchupsrollup
 ### Example {#nba_stats_matchupsrollup-example}
 
 ```python
-nba_stats_matchupsrollup(league_id='00')
+nba_stats_matchupsrollup(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -1015,7 +1015,7 @@ GET /stats/playbyplayv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playbyplayv3`
 
-**Valid URL:** [https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0](https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0)
+**Valid URL:** [https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=0022201086&StartPeriod=0](https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=0022201086&StartPeriod=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1186,7 +1186,7 @@ GET /stats/synergyplaytypes
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/synergyplaytypes`
 
-**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive)
+**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&SeasonYear=2024-25&TypeGrouping=Offensive](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&SeasonYear=2024-25&TypeGrouping=Offensive)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1195,7 +1195,7 @@ GET /stats/synergyplaytypes
 | `PlayType` | `play_type_nullable` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `SeasonYear` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `SeasonYear` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `TypeGrouping` | `type_grouping_nullable` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_synergyplaytypes-returns}
@@ -1234,279 +1234,7 @@ GET /stats/synergyplaytypes
 ### Example {#nba_stats_synergyplaytypes-example}
 
 ```python
-nba_stats_synergyplaytypes(league_id='00')
-```
-
-_Last validated n/a._
-
-## nba_stats_videodetailsasset
-
-GET /stats/videodetailsasset
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/videodetailsasset`
-
-**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=](https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `ContextMeasure` | `context_measure_detailed` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games` |  |  | `Y` |  |
-| `Month` | `month` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
-| `Period` | `period` |  |  | `Y` |  |
-| `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2025-26``. Defaults to the current season at call time, as hoopR does (``2026-27`` from October 2026); stats.nba.com answers a request without a season with an empty HTTP 500. |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `StartRange` | `start_range_nullable` |  |  | `Y` |  |
-| `StartPeriod` | `start_period_nullable` |  |  | `Y` |  |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
-| `RangeType` | `range_type_nullable` |  |  | `Y` |  |
-| `Position` | `position_nullable` |  |  | `Y` |  |
-| `PointDiff` | `point_diff_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
-| `GameID` | `game_id_nullable` |  |  | `Y` |  |
-| `EndRange` | `end_range_nullable` |  |  | `Y` |  |
-| `EndPeriod` | `end_period_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
-| `ClutchTime` | `clutch_time_nullable` |  |  | `Y` |  |
-| `AheadBehind` | `ahead_behind_nullable` |  |  | `Y` |  |
-
-### Returns {#nba_stats_videodetailsasset-returns}
-
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
-
-**videoUrls**
-
-| col_name | type | description |
-|---|---|---|
-| `uuid` | character | Uuid. |
-| `sdur` | integer | Sdur. |
-| `surl` | character | Surl. |
-| `sth` | character | Sth. |
-| `mdur` | integer | Mdur. |
-| `murl` | character | Murl. |
-| `mth` | character | Mth. |
-| `ldur` | integer | Ldur. |
-| `lurl` | character | Lurl. |
-| `lth` | character | Lth. |
-| `vtt` | character | Vtt. |
-| `scc` | character | Scc. |
-| `srt` | character | Srt. |
-
-**playlist**
-
-| col_name | type | description |
-|---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `hid` | integer | Hid. |
-| `va` | character | Va. |
-| `vid` | integer | Vid. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_videodetailsasset-example}
-
-```python
-nba_stats_videodetailsasset(league_id='00')
-```
-
-_Last validated n/a._
-
-## nba_stats_videoevents
-
-GET /stats/videoevents
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/videoevents`
-
-**Valid URL:** [https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075](https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameEventID` | `game_event_id` |  |  | `Y` |  |
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns {#nba_stats_videoevents-returns}
-
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
-
-**videoUrls**
-
-| col_name | type | description |
-|---|---|---|
-| `uuid` | character | Uuid. |
-| `dur` | character | Dur. |
-| `stt` | character | Stt. |
-| `stp` | character | Stp. |
-| `sth` | character | Sth. |
-| `stw` | character | Stw. |
-| `mtt` | character | Mtt. |
-| `mtp` | character | Mtp. |
-| `mth` | character | Mth. |
-| `mtw` | character | Mtw. |
-| `ltt` | character | Ltt. |
-| `ltp` | character | Ltp. |
-| `lth` | character | Lth. |
-| `ltw` | character | Ltw. |
-
-**playlist**
-
-| col_name | type | description |
-|---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `va` | character | Va. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_videoevents-example}
-
-```python
-nba_stats_videoevents()
-```
-
-_Last validated n/a._
-
-## nba_stats_videoeventsasset
-
-GET /stats/videoeventsasset
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/videoeventsasset`
-
-**Valid URL:** [https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807](https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameEventID` | `game_event_id` |  |  | `Y` |  |
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns {#nba_stats_videoeventsasset-returns}
-
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
-
-**videoUrls**
-
-| col_name | type | description |
-|---|---|---|
-| `uuid` | character | Uuid. |
-| `sdur` | integer | Sdur. |
-| `surl` | character | Surl. |
-| `sth` | character | Sth. |
-| `mdur` | integer | Mdur. |
-| `murl` | character | Murl. |
-| `mth` | character | Mth. |
-| `ldur` | integer | Ldur. |
-| `lurl` | character | Lurl. |
-| `lth` | character | Lth. |
-| `vtt` | character | Vtt. |
-| `scc` | character | Scc. |
-| `srt` | character | Srt. |
-
-**playlist**
-
-| col_name | type | description |
-|---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `hid` | integer | Hid. |
-| `va` | character | Va. |
-| `vid` | integer | Vid. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_videoeventsasset-example}
-
-```python
-nba_stats_videoeventsasset()
-```
-
-_Last validated n/a._
-
-## nba_stats_videostatus
-
-GET /stats/videostatus
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/videostatus`
-
-**Valid URL:** [https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00](https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameDate` | `game_date` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-
-### Returns {#nba_stats_videostatus-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `visitor_team_city` | character | City name of the visiting team. |
-| `visitor_team_name` | character | Nickname of the visiting team. |
-| `visitor_team_abbreviation` | character | Abbreviation of the visiting team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_city` | character | Home team city / location. |
-| `home_team_name` | character | Home team name. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
-| `game_status` | integer | Game status label. |
-| `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
-| `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |
-| `pt_xyz_available` | integer | Pt xyz available. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_videostatus-example}
-
-```python
-nba_stats_videostatus(league_id='00')
+nba_stats_synergyplaytypes(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

@@ -211,6 +211,9 @@ def _stats_eps(league_id: str) -> List[dict]:
 # no season through the proxy pool (tests/nba/test_nba_stats_season_defaults.py::test_live_defaults_return_data
 # covers a sample).
 _SEASON_KEYS = ("Season", "SeasonYear")
+# The documented example call passes a fixed season: the default itself depends on today's date,
+# and a docs page rendered from it would drift (and fail generate.py --check) at every rollover.
+_SEASON_EXAMPLE = {"nba_stats": "2024-25", "wnba_stats": "2024"}
 _SEASON_OPTIONAL: Dict[str, frozenset] = {
     "nba_stats": frozenset(
         {
@@ -375,6 +378,7 @@ def _endpoint_entry(
             param["default"] = _clean_default(p["name"], p["query_key"], default)
             extra.append(param)
     example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
+    example_args.update({p["name"]: _SEASON_EXAMPLE[stem] for p in extra if p.get("transform") == "season_or_previous"})
     example_args.update(_EXAMPLE_ARGS.get(ep["slug"], {}))
     entry: Dict[str, Any] = {
         "short": ep["slug"],

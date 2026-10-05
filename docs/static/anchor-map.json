@@ -2663,10 +2663,10 @@
   "nba_stats_teamplayeronoffsummary": "teamplayer",
   "nba_stats_teamvsplayer": "team",
   "nba_stats_teamyearbyyearstats": "team",
-  "nba_stats_videodetailsasset": "other",
-  "nba_stats_videoevents": "other",
-  "nba_stats_videoeventsasset": "other",
-  "nba_stats_videostatus": "other"
+  "nba_stats_videodetailsasset": "video",
+  "nba_stats_videoevents": "video",
+  "nba_stats_videoeventsasset": "video",
+  "nba_stats_videostatus": "video"
  },
  "/docs/nbagl/reference/core": {
   "espn_nbagl_award": "other",
@@ -5448,7 +5448,7 @@
   "yahoo_playbook_race": "playbook",
   "yahoo_playbook_team": "playbook",
   "yahoo_playbook_team_basic": "playbook",
-  "yahoo_playbook_team_social_share": "playbook-2",
+  "yahoo_playbook_team_social_share": "playbook",
   "yahoo_playbook_tennis_match": "playbook-2",
   "yahoo_player_basic": "player",
   "yahoo_player_career_stats": "player",
@@ -5491,7 +5491,7 @@
   "yahoo_tennis_matches_by_date": "other",
   "yahoo_tennis_tournament": "other",
   "yahoo_tennis_tournaments": "other",
-  "yahoo_tennis_tournaments_by_date": "other-2",
+  "yahoo_tennis_tournaments_by_date": "other",
   "yahoo_trending_event_ids": "other-2",
   "yahoo_trending_game_ids": "other-2"
  }

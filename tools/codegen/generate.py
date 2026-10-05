@@ -69,15 +69,23 @@ def _now_toggle(ep: spec.Endpoint) -> str:
     return none_default[0] if none_default else ep.path_params[-1].python_name
 
 
-def _transform(name: str):
-    """The runtime callable a ``transform:`` names (all live in ``_codegen_runtime``)."""
+def _transform(name: str, module: str = "sportsdataverse._codegen_runtime"):
+    """The runtime callable a ``transform:`` names, from the family's getter module.
+
+    A family with its own runtime (``getter_module:``, e.g. nba_stats' ``season_or_previous``)
+    imports its transforms from there, so the replay must too; anything else is shared."""
+    import importlib
+
     from sportsdataverse import _codegen_runtime
 
+    found = getattr(importlib.import_module(module), name, None)
     # ponytail: nfl_api_runtime._bool_str is a copy of the shared bool_str.
-    return getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name))
+    return found or getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name))
 
 
-def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> str:
+def _example_url(
+    host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
+) -> str:
     """The URL the generated wrapper requests when called with ``ep.example_args``.
 
     Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
@@ -93,12 +101,12 @@ def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> s
     qs = {**ep.fixed_params}
     for p in ep.query_params:
         v = vals[p.python_name]
-        qs[p.api] = _transform(p.transform)(v) if p.transform else v
+        qs[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
     for p in ep.path_params:  # same statement order as _build_path_expr
         if p.default_from and vals[p.python_name] is None:
             vals[p.python_name] = vals[p.default_from]
         if p.transform:
-            vals[p.python_name] = _transform(p.transform)(vals[p.python_name])
+            vals[p.python_name] = _transform(p.transform, getter_module)(vals[p.python_name])
     path = ep.path
     if "[" in path:
         head, rest = path.split("[", 1)
@@ -696,6 +704,7 @@ class _EndpointView:
         auth: bool = False,
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
+        getter_module: str = "sportsdataverse._codegen_runtime",
     ):
         # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
         if league.prefix in ep.league_example_args:
@@ -756,7 +765,7 @@ class _EndpointView:
             needs_fstring = bool(ep.path_params) or league.league_param
             self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
-        self.example_url = _example_url(ep_host, ep, league.sport, league.league)
+        self.example_url = _example_url(ep_host, ep, league.sport, league.league, getter_module)
         self.example_call = _example_call(ep, fn_name, league.league if league.league_param else "")
         self.docstring = _build_docstring(
             ep,
@@ -1131,6 +1140,7 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
                 flat=True,
                 auth=api.auth,
                 raw_types=api.raw_types,
+                getter_module=api.getter_module,
                 # Per-endpoint extras win over the family block, so a large family
                 # can document one wrapper without rewriting all of its siblings.
                 doc_extras=ep.docstring or api.docstring,

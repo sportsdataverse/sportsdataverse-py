@@ -44,7 +44,7 @@ GET /rdb/v1/transfers/best-available
 | `class_year` | integer | Player's original recruiting class year. |
 | `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
 | `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
 | `transfer_industry_comparison` | character |  |
@@ -331,7 +331,7 @@ GET /rdb/v1/transfers/latest
 | `class_year` | integer | Player's original recruiting class year. |
 | `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
 | `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
 | `transfer_industry_comparison` | character |  |

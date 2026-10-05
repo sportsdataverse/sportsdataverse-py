@@ -736,7 +736,7 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character | ESPN id of the parent position; `position_detail = TRUE` only. |
+| `position_parent_id` | character | ESPN id of the parent position. |
 | `position_parent_name` | character | Parent position name. |
 | `position_parent_display_name` | character | Parent position display name. |
 | `position_parent_abbreviation` | character | Parent position abbreviation. |

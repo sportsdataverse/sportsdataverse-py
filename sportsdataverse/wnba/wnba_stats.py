@@ -192,13 +192,13 @@ def wnba_stats_assistleaders(
     """GET /stats/assistleaders
 
     Endpoint: ``GET https://stats.wnba.com/stats/assistleaders``
-    Example URL: https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/assistleaders?LeagueID=10&PerMode=PerGame&PlayerOrTeam=Team&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         per_mode_simple: PerMode query parameter.
         player_or_team: PlayerOrTeam query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -209,7 +209,7 @@ def wnba_stats_assistleaders(
     Example:
         Quick start::
 
-            wnba_stats_assistleaders(league_id='10')
+            wnba_stats_assistleaders(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -626,7 +626,7 @@ def wnba_stats_boxscorehustlev2(
     """GET /stats/boxscorehustlev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorehustlev2``
-    Example URL: https://stats.wnba.com/stats/boxscorehustlev2?GameID=0022200021
+    Example URL: https://stats.wnba.com/stats/boxscorehustlev2
 
     Args:
         game_id: GameID query parameter.
@@ -1281,12 +1281,12 @@ def wnba_stats_commonallplayers(
     """GET /stats/commonallplayers
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonallplayers``
-    Example URL: https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10
+    Example URL: https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10&Season=2024
 
     Args:
         is_only_current_season: IsOnlyCurrentSeason query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1296,7 +1296,7 @@ def wnba_stats_commonallplayers(
     Example:
         Quick start::
 
-            wnba_stats_commonallplayers(league_id='10')
+            wnba_stats_commonallplayers(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1371,11 +1371,11 @@ def wnba_stats_commonplayoffseries(
     """GET /stats/commonplayoffseries
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonplayoffseries``
-    Example URL: https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=
+    Example URL: https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&Season=2024&SeriesID=
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time, as wehoop does (``2025`` during 2026).
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         series_id_nullable: SeriesID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1386,7 +1386,7 @@ def wnba_stats_commonplayoffseries(
     Example:
         Quick start::
 
-            wnba_stats_commonplayoffseries(league_id='10')
+            wnba_stats_commonplayoffseries(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1417,11 +1417,11 @@ def wnba_stats_commonteamroster(
     """GET /stats/commonteamroster
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonteamroster``
-    Example URL: https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317
+    Example URL: https://stats.wnba.com/stats/commonteamroster?LeagueID=10&Season=2024&TeamID=1611661317
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1433,7 +1433,7 @@ def wnba_stats_commonteamroster(
     Example:
         Quick start::
 
-            wnba_stats_commonteamroster(league_id='10')
+            wnba_stats_commonteamroster(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1740,11 +1740,11 @@ def wnba_stats_draftcombinestats(
     """GET /stats/draftcombinestats
 
     Endpoint: ``GET https://stats.wnba.com/stats/draftcombinestats``
-    Example URL: https://stats.wnba.com/stats/draftcombinestats?LeagueID=10
+    Example URL: https://stats.wnba.com/stats/draftcombinestats?LeagueID=10&SeasonYear=2024
 
     Args:
         league_id: LeagueID query parameter.
-        season_all_time: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_all_time: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1754,7 +1754,7 @@ def wnba_stats_draftcombinestats(
     Example:
         Quick start::
 
-            wnba_stats_draftcombinestats(league_id='10')
+            wnba_stats_draftcombinestats(league_id='10', season_all_time='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2296,7 +2296,7 @@ def wnba_stats_hustlestatsboxscore(
     """GET /stats/hustlestatsboxscore
 
     Endpoint: ``GET https://stats.wnba.com/stats/hustlestatsboxscore``
-    Example URL: https://stats.wnba.com/stats/hustlestatsboxscore?GameID=0022200021
+    Example URL: https://stats.wnba.com/stats/hustlestatsboxscore
 
     Args:
         game_id: GameID query parameter.
@@ -2461,7 +2461,7 @@ def wnba_stats_leaguedashlineups(
     """GET /stats/leaguedashlineups
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashlineups``
-    Example URL: https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -2483,7 +2483,7 @@ def wnba_stats_leaguedashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2499,7 +2499,7 @@ def wnba_stats_leaguedashlineups(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashlineups(league_id='10')
+            wnba_stats_leaguedashlineups(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2581,7 +2581,7 @@ def wnba_stats_leaguedashplayerbiostats(
     """GET /stats/leaguedashplayerbiostats
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerbiostats``
-    Example URL: https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.wnba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -2606,7 +2606,7 @@ def wnba_stats_leaguedashplayerbiostats(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_abbreviation_nullable: PlayerPosition query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2624,7 +2624,7 @@ def wnba_stats_leaguedashplayerbiostats(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashplayerbiostats(league_id='10')
+            wnba_stats_leaguedashplayerbiostats(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2718,7 +2718,7 @@ def wnba_stats_leaguedashplayerclutch(
     """GET /stats/leaguedashplayerclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerclutch``
-    Example URL: https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.wnba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         ahead_behind: AheadBehind query parameter.
@@ -2750,7 +2750,7 @@ def wnba_stats_leaguedashplayerclutch(
         plus_minus: PlusMinus query parameter.
         point_diff: PointDiff query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2768,7 +2768,7 @@ def wnba_stats_leaguedashplayerclutch(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashplayerclutch(league_id='10')
+            wnba_stats_leaguedashplayerclutch(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2867,7 +2867,7 @@ def wnba_stats_leaguedashplayershotlocations(
     """GET /stats/leaguedashplayershotlocations
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayershotlocations``
-    Example URL: https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.wnba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -2897,7 +2897,7 @@ def wnba_stats_leaguedashplayershotlocations(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2915,7 +2915,7 @@ def wnba_stats_leaguedashplayershotlocations(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashplayershotlocations(league_id='10')
+            wnba_stats_leaguedashplayershotlocations(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3012,7 +3012,7 @@ def wnba_stats_leaguedashplayerstats(
     """GET /stats/leaguedashplayerstats
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashplayerstats``
-    Example URL: https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.wnba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3041,7 +3041,7 @@ def wnba_stats_leaguedashplayerstats(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3060,7 +3060,7 @@ def wnba_stats_leaguedashplayerstats(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashplayerstats(league_id='10')
+            wnba_stats_leaguedashplayerstats(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3948,7 +3948,7 @@ def wnba_stats_leaguegamelog(
     """GET /stats/leaguegamelog
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguegamelog``
-    Example URL: https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE
+    Example URL: https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&Season=2024&SeasonType=Regular+Season&Sorter=DATE
 
     Args:
         counter: Counter query parameter.
@@ -3957,7 +3957,7 @@ def wnba_stats_leaguegamelog(
         direction: Direction query parameter.
         league_id: LeagueID query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         sorter: Sorter query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -3969,7 +3969,7 @@ def wnba_stats_leaguegamelog(
     Example:
         Quick start::
 
-            wnba_stats_leaguegamelog(league_id='10')
+            wnba_stats_leaguegamelog(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4088,7 +4088,7 @@ def wnba_stats_leaguelineupviz(
     """GET /stats/leaguelineupviz
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguelineupviz``
-    Example URL: https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4111,7 +4111,7 @@ def wnba_stats_leaguelineupviz(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4127,7 +4127,7 @@ def wnba_stats_leaguelineupviz(
     Example:
         Quick start::
 
-            wnba_stats_leaguelineupviz(league_id='10')
+            wnba_stats_leaguelineupviz(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4200,7 +4200,7 @@ def wnba_stats_leagueplayerondetails(
     """GET /stats/leagueplayerondetails
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueplayerondetails``
-    Example URL: https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -4218,7 +4218,7 @@ def wnba_stats_leagueplayerondetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -4233,7 +4233,7 @@ def wnba_stats_leagueplayerondetails(
     Example:
         Quick start::
 
-            wnba_stats_leagueplayerondetails(league_id='10')
+            wnba_stats_leagueplayerondetails(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4287,7 +4287,7 @@ def wnba_stats_leagueseasonmatchups(
     """GET /stats/leagueseasonmatchups
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueseasonmatchups``
-    Example URL: https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
@@ -4296,7 +4296,7 @@ def wnba_stats_leagueseasonmatchups(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -4307,7 +4307,7 @@ def wnba_stats_leagueseasonmatchups(
     Example:
         Quick start::
 
-            wnba_stats_leagueseasonmatchups(league_id='10')
+            wnba_stats_leagueseasonmatchups(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4344,11 +4344,11 @@ def wnba_stats_leaguestandingsv3(
     """GET /stats/leaguestandingsv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguestandingsv3``
-    Example URL: https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&SeasonType=Regular+Season&SeasonYear=
+    Example URL: https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&Season=2024&SeasonType=Regular+Season&SeasonYear=
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4360,7 +4360,7 @@ def wnba_stats_leaguestandingsv3(
     Example:
         Quick start::
 
-            wnba_stats_leaguestandingsv3(league_id='10')
+            wnba_stats_leaguestandingsv3(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4392,7 +4392,7 @@ def wnba_stats_playbyplayv2(
     """GET /stats/playbyplayv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/playbyplayv2``
-    Example URL: https://stats.wnba.com/stats/playbyplayv2?GameID=1022200034
+    Example URL: https://stats.wnba.com/stats/playbyplayv2?EndPeriod=0&GameID=1022200034&StartPeriod=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -4644,7 +4644,7 @@ def wnba_stats_playercompare(
     """GET /stats/playercompare
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercompare``
-    Example URL: https://stats.wnba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerIDList=100720%2C202250%2C204319%2C1627668%2C1628931&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&VsPlayerIDList=202252%2C203399%2C1631022%2C1628878%2C204333
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4665,7 +4665,7 @@ def wnba_stats_playercompare(
         player_id_list: PlayerIDList query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4682,7 +4682,7 @@ def wnba_stats_playercompare(
     Example:
         Quick start::
 
-            wnba_stats_playercompare(league_id='10')
+            wnba_stats_playercompare(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4755,7 +4755,7 @@ def wnba_stats_playerdashboardbyclutch(
     """GET /stats/playerdashboardbyclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyclutch``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -4775,7 +4775,7 @@ def wnba_stats_playerdashboardbyclutch(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4791,7 +4791,7 @@ def wnba_stats_playerdashboardbyclutch(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbyclutch(league_id='10')
+            wnba_stats_playerdashboardbyclutch(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4862,7 +4862,7 @@ def wnba_stats_playerdashboardbygamesplits(
     """GET /stats/playerdashboardbygamesplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygamesplits``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -4882,7 +4882,7 @@ def wnba_stats_playerdashboardbygamesplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4898,7 +4898,7 @@ def wnba_stats_playerdashboardbygamesplits(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbygamesplits(league_id='10')
+            wnba_stats_playerdashboardbygamesplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4969,7 +4969,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
     """GET /stats/playerdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygeneralsplits``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -4989,7 +4989,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5005,7 +5005,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbygeneralsplits(league_id='10')
+            wnba_stats_playerdashboardbygeneralsplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5076,7 +5076,7 @@ def wnba_stats_playerdashboardbylastngames(
     """GET /stats/playerdashboardbylastngames
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbylastngames``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5096,7 +5096,7 @@ def wnba_stats_playerdashboardbylastngames(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5112,7 +5112,7 @@ def wnba_stats_playerdashboardbylastngames(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbylastngames(league_id='10')
+            wnba_stats_playerdashboardbylastngames(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5183,7 +5183,7 @@ def wnba_stats_playerdashboardbyopponent(
     """GET /stats/playerdashboardbyopponent
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyopponent``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -5203,7 +5203,7 @@ def wnba_stats_playerdashboardbyopponent(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -5219,7 +5219,7 @@ def wnba_stats_playerdashboardbyopponent(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbyopponent(league_id='10')
+            wnba_stats_playerdashboardbyopponent(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5290,7 +5290,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
     """GET /stats/playerdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyshootingsplits``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5310,7 +5310,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5326,7 +5326,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbyshootingsplits(league_id='10')
+            wnba_stats_playerdashboardbyshootingsplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5397,7 +5397,7 @@ def wnba_stats_playerdashboardbyteamperformance(
     """GET /stats/playerdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyteamperformance``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5417,7 +5417,7 @@ def wnba_stats_playerdashboardbyteamperformance(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5433,7 +5433,7 @@ def wnba_stats_playerdashboardbyteamperformance(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbyteamperformance(league_id='10')
+            wnba_stats_playerdashboardbyteamperformance(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5606,7 +5606,7 @@ def wnba_stats_playerdashptshotdefend(
     """GET /stats/playerdashptshotdefend
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashptshotdefend``
-    Example URL: https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5621,7 +5621,7 @@ def wnba_stats_playerdashptshotdefend(
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -5636,7 +5636,7 @@ def wnba_stats_playerdashptshotdefend(
     Example:
         Quick start::
 
-            wnba_stats_playerdashptshotdefend(league_id='10')
+            wnba_stats_playerdashptshotdefend(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5794,12 +5794,12 @@ def wnba_stats_playerfantasyprofilebargraph(
     """GET /stats/playerfantasyprofilebargraph
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofilebargraph``
-    Example URL: https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star_nullable: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -5811,7 +5811,7 @@ def wnba_stats_playerfantasyprofilebargraph(
     Example:
         Quick start::
 
-            wnba_stats_playerfantasyprofilebargraph(league_id='10')
+            wnba_stats_playerfantasyprofilebargraph(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5846,14 +5846,14 @@ def wnba_stats_playergamelog(
     """GET /stats/playergamelog
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamelog``
-    Example URL: https://stats.wnba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=10&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
 
     Args:
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5864,7 +5864,7 @@ def wnba_stats_playergamelog(
     Example:
         Quick start::
 
-            wnba_stats_playergamelog(league_id='10')
+            wnba_stats_playergamelog(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5916,7 +5916,7 @@ def wnba_stats_playergamelogs(
     """GET /stats/playergamelogs
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamelogs``
-    Example URL: https://stats.wnba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5933,7 +5933,7 @@ def wnba_stats_playergamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_nullable: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5949,7 +5949,7 @@ def wnba_stats_playergamelogs(
     Example:
         Quick start::
 
-            wnba_stats_playergamelogs(league_id='10')
+            wnba_stats_playergamelogs(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6312,7 +6312,7 @@ def wnba_stats_playerindex(
     """GET /stats/playerindex
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerindex``
-    Example URL: https://stats.wnba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=10&TeamID=0&Weight=
+    Example URL: https://stats.wnba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=10&Season=2024&TeamID=0&Weight=
 
     Args:
         active_nullable: Active query parameter.
@@ -6325,7 +6325,7 @@ def wnba_stats_playerindex(
         height_nullable: Height query parameter.
         historical_nullable: Historical query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         team_id_nullable: TeamID query parameter.
         weight_nullable: Weight query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -6337,7 +6337,7 @@ def wnba_stats_playerindex(
     Example:
         Quick start::
 
-            wnba_stats_playerindex(league_id='10')
+            wnba_stats_playerindex(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6380,13 +6380,13 @@ def wnba_stats_playernextngames(
     """GET /stats/playernextngames
 
     Endpoint: ``GET https://stats.wnba.com/stats/playernextngames``
-    Example URL: https://stats.wnba.com/stats/playernextngames?LeagueID=10&NumberOfGames=2147483647&PlayerID=1628932&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playernextngames?LeagueID=10&NumberOfGames=2147483647&PlayerID=1628932&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         number_of_games: NumberOfGames query parameter.
         player_id: PlayerID query parameter.
-        season_all: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_all: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -6397,7 +6397,7 @@ def wnba_stats_playernextngames(
     Example:
         Quick start::
 
-            wnba_stats_playernextngames(league_id='10')
+            wnba_stats_playernextngames(league_id='10', season_all='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6496,7 +6496,7 @@ def wnba_stats_playervsplayer(
     """GET /stats/playervsplayer
 
     Endpoint: ``GET https://stats.wnba.com/stats/playervsplayer``
-    Example URL: https://stats.wnba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488
+    Example URL: https://stats.wnba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6515,7 +6515,7 @@ def wnba_stats_playervsplayer(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
@@ -6531,7 +6531,7 @@ def wnba_stats_playervsplayer(
     Example:
         Quick start::
 
-            wnba_stats_playervsplayer(league_id='10')
+            wnba_stats_playervsplayer(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6887,11 +6887,11 @@ def wnba_stats_shotchartleaguewide(
     """GET /stats/shotchartleaguewide
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartleaguewide``
-    Example URL: https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10
+    Example URL: https://stats.wnba.com/stats/shotchartleaguewide?LeagueID=10&Season=2024
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -6901,7 +6901,7 @@ def wnba_stats_shotchartleaguewide(
     Example:
         Quick start::
 
-            wnba_stats_shotchartleaguewide(league_id='10')
+            wnba_stats_shotchartleaguewide(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7049,7 +7049,7 @@ def wnba_stats_teamdashboardbyclutch(
     """GET /stats/teamdashboardbyclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyclutch``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7068,7 +7068,7 @@ def wnba_stats_teamdashboardbyclutch(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7085,7 +7085,7 @@ def wnba_stats_teamdashboardbyclutch(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbyclutch(league_id='10')
+            wnba_stats_teamdashboardbyclutch(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7156,7 +7156,7 @@ def wnba_stats_teamdashboardbygamesplits(
     """GET /stats/teamdashboardbygamesplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygamesplits``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7175,7 +7175,7 @@ def wnba_stats_teamdashboardbygamesplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7192,7 +7192,7 @@ def wnba_stats_teamdashboardbygamesplits(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbygamesplits(league_id='10')
+            wnba_stats_teamdashboardbygamesplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7263,7 +7263,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
     """GET /stats/teamdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygeneralsplits``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7282,7 +7282,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7299,7 +7299,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbygeneralsplits(league_id='10')
+            wnba_stats_teamdashboardbygeneralsplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7370,7 +7370,7 @@ def wnba_stats_teamdashboardbylastngames(
     """GET /stats/teamdashboardbylastngames
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbylastngames``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7389,7 +7389,7 @@ def wnba_stats_teamdashboardbylastngames(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7406,7 +7406,7 @@ def wnba_stats_teamdashboardbylastngames(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbylastngames(league_id='10')
+            wnba_stats_teamdashboardbylastngames(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7477,7 +7477,7 @@ def wnba_stats_teamdashboardbyopponent(
     """GET /stats/teamdashboardbyopponent
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyopponent``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7496,7 +7496,7 @@ def wnba_stats_teamdashboardbyopponent(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7513,7 +7513,7 @@ def wnba_stats_teamdashboardbyopponent(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbyopponent(league_id='10')
+            wnba_stats_teamdashboardbyopponent(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7584,7 +7584,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
     """GET /stats/teamdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyshootingsplits``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7603,7 +7603,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7620,7 +7620,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbyshootingsplits(league_id='10')
+            wnba_stats_teamdashboardbyshootingsplits(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7691,7 +7691,7 @@ def wnba_stats_teamdashboardbyteamperformance(
     """GET /stats/teamdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyteamperformance``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7710,7 +7710,7 @@ def wnba_stats_teamdashboardbyteamperformance(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7727,7 +7727,7 @@ def wnba_stats_teamdashboardbyteamperformance(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbyteamperformance(league_id='10')
+            wnba_stats_teamdashboardbyteamperformance(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7907,7 +7907,7 @@ def wnba_stats_teamdashlineups(
     """GET /stats/teamdashlineups
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashlineups``
-    Example URL: https://stats.wnba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7928,7 +7928,7 @@ def wnba_stats_teamdashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7945,7 +7945,7 @@ def wnba_stats_teamdashlineups(
     Example:
         Quick start::
 
-            wnba_stats_teamdashlineups(league_id='10')
+            wnba_stats_teamdashlineups(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8088,13 +8088,13 @@ def wnba_stats_teamgamelog(
     """GET /stats/teamgamelog
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamgamelog``
-    Example URL: https://stats.wnba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328
+    Example URL: https://stats.wnba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328
 
     Args:
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -8106,7 +8106,7 @@ def wnba_stats_teamgamelog(
     Example:
         Quick start::
 
-            wnba_stats_teamgamelog(league_id='10')
+            wnba_stats_teamgamelog(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8158,7 +8158,7 @@ def wnba_stats_teamgamelogs(
     """GET /stats/teamgamelogs
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamgamelogs``
-    Example URL: https://stats.wnba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8175,7 +8175,7 @@ def wnba_stats_teamgamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_nullable: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8191,7 +8191,7 @@ def wnba_stats_teamgamelogs(
     Example:
         Quick start::
 
-            wnba_stats_teamgamelogs(league_id='10')
+            wnba_stats_teamgamelogs(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8415,7 +8415,7 @@ def wnba_stats_teamplayeronoffdetails(
     """GET /stats/teamplayeronoffdetails
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffdetails``
-    Example URL: https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8433,7 +8433,7 @@ def wnba_stats_teamplayeronoffdetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -8449,7 +8449,7 @@ def wnba_stats_teamplayeronoffdetails(
     Example:
         Quick start::
 
-            wnba_stats_teamplayeronoffdetails(league_id='10')
+            wnba_stats_teamplayeronoffdetails(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8516,7 +8516,7 @@ def wnba_stats_teamplayeronoffsummary(
     """GET /stats/teamplayeronoffsummary
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffsummary``
-    Example URL: https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8534,7 +8534,7 @@ def wnba_stats_teamplayeronoffsummary(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -8550,7 +8550,7 @@ def wnba_stats_teamplayeronoffsummary(
     Example:
         Quick start::
 
-            wnba_stats_teamplayeronoffsummary(league_id='10')
+            wnba_stats_teamplayeronoffsummary(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8619,7 +8619,7 @@ def wnba_stats_teamvsplayer(
     """GET /stats/teamvsplayer
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamvsplayer``
-    Example URL: https://stats.wnba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932
+    Example URL: https://stats.wnba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8638,7 +8638,7 @@ def wnba_stats_teamvsplayer(
         player_id_nullable: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -8655,7 +8655,7 @@ def wnba_stats_teamvsplayer(
     Example:
         Quick start::
 
-            wnba_stats_teamvsplayer(league_id='10')
+            wnba_stats_teamvsplayer(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

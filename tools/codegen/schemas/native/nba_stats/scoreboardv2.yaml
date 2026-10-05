@@ -339,7 +339,7 @@ frames:
 - columns:
   - description: ''
     name: game_id
-    type: integer
+    type: character
   - description: ''
     name: leag_tix
     type: character
