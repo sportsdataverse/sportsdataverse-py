@@ -35,9 +35,14 @@ class _RedactSecretsFilter(logging.Filter):
         return True
 
 
-# urllib3 logs every request line at DEBUG (``"GET /v4/sports?apiKey=... HTTP/1.1" 200``)
-# and its connection-retry warnings quote the URL too.
-logging.getLogger("urllib3.connectionpool").addFilter(_RedactSecretsFilter())
+# urllib3 quotes the URL, query string and all, in its DEBUG request line
+# (``"GET /v4/sports?apiKey=... HTTP/1.1" 200``), its connection-retry warnings, a
+# ``Retry`` adapter's "Incremented Retry for (url=...)" and its redirect lines.
+for _urllib3_logger in ("urllib3.connectionpool", "urllib3.util.retry", "urllib3.poolmanager"):
+    logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
+
+# Request headers that carry a credential; dropped from an exception's request.
+_SECRET_HEADERS = frozenset({"authorization", "proxy-authorization", "cookie"})
 
 
 def _redact_exception(exc: BaseException) -> None:
@@ -45,7 +50,11 @@ def _redact_exception(exc: BaseException) -> None:
 
     requests' ``ConnectionError`` quotes the request path, query string and all, and
     chains urllib3's ``MaxRetryError``, which quotes it again; re-raising it, or a
-    wrapper's ``raise ... from exc``, would print both.
+    wrapper's ``raise ... from exc``, would print both. Their attributes hold the same
+    URL (``err.url``, ``err.request.url``) and the request's ``Authorization`` /
+    ``Cookie`` headers, which an error reporter that serializes attributes would send
+    on; the URLs are redacted and those headers dropped, as sportsdataverse-js
+    ``safeCause`` does.
     """
     seen: set[int] = set()
     todo: list[BaseException | None] = [exc]
@@ -61,6 +70,25 @@ def _redact_exception(exc: BaseException) -> None:
         clean = _redact_secrets(text)
         if clean != text:
             err.args = (clean,)
+        # String attributes: urllib3's ``url`` and the ``_message`` its ``__reduce__``
+        # pickles (a QueueHandler or a worker process would carry it on).
+        for name, value in list(getattr(err, "__dict__", {}).items()):
+            if isinstance(value, str):
+                err.__dict__[name] = _redact_secrets(value)
+        request = getattr(err, "request", None)
+        url = getattr(request, "url", None)
+        if isinstance(url, str):
+            try:
+                request.url = _redact_secrets(url)
+            except (AttributeError, TypeError):
+                pass
+        headers = getattr(request, "headers", None)
+        if headers is not None:
+            try:
+                for name in [h for h in headers if str(h).lower() in _SECRET_HEADERS]:
+                    del headers[name]
+            except (AttributeError, TypeError):
+                pass
         todo += [err.__cause__, err.__context__]
 
 

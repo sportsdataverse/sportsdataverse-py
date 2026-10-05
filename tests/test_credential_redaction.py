@@ -112,11 +112,7 @@ def test_503_past_the_retries_logs_without_the_key(path, monkeypatch, caplog):
 @pytest.mark.parametrize("path", PATHS)
 def test_connection_failure_and_its_chain_carry_no_key(path, monkeypatch, caplog):
     call, _ = PATHS[path]
-
-    def refuse(*args, **kwargs):
-        raise socket.gaierror(11001, "getaddrinfo failed")
-
-    monkeypatch.setattr(urllib3.util.connection, "create_connection", refuse)
+    monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
     with pytest.raises(requests.exceptions.ConnectionError) as ei:
         call()
     exc = ei.value
@@ -129,6 +125,51 @@ def test_connection_failure_and_its_chain_carry_no_key(path, monkeypatch, caplog
         raise AssetFetchError(f"fetch failed: {exc}") from exc
     except AssetFetchError as wrapped:
         assert _leaks(wrapped, caplog) == []
+
+
+def _refuse(*args, **kwargs):
+    raise socket.gaierror(11001, "getaddrinfo failed")
+
+
+def test_the_exception_attributes_carry_no_credential(monkeypatch):
+    # An error reporter that serializes attributes reads err.url, err.request.url
+    # and err.request.headers, not just the message.
+    monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
+    headers = {"Authorization": f"Bearer {SECRET}", "Cookie": f"session={SECRET}", "Accept": "application/json"}
+    with pytest.raises(requests.exceptions.ConnectionError) as ei:
+        dl_utils.download(
+            "https://api.the-odds-api.com/v4/sports", params={"apiKey": SECRET}, headers=headers, num_retries=0
+        )
+    request = ei.value.request
+    assert request.url == "https://api.the-odds-api.com/v4/sports?apiKey=REDACTED"
+    assert "Authorization" not in request.headers and "Cookie" not in request.headers
+    assert request.headers["Accept"] == "application/json"  # the rest of the request is kept
+
+    chain, todo = [], [ei.value]
+    while todo:
+        err = todo.pop()
+        if err is not None and err not in chain:
+            chain.append(err)
+            todo += [err.__cause__, err.__context__]
+    urls = [err.url for err in chain if isinstance(getattr(err, "url", None), str)]
+    assert urls == ["/v4/sports?apiKey=REDACTED"]  # urllib3's MaxRetryError.url
+    for err in chain:
+        assert SECRET not in repr(vars(err))
+
+
+def test_a_caller_retry_adapter_logs_without_the_key(monkeypatch, caplog):
+    # A session mounted with a urllib3 ``Retry`` logs "Incremented Retry for
+    # (url='/v4/sports?apiKey=...')" on urllib3.util.retry.
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
+    session = requests.Session()
+    session.mount("https://", HTTPAdapter(max_retries=Retry(total=2, backoff_factor=0)))
+    monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
+    with pytest.raises(requests.exceptions.ConnectionError) as ei:
+        toa.toa_sports(api_key=SECRET, return_parsed=False, num_retries=0, session=session)
+    assert [r for r in caplog.records if r.name == "urllib3.util.retry"]  # it did log the URL
+    assert _leaks(ei.value, caplog) == []
 
 
 def test_urllib3_request_line_is_redacted(caplog):
@@ -161,6 +202,10 @@ def test_every_sdv_error_message_is_redacted():
         ("?feed=modulekit&key=f1aa699db3d81487&fmt=json", "?feed=modulekit&key=REDACTED&fmt=json"),
         ("?token=t&access_token=a&client_secret=c", "?token=REDACTED&access_token=REDACTED&client_secret=REDACTED"),
         ("?password=hunter2 secret=s3", "?password=REDACTED secret=REDACTED"),
+        # The punctuation closing an unquoted value stays.
+        ('{"token": 12345}', '{"token": REDACTED}'),
+        ("(password=hunter2), next", "(password=REDACTED), next"),
+        ("{'key': 12345678901234567890, 'a': 1}", "{'key': REDACTED, 'a': 1}"),
         ("next=%2Fv4%3Fall%3Dx%26apiKey%3Dabc123", "next=%2Fv4%3Fall%3Dx%26apiKey%3DREDACTED"),
         ("{'feed': 'modulekit', 'key': 'f1aa699db3d81487'}", "{'feed': 'modulekit', 'key': 'REDACTED'}"),
         ('{"apiKey": "abc123", "regions": "us"}', '{"apiKey": "REDACTED", "regions": "us"}'),

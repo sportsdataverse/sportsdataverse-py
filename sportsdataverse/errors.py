@@ -29,12 +29,16 @@ _SECRET_PAIR = _re.compile(
 
 def _redact_pair(match: _re.Match[str]) -> str:
     prefix, name, value = match.groups()
+    # An unquoted value (``{'key': 1234}``, ``(token=abc)``) runs into the
+    # punctuation that closes it; keep that punctuation out of the redaction.
+    secret = value.rstrip(",;)]}")
+    tail = value[len(secret) :]
     # A bare ``key`` must look like a credential (16+ characters, as every
     # HockeyTech key is), so "primary key=player_id" survives. The short value is
     # still scanned: it may hold an escaped pair of its own.
-    if name.lower() == "key" and len(value) < 16:
+    if name.lower() == "key" and len(secret) < 16:
         return prefix + _SECRET_PAIR.sub(_redact_pair, value)
-    return prefix + "REDACTED"
+    return prefix + "REDACTED" + tail
 
 
 def _redact_secrets(text: str) -> str:
