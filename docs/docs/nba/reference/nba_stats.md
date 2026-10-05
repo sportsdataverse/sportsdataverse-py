@@ -193,6 +193,15 @@ toc_max_heading_level: 2
 | [nba_stats_teamdashptreb](nba_stats/teamdash-5.md#nba_stats_teamdashptreb) | GET /stats/teamdashptreb |
 | [nba_stats_teamdashptshots](nba_stats/teamdash-5.md#nba_stats_teamdashptshots) | GET /stats/teamdashptshots |
 
+## Video
+
+| Function | Summary |
+|---|---|
+| [nba_stats_videodetailsasset](nba_stats/video.md#nba_stats_videodetailsasset) | GET /stats/videodetailsasset |
+| [nba_stats_videoevents](nba_stats/video.md#nba_stats_videoevents) | GET /stats/videoevents |
+| [nba_stats_videoeventsasset](nba_stats/video.md#nba_stats_videoeventsasset) | GET /stats/videoeventsasset |
+| [nba_stats_videostatus](nba_stats/video.md#nba_stats_videostatus) | GET /stats/videostatus |
+
 ## Other
 
 | Function | Summary |
@@ -212,7 +221,3 @@ toc_max_heading_level: 2
 | [nba_stats_playbyplayv3](nba_stats/other.md#nba_stats_playbyplayv3) | GET /stats/playbyplayv3 |
 | [nba_stats_playoffpicture](nba_stats/other.md#nba_stats_playoffpicture) | GET /stats/playoffpicture |
 | [nba_stats_synergyplaytypes](nba_stats/other.md#nba_stats_synergyplaytypes) | GET /stats/synergyplaytypes |
-| [nba_stats_videodetailsasset](nba_stats/other.md#nba_stats_videodetailsasset) | GET /stats/videodetailsasset |
-| [nba_stats_videoevents](nba_stats/other.md#nba_stats_videoevents) | GET /stats/videoevents |
-| [nba_stats_videoeventsasset](nba_stats/other.md#nba_stats_videoeventsasset) | GET /stats/videoeventsasset |
-| [nba_stats_videostatus](nba_stats/other.md#nba_stats_videostatus) | GET /stats/videostatus |

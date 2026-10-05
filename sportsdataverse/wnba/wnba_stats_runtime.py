@@ -8,7 +8,41 @@ from typing import Any, Optional
 from sportsdataverse.nba.nba_stats_runtime import _get as _nba_get
 from sportsdataverse.nba.nba_stats_runtime import stats_headers
 
-__all__ = ["_get", "stats_headers"]
+__all__ = ["_get", "season_or_previous", "stats_headers"]
+
+
+def season_or_previous(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the previous WNBA season year when it is ``None``.
+
+    The codegen transform behind every generated ``wnba_stats_*`` season argument that
+    stats.wnba.com needs (it answers a request without one with an empty HTTP 500). The previous
+    season always has data, which a current-season default lacks before a season tips off. It is
+    wehoop's own default, ``most_recent_wnba_season() - 1`` (``"2025"`` during 2026).
+
+    Args:
+        season: The caller's season (e.g. ``"2024"``), or ``None`` for the previous one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season year to send as ``Season`` / ``SeasonYear``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wnba.wnba_stats_runtime import season_or_previous
+            season_or_previous(None)     # e.g. "2025"
+            season_or_previous("2023")   # "2023"
+
+        See Also:
+            * `wehoop`_ -- the R sister package these defaults are mined from
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
+
+    return str(most_recent_wnba_season() - 1)
 
 
 def _get(
@@ -31,13 +65,15 @@ def _get(
     Args:
         path: Bare endpoint name or fully-qualified URL.
         params: Query-string parameters. ``None`` values are stripped;
-            ``GameID`` is zero-padded to 10 characters.
+            ``GameID`` is zero-padded to 10 characters. Season defaults are applied by the
+            generated wrappers (:func:`season_or_previous`), not here.
         host: Target host. Defaults to ``"stats.wnba.com"``.
         **kwargs: Forwarded to :func:`sportsdataverse.nba.nba_stats_runtime._get`
             (``headers``, ``transport``, ``proxy_url``, etc.).
 
     Returns:
-        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error.
+        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error, which also
+        warns :class:`~sportsdataverse.errors.EmptyResponseWarning`.
 
     Example:
         Quick start (offline — inject a transport)::
@@ -47,4 +83,4 @@ def _get(
                 return 200, '{"resultSets": []}'
             data = _get("leaguedashplayerstats", {"LeagueID": "40"}, transport=fake)
     """
-    return _nba_get(path, params, host=host, **kwargs)
+    return _nba_get(path, params, host=host, _shim_frames=1, **kwargs)

@@ -203,7 +203,7 @@ GET /stats/playerdashptshotdefend
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerdashptshotdefend`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -219,7 +219,7 @@ GET /stats/playerdashptshotdefend
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `Period` | `period` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -248,7 +248,7 @@ GET /stats/playerdashptshotdefend
 ### Example {#wnba_stats_playerdashptshotdefend-example}
 
 ```python
-wnba_stats_playerdashptshotdefend(league_id='10')
+wnba_stats_playerdashptshotdefend(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

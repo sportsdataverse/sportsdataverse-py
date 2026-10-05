@@ -566,12 +566,12 @@ Polars dataframe containing teams available.
 | col_name | type | description |
 |---|---|---|
 | `team_abbr` | character | Official team abbreveation |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
+| `team_name` | character | Team nickname. |
 | `team_id` | integer | ESPN team id. |
 | `team_nick` | character | Team nickname or mascot name (e.g., 'Chiefs', 'Patriots'). |
 | `team_conf` | character | Conference the team belongs to (e.g., 'AFC', 'NFC'). |
 | `team_division` | character | Division within the conference the team belongs to (e.g., 'AFC East'). |
-| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
+| `team_color` | character | Primary team color. |
 | `team_color2` | character | Secondary brand color for the team, expressed as a hex color code. |
 | `team_color3` | character | Tertiary brand color for the team, expressed as a hex color code. |
 | `team_color4` | character | Quaternary brand color for the team, expressed as a hex color code. |

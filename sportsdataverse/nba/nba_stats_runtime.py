@@ -10,11 +10,54 @@ from __future__ import annotations
 import json
 import os
 import time
+import warnings
 from typing import Any, Callable, Optional
 
-__all__ = ["_get", "stats_headers"]
+from sportsdataverse.errors import EmptyResponseWarning
+
+__all__ = ["_get", "season_or_previous", "stats_headers"]
 
 Transport = Callable[[str, dict, dict, Optional[str]], tuple]
+
+
+def season_or_previous(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the previous NBA season label when it is ``None``.
+
+    The codegen transform behind every generated ``nba_stats_*`` season argument that
+    stats.nba.com needs (it answers a request without one with an empty HTTP 500). The previous
+    season is used rather than the current one because it always has data: from October the
+    current season is in preseason, and a current-season default returned empty frames. It
+    resolves per call, not as a signature default, so a long-running process rolls over too.
+
+    ``most_recent_nba_season()`` is an END year, so ``- 2`` is the previous season's START
+    year: October 2026 gives ``"2025-26"``. G League and Summer League accept the same label,
+    and the draft-combine ``SeasonYear`` reads its leading year (``"2025-26"`` = the 2025
+    combine).
+
+    Args:
+        season: The caller's season (e.g. ``"2024-25"``), or ``None`` for the previous one.
+            An explicit ``""`` is returned as-is.
+
+    Returns:
+        str: The season label to send as ``Season`` / ``SeasonYear``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_stats_runtime import season_or_previous
+            season_or_previous(None)        # e.g. "2025-26"
+            season_or_previous("2023-24")   # "2023-24"
+
+        See Also:
+            * `hoopR`_ -- companion R package for the same endpoints
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if season is not None:
+        return season
+    from sportsdataverse.nba.nba_schedule import most_recent_nba_season, year_to_season
+
+    return str(year_to_season(most_recent_nba_season() - 2))
 
 
 def stats_headers(host: str = "stats.nba.com") -> dict:
@@ -127,7 +170,9 @@ def _get(
         **kwargs: Accepted for forward-compatibility with generated callers; unused.
 
     Returns:
-        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error.
+        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error. Returning
+        ``{}`` also warns :class:`~sportsdataverse.errors.EmptyResponseWarning`, naming the URL
+        and status; silence it with ``warnings.filterwarnings("ignore", category=EmptyResponseWarning)``.
 
     Example:
         Quick start (offline — inject a transport)::
@@ -183,12 +228,24 @@ def _get(
             try:
                 payload = json.loads(text)
             except json.JSONDecodeError:
-                payload = {}
+                payload = None
             if payload:  # a valid, non-empty envelope
                 return payload
         # non-200 / blank / undecodable / bare {} — a transient throttle; retry
         if attempt < retries:
             time.sleep(backoff * (attempt + 1))
             continue
+        if not text.strip():
+            reason = " with an empty body"
+        elif status != 200:
+            reason = ""
+        else:
+            reason = " with a body that is not JSON" if payload is None else " with an empty object"
+        warnings.warn(
+            f"{url} answered HTTP {status}{reason}; returning {{}}. {host} answers this way when a "
+            "parameter it needs is missing or invalid (most often Season), and when it throttles.",
+            EmptyResponseWarning,
+            stacklevel=3 + kwargs.get("_shim_frames", 0),  # the caller, past the WNBA shim's frame
+        )
         return {}
     return {}  # unreachable; keeps type-checkers happy

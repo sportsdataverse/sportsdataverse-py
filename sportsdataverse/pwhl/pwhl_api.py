@@ -13,9 +13,11 @@ import warnings
 from typing import Any, Optional
 
 
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._analytics import enrich_pbp
+from sportsdataverse.hockeytech._leagues import most_recent_season_yr
 
 __all__ = [
     "pwhl_schedule",
@@ -49,9 +51,16 @@ def pwhl_season_id(return_as_pandas: bool = False) -> Any:
 
 
 def most_recent_pwhl_season() -> int:
-    """Most-recent PWHL season as an end-year integer (max ``season_yr``)."""
-    df = pwhl_season_id()
-    return int(df["season_yr"].max()) if df.height else 2026
+    """Most-recent PWHL season as an end-year integer (max ``season_yr``).
+
+    Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails.
+    """
+    return most_recent_season_yr(pwhl_season_id(), _LG)
+
+
+def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
+    """The caller's season; the newest only when neither season nor season_id is given."""
+    return season if season is not None or season_id is not None else most_recent_pwhl_season()
 
 
 def pwhl_schedule(
@@ -119,9 +128,7 @@ def pwhl_standings(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL standings — one row per team."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -144,9 +151,7 @@ def pwhl_teams(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL teams for a given season."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_teams(hockeytech_api(_LG, "modulekit", "teamsbyseason", {"season": sid}), return_as_pandas)
 
 
@@ -157,9 +162,7 @@ def pwhl_team_roster(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL team roster for a given team + season."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_roster(
         hockeytech_api(_LG, "modulekit", "roster", {"team_id": team_id, "season_id": sid}),
         return_as_pandas,
@@ -185,9 +188,7 @@ def pwhl_leaders(
     by season, not ``season`` (name string). The resolved integer is passed as the
     ``season_id`` param so historical-season requests return results.
     """
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -280,9 +281,7 @@ def pwhl_stats(
     return_as_pandas: bool = False,
 ) -> Any:
     """PWHL aggregate stats by season and position."""
-    sid = resolve_season_id(
-        _LG, season=season if season is not None else most_recent_pwhl_season(), season_id=season_id
-    )
+    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_stats(
         hockeytech_api(_LG, "modulekit", "statviewtype", {"type": position, "season_id": sid}),
         return_as_pandas,
@@ -301,10 +300,11 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         the PWHL site appears to compute its Streaks page client-side from schedule
         data. fastRhockey's equivalent carries the same defect.
 
-        This function has therefore never returned data. It now emits a
-        :class:`DeprecationWarning` and still returns an empty frame rather than
-        failing silently, so the empty result is no longer mistakable for "the
-        league currently has no streaks". Derive streaks from
+        This function has therefore never returned data. It emits a
+        :class:`DeprecationWarning` and returns an empty frame without a request
+        (the feed would only answer the sentinel, which ``hockeytech_api`` now
+        raises on), so the empty result is not mistakable for "the league
+        currently has no streaks". Derive streaks from
         :func:`pwhl_schedule` / :func:`pwhl_standings` instead.
 
     Args:
@@ -325,7 +325,7 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         DeprecationWarning,
         stacklevel=2,
     )
-    return P.parse_streaks(hockeytech_api(_LG, "modulekit", "streaks", {"league_id": 1}), return_as_pandas)
+    return P.parse_streaks({}, return_as_pandas)  # ponytail: no request -- the view does not exist
 
 
 def pwhl_transactions(return_as_pandas: bool = False) -> Any:
@@ -338,13 +338,19 @@ def pwhl_playoff_bracket(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL playoff bracket for a given season."""
-    sid = resolve_season_id(
-        _LG,
-        season=season if season is not None else most_recent_pwhl_season(),
-        game_type="playoffs",
-        season_id=season_id,
-    )
+    """PWHL playoff bracket for a given season.
+
+    With neither ``season`` nor ``season_id``, the newest season that has playoffs:
+    the newest season overall is usually still before its playoffs, with no bracket.
+    Raises ``NoDataError`` when the seasons feed lists no playoff season.
+    """
+    if season is None and season_id is None:
+        seasons = pwhl_season_id()
+        playoffs = seasons.filter(seasons["game_type_label"] == "playoffs") if seasons.height else seasons
+        if not playoffs.height:
+            raise NoDataError("PWHL: the seasons feed lists no playoff season")
+        season_id = int(playoffs.sort(["season_yr", "season_id"])["season_id"][-1])
+    sid = resolve_season_id(_LG, season=season, game_type="playoffs", season_id=season_id)
     return P.parse_playoff_bracket(
         hockeytech_api(_LG, "modulekit", "brackets", {"season_id": sid, "league_id": 1}),
         return_as_pandas,

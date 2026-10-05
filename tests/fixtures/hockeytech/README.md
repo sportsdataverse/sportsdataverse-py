@@ -23,7 +23,17 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | pwhl_player_stats_27 | pwhl | modulekit/player seasonstats | player 27 |
 | pwhl_leaders_5 | pwhl | statviewfeed/leadersExtended | season_id 5 |
 | pwhl_game_summary_42 | pwhl | gc/gamesummary | game_id 42 |
+| ahl_seasons | ahl | modulekit/seasons | all; sdv-internal-refs `hockeytech/captures/samples/ahl/seasons.json` (b78eb2c, live 2026-07-12), trim marker dropped, key redacted |
 | ahl_pbp\_\* / ohl_pbp\_\* / whl_pbp\_\* / qmjhl_pbp\_\* | (juniors) | gameCenterPlayByPlay (dialect b) | per league |
+
+HTTP-200 reply bodies that are not data, used by `tests/hockeytech/test_client.py`
+to pin `hockeytech_api`'s error vocabulary:
+
+| file | league | endpoint | provenance |
+|------|--------|----------|------------|
+| mjhl_gamesummary_7301_access_denied.txt | mjhl | gc/gamesummary, game 7301 | live 2026-10-05 (sdv-js T22a, `analytics/live-2026-10-05/mjhl_summary_7301.txt`); plain text, the key has no gamecenter access |
+| pwhl_streaks_undefined_tab.json | pwhl | modulekit/streaks | live 2026-07-12, sdv-internal-refs `hockeytech/captures/samples/pwhl/streaks.json` (b78eb2c), key redacted |
+| pwhl_svf_streaks_invalidview.json | pwhl | statviewfeed/streaks | live 2026-07-12, sdv-internal-refs `hockeytech/captures/samples/pwhl/svf_streaks.json` (b78eb2c) |
 
 Refresh: re-run `tests/fixtures/hockeytech/_capture.py` (committed in task A1.3)
 against a completed game.

@@ -18,6 +18,7 @@ from typing import Any, Optional
 
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
+from sportsdataverse.hockeytech._leagues import most_recent_season_yr
 from sportsdataverse.hockeytech._analytics import (
     corsi_fenwick_on_ice,
     enrich_pbp,
@@ -64,13 +65,19 @@ def build_family(league: str) -> dict[str, Any]:
     _season_id.__doc__ = f"All {cfg.name} seasons with end-year + game-type labels."
 
     def _most_recent_season() -> int:
-        """Most-recent season as an end-year integer (max ``season_yr``), or 2026."""
-        df = _season_id()
-        return int(df["season_yr"].max()) if df.height else 2026
+        """Most-recent season as an end-year integer (max ``season_yr``)."""
+        return most_recent_season_yr(_season_id(), lg)
 
     _most_recent_season.__name__ = f"most_recent_{lg}_season"
     _most_recent_season.__qualname__ = f"most_recent_{lg}_season"
-    _most_recent_season.__doc__ = f"Most-recent {cfg.name} season as an end-year integer (max ``season_yr``), or 2026."
+    _most_recent_season.__doc__ = (
+        f"Most-recent {cfg.name} season as an end-year integer (max ``season_yr``). "
+        "Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails."
+    )
+
+    def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
+        """The caller's season; the newest only when neither season nor season_id is given."""
+        return season if season is not None or season_id is not None else _most_recent_season()
 
     # ------------------------------------------------------------------
     # Schedule
@@ -136,7 +143,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Standings — one row per team."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         payload = hockeytech_api(
@@ -170,7 +177,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Teams for a given season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         return P.parse_teams(
@@ -195,7 +202,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Team roster for a given team + season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         return P.parse_roster(
@@ -239,7 +246,7 @@ def build_family(league: str) -> dict[str, Any]:
         """Statistical leaders for a given season."""
         sid = resolve_season_id(
             lg,
-            season=season if season is not None else _most_recent_season(),
+            season=_season_or_latest(season, season_id),
             season_id=season_id,
         )
         payload = hockeytech_api(

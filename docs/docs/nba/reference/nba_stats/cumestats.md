@@ -13,7 +13,7 @@ GET /stats/cumestatsplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season](https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsplayer?GameIDs=0022000756&LeagueID=00&PlayerID=1629611&Season=2020-21&SeasonType=Regular+Season](https://stats.nba.com/stats/cumestatsplayer?GameIDs=0022000756&LeagueID=00&PlayerID=1629611&Season=2020-21&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -129,7 +129,7 @@ GET /stats/cumestatsplayergames
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayergames`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=2544&Season=2024-25&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -137,7 +137,7 @@ GET /stats/cumestatsplayergames
 | `Location` | `location_nullable` |  |  | `Y` |  |
 | `Outcome` | `outcome_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
@@ -157,7 +157,7 @@ GET /stats/cumestatsplayergames
 ### Example {#nba_stats_cumestatsplayergames-example}
 
 ```python
-nba_stats_cumestatsplayergames(league_id='00')
+nba_stats_cumestatsplayergames(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -168,13 +168,13 @@ GET /stats/cumestatsteam
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteam`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317](https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?GameIDs=0022201094&LeagueID=00&Season=2024-25&SeasonType=Regular+Season&TeamID=1610612739](https://stats.nba.com/stats/cumestatsteam?GameIDs=0022201094&LeagueID=00&Season=2024-25&SeasonType=Regular+Season&TeamID=1610612739)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `GameIDs` | `game_ids` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
@@ -282,7 +282,7 @@ GET /stats/cumestatsteam
 ### Example {#nba_stats_cumestatsteam-example}
 
 ```python
-nba_stats_cumestatsteam(league_id='00')
+nba_stats_cumestatsteam(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -293,14 +293,14 @@ GET /stats/cumestatsteamgames
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteamgames`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2024-25&SeasonID=&SeasonType=Regular+Season&TeamID=1610612739&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2024-25&SeasonID=&SeasonType=Regular+Season&TeamID=1610612739&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Location` | `location_nullable` |  |  | `Y` |  |
 | `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonID` | `season_id_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -322,7 +322,7 @@ GET /stats/cumestatsteamgames
 ### Example {#nba_stats_cumestatsteamgames-example}
 
 ```python
-nba_stats_cumestatsteamgames(league_id='00')
+nba_stats_cumestatsteamgames(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

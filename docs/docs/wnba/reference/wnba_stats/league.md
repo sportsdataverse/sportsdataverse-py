@@ -157,7 +157,7 @@ GET /stats/leaguegamelog
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguegamelog`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE](https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE)
+**Valid URL:** [https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&Season=2024&SeasonType=Regular+Season&Sorter=DATE](https://stats.wnba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=10&PlayerOrTeam=T&Season=2024&SeasonType=Regular+Season&Sorter=DATE)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -167,7 +167,7 @@ GET /stats/leaguegamelog
 | `Direction` | `direction` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `Sorter` | `sorter` |  |  | `Y` |  |
 
@@ -212,7 +212,7 @@ GET /stats/leaguegamelog
 ### Example {#wnba_stats_leaguegamelog-example}
 
 ```python
-wnba_stats_leaguegamelog(league_id='10')
+wnba_stats_leaguegamelog(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -283,7 +283,7 @@ GET /stats/leaguelineupviz
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguelineupviz`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -307,7 +307,7 @@ GET /stats/leaguelineupviz
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -352,7 +352,7 @@ GET /stats/leaguelineupviz
 ### Example {#wnba_stats_leaguelineupviz-example}
 
 ```python
-wnba_stats_leaguelineupviz(league_id='10')
+wnba_stats_leaguelineupviz(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -363,7 +363,7 @@ GET /stats/leagueplayerondetails
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leagueplayerondetails`
 
-**Valid URL:** [https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=](https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=](https://stats.wnba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -382,7 +382,7 @@ GET /stats/leagueplayerondetails
 | `Period` | `period` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
@@ -460,7 +460,7 @@ GET /stats/leagueplayerondetails
 ### Example {#wnba_stats_leagueplayerondetails-example}
 
 ```python
-wnba_stats_leagueplayerondetails(league_id='10')
+wnba_stats_leagueplayerondetails(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -471,7 +471,7 @@ GET /stats/leagueseasonmatchups
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leagueseasonmatchups`
 
-**Valid URL:** [https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season](https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=10&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -481,7 +481,7 @@ GET /stats/leagueseasonmatchups
 | `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
 | `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_leagueseasonmatchups-returns}
@@ -522,7 +522,7 @@ GET /stats/leagueseasonmatchups
 ### Example {#wnba_stats_leagueseasonmatchups-example}
 
 ```python
-wnba_stats_leagueseasonmatchups(league_id='10')
+wnba_stats_leagueseasonmatchups(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -533,12 +533,12 @@ GET /stats/leaguestandingsv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/leaguestandingsv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&SeasonType=Regular+Season&SeasonYear=](https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&SeasonType=Regular+Season&SeasonYear=)
+**Valid URL:** [https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&Season=2024&SeasonType=Regular+Season&SeasonYear=](https://stats.wnba.com/stats/leaguestandingsv3?LeagueID=10&Season=2024&SeasonType=Regular+Season&SeasonYear=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `SeasonYear` | `season_nullable` |  |  | `Y` |  |
 
@@ -646,7 +646,7 @@ GET /stats/leaguestandingsv3
 ### Example {#wnba_stats_leaguestandingsv3-example}
 
 ```python
-wnba_stats_leaguestandingsv3(league_id='10')
+wnba_stats_leaguestandingsv3(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

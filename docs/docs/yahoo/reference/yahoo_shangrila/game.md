@@ -33,10 +33,10 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 | `status` | character | Status label. |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name; `team_detail = TRUE` only. |
+| `away_team_display_name` | character | Away team full display name. |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name; `team_detail = TRUE` only. |
+| `home_team_display_name` | character | Home team full display name. |
 | `active_prop_bets` | character | JSON-encoded list of the prop-bet markets currently open for the game. |
 | `game_props` | character | JSON-encoded list of player and game prop markets offered on the game. |
 
@@ -255,8 +255,8 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name; `team_detail = TRUE` only. |
-| `away_team_abbreviation` | character | Away team abbreviation; `team_detail = TRUE` only. |
+| `away_team_display_name` | character | Away team full display name. |
+| `away_team_abbreviation` | character | Away team abbreviation. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
 | `away_team_league` | character | JSON-encoded league node identifying the league the away team plays in. |
@@ -277,8 +277,8 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name; `team_detail = TRUE` only. |
-| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_display_name` | character | Home team full display name. |
+| `home_team_abbreviation` | character | Home team abbreviation. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
 | `home_team_league` | character | JSON-encoded league node identifying the league the home team plays in. |

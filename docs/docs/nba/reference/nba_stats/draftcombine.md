@@ -13,12 +13,12 @@ GET /stats/draftcombinedrillresults
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinedrillresults`
 
-**Valid URL:** [https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00](https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00&SeasonYear=2024-25](https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00&SeasonYear=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinedrillresults-returns}
 
@@ -44,7 +44,7 @@ GET /stats/draftcombinedrillresults
 ### Example {#nba_stats_draftcombinedrillresults-example}
 
 ```python
-nba_stats_draftcombinedrillresults(league_id='00')
+nba_stats_draftcombinedrillresults(league_id='00', season_year='2024-25')
 ```
 
 _Last validated n/a._
@@ -55,12 +55,12 @@ GET /stats/draftcombinenonstationaryshooting
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinenonstationaryshooting`
 
-**Valid URL:** [https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00](https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00&SeasonYear=2024-25](https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00&SeasonYear=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinenonstationaryshooting-returns}
 
@@ -104,7 +104,7 @@ GET /stats/draftcombinenonstationaryshooting
 ### Example {#nba_stats_draftcombinenonstationaryshooting-example}
 
 ```python
-nba_stats_draftcombinenonstationaryshooting(league_id='00')
+nba_stats_draftcombinenonstationaryshooting(league_id='00', season_year='2024-25')
 ```
 
 _Last validated n/a._
@@ -115,12 +115,12 @@ GET /stats/draftcombineplayeranthro
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombineplayeranthro`
 
-**Valid URL:** [https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00](https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00&SeasonYear=2024-25](https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00&SeasonYear=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombineplayeranthro-returns}
 
@@ -152,7 +152,7 @@ GET /stats/draftcombineplayeranthro
 ### Example {#nba_stats_draftcombineplayeranthro-example}
 
 ```python
-nba_stats_draftcombineplayeranthro(league_id='00')
+nba_stats_draftcombineplayeranthro(league_id='00', season_year='2024-25')
 ```
 
 _Last validated n/a._
@@ -163,12 +163,12 @@ GET /stats/draftcombinespotshooting
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinespotshooting`
 
-**Valid URL:** [https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00](https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00&SeasonYear=2024-25](https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00&SeasonYear=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_year` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinespotshooting-returns}
 
@@ -233,7 +233,7 @@ GET /stats/draftcombinespotshooting
 ### Example {#nba_stats_draftcombinespotshooting-example}
 
 ```python
-nba_stats_draftcombinespotshooting(league_id='00')
+nba_stats_draftcombinespotshooting(league_id='00', season_year='2024-25')
 ```
 
 _Last validated n/a._
@@ -244,12 +244,12 @@ GET /stats/draftcombinestats
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinestats`
 
-**Valid URL:** [https://stats.nba.com/stats/draftcombinestats?LeagueID=00](https://stats.nba.com/stats/draftcombinestats?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear=2024-25](https://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `SeasonYear` | `season_all_time` |  |  | `Y` |  |
+| `SeasonYear` | `season_all_time` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults to the previous season at call time (``2025-26`` from October 2026), the latest one that is sure to have data; stats.nba.com answers a request without a season with an empty HTTP 500. |
 
 ### Returns {#nba_stats_draftcombinestats-returns}
 
@@ -310,7 +310,7 @@ GET /stats/draftcombinestats
 ### Example {#nba_stats_draftcombinestats-example}
 
 ```python
-nba_stats_draftcombinestats(league_id='00')
+nba_stats_draftcombinestats(league_id='00', season_all_time='2024-25')
 ```
 
 _Last validated n/a._

@@ -1,0 +1,23 @@
+{
+ "SiteKit": {
+  "Parameters": {
+   "feed": "modulekit",
+   "key": "REDACTED",
+   "client_code": "pwhl",
+   "site_id": "0",
+   "lang": "en",
+   "view": "streaks",
+   "league_id": 1,
+   "lang_id": 1,
+   "league_code": "pwhl",
+   "season_id": "10"
+  },
+  "Undefined": "Undefined Tab streaks",
+  "Copyright": {
+   "required_copyright": "Official statistics provided by Professional Women's Hockey League",
+   "required_link": "http://leaguestat.com",
+   "powered_by": "Powered by HockeyTech.com",
+   "powered_by_url": "http://hockeytech.com"
+  }
+ }
+}

@@ -176,7 +176,7 @@ GET /stats/scoreboardv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `leag_tix` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

@@ -224,7 +224,7 @@ Release: [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 | col_name | type | description |
 |---|---|---|
 | `team_id` | String | ESPN team id. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `team_name` | String | Team nickname. |
 | `date` | String | Date of the poll release. |
 | `opponent_id` | String | ESPN team id of the opponent. |
 | `opponent` | String | Opponent team name. |
@@ -250,7 +250,7 @@ Release: [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 | col_name | type | description |
 |---|---|---|
 | `team_id` | String | ESPN team id. |
-| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `team_name` | String | Team nickname. |
 | `player_id` | String | ESPN player id from the roster entry. |
 | `player_name` | String | Full name of player |
 | `jersey` | String | Jersey number. |

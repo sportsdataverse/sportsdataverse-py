@@ -459,7 +459,7 @@ GET /stats/boxscorehustlev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorehustlev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscorehustlev2?GameID=0022200021](https://stats.wnba.com/stats/boxscorehustlev2?GameID=0022200021)
+**Valid URL:** [https://stats.wnba.com/stats/boxscorehustlev2](https://stats.wnba.com/stats/boxscorehustlev2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

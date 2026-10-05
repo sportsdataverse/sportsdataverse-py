@@ -672,7 +672,7 @@ Two codegen-generated flat-API stems wrap the official stats API surface:
 
 Wrappers default `return_parsed=True` (tidy polars). `return_parsed=False` → raw `Dict`; `return_as_pandas=True` → pandas.
 
-`tools/codegen/gen_nba_stats.py` generates the endpoint YAML (endpoints + params) from the enriched canonical catalog, registered in `FLAT_APIS` in `tools/codegen/generate.py`. The **returns-schemas are NOT taken from the catalog.** They are built from what `parse_nba_stats_result_sets` emits on one vendored real capture per endpoint: `tests/fixtures/{nba_stats,wnba_stats}/endpoints/<slug>.json`, trimmed copies of the `sdv-internal-refs` sweep samples made by `tools/codegen/vendor_captures.py`, or a pilot capture listed in `gen_nba_stats.CAPTURE_OVERRIDES`. A multi-result-set payload becomes `kind: frames`. An endpoint the parser emits nothing for gets `unverified:` and no columns. `tests/codegen/test_stats_on3_schemas_match_parser.py` asserts that names, order and types match the parser on every committed capture. Live tests use the dedicated `@skip_if_no_nba_stats_live` gate (env `SDV_PY_NBA_STATS_LIVE=1`), NOT `SDV_PY_LIVE_TESTS` — stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs, so they're excluded from CI and run only from a residential IP. Returns-table descriptions live in `manual_column_descriptions.yaml` and are back-filled by column name from the SDV R-package docs (`_r_col_desc` → `_merged`). The remaining un-authored columns of the `native/nba_stats` + `native/wnba_stats` buckets are a tracked follow-up, deferred from the coverage ratchet via `_DEFERRED_BUCKETS` in `tools/codegen/extract_residual_columns.py`. Each bucket is capped at its measured count, so a new blank column still fails. Param `default`/`example` values are mined from hoopR/wehoop roxygen.
+`tools/codegen/gen_nba_stats.py` generates the endpoint YAML (endpoints + params) from the enriched canonical catalog, registered in `FLAT_APIS` in `tools/codegen/generate.py`. The **returns-schemas are NOT taken from the catalog.** They are built from what `parse_nba_stats_result_sets` emits on one vendored real capture per endpoint: `tests/fixtures/{nba_stats,wnba_stats}/endpoints/<slug>.json`, trimmed copies of the `sdv-internal-refs` sweep samples made by `tools/codegen/vendor_captures.py`, or a pilot capture listed in `gen_nba_stats.CAPTURE_OVERRIDES`. A multi-result-set payload becomes `kind: frames`. An endpoint the parser emits nothing for gets `unverified:` and no columns. `tests/codegen/test_stats_on3_schemas_match_parser.py` asserts that names, order and types match the parser on every committed capture. Live tests use the dedicated `@skip_if_no_nba_stats_live` gate (env `SDV_PY_NBA_STATS_LIVE=1`), NOT `SDV_PY_LIVE_TESTS` — stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs, so they're excluded from CI and run only from a residential IP. Returns-table descriptions live in `manual_column_descriptions.yaml` and are back-filled by column name from the SDV R-package docs (`_r_col_desc` → `_merged`). The remaining un-authored columns of the `native/nba_stats` + `native/wnba_stats` buckets are a tracked follow-up, deferred from the coverage ratchet via `_DEFERRED_BUCKETS` in `tools/codegen/extract_residual_columns.py`. Each bucket is capped at its measured count, so a new blank column still fails. Param `default`/`example` values are mined from hoopR/wehoop roxygen **per league** (the catalog's `league_defaults`: hoopR for `nba_stats`, wehoop for `wnba_stats`; never the other league's entity id). A season argument whose R default is a call (`year_to_season(most_recent_nba_season() - 1)`) gets the runtime transform `season_or_previous` (previous season at call time, which always has data), except the measured `_SEASON_OPTIONAL` endpoints in `gen_nba_stats.py` that answer without one (drafthistory, the finders: all seasons). stats.nba.com answers a missing required `Season` with an empty HTTP 500, which `_get` returns as `{}`.
 
 ```python
 from sportsdataverse.nba import nba_stats
@@ -733,10 +733,13 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - **Per-league PBP caveats:** `ushl` gamecenter ships goals/penalties/goalie
   changes only (no coordinates); `mjhl` (probed 2026-10-05) is the same: its
   `gameCenterPlayByPlay` returns goals/penalties/goalie changes only (no
-  shots/coordinates), shifts return a valid empty envelope, and only the game
-  summary is denied (plain-text body `Feed type access denied.`, which
-  `hockeytech_api` turns into None, so `mjhl_game_summary` is empty — graceful,
-  not an error).
+  coordinates), shifts return a valid envelope, and only `gc/gamesummary` is
+  denied — the plain-text HTTP-200 `Feed type access denied.`, which
+  `hockeytech_api` returns as `{}`, so `mjhl_game_summary` gives empty event
+  frames (plus the `game_id` stub row) and `mjhl_pbp` returns plays without
+  game metadata. Every other unusable reply (non-2xx, an empty/unparseable body
+  such as a bad key's `Invalid key.`, an `Undefined Tab`/`InvalidView`
+  sentinel) raises `AssetFetchError`; a 404 raises `NoDataError`.
 - **Keys are per-league and public** (shipped in each site's JS); no shared master
   key. They rotate by *addition* — old generations keep working. Override any
   league's key with env `SDV_<LEAGUE>_API_KEY` (wins for every view). PWHL's

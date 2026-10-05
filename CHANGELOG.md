@@ -4,6 +4,9 @@
 
 - [Unreleased](#unreleased)
   - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
+  - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
+  - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
+  - [Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)](#fixed--a-failed-hockeytech-fetch-raises-instead-of-returning-an-empty-frame-breaking)
   - [Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-paired-spread-signs-team-timeouts-mbb-double-overtime-seconds)
   - [Fixed — pff_api return tables for the per-player and coverage-matrix routes](#fixed--pff_api-return-tables-for-the-per-player-and-coverage-matrix-routes)
   - [Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict](#fixed--reference-docs-valid-urls-are-the-urls-the-example-calls-request-summary-documents-its-dict)
@@ -347,6 +350,126 @@ No signature changes. `tests/test_credential_redaction.py` sends a synthetic key
 each of the three providers on a 404, a 503 and a connection failure, and checks the
 message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
 logs.
+
+### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
+
+The `nba_stats_*` / `wnba_stats_*` defaults are mined from hoopR / wehoop through the
+sdv-internal-refs catalog, and three things were lost on the way. Called with their defaults, 67
+of 128 NBA and 65 of 111 WNBA wrappers returned data before this change; all 128 and all 111 do
+now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working to broken).
+
+- **Season.** hoopR's default is a call (`year_to_season(...)`), and the catalog dropped it, so
+  `season` defaulted to `None` and the request went out without a `Season`. stats.nba.com answers
+  that with an empty HTTP 500, which these wrappers returned as an empty frame with no error.
+  51 NBA and 42 WNBA wrappers failed this way, among them `playergamelogs`, `playergamelog`,
+  `teamgamelogs`, `commonteamroster`, `commonallplayers`, `leaguedashplayerstats` and
+  `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family, `cumestats*`,
+  `videodetailsasset`, `commonplayoffseries` and WNBA `playercompare` need theirs too.
+  These arguments now default to the **previous season**, resolved at call time: `"2025-26"`
+  for NBA, G League and Summer League from October 2026, and `"2025"` for WNBA during 2026
+  (wehoop's own `most_recent_wnba_season() - 1`). The previous season always has data; a
+  current-season default returned empty frames in the preseason. An explicit value, including
+  `""`, is sent as given.
+- **Endpoints that work without a season keep the API's default.** For `drafthistory`,
+  `leaguegamefinder`, `playergamestreakfinder`, `playercareerbycollegerollup` and
+  `shotchartdetail` that default is every season, which a season default would silently narrow.
+  The 30 NBA and 25 WNBA endpoints the sweep measured this way are listed in
+  `tools/codegen/gen_nba_stats.py`.
+- **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
+  hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
+  asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA
+  game. NBA wrappers now take hoopR's examples and WNBA wrappers wehoop's, and an id that only the
+  other league's package sets is left out rather than borrowed: WNBA `boxscorehustlev2` /
+  `hustlestatsboxscore` used to fetch an NBA game, and `playerdashptshotdefend` defaulted to LeBron
+  James (without a player it now returns the league-wide table). `playercompare` gains its
+  player-id lists, and WNBA `playbyplayv2` sends wehoop's `StartPeriod` / `EndPeriod` (it was
+  HTTP 500 without).
+- **Empty results now warn.** When stats.nba.com / stats.wnba.com answer a non-200 status, a
+  blank body or an empty object, the wrappers still return `{}` / an empty frame (pipelines rely
+  on that for routine misses), but they now warn `sportsdataverse.errors.EmptyResponseWarning`
+  with the URL and status. Silence it with
+  `warnings.filterwarnings("ignore", category=EmptyResponseWarning)`.
+- **The vendored catalog is a plain copy again.** `tools/codegen/inputs/nba_canonical_catalog.json`
+  had drifted from sdv-internal-refs through edits made only here (#391's video endpoints, older
+  statuses). sdv-internal-refs now classifies the video envelope itself, so the file is copied
+  verbatim; the generated wrappers are unchanged by the copy.
+- stats.wnba.com answers `draftcombinestats` with the NBA draft combine; wehoop has deprecated its
+  draft-combine wrappers.
+
+### Fixed — returns tables no longer cite R-only arguments
+
+Column descriptions mined from hoopR / wehoop said "`team_detail = TRUE` only" (also
+`athlete_detail`, `position_detail`) for columns that the R wrappers add behind an argument. The
+Python parsers always return those columns and have no such argument, so the condition is dropped
+from 131 descriptions.
+
+### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
+
+`hockeytech_api`, the one HTTP entry point behind the PWHL surface and the 19 other HockeyTech
+league families, caught every exception and returned `None`. A 403, a 5xx, a timeout or an
+unparseable body therefore parsed to a zero-row frame, so a failed fetch read as "no games".
+It now follows the package error vocabulary:
+
+- **HTTP 404** raises `NoDataError`.
+- **A failed fetch** raises `AssetFetchError`: a transport error, a non-2xx status that outlived
+  the retries, an empty or unparseable body, or one of the HTTP-200 error sentinels
+  (`Undefined Tab <view>`, or any top-level `{"error": "..."}` such as
+  `InvalidView error: <view>`). The sentinels used to warn and then parse to an empty frame.
+  The error text never carries the feed key: it is masked, and the URL-bearing transport
+  exception is not chained.
+- **`Feed type access denied.`**, the plain-text reply MJHL's public key gets on `gc`, is still
+  a graceful empty: `mjhl_game_summary` returns empty frames and `mjhl_pbp` returns plays without
+  game metadata.
+
+Every `<lg>_*` family function, the `pwhl_*` functions and the analytics fetches pass these errors
+to the caller. `resolve_season_id` keeps PWHL's fallback table for a failed seasons fetch and for
+a season the list lacks; other leagues re-raise. The table now runs through 2026-27 (ids 1-11,
+preseasons and the 2026 playoffs included). `pwhl_streaks` (deprecated, no such upstream view) no
+longer sends a request; it still warns and returns an empty frame.
+
+Season resolution also skips the one-off events HockeyTech lists as seasons (all-star games,
+showcases, prospect games, combines, special events, exhibitions, play-ins):
+`resolve_season_id("ahl", season=2026)` returned 91, the "2026 All-Star Challenge", instead of 90,
+the "2025-26 Regular Season". An explicit `season_id=` never asks for the seasons list, so a dead
+seasons feed cannot break `pwhl_stats(season_id=11)`. `pwhl_playoff_bracket()` with no arguments
+now uses the newest season that has playoffs, not the newest season (which usually has none yet).
+
+`most_recent_<lg>_season` / `most_recent_pwhl_season` no longer return a hard-coded 2026, which was
+already stale (the live PWHL seasons feed lists 2026-27, end-year 2027). A seasons list the feed
+answered with no season raises `NoDataError`; a failed fetch raises `AssetFetchError`. This
+matches sportsdataverse-js.
+
+**Breaking:** code that checked for `None` or an empty frame to detect a HockeyTech failure now
+gets `AssetFetchError` / `NoDataError`. Wrappers that default the season (`<lg>_standings`,
+`_teams`, `_team_roster`, `_leaders`, `pwhl_stats`, `pwhl_playoff_bracket`) raise the same way when
+they need the seasons lookup and it fails; pass `season_id=` to skip the lookup. Catch them as:
+
+```python
+import sportsdataverse as sdv
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
+try:
+    df = sdv.ahl_schedule()
+except NoDataError:
+    df = None  # the fetch worked and there is nothing there: skip it
+except AssetFetchError:
+    raise  # the fetch failed and the answer is unknown: retry later, never record it as empty
+```
+
+Both subclass `SportsDataverseError`. A season that the list does not carry is still `ValueError`
+("No ahl season for season=..."), as before.
+
+34 PWHL return-column descriptions were also wrong and are corrected from real values. In
+`pwhl_scorebar`: `id` is the game id, `home_id` is the HockeyTech team id, `game_status` is the
+numeric code, `quick_score` is always `'0'`, `game_summary_url` is a game id or a site path,
+`game_letter` is the playoff-series letter, `game_date_iso8601` carries the start time and UTC
+offset, `date` is a date only, `home_city` / `timezone` / `home_goals` / `league_id` say what they
+hold, and the eight W/L columns are the team's season record as fetched, not as of the game. In
+`pwhl_player_search`: `score` is a search relevance score, `profile_image` is a file name, and
+`role_id` / `role_name` are the person's role, not a position. In `pwhl_stats`: `height` is
+feet-and-inches text, `rank` is the table rank, `namelink` is plain text, `division` is a name,
+`veteran` is a code, and `name` (also in `pwhl_leaders` and `pwhl_team_roster`) is the player's
+name, not a team mascot.
 
 ### Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds
 
