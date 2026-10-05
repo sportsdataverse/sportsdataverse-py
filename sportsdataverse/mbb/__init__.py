@@ -5,7 +5,12 @@ from sportsdataverse.mbb.mbb_espn_ext import *
 from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
 from sportsdataverse.mbb.torvik import *
-from sportsdataverse.mbb.torvik_parsers import parse_torvik_csv
+from sportsdataverse.mbb.torvik_parsers import (
+    parse_torvik_csv,
+    parse_torvik_game_schedule,
+    parse_torvik_game_stats,
+    parse_torvik_player_stats,
+)
 from sportsdataverse.mbb.kenpom import *
 from sportsdataverse.mbb.kenpom_runtime import (
     has_kenpom_login,
