@@ -123,7 +123,20 @@ const config: Config = {
     require.resolve('./src/clientModules/anchorForward.ts'),
     require.resolve('./src/clientModules/hydrated.ts'),
   ],
-  plugins: [tutorialRedirects],
+  plugins: [
+    tutorialRedirects,
+    // llms.txt for AI agents (llmstxt.org): an index linking a Markdown copy of every page, the shape
+    // pkgdown 2.2 gives the R sites. No llms-full.txt: the docs are ~18 MB, too big to be one useful file.
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsFullTxt: false,
+        generateMarkdownFiles: true,
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+      },
+    ],
+  ],
   scripts: [
     {src: 'https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js', async: true},
   ],
