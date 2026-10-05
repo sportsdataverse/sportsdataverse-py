@@ -124,10 +124,13 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
         raise AssetFetchError(f"The Odds API /v4/{path} answered HTTP {resp.status_code}: {(resp.text or '')[:200]}")
     try:
         return resp.json()
-    except ValueError:  # requests' JSONDecodeError; the decoder's own text adds nothing
-        raise AssetFetchError(
-            f"The Odds API /v4/{path} answered HTTP {resp.status_code} with a non-JSON body: {(resp.text or '')[:200]}"
-        ) from None
+    except ValueError:  # requests' JSONDecodeError, whose ``.doc`` is the whole unredacted body
+        pass
+    # Raised outside the handler so the decode error is not chained as ``__context__``
+    # (``from None`` only hides it from the traceback; the body stays reachable).
+    raise AssetFetchError(
+        f"The Odds API /v4/{path} answered HTTP {resp.status_code} with a non-JSON body: {(resp.text or '')[:200]}"
+    )
 
 
 def toa_usage(return_as_pandas: bool = False) -> DataFrameT:

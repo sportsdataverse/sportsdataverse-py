@@ -213,7 +213,8 @@ def test_non_json_200_is_a_failed_fetch(monkeypatch):
     _serve(monkeypatch, 200, "<html>down for maintenance</html>")
     with pytest.raises(AssetFetchError, match="non-JSON body: <html>down for maintenance") as ei:
         toa.toa_sports(return_parsed=False)
-    assert ei.value.__cause__ is None and ei.value.__suppress_context__
+    # Not chained at all: a JSONDecodeError's ``.doc`` is the whole body.
+    assert ei.value.__cause__ is None and ei.value.__context__ is None
 
 
 def test_404_is_no_data(monkeypatch):
