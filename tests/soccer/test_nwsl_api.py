@@ -255,12 +255,17 @@ def test_runtime_sends_the_site_referer(monkeypatch: pytest.MonkeyPatch) -> None
     assert "::" in seen["url"]  # composite id reaches the host literally
 
 
-def test_runtime_non_json_body_is_empty_dict(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_runtime_non_json_body_is_a_failed_fetch(monkeypatch: pytest.MonkeyPatch) -> None:
+    # A 200 with no JSON is an unknown answer, never an empty envelope (was ``{}``).
+    from sportsdataverse.errors import AssetFetchError
     from sportsdataverse.soccer.nwsl import nwsl_api_runtime
 
     class _Bad:
+        text = "<html>Access Denied</html>"
+
         def json(self) -> Any:
             raise ValueError("not json")
 
     monkeypatch.setattr(nwsl_api_runtime, "download", lambda **kw: _Bad())
-    assert nwsl_api_runtime._get("https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions") == {}
+    with pytest.raises(AssetFetchError, match="non-JSON body"):
+        nwsl_api_runtime._get("https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions")

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import Dict, Optional
 
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.nhl.nhl_api_web_parsers import parse_nhl_web_scoreboard
 
@@ -46,6 +47,12 @@ def nhl_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        NoDataError: api-web answered 404.
+        ValueError: api-web answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or
+            a 2xx whose body is empty (not 204/205) or not JSON.
+
     Example:
         Quick start::
 
@@ -56,11 +63,10 @@ def nhl_scoreboard(
     else:
         suffix = "now" if date is None else date
         path = f"/v1/scoreboard/{suffix}"
-    resp = download(url=f"{_API_WEB_BASE}{path}", **kwargs)
-    try:
-        raw: Dict = {} if resp is None else resp.json()
-    except Exception:
-        raw = {}
+    url = f"{_API_WEB_BASE}{path}"
+    with _transport_errors(url):
+        resp = download(url=url, **kwargs)
+    raw: Dict = _json_body(resp, url)
     if return_parsed:
         return parse_nhl_web_scoreboard(raw, return_as_pandas=return_as_pandas)
     return raw

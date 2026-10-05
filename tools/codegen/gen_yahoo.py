@@ -391,10 +391,6 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "example_import_from": "sportsdataverse.yahoo.yahoo_shangrila",
-            "raises": [
-                "requests.exceptions.RequestException: Connection-level failure after "
-                "``dl_utils.download`` exhausts its retries.",
-            ],
             "see_also": [
                 {
                     "name": "cfbfastR",

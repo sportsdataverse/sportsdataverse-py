@@ -97,7 +97,8 @@ def pff_facet_run_defense_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -159,7 +160,8 @@ def pff_facet_field_goal_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -221,7 +223,8 @@ def pff_facet_coverage_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -283,7 +286,8 @@ def pff_facet_kicking_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -345,7 +349,8 @@ def pff_facet_blocking_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -407,7 +412,8 @@ def pff_facet_defense_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -469,7 +475,8 @@ def pff_facet_offense_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -531,7 +538,8 @@ def pff_facet_passing_allowed_pressure(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -593,7 +601,8 @@ def pff_facet_pass_rush_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -655,7 +664,8 @@ def pff_facet_passing_concept(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -717,7 +727,8 @@ def pff_facet_coverage_scheme(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -779,7 +790,8 @@ def pff_facet_passing_detail_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -841,7 +853,8 @@ def pff_facet_run_blocking(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -903,7 +916,8 @@ def pff_facet_pass_blocking(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -965,7 +979,8 @@ def pff_facet_passing_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1027,7 +1042,8 @@ def pff_facet_punting_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1089,7 +1105,8 @@ def pff_facet_passing_depth(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1151,7 +1168,8 @@ def pff_facet_passing_pressure(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1213,7 +1231,8 @@ def pff_facet_receiving_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1275,7 +1294,8 @@ def pff_facet_return_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1337,7 +1357,8 @@ def pff_facet_rushing_direction_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1399,7 +1420,8 @@ def pff_facet_receiving_coverage_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1461,7 +1483,8 @@ def pff_facet_rushing_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1523,7 +1546,8 @@ def pff_facet_slot_coverages(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1585,7 +1609,8 @@ def pff_facet_pbes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1647,7 +1672,8 @@ def pff_facet_prps(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1709,7 +1735,8 @@ def pff_facet_receiving_scheme(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1771,7 +1798,8 @@ def pff_facet_time_in_pockets(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1833,7 +1861,8 @@ def pff_facet_receiving_concept(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1895,7 +1924,8 @@ def pff_facet_special_teams_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1957,7 +1987,8 @@ def pff_facet_receiving_depth(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2019,7 +2050,8 @@ def pff_facet_receiving_coverage(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2079,7 +2111,8 @@ def pff_player_passing_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2138,7 +2171,8 @@ def pff_player_rushing_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2197,7 +2231,8 @@ def pff_player_receiving_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2256,7 +2291,8 @@ def pff_player_defense_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2315,7 +2351,8 @@ def pff_player_offense_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2374,7 +2411,8 @@ def pff_player_snaps_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2433,7 +2471,8 @@ def pff_player_offense_blocking(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2482,7 +2521,8 @@ def pff_leagues(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2529,7 +2569,8 @@ def pff_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2581,7 +2622,8 @@ def pff_teams_overview(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2634,7 +2676,8 @@ def pff_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2687,7 +2730,8 @@ def pff_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2738,7 +2782,8 @@ def pff_player_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2792,7 +2837,8 @@ def pff_player_position_pivot(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

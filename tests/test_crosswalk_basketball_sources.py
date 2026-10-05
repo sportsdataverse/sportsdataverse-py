@@ -1096,7 +1096,7 @@ def _patch_fox(monkeypatch: pytest.MonkeyPatch, standings: dict[str, dict], call
             return catalog
         return standings.get(str((params or {}).get("groupId")), {})
 
-    monkeypatch.setattr(src, "_fox_json", fake)
+    monkeypatch.setattr(src, "fox_get", fake)
 
 
 def test_fox_season_teams_reads_the_requested_season(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1126,7 +1126,7 @@ def test_fox_season_teams_is_empty_before_fox_history(monkeypatch: pytest.Monkey
     """No Fox call at all for a season before its floor; the columns stay null."""
     import sportsdataverse._crosswalk_basketball_sources as src
 
-    monkeypatch.setattr(src, "_fox_json", _boom)
+    monkeypatch.setattr(src, "fox_get", _boom)
     assert fox_season_teams("mbb", 2017).height == 0
     assert fox_season_teams("wbb", 2018).height == 0
 
@@ -1203,7 +1203,10 @@ def test_torvik_teams_is_empty_before_torvik_history(monkeypatch: pytest.MonkeyP
     """No Torvik call for a season it does not cover; the bart_* columns stay null."""
     monkeypatch.setattr("sportsdataverse.mbb.torvik_runtime.download", _boom)
     assert torvik_teams(league, floor - 1).height == 0
-    with pytest.raises(TimeoutError):
+    # The floor season does call out; a timeout that outlived the retries is a failed fetch.
+    from sportsdataverse.errors import AssetFetchError
+
+    with pytest.raises(AssetFetchError, match="TimeoutError"):
         torvik_teams(league, floor)
 
 

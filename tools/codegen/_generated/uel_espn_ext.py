@@ -186,7 +186,8 @@ def espn_uel_scoreboard(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -237,7 +238,8 @@ def espn_uel_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -281,7 +283,8 @@ def espn_uel_calendar(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -325,7 +328,8 @@ def espn_uel_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -369,7 +373,8 @@ def espn_uel_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -413,7 +418,8 @@ def espn_uel_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -457,7 +463,8 @@ def espn_uel_conferences(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -499,7 +506,8 @@ def espn_uel_statistics_league(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -541,7 +549,8 @@ def espn_uel_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -585,7 +594,8 @@ def espn_uel_teams_site(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -631,7 +641,8 @@ def espn_uel_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -677,7 +688,8 @@ def espn_uel_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -725,7 +737,8 @@ def espn_uel_team_schedule(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -771,7 +784,8 @@ def espn_uel_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -815,7 +829,8 @@ def espn_uel_team_depthcharts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -859,7 +874,8 @@ def espn_uel_team_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -903,7 +919,8 @@ def espn_uel_team_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -947,7 +964,8 @@ def espn_uel_team_history(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -993,7 +1011,8 @@ def espn_uel_team_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1039,7 +1058,8 @@ def espn_uel_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1083,7 +1103,8 @@ def espn_uel_player_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1127,7 +1148,8 @@ def espn_uel_player_bio(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1171,7 +1193,8 @@ def espn_uel_player_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1219,7 +1242,8 @@ def espn_uel_standings(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1267,7 +1291,8 @@ def espn_uel_player_overview(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1313,7 +1338,8 @@ def espn_uel_player_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1361,7 +1387,8 @@ def espn_uel_player_gamelog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1409,7 +1436,8 @@ def espn_uel_player_splits(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1465,7 +1493,8 @@ def espn_uel_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1514,7 +1543,8 @@ def espn_uel_league_root(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1556,7 +1586,8 @@ def espn_uel_season_pointer(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1600,7 +1631,8 @@ def espn_uel_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1646,7 +1678,8 @@ def espn_uel_season_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1690,7 +1723,8 @@ def espn_uel_season_types(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1736,7 +1770,8 @@ def espn_uel_season_type(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1784,7 +1819,8 @@ def espn_uel_season_group(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1830,7 +1866,8 @@ def espn_uel_season_groups(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1880,7 +1917,8 @@ def espn_uel_season_group_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1932,7 +1970,8 @@ def espn_uel_season_group_children(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1980,7 +2019,8 @@ def espn_uel_season_type_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2026,7 +2066,8 @@ def espn_uel_season_type_corrections(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2072,7 +2113,8 @@ def espn_uel_season_weeks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2120,7 +2162,8 @@ def espn_uel_season_week(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2170,7 +2213,8 @@ def espn_uel_season_week_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2222,7 +2266,8 @@ def espn_uel_season_week_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2272,7 +2317,8 @@ def espn_uel_season_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2321,7 +2367,8 @@ def espn_uel_season_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2369,7 +2416,8 @@ def espn_uel_season_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2418,7 +2466,8 @@ def espn_uel_season_coaches(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2464,7 +2513,8 @@ def espn_uel_season_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2510,7 +2560,8 @@ def espn_uel_season_draft_round_picks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2554,7 +2605,8 @@ def espn_uel_season_futures(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2598,7 +2650,8 @@ def espn_uel_season_freeagents(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2644,7 +2697,8 @@ def espn_uel_season_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2690,7 +2744,8 @@ def espn_uel_season_powerindex_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2736,7 +2791,8 @@ def espn_uel_season_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2786,7 +2842,8 @@ def espn_uel_players_index(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2834,7 +2891,8 @@ def espn_uel_player_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2880,7 +2938,8 @@ def espn_uel_player_career_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2929,7 +2988,8 @@ def espn_uel_player_statisticslog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -2973,7 +3033,8 @@ def espn_uel_player_eventlog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3017,7 +3078,8 @@ def espn_uel_player_contracts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3061,7 +3123,8 @@ def espn_uel_player_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3105,7 +3168,8 @@ def espn_uel_player_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3149,7 +3213,8 @@ def espn_uel_player_records(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3193,7 +3258,8 @@ def espn_uel_player_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3237,7 +3303,8 @@ def espn_uel_player_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3283,7 +3350,8 @@ def espn_uel_player_vs_player(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3329,7 +3397,8 @@ def espn_uel_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3376,7 +3445,8 @@ def espn_uel_game(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3422,7 +3492,8 @@ def espn_uel_game_competition(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3472,7 +3543,8 @@ def espn_uel_game_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3522,7 +3594,8 @@ def espn_uel_game_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3572,7 +3645,8 @@ def espn_uel_game_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3622,7 +3696,8 @@ def espn_uel_game_team_linescores(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3672,7 +3747,8 @@ def espn_uel_game_team_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3722,7 +3798,8 @@ def espn_uel_game_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3772,7 +3849,8 @@ def espn_uel_game_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3820,7 +3898,8 @@ def espn_uel_game_odds(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3870,7 +3949,8 @@ def espn_uel_game_probabilities(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3922,7 +4002,8 @@ def espn_uel_game_plays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -3974,7 +4055,8 @@ def espn_uel_game_play(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4024,7 +4106,8 @@ def espn_uel_game_play_personnel(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4072,7 +4155,8 @@ def espn_uel_game_situation(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4120,7 +4204,8 @@ def espn_uel_game_status(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4168,7 +4253,8 @@ def espn_uel_game_officials(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4216,7 +4302,8 @@ def espn_uel_game_broadcasts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4264,7 +4351,8 @@ def espn_uel_game_predictor(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4312,7 +4400,8 @@ def espn_uel_game_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4360,7 +4449,8 @@ def espn_uel_game_propbets(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4408,7 +4498,8 @@ def espn_uel_game_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4456,7 +4547,8 @@ def espn_uel_game_scoringplays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4506,7 +4598,8 @@ def espn_uel_game_official_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4554,7 +4647,8 @@ def espn_uel_teams_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4601,7 +4695,8 @@ def espn_uel_team_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4645,7 +4740,8 @@ def espn_uel_venues(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4691,7 +4787,8 @@ def espn_uel_venue(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4735,7 +4832,8 @@ def espn_uel_franchises(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4781,7 +4879,8 @@ def espn_uel_franchise(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4825,7 +4924,8 @@ def espn_uel_coach(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4871,7 +4971,8 @@ def espn_uel_coach_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4917,7 +5018,8 @@ def espn_uel_coach_season(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -4961,7 +5063,8 @@ def espn_uel_positions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5007,7 +5110,8 @@ def espn_uel_position(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5051,7 +5155,8 @@ def espn_uel_tournaments(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5097,7 +5202,8 @@ def espn_uel_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5143,7 +5249,8 @@ def espn_uel_award(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5185,7 +5292,8 @@ def espn_uel_standings_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5227,7 +5335,8 @@ def espn_uel_leaders_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5269,7 +5378,8 @@ def espn_uel_league_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5311,7 +5421,8 @@ def espn_uel_talentpicks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -5359,7 +5470,8 @@ def espn_uel_fpi(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

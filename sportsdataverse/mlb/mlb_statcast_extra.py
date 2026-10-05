@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mlb.mlb_statcast_parsers import (
@@ -367,13 +368,12 @@ def mlb_statcast_search_wbc(
 
 
 def _player_page_html(player_id: int, stats: Optional[str] = None, **kwargs: Any) -> str:
-    """Fetch the raw ``/savant-player/{id}`` HTML (``""`` on transport failure)."""
+    """Fetch the raw ``/savant-player/{id}`` HTML; a failed fetch raises (see ``_text_body``)."""
     url = f"{_SAVANT_BASE}/savant-player/{player_id}"
     params = {"stats": stats} if stats else None
-    resp = download(url=url, params=params, **kwargs)
-    if resp is None:
-        return ""
-    return resp.text if hasattr(resp, "text") else resp.content.decode("utf-8", errors="replace")
+    with _transport_errors(url):
+        resp = download(url=url, params=params, **kwargs)
+    return _text_body(resp, url)
 
 
 def mlb_statcast_player(

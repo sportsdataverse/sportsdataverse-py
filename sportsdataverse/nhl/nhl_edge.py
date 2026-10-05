@@ -83,7 +83,8 @@ def nhl_edge_skater_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -135,7 +136,8 @@ def nhl_edge_skater_comparison(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -187,7 +189,8 @@ def nhl_edge_skater_shot_location_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -243,7 +246,8 @@ def nhl_edge_skater_shot_location_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -295,7 +299,8 @@ def nhl_edge_skater_shot_speed_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -349,7 +354,8 @@ def nhl_edge_skater_shot_speed_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -401,7 +407,8 @@ def nhl_edge_skater_skating_distance_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -453,7 +460,8 @@ def nhl_edge_skater_skating_speed_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -507,7 +515,8 @@ def nhl_edge_skater_speed_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -563,7 +572,8 @@ def nhl_edge_skater_distance_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -615,7 +625,8 @@ def nhl_edge_skater_zone_time(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -671,7 +682,8 @@ def nhl_edge_skater_zone_time_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -721,7 +733,8 @@ def nhl_edge_skater_landing(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -773,7 +786,8 @@ def nhl_edge_goalie_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -825,7 +839,8 @@ def nhl_edge_goalie_5v5_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -877,7 +892,8 @@ def nhl_edge_goalie_5v5_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -929,7 +945,8 @@ def nhl_edge_goalie_comparison(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -981,7 +998,8 @@ def nhl_edge_goalie_save_percentage_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1033,7 +1051,8 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1085,7 +1104,8 @@ def nhl_edge_goalie_shot_location_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1139,7 +1159,8 @@ def nhl_edge_goalie_shot_location_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1189,7 +1210,8 @@ def nhl_edge_goalie_landing(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1241,7 +1263,8 @@ def nhl_edge_team_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1291,7 +1314,8 @@ def nhl_edge_team_landing(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1343,7 +1367,8 @@ def nhl_edge_team_shot_location_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1399,7 +1424,8 @@ def nhl_edge_team_shot_location_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1451,7 +1477,8 @@ def nhl_edge_team_shot_speed_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1498,7 +1525,8 @@ def nhl_edge_team_skating_distance_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1552,7 +1580,8 @@ def nhl_edge_team_skating_distance_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1599,7 +1628,8 @@ def nhl_edge_team_skating_speed_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1651,7 +1681,8 @@ def nhl_edge_team_skating_speed_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1703,7 +1734,8 @@ def nhl_edge_team_zone_time_details(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1757,7 +1789,8 @@ def nhl_edge_team_zone_time_top_10(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1809,7 +1842,8 @@ def nhl_edge_cat_skater_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1861,7 +1895,8 @@ def nhl_edge_cat_goalie_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

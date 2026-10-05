@@ -78,7 +78,8 @@ def nfl_standings(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -132,7 +133,8 @@ def nfl_rosters(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -183,7 +185,8 @@ def nfl_teams_history(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -231,7 +234,8 @@ def nfl_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -278,7 +282,8 @@ def nfl_weeks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -323,7 +328,8 @@ def nfl_weeks_by_date(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -370,7 +376,8 @@ def nfl_combine_profiles(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -420,7 +427,8 @@ def nfl_draft_picks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -472,7 +480,8 @@ def nfl_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -525,7 +534,8 @@ def nfl_game_summaries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -586,7 +596,8 @@ def nfl_weekly_game_details(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -639,7 +650,8 @@ def nfl_live_team_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -684,7 +696,8 @@ def nfl_live_player_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -737,7 +750,8 @@ def nfl_game_details_v2(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -789,7 +803,8 @@ def nfl_game_details_by_slug(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

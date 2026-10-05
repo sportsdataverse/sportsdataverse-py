@@ -76,19 +76,25 @@ def test_get_raises_on_non_json(rt, monkeypatch):
         rt._get("https://api.on3.com/public/rdb/v1/anything")
 
 
-def test_get_empty_on_blank_body(rt, monkeypatch):
+def test_get_raises_on_blank_200(rt, monkeypatch):
+    # An empty 200 is not "nothing" (only 204/205 are): it is a failed fetch.
+    from sportsdataverse.errors import AssetFetchError
+
     monkeypatch.setattr(rt, "download", lambda **kw: _Resp(text=""))
-    assert rt._get("https://api.on3.com/public/rdb/v1/anything") == {}
+    with pytest.raises(AssetFetchError, match="empty body"):
+        rt._get("https://api.on3.com/public/rdb/v1/anything")
 
 
-def test_get_empty_on_no_data_error(rt, monkeypatch):
-    from sportsdataverse.errors import NoESPNDataError
+def test_get_404_is_no_data(rt, monkeypatch):
+    # A 404 is NoDataError like every other host (was swallowed into ``{}``).
+    from sportsdataverse.errors import NoDataError
 
     def boom(**kw):
-        raise NoESPNDataError("404")
+        raise NoDataError("404")
 
     monkeypatch.setattr(rt, "download", boom)
-    assert rt._get("https://api.on3.com/public/rdb/v1/anything") == {}
+    with pytest.raises(NoDataError):
+        rt._get("https://api.on3.com/public/rdb/v1/anything")
 
 
 def test_get_merges_caller_headers(rt, monkeypatch):

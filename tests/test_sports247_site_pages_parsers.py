@@ -78,7 +78,9 @@ def test_get_raises_on_non_200_or_bad_json():
         _get("https://247sports.com/Institution.json", transport=lambda *a: (403, ""))
     with pytest.raises(AssetFetchError):
         _get("https://247sports.com/Institution.json", transport=lambda *a: (200, "<html>"))
-    assert _get("https://247sports.com/Institution.json", transport=lambda *a: (200, "")) == {}
+    with pytest.raises(AssetFetchError, match="empty body"):  # only 204/205 mean "nothing"
+        _get("https://247sports.com/Institution.json", transport=lambda *a: (200, ""))
+    assert _get("https://247sports.com/Institution.json", transport=lambda *a: (204, "")) == {}
 
 
 # ===========================================================================

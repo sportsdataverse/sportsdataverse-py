@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_body
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.nfl_games import nfl_headers_gen
 
@@ -57,11 +57,15 @@ def _get(
 
     Raises:
         NoDataError: api.nfl.com answered 404.
-        AssetFetchError: Any other non-2xx after retries (an expired token's 401,
-            a 429, a 5xx), or a 2xx whose body is not JSON.
+        ValueError: api.nfl.com answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries (an
+            expired token's 401, a 429, a 5xx), or a 2xx whose body is empty (not
+            204/205) or not JSON.
     """
     if headers is None:
         headers = nfl_headers_gen()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     kwargs.setdefault("timeout", 30)
-    return _json_body(download(url=url, params=clean, headers=headers, **kwargs), url)
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, headers=headers, **kwargs)
+    return _json_body(resp, url)

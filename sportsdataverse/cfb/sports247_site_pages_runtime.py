@@ -24,7 +24,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_text
+from sportsdataverse._codegen_runtime import _json_text, _transport_errors
 
 __all__ = ["_get", "site_headers"]
 
@@ -110,12 +110,14 @@ def _get(
 
     Returns:
         Parsed JSON (``dict`` for the detail routes, ``list`` for the array
-        routes), or ``{}`` for a blank 2xx body.
+        routes), or ``{}`` for a 204/205.
 
     Raises:
         NoDataError: 247sports.com answered 404.
-        AssetFetchError: any other non-2xx, or a 2xx whose body is not JSON (a
-            Cloudflare interstitial) -- the answer is unknown, not empty.
+        ValueError: 247sports.com answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx, a transport failure, or a 2xx whose body
+            is empty (not 204/205) or not JSON (a Cloudflare interstitial) -- the
+            answer is unknown, not empty.
 
     Example:
         Quick start (offline — inject a transport)::
@@ -128,6 +130,7 @@ def _get(
     clean: Dict[str, Any] = {k: v for k, v in (params or {}).items() if v is not None}
     hdrs = dict(headers or site_headers())
     _transport = transport or _curl_transport
-    status, text = _transport(url, clean, hdrs, proxy_url)
+    with _transport_errors(url):
+        status, text = _transport(url, clean, hdrs, proxy_url)
     body = _json_text(url, status, text)
     return body if isinstance(body, (dict, list)) else {}

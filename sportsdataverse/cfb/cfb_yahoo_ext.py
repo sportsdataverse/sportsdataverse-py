@@ -187,8 +187,8 @@ def yahoo_cfb_player_season_stats(
         ``return_parsed=False``. Includes a self-describing ``season`` column.
 
     Raises:
-        requests.exceptions.RequestException: Propagated from the underlying
-            HTTP request on a network/transport failure.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Pull the 2024 player leaders as a polars frame::
@@ -276,8 +276,8 @@ def yahoo_cfb_team_season_stats(
         ``return_parsed=False``. Includes a self-describing ``season`` column.
 
     Raises:
-        requests.exceptions.RequestException: Propagated from the underlying
-            HTTP request on a network/transport failure.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Pull the 2024 team stats as a polars frame::
@@ -589,8 +589,8 @@ def yahoo_cfb_scoreboard(
         ``week`` columns.
 
     Raises:
-        requests.exceptions.RequestException: Propagated from the underlying
-            HTTP request on a network/transport failure.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Pull week 1 of the 2024 season::
@@ -694,8 +694,8 @@ def yahoo_cfb_teams(
         ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Propagated from the underlying
-            HTTP request on a network/transport failure.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Build a dotted-id -> abbreviation lookup::
@@ -860,8 +860,8 @@ def yahoo_cfb_boxscore(
         | ``value`` | Utf8 | Stat value as Yahoo sends it (``"188"``, ``"73.2"``, ``"1-14"``). |
 
     Raises:
-        requests.exceptions.RequestException: Propagated from the underlying
-            HTTP request on a network/transport failure.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
+            after retries, or an empty or unreadable 200 body).
 
     Example:
         Decoded box score for one game::

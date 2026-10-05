@@ -867,6 +867,10 @@ fetch **failed** and the answer is **unknown** — a 403, a rate limit, an exhau
 retry budget. Never collapse the two: a failed fetch recorded as an empty season
 is silent data loss, and a test asserts neither is a subclass of the other.
 
+Repo-wide, a **400 / 422** is `ValueError` (the request itself is wrong; retrying cannot
+help), naming host, path and status. The runtime getters share this classification via
+`_codegen_runtime._check_status` / `_json_body` / `_json_text` / `_transport_errors`.
+
 `NoESPNDataError` remains a true alias of `NoDataError` (the error was named when
 it was ESPN-only, but `download()` raises it for any 404, release assets
 included). A test asserts they are the same object, so existing

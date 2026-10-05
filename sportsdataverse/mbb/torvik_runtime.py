@@ -24,7 +24,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
-from sportsdataverse._codegen_runtime import _check_response
+from sportsdataverse._codegen_runtime import _check_response, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 _UA = "Mozilla/5.0 (sportsdataverse-py; +https://py.sportsdataverse.org)"
@@ -47,19 +47,19 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
 
     Raises:
         NoDataError: barttorvik.com answered 404.
-        AssetFetchError: any other non-2xx after retries -- its error page is not data.
+        ValueError: barttorvik.com answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            the empty 200 barttorvik answers a blocked request with.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     headers = kwargs.pop("headers", None) or {"User-Agent": _UA}
-    resp = download(url=url, params=clean, headers=headers, **kwargs)
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, headers=headers, **kwargs)
     _check_response(resp, url)
     ctype = (resp.headers.get("content-type") or "").lower() if getattr(resp, "headers", None) else ""
     if "json" in ctype:
         try:
             return resp.json()
-        except Exception:
+        except ValueError:
             pass
-    try:
-        return resp.text
-    except Exception:
-        return ""
+    return _text_body(resp, url)

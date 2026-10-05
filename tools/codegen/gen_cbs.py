@@ -281,8 +281,8 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "requests.exceptions.RequestException: Connection-level failure after "
-                "``dl_utils.download`` exhausts its retries. An unknown id is NOT an "
+                "AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after "
+                "retries, or an empty or unreadable 200 body). An unknown id is NOT an "
                 "exception -- NAPI answers it with HTTP 200 plus an "
                 "``{error|errors|warnings}`` envelope, which parses to a zero-row frame.",
             ],

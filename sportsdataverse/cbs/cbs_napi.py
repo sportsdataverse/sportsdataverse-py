@@ -138,9 +138,9 @@ def cbs_bulk(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -206,9 +206,9 @@ def cbs_client_config(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -262,9 +262,9 @@ def cbs_coach_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -315,9 +315,9 @@ def cbs_coach_team_associations(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -372,9 +372,9 @@ def cbs_division_subdivisions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -425,9 +425,9 @@ def cbs_endpoint_registry(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -480,9 +480,9 @@ def cbs_event(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -534,9 +534,9 @@ def cbs_event_entrants(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -585,9 +585,9 @@ def cbs_event_leaderboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -636,9 +636,9 @@ def cbs_event_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -687,9 +687,9 @@ def cbs_event_venues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -742,9 +742,9 @@ def cbs_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -796,9 +796,9 @@ def cbs_game_betting_splits(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -847,9 +847,9 @@ def cbs_game_boxscore(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -898,9 +898,9 @@ def cbs_game_content_preview(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -949,9 +949,9 @@ def cbs_game_content_recap(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1002,9 +1002,9 @@ def cbs_game_content_story(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1055,9 +1055,9 @@ def cbs_game_featured(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1108,9 +1108,9 @@ def cbs_game_lineup(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1171,9 +1171,9 @@ def cbs_game_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1228,9 +1228,9 @@ def cbs_game_odds_hq(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1279,9 +1279,9 @@ def cbs_game_outcomes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1334,9 +1334,9 @@ def cbs_game_probable_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1398,9 +1398,9 @@ def cbs_game_props(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1455,9 +1455,9 @@ def cbs_game_rtwp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1506,9 +1506,9 @@ def cbs_game_ruwt_highlights(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1557,9 +1557,9 @@ def cbs_game_scoring_boxscores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1608,9 +1608,9 @@ def cbs_game_scoring_drives(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1659,9 +1659,9 @@ def cbs_game_scoring_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1710,9 +1710,9 @@ def cbs_game_scoring_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1761,9 +1761,9 @@ def cbs_game_scoring_plays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1812,9 +1812,9 @@ def cbs_game_scoring_rosters(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1863,9 +1863,9 @@ def cbs_game_scoring_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1914,9 +1914,9 @@ def cbs_game_scoring_scores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -1965,9 +1965,9 @@ def cbs_game_scoring_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2016,9 +2016,9 @@ def cbs_game_scoring_winprob(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2067,9 +2067,9 @@ def cbs_game_scoring_ytd_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2118,9 +2118,9 @@ def cbs_game_scoring_ytd_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2169,9 +2169,9 @@ def cbs_game_ticket(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2220,9 +2220,9 @@ def cbs_game_weather(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2271,9 +2271,9 @@ def cbs_golf_event_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2325,9 +2325,9 @@ def cbs_golf_player_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2383,9 +2383,9 @@ def cbs_golfer_results(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2440,9 +2440,9 @@ def cbs_league(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2496,9 +2496,9 @@ def cbs_league_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2549,9 +2549,9 @@ def cbs_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2607,9 +2607,9 @@ def cbs_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2663,9 +2663,9 @@ def cbs_player_combine_data(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2719,9 +2719,9 @@ def cbs_player_depth_charts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2780,9 +2780,9 @@ def cbs_player_draft_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2840,9 +2840,9 @@ def cbs_player_encyclopedia(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2895,9 +2895,9 @@ def cbs_player_futures(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -2953,9 +2953,9 @@ def cbs_player_game_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3009,9 +3009,9 @@ def cbs_player_hockey_meta(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3063,9 +3063,9 @@ def cbs_player_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3117,9 +3117,9 @@ def cbs_player_meta_baseball(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3169,9 +3169,9 @@ def cbs_player_meta_golf(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3223,9 +3223,9 @@ def cbs_player_outlook(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3279,9 +3279,9 @@ def cbs_player_position_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3343,9 +3343,9 @@ def cbs_player_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3403,9 +3403,9 @@ def cbs_player_recruit_associations(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3467,9 +3467,9 @@ def cbs_player_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3539,9 +3539,9 @@ def cbs_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3605,9 +3605,9 @@ def cbs_player_team_associations(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3671,9 +3671,9 @@ def cbs_player_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3729,9 +3729,9 @@ def cbs_recruit_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3785,9 +3785,9 @@ def cbs_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3842,9 +3842,9 @@ def cbs_season_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3898,9 +3898,9 @@ def cbs_sport(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -3952,9 +3952,9 @@ def cbs_sport_leagues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4004,9 +4004,9 @@ def cbs_team_futures(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4058,9 +4058,9 @@ def cbs_team_metadata(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4114,9 +4114,9 @@ def cbs_team_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4172,9 +4172,9 @@ def cbs_team_polls(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4233,9 +4233,9 @@ def cbs_team_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4289,9 +4289,9 @@ def cbs_team_rankings_sportsline(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4351,9 +4351,9 @@ def cbs_team_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4415,9 +4415,9 @@ def cbs_team_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4473,9 +4473,9 @@ def cbs_team_standings_sportsline(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4535,9 +4535,9 @@ def cbs_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4593,9 +4593,9 @@ def cbs_venue(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::
@@ -4646,9 +4646,9 @@ def cbs_venue_metadata(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row frame.
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        AssetFetchError: The fetch failed (a non-2xx answer after retries, e.g. 401/403/429/5xx, or an unreadable body) -- the answer is unknown, not empty.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
         Quick start::

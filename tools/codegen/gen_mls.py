@@ -238,8 +238,6 @@ def main() -> None:
             "raises": [
                 "sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 "
                 "(unknown id, or an unplayed match on ``/matches/{matchId}``).",
-                "requests.exceptions.RequestException: Connection-level failure after "
-                "``dl_utils.download`` exhausts its retries.",
             ],
             "see_also": [
                 {

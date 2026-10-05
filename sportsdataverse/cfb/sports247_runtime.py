@@ -43,7 +43,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_text
+from sportsdataverse._codegen_runtime import _json_text, _transport_errors
 
 __all__ = ["_get", "rdb_headers"]
 
@@ -161,12 +161,14 @@ def _get(
 
     Returns:
         Parsed JSON (``dict`` for enveloped payloads, ``list`` for the
-        array routes), or ``{}`` for a blank 2xx body.
+        array routes), or ``{}`` for a 204/205.
 
     Raises:
         NoDataError: the RDB answered 404.
+        ValueError: the RDB answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx (a 401/403 that survived the re-mint, a
-            429, a 5xx), or a 2xx whose body is not JSON -- the answer is unknown.
+            429, a 5xx), a transport failure, or a 2xx whose body is empty (not
+            204/205) or not JSON -- the answer is unknown.
 
     Example:
         Quick start (offline — inject a transport, no minting)::
@@ -193,7 +195,8 @@ def _get(
                 _jwt = _mint_guest_jwt()
             if _jwt:
                 hdrs["Authorization"] = f"Bearer {_jwt}"
-        status, text = _transport(full, clean, hdrs, proxy_url)
+        with _transport_errors(full):
+            status, text = _transport(full, clean, hdrs, proxy_url)
         # 401/403 == the guest token expired (or was never minted). Re-mint once;
         # a second refusal (or a failed mint) is a failed fetch, raised below.
         if auth and status in (401, 403) and attempt == 0:

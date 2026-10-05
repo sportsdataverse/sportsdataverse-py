@@ -167,10 +167,14 @@ def _get(
             the rest (``timeout``, ``num_retries``, ...) reach ``download``.
 
     Returns:
-        The page HTML as ``str``; ``""`` when the request yields no response.
+        The page HTML as ``str``.
 
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
+        NoDataError: kenpom.com answered 404.
+        ValueError: kenpom.com answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or
+            an empty 200 -- an error page is never returned as HTML to parse.
 
     Example:
         Fetch the 2025 ratings page (needs a live subscription)::

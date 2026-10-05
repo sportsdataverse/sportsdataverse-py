@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Dict, Optional
 
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 _RECORDS_BASE = "https://records.nhl.com/site/api"
@@ -25,15 +26,15 @@ __all__ = [
 
 
 def _fetch(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
-    """Internal ``download() → .json()`` helper.  Returns ``{}`` on failure."""
+    """Internal ``download() → .json()`` helper under the package error vocabulary.
+
+    Raises ``NoDataError`` (404), ``ValueError`` (400/422) or ``AssetFetchError`` (any
+    other failed fetch) -- never ``{}`` for a failure.
+    """
     url = f"{_RECORDS_BASE}{path}"
-    resp = download(url=url, params=params, **kwargs)
-    if resp is None:
-        return {}
-    try:
-        return resp.json()
-    except Exception:
-        return {}
+    with _transport_errors(url):
+        resp = download(url=url, params=params, **kwargs)
+    return _json_body(resp, url)
 
 
 def _build_params(**filters) -> Optional[dict]:

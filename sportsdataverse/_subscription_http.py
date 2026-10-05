@@ -44,7 +44,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import requests
 
-from sportsdataverse._codegen_runtime import _check_response
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
 
@@ -410,7 +410,9 @@ def get_html(
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
         NoDataError: The page answered 404.
-        AssetFetchError: Any other non-2xx after retries -- its error page is not data.
+        ValueError: The site answered 400 / 422 -- the request is wrong.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or
+            an empty 200 -- its error page is not data.
 
     Example:
         One page, explicit proxy::
@@ -425,13 +427,13 @@ def get_html(
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     hdrs = {"User-Agent": USER_AGENT, "Referer": site.base_url + "/"}
     hdrs.update(headers or {})
-    resp = download(
-        url=full,
-        params=clean,
-        headers=hdrs,
-        proxy=sess.proxies or None,
-        session=sess,
-        **kwargs,
-    )
-    _check_response(resp, full)
-    return getattr(resp, "text", "") or ""
+    with _transport_errors(full):
+        resp = download(
+            url=full,
+            params=clean,
+            headers=hdrs,
+            proxy=sess.proxies or None,
+            session=sess,
+            **kwargs,
+        )
+    return _text_body(resp, full)

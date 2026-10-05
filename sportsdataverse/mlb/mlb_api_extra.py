@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _json_body
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 _BASE = "https://statsapi.mlb.com"
@@ -41,11 +41,15 @@ def _get(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
 
     Raises:
         NoDataError: statsapi answered 404.
-        AssetFetchError: any other non-2xx after retries, or a 2xx non-JSON body.
+        ValueError: statsapi answered 400 / 422 -- the request is wrong.
+        AssetFetchError: any other non-2xx or a connection failure after retries, or
+            a 2xx whose body is empty (not 204/205) or not JSON.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     url = f"{_BASE}{path}"
-    return _json_body(download(url=url, params=clean, **kwargs), url)
+    with _transport_errors(url):
+        resp = download(url=url, params=clean, **kwargs)
+    return _json_body(resp, url)
 
 
 def _csv(values) -> Optional[str]:
