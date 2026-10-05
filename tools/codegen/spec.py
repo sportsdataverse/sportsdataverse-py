@@ -47,6 +47,17 @@ class Endpoint:
     now_variant: Optional[str] = None  # alternate path when the now_toggle param is None
     now_toggle: Optional[str] = None  # the path param whose None selects now_variant
     exclude_leagues: List[str] = field(default_factory=list)
+    # Allowlist of league PREFIXES (``nba``, ``cfb``, ``epl``) this endpoint is emitted
+    # for, on top of ``scope``. Empty = every in-scope league. For a family whose
+    # per-league availability was live-probed (ESPN CDN): a league no probe verified
+    # gets no wrapper. Prefixes, not slugs, so the soccer param-mode catch-all
+    # (slug ``eng.1``, prefix ``soccer``) is not swept in alongside ``epl``.
+    include_prefixes: List[str] = field(default_factory=list)
+    # Constant query params sent on every request and never exposed as arguments
+    # (ESPN CDN ``xhr=1``: without it the page is served as HTML). Rendered before
+    # the caller's params, so ``params=`` can still override. A family-level
+    # ``fixed_params`` in an ESPN API YAML is merged into each of its endpoints.
+    fixed_params: Dict[str, object] = field(default_factory=dict)
     # Same shape as FlatApi.docstring, scoped to ONE endpoint. Declared per
     # endpoint when a family is too large to opt in wholesale: the family-level
     # block rewrites every wrapper in the family, this one changes only its own.
@@ -271,6 +282,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         now_variant=e.get("now_variant"),
         now_toggle=e.get("now_toggle"),
         exclude_leagues=list(e.get("exclude_leagues", [])),
+        include_prefixes=list(e.get("include_prefixes", [])),
+        fixed_params=dict(e.get("fixed_params") or {}),
         docstring=dict(e.get("docstring") or {}),
     )
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
@@ -286,7 +299,11 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
 
 def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     raw = _read_yaml(path)
-    endpoints = [_parse_endpoint(e, registry, path) for e in raw["endpoints"]]
+    fam = raw.get("fixed_params") or {}
+    endpoints = [
+        _parse_endpoint({**e, "fixed_params": {**fam, **(e.get("fixed_params") or {})}}, registry, path)
+        for e in raw["endpoints"]
+    ]
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
 
 

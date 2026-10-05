@@ -12,6 +12,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_athlete_overview,
     parse_athlete_splits,
     parse_athlete_stats,
+    parse_cdn_schedule,
     parse_coaches,
     parse_draft,
     parse_event_competitor_linescores,
@@ -147,6 +148,7 @@ __all__ = [
     "espn_ufl_league_notes",
     "espn_ufl_talentpicks",
     "espn_ufl_fpi",
+    "espn_ufl_cdn_schedule",
 ]
 
 
@@ -4930,4 +4932,56 @@ def espn_ufl_fpi(
     )
     if return_parsed:
         return parse_fpi(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_ufl_cdn_schedule(
+    date: Optional[Union[int, str]] = None,
+    week: Optional[int] = None,
+    season: Optional[int] = None,
+    season_type: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """espn.com schedule page data, one row per game: up to 7 days starting at `date` (mbb and wbb: that day only; cfb and nfl: one week).
+
+    Bound to sport='football', league='ufl'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/schedule``
+    Example URL: https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250115
+
+    Args:
+        date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
+        week: Week number (cfb and nfl).
+        season: Season year that `week` belongs to (cfb and nfl).
+        season_type: Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).
+        return_parsed: parse the payload through parse_cdn_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_ufl_cdn_schedule(date='20250115')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "date": date,
+        "week": week,
+        "year": season,
+        "seasontype": season_type,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/ufl/schedule",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_schedule(raw, return_as_pandas=return_as_pandas)
     return raw

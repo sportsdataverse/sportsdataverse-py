@@ -12,6 +12,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 | `https://cdn.espn.com/core` |
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 41 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 180 | hand-written wrappers, loaders & helpers |

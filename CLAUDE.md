@@ -249,8 +249,15 @@ __all__ = make_league_module(
 )
 ```
 
-Total cross-league surface: **121 short names** registered across 8
-leagues = **819 wrappers**.
+Total cross-league surface: **126 short names** (from the five ESPN
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 29 league modules
+= **3,334 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
+`cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
+`cdn_rankings`) is the one family whose per-league reach was live-probed:
+each endpoint carries an `include_prefixes` allowlist (league prefixes, so
+the soccer param-mode catch-all is never swept in), and the family-level
+`fixed_params: {xhr: 1}` is sent on every request without becoming an
+argument. The probe matrix lives at the top of `espn_cdn.yaml`.
 
 ## Parser Layer (0.0.51+)
 
@@ -314,7 +321,7 @@ cover the long tail:
   per game).
 
 Three regression tests in `tests/test_espn_universal_parsers.py`
-lock in the 121/121 coverage invariant + the shim invariant. Any
+lock in the 126/126 coverage invariant + the shim invariant. Any
 new wrapper short name added without a matching `ENDPOINT_PARSERS`
 entry fails CI.
 

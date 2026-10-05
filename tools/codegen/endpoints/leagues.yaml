@@ -6,6 +6,9 @@ hosts:
   # ESPN's FPI surface. The core_v2 powerindex endpoint returns only $ref links;
   # this host serves the resolved Football Power Index table directly.
   fitt_v3: "https://site.web.api.espn.com/apis/fitt/v3/sports"
+  # espn.com's own page data (gamecast, boxscore, schedule, scoreboard, rankings)
+  # as JSON. Keyed by league slug only -- no {sport} segment. See espn_cdn.yaml.
+  cdn: "https://cdn.espn.com/core"
 leagues:
   - {prefix: nba, sport: basketball, league: nba, scopes: [universal]}
   - {prefix: wnba, sport: basketball, league: wnba, scopes: [universal]}

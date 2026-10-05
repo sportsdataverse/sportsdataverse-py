@@ -2204,6 +2204,26 @@ cchl_standings:
     such as '14' or '-10'.
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
+cdn_rankings:
+  poll_id: ESPN poll id, e.g. 1 = AP Top 25, 2 = AFCA Coaches Poll, 20 = FCS Coaches Poll, 11 / 12 = AFCA Division II /
+    III Coaches Poll.
+  poll_name: Full poll name, e.g. 'AP Top 25', 'AFCA Coaches Poll', 'FCS Coaches Poll'.
+  poll_short_name: Short poll label, e.g. 'AP Poll'.
+  ranked: TRUE for the poll's ranked teams; FALSE for teams that only received votes, whose rows carry just the team
+    name and points.
+  team_id: ESPN team id as a string (the dtype of scoreboard home_id / away_id), read from team_url. Null on
+    vote-receiving rows and on teams ESPN does not link (most Division II and III entries), so join on it only where
+    present.
+  team_display_name: Team name as the poll page shows it.
+  trend: Movement since the previous poll as ESPN prints it, e.g. '+3', '-2', or '-' for no change.
+  formatted_record: Team's win-loss record at the poll date, e.g. '4-0'.
+  first_place_votes: First-place votes received. Null on vote-receiving rows.
+  rank: Position in the poll (1 = top). Null on vote-receiving rows.
+  previous_rank: Position in the previous week's poll. Null on vote-receiving rows.
+  team_abbreviation: Short team code ESPN displays, e.g. 'TEX'.
+  team_url: espn.com team page URL. Absent for teams ESPN does not link.
+  team_logo: URL of the team logo on ESPN's CDN.
+  points: Poll points received.
 cfb_adjusted_tempo:
   adj_plays_game: Opponent-adjusted situation-neutral plays per game (iterative solver; higher = faster).
   adj_sec_play: Opponent-adjusted seconds elapsed per situation-neutral play (lower = faster).

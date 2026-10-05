@@ -12,6 +12,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 87 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 | `https://cdn.espn.com/core` |
 | [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 5 | `https://barttorvik.com` |
 | [KenPom (kenpom.com, subscription)](reference/kenpom) | 30 | `https://kenpom.com` |
 | [Dataset loaders](reference/loaders) | 34 | sportsdataverse-data releases |
