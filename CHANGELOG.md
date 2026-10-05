@@ -335,8 +335,12 @@ Fox `apikey`. A connection failure was re-raised as requests' own exception, whi
 the request path and chains urllib3's `MaxRetryError`, which quotes it again.
 
 - The value of a credential pair now reads `REDACTED` in every log line `download` writes,
-  in every sportsdataverse error message, in urllib3's DEBUG request lines, and in the
-  re-raised transport exception and every exception chained to it. Covered names are
+  in every sportsdataverse error message, in urllib3's request, retry and redirect log
+  lines (including a caller's own `Retry` adapter), and in the re-raised transport
+  exception and every exception chained to it. That covers the exception's attributes as
+  well as its text: `err.url`, `err.request.url` and urllib3's pickled message are
+  redacted, and the request's `Authorization` / `Proxy-Authorization` / `Cookie` headers
+  are dropped. Covered names are
   `apiKey` / `api_key` / `apikey`, `token` / `access_token`, `password`, `secret` /
   `client_secret` and the rest of the sportsdataverse-js list, case-insensitively and in
   URL-encoded and `'name': 'value'` form. A bare `key` is redacted when its value has 16 or
@@ -344,7 +348,10 @@ the request path and chains urllib3's `MaxRetryError`, which quotes it again.
   are kept, so the line still says which request failed.
 - The Odds API wrappers raise `AssetFetchError` on a non-2xx answer: a rejected key (401),
   spent quota (429), or a 5xx that outlived the retries. Before, the error body came back
-  as if it were odds. A 404 still raises `NoDataError`.
+  as if it were odds. A 2xx with a non-JSON body raises `AssetFetchError` too, instead of
+  a bare `JSONDecodeError`. A 404 still raises `NoDataError`. `cfb_odds_events_crosswalk`
+  reads The Odds API, so it now raises these too, where it used to parse the error body as
+  an event list.
 
 No signature changes. `tests/test_credential_redaction.py` sends a synthetic key through
 each of the three providers on a 404, a 503 and a connection failure, and checks the
