@@ -25,6 +25,10 @@ warnings.warn(
 
 from sportsdataverse.wnba import espn_wnba_award as _raw_espn_wnba_award
 from sportsdataverse.wnba import espn_wnba_awards as _raw_espn_wnba_awards
+from sportsdataverse.wnba import espn_wnba_cdn_boxscore as _raw_espn_wnba_cdn_boxscore
+from sportsdataverse.wnba import espn_wnba_cdn_playbyplay as _raw_espn_wnba_cdn_playbyplay
+from sportsdataverse.wnba import espn_wnba_cdn_schedule as _raw_espn_wnba_cdn_schedule
+from sportsdataverse.wnba import espn_wnba_cdn_scoreboard as _raw_espn_wnba_cdn_scoreboard
 from sportsdataverse.wnba import espn_wnba_coach as _raw_espn_wnba_coach
 from sportsdataverse.wnba import espn_wnba_coach_record as _raw_espn_wnba_coach_record
 from sportsdataverse.wnba import espn_wnba_coach_season as _raw_espn_wnba_coach_season
@@ -284,6 +288,10 @@ __all__ = [
     "espn_wnba_award",
     "espn_wnba_awards",
     "espn_wnba_calendar",
+    "espn_wnba_cdn_boxscore",
+    "espn_wnba_cdn_playbyplay",
+    "espn_wnba_cdn_schedule",
+    "espn_wnba_cdn_scoreboard",
     "espn_wnba_coach",
     "espn_wnba_coach_record",
     "espn_wnba_coach_season",
@@ -560,6 +568,62 @@ def espn_wnba_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_awards(*args, **kwargs)
+
+
+def espn_wnba_cdn_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_cdn_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_cdn_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_cdn_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_cdn_boxscore(*args, **kwargs)
+
+
+def espn_wnba_cdn_playbyplay(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_cdn_playbyplay``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_cdn_playbyplay` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_cdn_playbyplay` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_cdn_playbyplay(*args, **kwargs)
+
+
+def espn_wnba_cdn_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_cdn_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_cdn_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_cdn_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_cdn_schedule(*args, **kwargs)
+
+
+def espn_wnba_cdn_scoreboard(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_cdn_scoreboard``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_cdn_scoreboard` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_cdn_scoreboard` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_cdn_scoreboard(*args, **kwargs)
 
 
 def espn_wnba_coach(*args, **kwargs):

@@ -26,6 +26,7 @@ warnings.warn(
 from sportsdataverse.nhl import espn_nhl_award as _raw_espn_nhl_award
 from sportsdataverse.nhl import espn_nhl_awards as _raw_espn_nhl_awards
 from sportsdataverse.nhl import espn_nhl_calendar as _raw_espn_nhl_calendar
+from sportsdataverse.nhl import espn_nhl_cdn_schedule as _raw_espn_nhl_cdn_schedule
 from sportsdataverse.nhl import espn_nhl_coach as _raw_espn_nhl_coach
 from sportsdataverse.nhl import espn_nhl_coach_record as _raw_espn_nhl_coach_record
 from sportsdataverse.nhl import espn_nhl_coach_season as _raw_espn_nhl_coach_season
@@ -442,6 +443,7 @@ __all__ = [
     "espn_nhl_award",
     "espn_nhl_awards",
     "espn_nhl_calendar",
+    "espn_nhl_cdn_schedule",
     "espn_nhl_coach",
     "espn_nhl_coach_record",
     "espn_nhl_coach_season",
@@ -866,6 +868,20 @@ def espn_nhl_calendar(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nhl_calendar(*args, **kwargs)
+
+
+def espn_nhl_cdn_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.espn_nhl_cdn_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.espn_nhl_cdn_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.espn_nhl_cdn_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nhl_cdn_schedule(*args, **kwargs)
 
 
 def espn_nhl_coach(*args, **kwargs):

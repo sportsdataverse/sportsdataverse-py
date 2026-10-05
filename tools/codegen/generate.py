@@ -24,7 +24,7 @@ ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
 OUT = ROOT / "tools" / "codegen" / "_generated"
 LIVE = ROOT / "sportsdataverse"
 
-ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2", "espn_fitt_v3"]
+ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2", "espn_fitt_v3", "espn_cdn"]
 
 # Invoke ruff via the *current interpreter's* environment (``python -m ruff``)
 # rather than a bare ``ruff`` on PATH. A bare ``ruff`` can resolve to a stale
@@ -66,6 +66,7 @@ def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> s
     if "{" in path:
         path = path[: path.index("{")].rstrip("/")
     qs = {p.api: ep.example_args[p.python_name] for p in ep.query_params if p.python_name in ep.example_args}
+    qs = {**ep.fixed_params, **qs}
     return f"{host_url}{path}" + (f"?{urlencode(qs)}" if qs else "")
 
 
@@ -640,6 +641,7 @@ class _EndpointView:
         self.short = ep.short
         self.summary = _normalize_rst(ep.summary or "")
         self.query_params = ep.query_params
+        self.fixed_params = ep.fixed_params
         self.path_params = ep.path_params
         self.parser = ep.parser
         self.path = ep.path
@@ -917,6 +919,8 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         host_url = hosts[api.host]
         for ep in api.endpoints:
             if ep.scope not in league.scopes or league.league in ep.exclude_leagues:
+                continue
+            if ep.include_prefixes and league.prefix not in ep.include_prefixes:
                 continue
             base = api.name_pattern.format(prefix=league.prefix, short=ep.short)
             if base in drops:
@@ -2363,6 +2367,7 @@ _ESPN_API_DOC = {
     "espn_web_v3": ("web", "ESPN web API (v3)"),
     "espn_core_v2": ("core", "ESPN core API (v2)"),
     "espn_fitt_v3": ("fitt", "ESPN FPI API (fitt v3)"),
+    "espn_cdn": ("cdn", "ESPN CDN API (cdn.espn.com)"),
 }
 
 # Flat/native API module -> human label for the per-API doc pages. Parallels

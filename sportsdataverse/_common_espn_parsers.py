@@ -2150,6 +2150,159 @@ SUMMARY_SECTION_PARSERS = {
 
 
 # ===========================================================================
+# ESPN CDN (cdn.espn.com/core/{league}/{page}?xhr=1) page payloads
+# ===========================================================================
+
+
+def _cdn_content(payload: Any) -> dict:
+    """The ``content`` block of a CDN page payload, or ``{}``."""
+    content = payload.get("content") if isinstance(payload, dict) else None
+    return content if isinstance(content, dict) else {}
+
+
+def parse_cdn_game(payload: Dict, section: str = None, return_as_pandas: bool = False):
+    """Parse a CDN ``playbyplay`` / ``boxscore`` page through :func:`parse_summary`.
+
+    The page's ``gamepackageJSON`` block is a Site v2 summary payload, so this is
+    the summary dispatcher run on that block. The page's ``__gamepackage__.playerHash``
+    (athlete id -> display name) is not parsed; read it from the raw payload.
+
+    Args:
+        payload: Raw JSON dict from an ``espn_{league}_cdn_playbyplay()`` or
+            ``espn_{league}_cdn_boxscore()`` wrapper.
+        section: Optional summary section name (see :data:`SUMMARY_SECTION_PARSERS`).
+        return_as_pandas: Return pandas instead of polars.
+
+    Returns:
+        Dict of summary sub-frames when ``section`` is None, else that one frame.
+        A payload without ``gamepackageJSON`` yields zero-row frames.
+
+    Raises:
+        ValueError: If ``section`` is not a recognised summary section name.
+
+    Example:
+        Parse a game's play-by-play page::
+
+            from sportsdataverse.nba import espn_nba_cdn_playbyplay
+            from sportsdataverse._common_espn_parsers import parse_cdn_game
+
+            raw = espn_nba_cdn_playbyplay(game_id=401705127, return_parsed=False)
+            plays = parse_cdn_game(raw, section="plays")
+            print(plays.shape)
+    """
+    gp = payload.get("gamepackageJSON") if isinstance(payload, dict) else None
+    return parse_summary(gp if isinstance(gp, dict) else {}, section=section, return_as_pandas=return_as_pandas)
+
+
+def parse_cdn_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a CDN ``scoreboard`` page: its ``content.sbData`` block is a Site v2 scoreboard.
+
+    Args:
+        payload: Raw JSON dict from an ``espn_{league}_cdn_scoreboard()`` wrapper.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        pl.DataFrame: One row per game, the :func:`parse_scoreboard` columns; zero
+        rows when the page carries no ``sbData``.
+
+    Example:
+        Parse one day's scoreboard page::
+
+            from sportsdataverse.nba import espn_nba_cdn_scoreboard
+            from sportsdataverse._common_espn_parsers import parse_cdn_scoreboard
+
+            raw = espn_nba_cdn_scoreboard(date="20250115", return_parsed=False)
+            print(parse_cdn_scoreboard(raw).shape)
+    """
+    sb = _cdn_content(payload).get("sbData")
+    return parse_scoreboard(sb if isinstance(sb, dict) else {}, return_as_pandas=return_as_pandas)
+
+
+def parse_cdn_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a CDN ``schedule`` page: every day's ``games`` flattened into one frame.
+
+    ``content.schedule`` maps a ``YYYYMMDD`` key to that day's block, whose ``games``
+    are scoreboard-shaped events, so each one goes through :func:`parse_scoreboard`'s
+    row builder.
+
+    Args:
+        payload: Raw JSON dict from an ``espn_{league}_cdn_schedule()`` wrapper.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        pl.DataFrame: One row per game across every day on the page; zero rows when
+        the page carries no schedule.
+
+    Example:
+        Parse a schedule page::
+
+            from sportsdataverse.nba import espn_nba_cdn_schedule
+            from sportsdataverse._common_espn_parsers import parse_cdn_schedule
+
+            raw = espn_nba_cdn_schedule(date="20250115", return_parsed=False)
+            print(parse_cdn_schedule(raw).shape)
+    """
+    sch = _cdn_content(payload).get("schedule")
+    days = sch.values() if isinstance(sch, dict) else []
+    games = [g for day in days if isinstance(day, dict) for g in (day.get("games") or []) if isinstance(g, dict)]
+    return parse_scoreboard({"events": games}, return_as_pandas=return_as_pandas)
+
+
+_TEAM_ID_FROM_URL = r"/id/(\d+)"
+
+
+def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a CDN ``rankings`` page into one row per poll entry.
+
+    ``content.data.rankings`` is a list of polls, each with ``ranks`` (the ranked
+    teams) and ``others`` (teams receiving votes, which carry only a name and
+    points). Both are emitted, told apart by ``ranked``. ``team_id`` is read from
+    the team page URL, so it is null on the vote-receiving rows and on teams ESPN
+    does not link (most Division II / III entries).
+
+    Args:
+        payload: Raw JSON dict from ``espn_cfb_cdn_rankings()``.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        pl.DataFrame: One row per (poll, team); zero rows when the page carries no polls.
+
+    Example:
+        Parse the AP poll for one week::
+
+            import polars as pl
+            from sportsdataverse.cfb import espn_cfb_cdn_rankings
+            from sportsdataverse._common_espn_parsers import parse_cdn_rankings
+
+            raw = espn_cfb_cdn_rankings(season=2024, week=5, season_type=2, return_parsed=False)
+            df = parse_cdn_rankings(raw)
+            df.filter(pl.col("poll_name") == "AP Top 25").head()
+    """
+    data = _cdn_content(payload).get("data")
+    polls = data.get("rankings") if isinstance(data, dict) else None
+    rows = []
+    for poll in polls if isinstance(polls, list) else []:
+        if not isinstance(poll, dict):
+            continue
+        head = {"poll_id": poll.get("id"), "poll_name": poll.get("name"), "poll_short_name": poll.get("short_name")}
+        for ranked, key in ((True, "ranks"), (False, "others")):
+            for entry in poll.get(key) or []:
+                if isinstance(entry, dict):
+                    rows.append({**head, "ranked": ranked, **entry})
+    if not rows:
+        return _empty_frame(return_as_pandas)
+    # Built in polars, not pandas: the vote-receiving rows have no rank, and a
+    # pandas frame would turn rank / previous_rank / first_place_votes into floats.
+    df = pl.DataFrame(rows, infer_schema_length=None)
+    df = df.rename({c: underscore(c) for c in df.columns})
+    if "team_url" in df.columns:
+        lead = ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
+        team_id = pl.col("team_url").str.extract(_TEAM_ID_FROM_URL, 1).cast(pl.Int64).alias("team_id")
+        df = df.with_columns(team_id).select(*lead, pl.exclude(lead))
+    return df.to_pandas() if return_as_pandas else df
+
+
+# ===========================================================================
 # Endpoint -> parser registry
 # ===========================================================================
 #
@@ -2310,6 +2463,12 @@ ENDPOINT_PARSERS = {
     "event_predictor": parse_single_entity,
     "event_powerindex": parse_single_entity,
     "event_official_detail": parse_single_entity,
+    # ---- ESPN CDN page payloads (cdn.espn.com/core) ----
+    "cdn_playbyplay": parse_cdn_game,
+    "cdn_boxscore": parse_cdn_game,
+    "cdn_schedule": parse_cdn_schedule,
+    "cdn_scoreboard": parse_cdn_scoreboard,
+    "cdn_rankings": parse_cdn_rankings,
 }
 
 

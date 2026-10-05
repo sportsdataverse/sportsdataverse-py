@@ -12,6 +12,10 @@ from sportsdataverse._common_espn_parsers import (
     parse_athlete_overview,
     parse_athlete_splits,
     parse_athlete_stats,
+    parse_cdn_game,
+    parse_cdn_rankings,
+    parse_cdn_schedule,
+    parse_cdn_scoreboard,
     parse_coaches,
     parse_draft,
     parse_event_competitor_linescores,
@@ -155,6 +159,11 @@ __all__ = [
     "espn_cfb_season_qbr",
     "espn_cfb_season_qbr_week",
     "espn_cfb_fpi",
+    "espn_cfb_cdn_playbyplay",
+    "espn_cfb_cdn_boxscore",
+    "espn_cfb_cdn_schedule",
+    "espn_cfb_cdn_scoreboard",
+    "espn_cfb_cdn_rankings",
 ]
 
 
@@ -5288,4 +5297,243 @@ def espn_cfb_fpi(
     )
     if return_parsed:
         return parse_fpi(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_cfb_cdn_playbyplay(
+    game_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """One game's espn.com play-by-play page data. The gamepackageJSON block is a Site v2 summary (header, boxscore, plays or drives, win probability, ...), so the parsed result is the same dict of frames that parse_summary returns.
+
+    Bound to sport='football', league='college-football'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/playbyplay``
+    Example URL: https://cdn.espn.com/core/college-football/playbyplay?xhr=1&gameId=401705127
+
+    Args:
+        game_id: ESPN game (event) id.
+        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_cfb_cdn_playbyplay(game_id='401705127')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "gameId": game_id,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/college-football/playbyplay",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_game(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_cfb_cdn_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """One game's espn.com box-score page data, parsed like a Site v2 summary. For football the drives and scoring plays are only on the playbyplay page.
+
+    Bound to sport='football', league='college-football'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/boxscore``
+    Example URL: https://cdn.espn.com/core/college-football/boxscore?xhr=1&gameId=401705127
+
+    Args:
+        game_id: ESPN game (event) id.
+        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_cfb_cdn_boxscore(game_id='401705127')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "gameId": game_id,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/college-football/boxscore",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_game(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_cfb_cdn_schedule(
+    date: Optional[Union[int, str]] = None,
+    week: Optional[int] = None,
+    season: Optional[int] = None,
+    season_type: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """espn.com schedule page data, one row per game: up to 7 days starting at `date` (mbb and wbb: that day only; cfb and nfl: one week).
+
+    Bound to sport='football', league='college-football'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/schedule``
+    Example URL: https://cdn.espn.com/core/college-football/schedule?xhr=1&date=20250115
+
+    Args:
+        date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
+        week: Week number (cfb and nfl).
+        season: Season year that `week` belongs to (cfb and nfl).
+        season_type: Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).
+        return_parsed: parse the payload through parse_cdn_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_cfb_cdn_schedule(date='20250115')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "date": date,
+        "week": week,
+        "year": season,
+        "seasontype": season_type,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/college-football/schedule",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_schedule(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_cfb_cdn_scoreboard(
+    date: Optional[Union[int, str]] = None,
+    week: Optional[int] = None,
+    season: Optional[int] = None,
+    season_type: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """espn.com scoreboard page data for one day (one week for football), one row per game. The page's sbData block is a Site v2 scoreboard payload.
+
+    Bound to sport='football', league='college-football'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/scoreboard``
+    Example URL: https://cdn.espn.com/core/college-football/scoreboard?xhr=1&date=20250115
+
+    Args:
+        date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
+        week: Week number (cfb and nfl).
+        season: Season year that `week` belongs to (cfb and nfl).
+        season_type: Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).
+        return_parsed: parse the payload through parse_cdn_scoreboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_cfb_cdn_scoreboard(date='20250115')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "date": date,
+        "week": week,
+        "year": season,
+        "seasontype": season_type,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/college-football/scoreboard",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_scoreboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_cfb_cdn_rankings(
+    week: Optional[int] = None,
+    season: Optional[int] = None,
+    season_type: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """espn.com poll rankings page data: every poll (AP, Coaches, FCS, Division II and III) for one week, one row per ranked or vote-receiving team.
+
+    Bound to sport='football', league='college-football'.
+
+    Endpoint: ``GET https://cdn.espn.com/core/{league}/rankings``
+    Example URL: https://cdn.espn.com/core/college-football/rankings?xhr=1&week=5&year=2024&seasontype=2
+
+    Args:
+        week: Poll week. Defaults to the current week.
+        season: Season year. Defaults to the current season.
+        season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
+        return_parsed: parse the payload through parse_cdn_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_cfb_cdn_rankings(season=2024, week=5, season_type=2)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "xhr": 1,
+        "week": week,
+        "year": season,
+        "seasontype": season_type,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://cdn.espn.com/core/college-football/rankings",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_cdn_rankings(raw, return_as_pandas=return_as_pandas)
     return raw

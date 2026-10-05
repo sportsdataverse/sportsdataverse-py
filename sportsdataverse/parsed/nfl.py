@@ -25,6 +25,10 @@ warnings.warn(
 
 from sportsdataverse.nfl import espn_nfl_award as _raw_espn_nfl_award
 from sportsdataverse.nfl import espn_nfl_awards as _raw_espn_nfl_awards
+from sportsdataverse.nfl import espn_nfl_cdn_boxscore as _raw_espn_nfl_cdn_boxscore
+from sportsdataverse.nfl import espn_nfl_cdn_playbyplay as _raw_espn_nfl_cdn_playbyplay
+from sportsdataverse.nfl import espn_nfl_cdn_schedule as _raw_espn_nfl_cdn_schedule
+from sportsdataverse.nfl import espn_nfl_cdn_scoreboard as _raw_espn_nfl_cdn_scoreboard
 from sportsdataverse.nfl import espn_nfl_coach as _raw_espn_nfl_coach
 from sportsdataverse.nfl import espn_nfl_coach_record as _raw_espn_nfl_coach_record
 from sportsdataverse.nfl import espn_nfl_coach_season as _raw_espn_nfl_coach_season
@@ -399,6 +403,10 @@ __all__ = [
     "espn_nfl_award",
     "espn_nfl_awards",
     "espn_nfl_calendar",
+    "espn_nfl_cdn_boxscore",
+    "espn_nfl_cdn_playbyplay",
+    "espn_nfl_cdn_schedule",
+    "espn_nfl_cdn_scoreboard",
     "espn_nfl_coach",
     "espn_nfl_coach_record",
     "espn_nfl_coach_season",
@@ -744,6 +752,62 @@ def espn_nfl_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_awards(*args, **kwargs)
+
+
+def espn_nfl_cdn_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_cdn_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_cdn_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_cdn_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_cdn_boxscore(*args, **kwargs)
+
+
+def espn_nfl_cdn_playbyplay(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_cdn_playbyplay``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_cdn_playbyplay` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_cdn_playbyplay` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_cdn_playbyplay(*args, **kwargs)
+
+
+def espn_nfl_cdn_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_cdn_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_cdn_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_cdn_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_cdn_schedule(*args, **kwargs)
+
+
+def espn_nfl_cdn_scoreboard(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_cdn_scoreboard``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_cdn_scoreboard` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_cdn_scoreboard` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_cdn_scoreboard(*args, **kwargs)
 
 
 def espn_nfl_coach(*args, **kwargs):

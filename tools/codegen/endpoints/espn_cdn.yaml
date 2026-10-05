@@ -1,0 +1,149 @@
+api: espn_cdn
+host: cdn
+name_pattern: espn_{prefix}_{short}
+# The page data behind espn.com's game, schedule, scoreboard and rankings pages,
+# served as JSON only when the request carries xhr=1 (without it: the HTML page).
+fixed_params:
+  xhr: 1
+#
+# Per-league availability is NOT uniform, so every endpoint carries an
+# include_prefixes allowlist taken from a live probe (2026-10-05, sequential, each
+# empty result paired with a positive control in the same run: the Site v2
+# scoreboard had games that day, and cdn nba/playbyplay answered at start and end).
+#
+#   page        served for                                           not served (how)
+#   playbyplay  nba wnba mbb wbb cfb nfl mlb college_baseball         nhl mch wch ufl xfl cfl, all soccer,
+#   boxscore      college_softball                                     cricket (403, redirected off /core/)
+#   schedule    nba wnba mbb wbb cfb nfl mlb nhl college_baseball     mch + soccer (no schedule key), xfl (404);
+#                 college_softball ufl                                 wch cfl unverified (no positive control)
+#   scoreboard  nba wnba mbb wbb cfb nfl mlb college_baseball         nhl ufl xfl cfl mch wch (404),
+#                 epl mls ucl                                          college_softball (403), other soccer (404)
+#   rankings    cfb                                                    every other league (403)
+#
+# Parameter semantics measured in the same probe:
+# * `date` is the query key (singular). `dates` -- the Site v2 key -- is silently
+#   ignored and the page for TODAY comes back.
+# * Football (cfb, nfl) schedule/scoreboard are week-oriented: `date` is ignored
+#   there too; select with week + season (`year`) + season_type (`seasontype`).
+# * `groups` is ignored on cfb schedule/scoreboard and mbb scoreboard, so it is
+#   not exposed.
+# * playbyplay and boxscore return the same envelope (only the tab differs); the
+#   football playbyplay page adds drives/scoringPlays that its boxscore page omits.
+endpoints:
+- short: cdn_playbyplay
+  scope: universal
+  include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, college_baseball, college_softball]
+  path: /{league}/playbyplay
+  summary: >-
+    One game's espn.com play-by-play page data. The gamepackageJSON block is a
+    Site v2 summary (header, boxscore, plays or drives, win probability, ...), so
+    the parsed result is the same dict of frames that parse_summary returns.
+  extra_params:
+  - name: game_id
+    query_key: gameId
+    type: int|str
+    required: true
+    description: ESPN game (event) id.
+  parser: parse_cdn_game
+  returns_schema: summary
+  example_args:
+    game_id: '401705127'
+- short: cdn_boxscore
+  scope: universal
+  include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, college_baseball, college_softball]
+  path: /{league}/boxscore
+  summary: >-
+    One game's espn.com box-score page data, parsed like a Site v2 summary. For
+    football the drives and scoring plays are only on the playbyplay page.
+  extra_params:
+  - name: game_id
+    query_key: gameId
+    type: int|str
+    required: true
+    description: ESPN game (event) id.
+  parser: parse_cdn_game
+  returns_schema: summary
+  example_args:
+    game_id: '401705127'
+- short: cdn_schedule
+  scope: universal
+  include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, nhl, college_baseball, college_softball, ufl]
+  path: /{league}/schedule
+  summary: >-
+    espn.com schedule page data, one row per game: up to 7 days starting at
+    `date` (mbb and wbb: that day only; cfb and nfl: one week).
+  extra_params:
+  - name: date
+    query_key: date
+    type: int|str
+    description: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
+  - name: week
+    query_key: week
+    type: int
+    description: Week number (cfb and nfl).
+  - name: season
+    query_key: year
+    type: int
+    description: Season year that `week` belongs to (cfb and nfl).
+  - name: season_type
+    query_key: seasontype
+    type: int
+    description: 'Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).'
+  parser: parse_cdn_schedule
+  returns_schema: scoreboard
+  example_args:
+    date: '20250115'
+- short: cdn_scoreboard
+  scope: universal
+  include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, college_baseball, epl, mls, ucl]
+  path: /{league}/scoreboard
+  summary: >-
+    espn.com scoreboard page data for one day (one week for football), one row
+    per game. The page's sbData block is a Site v2 scoreboard payload.
+  extra_params:
+  - name: date
+    query_key: date
+    type: int|str
+    description: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
+  - name: week
+    query_key: week
+    type: int
+    description: Week number (cfb and nfl).
+  - name: season
+    query_key: year
+    type: int
+    description: Season year that `week` belongs to (cfb and nfl).
+  - name: season_type
+    query_key: seasontype
+    type: int
+    description: 'Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).'
+  parser: parse_cdn_scoreboard
+  returns_schema: scoreboard
+  example_args:
+    date: '20250115'
+- short: cdn_rankings
+  scope: universal
+  include_prefixes: [cfb]
+  path: /{league}/rankings
+  summary: >-
+    espn.com poll rankings page data: every poll (AP, Coaches, FCS, Division II
+    and III) for one week, one row per ranked or vote-receiving team.
+  extra_params:
+  - name: week
+    query_key: week
+    type: int
+    description: Poll week. Defaults to the current week.
+  - name: season
+    query_key: year
+    type: int
+    description: Season year. Defaults to the current season.
+  - name: season_type
+    query_key: seasontype
+    type: int
+    description: 'Season phase: 1=preseason, 2=regular season, 3=postseason.'
+  parser: parse_cdn_rankings
+  returns_schema: cdn_rankings
+  example_args:
+    season: 2024
+    week: 5
+    season_type: 2
