@@ -15764,6 +15764,146 @@ load_cfb_usage_teams:
     null when no curve was available.'
   third_down_rate: third_down_conversions / third_down_opportunities; null with no third downs.
   touchdowns: Scrimmage plays that scored an offensive touchdown.
+ahl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+ajhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+bchl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+cchl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+chl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+echl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+gojhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+kijhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+mhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+mjhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+nojhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+ohl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+ojhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+pwhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+qmjhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+sjhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+sphl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+ushl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+vijhl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+whl_season_id:
+  game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
+    (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
+    resolution skips them.'
+  season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
+    "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
+    next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,

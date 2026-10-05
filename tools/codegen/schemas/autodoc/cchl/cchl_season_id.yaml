@@ -23,7 +23,7 @@ columns:
   type: character
   description: ''
 - name: season_yr
-  type: double
+  type: integer
   description: ''
 - name: game_type_label
   type: character

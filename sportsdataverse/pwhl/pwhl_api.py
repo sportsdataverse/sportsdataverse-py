@@ -51,7 +51,10 @@ def pwhl_season_id(return_as_pandas: bool = False) -> Any:
 
 
 def most_recent_pwhl_season() -> int:
-    """Most-recent PWHL season as an end-year integer (max ``season_yr``).
+    """Newest PWHL regular season as an end-year integer.
+
+    The highest ``season_yr`` of a regular season that is not a one-off event, so a
+    preseason the feed lists before its regular season is not a default.
 
     Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails.
     """
